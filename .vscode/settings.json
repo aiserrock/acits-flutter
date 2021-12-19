@@ -1,0 +1,26 @@
+{
+  "actionButtons": {
+    "reloadButton": null,
+    "defaultColor": "white",
+    "useScripts": true,
+    "npmClient": "npm",
+    "monorepo": true,
+    "commands": [
+      {
+        "name": "🔨 gen",
+        "color": "#ffffff",
+        "command": "fvm flutter pub run build_runner build",
+        "singleInstance": true
+      },
+      {
+        "name": "👁️ gen",
+        "color": "#ffffff",
+        "command": "fvm flutter pub run build_runner watch",
+        "singleInstance": true
+      }
+    ]
+  },
+  "yaml.schemas": {
+    "https://json.schemastore.org/dart-build.json": ["build.yaml"]
+  }
+}

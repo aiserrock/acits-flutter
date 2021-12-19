@@ -1,0 +1,11 @@
+targets:
+  $default:
+    sources:
+      - lib/**
+      - doc/api/**
+    builders:
+      swagger_dart_code_generator:
+        options:
+          input_folder: "doc/api/"
+          output_folder: "lib/api/"
+          url: "https://dev.acits.ru/api"

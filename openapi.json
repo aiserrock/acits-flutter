@@ -1,0 +1,2617 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Acits API",
+  "version": "1.0.0",
+  "description": "Animal shelter manager",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "The version of this schema that will be used to validate JSON data"
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "json",
+        "yaml"
+      ]
+    },
+    "lang": {
+      "type": "string",
+      "enum": [
+        "en",
+        "ru"
+      ]
+    },
+    "x-current-shelter": {
+      "type": "integer",
+      "default": 2,
+      "description": "Set current shelter id"
+    },
+    "object-1": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "object-2": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "object-3": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "object-4": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "tokenObtainPair": {
+      "$ref": "#/definitions/TokenObtainPair"
+    },
+    "tokenRefresh": {
+      "$ref": "#/definitions/TokenRefresh"
+    },
+    "limit": {
+      "type": "integer",
+      "description": "Number of results to return per page."
+    },
+    "offset": {
+      "type": "integer",
+      "description": "The initial index from which to return the results."
+    },
+    "ordering": {
+      "type": "string",
+      "description": "Which field to use when ordering the results."
+    },
+    "search": {
+      "type": "string",
+      "description": "A search term."
+    },
+    "spec_category_name": {
+      "type": "string",
+      "description": "Species category name"
+    },
+    "spec_name": {
+      "type": "string",
+      "description": "Species name"
+    },
+    "spec_parent_name": {
+      "type": "string",
+      "description": "Species parent name"
+    },
+    "status": {
+      "$ref": "#/definitions/Status"
+    },
+    "paginatedAnimalList": {
+      "$ref": "#/definitions/PaginatedAnimalList"
+    },
+    "animal": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "integer",
+      "description": "A unique integer value identifying this user shelter."
+    },
+    "patchedAnimal": {
+      "$ref": "#/definitions/PatchedAnimal"
+    },
+    "pdf_type": {
+      "type": "string",
+      "description": "One of ('history', 'history-editing', 'history-prescriptions')"
+    },
+    "string-5": {
+      "type": "string",
+      "format": "binary"
+    },
+    "arrayOfApplicantFile": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ApplicantFile"
+      }
+    },
+    "created_at_after": {
+      "type": "string",
+      "format": "date",
+      "description": "Date range from - to"
+    },
+    "created_at_before": {
+      "type": "string",
+      "format": "date",
+      "description": "Date range from - to"
+    },
+    "created_at_range": {
+      "type": "string",
+      "format": "date-time",
+      "enum": [
+        "month",
+        "today",
+        "week",
+        "year",
+        "yesterday"
+      ],
+      "description": "Date range"
+    },
+    "paginatedAnimalHistorySnapshotList": {
+      "$ref": "#/definitions/PaginatedAnimalHistorySnapshotList"
+    },
+    "execute_at__gte": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "execute_at__lt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "paginatedAnimalPrescriptionList": {
+      "$ref": "#/definitions/PaginatedAnimalPrescriptionList"
+    },
+    "is_required": {
+      "type": "boolean"
+    },
+    "arrayOfAnimalAttribute": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/AnimalAttribute"
+      }
+    },
+    "animalAttribute": {
+      "$ref": "#/definitions/AnimalAttribute"
+    },
+    "paginatedAnimalNoteList": {
+      "$ref": "#/definitions/PaginatedAnimalNoteList"
+    },
+    "animalNote": {
+      "$ref": "#/definitions/AnimalNote"
+    },
+    "patchedAnimalNote": {
+      "$ref": "#/definitions/PatchedAnimalNote"
+    },
+    "level": {
+      "type": "integer",
+      "enum": [
+        1,
+        2,
+        3
+      ]
+    },
+    "parent_id": {
+      "type": "integer"
+    },
+    "paginatedSpeciesList": {
+      "$ref": "#/definitions/PaginatedSpeciesList"
+    },
+    "species": {
+      "$ref": "#/definitions/Species"
+    },
+    "paginatedApplicantList": {
+      "$ref": "#/definitions/PaginatedApplicantList"
+    },
+    "applicant": {
+      "$ref": "#/definitions/Applicant"
+    },
+    "patchedApplicant": {
+      "$ref": "#/definitions/PatchedApplicant"
+    },
+    "paginatedShelterShortSerializersList": {
+      "$ref": "#/definitions/PaginatedShelterShortSerializersList"
+    },
+    "paginatedCuratorList": {
+      "$ref": "#/definitions/PaginatedCuratorList"
+    },
+    "curator": {
+      "$ref": "#/definitions/Curator"
+    },
+    "patchedCurator": {
+      "$ref": "#/definitions/PatchedCurator"
+    },
+    "feedback": {
+      "$ref": "#/definitions/Feedback"
+    },
+    "paginatedPrescriptionList": {
+      "$ref": "#/definitions/PaginatedPrescriptionList"
+    },
+    "prescription": {
+      "$ref": "#/definitions/Prescription"
+    },
+    "patchedPrescription": {
+      "$ref": "#/definitions/PatchedPrescription"
+    },
+    "paginatedPrescriptionExecutionTodayList": {
+      "$ref": "#/definitions/PaginatedPrescriptionExecutionTodayList"
+    },
+    "paginatedShelterDrugList": {
+      "$ref": "#/definitions/PaginatedShelterDrugList"
+    },
+    "is_verified_by_admin": {
+      "type": "boolean",
+      "description": "Is verified by admin (true/false)"
+    },
+    "is_verified_by_admin__isnull": {
+      "type": "boolean",
+      "description": "Is verified by admin isnull (true/false)"
+    },
+    "paginatedUserSheltersAdminSerializersList": {
+      "$ref": "#/definitions/PaginatedUserSheltersAdminSerializersList"
+    },
+    "userSheltersAdminSerializers": {
+      "$ref": "#/definitions/UserSheltersAdminSerializers"
+    },
+    "patchedUserSheltersAdminSerializers": {
+      "$ref": "#/definitions/PatchedUserSheltersAdminSerializers"
+    },
+    "approve": {
+      "$ref": "#/definitions/Approve"
+    },
+    "decline": {
+      "$ref": "#/definitions/Decline"
+    },
+    "userSheltersWorkerSerializers": {
+      "$ref": "#/definitions/UserSheltersWorkerSerializers"
+    },
+    "userShelterAdminSerializers": {
+      "$ref": "#/definitions/UserShelterAdminSerializers"
+    },
+    "paginatedUserShortSerializersList": {
+      "$ref": "#/definitions/PaginatedUserShortSerializersList"
+    },
+    "userSerializers": {
+      "$ref": "#/definitions/UserSerializers"
+    },
+    "patchedUserSerializers": {
+      "$ref": "#/definitions/PatchedUserSerializers"
+    },
+    "userChangePasswordSerializers": {
+      "$ref": "#/definitions/UserChangePasswordSerializers"
+    },
+    "patchedUserChangePasswordSerializers": {
+      "$ref": "#/definitions/PatchedUserChangePasswordSerializers"
+    },
+    "userCurrentShelterSerializers": {
+      "$ref": "#/definitions/UserCurrentShelterSerializers"
+    },
+    "userShelterWorkerSerializers": {
+      "$ref": "#/definitions/UserShelterWorkerSerializers"
+    },
+    "valuesForSelection": {
+      "$ref": "#/definitions/ValuesForSelection"
+    }
+  },
+  "required": [
+    "schemaVersion"
+  ],
+  "definitions": {
+    "Animal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "avatar": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "avatar_filename": {
+          "type": "string",
+          "readOnly": true
+        },
+        "spec": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Species"
+            }
+          ],
+          "readOnly": true
+        },
+        "spec_id": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "status": {
+          "$ref": "#/definitions/Status131Enum"
+        },
+        "date_joined": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "birth_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "death_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "death_reason": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "place_of_catch": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "place_of_release": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "date_of_chipping": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "chipping_code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "height": {
+          "type": "string",
+          "pattern": "^\\d+[.,]?\\d*$",
+          "maxLength": 10
+        },
+        "weight": {
+          "type": "string",
+          "pattern": "^\\d+[.,]?\\d*$",
+          "maxLength": 10
+        },
+        "has_documents": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "shelter": {
+          "type": "integer"
+        },
+        "curator": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Curator"
+            }
+          ],
+          "readOnly": true
+        },
+        "curator_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "writeOnly": true
+        },
+        "applicant": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Applicant"
+            }
+          ],
+          "readOnly": true
+        },
+        "applicant_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "writeOnly": true
+        },
+        "animal_attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnimalAttributeValue"
+          }
+        },
+        "deleted_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "animal_attributes",
+        "applicant",
+        "avatar_filename",
+        "curator",
+        "date_joined",
+        "deleted_at",
+        "has_documents",
+        "id",
+        "place_of_catch",
+        "shelter",
+        "spec",
+        "spec_id",
+        "url"
+      ]
+    },
+    "AnimalAttribute": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "is_required": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "AnimalAttributeValue": {
+      "type": "object",
+      "properties": {
+        "attr_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "is_required": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "attr_id",
+        "is_required",
+        "name",
+        "value"
+      ]
+    },
+    "AnimalHistorySnapshot": {
+      "type": "object",
+      "properties": {
+        "animal": {
+          "type": "integer"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "status": {
+          "$ref": "#/definitions/Status131Enum"
+        },
+        "height": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "weight": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "shelter_name": {
+          "type": "string"
+        },
+        "editor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "animal",
+        "created_at",
+        "editor",
+        "shelter_name"
+      ]
+    },
+    "AnimalNote": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "animal": {
+          "type": "integer"
+        },
+        "content": {
+          "type": "string"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnimalNoteFile"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "created_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "is_user_can_edit_or_delete": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "animal",
+        "content",
+        "created_at",
+        "created_by",
+        "id",
+        "is_user_can_edit_or_delete",
+        "updated_at",
+        "updated_by",
+        "url"
+      ]
+    },
+    "AnimalNoteFile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "file": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string",
+          "writeOnly": true,
+          "maxLength": 255
+        },
+        "filename": {
+          "type": "string",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "created_at",
+        "file",
+        "filename",
+        "id",
+        "name"
+      ]
+    },
+    "AnimalPrescription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "my_type": {
+          "$ref": "#/definitions/MyTypeEnum"
+        },
+        "duration": {
+          "$ref": "#/definitions/DurationEnum"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "created_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "drugs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionDrug"
+          }
+        },
+        "executions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionExecution"
+          }
+        }
+      },
+      "required": [
+        "created_by",
+        "drugs",
+        "executions",
+        "id",
+        "updated_by"
+      ]
+    },
+    "Applicant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "shelter": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "last_name": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "maxLength": 254
+        },
+        "phone_number": {
+          "type": "string",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "contact_details": {
+          "type": "string",
+          "format": "uri",
+          "title": "Social links",
+          "maxLength": 200
+        },
+        "created_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "animal_id": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "applicant_files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApplicantFile"
+          }
+        }
+      },
+      "required": [
+        "created_at",
+        "created_by",
+        "first_name",
+        "id",
+        "last_name",
+        "phone_number",
+        "shelter",
+        "updated_at",
+        "updated_by",
+        "url"
+      ]
+    },
+    "ApplicantFile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "file": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string",
+          "writeOnly": true,
+          "maxLength": 255
+        },
+        "filename": {
+          "type": "string",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "created_at",
+        "file",
+        "filename",
+        "id",
+        "name"
+      ]
+    },
+    "Approve": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "Curator": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "shelter": {
+          "type": "string",
+          "readOnly": true
+        },
+        "first_name": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "last_name": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "phone_number": {
+          "type": "string",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "phone_number",
+        "shelter",
+        "url"
+      ]
+    },
+    "Decline": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "Drug": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "usage_instruction": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "form_of_drug": {
+          "type": "integer"
+        },
+        "form_of_drug_name": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "form_of_drug",
+        "form_of_drug_name",
+        "id",
+        "name",
+        "usage_instruction"
+      ]
+    },
+    "DurationEnum": {
+      "enum": [
+        "EVERYDAY",
+        "EVERY_WEEK",
+        "CUSTOM"
+      ],
+      "type": "string"
+    },
+    "Feedback": {
+      "type": "object",
+      "properties": {
+        "shelter_id": {
+          "type": "integer"
+        },
+        "shelter_name": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "action": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "date",
+        "email",
+        "message",
+        "shelter_id",
+        "shelter_name"
+      ]
+    },
+    "LevelEnum": {
+      "enum": [
+        1,
+        2,
+        3
+      ],
+      "type": "integer"
+    },
+    "MyTypeEnum": {
+      "enum": [
+        "COURSE_OF_TREATMENT",
+        "APPOINTMENT",
+        "READMISSION",
+        "REMOVING_STITCHES",
+        "WOUND_HEALING",
+        "ANALYSIS"
+      ],
+      "type": "string"
+    },
+    "PaginatedAnimalHistorySnapshotList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnimalHistorySnapshot"
+          }
+        }
+      }
+    },
+    "PaginatedAnimalList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Animal"
+          }
+        }
+      }
+    },
+    "PaginatedAnimalNoteList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnimalNote"
+          }
+        }
+      }
+    },
+    "PaginatedAnimalPrescriptionList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnimalPrescription"
+          }
+        }
+      }
+    },
+    "PaginatedApplicantList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Applicant"
+          }
+        }
+      }
+    },
+    "PaginatedCuratorList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Curator"
+          }
+        }
+      }
+    },
+    "PaginatedPrescriptionExecutionTodayList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionExecutionToday"
+          }
+        }
+      }
+    },
+    "PaginatedPrescriptionList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Prescription"
+          }
+        }
+      }
+    },
+    "PaginatedShelterDrugList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ShelterDrug"
+          }
+        }
+      }
+    },
+    "PaginatedShelterShortSerializersList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ShelterShortSerializers"
+          }
+        }
+      }
+    },
+    "PaginatedSpeciesList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Species"
+          }
+        }
+      }
+    },
+    "PaginatedUserSheltersAdminSerializersList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserSheltersAdminSerializers"
+          }
+        }
+      }
+    },
+    "PaginatedUserShortSerializersList": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": 123
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=400&limit=100"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "example": "http://api.example.org/accounts/?offset=200&limit=100"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserShortSerializers"
+          }
+        }
+      }
+    },
+    "PatchedAnimal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "avatar": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "avatar_filename": {
+          "type": "string",
+          "readOnly": true
+        },
+        "spec": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Species"
+            }
+          ],
+          "readOnly": true
+        },
+        "spec_id": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "status": {
+          "$ref": "#/definitions/Status131Enum"
+        },
+        "date_joined": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "birth_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "death_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "death_reason": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "place_of_catch": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "place_of_release": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "date_of_chipping": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "chipping_code": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "height": {
+          "type": "string",
+          "pattern": "^\\d+[.,]?\\d*$",
+          "maxLength": 10
+        },
+        "weight": {
+          "type": "string",
+          "pattern": "^\\d+[.,]?\\d*$",
+          "maxLength": 10
+        },
+        "has_documents": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "shelter": {
+          "type": "integer"
+        },
+        "curator": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Curator"
+            }
+          ],
+          "readOnly": true
+        },
+        "curator_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "writeOnly": true
+        },
+        "applicant": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Applicant"
+            }
+          ],
+          "readOnly": true
+        },
+        "applicant_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "writeOnly": true
+        },
+        "animal_attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnimalAttributeValue"
+          }
+        },
+        "deleted_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "PatchedAnimalNote": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "animal": {
+          "type": "integer"
+        },
+        "content": {
+          "type": "string"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnimalNoteFile"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "created_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "is_user_can_edit_or_delete": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      }
+    },
+    "PatchedApplicant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "shelter": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "last_name": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email",
+          "maxLength": 254
+        },
+        "phone_number": {
+          "type": "string",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "contact_details": {
+          "type": "string",
+          "format": "uri",
+          "title": "Social links",
+          "maxLength": 200
+        },
+        "created_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "animal_id": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "applicant_files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApplicantFile"
+          }
+        }
+      }
+    },
+    "PatchedCurator": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "shelter": {
+          "type": "string",
+          "readOnly": true
+        },
+        "first_name": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "last_name": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "phone_number": {
+          "type": "string",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 255
+        }
+      }
+    },
+    "PatchedPrescription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "animal": {
+          "type": "integer"
+        },
+        "my_type": {
+          "$ref": "#/definitions/MyTypeEnum"
+        },
+        "duration": {
+          "$ref": "#/definitions/DurationEnum"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "created_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "drugs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionDrug"
+          }
+        },
+        "executions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionExecution"
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionFile"
+          }
+        }
+      }
+    },
+    "PatchedUserChangePasswordSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "re_password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "old_password": {
+          "type": "string",
+          "writeOnly": true
+        }
+      }
+    },
+    "PatchedUserSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "username": {
+          "type": "string",
+          "readOnly": true,
+          "title": "Имя пользователя",
+          "description": "Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_."
+        },
+        "first_name": {
+          "type": "string",
+          "title": "Имя",
+          "maxLength": 30
+        },
+        "last_name": {
+          "type": "string",
+          "title": "Фамилия",
+          "maxLength": 150
+        },
+        "fathers_name": {
+          "type": "string",
+          "title": "По отчеству",
+          "maxLength": 150
+        },
+        "full_name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "readOnly": true,
+          "title": "Почта"
+        },
+        "phone_number": {
+          "type": "string",
+          "title": "Номер телефона",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "address": {
+          "type": "string",
+          "title": "Адрес",
+          "maxLength": 200
+        },
+        "date_joined": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "title": "Дата регистрации"
+        },
+        "is_verified": {
+          "type": "boolean",
+          "readOnly": true,
+          "title": "Верифицировано"
+        }
+      }
+    },
+    "PatchedUserSheltersAdminSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "user": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/UserSerializers"
+            }
+          ],
+          "readOnly": true
+        },
+        "user_id": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "role": {
+          "$ref": "#/definitions/RoleEnum"
+        },
+        "is_verified_by_admin": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      }
+    },
+    "Prescription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "animal": {
+          "type": "integer"
+        },
+        "my_type": {
+          "$ref": "#/definitions/MyTypeEnum"
+        },
+        "duration": {
+          "$ref": "#/definitions/DurationEnum"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "created_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "updated_by": {
+          "type": "string",
+          "readOnly": true
+        },
+        "drugs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionDrug"
+          }
+        },
+        "executions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionExecution"
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionFile"
+          }
+        }
+      },
+      "required": [
+        "animal",
+        "created_by",
+        "drugs",
+        "executions",
+        "id",
+        "updated_by",
+        "url"
+      ]
+    },
+    "PrescriptionAnimal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "spec_name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "spec_parent_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "spec_name",
+        "spec_parent_name"
+      ]
+    },
+    "PrescriptionDrug": {
+      "type": "object",
+      "properties": {
+        "drug_id": {
+          "type": "integer"
+        },
+        "drug_name": {
+          "type": "string"
+        },
+        "usage_instruction": {
+          "type": "string",
+          "readOnly": true
+        },
+        "form_of_drug": {
+          "type": "string",
+          "readOnly": true
+        },
+        "drug_dosage": {
+          "type": "number",
+          "format": "float",
+          "minimum": 0.001
+        }
+      },
+      "required": [
+        "drug_dosage",
+        "drug_id",
+        "drug_name",
+        "form_of_drug",
+        "usage_instruction"
+      ]
+    },
+    "PrescriptionExecution": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "execute_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/PrescriptionExecutionStatusEnum"
+            }
+          ],
+          "readOnly": true
+        }
+      },
+      "required": [
+        "execute_at",
+        "id",
+        "status"
+      ]
+    },
+    "PrescriptionExecutionStatusEnum": {
+      "enum": [
+        "IN_PROGRESS",
+        "DONE",
+        "EXPIRED",
+        "CANCELLED"
+      ],
+      "type": "string"
+    },
+    "PrescriptionExecutionToday": {
+      "type": "object",
+      "properties": {
+        "prescription": {
+          "type": "integer"
+        },
+        "animal": {
+          "$ref": "#/definitions/PrescriptionAnimal"
+        },
+        "my_type": {
+          "$ref": "#/definitions/MyTypeEnum"
+        },
+        "drugs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PrescriptionDrug"
+          }
+        },
+        "description": {
+          "type": "string",
+          "readOnly": true
+        },
+        "execute_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "animal",
+        "description",
+        "drugs",
+        "execute_at",
+        "my_type",
+        "prescription"
+      ]
+    },
+    "PrescriptionFile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "file": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string",
+          "writeOnly": true,
+          "maxLength": 255
+        },
+        "filename": {
+          "type": "string",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "created_at",
+        "file",
+        "filename",
+        "id",
+        "name"
+      ]
+    },
+    "RoleEnum": {
+      "enum": [
+        "GUEST",
+        "WORKER"
+      ],
+      "type": "string"
+    },
+    "ShelterDrug": {
+      "type": "object",
+      "properties": {
+        "drug": {
+          "$ref": "#/definitions/Drug"
+        },
+        "drug_residues_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "maximum": 32767,
+          "minimum": -32768
+        }
+      },
+      "required": [
+        "drug"
+      ]
+    },
+    "ShelterSerializers": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "country": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "state": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "street": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "house": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "apartment": {
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "name"
+      ]
+    },
+    "ShelterShortSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Species": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z\\u0410-\\u044f- ()]*$",
+          "maxLength": 255
+        },
+        "level": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/LevelEnum"
+            }
+          ],
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "parent_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "parent_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "category_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        }
+      },
+      "required": [
+        "category_name",
+        "id",
+        "level",
+        "name",
+        "parent_name"
+      ]
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "Status131Enum": {
+      "enum": [
+        "IN_THE_SHELTER",
+        "HOSPITAL",
+        "OVEREXPOSURE",
+        "ATTACHED",
+        "PREPARING_TO_RELEASE",
+        "RELEASED",
+        "DEATH",
+        "EUTHANASIA"
+      ],
+      "type": "string"
+    },
+    "TokenObtainPair": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "access": {
+          "type": "string",
+          "readOnly": true
+        },
+        "refresh": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "access",
+        "password",
+        "refresh",
+        "username"
+      ]
+    },
+    "TokenRefresh": {
+      "type": "object",
+      "properties": {
+        "access": {
+          "type": "string",
+          "readOnly": true
+        },
+        "refresh": {
+          "type": "string",
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "access",
+        "refresh"
+      ]
+    },
+    "UserChangePasswordSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "re_password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "old_password": {
+          "type": "string",
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "old_password",
+        "password",
+        "re_password"
+      ]
+    },
+    "UserCurrentShelterSerializers": {
+      "type": "object",
+      "properties": {
+        "current_shelter": {
+          "type": "integer"
+        },
+        "current_shelter_user_role": {
+          "type": "string"
+        },
+        "is_user_can_edit": {
+          "type": "boolean"
+        },
+        "is_user_can_delete": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "current_shelter",
+        "current_shelter_user_role",
+        "is_user_can_delete",
+        "is_user_can_edit"
+      ]
+    },
+    "UserSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "username": {
+          "type": "string",
+          "readOnly": true,
+          "title": "Имя пользователя",
+          "description": "Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_."
+        },
+        "first_name": {
+          "type": "string",
+          "title": "Имя",
+          "maxLength": 30
+        },
+        "last_name": {
+          "type": "string",
+          "title": "Фамилия",
+          "maxLength": 150
+        },
+        "fathers_name": {
+          "type": "string",
+          "title": "По отчеству",
+          "maxLength": 150
+        },
+        "full_name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "readOnly": true,
+          "title": "Почта"
+        },
+        "phone_number": {
+          "type": "string",
+          "title": "Номер телефона",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "address": {
+          "type": "string",
+          "title": "Адрес",
+          "maxLength": 200
+        },
+        "date_joined": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "title": "Дата регистрации"
+        },
+        "is_verified": {
+          "type": "boolean",
+          "readOnly": true,
+          "title": "Верифицировано"
+        }
+      },
+      "required": [
+        "date_joined",
+        "email",
+        "first_name",
+        "full_name",
+        "id",
+        "is_verified",
+        "last_name",
+        "username"
+      ]
+    },
+    "UserShelterAdminSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "type": "string",
+          "title": "Имя",
+          "maxLength": 30
+        },
+        "last_name": {
+          "type": "string",
+          "title": "Фамилия",
+          "maxLength": 150
+        },
+        "fathers_name": {
+          "type": "string",
+          "title": "По отчеству",
+          "maxLength": 150
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "title": "Почта",
+          "maxLength": 254
+        },
+        "phone_number": {
+          "type": "string",
+          "title": "Номер телефона",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "address": {
+          "type": "string",
+          "title": "Адрес",
+          "maxLength": 200
+        },
+        "password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "re_password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "shelter": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ShelterSerializers"
+            }
+          ],
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "password",
+        "re_password",
+        "shelter"
+      ]
+    },
+    "UserShelterWorkerSerializers": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "title": "Имя",
+          "maxLength": 30
+        },
+        "last_name": {
+          "type": "string",
+          "title": "Фамилия",
+          "maxLength": 150
+        },
+        "fathers_name": {
+          "type": "string",
+          "title": "По отчеству",
+          "maxLength": 150
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "title": "Почта",
+          "maxLength": 254
+        },
+        "phone_number": {
+          "type": "string",
+          "title": "Номер телефона",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "address": {
+          "type": "string",
+          "title": "Адрес",
+          "maxLength": 200
+        },
+        "password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "re_password": {
+          "type": "string",
+          "writeOnly": true
+        },
+        "shelter": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "role": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/RoleEnum"
+            }
+          ],
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "email",
+        "first_name",
+        "last_name",
+        "password",
+        "re_password",
+        "role",
+        "shelter"
+      ]
+    },
+    "UserSheltersAdminSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "user": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/UserSerializers"
+            }
+          ],
+          "readOnly": true
+        },
+        "user_id": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "role": {
+          "$ref": "#/definitions/RoleEnum"
+        },
+        "is_verified_by_admin": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "is_verified_by_admin",
+        "role",
+        "user",
+        "user_id"
+      ]
+    },
+    "UserSheltersWorkerSerializers": {
+      "type": "object",
+      "properties": {
+        "shelter": {
+          "type": "integer",
+          "writeOnly": true
+        },
+        "role": {
+          "$ref": "#/definitions/RoleEnum"
+        }
+      },
+      "required": [
+        "role",
+        "shelter"
+      ]
+    },
+    "UserShortSerializers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "full_name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "title": "Почта",
+          "maxLength": 254
+        },
+        "phone_number": {
+          "type": "string",
+          "title": "Номер телефона",
+          "pattern": "^\\+?1?\\d{9,15}$",
+          "maxLength": 17
+        },
+        "address": {
+          "type": "string",
+          "title": "Адрес",
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "email",
+        "full_name",
+        "id"
+      ]
+    },
+    "ValuesForSelection": {
+      "type": "object",
+      "properties": {
+        "choices_name": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValuesForSelectionItem"
+          }
+        }
+      },
+      "required": [
+        "choices_name"
+      ]
+    },
+    "ValuesForSelectionItem": {
+      "type": "object",
+      "properties": {
+        "display_name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "display_name",
+        "value"
+      ]
+    }
+  }
+}

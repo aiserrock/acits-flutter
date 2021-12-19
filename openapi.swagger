@@ -1,0 +1,4036 @@
+openapi: 3.0.3
+info:
+  title: Acits API
+  version: 1.0.0
+  description: Animal shelter manager
+paths:
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - en
+          - ru
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Schema
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/animals/:
+    get:
+      operationId: v1_animals_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: spec_category_name
+        schema:
+          type: string
+        description: Species category name
+      - in: query
+        name: spec_name
+        schema:
+          type: string
+        description: Species name
+      - in: query
+        name: spec_parent_name
+        schema:
+          type: string
+        description: Species parent name
+      - in: query
+        name: status
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - ATTACHED
+            - DEATH
+            - EUTHANASIA
+            - HOSPITAL
+            - IN_THE_SHELTER
+            - OVEREXPOSURE
+            - PREPARING_TO_RELEASE
+            - RELEASED
+        explode: true
+        style: form
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAnimalList'
+          description: ''
+    post:
+      operationId: v1_animals_create
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Animal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Animal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Animal'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+  /api/v1/animals/{id}/:
+    get:
+      operationId: v1_animals_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+    put:
+      operationId: v1_animals_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Animal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Animal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Animal'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+    patch:
+      operationId: v1_animals_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimal'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+    delete:
+      operationId: v1_animals_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/animals/{id}/{pdf_type}/pdf/:
+    get:
+      operationId: v1_animals_pdf_retrieve
+      description: Generate PDF File by Animal, AnimalHistorySnapshot and Prescriptions.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: pdf_type
+        schema:
+          type: string
+        description: One of ('history', 'history-editing', 'history-prescriptions')
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /api/v1/animals/{id}/files/:
+    get:
+      operationId: v1_animals_files_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Файл заявителя.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApplicantFile'
+          description: ''
+  /api/v1/animals/{id}/history/:
+    get:
+      operationId: v1_animals_history_list
+      description: List of Animal History Snapshot.
+      parameters:
+      - in: query
+        name: created_at_after
+        schema:
+          type: string
+          format: date
+        description: Date range from - to
+      - in: query
+        name: created_at_before
+        schema:
+          type: string
+          format: date
+        description: Date range from - to
+      - in: query
+        name: created_at_range
+        schema:
+          type: string
+          format: date-time
+          enum:
+          - month
+          - today
+          - week
+          - year
+          - yesterday
+        description: Date range
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAnimalHistorySnapshotList'
+          description: ''
+  /api/v1/animals/{id}/prescriptions/:
+    get:
+      operationId: v1_animals_prescriptions_list
+      description: List of animal prescriptions
+      parameters:
+      - in: query
+        name: execute_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: execute_at__lt
+        schema:
+          type: string
+          format: date-time
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAnimalPrescriptionList'
+          description: ''
+  /api/v1/animals/{id}/restore/:
+    put:
+      operationId: v1_animals_restore_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: ''
+  /api/v1/animals/attributes/:
+    get:
+      operationId: v1_animals_attributes_list
+      parameters:
+      - in: query
+        name: is_required
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnimalAttribute'
+          description: ''
+  /api/v1/animals/attributes/{id}/:
+    get:
+      operationId: v1_animals_attributes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal Attribute.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalAttribute'
+          description: ''
+  /api/v1/animals/notes/:
+    get:
+      operationId: v1_animals_notes_list
+      parameters:
+      - in: query
+        name: animal
+        schema:
+          type: integer
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAnimalNoteList'
+          description: ''
+    post:
+      operationId: v1_animals_notes_create
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalNote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnimalNote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnimalNote'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalNote'
+          description: ''
+  /api/v1/animals/notes/{id}/:
+    get:
+      operationId: v1_animals_notes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal Note.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalNote'
+          description: ''
+    put:
+      operationId: v1_animals_notes_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal Note.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalNote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnimalNote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnimalNote'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalNote'
+          description: ''
+    patch:
+      operationId: v1_animals_notes_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal Note.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimalNote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimalNote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimalNote'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalNote'
+          description: ''
+    delete:
+      operationId: v1_animals_notes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Animal Note.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/animals/species/:
+    get:
+      operationId: v1_animals_species_list
+      description: A viewset that provides default `create()`, `retrieve()` and `list()`
+        actions.
+      parameters:
+      - in: query
+        name: level
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 2
+          - 3
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: parent_id
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSpeciesList'
+          description: ''
+    post:
+      operationId: v1_animals_species_create
+      description: A viewset that provides default `create()`, `retrieve()` and `list()`
+        actions.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Species'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Species'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Species'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Species'
+          description: ''
+  /api/v1/animals/species/{id}/:
+    get:
+      operationId: v1_animals_species_retrieve
+      description: A viewset that provides default `create()`, `retrieve()` and `list()`
+        actions.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Species.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Species'
+          description: ''
+  /api/v1/applicants/:
+    get:
+      operationId: v1_applicants_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Applicants
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedApplicantList'
+          description: ''
+    post:
+      operationId: v1_applicants_create
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Applicants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Applicant'
+          description: ''
+  /api/v1/applicants/{id}/:
+    get:
+      operationId: v1_applicants_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заявитель.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Applicants
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Applicant'
+          description: ''
+    put:
+      operationId: v1_applicants_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заявитель.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Applicants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Applicant'
+          description: ''
+    patch:
+      operationId: v1_applicants_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заявитель.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Applicants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedApplicant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedApplicant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedApplicant'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Applicant'
+          description: ''
+    delete:
+      operationId: v1_applicants_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Заявитель.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Applicants
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/available-shelters/:
+    get:
+      operationId: v1_available_shelters_list
+      description: List of available shelters for authenticated user.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Shelters
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShelterShortSerializersList'
+          description: ''
+  /api/v1/curators/:
+    get:
+      operationId: v1_curators_list
+      description: |-
+        A viewset that provides default `create()`, `retrieve()`, `update()`,
+        `partial_update()` and `list()` actions.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Curators
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCuratorList'
+          description: ''
+    post:
+      operationId: v1_curators_create
+      description: |-
+        A viewset that provides default `create()`, `retrieve()`, `update()`,
+        `partial_update()` and `list()` actions.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Curators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curator'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Curator'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Curator'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curator'
+          description: ''
+  /api/v1/curators/{id}/:
+    get:
+      operationId: v1_curators_retrieve
+      description: |-
+        A viewset that provides default `create()`, `retrieve()`, `update()`,
+        `partial_update()` and `list()` actions.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Curator.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Curators
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curator'
+          description: ''
+    put:
+      operationId: v1_curators_update
+      description: |-
+        A viewset that provides default `create()`, `retrieve()`, `update()`,
+        `partial_update()` and `list()` actions.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Curator.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Curators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Curator'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Curator'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Curator'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curator'
+          description: ''
+    patch:
+      operationId: v1_curators_partial_update
+      description: |-
+        A viewset that provides default `create()`, `retrieve()`, `update()`,
+        `partial_update()` and `list()` actions.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Curator.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Curators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCurator'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCurator'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCurator'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curator'
+          description: ''
+  /api/v1/feedback/:
+    post:
+      operationId: v1_feedback_create
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+          description: ''
+  /api/v1/prescriptions/:
+    get:
+      operationId: v1_prescriptions_list
+      description: |-
+        Work with multiple objects in model viewset.
+        In this case, we're check if it's list of multiple objects,
+        so we just check what type data is and set many=true if it's a list.
+      parameters:
+      - in: query
+        name: animal
+        schema:
+          type: integer
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Prescriptions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPrescriptionList'
+          description: ''
+    post:
+      operationId: v1_prescriptions_create
+      description: |-
+        Work with multiple objects in model viewset.
+        In this case, we're check if it's list of multiple objects,
+        so we just check what type data is and set many=true if it's a list.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Prescriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prescription'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Prescription'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Prescription'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prescription'
+          description: ''
+  /api/v1/prescriptions/{id}/:
+    get:
+      operationId: v1_prescriptions_retrieve
+      description: |-
+        Work with multiple objects in model viewset.
+        In this case, we're check if it's list of multiple objects,
+        so we just check what type data is and set many=true if it's a list.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Prescription.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Prescriptions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prescription'
+          description: ''
+    put:
+      operationId: v1_prescriptions_update
+      description: |-
+        Work with multiple objects in model viewset.
+        In this case, we're check if it's list of multiple objects,
+        so we just check what type data is and set many=true if it's a list.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Prescription.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Prescriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prescription'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Prescription'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Prescription'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prescription'
+          description: ''
+    patch:
+      operationId: v1_prescriptions_partial_update
+      description: |-
+        Work with multiple objects in model viewset.
+        In this case, we're check if it's list of multiple objects,
+        so we just check what type data is and set many=true if it's a list.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Prescription.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Prescriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPrescription'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPrescription'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPrescription'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prescription'
+          description: ''
+    delete:
+      operationId: v1_prescriptions_destroy
+      description: |-
+        Work with multiple objects in model viewset.
+        In this case, we're check if it's list of multiple objects,
+        so we just check what type data is and set many=true if it's a list.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Prescription.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Prescriptions
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/prescriptions/executions/:
+    get:
+      operationId: v1_prescriptions_executions_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Prescriptions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPrescriptionExecutionTodayList'
+          description: ''
+  /api/v1/shelter/drugs/:
+    get:
+      operationId: v1_shelter_drugs_list
+      description: List of shelter drugs.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Shelters
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShelterDrugList'
+          description: ''
+  /api/v1/shelter/workers/:
+    get:
+      operationId: v1_shelter_workers_list
+      description: List of user shelters workers.
+      parameters:
+      - in: query
+        name: is_verified_by_admin
+        schema:
+          type: boolean
+        description: Is verified by admin (true/false)
+      - in: query
+        name: is_verified_by_admin__isnull
+        schema:
+          type: boolean
+        description: Is verified by admin isnull (true/false)
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserSheltersAdminSerializersList'
+          description: ''
+    post:
+      operationId: v1_shelter_workers_create
+      description: List of user shelters workers.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSheltersAdminSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          description: ''
+  /api/v1/shelter/workers/{id}/:
+    get:
+      operationId: v1_shelter_workers_retrieve
+      description: List of user shelters workers.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user shelter.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          description: ''
+    put:
+      operationId: v1_shelter_workers_update
+      description: List of user shelters workers.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user shelter.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSheltersAdminSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          description: ''
+    patch:
+      operationId: v1_shelter_workers_partial_update
+      description: List of user shelters workers.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user shelter.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSheltersAdminSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSheltersAdminSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSheltersAdminSerializers'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSheltersAdminSerializers'
+          description: ''
+    delete:
+      operationId: v1_shelter_workers_destroy
+      description: List of user shelters workers.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user shelter.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/shelter/workers/{id}/approve/:
+    put:
+      operationId: v1_shelter_workers_approve_update
+      description: List of user shelters workers.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user shelter.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Approve'
+          description: ''
+  /api/v1/shelter/workers/{id}/decline/:
+    put:
+      operationId: v1_shelter_workers_decline_update
+      description: List of user shelters workers.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user shelter.
+        required: true
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Administrator shelter management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Decline'
+          description: ''
+  /api/v1/shelters/:
+    get:
+      operationId: v1_shelters_list
+      description: List of shelters.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Shelters
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShelterShortSerializersList'
+          description: ''
+  /api/v1/shelters/add/:
+    post:
+      operationId: v1_shelters_add_create
+      description: Add user to shelter.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Shelters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSheltersWorkerSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSheltersWorkerSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSheltersWorkerSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSheltersWorkerSerializers'
+          description: ''
+  /api/v1/users/admin-register/:
+    post:
+      operationId: v1_users_admin_register_create
+      description: Admin with shelter registration.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserShelterAdminSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserShelterAdminSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserShelterAdminSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserShelterAdminSerializers'
+          description: ''
+  /api/v1/users/available-workers/:
+    get:
+      operationId: v1_users_available_workers_list
+      description: List of available workers for the shelter.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserShortSerializersList'
+          description: ''
+  /api/v1/users/me/:
+    get:
+      operationId: v1_users_me_retrieve
+      description: User profile.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSerializers'
+          description: ''
+    put:
+      operationId: v1_users_me_update
+      description: User profile.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSerializers'
+          description: ''
+    patch:
+      operationId: v1_users_me_partial_update
+      description: User profile.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSerializers'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSerializers'
+          description: ''
+  /api/v1/users/me/change_password/:
+    put:
+      operationId: v1_users_me_change_password_update
+      description: Change password.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserChangePasswordSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserChangePasswordSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserChangePasswordSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserChangePasswordSerializers'
+          description: ''
+    patch:
+      operationId: v1_users_me_change_password_partial_update
+      description: Change password.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserChangePasswordSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserChangePasswordSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserChangePasswordSerializers'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserChangePasswordSerializers'
+          description: ''
+  /api/v1/users/me/shelters/:
+    get:
+      operationId: v1_users_me_shelters_list
+      description: List of user shelters.
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShelterShortSerializersList'
+          description: ''
+  /api/v1/users/me/shelters/current/:
+    get:
+      operationId: v1_users_me_shelters_current_retrieve
+      description: User current shelter.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCurrentShelterSerializers'
+          description: ''
+  /api/v1/users/worker-register/:
+    post:
+      operationId: v1_users_worker_register_create
+      description: Worker registration.
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Users registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserShelterWorkerSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserShelterWorkerSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserShelterWorkerSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserShelterWorkerSerializers'
+          description: ''
+  /api/v1/values-for-selection/:
+    get:
+      operationId: v1_values_for_selection_retrieve
+      parameters:
+      - in: header
+        name: x-current-shelter
+        schema:
+          type: integer
+          default: 2
+        description: Set current shelter id
+      tags:
+      - Values for selection
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValuesForSelection'
+          description: ''
+components:
+  schemas:
+    Animal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+        avatar_filename:
+          type: string
+          readOnly: true
+        spec:
+          allOf:
+          - $ref: '#/components/schemas/Species'
+          readOnly: true
+        spec_id:
+          type: integer
+          writeOnly: true
+        status:
+          $ref: '#/components/schemas/Status131Enum'
+        date_joined:
+          type: string
+          format: date-time
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        death_date:
+          type: string
+          format: date
+          nullable: true
+        death_reason:
+          type: string
+          maxLength: 128
+        place_of_catch:
+          type: string
+          maxLength: 255
+        place_of_release:
+          type: string
+          maxLength: 255
+        date_of_chipping:
+          type: string
+          format: date
+          nullable: true
+        chipping_code:
+          type: string
+          maxLength: 50
+        height:
+          type: string
+          pattern: ^\d+[.,]?\d*$
+          maxLength: 10
+        weight:
+          type: string
+          pattern: ^\d+[.,]?\d*$
+          maxLength: 10
+        has_documents:
+          type: boolean
+          readOnly: true
+        shelter:
+          type: integer
+        curator:
+          allOf:
+          - $ref: '#/components/schemas/Curator'
+          readOnly: true
+        curator_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        applicant:
+          allOf:
+          - $ref: '#/components/schemas/Applicant'
+          readOnly: true
+        applicant_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        animal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimalAttributeValue'
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+      required:
+      - animal_attributes
+      - applicant
+      - avatar_filename
+      - curator
+      - date_joined
+      - deleted_at
+      - has_documents
+      - id
+      - place_of_catch
+      - shelter
+      - spec
+      - spec_id
+      - url
+    AnimalAttribute:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        is_required:
+          type: boolean
+      required:
+      - id
+      - name
+    AnimalAttributeValue:
+      type: object
+      properties:
+        attr_id:
+          type: integer
+        name:
+          type: string
+        value:
+          type: string
+          maxLength: 255
+        is_required:
+          type: boolean
+          readOnly: true
+      required:
+      - attr_id
+      - is_required
+      - name
+      - value
+    AnimalHistorySnapshot:
+      type: object
+      properties:
+        animal:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status131Enum'
+        height:
+          type: string
+          maxLength: 10
+        weight:
+          type: string
+          maxLength: 10
+        shelter_name:
+          type: string
+        editor:
+          type: string
+      required:
+      - animal
+      - created_at
+      - editor
+      - shelter_name
+    AnimalNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        animal:
+          type: integer
+        content:
+          type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimalNoteFile'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_by:
+          type: string
+          readOnly: true
+        updated_by:
+          type: string
+          readOnly: true
+        is_user_can_edit_or_delete:
+          type: boolean
+          readOnly: true
+      required:
+      - animal
+      - content
+      - created_at
+      - created_by
+      - id
+      - is_user_can_edit_or_delete
+      - updated_at
+      - updated_by
+      - url
+    AnimalNoteFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        file:
+          type: string
+          format: uri
+        name:
+          type: string
+          writeOnly: true
+          maxLength: 255
+        filename:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - file
+      - filename
+      - id
+      - name
+    AnimalPrescription:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        my_type:
+          $ref: '#/components/schemas/MyTypeEnum'
+        duration:
+          $ref: '#/components/schemas/DurationEnum'
+        description:
+          type: string
+          maxLength: 1024
+        created_by:
+          type: string
+          readOnly: true
+        updated_by:
+          type: string
+          readOnly: true
+        drugs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionDrug'
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionExecution'
+      required:
+      - created_by
+      - drugs
+      - executions
+      - id
+      - updated_by
+    Applicant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        shelter:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        phone_number:
+          type: string
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        contact_details:
+          type: string
+          format: uri
+          title: Social links
+          maxLength: 200
+        created_by:
+          type: string
+          readOnly: true
+        updated_by:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        animal_id:
+          type: integer
+          writeOnly: true
+        applicant_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicantFile'
+      required:
+      - created_at
+      - created_by
+      - first_name
+      - id
+      - last_name
+      - phone_number
+      - shelter
+      - updated_at
+      - updated_by
+      - url
+    ApplicantFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        file:
+          type: string
+          format: uri
+        name:
+          type: string
+          writeOnly: true
+          maxLength: 255
+        filename:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - file
+      - filename
+      - id
+      - name
+    Approve:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status
+    Curator:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        shelter:
+          type: string
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone_number:
+          type: string
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        address:
+          type: string
+          maxLength: 255
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - phone_number
+      - shelter
+      - url
+    Decline:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status
+    Drug:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        usage_instruction:
+          type: string
+          maxLength: 1024
+        form_of_drug:
+          type: integer
+        form_of_drug_name:
+          type: string
+          readOnly: true
+      required:
+      - form_of_drug
+      - form_of_drug_name
+      - id
+      - name
+      - usage_instruction
+    DurationEnum:
+      enum:
+      - EVERYDAY
+      - EVERY_WEEK
+      - CUSTOM
+      type: string
+    Feedback:
+      type: object
+      properties:
+        shelter_id:
+          type: integer
+        shelter_name:
+          type: string
+        date:
+          type: string
+          format: date
+        action:
+          type: string
+        email:
+          type: string
+          format: email
+        message:
+          type: string
+      required:
+      - action
+      - date
+      - email
+      - message
+      - shelter_id
+      - shelter_name
+    LevelEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+    MyTypeEnum:
+      enum:
+      - COURSE_OF_TREATMENT
+      - APPOINTMENT
+      - READMISSION
+      - REMOVING_STITCHES
+      - WOUND_HEALING
+      - ANALYSIS
+      type: string
+    PaginatedAnimalHistorySnapshotList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimalHistorySnapshot'
+    PaginatedAnimalList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Animal'
+    PaginatedAnimalNoteList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimalNote'
+    PaginatedAnimalPrescriptionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimalPrescription'
+    PaginatedApplicantList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Applicant'
+    PaginatedCuratorList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Curator'
+    PaginatedPrescriptionExecutionTodayList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionExecutionToday'
+    PaginatedPrescriptionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prescription'
+    PaginatedShelterDrugList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShelterDrug'
+    PaginatedShelterShortSerializersList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShelterShortSerializers'
+    PaginatedSpeciesList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Species'
+    PaginatedUserSheltersAdminSerializersList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSheltersAdminSerializers'
+    PaginatedUserShortSerializersList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserShortSerializers'
+    PatchedAnimal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+        avatar_filename:
+          type: string
+          readOnly: true
+        spec:
+          allOf:
+          - $ref: '#/components/schemas/Species'
+          readOnly: true
+        spec_id:
+          type: integer
+          writeOnly: true
+        status:
+          $ref: '#/components/schemas/Status131Enum'
+        date_joined:
+          type: string
+          format: date-time
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        death_date:
+          type: string
+          format: date
+          nullable: true
+        death_reason:
+          type: string
+          maxLength: 128
+        place_of_catch:
+          type: string
+          maxLength: 255
+        place_of_release:
+          type: string
+          maxLength: 255
+        date_of_chipping:
+          type: string
+          format: date
+          nullable: true
+        chipping_code:
+          type: string
+          maxLength: 50
+        height:
+          type: string
+          pattern: ^\d+[.,]?\d*$
+          maxLength: 10
+        weight:
+          type: string
+          pattern: ^\d+[.,]?\d*$
+          maxLength: 10
+        has_documents:
+          type: boolean
+          readOnly: true
+        shelter:
+          type: integer
+        curator:
+          allOf:
+          - $ref: '#/components/schemas/Curator'
+          readOnly: true
+        curator_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        applicant:
+          allOf:
+          - $ref: '#/components/schemas/Applicant'
+          readOnly: true
+        applicant_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        animal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimalAttributeValue'
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+    PatchedAnimalNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        animal:
+          type: integer
+        content:
+          type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnimalNoteFile'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_by:
+          type: string
+          readOnly: true
+        updated_by:
+          type: string
+          readOnly: true
+        is_user_can_edit_or_delete:
+          type: boolean
+          readOnly: true
+    PatchedApplicant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        shelter:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        phone_number:
+          type: string
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        contact_details:
+          type: string
+          format: uri
+          title: Social links
+          maxLength: 200
+        created_by:
+          type: string
+          readOnly: true
+        updated_by:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        animal_id:
+          type: integer
+          writeOnly: true
+        applicant_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicantFile'
+    PatchedCurator:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        shelter:
+          type: string
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 50
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone_number:
+          type: string
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        address:
+          type: string
+          maxLength: 255
+    PatchedPrescription:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        animal:
+          type: integer
+        my_type:
+          $ref: '#/components/schemas/MyTypeEnum'
+        duration:
+          $ref: '#/components/schemas/DurationEnum'
+        description:
+          type: string
+          maxLength: 1024
+        created_by:
+          type: string
+          readOnly: true
+        updated_by:
+          type: string
+          readOnly: true
+        drugs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionDrug'
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionExecution'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionFile'
+    PatchedUserChangePasswordSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        re_password:
+          type: string
+          writeOnly: true
+        old_password:
+          type: string
+          writeOnly: true
+    PatchedUserSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 30
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        fathers_name:
+          type: string
+          title: По отчеству
+          maxLength: 150
+        full_name:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Почта
+        phone_number:
+          type: string
+          title: Номер телефона
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        address:
+          type: string
+          title: Адрес
+          maxLength: 200
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата регистрации
+        is_verified:
+          type: boolean
+          readOnly: true
+          title: Верифицировано
+    PatchedUserSheltersAdminSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserSerializers'
+          readOnly: true
+        user_id:
+          type: integer
+          writeOnly: true
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        is_verified_by_admin:
+          type: boolean
+          readOnly: true
+    Prescription:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        animal:
+          type: integer
+        my_type:
+          $ref: '#/components/schemas/MyTypeEnum'
+        duration:
+          $ref: '#/components/schemas/DurationEnum'
+        description:
+          type: string
+          maxLength: 1024
+        created_by:
+          type: string
+          readOnly: true
+        updated_by:
+          type: string
+          readOnly: true
+        drugs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionDrug'
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionExecution'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionFile'
+      required:
+      - animal
+      - created_by
+      - drugs
+      - executions
+      - id
+      - updated_by
+      - url
+    PrescriptionAnimal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        spec_name:
+          type: string
+          readOnly: true
+        spec_parent_name:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - id
+      - spec_name
+      - spec_parent_name
+    PrescriptionDrug:
+      type: object
+      properties:
+        drug_id:
+          type: integer
+        drug_name:
+          type: string
+        usage_instruction:
+          type: string
+          readOnly: true
+        form_of_drug:
+          type: string
+          readOnly: true
+        drug_dosage:
+          type: number
+          format: float
+          minimum: 0.001
+      required:
+      - drug_dosage
+      - drug_id
+      - drug_name
+      - form_of_drug
+      - usage_instruction
+    PrescriptionExecution:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        execute_at:
+          type: string
+          format: date-time
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PrescriptionExecutionStatusEnum'
+          readOnly: true
+      required:
+      - execute_at
+      - id
+      - status
+    PrescriptionExecutionStatusEnum:
+      enum:
+      - IN_PROGRESS
+      - DONE
+      - EXPIRED
+      - CANCELLED
+      type: string
+    PrescriptionExecutionToday:
+      type: object
+      properties:
+        prescription:
+          type: integer
+        animal:
+          $ref: '#/components/schemas/PrescriptionAnimal'
+        my_type:
+          $ref: '#/components/schemas/MyTypeEnum'
+        drugs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrescriptionDrug'
+        description:
+          type: string
+          readOnly: true
+        execute_at:
+          type: string
+          format: date-time
+      required:
+      - animal
+      - description
+      - drugs
+      - execute_at
+      - my_type
+      - prescription
+    PrescriptionFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        file:
+          type: string
+          format: uri
+        name:
+          type: string
+          writeOnly: true
+          maxLength: 255
+        filename:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - file
+      - filename
+      - id
+      - name
+    RoleEnum:
+      enum:
+      - GUEST
+      - WORKER
+      type: string
+    ShelterDrug:
+      type: object
+      properties:
+        drug:
+          $ref: '#/components/schemas/Drug'
+        drug_residues_count:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          nullable: true
+      required:
+      - drug
+    ShelterSerializers:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          maxLength: 255
+        state:
+          type: string
+          maxLength: 255
+        region:
+          type: string
+          maxLength: 255
+        street:
+          type: string
+          maxLength: 255
+        house:
+          type: string
+          maxLength: 50
+        apartment:
+          type: string
+          maxLength: 50
+      required:
+      - city
+      - country
+      - name
+    ShelterShortSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - id
+      - name
+    Species:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          pattern: ^[A-z\u0410-\u044f- ()]*$
+          maxLength: 255
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelEnum'
+          minimum: -32768
+          maximum: 32767
+        parent_id:
+          type: integer
+          nullable: true
+        parent_name:
+          type: string
+          nullable: true
+          readOnly: true
+        category_name:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - category_name
+      - id
+      - level
+      - name
+      - parent_name
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status
+    Status131Enum:
+      enum:
+      - IN_THE_SHELTER
+      - HOSPITAL
+      - OVEREXPOSURE
+      - ATTACHED
+      - PREPARING_TO_RELEASE
+      - RELEASED
+      - DEATH
+      - EUTHANASIA
+      type: string
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    UserChangePasswordSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        re_password:
+          type: string
+          writeOnly: true
+        old_password:
+          type: string
+          writeOnly: true
+      required:
+      - id
+      - old_password
+      - password
+      - re_password
+    UserCurrentShelterSerializers:
+      type: object
+      properties:
+        current_shelter:
+          type: integer
+        current_shelter_user_role:
+          type: string
+        is_user_can_edit:
+          type: boolean
+        is_user_can_delete:
+          type: boolean
+      required:
+      - current_shelter
+      - current_shelter_user_role
+      - is_user_can_delete
+      - is_user_can_edit
+    UserSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 30
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        fathers_name:
+          type: string
+          title: По отчеству
+          maxLength: 150
+        full_name:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Почта
+        phone_number:
+          type: string
+          title: Номер телефона
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        address:
+          type: string
+          title: Адрес
+          maxLength: 200
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата регистрации
+        is_verified:
+          type: boolean
+          readOnly: true
+          title: Верифицировано
+      required:
+      - date_joined
+      - email
+      - first_name
+      - full_name
+      - id
+      - is_verified
+      - last_name
+      - username
+    UserShelterAdminSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 30
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        fathers_name:
+          type: string
+          title: По отчеству
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Почта
+          maxLength: 254
+        phone_number:
+          type: string
+          title: Номер телефона
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        address:
+          type: string
+          title: Адрес
+          maxLength: 200
+        password:
+          type: string
+          writeOnly: true
+        re_password:
+          type: string
+          writeOnly: true
+        shelter:
+          allOf:
+          - $ref: '#/components/schemas/ShelterSerializers'
+          writeOnly: true
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - re_password
+      - shelter
+    UserShelterWorkerSerializers:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Имя
+          maxLength: 30
+        last_name:
+          type: string
+          title: Фамилия
+          maxLength: 150
+        fathers_name:
+          type: string
+          title: По отчеству
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Почта
+          maxLength: 254
+        phone_number:
+          type: string
+          title: Номер телефона
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        address:
+          type: string
+          title: Адрес
+          maxLength: 200
+        password:
+          type: string
+          writeOnly: true
+        re_password:
+          type: string
+          writeOnly: true
+        shelter:
+          type: integer
+          writeOnly: true
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          writeOnly: true
+      required:
+      - email
+      - first_name
+      - last_name
+      - password
+      - re_password
+      - role
+      - shelter
+    UserSheltersAdminSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserSerializers'
+          readOnly: true
+        user_id:
+          type: integer
+          writeOnly: true
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        is_verified_by_admin:
+          type: boolean
+          readOnly: true
+      required:
+      - id
+      - is_verified_by_admin
+      - role
+      - user
+      - user_id
+    UserSheltersWorkerSerializers:
+      type: object
+      properties:
+        shelter:
+          type: integer
+          writeOnly: true
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - role
+      - shelter
+    UserShortSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Почта
+          maxLength: 254
+        phone_number:
+          type: string
+          title: Номер телефона
+          pattern: ^\+?1?\d{9,15}$
+          maxLength: 17
+        address:
+          type: string
+          title: Адрес
+          maxLength: 200
+      required:
+      - email
+      - full_name
+      - id
+    ValuesForSelection:
+      type: object
+      properties:
+        choices_name:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValuesForSelectionItem'
+      required:
+      - choices_name
+    ValuesForSelectionItem:
+      type: object
+      properties:
+        display_name:
+          type: string
+        value:
+          type: string
+      required:
+      - display_name
+      - value
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
