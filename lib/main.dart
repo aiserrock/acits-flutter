@@ -1,7 +1,10 @@
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'package:acits_flutter/di/di_container.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+Future<void> main() async {
   initDi();
   runApp(const MyApp());
 }
@@ -13,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: S.of(context).mainFlutterDemo,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -26,7 +29,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
     );
   }
 }

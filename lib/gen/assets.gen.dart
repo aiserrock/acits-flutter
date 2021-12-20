@@ -9,6 +9,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsIconGen {
+  const $AssetsIconGen();
+
+  /// File path: assets/icon/close.svg
+  SvgGenImage get close => const SvgGenImage('assets/icon/close.svg');
+}
+
 class $AssetsImageGen {
   const $AssetsImageGen();
 
@@ -21,10 +28,28 @@ class $AssetsImageGen {
       const SvgGenImage('assets/image/logo_splash.svg');
 }
 
+class $AssetsOnboardingGen {
+  const $AssetsOnboardingGen();
+
+  /// File path: assets/onboarding/drugs.svg
+  SvgGenImage get drugs => const SvgGenImage('assets/onboarding/drugs.svg');
+
+  /// File path: assets/onboarding/free.svg
+  SvgGenImage get free => const SvgGenImage('assets/onboarding/free.svg');
+
+  /// File path: assets/onboarding/news.svg
+  SvgGenImage get news => const SvgGenImage('assets/onboarding/news.svg');
+
+  /// File path: assets/onboarding/plan.svg
+  SvgGenImage get plan => const SvgGenImage('assets/onboarding/plan.svg');
+}
+
 class Assets {
   Assets._();
 
+  static const $AssetsIconGen icon = $AssetsIconGen();
   static const $AssetsImageGen image = $AssetsImageGen();
+  static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
 }
 
 class AssetGenImage extends AssetImage {
