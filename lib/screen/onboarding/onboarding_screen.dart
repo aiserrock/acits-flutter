@@ -70,19 +70,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            children: [
-              _buildCloseBtn(context),
-              _buildPager(),
-              const SizedBox(height: 24.0),
-              _buildBtn(),
-              const SizedBox(height: 24.0),
-              _buildIndicator(),
-              const SizedBox(height: 16.0),
-            ],
-          ),
+        child: Column(
+          children: [
+            _buildCloseBtn(context),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    _buildPager(),
+                    const SizedBox(height: 24.0),
+                    _buildBtn(),
+                    const SizedBox(height: 24.0),
+                    _buildIndicator(),
+                    const SizedBox(height: 16.0),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -124,11 +130,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildPager() {
+    final isSmallScreen = MediaQuery.of(context).size.width <= 320.0;
     return Expanded(
       child: PageView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: _onboardingData.length,
         controller: _controller,
+        physics: const BouncingScrollPhysics(),
         itemBuilder: (_, index) {
           final data = _onboardingData[index];
           return Column(
@@ -138,13 +146,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: data.image.svg(fit: BoxFit.fitWidth),
                 ),
               ),
-              const SizedBox(height: 24.0),
+              SizedBox(height: isSmallScreen ? 16.0 : 24.0),
               Text(
                 data.title,
                 style: StyleRes.title,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24.0),
+              SizedBox(height: isSmallScreen ? 16.0 : 24.0),
               Text(
                 data.message,
                 style: StyleRes.content,
