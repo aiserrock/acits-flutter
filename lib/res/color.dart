@@ -22,7 +22,13 @@ class ColorRes {
       textPrimary = _black100,
 
       /// Контент (body / message) текст
-      textSecondary = _grey200;
+      textSecondary = _grey200,
+
+      /// Foreground
+      foreground = Colors.white,
+
+      /// Background
+      background = _grey0;
 }
 
 /// Базовые цвета из UI Kit

@@ -3,6 +3,7 @@ import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -111,22 +112,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildBtn() {
-    return ElevatedButton(
+    return PrimaryButton(
       onPressed: _tapNext,
-      style: ButtonStyle(
-        textStyle: MaterialStateProperty.all(
-          const TextStyle(fontSize: 16.0),
-        ),
-        padding: MaterialStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-        ),
-        backgroundColor: MaterialStateProperty.all(ColorRes.primaryButton),
-      ),
-      child: Text(
-        _currentPage == _onboardingData.length - 1
-            ? StringRes.current.commonBegin.toUpperCase()
-            : StringRes.current.commonNext.toUpperCase(),
-      ),
+      text: _currentPage == _onboardingData.length - 1
+          ? StringRes.current.commonBegin.toUpperCase()
+          : StringRes.current.commonNext.toUpperCase(),
     );
   }
 
