@@ -12,126 +12,156 @@ import 'intl/messages_all.dart';
 // ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
 // ignore_for_file: avoid_redundant_argument_values, avoid_escaping_inner_quotes
 
-class S {
-  S();
+class StringRes {
+  StringRes();
 
-  static S? _current;
+  static StringRes? _current;
 
-  static S get current {
+  static StringRes get current {
     assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+        'No instance of StringRes was loaded. Try to initialize the StringRes delegate before accessing StringRes.current.');
     return _current!;
   }
 
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
-  static Future<S> load(Locale locale) {
+  static Future<StringRes> load(Locale locale) {
     final name = (locale.countryCode?.isEmpty ?? false)
         ? locale.languageCode
         : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
-      final instance = S();
-      S._current = instance;
+      final instance = StringRes();
+      StringRes._current = instance;
 
       return instance;
     });
   }
 
-  static S of(BuildContext context) {
-    final instance = S.maybeOf(context);
+  static StringRes of(BuildContext context) {
+    final instance = StringRes.maybeOf(context);
     assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+        'No instance of StringRes present in the widget tree. Did you add StringRes.delegate in localizationsDelegates?');
     return instance!;
   }
 
-  static S? maybeOf(BuildContext context) {
-    return Localizations.of<S>(context, S);
+  static StringRes? maybeOf(BuildContext context) {
+    return Localizations.of<StringRes>(context, StringRes);
   }
 
-  /// `5`
-  String get five {
+  /// `common`
+  String get common {
     return Intl.message(
-      '5',
-      name: 'five',
+      'common',
+      name: 'common',
       desc: '',
       args: [],
     );
   }
 
-  /// `4`
-  String get four {
+  /// `Begin`
+  String get commonBegin {
     return Intl.message(
-      '4',
-      name: 'four',
+      'Begin',
+      name: 'commonBegin',
       desc: '',
       args: [],
     );
   }
 
-  /// `world`
-  String get hello {
+  /// `Next`
+  String get commonNext {
     return Intl.message(
-      'world',
-      name: 'hello',
+      'Next',
+      name: 'commonNext',
       desc: '',
       args: [],
     );
   }
 
-  /// `Flutter Demo`
-  String get mainFlutterDemo {
+  /// `We have prepared in advance the maximum number of medical appointments for shelters`
+  String get onboardingDrugsMsg {
     return Intl.message(
-      'Flutter Demo',
-      name: 'mainFlutterDemo',
+      'We have prepared in advance the maximum number of medical appointments for shelters',
+      name: 'onboardingDrugsMsg',
       desc: '',
       args: [],
     );
   }
 
-  /// `second`
-  String get one_more {
+  /// `Flexible system of work with appointments`
+  String get onboardingDrugsTitle {
     return Intl.message(
-      'second',
-      name: 'one_more',
+      'Flexible system of work with appointments',
+      name: 'onboardingDrugsTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Three`
-  String get third {
+  /// `All functionality will be available to you in full, without restrictions`
+  String get onboardingFreeMsg {
     return Intl.message(
-      'Three',
-      name: 'third',
+      'All functionality will be available to you in full, without restrictions',
+      name: 'onboardingFreeMsg',
       desc: '',
       args: [],
     );
   }
 
-  /// `six_one`
-  String get six {
+  /// `Absolutely free`
+  String get onboardingFreeTitle {
     return Intl.message(
-      'six_one',
-      name: 'six',
+      'Absolutely free',
+      name: 'onboardingFreeTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Seven`
-  String get seven {
+  /// `The map is maintained throughout the life of the animal and does not depend on the shelter`
+  String get onboardingNewsMsg {
     return Intl.message(
-      'Seven',
-      name: 'seven',
+      'The map is maintained throughout the life of the animal and does not depend on the shelter',
+      name: 'onboardingNewsMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unified medical card of the animal`
+  String get onboardingNewsTitle {
+    return Intl.message(
+      'Unified medical card of the animal',
+      name: 'onboardingNewsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allows you to clearly plan working hours and provide timely medical assistance to animals`
+  String get onboardingPlanMsg {
+    return Intl.message(
+      'Allows you to clearly plan working hours and provide timely medical assistance to animals',
+      name: 'onboardingPlanMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Summary of appointments for the current day`
+  String get onboardingPlanTitle {
+    return Intl.message(
+      'Summary of appointments for the current day',
+      name: 'onboardingPlanTitle',
       desc: '',
       args: [],
     );
   }
 }
 
-class AppLocalizationDelegate extends LocalizationsDelegate<S> {
+class AppLocalizationDelegate extends LocalizationsDelegate<StringRes> {
   const AppLocalizationDelegate();
 
   List<Locale> get supportedLocales {
@@ -144,7 +174,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   @override
   bool isSupported(Locale locale) => _isSupported(locale);
   @override
-  Future<S> load(Locale locale) => S.load(locale);
+  Future<StringRes> load(Locale locale) => StringRes.load(locale);
   @override
   bool shouldReload(AppLocalizationDelegate old) => false;
 

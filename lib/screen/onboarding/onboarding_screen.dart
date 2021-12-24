@@ -1,4 +1,5 @@
 import 'package:acits_flutter/gen/assets.gen.dart';
+import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
@@ -21,23 +22,23 @@ class _OnboardingData {
 final _onboardingData = <_OnboardingData>[
   _OnboardingData(
     image: const $AssetsOnboardingGen().plan,
-    title: StringRes.onboardingPlanTitle,
-    message: StringRes.onboardingPlanMsg,
+    title: StringRes.current.onboardingPlanTitle,
+    message: StringRes.current.onboardingPlanMsg,
   ),
   _OnboardingData(
     image: const $AssetsOnboardingGen().news,
-    title: StringRes.onboardingNewsTitle,
-    message: StringRes.onboardingNewsMsg,
+    title: StringRes.current.onboardingNewsTitle,
+    message: StringRes.current.onboardingNewsMsg,
   ),
   _OnboardingData(
     image: const $AssetsOnboardingGen().drugs,
-    title: StringRes.onboardingDrugsTitle,
-    message: StringRes.onboardingDrugsMsg,
+    title: StringRes.current.onboardingDrugsTitle,
+    message: StringRes.current.onboardingDrugsMsg,
   ),
   _OnboardingData(
     image: const $AssetsOnboardingGen().free,
-    title: StringRes.onboardingFreeTitle,
-    message: StringRes.onboardingFreeMsg,
+    title: StringRes.current.onboardingFreeTitle,
+    message: StringRes.current.onboardingFreeMsg,
   ),
 ];
 
@@ -123,8 +124,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       child: Text(
         _currentPage == _onboardingData.length - 1
-            ? StringRes.commonBegin.toUpperCase()
-            : StringRes.commonNext.toUpperCase(),
+            ? StringRes.current.commonBegin.toUpperCase()
+            : StringRes.current.commonNext.toUpperCase(),
       ),
     );
   }

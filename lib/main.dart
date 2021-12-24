@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: StringRes.commonAppName,
+      title: StringConst.commonAppName,
       theme: ThemeData(
         buttonTheme: const ButtonThemeData(
           buttonColor: ColorRes.primaryButton,
@@ -34,12 +34,12 @@ class MyApp extends StatelessWidget {
         ),
       ),
       localizationsDelegates: const [
-        S.delegate,
+        StringRes.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: S.delegate.supportedLocales,
+      supportedLocales: StringRes.delegate.supportedLocales,
       home: const OnboardingScreen(),
     );
   }
