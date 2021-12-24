@@ -22,12 +22,24 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "five": MessageLookupByLibrary.simpleMessage("пятый"),
-        "four": MessageLookupByLibrary.simpleMessage("Червертый"),
-        "hello": MessageLookupByLibrary.simpleMessage("Мир"),
-        "mainFlutterDemo": MessageLookupByLibrary.simpleMessage("Flutter Демо"),
-        "one_more": MessageLookupByLibrary.simpleMessage("Еще одно слово"),
-        "six": MessageLookupByLibrary.simpleMessage("six_one"),
-        "third": MessageLookupByLibrary.simpleMessage("Третий не лишний")
+        "common": MessageLookupByLibrary.simpleMessage("общий"),
+        "commonBegin": MessageLookupByLibrary.simpleMessage("Начать"),
+        "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
+        "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
+            "Мы заранее подготовили максимальное количество медицинских назначений для приютов"),
+        "onboardingDrugsTitle": MessageLookupByLibrary.simpleMessage(
+            "Гибкая система работы с назначениями"),
+        "onboardingFreeMsg": MessageLookupByLibrary.simpleMessage(
+            "Весь функционал будет доступен для Вас в полном объеме, без ограничений"),
+        "onboardingFreeTitle":
+            MessageLookupByLibrary.simpleMessage("Абсолютно бесплатно"),
+        "onboardingNewsMsg": MessageLookupByLibrary.simpleMessage(
+            "Карта ведется на протяжении всей жизни животного и не зависит от приюта"),
+        "onboardingNewsTitle": MessageLookupByLibrary.simpleMessage(
+            "Единая медицинская карта животного"),
+        "onboardingPlanMsg": MessageLookupByLibrary.simpleMessage(
+            "Позволяет четко планировать рабочее время и своевременно оказывать медицинскую помощь животным"),
+        "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
+            "Сводка назначений на текущий день")
       };
 }

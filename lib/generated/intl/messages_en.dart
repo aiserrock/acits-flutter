@@ -22,13 +22,24 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "five": MessageLookupByLibrary.simpleMessage("5"),
-        "four": MessageLookupByLibrary.simpleMessage("4"),
-        "hello": MessageLookupByLibrary.simpleMessage("world"),
-        "mainFlutterDemo": MessageLookupByLibrary.simpleMessage("Flutter Demo"),
-        "one_more": MessageLookupByLibrary.simpleMessage("second"),
-        "seven": MessageLookupByLibrary.simpleMessage("Seven"),
-        "six": MessageLookupByLibrary.simpleMessage("six_one"),
-        "third": MessageLookupByLibrary.simpleMessage("Three")
+        "common": MessageLookupByLibrary.simpleMessage("common"),
+        "commonBegin": MessageLookupByLibrary.simpleMessage("Begin"),
+        "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
+        "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
+            "We have prepared in advance the maximum number of medical appointments for shelters"),
+        "onboardingDrugsTitle": MessageLookupByLibrary.simpleMessage(
+            "Flexible system of work with appointments"),
+        "onboardingFreeMsg": MessageLookupByLibrary.simpleMessage(
+            "All functionality will be available to you in full, without restrictions"),
+        "onboardingFreeTitle":
+            MessageLookupByLibrary.simpleMessage("Absolutely free"),
+        "onboardingNewsMsg": MessageLookupByLibrary.simpleMessage(
+            "The map is maintained throughout the life of the animal and does not depend on the shelter"),
+        "onboardingNewsTitle": MessageLookupByLibrary.simpleMessage(
+            "Unified medical card of the animal"),
+        "onboardingPlanMsg": MessageLookupByLibrary.simpleMessage(
+            "Allows you to clearly plan working hours and provide timely medical assistance to animals"),
+        "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
+            "Summary of appointments for the current day")
       };
 }

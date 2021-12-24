@@ -28,7 +28,7 @@ dependencies:
   flutter_svg: 1.0.0
 
   intl: 0.17.0
-  
+
   smooth_page_indicator: 1.0.0+2
 
 dev_dependencies:
@@ -59,7 +59,6 @@ flutter:
     - assets/image/
     - assets/icon/
     - assets/onboarding/
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
@@ -89,3 +88,6 @@ flutter_gen:
 
 flutter_intl:
   enabled: true
+  localizely:
+    project_id: 6d9c91e7-5307-4fce-808b-eb812e21d1fa
+  class_name: StringRes
