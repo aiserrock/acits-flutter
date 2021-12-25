@@ -37,5 +37,35 @@ class AuthService {
       _refresh = result.body?.refresh;
       return result.body;
     }
+    if (result.error != null) {
+      switch (result.base.statusCode) {
+        case 401:
+          throw NotAuthorizedException(message: result.error.toString());
+        default:
+          throw MesssagedException(message: result.error.toString());
+      }
+    }
+  }
+}
+
+class NotAuthorizedException implements Exception {
+  NotAuthorizedException({this.message});
+
+  final String? message;
+
+  @override
+  String toString() {
+    return message ?? super.toString();
+  }
+}
+
+class MesssagedException implements Exception {
+  MesssagedException({this.message});
+
+  final String? message;
+
+  @override
+  String toString() {
+    return message ?? super.toString();
   }
 }

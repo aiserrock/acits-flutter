@@ -25,6 +25,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "common": MessageLookupByLibrary.simpleMessage("common"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Begin"),
         "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
+        "loginAuthorizeError":
+            MessageLookupByLibrary.simpleMessage("Wrong login or password"),
+        "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
+            "ACITS - Animal control system inside the shelter"),
+        "loginEntryBtn": MessageLookupByLibrary.simpleMessage("Enter"),
+        "loginForgetPass":
+            MessageLookupByLibrary.simpleMessage("Forgot your password?"),
+        "loginLoginHint":
+            MessageLookupByLibrary.simpleMessage("Enter your email or login"),
+        "loginLoginLabel": MessageLookupByLibrary.simpleMessage("Login"),
+        "loginPassLabel": MessageLookupByLibrary.simpleMessage("Password"),
+        "loginToRegistration":
+            MessageLookupByLibrary.simpleMessage("Register now"),
         "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
             "We have prepared in advance the maximum number of medical appointments for shelters"),
         "onboardingDrugsTitle": MessageLookupByLibrary.simpleMessage(

@@ -80,6 +80,86 @@ class StringRes {
     );
   }
 
+  /// `Wrong login or password`
+  String get loginAuthorizeError {
+    return Intl.message(
+      'Wrong login or password',
+      name: 'loginAuthorizeError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ACITS - Animal control system inside the shelter`
+  String get loginDescribeMsg {
+    return Intl.message(
+      'ACITS - Animal control system inside the shelter',
+      name: 'loginDescribeMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter`
+  String get loginEntryBtn {
+    return Intl.message(
+      'Enter',
+      name: 'loginEntryBtn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot your password?`
+  String get loginForgetPass {
+    return Intl.message(
+      'Forgot your password?',
+      name: 'loginForgetPass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email or login`
+  String get loginLoginHint {
+    return Intl.message(
+      'Enter your email or login',
+      name: 'loginLoginHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login`
+  String get loginLoginLabel {
+    return Intl.message(
+      'Login',
+      name: 'loginLoginLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get loginPassLabel {
+    return Intl.message(
+      'Password',
+      name: 'loginPassLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register now`
+  String get loginToRegistration {
+    return Intl.message(
+      'Register now',
+      name: 'loginToRegistration',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `We have prepared in advance the maximum number of medical appointments for shelters`
   String get onboardingDrugsMsg {
     return Intl.message(

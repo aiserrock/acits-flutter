@@ -14,6 +14,13 @@ class $AssetsIconGen {
 
   /// File path: assets/icon/close.svg
   SvgGenImage get close => const SvgGenImage('assets/icon/close.svg');
+
+  /// File path: assets/icon/visible.svg
+  SvgGenImage get visible => const SvgGenImage('assets/icon/visible.svg');
+
+  /// File path: assets/icon/visible_off.svg
+  SvgGenImage get visibleOff =>
+      const SvgGenImage('assets/icon/visible_off.svg');
 }
 
 class $AssetsImageGen {
