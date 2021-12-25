@@ -1,8 +1,10 @@
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
-import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/ui/screen/auth/login_screen.dart';
+import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:acits_flutter/ui/widget/debug_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -21,22 +23,22 @@ class _OnboardingData {
 
 final _onboardingData = <_OnboardingData>[
   _OnboardingData(
-    image: const $AssetsOnboardingGen().plan,
+    image: Assets.onboarding.plan,
     title: StringRes.current.onboardingPlanTitle,
     message: StringRes.current.onboardingPlanMsg,
   ),
   _OnboardingData(
-    image: const $AssetsOnboardingGen().news,
+    image: Assets.onboarding.news,
     title: StringRes.current.onboardingNewsTitle,
     message: StringRes.current.onboardingNewsMsg,
   ),
   _OnboardingData(
-    image: const $AssetsOnboardingGen().drugs,
+    image: Assets.onboarding.drugs,
     title: StringRes.current.onboardingDrugsTitle,
     message: StringRes.current.onboardingDrugsMsg,
   ),
   _OnboardingData(
-    image: const $AssetsOnboardingGen().free,
+    image: Assets.onboarding.free,
     title: StringRes.current.onboardingFreeTitle,
     message: StringRes.current.onboardingFreeMsg,
   ),
@@ -70,6 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const Drawer(child: DebugDrawerContent()),
       body: SafeArea(
         child: Column(
           children: [
@@ -111,22 +114,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildBtn() {
-    return ElevatedButton(
+    return PrimaryButton(
       onPressed: _tapNext,
-      style: ButtonStyle(
-        textStyle: MaterialStateProperty.all(
-          const TextStyle(fontSize: 16.0),
-        ),
-        padding: MaterialStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-        ),
-        backgroundColor: MaterialStateProperty.all(ColorRes.primaryButton),
-      ),
-      child: Text(
-        _currentPage == _onboardingData.length - 1
-            ? StringRes.current.commonBegin.toUpperCase()
-            : StringRes.current.commonNext.toUpperCase(),
-      ),
+      text: _currentPage == _onboardingData.length - 1
+          ? StringRes.current.commonBegin.toUpperCase()
+          : StringRes.current.commonNext.toUpperCase(),
     );
   }
 
@@ -171,7 +163,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       alignment: Alignment.topRight,
       child: CupertinoButton(
         onPressed: Navigator.of(context).pop,
-        child: const $AssetsIconGen().close.svg(),
+        child: Assets.icon.close.svg(),
       ),
     );
   }
@@ -190,6 +182,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.linear,
       );
+    } else {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const LoginScreen()));
     }
   }
 

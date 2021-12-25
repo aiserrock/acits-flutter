@@ -2,7 +2,7 @@ import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
-import 'package:acits_flutter/screen/onboarding/onboarding_screen.dart';
+import 'package:acits_flutter/ui/screen/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/di/di_container.dart';

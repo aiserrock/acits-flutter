@@ -14,10 +14,20 @@ class $AssetsIconGen {
 
   /// File path: assets/icon/close.svg
   SvgGenImage get close => const SvgGenImage('assets/icon/close.svg');
+
+  /// File path: assets/icon/visible.svg
+  SvgGenImage get visible => const SvgGenImage('assets/icon/visible.svg');
+
+  /// File path: assets/icon/visible_off.svg
+  SvgGenImage get visibleOff =>
+      const SvgGenImage('assets/icon/visible_off.svg');
 }
 
 class $AssetsImageGen {
   const $AssetsImageGen();
+
+  /// File path: assets/image/logo_bar.svg
+  SvgGenImage get logoBar => const SvgGenImage('assets/image/logo_bar.svg');
 
   /// File path: assets/image/logo_native.png
   AssetGenImage get logoNative =>

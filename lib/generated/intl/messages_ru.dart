@@ -25,6 +25,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "common": MessageLookupByLibrary.simpleMessage("общий"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Начать"),
         "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
+        "loginAuthorizeError":
+            MessageLookupByLibrary.simpleMessage("Неверный логин или пароль"),
+        "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
+            "ACITS – Система контроля за животными внутри приюта"),
+        "loginEntryBtn": MessageLookupByLibrary.simpleMessage("Войти"),
+        "loginForgetPass":
+            MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
+        "loginLoginHint":
+            MessageLookupByLibrary.simpleMessage("Введите почту или логин"),
+        "loginLoginLabel": MessageLookupByLibrary.simpleMessage("Логин"),
+        "loginPassLabel": MessageLookupByLibrary.simpleMessage("Пароль"),
+        "loginToRegistration":
+            MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
             "Мы заранее подготовили максимальное количество медицинских назначений для приютов"),
         "onboardingDrugsTitle": MessageLookupByLibrary.simpleMessage(

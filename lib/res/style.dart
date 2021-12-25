@@ -12,6 +12,11 @@ class StyleRes {
         color: ColorRes.textSecondary,
         fontWeight: FontWeight.w400,
       ),
+      error = TextStyle(
+        fontSize: 16.0,
+        color: Colors.red,
+        fontWeight: FontWeight.w500,
+      ),
       button = TextStyle(
         fontSize: 16.0,
         color: Colors.white,
