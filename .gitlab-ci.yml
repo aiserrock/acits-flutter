@@ -1,6 +1,6 @@
 stages:
   - build
-#  - deploy
+  - deploy
 
 services:
   - docker:20.10.8-dind
@@ -26,18 +26,17 @@ build-web:
     - docker build --cache-from "$TAG_LATEST" -t $TAG_COMMIT -t $TAG_LATEST .
     - docker push $TAG_COMMIT
     - docker push $TAG_LATEST
-
   tags:
     - acits
 
-#deploy:
-#  stage: deploy
-#  script:
-#    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose -f /srv/frontend/$CI_COMMIT_BRANCH/docker-compose.yml pull"
-#    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose -f /srv/frontend/$CI_COMMIT_BRANCH/docker-compose.yml up -d"
-#  only:
-#    - development
-#    - test
-#    - master
-#  environment: $CI_COMMIT_BRANCH
+deploy-web:
+  stage: deploy
+  script:
+    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose -f /srv/mobile/$CI_COMMIT_BRANCH/docker-compose.yml pull"
+    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose -f /srv/mobile/$CI_COMMIT_BRANCH/docker-compose.yml up -d"
+  only:
+    - dev/sprint-01
+  environment: $CI_COMMIT_BRANCH
+  tags:
+    - acits
 
