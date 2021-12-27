@@ -48,11 +48,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Абсолютно бесплатно"),
         "onboardingNewsMsg": MessageLookupByLibrary.simpleMessage(
             "Карта ведется на протяжении всей жизни животного и не зависит от приюта"),
-        "onboardingNewsTitle": MessageLookupByLibrary.simpleMessage(
-            "Единая медицинская карта животного"),
+        "onboardingNewsTitle":
+            MessageLookupByLibrary.simpleMessage("Единая карта животного"),
         "onboardingPlanMsg": MessageLookupByLibrary.simpleMessage(
             "Позволяет четко планировать рабочее время и своевременно оказывать медицинскую помощь животным"),
         "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
-            "Сводка назначений на текущий день")
+            "Сводка назначений на текущий день"),
+        "shelterSelectShelter":
+            MessageLookupByLibrary.simpleMessage("Выберите приют")
       };
 }

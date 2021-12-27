@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/domain/exception.dart';
 
 @singleton
 class AuthService {
@@ -15,6 +16,10 @@ class AuthService {
   String? _refresh;
 
   String? get access => _access;
+
+  PaginatedShelterShortSerializersList? _shelterList;
+
+  UserCurrentShelterSerializers? _shelterRole;
 
   Future<TokenRefresh?> refreshToken() async {
     final request = TokenRefresh(access: _access, refresh: _refresh);
@@ -46,26 +51,23 @@ class AuthService {
       }
     }
   }
-}
 
-class NotAuthorizedException implements Exception {
-  NotAuthorizedException({this.message});
-
-  final String? message;
-
-  @override
-  String toString() {
-    return message ?? super.toString();
+  Future<PaginatedShelterShortSerializersList?> getShelterList() async {
+    final result = await _acitsClient.apiV1UsersMeSheltersGet();
+    if (result.body != null) {
+      _shelterList = result.body;
+      return _shelterList;
+    }
+    throw MesssagedException(error: result.error);
   }
-}
 
-class MesssagedException implements Exception {
-  MesssagedException({this.message});
-
-  final String? message;
-
-  @override
-  String toString() {
-    return message ?? super.toString();
+  Future<UserCurrentShelterSerializers?> setCurrentShelter(int shelterId) async {
+    final result =
+        await _acitsClient.apiV1UsersMeSheltersCurrentGet(xCurrentShelter: shelterId.toString());
+    if (result.body != null) {
+      _shelterRole = result.body;
+      return _shelterRole;
+    }
+    throw MesssagedException(error: result.error);
   }
 }

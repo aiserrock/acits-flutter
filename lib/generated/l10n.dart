@@ -210,10 +210,10 @@ class StringRes {
     );
   }
 
-  /// `Unified medical card of the animal`
+  /// `Unified card of the animal`
   String get onboardingNewsTitle {
     return Intl.message(
-      'Unified medical card of the animal',
+      'Unified card of the animal',
       name: 'onboardingNewsTitle',
       desc: '',
       args: [],
@@ -235,6 +235,16 @@ class StringRes {
     return Intl.message(
       'Summary of appointments for the current day',
       name: 'onboardingPlanTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick the shelter`
+  String get shelterSelectShelter {
+    return Intl.message(
+      'Pick the shelter',
+      name: 'shelterSelectShelter',
       desc: '',
       args: [],
     );

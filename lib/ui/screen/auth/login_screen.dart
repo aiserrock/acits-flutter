@@ -1,18 +1,23 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:shimmer/shimmer.dart';
+
+import 'package:acits_flutter/api/openapi.swagger.dart';
+
+import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
+import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen.dart';
 import 'package:acits_flutter/ui/screen/main/main_screen.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:shimmer/shimmer.dart';
 
 /// Экран входа по логину - паролю
 class LoginScreen extends StatefulWidget {
@@ -51,6 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         title: Assets.image.logoBar.svg(),
+        centerTitle: true,
       ),
       backgroundColor: ColorRes.background,
       body: KeyboardDismissOnTap(
@@ -138,19 +144,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: InputDecoration(
                           hintText: StringRes.current.loginLoginHint,
                           labelText: StringRes.current.loginLoginLabel,
-                          floatingLabelStyle:
-                              const TextStyle(color: ColorRes.accent),
+                          floatingLabelStyle: const TextStyle(color: ColorRes.accent),
                           errorStyle: const TextStyle(fontSize: 0.0),
                           focusedBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: ColorRes.accent, width: 2.0),
+                            borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
                           ),
                         ),
                         cursorColor: ColorRes.accent,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
-                        onEditingComplete: () =>
-                            FocusScope.of(context).requestFocus(passNode),
+                        onEditingComplete: () => FocusScope.of(context).requestFocus(passNode),
                       ),
                     ),
                   ),
@@ -164,19 +167,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: emptyValidator,
                         decoration: InputDecoration(
                           labelText: StringRes.current.loginPassLabel,
-                          floatingLabelStyle:
-                              const TextStyle(color: ColorRes.accent),
+                          floatingLabelStyle: const TextStyle(color: ColorRes.accent),
                           errorStyle: const TextStyle(fontSize: 0.0),
                           suffixIcon: CupertinoButton(
-                            onPressed: () =>
-                                setState(() => _isObscure = !_isObscure),
+                            onPressed: () => setState(() => _isObscure = !_isObscure),
                             child: _isObscure
                                 ? Assets.icon.visible.svg()
                                 : Assets.icon.visibleOff.svg(),
                           ),
                           focusedBorder: const UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: ColorRes.accent, width: 2.0),
+                            borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
                           ),
                         ),
                         obscureText: _isObscure,
@@ -203,8 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
         Container(
-          transform:
-              Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
+          transform: Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
           child: MaterialButton(
             padding: const EdgeInsets.all(16.0),
             onPressed: () {},
@@ -220,18 +219,17 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_isLoading) return;
     if (loginFormKey.currentState?.validate() ?? false) {
       setState(() => _isLoading = true);
-      _authService
+      await _authService
           .login(loginController.text, passController.text)
-          .then((value) => _onSuccess())
+          .then((value) async => _pickShelter())
           .onError(
         (error, _) {
           if (error is NotAuthorizedException) {
-            setState(
-                () => _errorMessage = StringRes.current.loginAuthorizeError);
+            setState(() => _errorMessage = StringRes.current.loginAuthorizeError);
           } else {
             setState(() => _errorMessage = error.toString());
           }
@@ -240,12 +238,30 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _pickShelter() async {
+    final list = await _authService.getShelterList().onError(
+      (error, _) {
+        if (error is NotAuthorizedException) {
+          setState(() => _errorMessage = StringRes.current.loginAuthorizeError);
+        } else {
+          setState(() => _errorMessage = error.toString());
+        }
+      },
+    );
+    if (list != null) {
+      final selectedShelter = await Navigator.of(context).push<ShelterShortSerializers?>(
+          MaterialPageRoute(builder: (_) => PickShelterList(shelterList: list)));
+      if (selectedShelter != null) {
+        await _authService.setCurrentShelter(selectedShelter.id!);
+        _onSuccess();
+      }
+    }
+  }
+
   void _onSuccess() {
     setState(() => _errorMessage = null);
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (_) => MainScreen()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const MainScreen()));
   }
 }
 
-String? emptyValidator(String? value) =>
-    (value == null || value.isEmpty) ? '' : null;
+String? emptyValidator(String? value) => (value == null || value.isEmpty) ? '' : null;
