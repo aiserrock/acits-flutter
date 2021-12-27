@@ -18,6 +18,9 @@ class ColorRes {
       /// Акцент
       accent = _blue400,
 
+      /// Неактивные иконки
+      inactiveIcon = _grey200,
+
       /// Важный (title) текст
       textPrimary = _black100,
 

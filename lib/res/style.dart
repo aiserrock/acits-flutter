@@ -12,6 +12,10 @@ class StyleRes {
         color: ColorRes.textSecondary,
         fontWeight: FontWeight.w400,
       ),
+      caption = TextStyle(
+        fontSize: 11.0,
+        color: ColorRes.textSecondary,
+      ),
       error = TextStyle(
         fontSize: 16.0,
         color: Colors.red,

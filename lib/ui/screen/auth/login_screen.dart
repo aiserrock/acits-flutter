@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -15,7 +16,6 @@ import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen.dart';
-import 'package:acits_flutter/ui/screen/main/main_screen.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
 
@@ -260,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onSuccess() {
     setState(() => _errorMessage = null);
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const MainScreen()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const RootScreen()));
   }
 }
 

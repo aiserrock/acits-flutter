@@ -23,12 +23,19 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "common": MessageLookupByLibrary.simpleMessage("common"),
+        "commonAdd": MessageLookupByLibrary.simpleMessage("Add"),
+        "commonAnimals": MessageLookupByLibrary.simpleMessage("Animals"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Begin"),
+        "commonCalendar": MessageLookupByLibrary.simpleMessage("Calendar"),
+        "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
         "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
+        "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
+        "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
+        "commonToday": MessageLookupByLibrary.simpleMessage("Today"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Wrong login or password"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
-            "ACITS - Animal control system inside the shelter"),
+            "ACITS - Animal control\nin the shelter"),
         "loginEntryBtn": MessageLookupByLibrary.simpleMessage("Enter"),
         "loginForgetPass":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
@@ -38,6 +45,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginPassLabel": MessageLookupByLibrary.simpleMessage("Password"),
         "loginToRegistration":
             MessageLookupByLibrary.simpleMessage("Register now"),
+        "mainAddAppointments":
+            MessageLookupByLibrary.simpleMessage("Add appointments"),
+        "mainAppointments":
+            MessageLookupByLibrary.simpleMessage("Appointments"),
+        "mainEmptyState": MessageLookupByLibrary.simpleMessage(
+            "There are no appointments for today"),
+        "mainTitle": MessageLookupByLibrary.simpleMessage("Today"),
         "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
             "We have prepared in advance the maximum number of medical appointments for shelters"),
         "onboardingDrugsTitle": MessageLookupByLibrary.simpleMessage(

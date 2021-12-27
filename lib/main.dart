@@ -21,6 +21,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: StringConst.commonAppName,
       theme: ThemeData(
+        colorScheme: const ColorScheme.light(
+          primary: ColorRes.accent,
+          secondary: ColorRes.indicatorActive,
+          background: ColorRes.background,
+        ),
         buttonTheme: const ButtonThemeData(
           buttonColor: ColorRes.primaryButton,
           textTheme: ButtonTextTheme.primary,
@@ -32,6 +37,10 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           button: StyleRes.button,
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          iconColor: ColorRes.accent,
+        ),
+        textSelectionTheme: TextSelectionThemeData(cursorColor: ColorRes.accent),
       ),
       localizationsDelegates: const [
         StringRes.delegate,
@@ -41,6 +50,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: StringRes.delegate.supportedLocales,
       home: const OnboardingScreen(),
+      color: ColorRes.accent,
     );
   }
 }
