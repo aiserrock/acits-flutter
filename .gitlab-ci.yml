@@ -1,0 +1,43 @@
+stages:
+  - build
+#  - deploy
+
+services:
+  - docker:20.10.8-dind
+
+default:
+  image: alpine:latest
+  before_script:
+    - chmod 600 $SSH_KEY
+    - apk update && apk add openssh-client
+
+variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
+
+build-web:
+  image: docker:latest
+  stage: build
+
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker pull "$TAG_LATEST" || true
+  script:
+    - docker build --cache-from "$TAG_LATEST" -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
+
+  tags:
+    - acits
+
+#deploy:
+#  stage: deploy
+#  script:
+#    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose -f /srv/frontend/$CI_COMMIT_BRANCH/docker-compose.yml pull"
+#    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose -f /srv/frontend/$CI_COMMIT_BRANCH/docker-compose.yml up -d"
+#  only:
+#    - development
+#    - test
+#    - master
+#  environment: $CI_COMMIT_BRANCH
+
