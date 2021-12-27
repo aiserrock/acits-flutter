@@ -40,6 +40,7 @@ class _PickShelterListState extends State<PickShelterList> {
           children: [
             Expanded(
               child: ListView.separated(
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: widget.shelterList.results?.length ?? 0,
                 itemBuilder: (_, index) => ListTile(
                   title: Text((widget.shelterList.results ?? [])[index].name ?? ''),
