@@ -29,6 +29,10 @@ class $AssetsImageGen {
   /// File path: assets/image/logo_bar.svg
   SvgGenImage get logoBar => const SvgGenImage('assets/image/logo_bar.svg');
 
+  /// File path: assets/image/logo_leading_bar.svg
+  SvgGenImage get logoLeadingBar =>
+      const SvgGenImage('assets/image/logo_leading_bar.svg');
+
   /// File path: assets/image/logo_native.png
   AssetGenImage get logoNative =>
       const AssetGenImage('assets/image/logo_native.png');

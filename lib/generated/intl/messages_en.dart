@@ -48,11 +48,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Absolutely free"),
         "onboardingNewsMsg": MessageLookupByLibrary.simpleMessage(
             "The map is maintained throughout the life of the animal and does not depend on the shelter"),
-        "onboardingNewsTitle": MessageLookupByLibrary.simpleMessage(
-            "Unified medical card of the animal"),
+        "onboardingNewsTitle":
+            MessageLookupByLibrary.simpleMessage("Unified card of the animal"),
         "onboardingPlanMsg": MessageLookupByLibrary.simpleMessage(
             "Allows you to clearly plan working hours and provide timely medical assistance to animals"),
         "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
-            "Summary of appointments for the current day")
+            "Summary of appointments for the current day"),
+        "shelterSelectShelter":
+            MessageLookupByLibrary.simpleMessage("Pick the shelter")
       };
 }

@@ -40,8 +40,7 @@ class HeaderInterceptor implements RequestInterceptor {
   FutureOr<Request> onRequest(Request request) {
     final authService = getIt<AuthService>();
     return request.copyWith(
-        headers: request.headers
-          ..addAll({'Aithorization': 'Bearer ${authService.access}'}));
+        headers: request.headers..addAll({'authorization': 'Bearer ${authService.access}'}));
   }
 }
 
@@ -54,12 +53,10 @@ class AuthInterceptor implements Authenticator {
   ) async {
     if (response.statusCode == HttpStatus.forbidden) {
       final authService = getIt<AuthService>();
-      final token =
-          await authService.refreshToken().then((value) => value?.access);
+      final token = await authService.refreshToken().then((value) => value?.access);
       if (token != null) {
         return request.copyWith(
-            headers: request.headers
-              ..addAll({'Aithorization': 'Bearer $token'}));
+            headers: request.headers..addAll({'authorization': 'Bearer $token'}));
       }
     } else {
       return null;
