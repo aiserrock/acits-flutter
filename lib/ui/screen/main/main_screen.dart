@@ -81,7 +81,10 @@ class _MainScreenState extends State<MainScreen> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Assets.common.emptyState.svg(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Assets.common.emptyState.svg()],
+            ),
             Text(
               StringRes.current.mainEmptyState,
               style: const TextStyle(
