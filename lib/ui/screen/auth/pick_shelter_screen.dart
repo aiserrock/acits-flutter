@@ -27,7 +27,7 @@ class _PickShelterListState extends State<PickShelterList> {
         ),
         appBar: AppBar(
           backgroundColor: ColorRes.foreground,
-          shadowColor: Colors.transparent,
+          // shadowColor: Colors.transparent,
           leading: Assets.image.logoLeadingBar.svg(),
           title: Text(
             StringRes.current.shelterSelectShelter,
@@ -35,7 +35,7 @@ class _PickShelterListState extends State<PickShelterList> {
           ),
           centerTitle: true,
         ),
-        backgroundColor: ColorRes.background,
+        backgroundColor: ColorRes.foreground,
         body: Column(
           children: [
             Expanded(

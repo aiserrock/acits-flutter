@@ -23,12 +23,19 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "common": MessageLookupByLibrary.simpleMessage("общий"),
+        "commonAdd": MessageLookupByLibrary.simpleMessage("Добавить"),
+        "commonAnimals": MessageLookupByLibrary.simpleMessage("Животные"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Начать"),
+        "commonCalendar": MessageLookupByLibrary.simpleMessage("Календарь"),
+        "commonDrugs": MessageLookupByLibrary.simpleMessage("Медикаменты"),
         "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
+        "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
+        "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),
+        "commonToday": MessageLookupByLibrary.simpleMessage("Сегодня"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Неверный логин или пароль"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
-            "ACITS – Система контроля за животными внутри приюта"),
+            "ACITS – Система контроля за животными\nвнутри приюта"),
         "loginEntryBtn": MessageLookupByLibrary.simpleMessage("Войти"),
         "loginForgetPass":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
@@ -38,6 +45,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginPassLabel": MessageLookupByLibrary.simpleMessage("Пароль"),
         "loginToRegistration":
             MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
+        "mainAddAppointments":
+            MessageLookupByLibrary.simpleMessage("Добавить назначение"),
+        "mainAppointments": MessageLookupByLibrary.simpleMessage("Назначения"),
+        "mainEmptyState":
+            MessageLookupByLibrary.simpleMessage("На сегодня назначений нет"),
+        "mainTitle": MessageLookupByLibrary.simpleMessage("Сегодня"),
         "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
             "Мы заранее подготовили максимальное количество медицинских назначений для приютов"),
         "onboardingDrugsTitle": MessageLookupByLibrary.simpleMessage(

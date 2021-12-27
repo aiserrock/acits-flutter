@@ -60,11 +60,51 @@ class StringRes {
     );
   }
 
+  /// `Add`
+  String get commonAdd {
+    return Intl.message(
+      'Add',
+      name: 'commonAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Animals`
+  String get commonAnimals {
+    return Intl.message(
+      'Animals',
+      name: 'commonAnimals',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Begin`
   String get commonBegin {
     return Intl.message(
       'Begin',
       name: 'commonBegin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Calendar`
+  String get commonCalendar {
+    return Intl.message(
+      'Calendar',
+      name: 'commonCalendar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Drugs`
+  String get commonDrugs {
+    return Intl.message(
+      'Drugs',
+      name: 'commonDrugs',
       desc: '',
       args: [],
     );
@@ -80,6 +120,36 @@ class StringRes {
     );
   }
 
+  /// `Search`
+  String get commonSearch {
+    return Intl.message(
+      'Search',
+      name: 'commonSearch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sort`
+  String get commonSort {
+    return Intl.message(
+      'Sort',
+      name: 'commonSort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today`
+  String get commonToday {
+    return Intl.message(
+      'Today',
+      name: 'commonToday',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Wrong login or password`
   String get loginAuthorizeError {
     return Intl.message(
@@ -90,10 +160,10 @@ class StringRes {
     );
   }
 
-  /// `ACITS - Animal control system inside the shelter`
+  /// `ACITS - Animal control\nin the shelter`
   String get loginDescribeMsg {
     return Intl.message(
-      'ACITS - Animal control system inside the shelter',
+      'ACITS - Animal control\nin the shelter',
       name: 'loginDescribeMsg',
       desc: '',
       args: [],
@@ -155,6 +225,46 @@ class StringRes {
     return Intl.message(
       'Register now',
       name: 'loginToRegistration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add appointments`
+  String get mainAddAppointments {
+    return Intl.message(
+      'Add appointments',
+      name: 'mainAddAppointments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appointments`
+  String get mainAppointments {
+    return Intl.message(
+      'Appointments',
+      name: 'mainAppointments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no appointments for today`
+  String get mainEmptyState {
+    return Intl.message(
+      'There are no appointments for today',
+      name: 'mainEmptyState',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today`
+  String get mainTitle {
+    return Intl.message(
+      'Today',
+      name: 'mainTitle',
       desc: '',
       args: [],
     );

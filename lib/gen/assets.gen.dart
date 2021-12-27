@@ -9,11 +9,31 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsCommonGen {
+  const $AssetsCommonGen();
+
+  /// File path: assets/common/empty_state.svg
+  SvgGenImage get emptyState =>
+      const SvgGenImage('assets/common/empty_state.svg');
+}
+
 class $AssetsIconGen {
   const $AssetsIconGen();
 
+  /// File path: assets/icon/calendar.svg
+  SvgGenImage get calendar => const SvgGenImage('assets/icon/calendar.svg');
+
   /// File path: assets/icon/close.svg
   SvgGenImage get close => const SvgGenImage('assets/icon/close.svg');
+
+  /// File path: assets/icon/drugs.svg
+  SvgGenImage get drugs => const SvgGenImage('assets/icon/drugs.svg');
+
+  /// File path: assets/icon/paw.svg
+  SvgGenImage get paw => const SvgGenImage('assets/icon/paw.svg');
+
+  /// File path: assets/icon/today.svg
+  SvgGenImage get today => const SvgGenImage('assets/icon/today.svg');
 
   /// File path: assets/icon/visible.svg
   SvgGenImage get visible => const SvgGenImage('assets/icon/visible.svg');
@@ -61,6 +81,7 @@ class $AssetsOnboardingGen {
 class Assets {
   Assets._();
 
+  static const $AssetsCommonGen common = $AssetsCommonGen();
   static const $AssetsIconGen icon = $AssetsIconGen();
   static const $AssetsImageGen image = $AssetsImageGen();
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
