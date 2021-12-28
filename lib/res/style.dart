@@ -1,11 +1,21 @@
-import 'package:acits_flutter/res/color.dart';
 import 'package:flutter/material.dart';
+
+import 'package:acits_flutter/res/color.dart';
 
 class StyleRes {
   static const title = TextStyle(
         fontSize: 20.0,
         color: ColorRes.textPrimary,
         fontWeight: FontWeight.w500,
+      ),
+      subTitle = TextStyle(
+        fontSize: 18.0,
+        color: ColorRes.textPrimary,
+        fontWeight: FontWeight.w500,
+      ),
+      mainContent = TextStyle(
+        fontSize: 18.0,
+        color: ColorRes.textPrimary,
       ),
       content = TextStyle(
         fontSize: 14.0,

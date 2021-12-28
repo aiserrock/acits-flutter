@@ -27,6 +27,9 @@ class ColorRes {
       /// Контент (body / message) текст
       textSecondary = _grey200,
 
+      /// Error
+      error = Colors.red,
+
       /// Foreground
       foreground = Colors.white,
 

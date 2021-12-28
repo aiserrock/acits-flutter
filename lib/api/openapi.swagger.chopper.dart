@@ -715,13 +715,17 @@ class _$Openapi extends Openapi {
           int? offset,
           String? ordering,
           String? search,
+          required String? from,
+          required String? to,
           String? xCurrentShelter}) {
     final $url = '/api/v1/prescriptions/executions/';
     final $params = <String, dynamic>{
       'limit': limit,
       'offset': offset,
       'ordering': ordering,
-      'search': search
+      'search': search,
+      'from': from,
+      'to': to
     };
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,

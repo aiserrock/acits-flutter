@@ -15,7 +15,10 @@ abstract class AuthClientRegister {
   ) async {
     final chopper = ChopperClient(
       baseUrl: 'https://dev.acits.ru',
-      interceptors: [headerInterceptor],
+      interceptors: [
+        headerInterceptor,
+        HttpLoggingInterceptor(),
+      ],
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
     );
@@ -26,9 +29,9 @@ abstract class AuthClientRegister {
   @Named('guest')
   Future<Openapi> createGuestClient() async {
     final chopper = ChopperClient(
-      baseUrl: 'https://dev.acits.ru',
-      converter: $JsonSerializableConverter(),
-    );
+        baseUrl: 'https://dev.acits.ru',
+        converter: $JsonSerializableConverter(),
+        interceptors: [HttpLoggingInterceptor()]);
     final client = Openapi.create(chopper);
     return client;
   }

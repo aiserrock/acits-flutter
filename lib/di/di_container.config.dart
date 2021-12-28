@@ -10,8 +10,9 @@ import 'package:injectable/injectable.dart' as _i2;
 import '../api/openapi.swagger.dart' as _i4;
 import '../res/color.dart' as _i5;
 import '../service/auth/auth_client_register.dart' as _i3;
-import '../service/auth/auth_service.dart'
-    as _i6; // ignore_for_file: unnecessary_lambdas
+import '../service/auth/auth_service.dart' as _i6;
+import '../service/prescription/prescription_service.dart'
+    as _i7; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -29,6 +30,9 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singletonAsync<_i6.AuthService>(() async => _i6.AuthService(
       await get.getAsync<_i4.Openapi>(),
       await get.getAsync<_i4.Openapi>(instanceName: 'guest')));
+  gh.singletonAsync<_i7.PrescriptionService>(() async =>
+      _i7.PrescriptionService(await get.getAsync<_i4.Openapi>(),
+          await get.getAsync<_i6.AuthService>()));
   return get;
 }
 

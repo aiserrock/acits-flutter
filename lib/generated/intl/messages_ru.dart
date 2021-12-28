@@ -27,8 +27,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Животные"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Начать"),
         "commonCalendar": MessageLookupByLibrary.simpleMessage("Календарь"),
+        "commonCancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "commonDelete": MessageLookupByLibrary.simpleMessage("Удалить"),
+        "commonDone": MessageLookupByLibrary.simpleMessage("Выполнено"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Медикаменты"),
+        "commonEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
         "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
+        "commonNotCompleted":
+            MessageLookupByLibrary.simpleMessage("Не выполнено"),
+        "commonReschedule": MessageLookupByLibrary.simpleMessage("Перенести"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Сегодня"),
@@ -47,6 +54,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "mainAddAppointments":
             MessageLookupByLibrary.simpleMessage("Добавить назначение"),
+        "mainAnimal": MessageLookupByLibrary.simpleMessage("Животное"),
+        "mainAppoinment": MessageLookupByLibrary.simpleMessage("Назначение"),
+        "mainAppoinmentAuthor":
+            MessageLookupByLibrary.simpleMessage("Автор назначения"),
         "mainAppointments": MessageLookupByLibrary.simpleMessage("Назначения"),
         "mainEmptyState":
             MessageLookupByLibrary.simpleMessage("На сегодня назначений нет"),
