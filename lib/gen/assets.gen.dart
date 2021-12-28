@@ -26,6 +26,9 @@ class $AssetsIconGen {
   /// File path: assets/icon/close.svg
   SvgGenImage get close => const SvgGenImage('assets/icon/close.svg');
 
+  /// File path: assets/icon/comment.svg
+  SvgGenImage get comment => const SvgGenImage('assets/icon/comment.svg');
+
   /// File path: assets/icon/drugs.svg
   SvgGenImage get drugs => const SvgGenImage('assets/icon/drugs.svg');
 

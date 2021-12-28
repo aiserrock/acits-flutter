@@ -531,6 +531,8 @@ abstract class Openapi extends ChopperService {
   ///@param offset The initial index from which to return the results.
   ///@param ordering Which field to use when ordering the results.
   ///@param search A search term.
+  ///@param from Today dateTime from bound 2021-12-27T21:00:00
+  ///@param to Today dateTime to bound 2021-12-27T21:00:00
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/prescriptions/executions/')
   Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>>
@@ -539,6 +541,8 @@ abstract class Openapi extends ChopperService {
           @Query('offset') int? offset,
           @Query('ordering') String? ordering,
           @Query('search') String? search,
+          @Query('from') required String? from,
+          @Query('to') required String? to,
           @Header('x-current-shelter') String? xCurrentShelter});
 
   ///

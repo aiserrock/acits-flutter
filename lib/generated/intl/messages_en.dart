@@ -27,8 +27,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Animals"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Begin"),
         "commonCalendar": MessageLookupByLibrary.simpleMessage("Calendar"),
+        "commonCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "commonDelete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "commonDone": MessageLookupByLibrary.simpleMessage("Done"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
+        "commonEdit": MessageLookupByLibrary.simpleMessage("Edit"),
         "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
+        "commonNotCompleted":
+            MessageLookupByLibrary.simpleMessage("Not completed"),
+        "commonReschedule": MessageLookupByLibrary.simpleMessage("Reschedule"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Today"),
@@ -47,6 +54,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Register now"),
         "mainAddAppointments":
             MessageLookupByLibrary.simpleMessage("Add appointments"),
+        "mainAnimal": MessageLookupByLibrary.simpleMessage("Animal"),
+        "mainAppoinment": MessageLookupByLibrary.simpleMessage("Appoinment"),
+        "mainAppoinmentAuthor":
+            MessageLookupByLibrary.simpleMessage("Appoinment author"),
         "mainAppointments":
             MessageLookupByLibrary.simpleMessage("Appointments"),
         "mainEmptyState": MessageLookupByLibrary.simpleMessage(

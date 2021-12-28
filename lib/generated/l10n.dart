@@ -100,6 +100,36 @@ class StringRes {
     );
   }
 
+  /// `Cancel`
+  String get commonCancel {
+    return Intl.message(
+      'Cancel',
+      name: 'commonCancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get commonDelete {
+    return Intl.message(
+      'Delete',
+      name: 'commonDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get commonDone {
+    return Intl.message(
+      'Done',
+      name: 'commonDone',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Drugs`
   String get commonDrugs {
     return Intl.message(
@@ -110,11 +140,41 @@ class StringRes {
     );
   }
 
+  /// `Edit`
+  String get commonEdit {
+    return Intl.message(
+      'Edit',
+      name: 'commonEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Next`
   String get commonNext {
     return Intl.message(
       'Next',
       name: 'commonNext',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not completed`
+  String get commonNotCompleted {
+    return Intl.message(
+      'Not completed',
+      name: 'commonNotCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reschedule`
+  String get commonReschedule {
+    return Intl.message(
+      'Reschedule',
+      name: 'commonReschedule',
       desc: '',
       args: [],
     );
@@ -235,6 +295,36 @@ class StringRes {
     return Intl.message(
       'Add appointments',
       name: 'mainAddAppointments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Animal`
+  String get mainAnimal {
+    return Intl.message(
+      'Animal',
+      name: 'mainAnimal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appoinment`
+  String get mainAppoinment {
+    return Intl.message(
+      'Appoinment',
+      name: 'mainAppoinment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appoinment author`
+  String get mainAppoinmentAuthor {
+    return Intl.message(
+      'Appoinment author',
+      name: 'mainAppoinmentAuthor',
       desc: '',
       args: [],
     );

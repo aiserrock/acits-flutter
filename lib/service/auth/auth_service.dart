@@ -21,6 +21,8 @@ class AuthService {
 
   UserCurrentShelterSerializers? _shelterRole;
 
+  String? get currentShelterId => _shelterRole?.currentShelter?.toString();
+
   Future<TokenRefresh?> refreshToken() async {
     final request = TokenRefresh(access: _access, refresh: _refresh);
     final result = await _acitsClient.apiTokenRefreshPost(body: request);
