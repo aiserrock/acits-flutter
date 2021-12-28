@@ -54,7 +54,7 @@ class AuthInterceptor implements Authenticator {
     Request request,
     Response response,
   ) async {
-    if (response.statusCode == HttpStatus.forbidden) {
+    if (response.statusCode == HttpStatus.unauthorized) {
       final authService = getIt<AuthService>();
       final token = await authService.refreshToken().then((value) => value?.access);
       if (token != null) {

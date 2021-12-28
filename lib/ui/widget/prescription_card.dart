@@ -9,6 +9,8 @@ import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 
+const _reschedulePeriod = Duration(days: 90);
+
 class PrescriptionCardWidget extends StatefulWidget {
   const PrescriptionCardWidget(
     this.itemData, {
@@ -194,6 +196,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
           ): () {
             Navigator.of(context).pop();
+            _reschedule();
           },
           Text(
             StringRes.current.commonNotCompleted,
@@ -217,6 +220,16 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       ),
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+    );
+  }
+
+  Future<void> _reschedule() async {
+    final now = DateTime.now();
+    final result = showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: now,
+      lastDate: now.add(_reschedulePeriod),
     );
   }
 }

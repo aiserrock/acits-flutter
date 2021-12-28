@@ -4,7 +4,10 @@ import 'package:acits_flutter/res/style.dart';
 import 'package:flutter/material.dart';
 
 /// BottomSheet c действиями и кнопкой отмены
-Widget bsPeriodSelectorActions(BuildContext context, Map<Widget, Function()> actions) {
+Widget bsPeriodSelectorActions(
+  BuildContext context,
+  Map<Widget, Function()> actions,
+) {
   return _buildIosStyle(context, actions);
 }
 
