@@ -44,7 +44,7 @@ class PrescriptionService {
       xCurrentShelter: _authService.currentShelterId,
     );
     if (result.body != null) {
-      _typeValues = jsonDecode(result.bodyString);
+      _typeValues = json.decode(utf8.decode(result.bodyBytes));
       return result.body;
     } else {
       throw MesssagedException(error: result.error);
