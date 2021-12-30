@@ -23,5 +23,5 @@
   "yaml.schemas": {
     "https://json.schemastore.org/dart-build.json": ["build.yaml"]
   },
-  "liveServer.settings.root":"/build/web"
+  "liveServer.settings.root": "/build/web"
 }
