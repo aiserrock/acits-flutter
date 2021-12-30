@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.acits_flutter">
+    package="io.github.andx2.acits">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="acits_flutter"
+        android:label="Acits"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
