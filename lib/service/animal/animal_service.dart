@@ -21,7 +21,6 @@ class AnimalService {
     required int limit,
     int offset = 0,
   }) async {
-    await Future.delayed(Duration(seconds: 3));
     final result = await _client.apiV1AnimalsGet(
       limit: limit,
       offset: offset,
