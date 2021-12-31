@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/util/util.dart';
 
 import 'package:acits_flutter/service/auth/auth_service.dart';
 
@@ -12,17 +12,16 @@ class PrescriptionService {
   PrescriptionService(
     this._acitsClient,
     this._authService,
+    this._configService,
   );
 
   final Openapi _acitsClient;
   final AuthService _authService;
+  final ConfigService _configService;
 
-  Map<String, dynamic>? _typeValues;
-  final _prescriptionTypeNames = <MyTypeEnum, String?>{};
-
-  Future<PaginatedPrescriptionExecutionTodayList?> getTodayPrescriptionList() async {
-    if (_typeValues == null) {
-      await getTypeValues();
+  Future<PaginatedPrescriptionExecutionTodayList?> fetchTodayPrescriptionList() async {
+    if (_configService.typeValues == null) {
+      await _configService.getTypeValues();
     }
     final time = DateTime.now();
     final from = DateTime(time.year, time.month, time.day);
@@ -39,44 +38,5 @@ class PrescriptionService {
     }
   }
 
-  Future<ValuesForSelection?> getTypeValues() async {
-    final result = await _acitsClient.apiV1ValuesForSelectionGet(
-      xCurrentShelter: _authService.currentShelterId,
-    );
-    if (result.body != null) {
-      _typeValues = json.decode(utf8.decode(result.bodyBytes));
-      return result.body;
-    } else {
-      throw MesssagedException(error: result.error);
-    }
-  }
-
-  String? getTypeName(MyTypeEnum? type) {
-    if (type == null) return null;
-    if (_prescriptionTypeNames.isEmpty) _parsePrescriptionTypes();
-    return _prescriptionTypeNames[type];
-  }
-
-  void _parsePrescriptionTypes() {
-    final raw = _typeValues?['prescription_types'];
-    if (raw is List<dynamic>) {
-      for (final item in raw) {
-        if (item is Map) {
-          final key = item['value'];
-          final type =
-              $MyTypeEnumMap.entries.firstWhereOrNull((element) => element.value == key)?.key;
-          if (type != null) _prescriptionTypeNames[type] = item['display_name'];
-        }
-      }
-    }
-  }
-}
-
-extension FirstWhereOrNullExtension<E> on Iterable<E> {
-  E? firstWhereOrNull(bool Function(E) test) {
-    for (E element in this) {
-      if (test(element)) return element;
-    }
-    return null;
-  }
+  String? getTypeName(MyTypeEnum? type) => _configService.getMyTypeName(type);
 }

@@ -35,6 +35,10 @@ class $AssetsIconGen {
   /// File path: assets/icon/paw.svg
   SvgGenImage get paw => const SvgGenImage('assets/icon/paw.svg');
 
+  /// File path: assets/icon/prescription.svg
+  SvgGenImage get prescription =>
+      const SvgGenImage('assets/icon/prescription.svg');
+
   /// File path: assets/icon/today.svg
   SvgGenImage get today => const SvgGenImage('assets/icon/today.svg');
 
@@ -48,6 +52,10 @@ class $AssetsIconGen {
 
 class $AssetsImageGen {
   const $AssetsImageGen();
+
+  /// File path: assets/image/animal_stub.png
+  AssetGenImage get animalStub =>
+      const AssetGenImage('assets/image/animal_stub.png');
 
   /// File path: assets/image/logo_bar.svg
   SvgGenImage get logoBar => const SvgGenImage('assets/image/logo_bar.svg');

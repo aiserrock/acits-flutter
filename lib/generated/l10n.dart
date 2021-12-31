@@ -50,6 +50,16 @@ class StringRes {
     return Localizations.of<StringRes>(context, StringRes);
   }
 
+  /// `Admitted`
+  String get animalAdmitted {
+    return Intl.message(
+      'Admitted',
+      name: 'animalAdmitted',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `common`
   String get common {
     return Intl.message(

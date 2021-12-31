@@ -1,0 +1,79 @@
+import 'dart:convert';
+
+import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/service/auth/auth_service.dart';
+import 'package:injectable/injectable.dart';
+
+import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/export.dart';
+
+@singleton
+class ConfigService {
+  ConfigService(
+    this._acitsClient,
+    this._authService,
+  );
+
+  final Openapi _acitsClient;
+  final AuthService _authService;
+
+  Map<String, dynamic>? _typeValues;
+
+  final _prescriptionTypeNames = <MyTypeEnum, String?>{};
+  final _animalStatusNames = <Status131Enum, String?>{};
+
+  Map<String, dynamic>? get typeValues =>
+      _typeValues != null ? Map<String, dynamic>.from(_typeValues!) : null;
+
+  Future<ValuesForSelection?> getTypeValues() async {
+    final result = await _acitsClient.apiV1ValuesForSelectionGet(
+      xCurrentShelter: _authService.currentShelterId,
+    );
+    if (result.body != null) {
+      _typeValues = json.decode(utf8.decode(result.bodyBytes));
+      return result.body;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
+  String? getMyTypeName(MyTypeEnum? type) {
+    if (type == null) return null;
+    if (_prescriptionTypeNames.isEmpty) _parsePrescriptionTypes();
+    return _prescriptionTypeNames[type];
+  }
+
+  String? getStatus131Name(Status131Enum? type) {
+    if (type == null) return null;
+    if (_animalStatusNames.isEmpty) _parseAnimalStatusTypes();
+    return _animalStatusNames[type];
+  }
+
+  void _parseAnimalStatusTypes() {
+    final raw = typeValues?['animal_status'];
+    if (raw is List<dynamic>) {
+      for (final item in raw) {
+        if (item is Map) {
+          final key = item['value'];
+          final type =
+              $Status131EnumMap.entries.firstWhereOrNull((element) => element.value == key)?.key;
+          if (type != null) _animalStatusNames[type] = item['display_name'];
+        }
+      }
+    }
+  }
+
+  void _parsePrescriptionTypes() {
+    final raw = typeValues?['prescription_types'];
+    if (raw is List<dynamic>) {
+      for (final item in raw) {
+        if (item is Map) {
+          final key = item['value'];
+          final type =
+              $MyTypeEnumMap.entries.firstWhereOrNull((element) => element.value == key)?.key;
+          if (type != null) _prescriptionTypeNames[type] = item['display_name'];
+        }
+      }
+    }
+  }
+}
