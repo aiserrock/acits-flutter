@@ -218,7 +218,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
 
   void _onScroll() {
     final positions = _scrollController.position;
-    if (positions.pixels > positions.maxScrollExtent) _loadNextPage();
+    if (positions.pixels >= positions.maxScrollExtent) _loadNextPage();
   }
 
   void _loadNextPage() {
