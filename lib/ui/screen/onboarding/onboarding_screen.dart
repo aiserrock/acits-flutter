@@ -162,7 +162,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Align(
       alignment: Alignment.topRight,
       child: CupertinoButton(
-        onPressed: Navigator.of(context).pop,
+        onPressed: () => Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen())),
         child: Assets.icon.close.svg(),
       ),
     );
@@ -183,8 +184,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.linear,
       );
     } else {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LoginScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
     }
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ScreenState<T> {
+class WidgetState<T> {
   T? _value;
   Object? _error;
   bool _loading = false;
@@ -33,8 +33,8 @@ class ScreenState<T> {
   }
 }
 
-class ScreenStateBuilder<T> extends StatelessWidget {
-  const ScreenStateBuilder({
+class StateBuilder<T> extends StatelessWidget {
+  const StateBuilder({
     required this.state,
     required this.builder,
     required this.loader,
@@ -42,7 +42,7 @@ class ScreenStateBuilder<T> extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final ScreenState<T> state;
+  final WidgetState<T> state;
 
   final WidgetBuilder loader;
   final Widget Function(BuildContext context, Object? error) errorBuilder;

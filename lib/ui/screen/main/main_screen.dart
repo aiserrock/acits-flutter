@@ -1,3 +1,4 @@
+import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -23,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
   late bool _isSmallScreen;
   bool _isSearchActive = false;
 
-  ScreenState<PaginatedPrescriptionExecutionTodayList?> _state = ScreenState()..loading();
+  WidgetState<PaginatedPrescriptionExecutionTodayList?> _state = WidgetState()..loading();
 
   @override
   void didChangeDependencies() {
@@ -64,6 +65,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buidFab() {
     return FloatingActionButton(
+      heroTag: 'MainFab',
       mini: _isSmallScreen,
       onPressed: () {},
       child: const Icon(
@@ -91,9 +93,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildBody() {
-    return ScreenStateBuilder<PaginatedPrescriptionExecutionTodayList?>(
+    return StateBuilder<PaginatedPrescriptionExecutionTodayList?>(
       state: _state,
-      loader: (_) => const _MainScreenLoader(),
+      loader: (_) => const ScreenLoader(
+        height: 104.0,
+      ),
       builder: (_, data) => _MainScreenContent(
         data,
         typeNameMapper: getIt<PrescriptionService>().getTypeName,
@@ -134,12 +138,12 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _loadExecutions() async {
-    setState(() => _state = ScreenState()..loading());
+    setState(() => _state = WidgetState()..loading());
     final service = getIt<PrescriptionService>();
     await service
-        .getTodayPrescriptionList()
-        .then((value) => setState(() => _state = ScreenState()..content(value)))
-        .catchError((e) => _state = ScreenState()..error = e);
+        .fetchTodayPrescriptionList()
+        .then((value) => setState(() => _state = WidgetState()..content(value)))
+        .catchError((e) => _state = WidgetState()..error = e);
   }
 }
 
@@ -197,39 +201,6 @@ class _MainScreenContent extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MainScreenLoader extends StatelessWidget {
-  const _MainScreenLoader({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
-        child: Column(
-          children: List.filled(
-            4,
-            Shimmer.fromColors(
-              child: Container(
-                height: 108.0,
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 16.0),
-                decoration: const BoxDecoration(
-                  color: ColorRes.textSecondary,
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                ),
-              ),
-              baseColor: ColorRes.inactiveIcon.withOpacity(.3),
-              highlightColor: ColorRes.background,
-            ),
           ),
         ),
       ),

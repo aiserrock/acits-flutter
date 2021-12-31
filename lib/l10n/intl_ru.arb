@@ -1,5 +1,6 @@
 {
   "@@locale": "ru",
+  "animalAdmitted": "Поступил",
   "common": "общий",
   "commonAdd": "Добавить",
   "commonAnimals": "Животные",
@@ -9,8 +10,8 @@
   "commonDelete": "Удалить",
   "commonDone": "Выполнено",
   "commonDrugs": "Медикаменты",
-  "commonEdit": "Редактировать",
-  "commonNext": "Далее", 
+  "commonEdit": "Редактировать", 
+  "commonNext": "Далее",
   "commonNotCompleted": "Не выполнено",
   "commonReschedule": "Перенести",
   "commonSearch": "Поиск",

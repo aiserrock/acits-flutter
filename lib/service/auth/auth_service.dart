@@ -28,7 +28,7 @@ class AuthService {
     final result = await _acitsClient.apiTokenRefreshPost(body: request);
     if (result.body != null) {
       _access = result.body?.access;
-      _refresh = result.body?.refresh;
+      _refresh = result.body?.refresh ?? _refresh;
       return result.body;
     }
   }
