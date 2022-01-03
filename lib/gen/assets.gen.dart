@@ -20,6 +20,13 @@ class $AssetsCommonGen {
 class $AssetsIconGen {
   const $AssetsIconGen();
 
+  /// File path: assets/icon/animal_face.svg
+  SvgGenImage get animalFace =>
+      const SvgGenImage('assets/icon/animal_face.svg');
+
+  /// File path: assets/icon/applicant.svg
+  SvgGenImage get applicant => const SvgGenImage('assets/icon/applicant.svg');
+
   /// File path: assets/icon/calendar.svg
   SvgGenImage get calendar => const SvgGenImage('assets/icon/calendar.svg');
 
@@ -28,6 +35,9 @@ class $AssetsIconGen {
 
   /// File path: assets/icon/comment.svg
   SvgGenImage get comment => const SvgGenImage('assets/icon/comment.svg');
+
+  /// File path: assets/icon/curator.svg
+  SvgGenImage get curator => const SvgGenImage('assets/icon/curator.svg');
 
   /// File path: assets/icon/drugs.svg
   SvgGenImage get drugs => const SvgGenImage('assets/icon/drugs.svg');

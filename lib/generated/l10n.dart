@@ -60,6 +60,16 @@ class StringRes {
     );
   }
 
+  /// `Animal card`
+  String get animalCardTitle {
+    return Intl.message(
+      'Animal card',
+      name: 'animalCardTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `common`
   String get common {
     return Intl.message(

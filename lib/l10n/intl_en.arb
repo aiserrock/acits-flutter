@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "animalAdmitted": "Admitted",
+  "animalCardTitle": "Animal card",
   "common": "common",
   "commonAdd": "Add",
   "commonAnimals": "Animals",
