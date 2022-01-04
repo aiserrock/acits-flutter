@@ -3,10 +3,17 @@ import 'dart:math';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
+import 'package:acits_flutter/service/prescription/prescription_service.dart';
+import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 part 'animal_card_header.dart';
+part 'animal_common_info.dart';
+part 'animal_prescriptions.dart';
+
+final _dateFormatter = DateFormat('dd.MM.yyyy');
 
 class AnimalDetailScreen extends StatefulWidget {
   const AnimalDetailScreen({
@@ -27,6 +34,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   int _currentTab = 0;
 
   WidgetState<Animal> _state = WidgetState()..loading();
+  WidgetState<List<AnimalPrescription?>?> _statePrescriptions = WidgetState()
+    ..loading();
 
   @override
   void didChangeDependencies() {
@@ -39,6 +48,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   void initState() {
     super.initState();
     _loadAnimal();
+    _loadPrescriptions();
   }
 
   @override
@@ -54,7 +64,22 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       drawer: _buildDrawer(),
       backgroundColor: ColorRes.background,
       body: _buildBody(),
+      floatingActionButton: _buildFab(),
     );
+  }
+
+  FloatingActionButton? _buildFab() {
+    return (_currentTab == 1 || _currentTab == 4)
+        ? FloatingActionButton(
+            mini: _isSmallScreen,
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            foregroundColor: ColorRes.accent,
+            onPressed: () {},
+          )
+        : null;
   }
 
   Widget _buildDrawer() => const Drawer();
@@ -84,29 +109,36 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             tabBar: _buildTabBar(),
           ),
         ),
-        _buildPage((_currentTab + 1) * 5),
+        _buildPage((_currentTab + 1) * 5, animal),
       ],
     );
   }
 
-  SliverList _buildPage(int count) {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        List.filled(
-          count,
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 64.0,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: ColorRes.textSecondary,
-                  borderRadius: BorderRadius.circular(8.0)),
+  SliverList _buildPage(int count, Animal animal) {
+    switch (_currentTab) {
+      case 0:
+        return _buildCommonInfoPage(animal);
+      case 1:
+        return _buildPrescriptionsPage(animal);
+      default:
+        return SliverList(
+          delegate: SliverChildListDelegate(
+            List.filled(
+              count,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 64.0,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: ColorRes.textSecondary,
+                      borderRadius: BorderRadius.circular(8.0)),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        );
+    }
   }
 
   Widget _buildTabBar() {
@@ -167,6 +199,18 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     await getIt<AnimalService>()
         .fetchAnimalDetail(id: widget.id)
         .then((value) => setState(() => _state = WidgetState()..content(value)))
+        .catchError((e) => setState(() => _state = WidgetState()..error = e));
+  }
+
+  Future<void> _loadPrescriptions() async {
+    setState(() => _statePrescriptions = WidgetState()..loading());
+    await getIt<PrescriptionService>()
+        .fetchPrescriptionListByAnimal(
+          widget.id,
+          isOld: true,
+        )
+        .then((value) => setState(
+            () => _statePrescriptions = WidgetState()..content(value?.results)))
         .catchError((e) => setState(() => _state = WidgetState()..error = e));
   }
 }

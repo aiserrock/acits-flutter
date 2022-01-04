@@ -20,20 +20,56 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(count, day) =>
+      "${Intl.plural(count, zero: 'no ${day}s', one: '${count} ${day}', two: '${count} ${day}s', few: '${count} ${day}s', other: '${count} ${day}s')}";
+
+  static String m1(count, month) =>
+      "${Intl.plural(count, zero: 'no ${month}s', one: '${count} ${month}', two: '${count} ${month}s', few: '${count} ${month}s', other: '${count} ${month}s')}";
+
+  static String m2(count, year) =>
+      "${Intl.plural(count, zero: 'no ${year}s', one: '${count} ${year}', two: '${count} ${year}s', few: '${count} ${year}s', other: '${count} ${year}s')}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "animalAdmitted": MessageLookupByLibrary.simpleMessage("Admitted"),
+        "animalAge": MessageLookupByLibrary.simpleMessage("Age"),
+        "animalApplicant": MessageLookupByLibrary.simpleMessage("Applicant"),
         "animalCardTitle": MessageLookupByLibrary.simpleMessage("Animal card"),
+        "animalCatchPlace": MessageLookupByLibrary.simpleMessage("Catch place"),
+        "animalCategory": MessageLookupByLibrary.simpleMessage("Category"),
+        "animalChip": MessageLookupByLibrary.simpleMessage("Ring/chip"),
+        "animalChipDate": MessageLookupByLibrary.simpleMessage("Chipping date"),
+        "animalColor": MessageLookupByLibrary.simpleMessage("Color"),
+        "animalComments": MessageLookupByLibrary.simpleMessage("Comments"),
+        "animalCommonInfo": MessageLookupByLibrary.simpleMessage("Common info"),
+        "animalCurator": MessageLookupByLibrary.simpleMessage("Curator"),
+        "animalFamily": MessageLookupByLibrary.simpleMessage("Family"),
+        "animalKind": MessageLookupByLibrary.simpleMessage("Kind"),
+        "animalPrescriptions":
+            MessageLookupByLibrary.simpleMessage("Prescriptions"),
+        "animalReceiptDate":
+            MessageLookupByLibrary.simpleMessage("Receipt date"),
+        "animalSex": MessageLookupByLibrary.simpleMessage("Sex"),
+        "animalSpecSigns":
+            MessageLookupByLibrary.simpleMessage("Special signs"),
+        "animalStatus": MessageLookupByLibrary.simpleMessage("Status"),
+        "animalWeight": MessageLookupByLibrary.simpleMessage("Weight, kg"),
+        "aninmalSize": MessageLookupByLibrary.simpleMessage("Size, cm"),
         "common": MessageLookupByLibrary.simpleMessage("common"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Add"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Animals"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Begin"),
         "commonCalendar": MessageLookupByLibrary.simpleMessage("Calendar"),
         "commonCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "commonDay": MessageLookupByLibrary.simpleMessage("day"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Delete"),
         "commonDone": MessageLookupByLibrary.simpleMessage("Done"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Edit"),
+        "commonMonth": MessageLookupByLibrary.simpleMessage("month"),
+        "commonNDays": m0,
+        "commonNMonth": m1,
+        "commonNYears": m2,
         "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Not completed"),
@@ -41,6 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Today"),
+        "commonYear": MessageLookupByLibrary.simpleMessage("year"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Wrong login or password"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(

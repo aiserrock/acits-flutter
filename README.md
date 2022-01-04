@@ -36,5 +36,5 @@ fvm flutter pub run build_runner build
 https://pub.dev/packages/swagger_dart_code_generator
 
 ```bash
-fvm flutter pub run build_runner build
+fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```

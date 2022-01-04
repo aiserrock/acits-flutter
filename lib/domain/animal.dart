@@ -1,13 +1,55 @@
-import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/res/color.dart';
+
 import 'package:acits_flutter/service/config/config_service.dart';
+import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 extension AnimalX on Animal {
   String? get statusString {
     final _service = getIt<ConfigService>();
     return _service.getStatus131Name(status);
+  }
+
+  String? get sexString {
+    return animalAttributes
+        ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'sex')
+        ?.value;
+  }
+  String? get colorString {
+    return animalAttributes
+        ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'color')
+        ?.value;
+  }
+  String? get specialSignsString {
+    return animalAttributes
+        ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'special_signs')
+        ?.value;
+  }
+
+  String? get ageString {
+    if (birthDate == null) return null;
+    final days = DateTime.now().difference(birthDate!).inDays;
+    if (days < 30) {
+      return StringRes.current.commonNDays(days, StringRes.current.commonDay);
+    }
+    if (days < 365) {
+      return StringRes.current
+          .commonNMonth((days / 30).floor(), StringRes.current.commonMonth);
+    }
+    return StringRes.current
+        .commonNYears((days / 365).floor(), StringRes.current.commonYear);
+  }
+
+  String? get specFamily {
+    return spec['parent_name'];
+  }
+
+  String? get specKind {
+    return spec['name'];
+  }
+
+  String? get specCategory {
+    return spec['category_name'];
   }
 
   Color get statusColor {
