@@ -132,61 +132,71 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Form(
               key: loginFormKey,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 72.0,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: TextFormField(
-                        controller: loginController,
-                        validator: emptyValidator,
-                        decoration: InputDecoration(
-                          hintText: StringRes.current.loginLoginHint,
-                          labelText: StringRes.current.loginLoginLabel,
-                          floatingLabelStyle: const TextStyle(color: ColorRes.accent),
-                          errorStyle: const TextStyle(fontSize: 0.0),
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
+              child: AutofillGroup(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 72.0,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: TextFormField(
+                          controller: loginController,
+                          validator: emptyValidator,
+                          autofillHints: const [AutofillHints.username],
+                          decoration: InputDecoration(
+                            hintText: StringRes.current.loginLoginHint,
+                            labelText: StringRes.current.loginLoginLabel,
+                            floatingLabelStyle:
+                                const TextStyle(color: ColorRes.accent),
+                            errorStyle: const TextStyle(fontSize: 0.0),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: ColorRes.accent, width: 2.0),
+                            ),
                           ),
+                          cursorColor: ColorRes.accent,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () =>
+                              FocusScope.of(context).requestFocus(passNode),
                         ),
-                        cursorColor: ColorRes.accent,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        onEditingComplete: () => FocusScope.of(context).requestFocus(passNode),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 72.0,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: TextFormField(
-                        controller: passController,
-                        focusNode: passNode,
-                        validator: emptyValidator,
-                        decoration: InputDecoration(
-                          labelText: StringRes.current.loginPassLabel,
-                          floatingLabelStyle: const TextStyle(color: ColorRes.accent),
-                          errorStyle: const TextStyle(fontSize: 0.0),
-                          suffixIcon: CupertinoButton(
-                            onPressed: () => setState(() => _isObscure = !_isObscure),
-                            child: _isObscure
-                                ? Assets.icon.visible.svg()
-                                : Assets.icon.visibleOff.svg(),
+                    SizedBox(
+                      height: 72.0,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: TextFormField(
+                          controller: passController,
+                          focusNode: passNode,
+                          validator: emptyValidator,
+                          autofillHints: const [AutofillHints.password],
+                          decoration: InputDecoration(
+                            labelText: StringRes.current.loginPassLabel,
+                            floatingLabelStyle:
+                                const TextStyle(color: ColorRes.accent),
+                            errorStyle: const TextStyle(fontSize: 0.0),
+                            suffixIcon: CupertinoButton(
+                              onPressed: () =>
+                                  setState(() => _isObscure = !_isObscure),
+                              child: _isObscure
+                                  ? Assets.icon.visible.svg()
+                                  : Assets.icon.visibleOff.svg(),
+                            ),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: ColorRes.accent, width: 2.0),
+                            ),
                           ),
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
-                          ),
+                          obscureText: _isObscure,
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.done,
+                          onEditingComplete: _submit,
                         ),
-                        obscureText: _isObscure,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.done,
-                        onEditingComplete: _submit,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             if (_errorMessage != null)
@@ -203,7 +213,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
         Container(
-          transform: Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
+          transform:
+              Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
           child: MaterialButton(
             padding: const EdgeInsets.all(16.0),
             onPressed: () {},
@@ -229,7 +240,8 @@ class _LoginScreenState extends State<LoginScreen> {
           .onError(
         (error, _) {
           if (error is NotAuthorizedException) {
-            setState(() => _errorMessage = StringRes.current.loginAuthorizeError);
+            setState(
+                () => _errorMessage = StringRes.current.loginAuthorizeError);
           } else {
             setState(() => _errorMessage = error.toString());
           }
@@ -249,8 +261,9 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
     if (list != null) {
-      final selectedShelter = await Navigator.of(context).push<ShelterShortSerializers?>(
-          MaterialPageRoute(builder: (_) => PickShelterList(shelterList: list)));
+      final selectedShelter = await Navigator.of(context)
+          .push<ShelterShortSerializers?>(MaterialPageRoute(
+              builder: (_) => PickShelterList(shelterList: list)));
       if (selectedShelter != null) {
         await _authService.setCurrentShelter(selectedShelter.id!);
         _onSuccess();
@@ -260,8 +273,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onSuccess() {
     setState(() => _errorMessage = null);
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const RootScreen()));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => const RootScreen()));
   }
 }
 
-String? emptyValidator(String? value) => (value == null || value.isEmpty) ? '' : null;
+String? emptyValidator(String? value) =>
+    (value == null || value.isEmpty) ? '' : null;
