@@ -43,6 +43,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalComments": MessageLookupByLibrary.simpleMessage("Comments"),
         "animalCommonInfo": MessageLookupByLibrary.simpleMessage("Common info"),
         "animalCurator": MessageLookupByLibrary.simpleMessage("Curator"),
+        "animalCuratorAddress": MessageLookupByLibrary.simpleMessage("Address"),
+        "animalCuratorEmail": MessageLookupByLibrary.simpleMessage("E-mail"),
+        "animalCuratorName": MessageLookupByLibrary.simpleMessage("Name"),
+        "animalCuratorPhone": MessageLookupByLibrary.simpleMessage("Phone"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Family"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Kind"),
         "animalPrescriptions":
@@ -50,9 +54,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalReceiptDate":
             MessageLookupByLibrary.simpleMessage("Receipt date"),
         "animalSex": MessageLookupByLibrary.simpleMessage("Sex"),
+        "animalSocialLink": MessageLookupByLibrary.simpleMessage("Social link"),
         "animalSpecSigns":
             MessageLookupByLibrary.simpleMessage("Special signs"),
         "animalStatus": MessageLookupByLibrary.simpleMessage("Status"),
+        "animalTransferAct":
+            MessageLookupByLibrary.simpleMessage("Transfer act"),
         "animalWeight": MessageLookupByLibrary.simpleMessage("Weight, kg"),
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Size, cm"),
         "common": MessageLookupByLibrary.simpleMessage("common"),

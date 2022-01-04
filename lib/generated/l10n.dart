@@ -170,6 +170,46 @@ class StringRes {
     );
   }
 
+  /// `Address`
+  String get animalCuratorAddress {
+    return Intl.message(
+      'Address',
+      name: 'animalCuratorAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `E-mail`
+  String get animalCuratorEmail {
+    return Intl.message(
+      'E-mail',
+      name: 'animalCuratorEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get animalCuratorName {
+    return Intl.message(
+      'Name',
+      name: 'animalCuratorName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone`
+  String get animalCuratorPhone {
+    return Intl.message(
+      'Phone',
+      name: 'animalCuratorPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Family`
   String get animalFamily {
     return Intl.message(
@@ -220,6 +260,16 @@ class StringRes {
     );
   }
 
+  /// `Social link`
+  String get animalSocialLink {
+    return Intl.message(
+      'Social link',
+      name: 'animalSocialLink',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Special signs`
   String get animalSpecSigns {
     return Intl.message(
@@ -235,6 +285,16 @@ class StringRes {
     return Intl.message(
       'Status',
       name: 'animalStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer act`
+  String get animalTransferAct {
+    return Intl.message(
+      'Transfer act',
+      name: 'animalTransferAct',
       desc: '',
       args: [],
     );
@@ -390,13 +450,13 @@ class StringRes {
       few: '$count ${day}s',
       other: '$count ${day}s',
       name: 'commonNDays',
-      desc: 'Days plurals',
+      desc: '',
       args: [count, day],
     );
   }
 
   /// `{count,plural, =0{no {month}s} =1{{count} {month}} =2{{count} {month}s} few{{count} {month}s} other{{count} {month}s}}`
-  String commonNMonth(num count, Object month) {
+  String commonNMonth(int count, Object month) {
     return Intl.plural(
       count,
       zero: 'no ${month}s',
@@ -411,7 +471,7 @@ class StringRes {
   }
 
   /// `{count,plural, =0{no {year}s} =1{{count} {year}} =2{{count} {year}s} few{{count} {year}s} other{{count} {year}s}}`
-  String commonNYears(num count, Object year) {
+  String commonNYears(int count, Object year) {
     return Intl.plural(
       count,
       zero: 'no ${year}s',

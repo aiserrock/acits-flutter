@@ -1,15 +1,28 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildPrescriptionsPage(Animal animal) {
-  return SliverList(
-    delegate: SliverChildListDelegate(
-      _buildPrescriptionsContent(animal),
-    ),
-  );
+SliverList _buildPrescriptionsPage(
+    WidgetState<List<AnimalPrescription?>?> state) {
+  return state.isContent
+      ? SliverList(
+          delegate: SliverChildListDelegate(
+            _buildPrescriptionsContent(state.value!),
+          ),
+        )
+      : state.isLoading
+          ? SliverList(
+              delegate: SliverChildListDelegate(
+                [const Text('loading')],
+              ),
+            )
+          : SliverList(
+              delegate: SliverChildListDelegate(
+                [const Text('error')],
+              ),
+            );
 }
 
-List<Widget> _buildPrescriptionsContent(Animal animal) {
-  return [
+List<Widget> _buildPrescriptionsContent(List<AnimalPrescription?> list) {
+  return <Widget>[
     Padding(
       padding: const EdgeInsets.only(
         top: 24.0,
@@ -21,72 +34,9 @@ List<Widget> _buildPrescriptionsContent(Animal animal) {
         style: StyleRes.title.copyWith(fontSize: 22.0),
       ),
     ),
-    AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalSex,
-        firstValue: animal.sexString ?? '',
-        secondCaption: StringRes.current.animalAge,
-        secondValue: animal.ageString ?? '',
-      ),
-      CardData(
-        firstCaption: StringRes.current.aninmalSize,
-        firstValue: animal.height ?? '',
-        secondCaption: StringRes.current.animalWeight,
-        secondValue: animal.weight ?? '',
-      ),
-    ]),
-    AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalReceiptDate,
-        firstValue: animal.dateJoined != null
-            ? _dateFormatter.format(animal.dateJoined!)
-            : '',
-        secondCaption: StringRes.current.animalStatus,
-        secondValue: animal.statusString ?? '',
-      ),
-      CardData(
-        firstCaption: StringRes.current.animalCatchPlace,
-        firstValue: animal.placeOfCatch ?? '',
-      ),
-    ]),
-    AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalFamily,
-        firstValue: animal.specFamily ?? '',
-      ),
-      CardData(
-        firstCaption: StringRes.current.animalKind,
-        firstValue: animal.specKind ?? '',
-      ),
-      CardData(
-        firstCaption: StringRes.current.animalCategory,
-        firstValue: animal.specCategory ?? '',
-      ),
-    ]),
-    AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalColor,
-        firstValue: animal.colorString ?? '',
-      ),
-      CardData(
-        firstCaption: StringRes.current.animalSpecSigns,
-        firstValue: animal.specialSignsString ?? '',
-      ),
-    ]),
-    AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalChip,
-        firstValue: animal.chippingCode ?? '',
-      ),
-      CardData(
-        firstCaption: StringRes.current.animalChipDate,
-        firstValue: animal.dateOfChipping != null
-            ? _dateFormatter.format(animal.dateOfChipping!)
-            : '',
-      ),
-    ]),
-    const SizedBox(
-      height: 12.0,
-    )
+    ...list
+        .where((element) => element != null)
+        .map<Widget>((item) => AnimalPrescriptionCard(prescription: item!)),
+    const SizedBox(height: 64.0),
   ];
 }

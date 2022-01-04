@@ -1,5 +1,26 @@
 {
   "@@locale": "ru",
+  "@commonNDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonNMonth": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonNYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "animalAdmitted": "Поступил",
   "animalAge": "Возраст",
   "animalApplicant": "Заявитель",
@@ -12,13 +33,19 @@
   "animalComments": "Комментарии",
   "animalCommonInfo": "Основная информация",
   "animalCurator": "Куратор",
+  "animalCuratorAddress": "Адрес",
+  "animalCuratorEmail": "E-mail",
+  "animalCuratorName": "Имя",
+  "animalCuratorPhone": "Номер телефона",
   "animalFamily": "Семейство",
   "animalKind": "Вид",
   "animalPrescriptions": "Назначения",
-  "animalReceiptDate": "Дата поступления",
+  "animalReceiptDate": "Дата поступления", 
   "animalSex": "Пол",
+  "animalSocialLink": "Ссылка на соцсети",
   "animalSpecSigns": "Особые приметы",
   "animalStatus": "Статус",
+  "animalTransferAct": "Акт приема-передачи",
   "animalWeight": "Вес, кг",
   "aninmalSize": "Рост, см",
   "common": "общий",
@@ -37,7 +64,7 @@
   "commonNMonth": "{count,plural, =0{0 месяцев} =1{{count} {месяц}} =2{{count} {месяц}а} few{{count} месяцев} other{{count} месяцев}}",
   "commonNYears": "{count,plural, =0{0 лет} =1{{count} {год}} =2{{count} {год}а} few{{count} лет} other{{count} лет}}",
   "commonNext": "Далее",
-  "commonNotCompleted": "Не выполнено", 
+  "commonNotCompleted": "Не выполнено",
   "commonReschedule": "Перенести",
   "commonSearch": "Поиск",
   "commonSort": "Сортировка",

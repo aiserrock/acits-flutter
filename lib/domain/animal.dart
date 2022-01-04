@@ -15,11 +15,13 @@ extension AnimalX on Animal {
         ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'sex')
         ?.value;
   }
+
   String? get colorString {
     return animalAttributes
         ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'color')
         ?.value;
   }
+
   String? get specialSignsString {
     return animalAttributes
         ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'special_signs')
@@ -77,4 +79,48 @@ extension AnimalX on Animal {
         return ColorRes.textSecondary;
     }
   }
+
+  String? get curatorFullName {
+    if (curator is! Map<String, dynamic>) return null;
+    final data = curator as Map<String, dynamic>;
+    return '${data['first_name']} ${data['last_name']}';
+  }
+
+  String? get curatorPhone {
+    if (curator is! Map<String, dynamic>) return null;
+    final data = curator as Map<String, dynamic>;
+    return data['phone_number'];
+  }
+
+  String? get curatorEmail {
+    if (curator is! Map<String, dynamic>) return null;
+    final data = curator as Map<String, dynamic>;
+    return data['email'];
+  }
+
+  String? get curatorAddress {
+    if (curator is! Map<String, dynamic>) return null;
+    final data = curator as Map<String, dynamic>;
+    return data['address'];
+  }
+
+
+  String? get applicantFullName {
+    if (applicant is! Map<String, dynamic>) return null;
+    final data = applicant as Map<String, dynamic>;
+    return '${data['first_name']} ${data['last_name']}';
+  }
+
+  String? get applicantPhone {
+    if (applicant is! Map<String, dynamic>) return null;
+    final data = applicant as Map<String, dynamic>;
+    return data['phone_number'];
+  }
+
+  String? get applicantEmail {
+    if (applicant is! Map<String, dynamic>) return null;
+    final data = applicant as Map<String, dynamic>;
+    return data['email'];
+  }
+
 }

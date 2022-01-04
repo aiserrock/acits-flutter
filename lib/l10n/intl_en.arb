@@ -1,13 +1,23 @@
 {
   "@@locale": "en",
   "@commonNDays": {
-    "description": "Days plurals",
     "placeholders": {
       "count": {
         "type": "int"
-      },
-      "day": {
-        "example": "day"
+      }
+    }
+  },
+  "@commonNMonth": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@commonNYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
       }
     }
   },
@@ -23,13 +33,19 @@
   "animalComments": "Comments",
   "animalCommonInfo": "Common info",
   "animalCurator": "Curator",
+  "animalCuratorAddress": "Address",
+  "animalCuratorEmail": "E-mail",
+  "animalCuratorName": "Name",
+  "animalCuratorPhone": "Phone",
   "animalFamily": "Family",
   "animalKind": "Kind",
   "animalPrescriptions": "Prescriptions",
   "animalReceiptDate": "Receipt date",
   "animalSex": "Sex",
+  "animalSocialLink": "Social link",
   "animalSpecSigns": "Special signs",
   "animalStatus": "Status",
+  "animalTransferAct": "Transfer act",
   "animalWeight": "Weight, kg",
   "aninmalSize": "Size, cm",
   "common": "common",

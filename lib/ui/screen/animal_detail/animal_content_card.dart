@@ -1,14 +1,16 @@
-
 import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 class AnimalContentCard extends StatelessWidget {
   const AnimalContentCard(
     this.data, {
+    this.valueStyle,
     Key? key,
   }) : super(key: key);
 
   final List<CardData> data;
+
+  final TextStyle? valueStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +37,12 @@ class AnimalContentCard extends StatelessWidget {
                 children: [
                   Text(
                     item.firstValue ?? '',
-                    style: StyleRes.mainContent,
+                    style: valueStyle ?? StyleRes.mainContent,
                   ),
                   const Spacer(),
                   Text(
                     item.secondValue ?? '',
-                    style: StyleRes.mainContent,
+                    style: valueStyle ?? StyleRes.mainContent,
                   ),
                 ],
               ),

@@ -47,6 +47,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalCommonInfo":
             MessageLookupByLibrary.simpleMessage("Основная информация"),
         "animalCurator": MessageLookupByLibrary.simpleMessage("Куратор"),
+        "animalCuratorAddress": MessageLookupByLibrary.simpleMessage("Адрес"),
+        "animalCuratorEmail": MessageLookupByLibrary.simpleMessage("E-mail"),
+        "animalCuratorName": MessageLookupByLibrary.simpleMessage("Имя"),
+        "animalCuratorPhone":
+            MessageLookupByLibrary.simpleMessage("Номер телефона"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Семейство"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Вид"),
         "animalPrescriptions":
@@ -54,9 +59,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalReceiptDate":
             MessageLookupByLibrary.simpleMessage("Дата поступления"),
         "animalSex": MessageLookupByLibrary.simpleMessage("Пол"),
+        "animalSocialLink":
+            MessageLookupByLibrary.simpleMessage("Ссылка на соцсети"),
         "animalSpecSigns":
             MessageLookupByLibrary.simpleMessage("Особые приметы"),
         "animalStatus": MessageLookupByLibrary.simpleMessage("Статус"),
+        "animalTransferAct":
+            MessageLookupByLibrary.simpleMessage("Акт приема-передачи"),
         "animalWeight": MessageLookupByLibrary.simpleMessage("Вес, кг"),
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Рост, см"),
         "common": MessageLookupByLibrary.simpleMessage("общий"),

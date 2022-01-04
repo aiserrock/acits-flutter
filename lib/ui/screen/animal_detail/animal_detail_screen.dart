@@ -5,6 +5,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
+import 'package:acits_flutter/ui/widget/animal_prescription_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +13,8 @@ import 'package:intl/intl.dart';
 part 'animal_card_header.dart';
 part 'animal_common_info.dart';
 part 'animal_prescriptions.dart';
+part 'animal_curator.dart';
+part 'animal_applicant.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 
@@ -101,6 +104,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
   Widget _buildContent(BuildContext context, Animal animal) {
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
         SliverPersistentHeader(
           pinned: true,
@@ -119,7 +123,11 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       case 0:
         return _buildCommonInfoPage(animal);
       case 1:
-        return _buildPrescriptionsPage(animal);
+        return _buildPrescriptionsPage(_statePrescriptions);
+      case 2:
+        return _buildCuratorPage(animal);
+      case 3:
+        return _buildApplicantPage(animal);
       default:
         return SliverList(
           delegate: SliverChildListDelegate(
@@ -154,30 +162,40 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             0: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Assets.icon.animalFace.svg(
+                height: 28.0,
+                width: 28.0,
                 color: _currentTab == 0 ? ColorRes.accent : Colors.white,
               ),
             ),
             1: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Assets.icon.prescription.svg(
+                height: 28.0,
+                width: 28.0,
                 color: _currentTab == 1 ? ColorRes.accent : Colors.white,
               ),
             ),
             2: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Assets.icon.curator.svg(
+                height: 28.0,
+                width: 28.0,
                 color: _currentTab == 2 ? ColorRes.accent : Colors.white,
               ),
             ),
             3: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Assets.icon.applicant.svg(
+                height: 28.0,
+                width: 28.0,
                 color: _currentTab == 3 ? ColorRes.accent : Colors.white,
               ),
             ),
             4: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Assets.icon.comment.svg(
+                height: 28.0,
+                width: 28.0,
                 color: _currentTab == 4 ? ColorRes.accent : Colors.white,
               ),
             ),

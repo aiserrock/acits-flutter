@@ -8,3 +8,10 @@ extension PrescriptionX on PrescriptionExecutionToday {
     return _service.getMyTypeName(myType);
   }
 }
+
+extension MyTypeEnumX on MyTypeEnum {
+  String? get typeString {
+    final _service = getIt<ConfigService>();
+    return _service.getMyTypeName(this);
+  }
+}
