@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -44,6 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _authService = getIt<AuthService>();
+  }
+
+  @override
+  void dispose() {
+    loginController.dispose();
+    passController.dispose();
+    super.dispose();
   }
 
   @override
@@ -142,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           controller: loginController,
                           validator: emptyValidator,
-                          autofillHints: const [AutofillHints.username],
+                          autofillHints: const [AutofillHints.email],
                           decoration: InputDecoration(
                             hintText: StringRes.current.loginLoginHint,
                             labelText: StringRes.current.loginLoginLabel,
@@ -157,8 +165,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           cursorColor: ColorRes.accent,
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
-                          onEditingComplete: () =>
-                              FocusScope.of(context).requestFocus(passNode),
+                          onEditingComplete: () {
+                            TextInput.finishAutofillContext();
+                            FocusScope.of(context).requestFocus(passNode);
+                          },
                         ),
                       ),
                     ),
@@ -191,7 +201,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: _isObscure,
                           keyboardType: TextInputType.visiblePassword,
                           textInputAction: TextInputAction.done,
-                          onEditingComplete: _submit,
+                          onEditingComplete: () {
+                            TextInput.finishAutofillContext();
+                            _submit();
+                          },
                         ),
                       ),
                     ),
