@@ -21,13 +21,13 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
   static String m0(count, day) =>
-      "{count,plural, =0{0 дней} =1{${count} {день}} =2{${count} дня} few{${count} дней} other{${count} дней}}";
+      "${Intl.plural(count, zero: '0 дней', one: '${count} ${day}', two: '${count} дня', few: '${count} дней', other: '${count} дней')}";
 
   static String m1(count, month) =>
-      "{count,plural, =0{0 месяцев} =1{${count} {месяц}} =2{${count} {месяц}а} few{${count} месяцев} other{${count} месяцев}}";
+      "${Intl.plural(count, zero: '0 месяцев', one: '${count} ${month}', two: '${count} ${month}а', few: '${count} месяцев', other: '${count} месяцев')}";
 
   static String m2(count, year) =>
-      "{count,plural, =0{0 лет} =1{${count} {год}} =2{${count} {год}а} few{${count} лет} other{${count} лет}}";
+      "${Intl.plural(count, zero: '0 лет', one: '${count} ${year}', two: '${count} ${year}а', few: '${count} лет', other: '${count} лет')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -79,6 +79,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonDone": MessageLookupByLibrary.simpleMessage("Выполнено"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Медикаменты"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
+        "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
+            "Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз."),
+        "commonErrorStubTitle":
+            MessageLookupByLibrary.simpleMessage("Ой, что-то пошло не так..."),
         "commonMonth": MessageLookupByLibrary.simpleMessage("месяц"),
         "commonNDays": m0,
         "commonNMonth": m1,
@@ -86,6 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Не выполнено"),
+        "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Обновить"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Перенести"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),

@@ -19,8 +19,7 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final delta =
-        (maxExtent - shrinkOffset - minExtent) / (maxExtent - minExtent);
+    final delta = (maxExtent - shrinkOffset - minExtent) / (maxExtent - minExtent);
     final shrink = min(1.0, max(0, 1.0 - delta)).toDouble();
     return Container(
       color: ColorRes.foreground,
@@ -54,14 +53,14 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
       alignment: Alignment.lerp(
             Alignment.center,
             Alignment.topLeft,
-            shrink,
+            Curves.easeOutExpo.transform(shrink),
           ) ??
           Alignment.center,
       child: Padding(
         padding: EdgeInsets.lerp(
-              const EdgeInsets.only(top: 8.0),
+              const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
               const EdgeInsets.only(top: 8.0, left: 16.0, bottom: 4.0),
-              shrink,
+              Curves.easeInExpo.transform(shrink),
             ) ??
             const EdgeInsets.only(top: 64.0),
         child: SizedBox(
@@ -83,7 +82,7 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
       alignment: Alignment.lerp(
             Alignment.bottomCenter,
             Alignment.topLeft,
-            shrink,
+            Curves.easeInExpo.transform(shrink),
           ) ??
           Alignment.center,
       child: Padding(
@@ -179,6 +178,7 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
       child: SizedBox(
         height: 80.0,
         child: CupertinoButton(
+          padding: const EdgeInsets.only(),
           child: const Icon(
             Icons.arrow_back_ios,
             color: ColorRes.accent,
@@ -196,6 +196,5 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => _minHeight;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
 }

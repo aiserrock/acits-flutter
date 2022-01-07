@@ -73,6 +73,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonDone": MessageLookupByLibrary.simpleMessage("Done"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Edit"),
+        "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
+            "Failed to load data.\nPlease try again."),
+        "commonErrorStubTitle":
+            MessageLookupByLibrary.simpleMessage("Oh, something went wrong..."),
         "commonMonth": MessageLookupByLibrary.simpleMessage("month"),
         "commonNDays": m0,
         "commonNMonth": m1,
@@ -80,6 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Not completed"),
+        "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Reload"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Reschedule"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),

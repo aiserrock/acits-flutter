@@ -67,6 +67,9 @@ class $AssetsImageGen {
   AssetGenImage get animalStub =>
       const AssetGenImage('assets/image/animal_stub.png');
 
+  /// File path: assets/image/error_stub.svg
+  SvgGenImage get errorStub => const SvgGenImage('assets/image/error_stub.svg');
+
   /// File path: assets/image/logo_bar.svg
   SvgGenImage get logoBar => const SvgGenImage('assets/image/logo_bar.svg');
 

@@ -3,7 +3,6 @@ import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
-import 'package:acits_flutter/util/util.dart';
 
 import 'package:acits_flutter/service/auth/auth_service.dart';
 

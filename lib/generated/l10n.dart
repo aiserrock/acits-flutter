@@ -430,6 +430,26 @@ class StringRes {
     );
   }
 
+  /// `Failed to load data.\nPlease try again.`
+  String get commonErrorStubMsg {
+    return Intl.message(
+      'Failed to load data.\nPlease try again.',
+      name: 'commonErrorStubMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oh, something went wrong...`
+  String get commonErrorStubTitle {
+    return Intl.message(
+      'Oh, something went wrong...',
+      name: 'commonErrorStubTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `month`
   String get commonMonth {
     return Intl.message(
@@ -500,6 +520,16 @@ class StringRes {
     return Intl.message(
       'Not completed',
       name: 'commonNotCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reload`
+  String get commonReloadBtn {
+    return Intl.message(
+      'Reload',
+      name: 'commonReloadBtn',
       desc: '',
       args: [],
     );

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:acits_flutter/di/di_container.dart';
@@ -6,6 +7,8 @@ import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
 import 'package:acits_flutter/ui/widget/animal_prescription_card.dart';
+import 'package:acits_flutter/ui/widget/error_stub.dart';
+import 'package:acits_flutter/ui/widget/skeleton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +18,7 @@ part 'animal_common_info.dart';
 part 'animal_prescriptions.dart';
 part 'animal_curator.dart';
 part 'animal_applicant.dart';
+part 'animal_detail_stub.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 
@@ -37,8 +41,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   int _currentTab = 0;
 
   WidgetState<Animal> _state = WidgetState()..loading();
-  WidgetState<List<AnimalPrescription?>?> _statePrescriptions = WidgetState()
-    ..loading();
+  WidgetState<List<AnimalPrescription?>?> _statePrescriptions = WidgetState()..loading();
 
   @override
   void didChangeDependencies() {
@@ -92,29 +95,33 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       child: StateBuilder<Animal>(
         state: _state,
         builder: _buildContent,
-        errorBuilder: (_, __) => Container(
-          child: Text('error'),
+        errorBuilder: (_, error) => _AnimalDetailStub(
+          error: error,
+          onRefresh: _loadAnimal,
         ),
-        loader: (_) => Container(
-          child: Text('loader'),
+        loader: (_) => _AnimalDetailStub(
+          onRefresh: _loadAnimal,
         ),
       ),
     );
   }
 
   Widget _buildContent(BuildContext context, Animal animal) {
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
-      slivers: [
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: _AnimalCardHeaderDelegate(
-            animal,
-            tabBar: _buildTabBar(),
+    return RefreshIndicator(
+      onRefresh: _loadAnimal,
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _AnimalCardHeaderDelegate(
+              animal,
+              tabBar: _buildTabBar(),
+            ),
           ),
-        ),
-        _buildPage((_currentTab + 1) * 5, animal),
-      ],
+          _buildPage((_currentTab + 1) * 5, animal),
+        ],
+      ),
     );
   }
 
@@ -139,8 +146,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                   height: 64.0,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      color: ColorRes.textSecondary,
-                      borderRadius: BorderRadius.circular(8.0)),
+                      color: ColorRes.textSecondary, borderRadius: BorderRadius.circular(8.0)),
                 ),
               ),
             ),
@@ -227,8 +233,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
           widget.id,
           isOld: true,
         )
-        .then((value) => setState(
-            () => _statePrescriptions = WidgetState()..content(value?.results)))
+        .then(
+            (value) => setState(() => _statePrescriptions = WidgetState()..content(value?.results)))
         .catchError((e) => setState(() => _state = WidgetState()..error = e));
   }
 }
