@@ -1,13 +1,9 @@
+import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:acits_flutter/export.dart';
-
-import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/l10n.dart';
-import 'package:acits_flutter/res/color.dart';
-import 'package:acits_flutter/res/style.dart';
 
 class AnimalCardWidget extends StatelessWidget {
   AnimalCardWidget(
@@ -21,26 +17,30 @@ class AnimalCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: _buildActionBar(),
-          ),
-          Container(
-            decoration: const BoxDecoration(color: ColorRes.foreground),
-            margin: const EdgeInsets.only(right: 34.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildAvatar(),
-                const SizedBox(width: 8.0),
-                _buildContent(),
-              ],
+    return CupertinoButton(
+      padding: const EdgeInsets.only(),
+      onPressed: () => _navigateDetail(context),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: _buildActionBar(),
             ),
-          ),
-        ],
+            Container(
+              decoration: const BoxDecoration(color: ColorRes.foreground),
+              margin: const EdgeInsets.only(right: 34.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildAvatar(),
+                  const SizedBox(width: 8.0),
+                  _buildContent(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -193,10 +193,13 @@ class AnimalCardWidget extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: StringRes.current.animalAdmitted, style: StyleRes.content),
+          TextSpan(
+              text: StringRes.current.animalAdmitted, style: StyleRes.content),
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
-            text: itemData?.dateJoined != null ? _formatter.format(itemData!.dateJoined!) : '',
+            text: itemData?.dateJoined != null
+                ? _formatter.format(itemData!.dateJoined!)
+                : '',
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
@@ -227,6 +230,15 @@ class AnimalCardWidget extends StatelessWidget {
         ],
       ),
       maxLines: 3,
+    );
+  }
+
+  void _navigateDetail(BuildContext context) {
+    if (itemData?.id == null) return;
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (_) => AnimalDetailScreen(id: itemData!.id!),
+      ),
     );
   }
 }

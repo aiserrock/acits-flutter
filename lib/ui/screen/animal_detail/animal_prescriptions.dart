@@ -1,0 +1,42 @@
+part of 'animal_detail_screen.dart';
+
+SliverList _buildPrescriptionsPage(
+    WidgetState<List<AnimalPrescription?>?> state) {
+  return state.isContent
+      ? SliverList(
+          delegate: SliverChildListDelegate(
+            _buildPrescriptionsContent(state.value!),
+          ),
+        )
+      : state.isLoading
+          ? SliverList(
+              delegate: SliverChildListDelegate(
+                [const Text('loading')],
+              ),
+            )
+          : SliverList(
+              delegate: SliverChildListDelegate(
+                [const Text('error')],
+              ),
+            );
+}
+
+List<Widget> _buildPrescriptionsContent(List<AnimalPrescription?> list) {
+  return <Widget>[
+    Padding(
+      padding: const EdgeInsets.only(
+        top: 24.0,
+        left: 16.0,
+        bottom: 8.0,
+      ),
+      child: Text(
+        StringRes.current.animalPrescriptions,
+        style: StyleRes.title.copyWith(fontSize: 22.0),
+      ),
+    ),
+    ...list
+        .where((element) => element != null)
+        .map<Widget>((item) => AnimalPrescriptionCard(prescription: item!)),
+    const SizedBox(height: 64.0),
+  ];
+}

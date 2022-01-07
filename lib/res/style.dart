@@ -8,6 +8,10 @@ class StyleRes {
         color: ColorRes.textPrimary,
         fontWeight: FontWeight.w500,
       ),
+      titleLight = TextStyle(
+        fontSize: 20.0,
+        color: ColorRes.textSecondary,
+      ),
       subTitle = TextStyle(
         fontSize: 18.0,
         color: ColorRes.textPrimary,

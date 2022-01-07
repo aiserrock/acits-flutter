@@ -9,10 +9,10 @@ import 'package:injectable/injectable.dart';
 
 @module
 abstract class AuthClientRegister {
-  Future<Openapi> createClient(
+  Openapi createClient(
     AuthInterceptor authInterceptor,
     HeaderInterceptor headerInterceptor,
-  ) async {
+  ) {
     final chopper = ChopperClient(
       baseUrl: 'https://dev.acits.ru',
       interceptors: [
@@ -27,7 +27,7 @@ abstract class AuthClientRegister {
   }
 
   @Named('guest')
-  Future<Openapi> createGuestClient() async {
+  Openapi createGuestClient() {
     final chopper = ChopperClient(
         baseUrl: 'https://dev.acits.ru',
         converter: $JsonSerializableConverter(),

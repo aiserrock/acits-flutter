@@ -3,8 +3,15 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 
 extension PrescriptionX on PrescriptionExecutionToday {
-  String? get statusString {
+  String? get typeString {
     final _service = getIt<ConfigService>();
     return _service.getMyTypeName(myType);
+  }
+}
+
+extension MyTypeEnumX on MyTypeEnum {
+  String? get typeString {
+    final _service = getIt<ConfigService>();
+    return _service.getMyTypeName(this);
   }
 }

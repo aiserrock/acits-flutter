@@ -20,26 +20,82 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
+  static String m0(count, day) =>
+      "${Intl.plural(count, zero: '0 дней', one: '${count} ${day}', two: '${count} дня', few: '${count} дней', other: '${count} дней')}";
+
+  static String m1(count, month) =>
+      "${Intl.plural(count, zero: '0 месяцев', one: '${count} ${month}', two: '${count} ${month}а', few: '${count} месяцев', other: '${count} месяцев')}";
+
+  static String m2(count, year) =>
+      "${Intl.plural(count, zero: '0 лет', one: '${count} ${year}', two: '${count} ${year}а', few: '${count} лет', other: '${count} лет')}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "animalAdmitted": MessageLookupByLibrary.simpleMessage("Поступил"),
+        "animalAge": MessageLookupByLibrary.simpleMessage("Возраст"),
+        "animalApplicant": MessageLookupByLibrary.simpleMessage("Заявитель"),
+        "animalCardTitle":
+            MessageLookupByLibrary.simpleMessage("Карточка животного"),
+        "animalCatchPlace":
+            MessageLookupByLibrary.simpleMessage("Место отлова"),
+        "animalCategory": MessageLookupByLibrary.simpleMessage("Категория"),
+        "animalChip": MessageLookupByLibrary.simpleMessage("Кольцо/чип"),
+        "animalChipDate":
+            MessageLookupByLibrary.simpleMessage("Дата чипирования"),
+        "animalColor": MessageLookupByLibrary.simpleMessage("Окрас"),
+        "animalComments": MessageLookupByLibrary.simpleMessage("Комментарии"),
+        "animalCommonInfo":
+            MessageLookupByLibrary.simpleMessage("Основная информация"),
+        "animalCurator": MessageLookupByLibrary.simpleMessage("Куратор"),
+        "animalCuratorAddress": MessageLookupByLibrary.simpleMessage("Адрес"),
+        "animalCuratorEmail": MessageLookupByLibrary.simpleMessage("E-mail"),
+        "animalCuratorName": MessageLookupByLibrary.simpleMessage("Имя"),
+        "animalCuratorPhone":
+            MessageLookupByLibrary.simpleMessage("Номер телефона"),
+        "animalFamily": MessageLookupByLibrary.simpleMessage("Семейство"),
+        "animalKind": MessageLookupByLibrary.simpleMessage("Вид"),
+        "animalPrescriptions":
+            MessageLookupByLibrary.simpleMessage("Назначения"),
+        "animalReceiptDate":
+            MessageLookupByLibrary.simpleMessage("Дата поступления"),
+        "animalSex": MessageLookupByLibrary.simpleMessage("Пол"),
+        "animalSocialLink":
+            MessageLookupByLibrary.simpleMessage("Ссылка на соцсети"),
+        "animalSpecSigns":
+            MessageLookupByLibrary.simpleMessage("Особые приметы"),
+        "animalStatus": MessageLookupByLibrary.simpleMessage("Статус"),
+        "animalTransferAct":
+            MessageLookupByLibrary.simpleMessage("Акт приема-передачи"),
+        "animalWeight": MessageLookupByLibrary.simpleMessage("Вес, кг"),
+        "aninmalSize": MessageLookupByLibrary.simpleMessage("Рост, см"),
         "common": MessageLookupByLibrary.simpleMessage("общий"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Добавить"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Животные"),
         "commonBegin": MessageLookupByLibrary.simpleMessage("Начать"),
         "commonCalendar": MessageLookupByLibrary.simpleMessage("Календарь"),
         "commonCancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "commonDay": MessageLookupByLibrary.simpleMessage("день"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "commonDone": MessageLookupByLibrary.simpleMessage("Выполнено"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Медикаменты"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
+        "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
+            "Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз."),
+        "commonErrorStubTitle":
+            MessageLookupByLibrary.simpleMessage("Ой, что-то пошло не так..."),
+        "commonMonth": MessageLookupByLibrary.simpleMessage("месяц"),
+        "commonNDays": m0,
+        "commonNMonth": m1,
+        "commonNYears": m2,
         "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Не выполнено"),
+        "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Обновить"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Перенести"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Сегодня"),
+        "commonYear": MessageLookupByLibrary.simpleMessage("год"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Неверный логин или пароль"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(

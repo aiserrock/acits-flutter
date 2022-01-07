@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 
 import 'package:acits_flutter/generated/l10n.dart';
@@ -11,6 +12,8 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome?.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _setupLogging();
   initDi();
   runApp(const MyApp());
@@ -43,7 +46,8 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           iconColor: ColorRes.accent,
         ),
-        textSelectionTheme: TextSelectionThemeData(cursorColor: ColorRes.accent),
+        textSelectionTheme:
+            TextSelectionThemeData(cursorColor: ColorRes.accent),
       ),
       localizationsDelegates: const [
         StringRes.delegate,

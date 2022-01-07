@@ -17,6 +17,7 @@ class AnimalService {
   final Openapi _client;
   final ConfigService _configService;
 
+  /// Получить список живолных в приюте
   Future<PaginatedAnimalList?> fetchAnimalList({
     required int limit,
     int offset = 0,
@@ -29,6 +30,20 @@ class AnimalService {
 
     if (result.body != null) {
       return result.body;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
+  /// Получить детальное представление животного по его ID
+  Future<Animal> fetchAnimalDetail({required int id}) async {
+    final result = await _client.apiV1AnimalsIdGet(
+      id: id,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    if (result.body != null) {
+      return result.body!;
     } else {
       throw MesssagedException(error: result.error);
     }

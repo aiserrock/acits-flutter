@@ -60,6 +60,266 @@ class StringRes {
     );
   }
 
+  /// `Age`
+  String get animalAge {
+    return Intl.message(
+      'Age',
+      name: 'animalAge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Applicant`
+  String get animalApplicant {
+    return Intl.message(
+      'Applicant',
+      name: 'animalApplicant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Animal card`
+  String get animalCardTitle {
+    return Intl.message(
+      'Animal card',
+      name: 'animalCardTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Catch place`
+  String get animalCatchPlace {
+    return Intl.message(
+      'Catch place',
+      name: 'animalCatchPlace',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Category`
+  String get animalCategory {
+    return Intl.message(
+      'Category',
+      name: 'animalCategory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ring/chip`
+  String get animalChip {
+    return Intl.message(
+      'Ring/chip',
+      name: 'animalChip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chipping date`
+  String get animalChipDate {
+    return Intl.message(
+      'Chipping date',
+      name: 'animalChipDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color`
+  String get animalColor {
+    return Intl.message(
+      'Color',
+      name: 'animalColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comments`
+  String get animalComments {
+    return Intl.message(
+      'Comments',
+      name: 'animalComments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Common info`
+  String get animalCommonInfo {
+    return Intl.message(
+      'Common info',
+      name: 'animalCommonInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curator`
+  String get animalCurator {
+    return Intl.message(
+      'Curator',
+      name: 'animalCurator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address`
+  String get animalCuratorAddress {
+    return Intl.message(
+      'Address',
+      name: 'animalCuratorAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `E-mail`
+  String get animalCuratorEmail {
+    return Intl.message(
+      'E-mail',
+      name: 'animalCuratorEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get animalCuratorName {
+    return Intl.message(
+      'Name',
+      name: 'animalCuratorName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone`
+  String get animalCuratorPhone {
+    return Intl.message(
+      'Phone',
+      name: 'animalCuratorPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family`
+  String get animalFamily {
+    return Intl.message(
+      'Family',
+      name: 'animalFamily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kind`
+  String get animalKind {
+    return Intl.message(
+      'Kind',
+      name: 'animalKind',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prescriptions`
+  String get animalPrescriptions {
+    return Intl.message(
+      'Prescriptions',
+      name: 'animalPrescriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Receipt date`
+  String get animalReceiptDate {
+    return Intl.message(
+      'Receipt date',
+      name: 'animalReceiptDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sex`
+  String get animalSex {
+    return Intl.message(
+      'Sex',
+      name: 'animalSex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social link`
+  String get animalSocialLink {
+    return Intl.message(
+      'Social link',
+      name: 'animalSocialLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Special signs`
+  String get animalSpecSigns {
+    return Intl.message(
+      'Special signs',
+      name: 'animalSpecSigns',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get animalStatus {
+    return Intl.message(
+      'Status',
+      name: 'animalStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer act`
+  String get animalTransferAct {
+    return Intl.message(
+      'Transfer act',
+      name: 'animalTransferAct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weight, kg`
+  String get animalWeight {
+    return Intl.message(
+      'Weight, kg',
+      name: 'animalWeight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Size, cm`
+  String get aninmalSize {
+    return Intl.message(
+      'Size, cm',
+      name: 'aninmalSize',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `common`
   String get common {
     return Intl.message(
@@ -120,6 +380,16 @@ class StringRes {
     );
   }
 
+  /// `day`
+  String get commonDay {
+    return Intl.message(
+      'day',
+      name: 'commonDay',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete`
   String get commonDelete {
     return Intl.message(
@@ -160,6 +430,81 @@ class StringRes {
     );
   }
 
+  /// `Failed to load data.\nPlease try again.`
+  String get commonErrorStubMsg {
+    return Intl.message(
+      'Failed to load data.\nPlease try again.',
+      name: 'commonErrorStubMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oh, something went wrong...`
+  String get commonErrorStubTitle {
+    return Intl.message(
+      'Oh, something went wrong...',
+      name: 'commonErrorStubTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `month`
+  String get commonMonth {
+    return Intl.message(
+      'month',
+      name: 'commonMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count,plural, =0{no {day}s} =1{{count} {day}} =2{{count} {day}s} few{{count} {day}s} other{{count} {day}s}}`
+  String commonNDays(int count, Object day) {
+    return Intl.plural(
+      count,
+      zero: 'no ${day}s',
+      one: '$count $day',
+      two: '$count ${day}s',
+      few: '$count ${day}s',
+      other: '$count ${day}s',
+      name: 'commonNDays',
+      desc: '',
+      args: [count, day],
+    );
+  }
+
+  /// `{count,plural, =0{no {month}s} =1{{count} {month}} =2{{count} {month}s} few{{count} {month}s} other{{count} {month}s}}`
+  String commonNMonth(int count, Object month) {
+    return Intl.plural(
+      count,
+      zero: 'no ${month}s',
+      one: '$count $month',
+      two: '$count ${month}s',
+      few: '$count ${month}s',
+      other: '$count ${month}s',
+      name: 'commonNMonth',
+      desc: '',
+      args: [count, month],
+    );
+  }
+
+  /// `{count,plural, =0{no {year}s} =1{{count} {year}} =2{{count} {year}s} few{{count} {year}s} other{{count} {year}s}}`
+  String commonNYears(int count, Object year) {
+    return Intl.plural(
+      count,
+      zero: 'no ${year}s',
+      one: '$count $year',
+      two: '$count ${year}s',
+      few: '$count ${year}s',
+      other: '$count ${year}s',
+      name: 'commonNYears',
+      desc: '',
+      args: [count, year],
+    );
+  }
+
   /// `Next`
   String get commonNext {
     return Intl.message(
@@ -175,6 +520,16 @@ class StringRes {
     return Intl.message(
       'Not completed',
       name: 'commonNotCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reload`
+  String get commonReloadBtn {
+    return Intl.message(
+      'Reload',
+      name: 'commonReloadBtn',
       desc: '',
       args: [],
     );
@@ -215,6 +570,16 @@ class StringRes {
     return Intl.message(
       'Today',
       name: 'commonToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `year`
+  String get commonYear {
+    return Intl.message(
+      'year',
+      name: 'commonYear',
       desc: '',
       args: [],
     );
