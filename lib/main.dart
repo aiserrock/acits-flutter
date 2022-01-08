@@ -43,11 +43,11 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           button: StyleRes.button,
         ),
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           iconColor: ColorRes.accent,
         ),
         textSelectionTheme:
-            TextSelectionThemeData(cursorColor: ColorRes.accent),
+           const TextSelectionThemeData(cursorColor: ColorRes.accent),
       ),
       localizationsDelegates: const [
         StringRes.delegate,
@@ -65,6 +65,7 @@ class MyApp extends StatelessWidget {
 void _setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((rec) {
+    // ignore: avoid_print
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 }

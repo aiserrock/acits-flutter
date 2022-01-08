@@ -21,29 +21,53 @@ class AnimalContentCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
-                    item.firstCaption ?? '',
-                    style: StyleRes.content,
+                  Expanded(
+                    flex: 100,
+                    child: Text(
+                      item.firstCaption ?? '',
+                      style: StyleRes.content,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const Spacer(),
-                  Text(
-                    item.secondCaption ?? '',
-                    style: StyleRes.content,
-                  ),
+                  if (item.secondCaption != null)
+                    Expanded(
+                      flex: 100,
+                      child: Text(
+                        item.secondCaption ?? '',
+                        style: StyleRes.content,
+                        textAlign: TextAlign.right,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                 ],
               ),
               const SizedBox(height: 4.0),
               Row(
                 children: [
-                  Text(
-                    item.firstValue ?? '',
-                    style: valueStyle ?? StyleRes.mainContent,
+                  Expanded(
+                    flex: 100,
+                    child: Text(
+                      item.firstValue ?? '',
+                      style: valueStyle ?? StyleRes.mainContent,
+                      maxLines: 8,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const Spacer(),
-                  Text(
-                    item.secondValue ?? '',
-                    style: valueStyle ?? StyleRes.mainContent,
-                  ),
+                  if (item.secondValue != null)
+                    Expanded(
+                      flex: 100,
+                      child: Text(
+                        item.secondValue ?? '',
+                        style: valueStyle ?? StyleRes.mainContent,
+                        textAlign: TextAlign.right,
+                        maxLines: 8,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                 ],
               ),
               if (item != data.last) const Divider(),
@@ -60,8 +84,8 @@ class AnimalContentCard extends StatelessWidget {
         horizontal: 16.0,
         vertical: 8.0,
       ),
-      decoration: BoxDecoration(
-          color: ColorRes.foreground, borderRadius: BorderRadius.circular(8.0)),
+      decoration:
+          BoxDecoration(color: ColorRes.foreground, borderRadius: BorderRadius.circular(8.0)),
       child: Column(children: rows),
     );
   }
