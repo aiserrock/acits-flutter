@@ -1,47 +1,122 @@
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
 import 'package:acits_flutter/export.dart';
 
-class AnimalCardWidget extends StatelessWidget {
-  AnimalCardWidget(
+/// Карточка животного в списке
+class AnimalCardWidget extends StatefulWidget {
+  const AnimalCardWidget(
     this.itemData, {
     Key? key,
   }) : super(key: key);
 
   final Animal? itemData;
 
+  @override
+  State<AnimalCardWidget> createState() => _AnimalCardWidgetState();
+}
+
+class _AnimalCardWidgetState extends State<AnimalCardWidget> with SingleTickerProviderStateMixin {
   final _formatter = DateFormat('dd.MM.yyyy');
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      padding: const EdgeInsets.only(),
-      onPressed: () => _navigateDetail(context),
+    return Slidable(
+      endActionPane: _buildSlidablePane(),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Stack(
           children: [
-            Positioned.fill(
-              child: _buildActionBar(),
-            ),
-            Container(
-              decoration: const BoxDecoration(color: ColorRes.foreground),
-              margin: const EdgeInsets.only(right: 34.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildAvatar(),
-                  const SizedBox(width: 8.0),
-                  _buildContent(),
-                ],
+            CupertinoButton(
+              padding: const EdgeInsets.only(),
+              onPressed: () => _navigateDetail(context),
+              child: Container(
+                decoration: const BoxDecoration(color: ColorRes.foreground),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildAvatar(),
+                    const SizedBox(width: 8.0),
+                    _buildContent(),
+                  ],
+                ),
               ),
             ),
+            _buildActions(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildActions() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Builder(builder: (context) {
+        return Column(
+          children: [
+            CupertinoButton(
+              padding: const EdgeInsets.only(),
+              child: const Icon(
+                Icons.more_vert,
+                color: ColorRes.accent,
+              ),
+              onPressed: () {
+                SlidableController? controller = Slidable.of(context);
+                controller?.openEndActionPane();
+              },
+            ),
+            CupertinoButton(
+              padding: const EdgeInsets.only(),
+              child: const Icon(
+                Icons.download,
+                color: ColorRes.accent,
+              ),
+              onPressed: () {},
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  ActionPane _buildSlidablePane() {
+    return ActionPane(
+      motion: const BehindMotion(),
+      children: [
+        SlidableAction(
+          onPressed: (_) {},
+          backgroundColor: ColorRes.background,
+          icon: IconRes.prescription,
+          foregroundColor: ColorRes.accent,
+        ),
+        SlidableAction(
+          onPressed: (_) {},
+          backgroundColor: ColorRes.background,
+          icon: IconRes.comment,
+          foregroundColor: ColorRes.accent,
+        ),
+        SlidableAction(
+          onPressed: (_) {},
+          backgroundColor: ColorRes.background,
+          icon: Icons.edit_outlined,
+          foregroundColor: ColorRes.accent,
+        ),
+        SlidableAction(
+          onPressed: (_) {},
+          backgroundColor: ColorRes.background,
+          icon: Icons.delete_forever,
+          foregroundColor: ColorRes.error,
+        ),
+      ],
     );
   }
 
@@ -53,46 +128,56 @@ class AnimalCardWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              itemData?.name ?? '',
-              style: StyleRes.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Padding(
+              padding: const EdgeInsets.only(right: 28.0),
+              child: Text(
+                widget.itemData?.name ?? '',
+                style: StyleRes.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             Text(
-              itemData?.id?.toString() ?? '',
+              widget.itemData?.id?.toString() ?? '',
               style: StyleRes.content.copyWith(fontSize: 16.0),
               maxLines: 1,
             ),
             const SizedBox(height: 4.0),
-            _buildSpec(),
-            const SizedBox(height: 8.0),
-            Row(
-              children: [
-                Container(
-                  height: 16.0,
-                  width: 16.0,
-                  decoration: BoxDecoration(
-                    color: itemData?.statusColor,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: Text(
-                    itemData?.statusString ?? '',
-                    style: StyleRes.content.copyWith(
-                      color: ColorRes.textPrimary,
-                    ),
-                  ),
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.only(right: 28.0),
+              child: _buildSpec(),
             ),
+            const SizedBox(height: 8.0),
+            _buildStatus(),
             const SizedBox(height: 4.0),
             _buildAdmit(),
           ],
         ),
       ),
+    );
+  }
+
+  Row _buildStatus() {
+    return Row(
+      children: [
+        Container(
+          height: 16.0,
+          width: 16.0,
+          decoration: BoxDecoration(
+            color: widget.itemData?.statusColor,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        Expanded(
+          child: Text(
+            widget.itemData?.statusString ?? '',
+            style: StyleRes.content.copyWith(
+              color: ColorRes.textPrimary,
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -106,11 +191,11 @@ class AnimalCardWidget extends StatelessWidget {
       child: SizedBox(
         height: 80.0,
         width: 80.0,
-        child: itemData?.avatar == null
+        child: widget.itemData?.avatar == null
             ? Assets.image.animalStub.image()
             : CircleAvatar(
                 maxRadius: 80.0,
-                backgroundImage: NetworkImage(itemData!.avatar!),
+                backgroundImage: NetworkImage(widget.itemData!.avatar!),
                 backgroundColor: ColorRes.background,
               ),
       ),
@@ -193,12 +278,11 @@ class AnimalCardWidget extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-              text: StringRes.current.animalAdmitted, style: StyleRes.content),
+          TextSpan(text: StringRes.current.animalAdmitted, style: StyleRes.content),
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
-            text: itemData?.dateJoined != null
-                ? _formatter.format(itemData!.dateJoined!)
+            text: widget.itemData?.dateJoined != null
+                ? _formatter.format(widget.itemData!.dateJoined!)
                 : '',
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
@@ -215,14 +299,14 @@ class AnimalCardWidget extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(
-            text: (itemData?.spec?['parent_name'] ?? ''),
+            text: (widget.itemData?.spec?['parent_name'] ?? ''),
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
           ),
           const TextSpan(text: (', '), style: StyleRes.mainContent),
           TextSpan(
-            text: itemData?.spec?['name'] ?? '',
+            text: widget.itemData?.spec?['name'] ?? '',
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
@@ -234,10 +318,10 @@ class AnimalCardWidget extends StatelessWidget {
   }
 
   void _navigateDetail(BuildContext context) {
-    if (itemData?.id == null) return;
+    if (widget.itemData?.id == null) return;
     Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (_) => AnimalDetailScreen(id: itemData!.id!),
+        builder: (_) => AnimalDetailScreen(id: widget.itemData!.id!),
       ),
     );
   }

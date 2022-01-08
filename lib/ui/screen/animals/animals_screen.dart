@@ -9,6 +9,7 @@ import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/util/screen_state.dart';
 import 'package:flutter/material.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 const _animalPageLength = 25;
 const _scrollTopPadding = 16.0;
@@ -152,39 +153,44 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
   Widget _buildList() {
     return RefreshIndicator(
       onRefresh: () => _loadAnimalList(needResetOffset: true),
-      child: CustomScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        controller: _scrollController,
-        slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: _scrollTopPadding)),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, index) => Padding(
-                padding: const EdgeInsets.only(
-                  left: 16.0,
-                  right: 16.0,
-                  bottom: 16.0,
+      child: SlidableAutoCloseBehavior(
+        
+        child: CustomScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          controller: _scrollController,
+          slivers: [
+            const SliverToBoxAdapter(child: SizedBox(height: _scrollTopPadding)),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, index) => Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16.0,
+                    bottom: 16.0,
+                  ),
+                  child: AnimalCardWidget(
+                    _state.value?[index]
+                  ),
                 ),
-                child: AnimalCardWidget(_state.value?[index]),
-              ),
-              childCount: _state.value?.length ?? 0,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: StateBuilder(
-              state: _statePageLoading,
-              builder: (_, __) => const SizedBox(height: 16.0),
-              loader: (_) => const SizedBox(
-                height: 48.0,
-                child: Center(child: CircularProgressIndicator()),
-              ),
-              errorBuilder: (_, __) => const SizedBox(
-                height: 64.0,
-                child: Center(child: Text('error')),
+                childCount: _state.value?.length ?? 0,
               ),
             ),
-          )
-        ],
+            SliverToBoxAdapter(
+              child: StateBuilder(
+                state: _statePageLoading,
+                builder: (_, __) => const SizedBox(height: 16.0),
+                loader: (_) => const SizedBox(
+                  height: 48.0,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                errorBuilder: (_, __) => const SizedBox(
+                  height: 64.0,
+                  child: Center(child: Text('error')),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
