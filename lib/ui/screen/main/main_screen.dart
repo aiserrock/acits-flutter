@@ -23,8 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   late bool _isSmallScreen;
   bool _isSearchActive = false;
 
-  WidgetState<PaginatedPrescriptionExecutionTodayList?> _state = WidgetState()
-    ..loading();
+  WidgetState<PaginatedPrescriptionExecutionTodayList?> _state = WidgetState()..loading();
 
   @override
   void didChangeDependencies() {
@@ -119,11 +118,9 @@ class _MainScreenState extends State<MainScreen> {
                 suffix: GestureDetector(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 4.0),
-                    child: Assets.icon.close
-                        .svg(height: 16.0, width: 16.0, color: ColorRes.accent),
+                    child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: ColorRes.accent),
                   ),
-                  onTap: () =>
-                      setState(() => _isSearchActive = !_isSearchActive),
+                  onTap: () => setState(() => _isSearchActive = !_isSearchActive),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
@@ -168,8 +165,7 @@ class _MainScreenContent extends StatelessWidget {
       onRefresh: pullToRefresh,
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(
-            left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
         itemBuilder: (_, index) => PrescriptionCardWidget(
           (data?.results ?? [])[index],
         ),
@@ -180,29 +176,34 @@ class _MainScreenContent extends StatelessWidget {
   }
 
   Widget _buildEmptyState() {
-    return RefreshIndicator(
-      onRefresh: pullToRefresh,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Assets.common.emptyState.svg()],
+    return LayoutBuilder(builder: (_, cons) {
+      return RefreshIndicator(
+        onRefresh: pullToRefresh,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: SizedBox(
+            height: cons.maxHeight,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Assets.common.emptyState.svg()],
+                  ),
+                  Text(
+                    StringRes.current.mainEmptyState,
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: ColorRes.textSecondary,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                StringRes.current.mainEmptyState,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  color: ColorRes.textSecondary,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

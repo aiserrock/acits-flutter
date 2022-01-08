@@ -1,0 +1,110 @@
+import 'package:acits_flutter/export.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+class AnimalEditCard extends StatelessWidget {
+  const AnimalEditCard(
+    this.data, {
+    this.formKey,
+    Key? key,
+  }) : super(key: key);
+
+  final List<EditCardData> data;
+
+  final GlobalKey<FormState>? formKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = data
+        .map<Widget>(
+          (item) => Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: item.content == null
+                ? [
+                    if (item.onPressed == null) _buildField(item),
+                    if (item.onPressed != null)
+                      CupertinoButton(
+                        padding: const EdgeInsets.only(),
+                        onPressed: item.onPressed,
+                        child: _buildField(
+                          item,
+                          enabled: false,
+                        ),
+                      ),
+                  ]
+                : [
+                    if (item.label != null)
+                      Text(
+                        item.label!,
+                        style: StyleRes.content,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    item.content!,
+                  ],
+          ),
+        )
+        .toList();
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: 16.0,
+        horizontal: 8.0,
+      ),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 8.0,
+      ),
+      decoration:
+          BoxDecoration(color: ColorRes.foreground, borderRadius: BorderRadius.circular(8.0)),
+      child: Column(children: rows),
+    );
+  }
+
+  Widget _buildField(
+    EditCardData item, {
+    bool enabled = true,
+  }) {
+    return TextFormField(
+      key: formKey,
+      enabled: item.enabled && enabled,
+      validator: item.validator,
+      controller: item.controller,
+      initialValue: item.initValue,
+      decoration: InputDecoration(
+        labelText: item.label,
+        suffixIcon: item.suffix,
+      ),
+      style: item.enabled ? null : const TextStyle().copyWith(color: ColorRes.textSecondary),
+      maxLines: 8,
+      minLines: 1,
+      keyboardType: item.digitsOnly ? TextInputType.number : null,
+      inputFormatters: item.digitsOnly ? [FilteringTextInputFormatter.digitsOnly] : null,
+    );
+  }
+}
+
+class EditCardData {
+  EditCardData({
+    this.label,
+    this.controller,
+    this.onPressed,
+    this.validator,
+    this.suffix,
+    this.content,
+    this.digitsOnly = false,
+    this.enabled = true,
+    this.initValue,
+  });
+
+  final String? label;
+  final Widget? content;
+  final TextEditingController? controller;
+  final VoidCallback? onPressed;
+  final String Function(String?)? validator;
+  final Widget? suffix;
+  final bool digitsOnly;
+  final bool enabled;
+  final String? initValue;
+}

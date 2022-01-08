@@ -50,6 +50,26 @@ class StringRes {
     return Localizations.of<StringRes>(context, StringRes);
   }
 
+  /// `New animal`
+  String get animalAdd {
+    return Intl.message(
+      'New animal',
+      name: 'animalAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Additional info`
+  String get animalAdditionalInfo {
+    return Intl.message(
+      'Additional info',
+      name: 'animalAdditionalInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Admitted`
   String get animalAdmitted {
     return Intl.message(
@@ -70,11 +90,71 @@ class StringRes {
     );
   }
 
+  /// `Approximate`
+  String get animalAgeAppox {
+    return Intl.message(
+      'Approximate',
+      name: 'animalAgeAppox',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exact`
+  String get animalAgeExact {
+    return Intl.message(
+      'Exact',
+      name: 'animalAgeExact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Animal family`
+  String get animalAnimalFamily {
+    return Intl.message(
+      'Animal family',
+      name: 'animalAnimalFamily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Animal kind`
+  String get animalAnimalKind {
+    return Intl.message(
+      'Animal kind',
+      name: 'animalAnimalKind',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Animal status`
+  String get animalAnimalStatus {
+    return Intl.message(
+      'Animal status',
+      name: 'animalAnimalStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Applicant`
   String get animalApplicant {
     return Intl.message(
       'Applicant',
       name: 'animalApplicant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birth date`
+  String get animalBirth {
+    return Intl.message(
+      'Birth date',
+      name: 'animalBirth',
       desc: '',
       args: [],
     );
@@ -190,6 +270,16 @@ class StringRes {
     );
   }
 
+  /// `Last name`
+  String get animalCuratorLastName {
+    return Intl.message(
+      'Last name',
+      name: 'animalCuratorLastName',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Name`
   String get animalCuratorName {
     return Intl.message(
@@ -205,6 +295,26 @@ class StringRes {
     return Intl.message(
       'Phone',
       name: 'animalCuratorPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Admitt date`
+  String get animalDateAdmitt {
+    return Intl.message(
+      'Admitt date',
+      name: 'animalDateAdmitt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit animal`
+  String get animalEdit {
+    return Intl.message(
+      'Edit animal',
+      name: 'animalEdit',
       desc: '',
       args: [],
     );
@@ -230,11 +340,51 @@ class StringRes {
     );
   }
 
+  /// `Nickname`
+  String get animalName {
+    return Intl.message(
+      'Nickname',
+      name: 'animalName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick curator`
+  String get animalPickCurator {
+    return Intl.message(
+      'Pick curator',
+      name: 'animalPickCurator',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Prescriptions`
   String get animalPrescriptions {
     return Intl.message(
       'Prescriptions',
       name: 'animalPrescriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Qty month`
+  String get animalQtyMonth {
+    return Intl.message(
+      'Qty month',
+      name: 'animalQtyMonth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Year qty`
+  String get animalQtyYear {
+    return Intl.message(
+      'Year qty',
+      name: 'animalQtyYear',
       desc: '',
       args: [],
     );
@@ -290,11 +440,31 @@ class StringRes {
     );
   }
 
+  /// `Status and join`
+  String get animalStatusAndJoin {
+    return Intl.message(
+      'Status and join',
+      name: 'animalStatusAndJoin',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Transfer act`
   String get animalTransferAct {
     return Intl.message(
       'Transfer act',
       name: 'animalTransferAct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload transfer act`
+  String get animalUploadAct {
+    return Intl.message(
+      'Upload transfer act',
+      name: 'animalUploadAct',
       desc: '',
       args: [],
     );

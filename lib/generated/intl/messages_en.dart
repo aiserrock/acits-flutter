@@ -31,9 +31,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "animalAdd": MessageLookupByLibrary.simpleMessage("New animal"),
+        "animalAdditionalInfo":
+            MessageLookupByLibrary.simpleMessage("Additional info"),
         "animalAdmitted": MessageLookupByLibrary.simpleMessage("Admitted"),
         "animalAge": MessageLookupByLibrary.simpleMessage("Age"),
+        "animalAgeAppox": MessageLookupByLibrary.simpleMessage("Approximate"),
+        "animalAgeExact": MessageLookupByLibrary.simpleMessage("Exact"),
+        "animalAnimalFamily":
+            MessageLookupByLibrary.simpleMessage("Animal family"),
+        "animalAnimalKind": MessageLookupByLibrary.simpleMessage("Animal kind"),
+        "animalAnimalStatus":
+            MessageLookupByLibrary.simpleMessage("Animal status"),
         "animalApplicant": MessageLookupByLibrary.simpleMessage("Applicant"),
+        "animalBirth": MessageLookupByLibrary.simpleMessage("Birth date"),
         "animalCardTitle": MessageLookupByLibrary.simpleMessage("Animal card"),
         "animalCatchPlace": MessageLookupByLibrary.simpleMessage("Catch place"),
         "animalCategory": MessageLookupByLibrary.simpleMessage("Category"),
@@ -45,12 +56,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalCurator": MessageLookupByLibrary.simpleMessage("Curator"),
         "animalCuratorAddress": MessageLookupByLibrary.simpleMessage("Address"),
         "animalCuratorEmail": MessageLookupByLibrary.simpleMessage("E-mail"),
+        "animalCuratorLastName":
+            MessageLookupByLibrary.simpleMessage("Last name"),
         "animalCuratorName": MessageLookupByLibrary.simpleMessage("Name"),
         "animalCuratorPhone": MessageLookupByLibrary.simpleMessage("Phone"),
+        "animalDateAdmitt": MessageLookupByLibrary.simpleMessage("Admitt date"),
+        "animalEdit": MessageLookupByLibrary.simpleMessage("Edit animal"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Family"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Kind"),
+        "animalName": MessageLookupByLibrary.simpleMessage("Nickname"),
+        "animalPickCurator":
+            MessageLookupByLibrary.simpleMessage("Pick curator"),
         "animalPrescriptions":
             MessageLookupByLibrary.simpleMessage("Prescriptions"),
+        "animalQtyMonth": MessageLookupByLibrary.simpleMessage("Qty month"),
+        "animalQtyYear": MessageLookupByLibrary.simpleMessage("Year qty"),
         "animalReceiptDate":
             MessageLookupByLibrary.simpleMessage("Receipt date"),
         "animalSex": MessageLookupByLibrary.simpleMessage("Sex"),
@@ -58,8 +78,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalSpecSigns":
             MessageLookupByLibrary.simpleMessage("Special signs"),
         "animalStatus": MessageLookupByLibrary.simpleMessage("Status"),
+        "animalStatusAndJoin":
+            MessageLookupByLibrary.simpleMessage("Status and join"),
         "animalTransferAct":
             MessageLookupByLibrary.simpleMessage("Transfer act"),
+        "animalUploadAct":
+            MessageLookupByLibrary.simpleMessage("Upload transfer act"),
         "animalWeight": MessageLookupByLibrary.simpleMessage("Weight, kg"),
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Size, cm"),
         "common": MessageLookupByLibrary.simpleMessage("common"),

@@ -4,6 +4,7 @@ import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:acits_flutter/ui/widget/animal_card.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/util/screen_state.dart';
@@ -79,7 +80,11 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
     return FloatingActionButton(
       heroTag: 'AnimalsFab',
       mini: _isSmallScreen,
-      onPressed: () {},
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const AnimalEditScreen(),
+        ),
+      ),
       child: const Icon(
         Icons.add,
         color: ColorRes.foreground,
@@ -154,7 +159,6 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
     return RefreshIndicator(
       onRefresh: () => _loadAnimalList(needResetOffset: true),
       child: SlidableAutoCloseBehavior(
-        
         child: CustomScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           controller: _scrollController,
@@ -168,9 +172,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                     right: 16.0,
                     bottom: 16.0,
                   ),
-                  child: AnimalCardWidget(
-                    _state.value?[index]
-                  ),
+                  child: AnimalCardWidget(_state.value?[index]),
                 ),
                 childCount: _state.value?.length ?? 0,
               ),
