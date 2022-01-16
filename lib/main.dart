@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           iconColor: ColorRes.accent,
         ),
         textSelectionTheme:
-           const TextSelectionThemeData(cursorColor: ColorRes.accent),
+            const TextSelectionThemeData(cursorColor: ColorRes.accent),
       ),
       localizationsDelegates: const [
         StringRes.delegate,
@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: StringRes.delegate.supportedLocales,
       home: const OnboardingScreen(),
       color: ColorRes.accent,
+      navigatorKey: getIt<GlobalKey<NavigatorState>>(),
     );
   }
 }
