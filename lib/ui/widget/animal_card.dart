@@ -19,7 +19,8 @@ class AnimalCardWidget extends StatefulWidget {
   State<AnimalCardWidget> createState() => _AnimalCardWidgetState();
 }
 
-class _AnimalCardWidgetState extends State<AnimalCardWidget> with SingleTickerProviderStateMixin {
+class _AnimalCardWidgetState extends State<AnimalCardWidget>
+    with SingleTickerProviderStateMixin {
   final _formatter = DateFormat('dd.MM.yyyy');
 
   @override
@@ -202,83 +203,12 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget> with SingleTickerPr
     );
   }
 
-  Widget _buildActionBar() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        color: ColorRes.accent.withOpacity(.7),
-        child: Flex(
-          direction: Axis.vertical,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            _buildActionBtn(
-              onPressed: () {},
-              child: Assets.icon.prescription.svg(
-                color: ColorRes.foreground,
-                height: 18.0,
-                width: 18.0,
-              ),
-            ),
-            _buildActionBtn(
-              onPressed: () {},
-              child: Assets.icon.comment.svg(
-                color: ColorRes.foreground,
-                height: 18.0,
-                width: 18.0,
-              ),
-            ),
-            _buildActionBtn(
-              onPressed: () {},
-              icon: Icons.download,
-              color: ColorRes.foreground,
-            ),
-            _buildActionBtn(
-              onPressed: () {},
-              icon: Icons.edit,
-              color: ColorRes.foreground,
-            ),
-            _buildActionBtn(
-              onPressed: () {},
-              icon: Icons.delete,
-              color: ColorRes.error,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionBtn({
-    required void Function()? onPressed,
-    Widget? child,
-    IconData? icon,
-    Color color = ColorRes.inactiveIcon,
-    double size = 18.0,
-  }) {
-    return Flexible(
-      fit: FlexFit.tight,
-      child: CupertinoButton(
-        padding: const EdgeInsets.symmetric(
-          vertical: 2.0,
-          horizontal: 8.0,
-        ),
-        minSize: 24.0,
-        child: child ??
-            Icon(
-              icon,
-              color: color,
-              size: size,
-            ),
-        onPressed: () {},
-      ),
-    );
-  }
-
   Widget _buildAdmit() {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: StringRes.current.animalAdmitted, style: StyleRes.content),
+          TextSpan(
+              text: StringRes.current.animalAdmitted, style: StyleRes.content),
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
             text: widget.itemData?.dateJoined != null
