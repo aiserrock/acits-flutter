@@ -2,35 +2,32 @@ import 'dart:async';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
+import 'package:acits_flutter/service/staff/staff_service.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const _searchBouncePeriod = Duration(milliseconds: 1000);
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({
-    this.parentSearch,
+class SearchCuratorScreen extends StatefulWidget {
+  const SearchCuratorScreen({
     Key? key,
   }) : super(key: key);
 
-  final Species? parentSearch;
-
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchCuratorScreen> createState() => _SearchCuratorScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchCuratorScreenState extends State<SearchCuratorScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _service = getIt<AnimalService>();
+  final _service = getIt<StaffService>();
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
   Timer? _bounceTimer;
   late final NavigatorState _navigator;
 
   int _speciesListOffset = 0;
-  final _speciesState = WidgetState<List<Species>>()..loading();
+  final _curatorsState = WidgetState<List<Curator>>()..loading();
   final _listPagingState = WidgetState<Object>()..content(Object());
 
   @override
@@ -104,8 +101,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildBody() {
-    return StateBuilder<List<Species>>(
-      state: _speciesState,
+    return StateBuilder<List<Curator>>(
+      state: _curatorsState,
       builder: _buildList,
       loader: (_) => const Center(
         child: CircularProgressIndicator(),
@@ -114,7 +111,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildList(context, List<Species> list) {
+  Widget _buildList(context, List<Curator> list) {
     return list.isNotEmpty
         ? RefreshIndicator(
             onRefresh: () => _loadData(resetOffset: true),
@@ -130,7 +127,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       child: Builder(builder: (context) {
                         return ListTile(
-                          title: Text(list[index].name ?? ''),
+                          title: Text(list[index].fullName ?? ''),
                           onTap: () {
                             _onItemPressed(
                               context,
@@ -181,7 +178,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _onItemPressed(
     BuildContext context,
-    Species item,
+    Curator item,
   ) {
     _navigator.pop(item);
   }
@@ -209,17 +206,15 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(
         () {
           _speciesListOffset = 0;
-          _speciesState.loading();
+          _curatorsState.loading();
         },
       );
     }
-    if (!_speciesState.isLoading) {
+    if (!_curatorsState.isLoading) {
       setState(() => _listPagingState.loading());
     }
     _service
-        .getAnimalSpecies(
-      level: _service.getLevel(int.tryParse(widget.parentSearch?.level.toString() ?? '0') ?? 0),
-      parentId: widget.parentSearch?.id,
+        .getCurators(
       offset: _speciesListOffset,
       searchRequest: _searchController.text.isNotEmpty ? _searchController.text : null,
     )
@@ -228,16 +223,16 @@ class _SearchScreenState extends State<SearchScreen> {
         setState(
           () {
             _speciesListOffset += value.length;
-            final list = (_speciesState.value ?? [])..addAll(value);
-            _speciesState.content(list);
+            final list = (_curatorsState.value ?? [])..addAll(value);
+            _curatorsState.content(list);
             _listPagingState.content(Object());
           },
         );
       },
     ).onError(
       (error, stackTrace) {
-        if (_speciesState.isLoading) {
-          setState(() => _speciesState.error = error);
+        if (_curatorsState.isLoading) {
+          setState(() => _curatorsState.error = error);
         } else {
           setState(() => _listPagingState.error = error);
         }

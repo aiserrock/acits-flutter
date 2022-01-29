@@ -330,6 +330,56 @@ class StringRes {
     );
   }
 
+  /// `Female`
+  String get animalGenderFemale {
+    return Intl.message(
+      'Female',
+      name: 'animalGenderFemale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gengerless`
+  String get animalGenderLess {
+    return Intl.message(
+      'Gengerless',
+      name: 'animalGenderLess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Male`
+  String get animalGenderMale {
+    return Intl.message(
+      'Male',
+      name: 'animalGenderMale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Middle`
+  String get animalGenderMiddle {
+    return Intl.message(
+      'Middle',
+      name: 'animalGenderMiddle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown`
+  String get animalGenderUndefined {
+    return Intl.message(
+      'Unknown',
+      name: 'animalGenderUndefined',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Kind`
   String get animalKind {
     return Intl.message(

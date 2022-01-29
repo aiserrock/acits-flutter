@@ -1,17 +1,17 @@
-import 'dart:ui';
-
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_card.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_add_info_page.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_applicant_page.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_common_info_page.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_curator_page.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_status_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:intl/intl.dart';
-
-final _dateFormatter = DateFormat('dd.MM.yyyy');
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 /// Экран создания или редактирования существующих животных
 class AnimalEditScreen extends StatefulWidget {
@@ -33,37 +33,10 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   late final bool _isEdit;
 
   WidgetState<Animal> _editState = WidgetState<Animal>()..loading();
+  int _currentPage = 0;
+  final _pageController = PageController();
 
-  final _nameController = TextEditingController();
-  final _categoryController = TextEditingController();
-  final _familyController = TextEditingController();
-  final _kindController = TextEditingController();
-  final _dateReceiptController = TextEditingController();
-  final _statusController = TextEditingController();
-  final _catchController = TextEditingController();
-
-  int _currentAgeTab = 0;
-  final _ageYearController = TextEditingController();
-  final _ageMonthController = TextEditingController();
-  final _birthController = TextEditingController();
-  final _sexController = TextEditingController();
-  final _heightController = TextEditingController();
-  final _weightController = TextEditingController();
-  final _weightUnitController = TextEditingController();
-  final _colorController = TextEditingController();
-  final _specController = TextEditingController();
-  final _chipController = TextEditingController();
-  final _dateChipController = TextEditingController();
-
-  final _curatorController = TextEditingController();
-  Curator? _curator;
-
-  final _applicantNameController = TextEditingController();
-  final _applicantLastNameController = TextEditingController();
-  final _applicantPhoneController = TextEditingController();
-  final _applicantSocialController = TextEditingController();
-  final _applicantEmailController = TextEditingController();
-  Applicant? _applicant;
+  Animal editAnimal = Animal();
 
   @override
   void initState() {
@@ -103,6 +76,13 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
         ],
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: Colors.white,
+        ),
+        onPressed: () {},
+      ),
       body: _buildBody(),
     );
   }
@@ -126,472 +106,63 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
     );
   }
 
+  Widget _buildIndicator() {
+    return SmoothPageIndicator(
+      count: 5,
+      controller: _pageController,
+      onDotClicked: _scrollTo,
+      effect: const ExpandingDotsEffect(
+        activeDotColor: ColorRes.indicatorActive,
+        dotColor: ColorRes.indicatorInactive,
+        dotHeight: 8.0,
+        dotWidth: 8.0,
+        strokeWidth: 16.0,
+      ),
+    );
+  }
+
+  void _scrollTo(int index) {}
+
   Widget _buildContent() {
-    return Form(
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
-          SliverToBoxAdapter(child: _buildImage()),
-          const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
-          SliverToBoxAdapter(
-            child: _buildSubTitle(StringRes.current.animalCommonInfo),
-          ),
-          SliverToBoxAdapter(
-            child: _buildCommonCard(),
-          ),
-          SliverToBoxAdapter(
-            child: _buildSubTitle(StringRes.current.animalStatusAndJoin),
-          ),
-          SliverToBoxAdapter(
-            child: _buildStatusCard(),
-          ),
-          SliverToBoxAdapter(
-            child: _buildSubTitle(StringRes.current.animalAdditionalInfo),
-          ),
-          SliverToBoxAdapter(
-            child: _buildAddinionalCard(),
-          ),
-          SliverToBoxAdapter(
-            child: _buildCuratorTitle(),
-          ),
-          SliverToBoxAdapter(
-            child: _buildCuratorCard(),
-          ),
-          SliverToBoxAdapter(
-            child: _buildSubTitle(StringRes.current.animalApplicant),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 8.0,
-                left: 16.0,
-                bottom: 8.0,
-                right: 16.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    StringRes.current.animalUploadAct,
-                    style: StyleRes.content.copyWith(
-                      fontSize: 16.0,
-                      color: ColorRes.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CupertinoButton(
-                        padding: const EdgeInsets.all(4.0),
-                        child: const Icon(
-                          Icons.add_a_photo_outlined,
-                          color: ColorRes.accent,
-                          size: 40.0,
-                        ),
-                        onPressed: () {},
-                      ),
-                      const SizedBox(width: 16.0),
-                      CupertinoButton(
-                        padding: const EdgeInsets.all(4.0),
-                        child: const Icon(
-                          Icons.note_add_outlined,
-                          color: ColorRes.accent,
-                          size: 40.0,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8.0),
-                ],
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: _buildApplicantCard(),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
-        ],
+    final pages = <AnimalEditPage>[
+      AnimalEditCommonInfoPage(
+        animal: editAnimal,
+        isEdit: _isEdit,
+        validate: (_) {},
       ),
-    );
-  }
-
-  Widget _buildApplicantCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalCuratorName + ' *',
-          controller: _applicantNameController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCuratorLastName + ' *',
-          controller: _applicantLastNameController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCuratorPhone + ' *',
-          controller: _applicantPhoneController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalSocialLink,
-          controller: _applicantSocialController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCuratorEmail,
-          controller: _applicantEmailController,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCuratorTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 8.0,
-        left: 16.0,
-        bottom: 8.0,
-        right: 16.0,
+      AnimalEditStatusPage(
+        animal: editAnimal,
+        isEdit: _isEdit,
+        validate: (_) {},
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              StringRes.current.animalCurator,
-              style: StyleRes.title.copyWith(fontSize: 22.0),
-            ),
-          ),
-          const SizedBox(width: 16.0),
-          CupertinoButton(
-            padding: const EdgeInsets.only(),
-            child: const Icon(
-              Icons.add_circle_outline_rounded,
-              color: ColorRes.accent,
-              size: 32.0,
-            ),
-            onPressed: () {},
-          )
-        ],
+      AnimalEditAddInfoPage(
+        animal: editAnimal,
+        isEdit: _isEdit,
+        validate: (_) {},
       ),
-    );
-  }
-
-  Widget _buildCuratorCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalPickCurator,
-          controller: _curatorController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-        if (_curator != null)
-          EditCardData(
-            label: StringRes.current.animalCuratorPhone,
-            enabled: false,
-            initValue: _curator?.phoneNumber,
-          ),
-        if (_curator != null)
-          EditCardData(
-            label: StringRes.current.animalCuratorEmail,
-            enabled: false,
-            initValue: _curator?.email,
-          ),
-        if (_curator != null)
-          EditCardData(
-            label: StringRes.current.animalCuratorAddress,
-            enabled: false,
-            initValue: _curator?.address,
-          ),
-      ],
-    );
-  }
-
-  Widget _buildSubTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 8.0,
-        left: 16.0,
-        bottom: 8.0,
+      AnimalEditCuratorPage(
+        animal: editAnimal,
+        isEdit: _isEdit,
+        validate: (_) {},
       ),
-      child: Text(
-        title,
-        style: StyleRes.title.copyWith(fontSize: 22.0),
+      AnimalEditApplicantPage(
+        animal: editAnimal,
+        isEdit: _isEdit,
+        validate: (_) {},
       ),
-    );
-  }
-
-  Widget _buildAddinionalCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalAge,
-          content: _buildAgeTabSelector(),
-        ),
-        if (_currentAgeTab == 0)
-          EditCardData(
-            content: _buildAgeFields(),
-          ),
-        if (_currentAgeTab == 1)
-          EditCardData(
-            label: StringRes.current.animalBirth,
-            controller: _birthController,
-            suffix: const Icon(
-              Icons.calendar_today_outlined,
-              color: ColorRes.accent,
-            ),
-            onPressed: () {},
-          ),
-        EditCardData(
-          label: StringRes.current.animalSex,
-          controller: _sexController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-        EditCardData(
-          label: StringRes.current.aninmalSize,
-          controller: _heightController,
-          digitsOnly: true,
-        ),
-        EditCardData(
-          label: StringRes.current.animalWeight,
-          controller: _weightController,
-          digitsOnly: true,
-        ),
-        EditCardData(
-          label: StringRes.current.animalColor,
-          controller: _colorController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalSpecSigns,
-          controller: _specController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalChip,
-          controller: _chipController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalChipDate,
-          controller: _dateChipController,
-          suffix: const Icon(
-            Icons.calendar_today_outlined,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
-  Padding _buildAgeFields() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              controller: _ageYearController,
-              decoration: InputDecoration(
-                labelText: StringRes.current.animalQtyYear,
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            ),
-          ),
-          const SizedBox(width: 16.0),
-          Expanded(
-            child: Focus(
-              onFocusChange: (hasFocus) {
-                if (!hasFocus) _checkAgeInput();
-              },
-              child: TextFormField(
-                controller: _ageMonthController,
-                decoration: InputDecoration(
-                  labelText: StringRes.current.animalQtyMonth,
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAgeTabSelector() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: CupertinoSlidingSegmentedControl<int>(
-          groupValue: _currentAgeTab,
-          children: <int, Widget>{
-            0: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                StringRes.current.animalAgeAppox,
-                style: StyleRes.button.copyWith(
-                  color: _currentAgeTab == 0 ? ColorRes.textPrimary : Colors.white,
-                ),
-              ),
-            ),
-            1: Text(
-              StringRes.current.animalAgeExact,
-              style: StyleRes.button.copyWith(
-                color: _currentAgeTab == 1 ? ColorRes.textPrimary : Colors.white,
-              ),
-            ),
-          },
-          backgroundColor: ColorRes.indicatorActive,
-          onValueChanged: (int? index) => setState(() {
-            if (index != null) _currentAgeTab = index;
-          }),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatusCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalDateAdmitt + ' *',
-          controller: _dateReceiptController,
-          suffix: const Icon(
-            Icons.calendar_today_outlined,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-        EditCardData(
-          label: StringRes.current.animalAnimalStatus + ' *',
-          controller: _statusController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-        EditCardData(
-          label: StringRes.current.animalCatchPlace + ' *',
-          controller: _catchController,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCommonCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalName,
-          controller: _nameController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCategory + ' *',
-          controller: _categoryController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-        EditCardData(
-          label: StringRes.current.animalAnimalFamily + ' *',
-          controller: _familyController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-        EditCardData(
-          label: StringRes.current.animalAnimalKind,
-          controller: _kindController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
-  Widget _buildImage() {
-    return Stack(
-      alignment: Alignment.center,
+    ];
+    return Column(
       children: [
-        CircleAvatar(
-          backgroundImage: (_isEdit && _editState.value?.avatar != null)
-              ? NetworkImage(_editState.value!.avatar!)
-              : null,
-          foregroundColor: ColorRes.textSecondary,
-          radius: 80.0,
-        ),
-        Positioned.fill(
-          child: Center(
-            child: ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-                child: Container(
-                  padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white30,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CupertinoButton(
-                        padding: const EdgeInsets.all(4.0),
-                        child: const Icon(
-                          Icons.photo_camera,
-                          color: ColorRes.accent,
-                          size: 32.0,
-                        ),
-                        onPressed: () {},
-                      ),
-                      const SizedBox(
-                        width: 32.0,
-                        child: Divider(
-                          thickness: 2.0,
-                          color: ColorRes.accent,
-                        ),
-                      ),
-                      CupertinoButton(
-                        padding: const EdgeInsets.all(4.0),
-                        child: const Icon(
-                          Icons.photo_library_outlined,
-                          color: ColorRes.accent,
-                          size: 32.0,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+        const SizedBox(height: 24.0),
+        _buildIndicator(),
+        Expanded(
+          child: PageView(
+            controller: _pageController,
+            children: pages,
           ),
         ),
       ],
     );
-  }
-
-  void _checkAgeInput() {
-    if (_currentAgeTab != 0) return;
-    final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 +
-        (int.tryParse(_ageMonthController.text) ?? 0);
-    _ageYearController.text = (months ~/ 12).toString();
-    _ageMonthController.text = (months % 12).toString();
   }
 
   Future<void> _init() async {
@@ -603,39 +174,10 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
           (value) => setState(
             () {
               _editState = WidgetState()..content(value);
-              _setControllers(value);
+              editAnimal = value;
             },
           ),
         )
         .catchError((e) => setState(() => _editState = WidgetState()..error = e));
-  }
-
-  void _setControllers(Animal value) {
-    _nameController.text = value.name ?? '';
-    _categoryController.text = value.specCategory ?? '';
-    _familyController.text = value.specFamily ?? '';
-    _kindController.text = value.specKind ?? '';
-    _dateReceiptController.text =
-        value.dateJoined != null ? _dateFormatter.format(value.dateJoined!) : '';
-    _statusController.text = value.statusString ?? '';
-    _catchController.text = value.placeOfCatch ?? '';
-    _birthController.text = value.birthDate != null ? _dateFormatter.format(value.birthDate!) : '';
-    if (value.birthDate != null) setState(() => _currentAgeTab = 1);
-    _sexController.text = value.sexString ?? '';
-    _heightController.text = value.height ?? '';
-    _weightController.text = value.weight ?? '';
-    _colorController.text = value.colorString ?? '';
-    _specController.text = value.specialSignsString ?? '';
-    _chipController.text = value.chippingCode ?? '';
-    _dateChipController.text =
-        value.dateOfChipping != null ? _dateFormatter.format(value.dateOfChipping!) : '';
-    if (value.curator != null) setState(() => _curator = Curator.fromJson(value.curator));
-    _curatorController.text = value.curatorFullName ?? '';
-    if (value.applicant != null) setState(() => _applicant = Applicant.fromJson(value.applicant));
-    _applicantNameController.text = _applicant?.firstName ?? '';
-    _applicantLastNameController.text = _applicant?.lastName ?? '';
-    _applicantPhoneController.text = _applicant?.phoneNumber ?? '';
-    _applicantSocialController.text = _applicant?.contactDetails ?? '';
-    _applicantEmailController.text = _applicant?.email ?? '';
   }
 }

@@ -70,6 +70,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Дата поступления"),
         "animalEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Семейство"),
+        "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Женский"),
+        "animalGenderLess": MessageLookupByLibrary.simpleMessage("Без пола"),
+        "animalGenderMale": MessageLookupByLibrary.simpleMessage("Мужской"),
+        "animalGenderMiddle": MessageLookupByLibrary.simpleMessage("Средний"),
+        "animalGenderUndefined":
+            MessageLookupByLibrary.simpleMessage("Неизвестен"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Вид"),
         "animalName": MessageLookupByLibrary.simpleMessage("Кличка"),
         "animalPickCurator":

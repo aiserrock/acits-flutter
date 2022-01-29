@@ -63,6 +63,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalDateAdmitt": MessageLookupByLibrary.simpleMessage("Admitt date"),
         "animalEdit": MessageLookupByLibrary.simpleMessage("Edit animal"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Family"),
+        "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Female"),
+        "animalGenderLess": MessageLookupByLibrary.simpleMessage("Gengerless"),
+        "animalGenderMale": MessageLookupByLibrary.simpleMessage("Male"),
+        "animalGenderMiddle": MessageLookupByLibrary.simpleMessage("Middle"),
+        "animalGenderUndefined":
+            MessageLookupByLibrary.simpleMessage("Unknown"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Kind"),
         "animalName": MessageLookupByLibrary.simpleMessage("Nickname"),
         "animalPickCurator":

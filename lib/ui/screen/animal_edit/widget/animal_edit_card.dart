@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Контейнер полей ввода/редактирования данных
+/// животного при создании или редактировании
 class AnimalEditCard extends StatelessWidget {
   const AnimalEditCard(
     this.data, {
@@ -66,6 +68,11 @@ class AnimalEditCard extends StatelessWidget {
     EditCardData item, {
     bool enabled = true,
   }) {
+    final keyboardType = item.digitsOnly
+        ? TextInputType.number
+        : item.decimalOnly
+            ? const TextInputType.numberWithOptions(decimal: true)
+            : null;
     return TextFormField(
       key: formKey,
       enabled: item.enabled && enabled,
@@ -79,7 +86,7 @@ class AnimalEditCard extends StatelessWidget {
       style: item.enabled ? null : const TextStyle().copyWith(color: ColorRes.textSecondary),
       maxLines: 8,
       minLines: 1,
-      keyboardType: item.digitsOnly ? TextInputType.number : null,
+      keyboardType: keyboardType,
       inputFormatters: item.digitsOnly ? [FilteringTextInputFormatter.digitsOnly] : null,
     );
   }
@@ -94,6 +101,7 @@ class EditCardData {
     this.suffix,
     this.content,
     this.digitsOnly = false,
+    this.decimalOnly = false,
     this.enabled = true,
     this.initValue,
   });
@@ -105,6 +113,7 @@ class EditCardData {
   final String Function(String?)? validator;
   final Widget? suffix;
   final bool digitsOnly;
+  final bool decimalOnly;
   final bool enabled;
   final String? initValue;
 }
