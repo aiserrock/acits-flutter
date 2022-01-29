@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:acits_flutter/ui/screen/debug_screen/debug_screen.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -120,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return !_isLoading
         ? PrimaryButton(
             onPressed: _submit,
+            onLongPress: _openDebug,
             text: StringRes.current.loginEntryBtn.toUpperCase(),
           )
         : Shimmer.fromColors(
@@ -288,6 +290,11 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _errorMessage = null);
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (_) => const RootScreen()));
+  }
+
+  void _openDebug() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const DebugScreen()));
   }
 }
 

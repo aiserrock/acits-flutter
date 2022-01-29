@@ -7,6 +7,7 @@ class PrimaryButton extends StatelessWidget {
     this.text,
     this.child,
     this.isFill = true,
+    this.onLongPress,
     Key? key,
   })  : assert(text != null || child != null),
         super(key: key);
@@ -15,11 +16,13 @@ class PrimaryButton extends StatelessWidget {
   final String? text;
   final Widget? child;
   final bool isFill;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      onLongPress: onLongPress,
       style: ButtonStyle(
         textStyle: MaterialStateProperty.all(
           const TextStyle(fontSize: 16.0),

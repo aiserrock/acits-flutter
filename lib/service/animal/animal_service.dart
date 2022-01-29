@@ -1,6 +1,5 @@
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
@@ -10,12 +9,10 @@ class AnimalService {
   AnimalService(
     this._authService,
     this._client,
-    this._configService,
   );
 
   final AuthService _authService;
   final Openapi _client;
-  final ConfigService _configService;
 
   /// Получить список живолных в приюте
   Future<PaginatedAnimalList?> fetchAnimalList({
@@ -47,5 +44,36 @@ class AnimalService {
     } else {
       throw MesssagedException(error: result.error);
     }
+  }
+
+  Future<List<Species>> getAnimalSpecies({
+    required ApiV1AnimalsSpeciesGetLevel level,
+    int limit = 25,
+    int offset = 0,
+    int? parentId,
+    String? searchRequest,
+  }) async {
+    final result = await _client.apiV1AnimalsSpeciesGet(
+      level: level,
+      limit: limit,
+      offset: offset,
+      parentId: parentId,
+      search: searchRequest,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    final data = result.body?.results;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
+  ApiV1AnimalsSpeciesGetLevel getLevel(int value) {
+    assert(value >= 0);
+    assert(value < ApiV1AnimalsSpeciesGetLevel.values.length - 1);
+    return ApiV1AnimalsSpeciesGetLevel.values[value + 1];
   }
 }

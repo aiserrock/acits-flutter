@@ -1,3 +1,5 @@
+
+import 'package:acits_flutter/ui/screen/debug_screen/debug_screen.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:flutter/material.dart';
 
@@ -42,17 +44,20 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       key: scaffoldKey,
       drawer: _buildDrawer(),
-      backgroundColor: ColorRes.background,
+      backgroundColor: ColorRes.background, 
       appBar: AppBar(
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
-        leading: GestureDetector(
-          child: const Icon(
-            Icons.menu,
-            color: ColorRes.accent,
-          ),
-          onTap: () => scaffoldKey.currentState?.openDrawer(),
-        ),
+        leading: Builder(builder: (context) {
+          return GestureDetector(
+            child: const Icon(
+              Icons.menu,
+              color: ColorRes.accent,
+            ),
+            onTap: () => scaffoldKey.currentState?.openDrawer(),
+            onLongPress: () => _openDebug(context),
+          );
+        }),
         title: _buildTitle(),
         actions: _buildAppBarActions,
         centerTitle: true,
@@ -142,6 +147,11 @@ class _MainScreenState extends State<MainScreen> {
         .fetchTodayPrescriptionList()
         .then((value) => setState(() => _state = WidgetState()..content(value)))
         .catchError((e) => _state = WidgetState()..error = e);
+  }
+
+  void _openDebug(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const DebugScreen()));
   }
 }
 
