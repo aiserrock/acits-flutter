@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _receipeDateRange = Duration(days: 365);
 
-
 class AnimalEditStatusPage extends AnimalEditPage {
   const AnimalEditStatusPage({
     required Animal animal,
@@ -58,35 +57,37 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> {
   }
 
   Widget _buildStatusCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalDateAdmitt + ' *',
-          controller: _dateReceiptController,
-          suffix: const Icon(
-            Icons.calendar_today_outlined,
-            color: ColorRes.accent,
+    return Builder(builder: (context) {
+      return AnimalEditCard(
+        [
+          EditCardData(
+            label: StringRes.current.animalDateAdmitt + ' *',
+            controller: _dateReceiptController,
+            suffix: const Icon(
+              Icons.calendar_today_outlined,
+              color: ColorRes.accent,
+            ),
+            onPressed: () => _setDate(context),
           ),
-          onPressed: _setData,
-        ),
-        EditCardData(
-          label: StringRes.current.animalAnimalStatus + ' *',
-          controller: _statusController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
+          EditCardData(
+            label: StringRes.current.animalAnimalStatus + ' *',
+            controller: _statusController,
+            suffix: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: ColorRes.accent,
+            ),
+            onPressed: () => _setStatus(context),
           ),
-          onPressed: _setStatus,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCatchPlace + ' *',
-          controller: _catchController,
-        ),
-      ],
-    );
+          EditCardData(
+            label: StringRes.current.animalCatchPlace + ' *',
+            controller: _catchController,
+          ),
+        ],
+      );
+    });
   }
 
-  Future<void> _setStatus() async {
+  Future<void> _setStatus(BuildContext context) async {
     Map<Widget, dynamic Function()> actionsMap(BuildContext ctx) {
       final entries = Status131Enum.values
           .where((status) => status.statusString != null)
@@ -118,7 +119,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> {
     );
   }
 
-  Future<void> _setData() async {
+  Future<void> _setDate(BuildContext context) async {
     final now = DateTime.now();
     final result = await showDatePicker(
       context: context,

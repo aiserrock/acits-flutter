@@ -5,6 +5,7 @@ import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_screen_route.dart';
+import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +14,13 @@ class AnimalEditCommonInfoPage extends AnimalEditPage {
     required Animal animal,
     required bool isEdit,
     required void Function(bool isValid) validate,
+    required GlobalKey<FormState> formKey,
     Key? key,
   }) : super(
           isEdit: isEdit,
           animal: animal,
           validate: validate,
+          formKey: formKey,
           key: key,
         );
 
@@ -129,6 +132,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
 
   Widget _buildCommonCard() {
     return Form(
+      key: widget.formKey,
       child: AnimalEditCard(
         [
           EditCardData(
@@ -136,14 +140,17 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
             controller: _nameController,
           ),
           EditCardData(
-            label: StringRes.current.animalCategory + ' *',
-            controller: _categoryController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
-            ),
-            onPressed: _searchCategory,
-          ),
+              label: StringRes.current.animalCategory + ' *',
+              controller: _categoryController,
+              suffix: const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: ColorRes.accent,
+              ),
+              onPressed: _searchCategory,
+              validator: (value) {
+                final t = Validator.emptyValidator(value);
+                return t;
+              }),
           EditCardData(
             label: StringRes.current.animalAnimalFamily + ' *',
             controller: _familyController,
@@ -152,6 +159,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
               color: ColorRes.accent,
             ),
             onPressed: _searchFamily,
+            validator: Validator.emptyValidator,
           ),
           EditCardData(
             label: StringRes.current.animalAnimalKind,

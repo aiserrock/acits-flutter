@@ -25,16 +25,23 @@ class AnimalEditCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: item.content == null
                 ? [
-                    if (item.onPressed == null) _buildField(item),
-                    if (item.onPressed != null)
-                      CupertinoButton(
-                        padding: const EdgeInsets.only(),
-                        onPressed: item.onPressed,
-                        child: _buildField(
-                          item,
-                          enabled: false,
-                        ),
-                      ),
+                    // if (item.onPressed == null) _buildField(item),
+                    // if (item.onPressed != null)
+                    //   CupertinoButton(
+                    //     padding: const EdgeInsets.only(),
+                    //     onPressed: item.onPressed,
+                    //     child: _buildField(
+                    //       item,
+                    //       enabled: true,
+                    //     ),
+                    //   ),
+                    Stack(
+                      children: [
+                        _buildField(item),
+                        if (item.onPressed != null)
+                          Positioned.fill(child: InkWell(onTap: item.onPressed))
+                      ],
+                    )
                   ]
                 : [
                     if (item.label != null)
@@ -82,6 +89,7 @@ class AnimalEditCard extends StatelessWidget {
       decoration: InputDecoration(
         labelText: item.label,
         suffixIcon: item.suffix,
+        errorStyle: const TextStyle(fontSize: .0),
       ),
       style: item.enabled ? null : const TextStyle().copyWith(color: ColorRes.textSecondary),
       maxLines: 8,
@@ -110,7 +118,7 @@ class EditCardData {
   final Widget? content;
   final TextEditingController? controller;
   final VoidCallback? onPressed;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
   final Widget? suffix;
   final bool digitsOnly;
   final bool decimalOnly;

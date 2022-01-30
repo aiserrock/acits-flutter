@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_add_info_page.dart';
@@ -28,12 +30,11 @@ class AnimalEditScreen extends StatefulWidget {
 
 class _AnimalEditScreenState extends State<AnimalEditScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final formKeys = List<GlobalKey<FormState>>.generate(5, (_) => GlobalKey<FormState>());
 
   late final bool _isEdit;
 
   WidgetState<Animal> _editState = WidgetState<Animal>()..loading();
-  int _currentPage = 0;
   final _pageController = PageController();
 
   Animal editAnimal = Animal();
@@ -81,7 +82,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
           Icons.arrow_forward_ios_rounded,
           color: Colors.white,
         ),
-        onPressed: () {},
+        onPressed: _onFabPressed,
       ),
       body: _buildBody(),
     );
@@ -129,6 +130,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
         animal: editAnimal,
         isEdit: _isEdit,
         validate: (_) {},
+        formKey: formKeys[0],
       ),
       AnimalEditStatusPage(
         animal: editAnimal,
@@ -157,12 +159,36 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
         _buildIndicator(),
         Expanded(
           child: PageView(
+            physics: const ClampingScrollPhysics(),
+            onPageChanged: _onPageChanged,
             controller: _pageController,
             children: pages,
           ),
         ),
       ],
     );
+  }
+
+  void _onFabPressed() {
+    if (!_pageController.hasClients) return;
+    final page = _pageController.page!.round();
+    final isValid = formKeys[page].currentState?.validate() ?? true;
+    if (isValid) {
+      _pageController.nextPage(
+        duration: kTabScrollDuration,
+        curve: Curves.linear,
+      );
+    }
+  }
+
+  void _onPageChanged(int index) {
+    final isValid = formKeys[max(0, index - 1)].currentState?.validate() ?? true;
+    if (!isValid) {
+      _pageController.previousPage(
+        duration: kTabScrollDuration,
+        curve: Curves.linear,
+      );
+    }
   }
 
   Future<void> _init() async {
