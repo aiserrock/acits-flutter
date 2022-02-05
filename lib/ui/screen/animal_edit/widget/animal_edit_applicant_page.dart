@@ -1,28 +1,32 @@
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
+import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AnimalEditApplicantPage extends AnimalEditPage {
   const AnimalEditApplicantPage({
     required Animal animal,
     required bool isEdit,
-    required void Function(bool isValid) validate,
+    required GlobalKey<FormState> formKey,
     Key? key,
   }) : super(
           isEdit: isEdit,
           animal: animal,
-          validate: validate,
           key: key,
+          formKey: formKey,
         );
 
   @override
   State<AnimalEditApplicantPage> createState() => _AnimalEditApplicantPageState();
 }
 
-class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> {
+class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
+    with AnimalPageHolderListener {
   final _applicantNameController = TextEditingController();
   final _applicantLastNameController = TextEditingController();
   final _applicantPhoneController = TextEditingController();
@@ -34,6 +38,18 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> {
   void initState() {
     super.initState();
     _setControllers(widget.animal);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    addPageListener(context);
+  }
+
+  @override
+  void dispose() {
+    removePageListener();
+    super.dispose();
   }
 
   @override
@@ -106,29 +122,35 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> {
   }
 
   Widget _buildApplicantCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalCuratorName + ' *',
-          controller: _applicantNameController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCuratorLastName + ' *',
-          controller: _applicantLastNameController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCuratorPhone + ' *',
-          controller: _applicantPhoneController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalSocialLink,
-          controller: _applicantSocialController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalCuratorEmail,
-          controller: _applicantEmailController,
-        ),
-      ],
+    return Form(
+      key: widget.formKey,
+      child: AnimalEditCard(
+        [
+          EditCardData(
+            label: StringRes.current.animalCuratorName + ' *',
+            controller: _applicantNameController,
+            validator: Validator.emptyValidator,
+          ),
+          EditCardData(
+            label: StringRes.current.animalCuratorLastName + ' *',
+            controller: _applicantLastNameController,
+            validator: Validator.emptyValidator,
+          ),
+          EditCardData(
+            label: StringRes.current.animalCuratorPhone + ' *',
+            controller: _applicantPhoneController,
+            validator: Validator.emptyValidator,
+          ),
+          EditCardData(
+            label: StringRes.current.animalSocialLink,
+            controller: _applicantSocialController,
+          ),
+          EditCardData(
+            label: StringRes.current.animalCuratorEmail,
+            controller: _applicantEmailController,
+          ),
+        ],
+      ),
     );
   }
 
@@ -139,5 +161,21 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> {
     _applicantPhoneController.text = _applicant?.phoneNumber ?? '';
     _applicantSocialController.text = _applicant?.contactDetails ?? '';
     _applicantEmailController.text = _applicant?.email ?? '';
+  }
+
+  @override
+  void onChangePage() {
+    if (page != 4) return;
+    final applicant = Applicant(
+      firstName: _applicantNameController.text,
+      lastName: _applicantLastNameController.text,
+      phoneNumber: _applicantPhoneController.text,
+      contactDetails: _applicantSocialController.text,
+      email: _applicantEmailController.text,
+    );
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
+      applicant: applicant.toJson(),
+      applicantId: _applicant?.id,
+    );
   }
 }

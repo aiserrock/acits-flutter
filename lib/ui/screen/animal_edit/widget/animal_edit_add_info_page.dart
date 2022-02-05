@@ -1,5 +1,8 @@
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/animal_sex_enum.dart';
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/service/config/config_service.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
@@ -8,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _chipDateRange = Duration(days: 365 * 50);
@@ -17,12 +21,12 @@ class AnimalEditAddInfoPage extends AnimalEditPage {
   const AnimalEditAddInfoPage({
     required Animal animal,
     required bool isEdit,
-    required void Function(bool isValid) validate,
+    required GlobalKey<FormState> formKey,
     Key? key,
   }) : super(
           isEdit: isEdit,
           animal: animal,
-          validate: validate,
+          formKey: formKey,
           key: key,
         );
 
@@ -30,7 +34,8 @@ class AnimalEditAddInfoPage extends AnimalEditPage {
   State<AnimalEditAddInfoPage> createState() => _AnimalEditAddInfoPageState();
 }
 
-class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> {
+class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
+    with AnimalPageHolderListener {
   final _ageYearController = TextEditingController();
   final _ageMonthController = TextEditingController();
   final _birthController = TextEditingController();
@@ -55,6 +60,18 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    addPageListener(context);
+  }
+
+  @override
+  void dispose() {
+    removePageListener();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -72,67 +89,70 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> {
   }
 
   Widget _buildAddinionalCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalAge,
-          content: _buildAgeTabSelector(),
-        ),
-        if (_currentAgeTab == 0)
+    return Form(
+      key: widget.formKey,
+      child: AnimalEditCard(
+        [
           EditCardData(
-            content: _buildAgeFields(),
+            label: StringRes.current.animalAge,
+            content: _buildAgeTabSelector(),
           ),
-        if (_currentAgeTab == 1)
+          if (_currentAgeTab == 0)
+            EditCardData(
+              content: _buildAgeFields(),
+            ),
+          if (_currentAgeTab == 1)
+            EditCardData(
+              label: StringRes.current.animalBirth,
+              controller: _birthController,
+              suffix: const Icon(
+                Icons.calendar_today_outlined,
+                color: ColorRes.accent,
+              ),
+              onPressed: _setBirthDate,
+            ),
           EditCardData(
-            label: StringRes.current.animalBirth,
-            controller: _birthController,
+            label: StringRes.current.animalSex,
+            controller: _sexController,
+            suffix: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: ColorRes.accent,
+            ),
+            onPressed: () => _selectGender(context),
+          ),
+          EditCardData(
+            label: StringRes.current.aninmalSize,
+            controller: _heightController,
+            decimalOnly: true,
+          ),
+          EditCardData(
+            label: StringRes.current.animalWeight,
+            controller: _weightController,
+            decimalOnly: true,
+          ),
+          EditCardData(
+            label: StringRes.current.animalColor,
+            controller: _colorController,
+          ),
+          EditCardData(
+            label: StringRes.current.animalSpecSigns,
+            controller: _specController,
+          ),
+          EditCardData(
+            label: StringRes.current.animalChip,
+            controller: _chipController,
+          ),
+          EditCardData(
+            label: StringRes.current.animalChipDate,
+            controller: _dateChipController,
             suffix: const Icon(
               Icons.calendar_today_outlined,
               color: ColorRes.accent,
             ),
-            onPressed: _setBirthDate,
+            onPressed: _setChipDate,
           ),
-        EditCardData(
-          label: StringRes.current.animalSex,
-          controller: _sexController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: () => _selectGender(context),
-        ),
-        EditCardData(
-          label: StringRes.current.aninmalSize,
-          controller: _heightController,
-          decimalOnly: true,
-        ),
-        EditCardData(
-          label: StringRes.current.animalWeight,
-          controller: _weightController,
-          decimalOnly: true,
-        ),
-        EditCardData(
-          label: StringRes.current.animalColor,
-          controller: _colorController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalSpecSigns,
-          controller: _specController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalChip,
-          controller: _chipController,
-        ),
-        EditCardData(
-          label: StringRes.current.animalChipDate,
-          controller: _dateChipController,
-          suffix: const Icon(
-            Icons.calendar_today_outlined,
-            color: ColorRes.accent,
-          ),
-          onPressed: _setChipDate,
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -277,5 +297,59 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> {
     _chipController.text = value.chippingCode ?? '';
     _dateChipController.text =
         value.dateOfChipping != null ? _dateFormatter.format(value.dateOfChipping!) : '';
+  }
+
+  @override
+  void onChangePage() {
+    if (page != 2) return;
+    final attr = <AnimalAttributeValue>[];
+    if (_sexController.text.isNotEmpty) {
+      final sexAttribute = (getIt<ConfigService>().animalAttributes ?? [])
+          .firstWhereOrNull((element) => element.name == 'sex');
+      if (sexAttribute != null) {
+        attr.add(AnimalAttributeValue(
+          attrId: sexAttribute.id,
+          isRequired: sexAttribute.isRequired,
+          name: sexAttribute.name,
+          value: _sexController.text,
+        ));
+      }
+    }
+    if (_colorController.text.isNotEmpty) {
+      final colorAttribute = (getIt<ConfigService>().animalAttributes ?? [])
+          .firstWhereOrNull((element) => element.name == 'color');
+      if (colorAttribute != null) {
+        attr.add(AnimalAttributeValue(
+          attrId: colorAttribute.id,
+          isRequired: colorAttribute.isRequired,
+          name: colorAttribute.name,
+          value: _colorController.text,
+        ));
+      }
+    }
+    if (_specController.text.isNotEmpty) {
+      final signAttribute = (getIt<ConfigService>().animalAttributes ?? [])
+          .firstWhereOrNull((element) => element.name == 'special_signs');
+      if (signAttribute != null) {
+        attr.add(AnimalAttributeValue(
+          attrId: signAttribute.id,
+          isRequired: signAttribute.isRequired,
+          name: signAttribute.name,
+          value: _specController.text,
+        ));
+      }
+    }
+    final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 +
+        (int.tryParse(_ageMonthController.text) ?? 0);
+    final _birth =
+        _currentAgeTab == 0 ? DateTime.now().subtract(Duration(days: months * 30)) : birthDate;
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
+      birthDate: _birth,
+      animalAttributes: attr,
+      height: _heightController.text,
+      weight: _weightController.text,
+      chippingCode: _chipController.text,
+      dateOfChipping: chipDate,
+    );
   }
 }

@@ -71,6 +71,32 @@ class AnimalService {
     }
   }
 
+  Future<Animal?> uploadAnimal(Animal animal) async {
+    animal = animal.copyWith(
+      shelter: _authService.shelterRole?.currentShelter,
+      placeOfRelease: animal.placeOfRelease ?? '',
+      deathReason: animal.deathReason ?? '',
+    );
+    final result = animal.id != null
+        ? await _client.apiV1AnimalsIdPut(
+            id: animal.id,
+            xCurrentShelter: _authService.currentShelterId,
+            body: animal,
+          )
+        : await _client.apiV1AnimalsPost(
+            xCurrentShelter: _authService.currentShelterId,
+            body: animal,
+          );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
   ApiV1AnimalsSpeciesGetLevel getLevel(int value) {
     assert(value >= 0);
     assert(value < ApiV1AnimalsSpeciesGetLevel.values.length - 1);

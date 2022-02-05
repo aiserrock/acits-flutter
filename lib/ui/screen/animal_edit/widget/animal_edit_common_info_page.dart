@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
@@ -8,18 +9,17 @@ import 'package:acits_flutter/ui/screen/search_screen/search_screen_route.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AnimalEditCommonInfoPage extends AnimalEditPage {
   const AnimalEditCommonInfoPage({
     required Animal animal,
     required bool isEdit,
-    required void Function(bool isValid) validate,
     required GlobalKey<FormState> formKey,
     Key? key,
   }) : super(
-          isEdit: isEdit,
           animal: animal,
-          validate: validate,
+          isEdit: isEdit,
           formKey: formKey,
           key: key,
         );
@@ -28,7 +28,8 @@ class AnimalEditCommonInfoPage extends AnimalEditPage {
   State<AnimalEditCommonInfoPage> createState() => _AnimalEditCommonInfoPageState();
 }
 
-class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
+class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
+    with AnimalPageHolderListener {
   late final NavigatorState _navigator;
 
   final _nameController = TextEditingController();
@@ -49,6 +50,13 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _navigator = Navigator.of(context);
+    addPageListener(context);
+  }
+
+  @override
+  void dispose() {
+    removePageListener();
+    super.dispose();
   }
 
   @override
@@ -140,17 +148,15 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
             controller: _nameController,
           ),
           EditCardData(
-              label: StringRes.current.animalCategory + ' *',
-              controller: _categoryController,
-              suffix: const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: ColorRes.accent,
-              ),
-              onPressed: _searchCategory,
-              validator: (value) {
-                final t = Validator.emptyValidator(value);
-                return t;
-              }),
+            label: StringRes.current.animalCategory + ' *',
+            controller: _categoryController,
+            suffix: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: ColorRes.accent,
+            ),
+            onPressed: _searchCategory,
+            validator: Validator.emptyValidator,
+          ),
           EditCardData(
             label: StringRes.current.animalAnimalFamily + ' *',
             controller: _familyController,
@@ -162,13 +168,14 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
             validator: Validator.emptyValidator,
           ),
           EditCardData(
-            label: StringRes.current.animalAnimalKind,
+            label: StringRes.current.animalAnimalKind + ' *',
             controller: _kindController,
             suffix: const Icon(
               Icons.keyboard_arrow_down_rounded,
               color: ColorRes.accent,
             ),
             onPressed: _searchKind,
+            validator: Validator.emptyValidator,
           ),
         ],
       ),
@@ -226,5 +233,20 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> {
     _categoryController.text = value.specCategory ?? '';
     _familyController.text = value.specFamily ?? '';
     _kindController.text = value.specKind ?? '';
+  }
+
+  @override
+  void onChangePage() {
+    if (page != 0) return;
+    final spec = <String, String>{
+      'category_name': _categoryController.text,
+      'parent_name': _familyController.text,
+      'name': _kindController.text,
+    };
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
+      name: _nameController.text,
+      spec: spec,
+      specId: _kindSpec?.id,
+    );
   }
 }

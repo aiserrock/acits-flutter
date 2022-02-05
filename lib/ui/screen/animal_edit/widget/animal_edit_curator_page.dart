@@ -1,21 +1,21 @@
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_curator_screen_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AnimalEditCuratorPage extends AnimalEditPage {
   const AnimalEditCuratorPage({
     required Animal animal,
     required bool isEdit,
-    required void Function(bool isValid) validate,
     Key? key,
   }) : super(
           isEdit: isEdit,
           animal: animal,
-          validate: validate,
           key: key,
         );
 
@@ -23,7 +23,8 @@ class AnimalEditCuratorPage extends AnimalEditPage {
   State<AnimalEditCuratorPage> createState() => _AnimalEditCuratorPageState();
 }
 
-class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> {
+class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
+    with AnimalPageHolderListener {
   final _curatorController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
@@ -34,6 +35,18 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> {
   void initState() {
     super.initState();
     _setControllers(widget.animal);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    addPageListener(context);
+  }
+
+  @override
+  void dispose() {
+    removePageListener();
+    super.dispose();
   }
 
   @override
@@ -68,43 +81,45 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> {
   }
 
   Widget _buildCuratorCard() {
-    return AnimalEditCard(
-      [
-        EditCardData(
-          label: StringRes.current.animalPickCurator,
-          controller: _curatorController,
-          suffix: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: ColorRes.accent,
-          ),
-          onPressed: _searchCurator,
-        ),
-        if (_curator != null)
+    return Form(
+      child: AnimalEditCard(
+        [
           EditCardData(
-            label: StringRes.current.animalCuratorPhone,
-            enabled: false,
-            controller: _phoneController,
+            label: StringRes.current.animalPickCurator,
+            controller: _curatorController,
+            suffix: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: ColorRes.accent,
+            ),
+            onPressed: _searchCurator,
           ),
-        if (_curator != null)
-          EditCardData(
-            label: StringRes.current.animalCuratorEmail,
-            enabled: false,
-            controller: _emailController,
-          ),
-        if (_curator != null)
-          EditCardData(
-            label: StringRes.current.animalCuratorAddress,
-            enabled: false,
-            controller: _addressController,
-          ),
-      ],
+          if (_curator != null)
+            EditCardData(
+              label: StringRes.current.animalCuratorPhone,
+              enabled: false,
+              controller: _phoneController,
+            ),
+          if (_curator != null)
+            EditCardData(
+              label: StringRes.current.animalCuratorEmail,
+              enabled: false,
+              controller: _emailController,
+            ),
+          if (_curator != null)
+            EditCardData(
+              label: StringRes.current.animalCuratorAddress,
+              enabled: false,
+              controller: _addressController,
+            ),
+        ],
+      ),
     );
   }
 
   Future<void> _searchCurator() async {
     final result = await Navigator.push(context, SearchCuratorScreenRoute());
     if (result != null) {
-      _curator = result;
+      setState(() => _curator = result);
       _curatorController.text = result.fullName ?? '';
       _phoneController.text = result.phoneNumber ?? '';
       _emailController.text = result.email ?? '';
@@ -118,5 +133,14 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> {
     _phoneController.text = _curator?.phoneNumber ?? '';
     _emailController.text = _curator?.email ?? '';
     _addressController.text = _curator?.address ?? '';
+  }
+
+  @override
+  void onChangePage() {
+    if (page != 3) return;
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
+      curator: _curator?.toJson(),
+      curatorId: _curator?.id,
+    );
   }
 }

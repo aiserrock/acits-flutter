@@ -48,6 +48,10 @@ extension AnimalX on Animal {
     return spec?['category_name'];
   }
 
+  int? get idSpec {
+    return spec?['id'];
+  }
+
   Color get statusColor {
     switch (status) {
       case Status131Enum.released:

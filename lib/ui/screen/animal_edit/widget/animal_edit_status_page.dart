@@ -1,10 +1,13 @@
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
+import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _receipeDateRange = Duration(days: 365);
@@ -13,12 +16,12 @@ class AnimalEditStatusPage extends AnimalEditPage {
   const AnimalEditStatusPage({
     required Animal animal,
     required bool isEdit,
-    required void Function(bool isValid) validate,
+    required GlobalKey<FormState> formKey,
     Key? key,
   }) : super(
           isEdit: isEdit,
           animal: animal,
-          validate: validate,
+          formKey: formKey,
           key: key,
         );
 
@@ -26,7 +29,7 @@ class AnimalEditStatusPage extends AnimalEditPage {
   State<AnimalEditStatusPage> createState() => _AnimalEditStatusPageState();
 }
 
-class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> {
+class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with AnimalPageHolderListener {
   final _dateReceiptController = TextEditingController();
   final _statusController = TextEditingController();
   final _catchController = TextEditingController();
@@ -37,6 +40,18 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> {
   void initState() {
     super.initState();
     _setControllers(widget.animal);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    addPageListener(context);
+  }
+
+  @override
+  void dispose() {
+    removePageListener();
+    super.dispose();
   }
 
   @override
@@ -58,31 +73,37 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> {
 
   Widget _buildStatusCard() {
     return Builder(builder: (context) {
-      return AnimalEditCard(
-        [
-          EditCardData(
-            label: StringRes.current.animalDateAdmitt + ' *',
-            controller: _dateReceiptController,
-            suffix: const Icon(
-              Icons.calendar_today_outlined,
-              color: ColorRes.accent,
+      return Form(
+        key: widget.formKey,
+        child: AnimalEditCard(
+          [
+            EditCardData(
+              label: StringRes.current.animalDateAdmitt + ' *',
+              controller: _dateReceiptController,
+              suffix: const Icon(
+                Icons.calendar_today_outlined,
+                color: ColorRes.accent,
+              ),
+              onPressed: () => _setDate(context),
+              validator: Validator.emptyValidator,
             ),
-            onPressed: () => _setDate(context),
-          ),
-          EditCardData(
-            label: StringRes.current.animalAnimalStatus + ' *',
-            controller: _statusController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
+            EditCardData(
+              label: StringRes.current.animalAnimalStatus + ' *',
+              controller: _statusController,
+              suffix: const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: ColorRes.accent,
+              ),
+              onPressed: () => _setStatus(context),
+              validator: Validator.emptyValidator,
             ),
-            onPressed: () => _setStatus(context),
-          ),
-          EditCardData(
-            label: StringRes.current.animalCatchPlace + ' *',
-            controller: _catchController,
-          ),
-        ],
+            EditCardData(
+              label: StringRes.current.animalCatchPlace + ' *',
+              controller: _catchController,
+              validator: Validator.emptyValidator,
+            ),
+          ],
+        ),
       );
     });
   }
@@ -99,7 +120,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> {
               ),
               () {
                 _statusController.text = status.statusString ?? '';
-                status = status;
+                this.status = status;
                 Navigator.of(ctx).pop();
               },
             ),
@@ -138,5 +159,15 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> {
         value.dateJoined != null ? _dateFormatter.format(value.dateJoined!) : '';
     _statusController.text = value.statusString ?? '';
     _catchController.text = value.placeOfCatch ?? '';
+  }
+
+  @override
+  void onChangePage() {
+    if (page != 1) return;
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
+      dateJoined: date,
+      status: status,
+      placeOfCatch: _catchController.text,
+    );
   }
 }
