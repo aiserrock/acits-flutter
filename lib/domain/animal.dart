@@ -11,15 +11,11 @@ extension AnimalX on Animal {
   }
 
   String? get sexString {
-    return animalAttributes
-        ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'sex')
-        ?.value;
+    return animalAttributes?.firstWhereOrNull((attr) => (attr.name ?? '') == 'sex')?.value;
   }
 
   String? get colorString {
-    return animalAttributes
-        ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'color')
-        ?.value;
+    return animalAttributes?.firstWhereOrNull((attr) => (attr.name ?? '') == 'color')?.value;
   }
 
   String? get specialSignsString {
@@ -35,23 +31,25 @@ extension AnimalX on Animal {
       return StringRes.current.commonNDays(days, StringRes.current.commonDay);
     }
     if (days < 365) {
-      return StringRes.current
-          .commonNMonth((days / 30).floor(), StringRes.current.commonMonth);
+      return StringRes.current.commonNMonth((days / 30).floor(), StringRes.current.commonMonth);
     }
-    return StringRes.current
-        .commonNYears((days / 365).floor(), StringRes.current.commonYear);
+    return StringRes.current.commonNYears((days / 365).floor(), StringRes.current.commonYear);
   }
 
   String? get specFamily {
-    return spec['parent_name'];
+    return spec?['parent_name'];
   }
 
   String? get specKind {
-    return spec['name'];
+    return spec?['name'];
   }
 
   String? get specCategory {
-    return spec['category_name'];
+    return spec?['category_name'];
+  }
+
+  int? get idSpec {
+    return spec?['id'];
   }
 
   Color get statusColor {
@@ -104,7 +102,6 @@ extension AnimalX on Animal {
     return data['address'];
   }
 
-
   String? get applicantFullName {
     if (applicant is! Map<String, dynamic>) return null;
     final data = applicant as Map<String, dynamic>;
@@ -122,5 +119,43 @@ extension AnimalX on Animal {
     final data = applicant as Map<String, dynamic>;
     return data['email'];
   }
+}
 
+extension StatusX on Status131Enum {
+  Color get statusColor {
+    switch (this) {
+      case Status131Enum.released:
+        return const Color(0xFF54d4d4);
+      case Status131Enum.inTheShelter:
+        return const Color(0xFF6775e0);
+      case Status131Enum.overexposure:
+        return const Color(0xFFf2984a);
+      case Status131Enum.hospital:
+        return const Color(0xFFa156eb);
+      case Status131Enum.attached:
+        return const Color(0xFF279754);
+      //TODO: добавить цвета статусов
+      case Status131Enum.preparingToRelease:
+        return ColorRes.textSecondary;
+      case Status131Enum.swaggerGeneratedUnknown:
+        return ColorRes.textSecondary;
+      case Status131Enum.death:
+        return ColorRes.textSecondary;
+      case Status131Enum.euthanasia:
+        return ColorRes.textSecondary;
+      default:
+        return ColorRes.textSecondary;
+    }
+  }
+
+  String? get statusString {
+    final _service = getIt<ConfigService>();
+    return _service.getStatus131Name(this);
+  }
+}
+
+extension CuratorX on Curator {
+  String? get fullName {
+    return '$firstName $lastName';
+  }
 }

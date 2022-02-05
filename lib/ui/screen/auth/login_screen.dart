@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:acits_flutter/ui/screen/debug_screen/debug_screen.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
+import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -151,17 +152,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.topCenter,
                         child: TextFormField(
                           controller: loginController,
-                          validator: emptyValidator,
+                          validator: Validator.emptyValidator,
                           autofillHints: const [AutofillHints.email],
                           decoration: InputDecoration(
                             hintText: StringRes.current.loginLoginHint,
                             labelText: StringRes.current.loginLoginLabel,
-                            floatingLabelStyle:
-                                const TextStyle(color: ColorRes.accent),
+                            floatingLabelStyle: const TextStyle(color: ColorRes.accent),
                             errorStyle: const TextStyle(fontSize: 0.0),
                             focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: ColorRes.accent, width: 2.0),
+                              borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
                             ),
                           ),
                           cursorColor: ColorRes.accent,
@@ -181,23 +180,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           controller: passController,
                           focusNode: passNode,
-                          validator: emptyValidator,
+                          validator: Validator.emptyValidator,
                           autofillHints: const [AutofillHints.password],
                           decoration: InputDecoration(
                             labelText: StringRes.current.loginPassLabel,
-                            floatingLabelStyle:
-                                const TextStyle(color: ColorRes.accent),
+                            floatingLabelStyle: const TextStyle(color: ColorRes.accent),
                             errorStyle: const TextStyle(fontSize: 0.0),
                             suffixIcon: CupertinoButton(
-                              onPressed: () =>
-                                  setState(() => _isObscure = !_isObscure),
+                              onPressed: () => setState(() => _isObscure = !_isObscure),
                               child: _isObscure
                                   ? Assets.icon.visible.svg()
                                   : Assets.icon.visibleOff.svg(),
                             ),
                             focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: ColorRes.accent, width: 2.0),
+                              borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
                             ),
                           ),
                           obscureText: _isObscure,
@@ -228,8 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
         Container(
-          transform:
-              Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
+          transform: Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
           child: MaterialButton(
             padding: const EdgeInsets.all(16.0),
             onPressed: () {},
@@ -255,8 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .onError(
         (error, _) {
           if (error is NotAuthorizedException) {
-            setState(
-                () => _errorMessage = StringRes.current.loginAuthorizeError);
+            setState(() => _errorMessage = StringRes.current.loginAuthorizeError);
           } else {
             setState(() => _errorMessage = error.toString());
           }
@@ -276,9 +270,8 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
     if (list != null) {
-      final selectedShelter = await Navigator.of(context)
-          .push<ShelterShortSerializers?>(MaterialPageRoute(
-              builder: (_) => PickShelterList(shelterList: list)));
+      final selectedShelter = await Navigator.of(context).push<ShelterShortSerializers?>(
+          MaterialPageRoute(builder: (_) => PickShelterList(shelterList: list)));
       if (selectedShelter != null) {
         await _authService.setCurrentShelter(selectedShelter.id!);
         _onSuccess();
@@ -288,15 +281,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onSuccess() {
     setState(() => _errorMessage = null);
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (_) => const RootScreen()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const RootScreen()));
   }
 
   void _openDebug() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => const DebugScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DebugScreen()));
   }
 }
-
-String? emptyValidator(String? value) =>
-    (value == null || value.isEmpty) ? '' : null;

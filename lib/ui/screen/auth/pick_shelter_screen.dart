@@ -1,4 +1,7 @@
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
+import 'package:acits_flutter/service/config/config_service.dart';
+import 'package:acits_flutter/util/util.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/generated/l10n.dart';
@@ -19,6 +22,7 @@ class PickShelterList extends StatefulWidget {
 }
 
 class _PickShelterListState extends State<PickShelterList> {
+  WidgetState<Object> _state = WidgetState()..content(Object());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +31,7 @@ class _PickShelterListState extends State<PickShelterList> {
         ),
         appBar: AppBar(
           backgroundColor: ColorRes.foreground,
-          // shadowColor: Colors.transparent,
+          shadowColor: Colors.transparent,
           leading: Assets.image.logoLeadingBar.svg(),
           title: Text(
             StringRes.current.shelterSelectShelter,
@@ -39,15 +43,21 @@ class _PickShelterListState extends State<PickShelterList> {
         body: Column(
           children: [
             Expanded(
-              child: ListView.separated(
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: widget.shelterList.results?.length ?? 0,
-                itemBuilder: (_, index) => ListTile(
-                  title: Text((widget.shelterList.results ?? [])[index].name ?? ''),
-                  onTap: () => _pickShelter(index),
-                ),
-                separatorBuilder: (_, __) => const Divider(indent: 16.0, endIndent: 16.0),
-              ),
+              child: StateBuilder<Object>(
+                  state: _state,
+                  loader: (_) => Container(),
+                  errorBuilder: (_, __) => Container(),
+                  builder: (_, __) {
+                    return ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: widget.shelterList.results?.length ?? 0,
+                      itemBuilder: (_, index) => ListTile(
+                        title: Text((widget.shelterList.results ?? [])[index].name ?? ''),
+                        onTap: () => _pickShelter(index),
+                      ),
+                      separatorBuilder: (_, __) => const Divider(indent: 16.0, endIndent: 16.0),
+                    );
+                  }),
             ),
             const SizedBox(height: 16.0),
             Padding(
@@ -65,7 +75,20 @@ class _PickShelterListState extends State<PickShelterList> {
         ));
   }
 
-  void _pickShelter(int index) {
-    Navigator.of(context).pop<ShelterShortSerializers?>((widget.shelterList.results ?? [])[index]);
+  Future<void> _pickShelter(int index) async {
+    final shelter = (widget.shelterList.results ?? [])[index];
+    await _getConfig(shelter);
+    Navigator.of(context).pop<ShelterShortSerializers?>(shelter);
+  }
+
+  Future<void> _getConfig(ShelterShortSerializers shelter) async {
+    setState(() {
+      _state = WidgetState()..loading();
+    });
+    await getIt<ConfigService>().initConfig(currentShelterId: shelter.id).catchError((e) {
+      setState(() {
+        _state = WidgetState()..error = e;
+      });
+    });
   }
 }

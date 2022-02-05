@@ -21,6 +21,8 @@ class AuthService {
 
   UserCurrentShelterSerializers? _shelterRole;
 
+  UserCurrentShelterSerializers? get shelterRole => _shelterRole;
+
   String? get currentShelterId => _shelterRole?.currentShelter?.toString();
 
   Future<TokenRefresh?> refreshToken() async {

@@ -27,6 +27,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
   Timer? _bounceTimer;
+  late final NavigatorState _navigator;
 
   int _speciesListOffset = 0;
   final _speciesState = WidgetState<List<Species>>()..loading();
@@ -37,6 +38,12 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     _searchController.addListener(_onSearchChange);
     _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _navigator = Navigator.of(context);
   }
 
   @override
@@ -55,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: CupertinoButton(
-          onPressed: Navigator.of(context).pop,
+          onPressed: _navigator.pop,
           child: const Icon(
             Icons.arrow_back_ios_new,
             color: ColorRes.accent,
@@ -83,8 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
           suffix: GestureDetector(
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: Assets.icon.close
-                  .svg(height: 16.0, width: 16.0, color: ColorRes.accent),
+              child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: ColorRes.accent),
             ),
             onTap: _searchController.clear,
           ),
@@ -104,8 +110,7 @@ class _SearchScreenState extends State<SearchScreen> {
       loader: (_) => const Center(
         child: CircularProgressIndicator(),
       ),
-      errorBuilder: (_, __) =>
-          ErrorStubWidget(onPressed: () => _loadData(resetOffset: true)),
+      errorBuilder: (_, __) => ErrorStubWidget(onPressed: () => _loadData(resetOffset: true)),
     );
   }
 
@@ -178,7 +183,7 @@ class _SearchScreenState extends State<SearchScreen> {
     BuildContext context,
     Species item,
   ) {
-    Navigator.of(context).pop(item);
+    _navigator.pop(item);
   }
 
   void _onSearchChange() {
@@ -196,8 +201,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _onScroll() {
     final positions = _scrollController.position;
-    if (positions.pixels >= positions.maxScrollExtent &&
-        !_listPagingState.isLoading) _loadData();
+    if (positions.pixels >= positions.maxScrollExtent && !_listPagingState.isLoading) _loadData();
   }
 
   Future<void> _loadData({bool resetOffset = false}) async {
@@ -214,12 +218,10 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     _service
         .getAnimalSpecies(
-      level: _service.getLevel(
-          int.tryParse(widget.parentSearch?.level.toString() ?? '0') ?? 0),
+      level: _service.getLevel(int.tryParse(widget.parentSearch?.level.toString() ?? '0') ?? 0),
       parentId: widget.parentSearch?.id,
       offset: _speciesListOffset,
-      searchRequest:
-          _searchController.text.isNotEmpty ? _searchController.text : null,
+      searchRequest: _searchController.text.isNotEmpty ? _searchController.text : null,
     )
         .then(
       (value) {

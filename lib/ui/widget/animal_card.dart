@@ -1,4 +1,5 @@
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -7,31 +8,19 @@ import 'package:intl/intl.dart';
 import 'package:acits_flutter/export.dart';
 
 /// Карточка животного в списке
-class AnimalCardWidget extends StatefulWidget {
-  const AnimalCardWidget(
+class AnimalCardWidget extends StatelessWidget {
+  AnimalCardWidget(
     this.itemData, {
     Key? key,
   }) : super(key: key);
 
   final Animal? itemData;
-
-  @override
-  State<AnimalCardWidget> createState() => _AnimalCardWidgetState();
-}
-
-class _AnimalCardWidgetState extends State<AnimalCardWidget>
-    with SingleTickerProviderStateMixin {
   final _formatter = DateFormat('dd.MM.yyyy');
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      endActionPane: _buildSlidablePane(),
+      endActionPane: _buildSlidablePane(context),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Stack(
@@ -89,7 +78,7 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
     );
   }
 
-  ActionPane _buildSlidablePane() {
+  ActionPane _buildSlidablePane(BuildContext context) {
     return ActionPane(
       motion: const BehindMotion(),
       children: [
@@ -106,7 +95,11 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
           foregroundColor: ColorRes.accent,
         ),
         SlidableAction(
-          onPressed: (_) {},
+          onPressed: (_) => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => AnimalEditScreen(id: itemData?.id),
+            ),
+          ),
           backgroundColor: ColorRes.background,
           icon: Icons.edit_outlined,
           foregroundColor: ColorRes.accent,
@@ -132,14 +125,14 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
             Padding(
               padding: const EdgeInsets.only(right: 28.0),
               child: Text(
-                widget.itemData?.name ?? '',
+                itemData?.name ?? '',
                 style: StyleRes.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Text(
-              widget.itemData?.id?.toString() ?? '',
+              itemData?.id?.toString() ?? '',
               style: StyleRes.content.copyWith(fontSize: 16.0),
               maxLines: 1,
             ),
@@ -165,14 +158,14 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
           height: 16.0,
           width: 16.0,
           decoration: BoxDecoration(
-            color: widget.itemData?.statusColor,
+            color: itemData?.statusColor,
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
         const SizedBox(width: 8.0),
         Expanded(
           child: Text(
-            widget.itemData?.statusString ?? '',
+            itemData?.statusString ?? '',
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
@@ -192,11 +185,11 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
       child: SizedBox(
         height: 80.0,
         width: 80.0,
-        child: widget.itemData?.avatar == null
+        child: itemData?.avatar == null
             ? Assets.image.animalStub.image()
             : CircleAvatar(
                 maxRadius: 80.0,
-                backgroundImage: NetworkImage(widget.itemData!.avatar!),
+                backgroundImage: NetworkImage(itemData!.avatar!),
                 backgroundColor: ColorRes.background,
               ),
       ),
@@ -207,13 +200,10 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-              text: StringRes.current.animalAdmitted, style: StyleRes.content),
+          TextSpan(text: StringRes.current.animalAdmitted, style: StyleRes.content),
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
-            text: widget.itemData?.dateJoined != null
-                ? _formatter.format(widget.itemData!.dateJoined!)
-                : '',
+            text: itemData?.dateJoined != null ? _formatter.format(itemData!.dateJoined!) : '',
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
@@ -229,14 +219,14 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
       TextSpan(
         children: [
           TextSpan(
-            text: (widget.itemData?.spec?['parent_name'] ?? ''),
+            text: (itemData?.spec?['parent_name'] ?? ''),
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
           ),
           const TextSpan(text: (', '), style: StyleRes.mainContent),
           TextSpan(
-            text: widget.itemData?.spec?['name'] ?? '',
+            text: itemData?.spec?['name'] ?? '',
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
@@ -248,10 +238,10 @@ class _AnimalCardWidgetState extends State<AnimalCardWidget>
   }
 
   void _navigateDetail(BuildContext context) {
-    if (widget.itemData?.id == null) return;
+    if (itemData?.id == null) return;
     Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (_) => AnimalDetailScreen(id: widget.itemData!.id!),
+        builder: (_) => AnimalDetailScreen(id: itemData!.id!),
       ),
     );
   }

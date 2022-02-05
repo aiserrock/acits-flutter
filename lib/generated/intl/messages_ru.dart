@@ -31,9 +31,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "animalAdd": MessageLookupByLibrary.simpleMessage("Новое животное"),
+        "animalAdditionalInfo":
+            MessageLookupByLibrary.simpleMessage("Дополнительная информация"),
         "animalAdmitted": MessageLookupByLibrary.simpleMessage("Поступил"),
         "animalAge": MessageLookupByLibrary.simpleMessage("Возраст"),
+        "animalAgeAppox": MessageLookupByLibrary.simpleMessage("Примерный"),
+        "animalAgeExact": MessageLookupByLibrary.simpleMessage("Точный"),
+        "animalAnimalFamily":
+            MessageLookupByLibrary.simpleMessage("Семейство животного"),
+        "animalAnimalKind":
+            MessageLookupByLibrary.simpleMessage("Вид животного"),
+        "animalAnimalStatus":
+            MessageLookupByLibrary.simpleMessage("Статус животного"),
         "animalApplicant": MessageLookupByLibrary.simpleMessage("Заявитель"),
+        "animalBirth": MessageLookupByLibrary.simpleMessage("Дата рождения"),
         "animalCardTitle":
             MessageLookupByLibrary.simpleMessage("Карточка животного"),
         "animalCatchPlace":
@@ -49,13 +61,30 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalCurator": MessageLookupByLibrary.simpleMessage("Куратор"),
         "animalCuratorAddress": MessageLookupByLibrary.simpleMessage("Адрес"),
         "animalCuratorEmail": MessageLookupByLibrary.simpleMessage("E-mail"),
+        "animalCuratorLastName":
+            MessageLookupByLibrary.simpleMessage("Фамилия"),
         "animalCuratorName": MessageLookupByLibrary.simpleMessage("Имя"),
         "animalCuratorPhone":
             MessageLookupByLibrary.simpleMessage("Номер телефона"),
+        "animalDateAdmitt":
+            MessageLookupByLibrary.simpleMessage("Дата поступления"),
+        "animalEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Семейство"),
+        "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Женский"),
+        "animalGenderLess": MessageLookupByLibrary.simpleMessage("Без пола"),
+        "animalGenderMale": MessageLookupByLibrary.simpleMessage("Мужской"),
+        "animalGenderMiddle": MessageLookupByLibrary.simpleMessage("Средний"),
+        "animalGenderUndefined":
+            MessageLookupByLibrary.simpleMessage("Неизвестен"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Вид"),
+        "animalName": MessageLookupByLibrary.simpleMessage("Кличка"),
+        "animalPickCurator":
+            MessageLookupByLibrary.simpleMessage("Выбрать куратора"),
         "animalPrescriptions":
             MessageLookupByLibrary.simpleMessage("Назначения"),
+        "animalQtyMonth":
+            MessageLookupByLibrary.simpleMessage("Кол-во месяцев"),
+        "animalQtyYear": MessageLookupByLibrary.simpleMessage("Кол-во лет"),
         "animalReceiptDate":
             MessageLookupByLibrary.simpleMessage("Дата поступления"),
         "animalSex": MessageLookupByLibrary.simpleMessage("Пол"),
@@ -64,8 +93,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalSpecSigns":
             MessageLookupByLibrary.simpleMessage("Особые приметы"),
         "animalStatus": MessageLookupByLibrary.simpleMessage("Статус"),
+        "animalStatusAndJoin":
+            MessageLookupByLibrary.simpleMessage("Статус и поступление"),
         "animalTransferAct":
             MessageLookupByLibrary.simpleMessage("Акт приема-передачи"),
+        "animalUploadAct": MessageLookupByLibrary.simpleMessage(
+            "Загрузить акт приема-передачи"),
         "animalWeight": MessageLookupByLibrary.simpleMessage("Вес, кг"),
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Рост, см"),
         "common": MessageLookupByLibrary.simpleMessage("общий"),
