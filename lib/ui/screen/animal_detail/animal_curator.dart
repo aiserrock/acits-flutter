@@ -1,6 +1,6 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildCuratorPage(Animal animal) {
+SliverList _buildCuratorPage(AnimalRead animal) {
   return SliverList(
     delegate: SliverChildListDelegate(
       _buildCuratorContent(animal),
@@ -8,7 +8,7 @@ SliverList _buildCuratorPage(Animal animal) {
   );
 }
 
-List<Widget> _buildCuratorContent(Animal animal) {
+List<Widget> _buildCuratorContent(AnimalRead animal) {
   return <Widget>[
     Padding(
       padding: const EdgeInsets.only(

@@ -14,7 +14,7 @@ class AnimalCardWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Animal? itemData;
+  final AnimalRead? itemData;
   final _formatter = DateFormat('dd.MM.yyyy');
 
   @override
@@ -176,6 +176,7 @@ class AnimalCardWidget extends StatelessWidget {
   }
 
   Widget _buildAvatar() {
+    final thumb = itemData?.thumb;
     return Padding(
       padding: const EdgeInsets.only(
         left: 12.0,
@@ -185,11 +186,11 @@ class AnimalCardWidget extends StatelessWidget {
       child: SizedBox(
         height: 80.0,
         width: 80.0,
-        child: itemData?.avatar == null
+        child: thumb == null
             ? Assets.image.animalStub.image()
             : CircleAvatar(
                 maxRadius: 80.0,
-                backgroundImage: NetworkImage(itemData!.avatar!),
+                backgroundImage: NetworkImage(thumb),
                 backgroundColor: ColorRes.background,
               ),
       ),

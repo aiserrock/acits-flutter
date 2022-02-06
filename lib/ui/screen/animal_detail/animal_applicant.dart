@@ -1,6 +1,6 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildApplicantPage(Animal animal) {
+SliverList _buildApplicantPage(AnimalRead animal) {
   return SliverList(
     delegate: SliverChildListDelegate(
       _buildApplicantContent(animal),
@@ -8,7 +8,7 @@ SliverList _buildApplicantPage(Animal animal) {
   );
 }
 
-List<Widget> _buildApplicantContent(Animal animal) {
+List<Widget> _buildApplicantContent(AnimalRead animal) {
   return <Widget>[
     Padding(
       padding: const EdgeInsets.only(

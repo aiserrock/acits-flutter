@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class AnimalEditApplicantPage extends AnimalEditPage {
   const AnimalEditApplicantPage({
-    required Animal animal,
+    required AnimalRead animal,
     required bool isEdit,
     required GlobalKey<FormState> formKey,
     Key? key,
@@ -154,7 +154,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
     );
   }
 
-  void _setControllers(Animal value) {
+  void _setControllers(AnimalRead value) {
     if (value.applicant != null) setState(() => _applicant = Applicant.fromJson(value.applicant));
     _applicantNameController.text = _applicant?.firstName ?? '';
     _applicantLastNameController.text = _applicant?.lastName ?? '';

@@ -1,7 +1,7 @@
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
 
 @singleton
@@ -15,7 +15,7 @@ class AnimalService {
   final Openapi _client;
 
   /// Получить список живолных в приюте
-  Future<PaginatedAnimalList?> fetchAnimalList({
+  Future<PaginatedAnimalReadList?> fetchAnimalList({
     required int limit,
     int offset = 0,
   }) async {
@@ -33,9 +33,9 @@ class AnimalService {
   }
 
   /// Получить детальное представление животного по его ID
-  Future<Animal> fetchAnimalDetail({required int id}) async {
+  Future<AnimalRead> fetchAnimalDetail({required int id}) async {
     final result = await _client.apiV1AnimalsIdGet(
-      id: id,
+      id: id.toString(),
       xCurrentShelter: _authService.currentShelterId,
     );
 
@@ -71,22 +71,40 @@ class AnimalService {
     }
   }
 
-  Future<Animal?> uploadAnimal(Animal animal) async {
+  Future<AnimalRead?> createAnimal(AnimalWrite animal) async {
     animal = animal.copyWith(
       shelter: _authService.shelterRole?.currentShelter,
       placeOfRelease: animal.placeOfRelease ?? '',
       deathReason: animal.deathReason ?? '',
     );
-    final result = animal.id != null
-        ? await _client.apiV1AnimalsIdPut(
-            id: animal.id,
-            xCurrentShelter: _authService.currentShelterId,
-            body: animal,
-          )
-        : await _client.apiV1AnimalsPost(
-            xCurrentShelter: _authService.currentShelterId,
-            body: animal,
-          );
+    final result = await _client.apiV1AnimalsPost(
+      xCurrentShelter: _authService.currentShelterId,
+      body: animal,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
+  Future<AnimalRead?> updateAnimal(
+    int id,
+    AnimalWrite animal,
+  ) async {
+    animal = animal.copyWith(
+      shelter: _authService.shelterRole?.currentShelter,
+      placeOfRelease: animal.placeOfRelease ?? '',
+      deathReason: animal.deathReason ?? '',
+    );
+    final result = await _client.apiV1AnimalsIdPut(
+      id: id.toString(),
+      xCurrentShelter: _authService.currentShelterId,
+      body: animal,
+    );
 
     final data = result.body;
 

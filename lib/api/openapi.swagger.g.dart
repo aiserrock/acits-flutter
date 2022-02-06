@@ -6,79 +6,6 @@ part of 'openapi.swagger.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Animal _$AnimalFromJson(Map<String, dynamic> json) => Animal(
-      id: json['id'] as int?,
-      url: json['url'] as String?,
-      name: json['name'] as String?,
-      avatar: json['avatar'] as String?,
-      avatarFilename: json['avatar_filename'] as String?,
-      spec: json['spec'],
-      specId: json['spec_id'] as int?,
-      status: status131EnumFromJson(json['status'] as String?),
-      dateJoined: json['date_joined'] == null
-          ? null
-          : DateTime.parse(json['date_joined'] as String),
-      birthDate: json['birth_date'] == null
-          ? null
-          : DateTime.parse(json['birth_date'] as String),
-      deathDate: json['death_date'] == null
-          ? null
-          : DateTime.parse(json['death_date'] as String),
-      deathReason: json['death_reason'] as String?,
-      placeOfCatch: json['place_of_catch'] as String?,
-      placeOfRelease: json['place_of_release'] as String?,
-      dateOfChipping: json['date_of_chipping'] == null
-          ? null
-          : DateTime.parse(json['date_of_chipping'] as String),
-      chippingCode: json['chipping_code'] as String?,
-      height: json['height'] as String?,
-      weight: json['weight'] as String?,
-      hasDocuments: json['has_documents'] as bool?,
-      shelter: json['shelter'] as int?,
-      curator: json['curator'],
-      curatorId: json['curator_id'] as int?,
-      applicant: json['applicant'],
-      applicantId: json['applicant_id'] as int?,
-      animalAttributes: (json['animal_attributes'] as List<dynamic>?)
-              ?.map((e) =>
-                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      deletedAt: json['deleted_at'] == null
-          ? null
-          : DateTime.parse(json['deleted_at'] as String),
-    );
-
-Map<String, dynamic> _$AnimalToJson(Animal instance) => <String, dynamic>{
-      'id': instance.id,
-      'url': instance.url,
-      'name': instance.name,
-      'avatar': instance.avatar,
-      'avatar_filename': instance.avatarFilename,
-      'spec': instance.spec,
-      'spec_id': instance.specId,
-      'status': status131EnumToJson(instance.status),
-      'date_joined': instance.dateJoined?.toIsoDateOnly(),
-      'birth_date': _dateToJson(instance.birthDate),
-      'death_date': _dateToJson(instance.deathDate),
-      'death_reason': instance.deathReason,
-      'place_of_catch': instance.placeOfCatch,
-      'place_of_release': instance.placeOfRelease,
-      'date_of_chipping': _dateToJson(instance.dateOfChipping),
-      'chipping_code': instance.chippingCode,
-      'height': instance.height,
-      'weight': instance.weight,
-      'has_documents': instance.hasDocuments,
-      'shelter': instance.shelter,
-      'curator': instance.curator,
-      'curator_id': instance.curatorId,
-      'applicant': instance.applicant,
-      'applicant_id': instance.applicantId,
-      'animal_attributes':
-          instance.animalAttributes?.map((e) => e.toJson()).toList(),
-      'deleted_at': instance.deletedAt?.toIso8601String(),
-    };
-
 AnimalAttribute _$AnimalAttributeFromJson(Map<String, dynamic> json) =>
     AnimalAttribute(
       id: json['id'] as int?,
@@ -135,6 +62,38 @@ Map<String, dynamic> _$AnimalHistorySnapshotToJson(
       'weight': instance.weight,
       'shelter_name': instance.shelterName,
       'editor': instance.editor,
+    };
+
+AnimalImageRead _$AnimalImageReadFromJson(Map<String, dynamic> json) =>
+    AnimalImageRead(
+      id: json['id'] as int?,
+      isPrimary: json['is_primary'] as bool?,
+      filename: json['filename'] as String?,
+      image: json['image'] == null
+          ? null
+          : ImageThumbnails.fromJson(json['image'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AnimalImageReadToJson(AnimalImageRead instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'is_primary': instance.isPrimary,
+      'filename': instance.filename,
+      'image': instance.image?.toJson(),
+    };
+
+AnimalImageWrite _$AnimalImageWriteFromJson(Map<String, dynamic> json) =>
+    AnimalImageWrite(
+      isPrimary: json['is_primary'] as bool?,
+      name: json['name'] as String?,
+      image: json['image'] as String?,
+    );
+
+Map<String, dynamic> _$AnimalImageWriteToJson(AnimalImageWrite instance) =>
+    <String, dynamic>{
+      'is_primary': instance.isPrimary,
+      'name': instance.name,
+      'image': instance.image,
     };
 
 AnimalNote _$AnimalNoteFromJson(Map<String, dynamic> json) => AnimalNote(
@@ -194,7 +153,7 @@ Map<String, dynamic> _$AnimalNoteFileToJson(AnimalNoteFile instance) =>
 AnimalPrescription _$AnimalPrescriptionFromJson(Map<String, dynamic> json) =>
     AnimalPrescription(
       id: json['id'] as int?,
-      myType: myTypeEnumFromJson(json['my_type'] as String?),
+      myType: json['myType'],
       duration: durationEnumFromJson(json['duration'] as String?),
       description: json['description'] as String?,
       createdBy: json['created_by'] as String?,
@@ -213,13 +172,146 @@ AnimalPrescription _$AnimalPrescriptionFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$AnimalPrescriptionToJson(AnimalPrescription instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'my_type': myTypeEnumToJson(instance.myType),
+      'myType': instance.myType,
       'duration': durationEnumToJson(instance.duration),
       'description': instance.description,
       'created_by': instance.createdBy,
       'updated_by': instance.updatedBy,
       'drugs': instance.drugs?.map((e) => e.toJson()).toList(),
       'executions': instance.executions?.map((e) => e.toJson()).toList(),
+    };
+
+AnimalRead _$AnimalReadFromJson(Map<String, dynamic> json) => AnimalRead(
+      id: json['id'] as int?,
+      url: json['url'] as String?,
+      name: json['name'] as String?,
+      images: (json['images'] as List<dynamic>?)
+              ?.map((e) => AnimalImageRead.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      spec: json['spec'],
+      status: status131EnumFromJson(json['status'] as String?),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
+      birthDate: json['birth_date'] == null
+          ? null
+          : DateTime.parse(json['birth_date'] as String),
+      deathDate: json['death_date'] == null
+          ? null
+          : DateTime.parse(json['death_date'] as String),
+      deathReason: json['death_reason'] as String?,
+      placeOfCatch: json['place_of_catch'] as String?,
+      placeOfRelease: json['place_of_release'] as String?,
+      dateOfChipping: json['date_of_chipping'] == null
+          ? null
+          : DateTime.parse(json['date_of_chipping'] as String),
+      chippingCode: json['chipping_code'] as String?,
+      height: json['height'] as String?,
+      weight: json['weight'] as String?,
+      hasDocuments: json['has_documents'] as bool?,
+      shelter: json['shelter'] as int?,
+      curator: json['curator'],
+      applicant: json['applicant'],
+      animalAttributes: (json['animal_attributes'] as List<dynamic>?)
+              ?.map((e) =>
+                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+    );
+
+Map<String, dynamic> _$AnimalReadToJson(AnimalRead instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'url': instance.url,
+      'name': instance.name,
+      'images': instance.images?.map((e) => e.toJson()).toList(),
+      'spec': instance.spec,
+      'status': status131EnumToJson(instance.status),
+      'date_joined': _dateToJson(instance.dateJoined),
+      'birth_date': _dateToJson(instance.birthDate),
+      'death_date': _dateToJson(instance.deathDate),
+      'death_reason': instance.deathReason,
+      'place_of_catch': instance.placeOfCatch,
+      'place_of_release': instance.placeOfRelease,
+      'date_of_chipping': _dateToJson(instance.dateOfChipping),
+      'chipping_code': instance.chippingCode,
+      'height': instance.height,
+      'weight': instance.weight,
+      'has_documents': instance.hasDocuments,
+      'shelter': instance.shelter,
+      'curator': instance.curator,
+      'applicant': instance.applicant,
+      'animal_attributes':
+          instance.animalAttributes?.map((e) => e.toJson()).toList(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+    };
+
+AnimalWrite _$AnimalWriteFromJson(Map<String, dynamic> json) => AnimalWrite(
+      name: json['name'] as String?,
+      images: (json['images'] as List<dynamic>?)
+              ?.map((e) => AnimalImageWrite.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      validImages: (json['valid_images'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          [],
+      specId: json['spec_id'] as int?,
+      status: status131EnumFromJson(json['status'] as String?),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
+      birthDate: json['birth_date'] == null
+          ? null
+          : DateTime.parse(json['birth_date'] as String),
+      deathDate: json['death_date'] == null
+          ? null
+          : DateTime.parse(json['death_date'] as String),
+      deathReason: json['death_reason'] as String?,
+      placeOfCatch: json['place_of_catch'] as String?,
+      placeOfRelease: json['place_of_release'] as String?,
+      dateOfChipping: json['date_of_chipping'] == null
+          ? null
+          : DateTime.parse(json['date_of_chipping'] as String),
+      chippingCode: json['chipping_code'] as String?,
+      height: json['height'] as String?,
+      weight: json['weight'] as String?,
+      shelter: json['shelter'] as int?,
+      curatorId: json['curator_id'] as int?,
+      applicantId: json['applicant_id'] as int?,
+      animalAttributes: (json['animal_attributes'] as List<dynamic>?)
+              ?.map((e) =>
+                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+
+Map<String, dynamic> _$AnimalWriteToJson(AnimalWrite instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'images': instance.images?.map((e) => e.toJson()).toList(),
+      'valid_images': instance.validImages,
+      'spec_id': instance.specId,
+      'status': status131EnumToJson(instance.status),
+      'date_joined': _dateToJson(instance.dateJoined),
+      'birth_date': _dateToJson(instance.birthDate),
+      'death_date': _dateToJson(instance.deathDate),
+      'death_reason': instance.deathReason,
+      'place_of_catch': instance.placeOfCatch,
+      'place_of_release': instance.placeOfRelease,
+      'date_of_chipping': _dateToJson(instance.dateOfChipping),
+      'chipping_code': instance.chippingCode,
+      'height': instance.height,
+      'weight': instance.weight,
+      'shelter': instance.shelter,
+      'curator_id': instance.curatorId,
+      'applicant_id': instance.applicantId,
+      'animal_attributes':
+          instance.animalAttributes?.map((e) => e.toJson()).toList(),
     };
 
 Applicant _$ApplicantFromJson(Map<String, dynamic> json) => Applicant(
@@ -301,6 +393,14 @@ Curator _$CuratorFromJson(Map<String, dynamic> json) => Curator(
       email: json['email'] as String?,
       phoneNumber: json['phone_number'] as String?,
       address: json['address'] as String?,
+      createdBy: json['created_by'] as String?,
+      updatedBy: json['updated_by'] as String?,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$CuratorToJson(Curator instance) => <String, dynamic>{
@@ -312,6 +412,10 @@ Map<String, dynamic> _$CuratorToJson(Curator instance) => <String, dynamic>{
       'email': instance.email,
       'phone_number': instance.phoneNumber,
       'address': instance.address,
+      'created_by': instance.createdBy,
+      'updated_by': instance.updatedBy,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
 Decline _$DeclineFromJson(Map<String, dynamic> json) => Decline(
@@ -338,6 +442,14 @@ Map<String, dynamic> _$DrugToJson(Drug instance) => <String, dynamic>{
       'form_of_drug_name': instance.formOfDrugName,
     };
 
+Email _$EmailFromJson(Map<String, dynamic> json) => Email(
+      email: json['email'] as String?,
+    );
+
+Map<String, dynamic> _$EmailToJson(Email instance) => <String, dynamic>{
+      'email': instance.email,
+    };
+
 Feedback _$FeedbackFromJson(Map<String, dynamic> json) => Feedback(
       shelterId: json['shelter_id'] as int?,
       shelterName: json['shelter_name'] as String?,
@@ -357,6 +469,20 @@ Map<String, dynamic> _$FeedbackToJson(Feedback instance) => <String, dynamic>{
       'message': instance.message,
     };
 
+ImageThumbnails _$ImageThumbnailsFromJson(Map<String, dynamic> json) =>
+    ImageThumbnails(
+      large: json['large'] as String?,
+      medium: json['medium'] as String?,
+      small: json['small'] as String?,
+    );
+
+Map<String, dynamic> _$ImageThumbnailsToJson(ImageThumbnails instance) =>
+    <String, dynamic>{
+      'large': instance.large,
+      'medium': instance.medium,
+      'small': instance.small,
+    };
+
 PaginatedAnimalHistorySnapshotList _$PaginatedAnimalHistorySnapshotListFromJson(
         Map<String, dynamic> json) =>
     PaginatedAnimalHistorySnapshotList(
@@ -372,26 +498,6 @@ PaginatedAnimalHistorySnapshotList _$PaginatedAnimalHistorySnapshotListFromJson(
 
 Map<String, dynamic> _$PaginatedAnimalHistorySnapshotListToJson(
         PaginatedAnimalHistorySnapshotList instance) =>
-    <String, dynamic>{
-      'count': instance.count,
-      'next': instance.next,
-      'previous': instance.previous,
-      'results': instance.results?.map((e) => e.toJson()).toList(),
-    };
-
-PaginatedAnimalList _$PaginatedAnimalListFromJson(Map<String, dynamic> json) =>
-    PaginatedAnimalList(
-      count: json['count'] as int?,
-      next: json['next'] as String?,
-      previous: json['previous'] as String?,
-      results: (json['results'] as List<dynamic>?)
-              ?.map((e) => Animal.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
-
-Map<String, dynamic> _$PaginatedAnimalListToJson(
-        PaginatedAnimalList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -435,6 +541,27 @@ PaginatedAnimalPrescriptionList _$PaginatedAnimalPrescriptionListFromJson(
 
 Map<String, dynamic> _$PaginatedAnimalPrescriptionListToJson(
         PaginatedAnimalPrescriptionList instance) =>
+    <String, dynamic>{
+      'count': instance.count,
+      'next': instance.next,
+      'previous': instance.previous,
+      'results': instance.results?.map((e) => e.toJson()).toList(),
+    };
+
+PaginatedAnimalReadList _$PaginatedAnimalReadListFromJson(
+        Map<String, dynamic> json) =>
+    PaginatedAnimalReadList(
+      count: json['count'] as int?,
+      next: json['next'] as String?,
+      previous: json['previous'] as String?,
+      results: (json['results'] as List<dynamic>?)
+              ?.map((e) => AnimalRead.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+
+Map<String, dynamic> _$PaginatedAnimalReadListToJson(
+        PaginatedAnimalReadList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -637,81 +764,6 @@ Map<String, dynamic> _$PaginatedUserShortSerializersListToJson(
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PatchedAnimal _$PatchedAnimalFromJson(Map<String, dynamic> json) =>
-    PatchedAnimal(
-      id: json['id'] as int?,
-      url: json['url'] as String?,
-      name: json['name'] as String?,
-      avatar: json['avatar'] as String?,
-      avatarFilename: json['avatar_filename'] as String?,
-      spec: json['spec'],
-      specId: json['spec_id'] as int?,
-      status: status131EnumFromJson(json['status'] as String?),
-      dateJoined: json['date_joined'] == null
-          ? null
-          : DateTime.parse(json['date_joined'] as String),
-      birthDate: json['birth_date'] == null
-          ? null
-          : DateTime.parse(json['birth_date'] as String),
-      deathDate: json['death_date'] == null
-          ? null
-          : DateTime.parse(json['death_date'] as String),
-      deathReason: json['death_reason'] as String?,
-      placeOfCatch: json['place_of_catch'] as String?,
-      placeOfRelease: json['place_of_release'] as String?,
-      dateOfChipping: json['date_of_chipping'] == null
-          ? null
-          : DateTime.parse(json['date_of_chipping'] as String),
-      chippingCode: json['chipping_code'] as String?,
-      height: json['height'] as String?,
-      weight: json['weight'] as String?,
-      hasDocuments: json['has_documents'] as bool?,
-      shelter: json['shelter'] as int?,
-      curator: json['curator'],
-      curatorId: json['curator_id'] as int?,
-      applicant: json['applicant'],
-      applicantId: json['applicant_id'] as int?,
-      animalAttributes: (json['animal_attributes'] as List<dynamic>?)
-              ?.map((e) =>
-                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      deletedAt: json['deleted_at'] == null
-          ? null
-          : DateTime.parse(json['deleted_at'] as String),
-    );
-
-Map<String, dynamic> _$PatchedAnimalToJson(PatchedAnimal instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'url': instance.url,
-      'name': instance.name,
-      'avatar': instance.avatar,
-      'avatar_filename': instance.avatarFilename,
-      'spec': instance.spec,
-      'spec_id': instance.specId,
-      'status': status131EnumToJson(instance.status),
-      'date_joined': instance.dateJoined?.toIsoDateOnly(),
-      'birth_date': _dateToJson(instance.birthDate),
-      'death_date': _dateToJson(instance.deathDate),
-      'death_reason': instance.deathReason,
-      'place_of_catch': instance.placeOfCatch,
-      'place_of_release': instance.placeOfRelease,
-      'date_of_chipping': _dateToJson(instance.dateOfChipping),
-      'chipping_code': instance.chippingCode,
-      'height': instance.height,
-      'weight': instance.weight,
-      'has_documents': instance.hasDocuments,
-      'shelter': instance.shelter,
-      'curator': instance.curator,
-      'curator_id': instance.curatorId,
-      'applicant': instance.applicant,
-      'applicant_id': instance.applicantId,
-      'animal_attributes':
-          instance.animalAttributes?.map((e) => e.toJson()).toList(),
-      'deleted_at': instance.deletedAt?.toIso8601String(),
-    };
-
 PatchedAnimalNote _$PatchedAnimalNoteFromJson(Map<String, dynamic> json) =>
     PatchedAnimalNote(
       id: json['id'] as int?,
@@ -745,6 +797,71 @@ Map<String, dynamic> _$PatchedAnimalNoteToJson(PatchedAnimalNote instance) =>
       'created_by': instance.createdBy,
       'updated_by': instance.updatedBy,
       'is_user_can_edit_or_delete': instance.isUserCanEditOrDelete,
+    };
+
+PatchedAnimalWrite _$PatchedAnimalWriteFromJson(Map<String, dynamic> json) =>
+    PatchedAnimalWrite(
+      name: json['name'] as String?,
+      images: (json['images'] as List<dynamic>?)
+              ?.map((e) => AnimalImageWrite.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      validImages: (json['valid_images'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          [],
+      specId: json['spec_id'] as int?,
+      status: status131EnumFromJson(json['status'] as String?),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
+      birthDate: json['birth_date'] == null
+          ? null
+          : DateTime.parse(json['birth_date'] as String),
+      deathDate: json['death_date'] == null
+          ? null
+          : DateTime.parse(json['death_date'] as String),
+      deathReason: json['death_reason'] as String?,
+      placeOfCatch: json['place_of_catch'] as String?,
+      placeOfRelease: json['place_of_release'] as String?,
+      dateOfChipping: json['date_of_chipping'] == null
+          ? null
+          : DateTime.parse(json['date_of_chipping'] as String),
+      chippingCode: json['chipping_code'] as String?,
+      height: json['height'] as String?,
+      weight: json['weight'] as String?,
+      shelter: json['shelter'] as int?,
+      curatorId: json['curator_id'] as int?,
+      applicantId: json['applicant_id'] as int?,
+      animalAttributes: (json['animal_attributes'] as List<dynamic>?)
+              ?.map((e) =>
+                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+
+Map<String, dynamic> _$PatchedAnimalWriteToJson(PatchedAnimalWrite instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'images': instance.images?.map((e) => e.toJson()).toList(),
+      'valid_images': instance.validImages,
+      'spec_id': instance.specId,
+      'status': status131EnumToJson(instance.status),
+      'date_joined': _dateToJson(instance.dateJoined),
+      'birth_date': _dateToJson(instance.birthDate),
+      'death_date': _dateToJson(instance.deathDate),
+      'death_reason': instance.deathReason,
+      'place_of_catch': instance.placeOfCatch,
+      'place_of_release': instance.placeOfRelease,
+      'date_of_chipping': _dateToJson(instance.dateOfChipping),
+      'chipping_code': instance.chippingCode,
+      'height': instance.height,
+      'weight': instance.weight,
+      'shelter': instance.shelter,
+      'curator_id': instance.curatorId,
+      'applicant_id': instance.applicantId,
+      'animal_attributes':
+          instance.animalAttributes?.map((e) => e.toJson()).toList(),
     };
 
 PatchedApplicant _$PatchedApplicantFromJson(Map<String, dynamic> json) =>
@@ -801,6 +918,14 @@ PatchedCurator _$PatchedCuratorFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
       phoneNumber: json['phone_number'] as String?,
       address: json['address'] as String?,
+      createdBy: json['created_by'] as String?,
+      updatedBy: json['updated_by'] as String?,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$PatchedCuratorToJson(PatchedCurator instance) =>
@@ -813,6 +938,10 @@ Map<String, dynamic> _$PatchedCuratorToJson(PatchedCurator instance) =>
       'email': instance.email,
       'phone_number': instance.phoneNumber,
       'address': instance.address,
+      'created_by': instance.createdBy,
+      'updated_by': instance.updatedBy,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
 PatchedPrescription _$PatchedPrescriptionFromJson(Map<String, dynamic> json) =>
@@ -820,7 +949,7 @@ PatchedPrescription _$PatchedPrescriptionFromJson(Map<String, dynamic> json) =>
       id: json['id'] as int?,
       url: json['url'] as String?,
       animal: json['animal'] as int?,
-      myType: myTypeEnumFromJson(json['my_type'] as String?),
+      myType: json['myType'],
       duration: durationEnumFromJson(json['duration'] as String?),
       description: json['description'] as String?,
       createdBy: json['created_by'] as String?,
@@ -846,7 +975,7 @@ Map<String, dynamic> _$PatchedPrescriptionToJson(
       'id': instance.id,
       'url': instance.url,
       'animal': instance.animal,
-      'my_type': myTypeEnumToJson(instance.myType),
+      'myType': instance.myType,
       'duration': durationEnumToJson(instance.duration),
       'description': instance.description,
       'created_by': instance.createdBy,
@@ -932,7 +1061,7 @@ Prescription _$PrescriptionFromJson(Map<String, dynamic> json) => Prescription(
       id: json['id'] as int?,
       url: json['url'] as String?,
       animal: json['animal'] as int?,
-      myType: myTypeEnumFromJson(json['my_type'] as String?),
+      myType: json['myType'],
       duration: durationEnumFromJson(json['duration'] as String?),
       description: json['description'] as String?,
       createdBy: json['created_by'] as String?,
@@ -957,7 +1086,7 @@ Map<String, dynamic> _$PrescriptionToJson(Prescription instance) =>
       'id': instance.id,
       'url': instance.url,
       'animal': instance.animal,
-      'my_type': myTypeEnumToJson(instance.myType),
+      'myType': instance.myType,
       'duration': durationEnumToJson(instance.duration),
       'description': instance.description,
       'created_by': instance.createdBy,
@@ -1206,6 +1335,22 @@ Map<String, dynamic> _$UserCurrentShelterSerializersToJson(
       'current_shelter_user_role': instance.currentShelterUserRole,
       'is_user_can_edit': instance.isUserCanEdit,
       'is_user_can_delete': instance.isUserCanDelete,
+    };
+
+UserResetPasswordComplete _$UserResetPasswordCompleteFromJson(
+        Map<String, dynamic> json) =>
+    UserResetPasswordComplete(
+      uidb64: json['uidb64'] as String?,
+      token: json['token'] as String?,
+      newPassword: json['new_password'] as String?,
+    );
+
+Map<String, dynamic> _$UserResetPasswordCompleteToJson(
+        UserResetPasswordComplete instance) =>
+    <String, dynamic>{
+      'uidb64': instance.uidb64,
+      'token': instance.token,
+      'new_password': instance.newPassword,
     };
 
 UserSerializers _$UserSerializersFromJson(Map<String, dynamic> json) =>

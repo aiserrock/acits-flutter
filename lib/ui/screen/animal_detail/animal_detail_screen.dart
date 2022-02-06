@@ -40,7 +40,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   late bool _isSmallScreen;
   int _currentTab = 0;
 
-  WidgetState<Animal> _state = WidgetState()..loading();
+  WidgetState<AnimalRead> _state = WidgetState()..loading();
   WidgetState<List<AnimalPrescription?>?> _statePrescriptions = WidgetState()..loading();
 
   @override
@@ -92,7 +92,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
   Widget _buildBody() {
     return SafeArea(
-      child: StateBuilder<Animal>(
+      child: StateBuilder<AnimalRead>(
         state: _state,
         builder: _buildContent,
         errorBuilder: (_, error) => _AnimalDetailStub(
@@ -106,7 +106,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  Widget _buildContent(BuildContext context, Animal animal) {
+  Widget _buildContent(BuildContext context, AnimalRead animal) {
     return RefreshIndicator(
       onRefresh: _loadAnimal,
       child: CustomScrollView(
@@ -125,7 +125,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  SliverList _buildPage(int count, Animal animal) {
+  SliverList _buildPage(int count, AnimalRead animal) {
     switch (_currentTab) {
       case 0:
         return _buildCommonInfoPage(animal);

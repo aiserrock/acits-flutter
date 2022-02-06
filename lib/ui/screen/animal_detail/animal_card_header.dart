@@ -10,7 +10,7 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
     this.tabBar,
   });
 
-  final Animal animal;
+  final AnimalRead animal;
   final Widget? tabBar;
 
   @override
@@ -49,6 +49,7 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   Widget _buildImage(double shrink) {
+    final thumb = animal.thumb;
     return Align(
       alignment: Alignment.lerp(
             Alignment.center,
@@ -66,9 +67,9 @@ class _AnimalCardHeaderDelegate extends SliverPersistentHeaderDelegate {
         child: SizedBox(
           height: 120.0,
           width: 120.0,
-          child: animal.avatar != null
+          child: thumb != null
               ? CircleAvatar(
-                  backgroundImage: NetworkImage(animal.avatar!),
+                  backgroundImage: NetworkImage(thumb),
                   backgroundColor: ColorRes.background,
                 )
               : Assets.image.animalStub.image(),

@@ -1,3 +1,10 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/animal_sex_enum.dart';
 import 'package:acits_flutter/export.dart';
@@ -7,11 +14,6 @@ import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _chipDateRange = Duration(days: 365 * 50);
@@ -19,7 +21,7 @@ const _birthDateRange = Duration(days: 365 * 200);
 
 class AnimalEditAddInfoPage extends AnimalEditPage {
   const AnimalEditAddInfoPage({
-    required Animal animal,
+    required AnimalRead animal,
     required bool isEdit,
     required GlobalKey<FormState> formKey,
     Key? key,
@@ -285,7 +287,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     }
   }
 
-  void _setControllers(Animal value) {
+  void _setControllers(AnimalRead value) {
     _birthController.text = value.birthDate != null ? _dateFormatter.format(value.birthDate!) : '';
     if (value.birthDate != null) setState(() => _currentAgeTab = 1);
 
