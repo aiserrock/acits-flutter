@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class AnimalEditCommonInfoPage extends AnimalEditPage {
   const AnimalEditCommonInfoPage({
-    required Animal animal,
+    required AnimalRead animal,
     required bool isEdit,
     required GlobalKey<FormState> formKey,
     Key? key,
@@ -78,13 +78,12 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
   }
 
   Widget _buildImage() {
+    final avatar = widget.animal.thumb;
     return Stack(
       alignment: Alignment.center,
       children: [
         CircleAvatar(
-          backgroundImage: (widget.isEdit && widget.animal.avatar != null)
-              ? NetworkImage(widget.animal.avatar!)
-              : null,
+          backgroundImage: (widget.isEdit && avatar != null) ? NetworkImage(avatar) : null,
           foregroundColor: ColorRes.textSecondary,
           radius: 80.0,
         ),
@@ -228,7 +227,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
     }
   }
 
-  void _setControllers(Animal value) {
+  void _setControllers(AnimalRead value) {
     _nameController.text = value.name ?? '';
     _categoryController.text = value.specCategory ?? '';
     _familyController.text = value.specFamily ?? '';
@@ -238,15 +237,15 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
   @override
   void onChangePage() {
     if (page != 0) return;
-    final spec = <String, String>{
+    final spec = <String, dynamic>{
       'category_name': _categoryController.text,
       'parent_name': _familyController.text,
       'name': _kindController.text,
+      'id': _kindSpec?.id ?? widget.animal.idSpec,
     };
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
       name: _nameController.text,
       spec: spec,
-      specId: _kindSpec?.id,
     );
   }
 }

@@ -29,7 +29,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
   bool _isSearchActive = false;
   int _currentListOffset = 0;
 
-  WidgetState<List<Animal>?> _state = WidgetState()..loading();
+  WidgetState<List<AnimalRead>?> _state = WidgetState()..loading();
   WidgetState<Object> _statePageLoading = WidgetState()..content(Object());
 
   @override
@@ -110,7 +110,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
   }
 
   Widget _buildBody() {
-    return StateBuilder<List<Animal>?>(
+    return StateBuilder<List<AnimalRead>?>(
       state: _state,
       loader: (_) => ScreenLoader(
         height: 160.0,
@@ -235,7 +235,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
     _loadAnimalList();
   }
 
-  Future<List<Animal>?> _loadAnimalList({bool needResetOffset = false}) async {
+  Future<List<AnimalRead>?> _loadAnimalList({bool needResetOffset = false}) async {
     if (needResetOffset) {
       _currentListOffset = 0;
       setState(() => _state = WidgetState()..loading());
@@ -248,7 +248,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
     )
         .then(
       (value) {
-        final newList = <Animal>[
+        final newList = <AnimalRead>[
           ...?_state.value,
           ...?value?.results,
         ];

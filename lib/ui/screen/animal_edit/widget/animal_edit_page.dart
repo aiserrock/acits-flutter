@@ -13,7 +13,7 @@ abstract class AnimalEditPage extends StatefulWidget {
   }) : super(key: key);
 
   final bool isEdit;
-  final Animal animal;
+  final AnimalRead animal;
   final GlobalKey<FormState>? formKey;
 }
 

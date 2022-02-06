@@ -14,7 +14,7 @@ const _receipeDateRange = Duration(days: 365);
 
 class AnimalEditStatusPage extends AnimalEditPage {
   const AnimalEditStatusPage({
-    required Animal animal,
+    required AnimalRead animal,
     required bool isEdit,
     required GlobalKey<FormState> formKey,
     Key? key,
@@ -154,7 +154,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
     }
   }
 
-  void _setControllers(Animal value) {
+  void _setControllers(AnimalRead value) {
     _dateReceiptController.text =
         value.dateJoined != null ? _dateFormatter.format(value.dateJoined!) : '';
     _statusController.text = value.statusString ?? '';
