@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class AnimalEditCuratorPage extends AnimalEditPage {
   const AnimalEditCuratorPage({
-    required Animal animal,
+    required AnimalRead animal,
     required bool isEdit,
     Key? key,
   }) : super(
@@ -127,7 +127,7 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
     }
   }
 
-  void _setControllers(Animal value) {
+  void _setControllers(AnimalRead value) {
     if (value.curator != null) setState(() => _curator = Curator.fromJson(value.curator));
     _curatorController.text = value.curatorFullName ?? '';
     _phoneController.text = _curator?.phoneNumber ?? '';
@@ -138,9 +138,10 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
   @override
   void onChangePage() {
     if (page != 3) return;
+    final curator = _curator?.toJson();
+    curator?['id'] = _curator?.id;
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
-      curator: _curator?.toJson(),
-      curatorId: _curator?.id,
+      curator: curator,
     );
   }
 }

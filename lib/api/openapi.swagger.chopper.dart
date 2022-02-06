@@ -59,26 +59,18 @@ class _$Openapi extends Openapi {
   }
 
   @override
-  Future<Response<PaginatedAnimalList>> apiV1AnimalsGet(
+  Future<Response<PaginatedAnimalReadList>> apiV1AnimalsGet(
       {int? limit,
       int? offset,
       String? ordering,
       String? search,
-      String? specCategoryName,
-      String? specName,
-      String? specParentName,
-      List<String>? status,
       String? xCurrentShelter}) {
     final $url = '/api/v1/animals/';
     final $params = <String, dynamic>{
       'limit': limit,
       'offset': offset,
       'ordering': ordering,
-      'search': search,
-      'spec_category_name': specCategoryName,
-      'spec_name': specName,
-      'spec_parent_name': specParentName,
-      'status': status
+      'search': search
     };
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
@@ -86,12 +78,13 @@ class _$Openapi extends Openapi {
 
     final $request = Request('GET', $url, client.baseUrl,
         parameters: $params, headers: $headers);
-    return client.send<PaginatedAnimalList, PaginatedAnimalList>($request);
+    return client
+        .send<PaginatedAnimalReadList, PaginatedAnimalReadList>($request);
   }
 
   @override
-  Future<Response<Animal>> apiV1AnimalsPost(
-      {String? xCurrentShelter, required Animal? body}) {
+  Future<Response<AnimalRead>> apiV1AnimalsPost(
+      {String? xCurrentShelter, required AnimalWrite? body}) {
     final $url = '/api/v1/animals/';
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
@@ -100,24 +93,26 @@ class _$Openapi extends Openapi {
     final $body = body;
     final $request =
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<Animal, Animal>($request);
+    return client.send<AnimalRead, AnimalRead>($request);
   }
 
   @override
-  Future<Response<Animal>> apiV1AnimalsIdGet(
-      {required int? id, String? xCurrentShelter}) {
+  Future<Response<AnimalRead>> apiV1AnimalsIdGet(
+      {required String? id, String? xCurrentShelter}) {
     final $url = '/api/v1/animals/${id}/';
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
     };
 
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
-    return client.send<Animal, Animal>($request);
+    return client.send<AnimalRead, AnimalRead>($request);
   }
 
   @override
-  Future<Response<Animal>> apiV1AnimalsIdPut(
-      {required int? id, String? xCurrentShelter, required Animal? body}) {
+  Future<Response<AnimalRead>> apiV1AnimalsIdPut(
+      {required String? id,
+      String? xCurrentShelter,
+      required AnimalWrite? body}) {
     final $url = '/api/v1/animals/${id}/';
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
@@ -126,14 +121,14 @@ class _$Openapi extends Openapi {
     final $body = body;
     final $request =
         Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<Animal, Animal>($request);
+    return client.send<AnimalRead, AnimalRead>($request);
   }
 
   @override
-  Future<Response<Animal>> apiV1AnimalsIdPatch(
-      {required int? id,
+  Future<Response<AnimalRead>> apiV1AnimalsIdPatch(
+      {required String? id,
       String? xCurrentShelter,
-      required PatchedAnimal? body}) {
+      required PatchedAnimalWrite? body}) {
     final $url = '/api/v1/animals/${id}/';
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
@@ -142,12 +137,12 @@ class _$Openapi extends Openapi {
     final $body = body;
     final $request =
         Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<Animal, Animal>($request);
+    return client.send<AnimalRead, AnimalRead>($request);
   }
 
   @override
   Future<Response<dynamic>> apiV1AnimalsIdDelete(
-      {required int? id, String? xCurrentShelter}) {
+      {required String? id, String? xCurrentShelter}) {
     final $url = '/api/v1/animals/${id}/';
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
@@ -238,8 +233,22 @@ class _$Openapi extends Openapi {
   }
 
   @override
+  Future<Response<Status>> apiV1AnimalsIdPrimaryImageImagePkPut(
+      {required String? id,
+      required String? imagePk,
+      String? xCurrentShelter}) {
+    final $url = '/api/v1/animals/${id}/primary_image/${imagePk}/';
+    final $headers = {
+      if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
+    };
+
+    final $request = Request('PUT', $url, client.baseUrl, headers: $headers);
+    return client.send<Status, Status>($request);
+  }
+
+  @override
   Future<Response<Status>> apiV1AnimalsIdRestorePut(
-      {required int? id, String? xCurrentShelter}) {
+      {required String? id, String? xCurrentShelter}) {
     final $url = '/api/v1/animals/${id}/restore/';
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
@@ -518,9 +527,13 @@ class _$Openapi extends Openapi {
   @override
   Future<Response<PaginatedShelterShortSerializersList>>
       apiV1AvailableSheltersGet(
-          {int? limit, int? offset, String? xCurrentShelter}) {
+          {int? limit, int? offset, String? search, String? xCurrentShelter}) {
     final $url = '/api/v1/available-shelters/';
-    final $params = <String, dynamic>{'limit': limit, 'offset': offset};
+    final $params = <String, dynamic>{
+      'limit': limit,
+      'offset': offset,
+      'search': search
+    };
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
     };
@@ -711,20 +724,20 @@ class _$Openapi extends Openapi {
   @override
   Future<Response<PaginatedPrescriptionExecutionTodayList>>
       apiV1PrescriptionsExecutionsGet(
-          {int? limit,
+          {required String? from,
+          int? limit,
           int? offset,
           String? ordering,
           String? search,
-          required String? from,
           required String? to,
           String? xCurrentShelter}) {
     final $url = '/api/v1/prescriptions/executions/';
     final $params = <String, dynamic>{
+      'from': from,
       'limit': limit,
       'offset': offset,
       'ordering': ordering,
       'search': search,
-      'from': from,
       'to': to
     };
     final $headers = {
@@ -881,9 +894,13 @@ class _$Openapi extends Openapi {
 
   @override
   Future<Response<PaginatedShelterShortSerializersList>> apiV1SheltersGet(
-      {int? limit, int? offset, String? xCurrentShelter}) {
+      {int? limit, int? offset, String? search, String? xCurrentShelter}) {
     final $url = '/api/v1/shelters/';
-    final $params = <String, dynamic>{'limit': limit, 'offset': offset};
+    final $params = <String, dynamic>{
+      'limit': limit,
+      'offset': offset,
+      'search': search
+    };
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
     };
@@ -1038,6 +1055,78 @@ class _$Openapi extends Openapi {
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<UserCurrentShelterSerializers,
         UserCurrentShelterSerializers>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> apiV1UsersResetPasswordPost(
+      {String? xCurrentShelter, required Email? body}) {
+    final $url = '/api/v1/users/reset-password/';
+    final $headers = {
+      if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
+    };
+
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> apiV1UsersResetPasswordCompletePost(
+      {String? xCurrentShelter, required UserResetPasswordComplete? body}) {
+    final $url = '/api/v1/users/reset-password/complete/';
+    final $headers = {
+      if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
+    };
+
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> apiV1UsersResetPasswordConfirmUidb64TokenGet(
+      {required String? token,
+      required String? uidb64,
+      String? xCurrentShelter}) {
+    final $url = '/api/v1/users/reset-password/confirm/${uidb64}/${token}/';
+    final $headers = {
+      if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
+    };
+
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> apiV1UsersVerifyEmailUidb64Sidb64TokenGet(
+      {required String? sidb64,
+      required String? token,
+      required String? uidb64,
+      String? xCurrentShelter}) {
+    final $url = '/api/v1/users/verify-email/${uidb64}/${sidb64}/${token}/';
+    final $headers = {
+      if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
+    };
+
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> apiV1UsersVerifyWorkerUidb64Sidb64TokenGet(
+      {required String? sidb64,
+      required String? token,
+      required String? uidb64,
+      String? xCurrentShelter}) {
+    final $url = '/api/v1/users/verify-worker/${uidb64}/${sidb64}/${token}/';
+    final $headers = {
+      if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
+    };
+
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
   }
 
   @override

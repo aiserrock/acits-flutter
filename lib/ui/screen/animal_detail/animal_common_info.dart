@@ -1,6 +1,6 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildCommonInfoPage(Animal animal) {
+SliverList _buildCommonInfoPage(AnimalRead animal) {
   return SliverList(
     delegate: SliverChildListDelegate(
       _buildCommonInfoContent(animal),
@@ -8,7 +8,7 @@ SliverList _buildCommonInfoPage(Animal animal) {
   );
 }
 
-List<Widget> _buildCommonInfoContent(Animal animal) {
+List<Widget> _buildCommonInfoContent(AnimalRead animal) {
   return [
     Padding(
       padding: const EdgeInsets.only(

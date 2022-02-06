@@ -1,10 +1,12 @@
+import 'package:collection/collection.dart';
+
 import 'package:acits_flutter/di/di_container.dart';
 
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
-extension AnimalX on Animal {
+extension AnimalX on AnimalRead {
   String? get statusString {
     final _service = getIt<ConfigService>();
     return _service.getStatus131Name(status);
@@ -118,6 +120,57 @@ extension AnimalX on Animal {
     if (applicant is! Map<String, dynamic>) return null;
     final data = applicant as Map<String, dynamic>;
     return data['email'];
+  }
+
+  AnimalImageRead? get avatar {
+    return images?.firstOrNull;
+  }
+
+  String? get thumb {
+    return (avatar?.image?.small ?? avatar?.image?.medium) ?? avatar?.image?.large;
+  }
+
+  AnimalWrite get write {
+    return AnimalWrite(
+      name: name,
+      // TODO: исправить (конверт в base64) для новых фотографий
+      // images: _imageWriteList ?? [],
+      images: [],
+      validImages: _validImages,
+      specId: spec['id'],
+      status: status,
+      dateJoined: dateJoined,
+      birthDate: birthDate,
+      deathDate: deathDate,
+      deathReason: deathReason,
+      placeOfCatch: placeOfCatch,
+      placeOfRelease: placeOfRelease,
+      dateOfChipping: dateOfChipping,
+      chippingCode: chippingCode,
+      height: height,
+      weight: weight,
+      shelter: shelter,
+      curatorId: curator['id'],
+      applicantId: applicant['id'],
+      animalAttributes: animalAttributes,
+    );
+  }
+
+  List<AnimalImageWrite>? get _imageWriteList {
+    final out = images
+        ?.map(
+          (read) => AnimalImageWrite(
+            image: read.image?.large,
+            isPrimary: read.isPrimary,
+            name: read.filename,
+          ),
+        )
+        .toList();
+    return out;
+  }
+
+  List<int> get _validImages {
+    return images?.map<int?>((e) => e.id).whereNotNull().toList() ?? [];
   }
 }
 

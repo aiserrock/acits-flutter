@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -238,7 +237,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
     setState(() => _editState = WidgetState<_AnimalEditScreenMode>()..loading());
     await _animalService.fetchAnimalDetail(id: widget.id!).then(
       (value) {
-        _getProvider<AnimalEditHolder>()?.init(value.copyWith(specId: value.specId ?? value.idSpec));
+        _getProvider<AnimalEditHolder>()?.init(value);
         setState(
           () {
             _editState = WidgetState()..content(_AnimalEditScreenMode.form);
@@ -254,7 +253,15 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
     setState(() => _isUploadProgress = true);
     final editedAnimal = _getProvider<AnimalEditHolder>()?.state;
     if (editedAnimal != null) {
-      final result = await _animalService.uploadAnimal(editedAnimal).catchError((_) {});
+      AnimalRead? result;
+      final isEdit = _isEdit && editedAnimal.id != null;
+      if (isEdit) {
+        result = await _animalService
+            .updateAnimal(editedAnimal.id!, editedAnimal.write)
+            .catchError((_) {});
+      } else {
+        result = await _animalService.createAnimal(editedAnimal.write).catchError((_) {});
+      }
       if (result != null) {
         setState(() => _editState = WidgetState()..content(_AnimalEditScreenMode.success));
       }
