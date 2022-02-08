@@ -95,6 +95,8 @@
   "commonSort": "Сортировка",
   "commonToday": "Сегодня",
   "commonYear": "год",
+  "curatorAdd": "Новый куратор",
+  "curatorEdit": "Редактирование",
   "loginAuthorizeError": "Неверный логин или пароль",
   "loginDescribeMsg": "ACITS – Система контроля за животными\nвнутри приюта",
   "loginEntryBtn": "Войти",

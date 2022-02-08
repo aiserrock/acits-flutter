@@ -120,6 +120,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Today"),
         "commonYear": MessageLookupByLibrary.simpleMessage("year"),
+        "curatorAdd": MessageLookupByLibrary.simpleMessage("New curator"),
+        "curatorEdit": MessageLookupByLibrary.simpleMessage("Edit curator"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Wrong login or password"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
