@@ -101,6 +101,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Загрузить акт приема-передачи"),
         "animalWeight": MessageLookupByLibrary.simpleMessage("Вес, кг"),
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Рост, см"),
+        "applicantAdd": MessageLookupByLibrary.simpleMessage("Новый заявитель"),
+        "applicantEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
         "common": MessageLookupByLibrary.simpleMessage("общий"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Добавить"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Животные"),

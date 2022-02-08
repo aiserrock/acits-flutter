@@ -28,7 +28,7 @@ class AnimalService {
     if (result.body != null) {
       return result.body;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -42,7 +42,7 @@ class AnimalService {
     if (result.body != null) {
       return result.body!;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -67,7 +67,7 @@ class AnimalService {
     if (data != null) {
       return data;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -87,7 +87,7 @@ class AnimalService {
     if (data != null) {
       return data;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -111,7 +111,7 @@ class AnimalService {
     if (data != null) {
       return data;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 

@@ -45,7 +45,7 @@ class ConfigService {
       _typeValues = json.decode(utf8.decode(result.bodyBytes));
       return result.body;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -58,7 +58,7 @@ class ConfigService {
       _animalAttributes = result.body!;
       return _animalAttributes!;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 

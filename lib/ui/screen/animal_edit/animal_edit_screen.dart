@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
+import 'package:acits_flutter/ui/widget/success_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -37,6 +38,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   final formKeys = List<GlobalKey<FormState>>.generate(5, (_) => GlobalKey<FormState>());
 
   late final bool _isEdit;
+  late final NavigatorState _navigator;
 
   WidgetState<_AnimalEditScreenMode> _editState = WidgetState<_AnimalEditScreenMode>()..loading();
   final _pageController = PageController();
@@ -51,6 +53,12 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
     _animalService = getIt<AnimalService>();
     _isEdit = widget.id != null;
     _init();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _navigator = Navigator.of(context);
   }
 
   @override
@@ -83,14 +91,16 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
                     ),
                     centerTitle: true,
                   ),
-                  floatingActionButton: FloatingActionButton(
-                    child: Icon(
-                      _isLastPage ? Icons.done_all : Icons.arrow_forward_ios_rounded,
-                      color: Colors.white,
-                    ),
-                    onPressed: _onFabPressed,
-                    backgroundColor: ColorRes.accent,
-                  ),
+                  floatingActionButton: _editState.value != _AnimalEditScreenMode.success
+                      ? FloatingActionButton(
+                          child: Icon(
+                            _isLastPage ? Icons.done_all : Icons.arrow_forward_ios_rounded,
+                            color: Colors.white,
+                          ),
+                          onPressed: _onFabPressed,
+                          backgroundColor: ColorRes.accent,
+                        )
+                      : null,
                   body: _buildBody(),
                 );
               });
@@ -111,8 +121,11 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
                           child: _buildContent(context),
                           onRefresh: _init,
                         )
-                      : const Center(
-                          child: Text('success'),
+                      : SuccessHolderWidget(
+                          onPressed: () => _navigator.pop(true),
+                          title: 'Готово!',
+                          message: 'Изменения сохранены.',
+                          button: 'Закрыть'.toUpperCase(),
                         );
                 })
             : _buildContent(context),
@@ -210,7 +223,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
         duration: kTabScrollDuration,
         curve: Curves.linear,
       );
-      if (_isLastPage && !_isUploadProgress) {
+      if (_isLastPage && !_isUploadProgress && _editState.value != _AnimalEditScreenMode.success) {
         _onSubmit();
       }
     }

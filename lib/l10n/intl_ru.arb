@@ -22,7 +22,7 @@
     }
   },
   "animalAdd": "Новое животное",
-  "animalAdditionalInfo": "Дополнительная информация",
+  "animalAdditionalInfo": "Дополнительная информация", 
   "animalAdmitted": "Поступил",
   "animalAge": "Возраст",
   "animalAgeAppox": "Примерный",
@@ -70,6 +70,8 @@
   "animalUploadAct": "Загрузить акт приема-передачи",
   "animalWeight": "Вес, кг",
   "aninmalSize": "Рост, см",
+  "applicantAdd": "Новый заявитель",
+  "applicantEdit": "Редактировать",
   "common": "общий",
   "commonAdd": "Добавить",
   "commonAnimals": "Животные",
