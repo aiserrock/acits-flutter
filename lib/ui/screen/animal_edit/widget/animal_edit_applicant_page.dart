@@ -164,6 +164,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
       phoneNumber: _applicantPhoneController.text,
       contactDetails: _applicantSocialController.text,
       email: _applicantEmailController.text,
+      id: _applicant?.id,
     );
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
       applicant: applicant.toJson(),
