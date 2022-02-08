@@ -4,6 +4,7 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/staff/staff_service.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
+import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -114,9 +115,8 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
                 validator: Validator.emptyValidator,
               ),
               EditCardData(
-                label: StringRes.current.animalCuratorLastName + ' *',
+                label: StringRes.current.animalCuratorLastName,
                 controller: _lastNameController,
-                validator: Validator.emptyValidator,
               ),
               EditCardData(
                 label: StringRes.current.animalCuratorPhone + ' *',
@@ -141,7 +141,6 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
   Future<void> _init() async {
     if (!_isEdit) return;
     _state = WidgetState<Curator>()..loading();
-    await Future.delayed(const Duration(seconds: 3));
     await _service.fetchCuratorById(id: widget.curatorId!).then((value) {
       _setControllers(value);
       setState(() => _state = WidgetState()..content(value));
@@ -170,7 +169,6 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
     );
     setState(() => _state = WidgetState<Curator>()..loading());
     Curator? result;
-    await Future.delayed(const Duration(seconds: 3));
     if (_isEdit) {
       result = await _service
           .updateCurator(
@@ -194,30 +192,5 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
       );
     }
     if (result != null) _navigator.pop(result);
-  }
-}
-
-const _sizePart = .75;
-
-class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({
-    this.assetPath,
-    Key? key,
-  }) : super(key: key);
-
-  final String? assetPath;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, cons) {
-      final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
-      return Center(
-        child: Lottie.asset(
-          assetPath ?? 'assets/lottie/loading.json',
-          height: size,
-          width: size,
-        ),
-      );
-    });
   }
 }
