@@ -92,6 +92,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Upload transfer act"),
         "animalWeight": MessageLookupByLibrary.simpleMessage("Weight, kg"),
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Size, cm"),
+        "applicantAdd": MessageLookupByLibrary.simpleMessage("New applicant"),
+        "applicantEdit": MessageLookupByLibrary.simpleMessage("Edit applicant"),
         "common": MessageLookupByLibrary.simpleMessage("common"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Add"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Animals"),

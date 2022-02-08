@@ -9,8 +9,8 @@ class NotAuthorizedException implements Exception {
   }
 }
 
-class MesssagedException implements Exception {
-  MesssagedException({
+class MessagedException implements Exception {
+  MessagedException({
     this.message,
     this.error,
   });

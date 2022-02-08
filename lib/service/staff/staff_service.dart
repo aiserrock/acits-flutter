@@ -33,7 +33,7 @@ class StaffService {
     if (data != null) {
       return data;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -51,7 +51,7 @@ class StaffService {
     if (data != null) {
       return data;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -71,7 +71,7 @@ class StaffService {
     if (data != null) {
       return data;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -89,7 +89,89 @@ class StaffService {
     if (data != null) {
       return data;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  /// Список заявителей
+  Future<List<Applicant>> fetchApplicants({
+    int limit = 25,
+    int offset = 0,
+    String? searchRequest,
+  }) async {
+    final result = await _client.apiV1ApplicantsGet(
+      limit: limit,
+      offset: offset,
+      search: searchRequest,
+      xCurrentShelter: _currentShelter,
+    );
+
+    final data = result.body?.results;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  /// Получить заявителя по Id
+  Future<Applicant?> fetchApplicantById({
+    required int id,
+  }) async {
+    final result = await _client.apiV1ApplicantsIdGet(
+      id: id,
+      xCurrentShelter: _currentShelter,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  /// Редактировать заявителя
+  Future<Applicant?> updateApplicant({
+    required int id,
+    required Applicant applicant,
+  }) async {
+    final result = await _client.apiV1ApplicantsIdPut(
+      id: id,
+      body: applicant.copyWith(
+        shelter: int.tryParse(_currentShelter ?? ''),
+      ),
+      xCurrentShelter: _currentShelter,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  /// Создать заявителя
+  Future<Applicant?> createApplicant({
+    required Applicant applicant,
+  }) async {
+    final result = await _client.apiV1ApplicantsPost(
+      body: applicant.copyWith(
+        shelter: int.tryParse(_currentShelter ?? ''),
+      ),
+      xCurrentShelter: _currentShelter,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
     }
   }
 

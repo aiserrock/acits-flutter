@@ -51,7 +51,7 @@ class AuthService {
         case 401:
           throw NotAuthorizedException(message: result.error.toString());
         default:
-          throw MesssagedException(message: result.error.toString());
+          throw MessagedException(message: result.error.toString());
       }
     }
   }
@@ -62,7 +62,7 @@ class AuthService {
       _shelterList = result.body;
       return _shelterList;
     }
-    throw MesssagedException(error: result.error);
+    throw MessagedException(error: result.error);
   }
 
   Future<UserCurrentShelterSerializers?> setCurrentShelter(int shelterId) async {
@@ -72,6 +72,6 @@ class AuthService {
       _shelterRole = result.body;
       return _shelterRole;
     }
-    throw MesssagedException(error: result.error);
+    throw MessagedException(error: result.error);
   }
 }
