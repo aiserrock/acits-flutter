@@ -805,6 +805,26 @@ class StringRes {
     );
   }
 
+  /// `New curator`
+  String get curatorAdd {
+    return Intl.message(
+      'New curator',
+      name: 'curatorAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit curator`
+  String get curatorEdit {
+    return Intl.message(
+      'Edit curator',
+      name: 'curatorEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Wrong login or password`
   String get loginAuthorizeError {
     return Intl.message(

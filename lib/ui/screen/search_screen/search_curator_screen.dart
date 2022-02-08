@@ -214,7 +214,7 @@ class _SearchCuratorScreenState extends State<SearchCuratorScreen> {
       setState(() => _listPagingState.loading());
     }
     _service
-        .getCurators(
+        .fetchCurators(
       offset: _speciesListOffset,
       searchRequest: _searchController.text.isNotEmpty ? _searchController.text : null,
     )

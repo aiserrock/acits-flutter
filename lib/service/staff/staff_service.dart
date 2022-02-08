@@ -16,7 +16,7 @@ class StaffService {
   final Openapi _client;
 
   /// Список кураторов
-  Future<List<Curator>> getCurators({
+  Future<List<Curator>> fetchCurators({
     int limit = 25,
     int offset = 0,
     String? searchRequest,
@@ -25,7 +25,7 @@ class StaffService {
       limit: limit,
       offset: offset,
       search: searchRequest,
-      xCurrentShelter: _authService.currentShelterId,
+      xCurrentShelter: _currentShelter,
     );
 
     final data = result.body?.results;
@@ -36,4 +36,62 @@ class StaffService {
       throw MesssagedException(error: result.error);
     }
   }
+
+  /// Получить куратора по Id
+  Future<Curator?> fetchCuratorById({
+    required int id,
+  }) async {
+    final result = await _client.apiV1CuratorsIdGet(
+      id: id,
+      xCurrentShelter: _currentShelter,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
+  /// Редактировать куратора
+  Future<Curator?> updateCurator({
+    required int id,
+    required Curator curator,
+  }) async {
+    final result = await _client.apiV1CuratorsIdPut(
+      id: id,
+      body: curator.copyWith(shelter: _currentShelter),
+      xCurrentShelter: _currentShelter,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
+  /// Создать куратора
+  Future<Curator?> createCurator({
+    required Curator curator,
+  }) async {
+    final result = await _client.apiV1CuratorsPost(
+      body: curator.copyWith(shelter: _currentShelter),
+      xCurrentShelter: _currentShelter,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MesssagedException(error: result.error);
+    }
+  }
+
+  String? get _currentShelter => _authService.currentShelterId;
 }
