@@ -3,6 +3,8 @@ import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
+import 'package:acits_flutter/ui/screen/applicant/applicant_edit_screen_route.dart';
+import 'package:acits_flutter/ui/screen/search_screen/search_applicant_screen_route.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,64 +62,42 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
       slivers: [
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
         SliverToBoxAdapter(
-          child: SubtitleWidget(title: StringRes.current.animalApplicant),
-        ),
-        SliverToBoxAdapter(
-          child: _buildActUploadButtons(),
+          child: SubtitleWidget(
+            title: StringRes.current.animalApplicant,
+            actions: [
+              if (_applicant != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: CupertinoButton(
+                    padding: const EdgeInsets.only(),
+                    child: const Icon(
+                      Icons.edit,
+                      color: ColorRes.accent,
+                      size: 40.0,
+                    ),
+                    onPressed: () => _addEditApplicant(
+                      context,
+                      applicantId: _applicant?.id,
+                    ),
+                  ),
+                ),
+              CupertinoButton(
+                padding: const EdgeInsets.only(),
+                child: const Icon(
+                  Icons.add_circle_outline_rounded,
+                  color: ColorRes.accent,
+                  size: 40.0,
+                ),
+                onPressed: () => _addEditApplicant(context),
+              ),
+              const SizedBox(width: 16.0),
+            ],
+          ),
         ),
         SliverToBoxAdapter(
           child: _buildApplicantCard(),
         ),
       ],
-    );
-  }
-
-  Widget _buildActUploadButtons() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 8.0,
-        left: 16.0,
-        bottom: 8.0,
-        right: 16.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            StringRes.current.animalUploadAct,
-            style: StyleRes.content.copyWith(
-              fontSize: 16.0,
-              color: ColorRes.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              CupertinoButton(
-                padding: const EdgeInsets.all(4.0),
-                child: const Icon(
-                  Icons.add_a_photo_outlined,
-                  color: ColorRes.accent,
-                  size: 40.0,
-                ),
-                onPressed: () {},
-              ),
-              const SizedBox(width: 16.0),
-              CupertinoButton(
-                padding: const EdgeInsets.all(4.0),
-                child: const Icon(
-                  Icons.note_add_outlined,
-                  color: ColorRes.accent,
-                  size: 40.0,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-          const SizedBox(height: 8.0),
-        ],
-      ),
     );
   }
 
@@ -129,26 +109,38 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
           EditCardData(
             label: StringRes.current.animalCuratorName + ' *',
             controller: _applicantNameController,
-            validator: Validator.emptyValidator,
+            suffix: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: ColorRes.accent,
+            ),
+            onPressed: _searchApplicant,
           ),
-          EditCardData(
-            label: StringRes.current.animalCuratorLastName + ' *',
-            controller: _applicantLastNameController,
-            validator: Validator.emptyValidator,
-          ),
-          EditCardData(
-            label: StringRes.current.animalCuratorPhone + ' *',
-            controller: _applicantPhoneController,
-            validator: Validator.emptyValidator,
-          ),
-          EditCardData(
-            label: StringRes.current.animalSocialLink,
-            controller: _applicantSocialController,
-          ),
-          EditCardData(
-            label: StringRes.current.animalCuratorEmail,
-            controller: _applicantEmailController,
-          ),
+          if (_applicant != null)
+            EditCardData(
+              label: StringRes.current.animalCuratorLastName + ' *',
+              controller: _applicantLastNameController,
+              validator: Validator.emptyValidator,
+              enabled: false,
+            ),
+          if (_applicant != null)
+            EditCardData(
+              label: StringRes.current.animalCuratorPhone + ' *',
+              controller: _applicantPhoneController,
+              validator: Validator.emptyValidator,
+              enabled: false,
+            ),
+          if (_applicant != null)
+            EditCardData(
+              label: StringRes.current.animalSocialLink,
+              controller: _applicantSocialController,
+              enabled: false,
+            ),
+          if (_applicant != null)
+            EditCardData(
+              label: StringRes.current.animalCuratorEmail,
+              controller: _applicantEmailController,
+              enabled: false,
+            ),
         ],
       ),
     );
@@ -172,10 +164,39 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
       phoneNumber: _applicantPhoneController.text,
       contactDetails: _applicantSocialController.text,
       email: _applicantEmailController.text,
+      id: _applicant?.id,
     );
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
       applicant: applicant.toJson(),
       applicantId: _applicant?.id,
     );
+  }
+
+  Future<void> _searchApplicant() async {
+    final result = await Navigator.push(context, SearchApplicantScreenRoute());
+    if (result != null) {
+      setState(() => _applicant = result);
+      _applicantNameController.text = result.firstName ?? '';
+      _applicantLastNameController.text = result.lastName ?? '';
+      _applicantPhoneController.text = result.phoneNumber ?? '';
+      _applicantEmailController.text = result.email ?? '';
+      _applicantSocialController.text = result.contactDetails ?? '';
+    }
+  }
+
+  Future<void> _addEditApplicant(
+    BuildContext context, {
+    int? applicantId,
+  }) async {
+    final result =
+        await Navigator.of(context).push(ApplicantEditScreenRoute(applicantId: applicantId));
+    if (result != null) {
+      setState(() => _applicant = result);
+      _applicantNameController.text = result.firstName ?? '';
+      _applicantLastNameController.text = result.lastName ?? '';
+      _applicantPhoneController.text = result.phoneNumber ?? '';
+      _applicantEmailController.text = result.email ?? '';
+      _applicantSocialController.text = result.contactDetails ?? '';
+    }
   }
 }

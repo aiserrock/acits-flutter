@@ -1,15 +1,16 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_screen_route.dart';
+import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen_route.dart';
 import 'package:acits_flutter/util/validator.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AnimalEditCommonInfoPage extends AnimalEditPage {
   const AnimalEditCommonInfoPage({

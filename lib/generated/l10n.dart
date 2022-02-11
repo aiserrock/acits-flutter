@@ -540,6 +540,26 @@ class StringRes {
     );
   }
 
+  /// `New applicant`
+  String get applicantAdd {
+    return Intl.message(
+      'New applicant',
+      name: 'applicantAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit applicant`
+  String get applicantEdit {
+    return Intl.message(
+      'Edit applicant',
+      name: 'applicantEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `common`
   String get common {
     return Intl.message(

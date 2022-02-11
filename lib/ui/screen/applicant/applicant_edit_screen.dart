@@ -2,25 +2,26 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/staff/staff_service.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
+import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 /// Экран создания или редактирования куратора
-class CuratorEditScreen extends StatefulWidget {
-  const CuratorEditScreen({
-    this.curatorId,
+class ApplicantEditScreen extends StatefulWidget {
+  const ApplicantEditScreen({
+    this.applicantId,
     Key? key,
   }) : super(key: key);
 
-  final int? curatorId;
+  final int? applicantId;
 
   @override
-  State<CuratorEditScreen> createState() => _CuratorEditScreenState();
+  State<ApplicantEditScreen> createState() => _ApplicantEditScreenState();
 }
 
-class _CuratorEditScreenState extends State<CuratorEditScreen> {
+class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
   late final StaffService _service;
   late final NavigatorState _navigator;
 
@@ -32,15 +33,15 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _addressController = TextEditingController();
+  final _socialController = TextEditingController();
 
-  WidgetState<Curator?> _state = WidgetState<Curator?>()..content(Curator());
+  WidgetState<Applicant?> _state = WidgetState<Applicant?>()..content(Applicant());
 
   @override
   void initState() {
     super.initState();
     _service = getIt<StaffService>();
-    _isEdit = widget.curatorId != null;
+    _isEdit = widget.applicantId != null;
     _init();
   }
 
@@ -67,7 +68,7 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          _isEdit ? StringRes.current.curatorEdit : StringRes.current.curatorAdd,
+          _isEdit ? StringRes.current.applicantEdit : StringRes.current.applicantAdd,
           style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
@@ -89,10 +90,10 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
   Widget _buildBody() {
     return KeyboardDismissOnTap(
       child: SafeArea(
-        child: StateBuilder<Curator?>(
+        child: StateBuilder<Applicant?>(
           state: _state,
           loader: (_) => const LoadingWidget(),
-          errorBuilder: (_, __) => Container(),
+          errorBuilder: (_, e) => ErrorHolderWidget(error: e),
           builder: (_, __) => _buildApplicantCard(),
         ),
       ),
@@ -121,12 +122,13 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
                 validator: Validator.emptyValidator,
               ),
               EditCardData(
-                label: StringRes.current.animalCuratorEmail,
-                controller: _emailController,
+                label: StringRes.current.animalSocialLink,
+                controller: _socialController,
               ),
               EditCardData(
-                label: StringRes.current.animalCuratorAddress,
-                controller: _addressController,
+                label: StringRes.current.animalCuratorEmail,
+                controller: _emailController,
+                validator: Validator.emailOrEmptyValidator,
               ),
             ],
           ),
@@ -137,8 +139,8 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
 
   Future<void> _init() async {
     if (!_isEdit) return;
-    _state = WidgetState<Curator>()..loading();
-    await _service.fetchCuratorById(id: widget.curatorId!).then((value) {
+    _state = WidgetState<Applicant>()..loading();
+    await _service.fetchApplicantById(id: widget.applicantId!).then((value) {
       _setControllers(value);
       setState(() => _state = WidgetState()..content(value));
     }).catchError((e) {
@@ -146,45 +148,45 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
     });
   }
 
-  void _setControllers(Curator? curator) {
-    _nameController.text = curator?.firstName ?? '';
-    _lastNameController.text = curator?.lastName ?? '';
-    _emailController.text = curator?.email ?? '';
-    _phoneController.text = curator?.phoneNumber ?? '';
-    _addressController.text = curator?.address ?? '';
+  void _setControllers(Applicant? applicant) {
+    _nameController.text = applicant?.firstName ?? '';
+    _lastNameController.text = applicant?.lastName ?? '';
+    _emailController.text = applicant?.email ?? '';
+    _phoneController.text = applicant?.phoneNumber ?? '';
+    _socialController.text = applicant?.contactDetails ?? '';
   }
 
   Future<void> _onSubmit() async {
     if (_state.isLoading) return;
     if (!(formKey.currentState?.validate() ?? false)) return;
-    final curator = (_state.value ?? Curator()).copyWith(
+    final applicant = (_state.value ?? Applicant()).copyWith(
       firstName: _nameController.text,
       lastName: _lastNameController.text,
       phoneNumber: _phoneController.text,
-      address: _addressController.text,
+      contactDetails: _socialController.text,
       email: _emailController.text,
     );
-    setState(() => _state = WidgetState<Curator>()..loading());
-    Curator? result;
+    setState(() => _state = WidgetState<Applicant>()..loading());
+    Applicant? result;
     if (_isEdit) {
       result = await _service
-          .updateCurator(
-        id: widget.curatorId!,
-        curator: curator,
+          .updateApplicant(
+        id: widget.applicantId!,
+        applicant: applicant,
       )
           .catchError(
         (e) {
-          setState(() => _state = WidgetState().error = e);
+          setState(() => _state = WidgetState()..error = e);
         },
       );
     } else {
       result = await _service
-          .createCurator(
-        curator: curator,
+          .createApplicant(
+        applicant: applicant,
       )
           .catchError(
         (e) {
-          setState(() => _state = WidgetState().error = e);
+          setState(() => _state = WidgetState()..error = e);
         },
       );
     }

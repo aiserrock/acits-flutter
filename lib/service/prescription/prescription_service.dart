@@ -34,7 +34,7 @@ class PrescriptionService {
     if (result.body != null) {
       return result.body;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 
@@ -61,7 +61,7 @@ class PrescriptionService {
     if (result.body != null) {
       return result.body;
     } else {
-      throw MesssagedException(error: result.error);
+      throw MessagedException(error: result.error);
     }
   }
 

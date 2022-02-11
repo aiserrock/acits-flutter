@@ -1,5 +1,5 @@
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_screen_route.dart';
+import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
