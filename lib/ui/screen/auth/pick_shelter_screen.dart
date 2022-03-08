@@ -26,6 +26,7 @@ class _PickShelterListState extends State<PickShelterList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: ColorRes.background,
         endDrawer: const Drawer(
           child: DebugDrawerContent(),
         ),
@@ -39,27 +40,16 @@ class _PickShelterListState extends State<PickShelterList> {
           ),
           centerTitle: true,
         ),
-        backgroundColor: ColorRes.foreground,
         body: Column(
           children: [
             Expanded(
               child: StateBuilder<Object>(
-                  state: _state,
-                  loader: (_) => Container(),
-                  errorBuilder: (_, __) => Container(),
-                  builder: (_, __) {
-                    return ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: widget.shelterList.results?.length ?? 0,
-                      itemBuilder: (_, index) => ListTile(
-                        title: Text((widget.shelterList.results ?? [])[index].name ?? ''),
-                        onTap: () => _pickShelter(index),
-                      ),
-                      separatorBuilder: (_, __) => const Divider(indent: 16.0, endIndent: 16.0),
-                    );
-                  }),
+                state: _state,
+                loader: (_) => Container(),
+                errorBuilder: (_, __) => Container(),
+                builder: (_, __) => _buildContent(),
+              ),
             ),
-            const SizedBox(height: 16.0),
             Padding(
               padding: const EdgeInsets.only(
                 left: 16.0,
@@ -73,6 +63,37 @@ class _PickShelterListState extends State<PickShelterList> {
             ),
           ],
         ));
+  }
+
+  Widget _buildContent() {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Card(
+        margin: const EdgeInsets.symmetric(
+          vertical: 20.0,
+          horizontal: 16.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListView.separated(
+          padding: const EdgeInsets.all(.0),
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: widget.shelterList.results?.length ?? 0,
+          itemBuilder: (_, index) => ListTile(
+            title: Text((widget.shelterList.results ?? [])[index].name ?? ''),
+            onTap: () => _pickShelter(index),
+          ),
+          separatorBuilder: (_, __) => const Divider(
+            indent: 16.0,
+            endIndent: 16.0,
+            height: 2.0,
+            thickness: 2.0,
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _pickShelter(int index) async {

@@ -123,7 +123,7 @@ extension AnimalX on AnimalRead {
   }
 
   AnimalImageRead? get avatar {
-    return images?.firstOrNull;
+    return images?.firstWhereOrNull((image) => image.isPrimary ?? false) ?? images?.firstOrNull;
   }
 
   String? get thumb {

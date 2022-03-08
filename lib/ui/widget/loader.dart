@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:acits_flutter/res/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -19,7 +20,7 @@ class LoadingWidget extends StatelessWidget {
       final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
       return Center(
         child: Lottie.asset(
-          assetPath ?? 'assets/lottie/loading.json',
+          assetPath ?? LottieRes.loading,
           height: size,
           width: size,
         ),

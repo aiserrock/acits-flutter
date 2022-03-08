@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
+import 'package:acits_flutter/ui/widget/skeleton.dart';
 import 'package:acits_flutter/res/color.dart';
 
 class ScreenLoader extends StatelessWidget {
@@ -35,18 +35,25 @@ class ScreenLoader extends StatelessWidget {
         child: Column(
           children: List.filled(
             3,
-            Shimmer.fromColors(
-              child: Container(
-                height: height ?? 104.0,
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 16.0),
-                decoration: const BoxDecoration(
-                  color: ColorRes.textSecondary,
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            Card(
+              color: ColorRes.foreground,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              margin: const EdgeInsets.only(bottom: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Skeleton(height: 20.0, width: 80.0),
+                    SizedBox(height: 10.0),
+                    Skeleton(height: 20.0, width: 170.0),
+                    SizedBox(height: 10.0),
+                    Skeleton(height: 20.0, width: double.infinity),
+                  ],
                 ),
               ),
-              baseColor: ColorRes.inactiveIcon.withOpacity(.3),
-              highlightColor: ColorRes.background,
             ),
           ),
         ),
