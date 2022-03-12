@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
@@ -11,11 +15,6 @@ import 'package:acits_flutter/ui/widget/default_app_bar.dart';
 import 'package:acits_flutter/ui/widget/default_icon_button.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 part 'animal_card_header.dart';
 part 'animal_common_info.dart';
@@ -49,7 +48,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   double _titleOpacity = .0;
 
   WidgetState<AnimalRead> _state = WidgetState()..loading();
-  WidgetState<List<AnimalPrescription?>?> _statePrescriptions = WidgetState()..loading();
+  WidgetState<List<Prescription?>?> _statePrescriptions = WidgetState()..loading();
 
   @override
   void didChangeDependencies() {
@@ -137,6 +136,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         title: _buildHeaderTitle(context, animal),
         background: _buildHeaderImagePager(context, animal),
       ),
+      elevation: 2.0,
       pinned: true,
       expandedHeight: _expandedHeight,
       collapsedHeight: _collapsedHeight,
@@ -158,6 +158,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         DefaultAppBar(
           titleString: StringRes.current.animalCardTitle,
           onBackPressure: Navigator.of(context).pop,
+          elevation: .0,
         ),
         Expanded(
           child: Padding(

@@ -7,6 +7,7 @@ class DefaultAppBar extends AppBar {
     Key? key,
     required this.titleString,
     required VoidCallback onBackPressure,
+    double? elevation,
   }) : super(
           key: key,
           title: Text(
@@ -23,6 +24,7 @@ class DefaultAppBar extends AppBar {
           centerTitle: true,
           backgroundColor: ColorRes.foreground,
           shadowColor: Colors.transparent,
+          elevation: elevation,
         );
 
   final String titleString;
