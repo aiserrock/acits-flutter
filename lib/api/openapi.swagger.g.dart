@@ -1148,7 +1148,7 @@ Map<String, dynamic> _$PrescriptionFileToJson(PrescriptionFile instance) =>
 PrescriptionShort _$PrescriptionShortFromJson(Map<String, dynamic> json) =>
     PrescriptionShort(
       id: json['id'] as int?,
-      myType: json['myType'],
+      myType: json['my_type'],
       description: json['description'] as String?,
       animal: json['animal'] == null
           ? null

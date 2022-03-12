@@ -4663,7 +4663,7 @@ class PrescriptionShort {
 
   @JsonKey(name: 'id')
   final int? id;
-  @JsonKey(name: 'myType')
+  @JsonKey(name: 'my_type')
   final dynamic myType;
   @JsonKey(name: 'description')
   final String? description;
