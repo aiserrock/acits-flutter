@@ -62,6 +62,8 @@ class ConfigService {
     }
   }
 
+  /// После изменений в схеме API тип приходит как в виде MyTypeEnum, так и строки. Сделал
+  /// обобщение и резолвинг типа внутри метода.
   String? getMyTypeName(Object? type) {
     if (type == null) return null;
     if (!(type is String || type is MyTypeEnum)) return null;
