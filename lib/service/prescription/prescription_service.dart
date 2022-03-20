@@ -18,8 +18,7 @@ class PrescriptionService {
   final AuthService _authService;
   final ConfigService _configService;
 
-  Future<PaginatedPrescriptionExecutionTodayList?>
-      fetchTodayPrescriptionList() async {
+  Future<PaginatedPrescriptionExecutionTodayList?> fetchTodayPrescriptionList() async {
     if (_configService.typeValues == null) {
       await _configService.getTypeValues();
     }
@@ -39,7 +38,7 @@ class PrescriptionService {
   }
 
   /// получить список назначений для животного по его ID
-  Future<PaginatedAnimalPrescriptionList?> fetchPrescriptionListByAnimal(
+  Future<PaginatedPrescriptionList?> fetchPrescriptionListByAnimal(
     int animalId, {
     int? limit,
     int offset = 0,
@@ -50,8 +49,8 @@ class PrescriptionService {
       await _configService.getTypeValues();
     }
 
-    final result = await _acitsClient.apiV1AnimalsIdPrescriptionsGet(
-      id: animalId,
+    final result = await _acitsClient.apiV1PrescriptionsGet(
+      animal: animalId,
       xCurrentShelter: _authService.currentShelterId,
       limit: limit,
       offset: offset,
