@@ -86,6 +86,22 @@ class $AssetsImageGen {
       const SvgGenImage('assets/image/logo_splash.svg');
 }
 
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/crash.json
+  String get crash => 'assets/lottie/crash.json';
+
+  /// File path: assets/lottie/crash_1.json
+  String get crash1 => 'assets/lottie/crash_1.json';
+
+  /// File path: assets/lottie/loading.json
+  String get loading => 'assets/lottie/loading.json';
+
+  /// File path: assets/lottie/success.json
+  String get success => 'assets/lottie/success.json';
+}
+
 class $AssetsOnboardingGen {
   const $AssetsOnboardingGen();
 
@@ -108,6 +124,7 @@ class Assets {
   static const $AssetsCommonGen common = $AssetsCommonGen();
   static const $AssetsIconGen icon = $AssetsIconGen();
   static const $AssetsImageGen image = $AssetsImageGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
 }
 

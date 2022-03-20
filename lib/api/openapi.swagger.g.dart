@@ -6,19 +6,22 @@ part of 'openapi.swagger.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AnimalAttribute _$AnimalAttributeFromJson(Map<String, dynamic> json) => AnimalAttribute(
+AnimalAttribute _$AnimalAttributeFromJson(Map<String, dynamic> json) =>
+    AnimalAttribute(
       id: json['id'] as int?,
       name: json['name'] as String?,
       isRequired: json['is_required'] as bool?,
     );
 
-Map<String, dynamic> _$AnimalAttributeToJson(AnimalAttribute instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalAttributeToJson(AnimalAttribute instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'is_required': instance.isRequired,
     };
 
-AnimalAttributeValue _$AnimalAttributeValueFromJson(Map<String, dynamic> json) =>
+AnimalAttributeValue _$AnimalAttributeValueFromJson(
+        Map<String, dynamic> json) =>
     AnimalAttributeValue(
       attrId: json['attr_id'] as int?,
       name: json['name'] as String?,
@@ -26,7 +29,8 @@ AnimalAttributeValue _$AnimalAttributeValueFromJson(Map<String, dynamic> json) =
       isRequired: json['is_required'] as bool?,
     );
 
-Map<String, dynamic> _$AnimalAttributeValueToJson(AnimalAttributeValue instance) =>
+Map<String, dynamic> _$AnimalAttributeValueToJson(
+        AnimalAttributeValue instance) =>
     <String, dynamic>{
       'attr_id': instance.attrId,
       'name': instance.name,
@@ -34,10 +38,13 @@ Map<String, dynamic> _$AnimalAttributeValueToJson(AnimalAttributeValue instance)
       'is_required': instance.isRequired,
     };
 
-AnimalHistorySnapshot _$AnimalHistorySnapshotFromJson(Map<String, dynamic> json) =>
+AnimalHistorySnapshot _$AnimalHistorySnapshotFromJson(
+        Map<String, dynamic> json) =>
     AnimalHistorySnapshot(
       animal: json['animal'] as int?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
       status: status131EnumFromJson(json['status'] as String?),
       height: json['height'] as String?,
       weight: json['weight'] as String?,
@@ -45,7 +52,8 @@ AnimalHistorySnapshot _$AnimalHistorySnapshotFromJson(Map<String, dynamic> json)
       editor: json['editor'] as String?,
     );
 
-Map<String, dynamic> _$AnimalHistorySnapshotToJson(AnimalHistorySnapshot instance) =>
+Map<String, dynamic> _$AnimalHistorySnapshotToJson(
+        AnimalHistorySnapshot instance) =>
     <String, dynamic>{
       'animal': instance.animal,
       'created_at': instance.createdAt?.toIso8601String(),
@@ -56,7 +64,8 @@ Map<String, dynamic> _$AnimalHistorySnapshotToJson(AnimalHistorySnapshot instanc
       'editor': instance.editor,
     };
 
-AnimalImageRead _$AnimalImageReadFromJson(Map<String, dynamic> json) => AnimalImageRead(
+AnimalImageRead _$AnimalImageReadFromJson(Map<String, dynamic> json) =>
+    AnimalImageRead(
       id: json['id'] as int?,
       isPrimary: json['is_primary'] as bool?,
       filename: json['filename'] as String?,
@@ -65,20 +74,23 @@ AnimalImageRead _$AnimalImageReadFromJson(Map<String, dynamic> json) => AnimalIm
           : ImageThumbnails.fromJson(json['image'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$AnimalImageReadToJson(AnimalImageRead instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalImageReadToJson(AnimalImageRead instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'is_primary': instance.isPrimary,
       'filename': instance.filename,
       'image': instance.image?.toJson(),
     };
 
-AnimalImageWrite _$AnimalImageWriteFromJson(Map<String, dynamic> json) => AnimalImageWrite(
+AnimalImageWrite _$AnimalImageWriteFromJson(Map<String, dynamic> json) =>
+    AnimalImageWrite(
       isPrimary: json['is_primary'] as bool?,
       name: json['name'] as String?,
       image: json['image'] as String?,
     );
 
-Map<String, dynamic> _$AnimalImageWriteToJson(AnimalImageWrite instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalImageWriteToJson(AnimalImageWrite instance) =>
+    <String, dynamic>{
       'is_primary': instance.isPrimary,
       'name': instance.name,
       'image': instance.image,
@@ -93,14 +105,19 @@ AnimalNote _$AnimalNoteFromJson(Map<String, dynamic> json) => AnimalNote(
               ?.map((e) => AnimalNoteFile.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
       createdBy: json['created_by'] as String?,
       updatedBy: json['updated_by'] as String?,
       isUserCanEditOrDelete: json['is_user_can_edit_or_delete'] as bool?,
     );
 
-Map<String, dynamic> _$AnimalNoteToJson(AnimalNote instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalNoteToJson(AnimalNote instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
       'animal': instance.animal,
@@ -113,15 +130,19 @@ Map<String, dynamic> _$AnimalNoteToJson(AnimalNote instance) => <String, dynamic
       'is_user_can_edit_or_delete': instance.isUserCanEditOrDelete,
     };
 
-AnimalNoteFile _$AnimalNoteFileFromJson(Map<String, dynamic> json) => AnimalNoteFile(
+AnimalNoteFile _$AnimalNoteFileFromJson(Map<String, dynamic> json) =>
+    AnimalNoteFile(
       id: json['id'] as int?,
       file: json['file'] as String?,
       name: json['name'] as String?,
       filename: json['filename'] as String?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
     );
 
-Map<String, dynamic> _$AnimalNoteFileToJson(AnimalNoteFile instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalNoteFileToJson(AnimalNoteFile instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'file': instance.file,
       'name': instance.name,
@@ -129,7 +150,8 @@ Map<String, dynamic> _$AnimalNoteFileToJson(AnimalNoteFile instance) => <String,
       'created_at': instance.createdAt?.toIso8601String(),
     };
 
-AnimalPrescription _$AnimalPrescriptionFromJson(Map<String, dynamic> json) => AnimalPrescription(
+AnimalPrescription _$AnimalPrescriptionFromJson(Map<String, dynamic> json) =>
+    AnimalPrescription(
       id: json['id'] as int?,
       myType: json['myType'],
       duration: durationEnumFromJson(json['duration'] as String?),
@@ -141,12 +163,14 @@ AnimalPrescription _$AnimalPrescriptionFromJson(Map<String, dynamic> json) => An
               .toList() ??
           [],
       executions: (json['executions'] as List<dynamic>?)
-              ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  PrescriptionExecution.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
 
-Map<String, dynamic> _$AnimalPrescriptionToJson(AnimalPrescription instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalPrescriptionToJson(AnimalPrescription instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'myType': instance.myType,
       'duration': durationEnumToJson(instance.duration),
@@ -167,10 +191,15 @@ AnimalRead _$AnimalReadFromJson(Map<String, dynamic> json) => AnimalRead(
           [],
       spec: json['spec'],
       status: status131EnumFromJson(json['status'] as String?),
-      dateJoined:
-          json['date_joined'] == null ? null : DateTime.parse(json['date_joined'] as String),
-      birthDate: json['birth_date'] == null ? null : DateTime.parse(json['birth_date'] as String),
-      deathDate: json['death_date'] == null ? null : DateTime.parse(json['death_date'] as String),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
+      birthDate: json['birth_date'] == null
+          ? null
+          : DateTime.parse(json['birth_date'] as String),
+      deathDate: json['death_date'] == null
+          ? null
+          : DateTime.parse(json['death_date'] as String),
       deathReason: json['death_reason'] as String?,
       placeOfCatch: json['place_of_catch'] as String?,
       placeOfRelease: json['place_of_release'] as String?,
@@ -185,13 +214,17 @@ AnimalRead _$AnimalReadFromJson(Map<String, dynamic> json) => AnimalRead(
       curator: json['curator'],
       applicant: json['applicant'],
       animalAttributes: (json['animal_attributes'] as List<dynamic>?)
-              ?.map((e) => AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      deletedAt: json['deleted_at'] == null ? null : DateTime.parse(json['deleted_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
     );
 
-Map<String, dynamic> _$AnimalReadToJson(AnimalRead instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalReadToJson(AnimalRead instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
       'name': instance.name,
@@ -212,7 +245,8 @@ Map<String, dynamic> _$AnimalReadToJson(AnimalRead instance) => <String, dynamic
       'shelter': instance.shelter,
       'curator': instance.curator,
       'applicant': instance.applicant,
-      'animal_attributes': instance.animalAttributes?.map((e) => e.toJson()).toList(),
+      'animal_attributes':
+          instance.animalAttributes?.map((e) => e.toJson()).toList(),
       'deleted_at': instance.deletedAt?.toIso8601String(),
     };
 
@@ -222,13 +256,21 @@ AnimalWrite _$AnimalWriteFromJson(Map<String, dynamic> json) => AnimalWrite(
               ?.map((e) => AnimalImageWrite.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      validImages: (json['valid_images'] as List<dynamic>?)?.map((e) => e as int).toList() ?? [],
+      validImages: (json['valid_images'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          [],
       specId: json['spec_id'] as int?,
       status: status131EnumFromJson(json['status'] as String?),
-      dateJoined:
-          json['date_joined'] == null ? null : DateTime.parse(json['date_joined'] as String),
-      birthDate: json['birth_date'] == null ? null : DateTime.parse(json['birth_date'] as String),
-      deathDate: json['death_date'] == null ? null : DateTime.parse(json['death_date'] as String),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
+      birthDate: json['birth_date'] == null
+          ? null
+          : DateTime.parse(json['birth_date'] as String),
+      deathDate: json['death_date'] == null
+          ? null
+          : DateTime.parse(json['death_date'] as String),
       deathReason: json['death_reason'] as String?,
       placeOfCatch: json['place_of_catch'] as String?,
       placeOfRelease: json['place_of_release'] as String?,
@@ -242,12 +284,14 @@ AnimalWrite _$AnimalWriteFromJson(Map<String, dynamic> json) => AnimalWrite(
       curatorId: json['curator_id'] as int?,
       applicantId: json['applicant_id'] as int?,
       animalAttributes: (json['animal_attributes'] as List<dynamic>?)
-              ?.map((e) => AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
 
-Map<String, dynamic> _$AnimalWriteToJson(AnimalWrite instance) => <String, dynamic>{
+Map<String, dynamic> _$AnimalWriteToJson(AnimalWrite instance) =>
+    <String, dynamic>{
       'name': instance.name,
       'images': instance.images?.map((e) => e.toJson()).toList(),
       'valid_images': instance.validImages,
@@ -266,7 +310,8 @@ Map<String, dynamic> _$AnimalWriteToJson(AnimalWrite instance) => <String, dynam
       'shelter': instance.shelter,
       'curator_id': instance.curatorId,
       'applicant_id': instance.applicantId,
-      'animal_attributes': instance.animalAttributes?.map((e) => e.toJson()).toList(),
+      'animal_attributes':
+          instance.animalAttributes?.map((e) => e.toJson()).toList(),
     };
 
 Applicant _$ApplicantFromJson(Map<String, dynamic> json) => Applicant(
@@ -280,8 +325,12 @@ Applicant _$ApplicantFromJson(Map<String, dynamic> json) => Applicant(
       contactDetails: json['contact_details'] as String?,
       createdBy: json['created_by'] as String?,
       updatedBy: json['updated_by'] as String?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
       animalId: json['animal_id'] as int?,
       applicantFiles: (json['applicant_files'] as List<dynamic>?)
               ?.map((e) => ApplicantFile.fromJson(e as Map<String, dynamic>))
@@ -289,37 +338,37 @@ Applicant _$ApplicantFromJson(Map<String, dynamic> json) => Applicant(
           [],
     );
 
-Map<String, dynamic> _$ApplicantToJson(Applicant instance) {
-  final result = <String, dynamic>{
-    'id': instance.id,
-    'url': instance.url,
-    'shelter': instance.shelter,
-    'first_name': instance.firstName,
-    'last_name': instance.lastName,
-    'email': instance.email,
-    'phone_number': instance.phoneNumber,
-    'contact_details': instance.contactDetails,
-    'created_by': instance.createdBy,
-    'updated_by': instance.updatedBy,
-    'created_at': instance.createdAt?.toIso8601String(),
-    'updated_at': instance.updatedAt?.toIso8601String(),
-    if (instance.animalId != null)
-    'animal_id': instance.animalId,
-    if(instance.applicantFiles != null)
-    'applicant_files': instance.applicantFiles?.map((e) => e.toJson()).toList(),
-  };
-  return result;
-}
+Map<String, dynamic> _$ApplicantToJson(Applicant instance) => <String, dynamic>{
+      'id': instance.id,
+      'url': instance.url,
+      'shelter': instance.shelter,
+      'first_name': instance.firstName,
+      'last_name': instance.lastName,
+      'email': instance.email,
+      'phone_number': instance.phoneNumber,
+      'contact_details': instance.contactDetails,
+      'created_by': instance.createdBy,
+      'updated_by': instance.updatedBy,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
+      'animal_id': instance.animalId,
+      'applicant_files':
+          instance.applicantFiles?.map((e) => e.toJson()).toList(),
+    };
 
-ApplicantFile _$ApplicantFileFromJson(Map<String, dynamic> json) => ApplicantFile(
+ApplicantFile _$ApplicantFileFromJson(Map<String, dynamic> json) =>
+    ApplicantFile(
       id: json['id'] as int?,
       file: json['file'] as String?,
       name: json['name'] as String?,
       filename: json['filename'] as String?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
     );
 
-Map<String, dynamic> _$ApplicantFileToJson(ApplicantFile instance) => <String, dynamic>{
+Map<String, dynamic> _$ApplicantFileToJson(ApplicantFile instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'file': instance.file,
       'name': instance.name,
@@ -346,8 +395,12 @@ Curator _$CuratorFromJson(Map<String, dynamic> json) => Curator(
       address: json['address'] as String?,
       createdBy: json['created_by'] as String?,
       updatedBy: json['updated_by'] as String?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$CuratorToJson(Curator instance) => <String, dynamic>{
@@ -400,7 +453,8 @@ Map<String, dynamic> _$EmailToJson(Email instance) => <String, dynamic>{
 Feedback _$FeedbackFromJson(Map<String, dynamic> json) => Feedback(
       shelterId: json['shelter_id'] as int?,
       shelterName: json['shelter_name'] as String?,
-      date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      date:
+          json['date'] == null ? null : DateTime.parse(json['date'] as String),
       action: json['action'] as String?,
       email: json['email'] as String?,
       message: json['message'] as String?,
@@ -415,13 +469,15 @@ Map<String, dynamic> _$FeedbackToJson(Feedback instance) => <String, dynamic>{
       'message': instance.message,
     };
 
-ImageThumbnails _$ImageThumbnailsFromJson(Map<String, dynamic> json) => ImageThumbnails(
+ImageThumbnails _$ImageThumbnailsFromJson(Map<String, dynamic> json) =>
+    ImageThumbnails(
       large: json['large'] as String?,
       medium: json['medium'] as String?,
       small: json['small'] as String?,
     );
 
-Map<String, dynamic> _$ImageThumbnailsToJson(ImageThumbnails instance) => <String, dynamic>{
+Map<String, dynamic> _$ImageThumbnailsToJson(ImageThumbnails instance) =>
+    <String, dynamic>{
       'large': instance.large,
       'medium': instance.medium,
       'small': instance.small,
@@ -434,7 +490,8 @@ PaginatedAnimalHistorySnapshotList _$PaginatedAnimalHistorySnapshotListFromJson(
       next: json['next'] as String?,
       previous: json['previous'] as String?,
       results: (json['results'] as List<dynamic>?)
-              ?.map((e) => AnimalHistorySnapshot.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  AnimalHistorySnapshot.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -448,7 +505,8 @@ Map<String, dynamic> _$PaginatedAnimalHistorySnapshotListToJson(
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedAnimalNoteList _$PaginatedAnimalNoteListFromJson(Map<String, dynamic> json) =>
+PaginatedAnimalNoteList _$PaginatedAnimalNoteListFromJson(
+        Map<String, dynamic> json) =>
     PaginatedAnimalNoteList(
       count: json['count'] as int?,
       next: json['next'] as String?,
@@ -459,7 +517,8 @@ PaginatedAnimalNoteList _$PaginatedAnimalNoteListFromJson(Map<String, dynamic> j
           [],
     );
 
-Map<String, dynamic> _$PaginatedAnimalNoteListToJson(PaginatedAnimalNoteList instance) =>
+Map<String, dynamic> _$PaginatedAnimalNoteListToJson(
+        PaginatedAnimalNoteList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -474,7 +533,8 @@ PaginatedAnimalPrescriptionList _$PaginatedAnimalPrescriptionListFromJson(
       next: json['next'] as String?,
       previous: json['previous'] as String?,
       results: (json['results'] as List<dynamic>?)
-              ?.map((e) => AnimalPrescription.fromJson(e as Map<String, dynamic>))
+              ?.map(
+                  (e) => AnimalPrescription.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -488,7 +548,8 @@ Map<String, dynamic> _$PaginatedAnimalPrescriptionListToJson(
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedAnimalReadList _$PaginatedAnimalReadListFromJson(Map<String, dynamic> json) =>
+PaginatedAnimalReadList _$PaginatedAnimalReadListFromJson(
+        Map<String, dynamic> json) =>
     PaginatedAnimalReadList(
       count: json['count'] as int?,
       next: json['next'] as String?,
@@ -499,7 +560,8 @@ PaginatedAnimalReadList _$PaginatedAnimalReadListFromJson(Map<String, dynamic> j
           [],
     );
 
-Map<String, dynamic> _$PaginatedAnimalReadListToJson(PaginatedAnimalReadList instance) =>
+Map<String, dynamic> _$PaginatedAnimalReadListToJson(
+        PaginatedAnimalReadList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -507,7 +569,8 @@ Map<String, dynamic> _$PaginatedAnimalReadListToJson(PaginatedAnimalReadList ins
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedApplicantList _$PaginatedApplicantListFromJson(Map<String, dynamic> json) =>
+PaginatedApplicantList _$PaginatedApplicantListFromJson(
+        Map<String, dynamic> json) =>
     PaginatedApplicantList(
       count: json['count'] as int?,
       next: json['next'] as String?,
@@ -518,7 +581,8 @@ PaginatedApplicantList _$PaginatedApplicantListFromJson(Map<String, dynamic> jso
           [],
     );
 
-Map<String, dynamic> _$PaginatedApplicantListToJson(PaginatedApplicantList instance) =>
+Map<String, dynamic> _$PaginatedApplicantListToJson(
+        PaginatedApplicantList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -526,7 +590,8 @@ Map<String, dynamic> _$PaginatedApplicantListToJson(PaginatedApplicantList insta
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedCuratorList _$PaginatedCuratorListFromJson(Map<String, dynamic> json) =>
+PaginatedCuratorList _$PaginatedCuratorListFromJson(
+        Map<String, dynamic> json) =>
     PaginatedCuratorList(
       count: json['count'] as int?,
       next: json['next'] as String?,
@@ -537,7 +602,8 @@ PaginatedCuratorList _$PaginatedCuratorListFromJson(Map<String, dynamic> json) =
           [],
     );
 
-Map<String, dynamic> _$PaginatedCuratorListToJson(PaginatedCuratorList instance) =>
+Map<String, dynamic> _$PaginatedCuratorListToJson(
+        PaginatedCuratorList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -545,17 +611,19 @@ Map<String, dynamic> _$PaginatedCuratorListToJson(PaginatedCuratorList instance)
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedPrescriptionExecutionTodayList _$PaginatedPrescriptionExecutionTodayListFromJson(
-        Map<String, dynamic> json) =>
-    PaginatedPrescriptionExecutionTodayList(
-      count: json['count'] as int?,
-      next: json['next'] as String?,
-      previous: json['previous'] as String?,
-      results: (json['results'] as List<dynamic>?)
-              ?.map((e) => PrescriptionExecutionToday.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
+PaginatedPrescriptionExecutionTodayList
+    _$PaginatedPrescriptionExecutionTodayListFromJson(
+            Map<String, dynamic> json) =>
+        PaginatedPrescriptionExecutionTodayList(
+          count: json['count'] as int?,
+          next: json['next'] as String?,
+          previous: json['previous'] as String?,
+          results: (json['results'] as List<dynamic>?)
+                  ?.map((e) => PrescriptionExecutionToday.fromJson(
+                      e as Map<String, dynamic>))
+                  .toList() ??
+              [],
+        );
 
 Map<String, dynamic> _$PaginatedPrescriptionExecutionTodayListToJson(
         PaginatedPrescriptionExecutionTodayList instance) =>
@@ -566,7 +634,8 @@ Map<String, dynamic> _$PaginatedPrescriptionExecutionTodayListToJson(
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedPrescriptionList _$PaginatedPrescriptionListFromJson(Map<String, dynamic> json) =>
+PaginatedPrescriptionList _$PaginatedPrescriptionListFromJson(
+        Map<String, dynamic> json) =>
     PaginatedPrescriptionList(
       count: json['count'] as int?,
       next: json['next'] as String?,
@@ -577,7 +646,8 @@ PaginatedPrescriptionList _$PaginatedPrescriptionListFromJson(Map<String, dynami
           [],
     );
 
-Map<String, dynamic> _$PaginatedPrescriptionListToJson(PaginatedPrescriptionList instance) =>
+Map<String, dynamic> _$PaginatedPrescriptionListToJson(
+        PaginatedPrescriptionList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -585,7 +655,8 @@ Map<String, dynamic> _$PaginatedPrescriptionListToJson(PaginatedPrescriptionList
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedShelterDrugList _$PaginatedShelterDrugListFromJson(Map<String, dynamic> json) =>
+PaginatedShelterDrugList _$PaginatedShelterDrugListFromJson(
+        Map<String, dynamic> json) =>
     PaginatedShelterDrugList(
       count: json['count'] as int?,
       next: json['next'] as String?,
@@ -596,7 +667,8 @@ PaginatedShelterDrugList _$PaginatedShelterDrugListFromJson(Map<String, dynamic>
           [],
     );
 
-Map<String, dynamic> _$PaginatedShelterDrugListToJson(PaginatedShelterDrugList instance) =>
+Map<String, dynamic> _$PaginatedShelterDrugListToJson(
+        PaginatedShelterDrugList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -604,17 +676,18 @@ Map<String, dynamic> _$PaginatedShelterDrugListToJson(PaginatedShelterDrugList i
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedShelterShortSerializersList _$PaginatedShelterShortSerializersListFromJson(
-        Map<String, dynamic> json) =>
-    PaginatedShelterShortSerializersList(
-      count: json['count'] as int?,
-      next: json['next'] as String?,
-      previous: json['previous'] as String?,
-      results: (json['results'] as List<dynamic>?)
-              ?.map((e) => ShelterShortSerializers.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
+PaginatedShelterShortSerializersList
+    _$PaginatedShelterShortSerializersListFromJson(Map<String, dynamic> json) =>
+        PaginatedShelterShortSerializersList(
+          count: json['count'] as int?,
+          next: json['next'] as String?,
+          previous: json['previous'] as String?,
+          results: (json['results'] as List<dynamic>?)
+                  ?.map((e) => ShelterShortSerializers.fromJson(
+                      e as Map<String, dynamic>))
+                  .toList() ??
+              [],
+        );
 
 Map<String, dynamic> _$PaginatedShelterShortSerializersListToJson(
         PaginatedShelterShortSerializersList instance) =>
@@ -625,7 +698,8 @@ Map<String, dynamic> _$PaginatedShelterShortSerializersListToJson(
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedSpeciesList _$PaginatedSpeciesListFromJson(Map<String, dynamic> json) =>
+PaginatedSpeciesList _$PaginatedSpeciesListFromJson(
+        Map<String, dynamic> json) =>
     PaginatedSpeciesList(
       count: json['count'] as int?,
       next: json['next'] as String?,
@@ -636,7 +710,8 @@ PaginatedSpeciesList _$PaginatedSpeciesListFromJson(Map<String, dynamic> json) =
           [],
     );
 
-Map<String, dynamic> _$PaginatedSpeciesListToJson(PaginatedSpeciesList instance) =>
+Map<String, dynamic> _$PaginatedSpeciesListToJson(
+        PaginatedSpeciesList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -644,17 +719,19 @@ Map<String, dynamic> _$PaginatedSpeciesListToJson(PaginatedSpeciesList instance)
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PaginatedUserSheltersAdminSerializersList _$PaginatedUserSheltersAdminSerializersListFromJson(
-        Map<String, dynamic> json) =>
-    PaginatedUserSheltersAdminSerializersList(
-      count: json['count'] as int?,
-      next: json['next'] as String?,
-      previous: json['previous'] as String?,
-      results: (json['results'] as List<dynamic>?)
-              ?.map((e) => UserSheltersAdminSerializers.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
+PaginatedUserSheltersAdminSerializersList
+    _$PaginatedUserSheltersAdminSerializersListFromJson(
+            Map<String, dynamic> json) =>
+        PaginatedUserSheltersAdminSerializersList(
+          count: json['count'] as int?,
+          next: json['next'] as String?,
+          previous: json['previous'] as String?,
+          results: (json['results'] as List<dynamic>?)
+                  ?.map((e) => UserSheltersAdminSerializers.fromJson(
+                      e as Map<String, dynamic>))
+                  .toList() ??
+              [],
+        );
 
 Map<String, dynamic> _$PaginatedUserSheltersAdminSerializersListToJson(
         PaginatedUserSheltersAdminSerializersList instance) =>
@@ -672,7 +749,8 @@ PaginatedUserShortSerializersList _$PaginatedUserShortSerializersListFromJson(
       next: json['next'] as String?,
       previous: json['previous'] as String?,
       results: (json['results'] as List<dynamic>?)
-              ?.map((e) => UserShortSerializers.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  UserShortSerializers.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -686,7 +764,8 @@ Map<String, dynamic> _$PaginatedUserShortSerializersListToJson(
       'results': instance.results?.map((e) => e.toJson()).toList(),
     };
 
-PatchedAnimalNote _$PatchedAnimalNoteFromJson(Map<String, dynamic> json) => PatchedAnimalNote(
+PatchedAnimalNote _$PatchedAnimalNoteFromJson(Map<String, dynamic> json) =>
+    PatchedAnimalNote(
       id: json['id'] as int?,
       url: json['url'] as String?,
       animal: json['animal'] as int?,
@@ -695,14 +774,19 @@ PatchedAnimalNote _$PatchedAnimalNoteFromJson(Map<String, dynamic> json) => Patc
               ?.map((e) => AnimalNoteFile.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
       createdBy: json['created_by'] as String?,
       updatedBy: json['updated_by'] as String?,
       isUserCanEditOrDelete: json['is_user_can_edit_or_delete'] as bool?,
     );
 
-Map<String, dynamic> _$PatchedAnimalNoteToJson(PatchedAnimalNote instance) => <String, dynamic>{
+Map<String, dynamic> _$PatchedAnimalNoteToJson(PatchedAnimalNote instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
       'animal': instance.animal,
@@ -715,19 +799,28 @@ Map<String, dynamic> _$PatchedAnimalNoteToJson(PatchedAnimalNote instance) => <S
       'is_user_can_edit_or_delete': instance.isUserCanEditOrDelete,
     };
 
-PatchedAnimalWrite _$PatchedAnimalWriteFromJson(Map<String, dynamic> json) => PatchedAnimalWrite(
+PatchedAnimalWrite _$PatchedAnimalWriteFromJson(Map<String, dynamic> json) =>
+    PatchedAnimalWrite(
       name: json['name'] as String?,
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => AnimalImageWrite.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      validImages: (json['valid_images'] as List<dynamic>?)?.map((e) => e as int).toList() ?? [],
+      validImages: (json['valid_images'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          [],
       specId: json['spec_id'] as int?,
       status: status131EnumFromJson(json['status'] as String?),
-      dateJoined:
-          json['date_joined'] == null ? null : DateTime.parse(json['date_joined'] as String),
-      birthDate: json['birth_date'] == null ? null : DateTime.parse(json['birth_date'] as String),
-      deathDate: json['death_date'] == null ? null : DateTime.parse(json['death_date'] as String),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
+      birthDate: json['birth_date'] == null
+          ? null
+          : DateTime.parse(json['birth_date'] as String),
+      deathDate: json['death_date'] == null
+          ? null
+          : DateTime.parse(json['death_date'] as String),
       deathReason: json['death_reason'] as String?,
       placeOfCatch: json['place_of_catch'] as String?,
       placeOfRelease: json['place_of_release'] as String?,
@@ -741,12 +834,14 @@ PatchedAnimalWrite _$PatchedAnimalWriteFromJson(Map<String, dynamic> json) => Pa
       curatorId: json['curator_id'] as int?,
       applicantId: json['applicant_id'] as int?,
       animalAttributes: (json['animal_attributes'] as List<dynamic>?)
-              ?.map((e) => AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  AnimalAttributeValue.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
 
-Map<String, dynamic> _$PatchedAnimalWriteToJson(PatchedAnimalWrite instance) => <String, dynamic>{
+Map<String, dynamic> _$PatchedAnimalWriteToJson(PatchedAnimalWrite instance) =>
+    <String, dynamic>{
       'name': instance.name,
       'images': instance.images?.map((e) => e.toJson()).toList(),
       'valid_images': instance.validImages,
@@ -765,10 +860,12 @@ Map<String, dynamic> _$PatchedAnimalWriteToJson(PatchedAnimalWrite instance) => 
       'shelter': instance.shelter,
       'curator_id': instance.curatorId,
       'applicant_id': instance.applicantId,
-      'animal_attributes': instance.animalAttributes?.map((e) => e.toJson()).toList(),
+      'animal_attributes':
+          instance.animalAttributes?.map((e) => e.toJson()).toList(),
     };
 
-PatchedApplicant _$PatchedApplicantFromJson(Map<String, dynamic> json) => PatchedApplicant(
+PatchedApplicant _$PatchedApplicantFromJson(Map<String, dynamic> json) =>
+    PatchedApplicant(
       id: json['id'] as int?,
       url: json['url'] as String?,
       shelter: json['shelter'] as int?,
@@ -779,8 +876,12 @@ PatchedApplicant _$PatchedApplicantFromJson(Map<String, dynamic> json) => Patche
       contactDetails: json['contact_details'] as String?,
       createdBy: json['created_by'] as String?,
       updatedBy: json['updated_by'] as String?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
       animalId: json['animal_id'] as int?,
       applicantFiles: (json['applicant_files'] as List<dynamic>?)
               ?.map((e) => ApplicantFile.fromJson(e as Map<String, dynamic>))
@@ -788,7 +889,8 @@ PatchedApplicant _$PatchedApplicantFromJson(Map<String, dynamic> json) => Patche
           [],
     );
 
-Map<String, dynamic> _$PatchedApplicantToJson(PatchedApplicant instance) => <String, dynamic>{
+Map<String, dynamic> _$PatchedApplicantToJson(PatchedApplicant instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
       'shelter': instance.shelter,
@@ -802,10 +904,12 @@ Map<String, dynamic> _$PatchedApplicantToJson(PatchedApplicant instance) => <Str
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
       'animal_id': instance.animalId,
-      'applicant_files': instance.applicantFiles?.map((e) => e.toJson()).toList(),
+      'applicant_files':
+          instance.applicantFiles?.map((e) => e.toJson()).toList(),
     };
 
-PatchedCurator _$PatchedCuratorFromJson(Map<String, dynamic> json) => PatchedCurator(
+PatchedCurator _$PatchedCuratorFromJson(Map<String, dynamic> json) =>
+    PatchedCurator(
       id: json['id'] as int?,
       url: json['url'] as String?,
       shelter: json['shelter'] as String?,
@@ -816,11 +920,16 @@ PatchedCurator _$PatchedCuratorFromJson(Map<String, dynamic> json) => PatchedCur
       address: json['address'] as String?,
       createdBy: json['created_by'] as String?,
       updatedBy: json['updated_by'] as String?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$PatchedCuratorToJson(PatchedCurator instance) => <String, dynamic>{
+Map<String, dynamic> _$PatchedCuratorToJson(PatchedCurator instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
       'shelter': instance.shelter,
@@ -835,7 +944,8 @@ Map<String, dynamic> _$PatchedCuratorToJson(PatchedCurator instance) => <String,
       'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
-PatchedPrescription _$PatchedPrescriptionFromJson(Map<String, dynamic> json) => PatchedPrescription(
+PatchedPrescription _$PatchedPrescriptionFromJson(Map<String, dynamic> json) =>
+    PatchedPrescription(
       id: json['id'] as int?,
       url: json['url'] as String?,
       animal: json['animal'] as int?,
@@ -849,7 +959,8 @@ PatchedPrescription _$PatchedPrescriptionFromJson(Map<String, dynamic> json) => 
               .toList() ??
           [],
       executions: (json['executions'] as List<dynamic>?)
-              ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  PrescriptionExecution.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       files: (json['files'] as List<dynamic>?)
@@ -858,7 +969,9 @@ PatchedPrescription _$PatchedPrescriptionFromJson(Map<String, dynamic> json) => 
           [],
     );
 
-Map<String, dynamic> _$PatchedPrescriptionToJson(PatchedPrescription instance) => <String, dynamic>{
+Map<String, dynamic> _$PatchedPrescriptionToJson(
+        PatchedPrescription instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
       'animal': instance.animal,
@@ -872,14 +985,14 @@ Map<String, dynamic> _$PatchedPrescriptionToJson(PatchedPrescription instance) =
       'files': instance.files?.map((e) => e.toJson()).toList(),
     };
 
-PatchedUserChangePasswordSerializers _$PatchedUserChangePasswordSerializersFromJson(
-        Map<String, dynamic> json) =>
-    PatchedUserChangePasswordSerializers(
-      id: json['id'] as int?,
-      password: json['password'] as String?,
-      rePassword: json['re_password'] as String?,
-      oldPassword: json['old_password'] as String?,
-    );
+PatchedUserChangePasswordSerializers
+    _$PatchedUserChangePasswordSerializersFromJson(Map<String, dynamic> json) =>
+        PatchedUserChangePasswordSerializers(
+          id: json['id'] as int?,
+          password: json['password'] as String?,
+          rePassword: json['re_password'] as String?,
+          oldPassword: json['old_password'] as String?,
+        );
 
 Map<String, dynamic> _$PatchedUserChangePasswordSerializersToJson(
         PatchedUserChangePasswordSerializers instance) =>
@@ -890,7 +1003,8 @@ Map<String, dynamic> _$PatchedUserChangePasswordSerializersToJson(
       'old_password': instance.oldPassword,
     };
 
-PatchedUserSerializers _$PatchedUserSerializersFromJson(Map<String, dynamic> json) =>
+PatchedUserSerializers _$PatchedUserSerializersFromJson(
+        Map<String, dynamic> json) =>
     PatchedUserSerializers(
       id: json['id'] as int?,
       username: json['username'] as String?,
@@ -901,12 +1015,14 @@ PatchedUserSerializers _$PatchedUserSerializersFromJson(Map<String, dynamic> jso
       email: json['email'] as String?,
       phoneNumber: json['phone_number'] as String?,
       address: json['address'] as String?,
-      dateJoined:
-          json['date_joined'] == null ? null : DateTime.parse(json['date_joined'] as String),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
       isVerified: json['is_verified'] as bool?,
     );
 
-Map<String, dynamic> _$PatchedUserSerializersToJson(PatchedUserSerializers instance) =>
+Map<String, dynamic> _$PatchedUserSerializersToJson(
+        PatchedUserSerializers instance) =>
     <String, dynamic>{
       'id': instance.id,
       'username': instance.username,
@@ -921,15 +1037,15 @@ Map<String, dynamic> _$PatchedUserSerializersToJson(PatchedUserSerializers insta
       'is_verified': instance.isVerified,
     };
 
-PatchedUserSheltersAdminSerializers _$PatchedUserSheltersAdminSerializersFromJson(
-        Map<String, dynamic> json) =>
-    PatchedUserSheltersAdminSerializers(
-      id: json['id'] as int?,
-      user: json['user'],
-      userId: json['user_id'] as int?,
-      role: roleEnumFromJson(json['role'] as String?),
-      isVerifiedByAdmin: json['is_verified_by_admin'] as bool?,
-    );
+PatchedUserSheltersAdminSerializers
+    _$PatchedUserSheltersAdminSerializersFromJson(Map<String, dynamic> json) =>
+        PatchedUserSheltersAdminSerializers(
+          id: json['id'] as int?,
+          user: json['user'],
+          userId: json['user_id'] as int?,
+          role: roleEnumFromJson(json['role'] as String?),
+          isVerifiedByAdmin: json['is_verified_by_admin'] as bool?,
+        );
 
 Map<String, dynamic> _$PatchedUserSheltersAdminSerializersToJson(
         PatchedUserSheltersAdminSerializers instance) =>
@@ -955,7 +1071,8 @@ Prescription _$PrescriptionFromJson(Map<String, dynamic> json) => Prescription(
               .toList() ??
           [],
       executions: (json['executions'] as List<dynamic>?)
-              ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  PrescriptionExecution.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       files: (json['files'] as List<dynamic>?)
@@ -964,7 +1081,8 @@ Prescription _$PrescriptionFromJson(Map<String, dynamic> json) => Prescription(
           [],
     );
 
-Map<String, dynamic> _$PrescriptionToJson(Prescription instance) => <String, dynamic>{
+Map<String, dynamic> _$PrescriptionToJson(Prescription instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'url': instance.url,
       'animal': instance.animal,
@@ -978,21 +1096,24 @@ Map<String, dynamic> _$PrescriptionToJson(Prescription instance) => <String, dyn
       'files': instance.files?.map((e) => e.toJson()).toList(),
     };
 
-PrescriptionAnimal _$PrescriptionAnimalFromJson(Map<String, dynamic> json) => PrescriptionAnimal(
+PrescriptionAnimal _$PrescriptionAnimalFromJson(Map<String, dynamic> json) =>
+    PrescriptionAnimal(
       id: json['id'] as int?,
       name: json['name'] as String?,
       specName: json['spec_name'] as String?,
       specParentName: json['spec_parent_name'] as String?,
     );
 
-Map<String, dynamic> _$PrescriptionAnimalToJson(PrescriptionAnimal instance) => <String, dynamic>{
+Map<String, dynamic> _$PrescriptionAnimalToJson(PrescriptionAnimal instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'spec_name': instance.specName,
       'spec_parent_name': instance.specParentName,
     };
 
-PrescriptionDrug _$PrescriptionDrugFromJson(Map<String, dynamic> json) => PrescriptionDrug(
+PrescriptionDrug _$PrescriptionDrugFromJson(Map<String, dynamic> json) =>
+    PrescriptionDrug(
       drugId: json['drug_id'] as int?,
       drugName: json['drug_name'] as String?,
       usageInstruction: json['usage_instruction'] as String?,
@@ -1000,7 +1121,8 @@ PrescriptionDrug _$PrescriptionDrugFromJson(Map<String, dynamic> json) => Prescr
       drugDosage: (json['drug_dosage'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$PrescriptionDrugToJson(PrescriptionDrug instance) => <String, dynamic>{
+Map<String, dynamic> _$PrescriptionDrugToJson(PrescriptionDrug instance) =>
+    <String, dynamic>{
       'drug_id': instance.drugId,
       'drug_name': instance.drugName,
       'usage_instruction': instance.usageInstruction,
@@ -1008,21 +1130,26 @@ Map<String, dynamic> _$PrescriptionDrugToJson(PrescriptionDrug instance) => <Str
       'drug_dosage': instance.drugDosage,
     };
 
-PrescriptionExecution _$PrescriptionExecutionFromJson(Map<String, dynamic> json) =>
+PrescriptionExecution _$PrescriptionExecutionFromJson(
+        Map<String, dynamic> json) =>
     PrescriptionExecution(
       id: json['id'] as int?,
-      executeAt: json['execute_at'] == null ? null : DateTime.parse(json['execute_at'] as String),
+      executeAt: json['execute_at'] == null
+          ? null
+          : DateTime.parse(json['execute_at'] as String),
       status: json['status'],
     );
 
-Map<String, dynamic> _$PrescriptionExecutionToJson(PrescriptionExecution instance) =>
+Map<String, dynamic> _$PrescriptionExecutionToJson(
+        PrescriptionExecution instance) =>
     <String, dynamic>{
       'id': instance.id,
       'execute_at': instance.executeAt?.toIso8601String(),
       'status': instance.status,
     };
 
-PrescriptionExecutionToday _$PrescriptionExecutionTodayFromJson(Map<String, dynamic> json) =>
+PrescriptionExecutionToday _$PrescriptionExecutionTodayFromJson(
+        Map<String, dynamic> json) =>
     PrescriptionExecutionToday(
       prescription: json['prescription'] as int?,
       animal: json['animal'] == null
@@ -1034,10 +1161,13 @@ PrescriptionExecutionToday _$PrescriptionExecutionTodayFromJson(Map<String, dyna
               .toList() ??
           [],
       description: json['description'] as String?,
-      executeAt: json['execute_at'] == null ? null : DateTime.parse(json['execute_at'] as String),
+      executeAt: json['execute_at'] == null
+          ? null
+          : DateTime.parse(json['execute_at'] as String),
     );
 
-Map<String, dynamic> _$PrescriptionExecutionTodayToJson(PrescriptionExecutionToday instance) =>
+Map<String, dynamic> _$PrescriptionExecutionTodayToJson(
+        PrescriptionExecutionToday instance) =>
     <String, dynamic>{
       'prescription': instance.prescription,
       'animal': instance.animal?.toJson(),
@@ -1047,15 +1177,19 @@ Map<String, dynamic> _$PrescriptionExecutionTodayToJson(PrescriptionExecutionTod
       'execute_at': instance.executeAt?.toIso8601String(),
     };
 
-PrescriptionFile _$PrescriptionFileFromJson(Map<String, dynamic> json) => PrescriptionFile(
+PrescriptionFile _$PrescriptionFileFromJson(Map<String, dynamic> json) =>
+    PrescriptionFile(
       id: json['id'] as int?,
       file: json['file'] as String?,
       name: json['name'] as String?,
       filename: json['filename'] as String?,
-      createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
     );
 
-Map<String, dynamic> _$PrescriptionFileToJson(PrescriptionFile instance) => <String, dynamic>{
+Map<String, dynamic> _$PrescriptionFileToJson(PrescriptionFile instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'file': instance.file,
       'name': instance.name,
@@ -1064,16 +1198,20 @@ Map<String, dynamic> _$PrescriptionFileToJson(PrescriptionFile instance) => <Str
     };
 
 ShelterDrug _$ShelterDrugFromJson(Map<String, dynamic> json) => ShelterDrug(
-      drug: json['drug'] == null ? null : Drug.fromJson(json['drug'] as Map<String, dynamic>),
+      drug: json['drug'] == null
+          ? null
+          : Drug.fromJson(json['drug'] as Map<String, dynamic>),
       drugResiduesCount: json['drug_residues_count'] as int?,
     );
 
-Map<String, dynamic> _$ShelterDrugToJson(ShelterDrug instance) => <String, dynamic>{
+Map<String, dynamic> _$ShelterDrugToJson(ShelterDrug instance) =>
+    <String, dynamic>{
       'drug': instance.drug?.toJson(),
       'drug_residues_count': instance.drugResiduesCount,
     };
 
-ShelterSerializers _$ShelterSerializersFromJson(Map<String, dynamic> json) => ShelterSerializers(
+ShelterSerializers _$ShelterSerializersFromJson(Map<String, dynamic> json) =>
+    ShelterSerializers(
       name: json['name'] as String?,
       country: json['country'] as String?,
       city: json['city'] as String?,
@@ -1084,7 +1222,8 @@ ShelterSerializers _$ShelterSerializersFromJson(Map<String, dynamic> json) => Sh
       apartment: json['apartment'] as String?,
     );
 
-Map<String, dynamic> _$ShelterSerializersToJson(ShelterSerializers instance) => <String, dynamic>{
+Map<String, dynamic> _$ShelterSerializersToJson(ShelterSerializers instance) =>
+    <String, dynamic>{
       'name': instance.name,
       'country': instance.country,
       'city': instance.city,
@@ -1095,13 +1234,15 @@ Map<String, dynamic> _$ShelterSerializersToJson(ShelterSerializers instance) => 
       'apartment': instance.apartment,
     };
 
-ShelterShortSerializers _$ShelterShortSerializersFromJson(Map<String, dynamic> json) =>
+ShelterShortSerializers _$ShelterShortSerializersFromJson(
+        Map<String, dynamic> json) =>
     ShelterShortSerializers(
       id: json['id'] as int?,
       name: json['name'] as String?,
     );
 
-Map<String, dynamic> _$ShelterShortSerializersToJson(ShelterShortSerializers instance) =>
+Map<String, dynamic> _$ShelterShortSerializersToJson(
+        ShelterShortSerializers instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -1133,14 +1274,16 @@ Map<String, dynamic> _$StatusToJson(Status instance) => <String, dynamic>{
       'status': instance.status,
     };
 
-TokenObtainPair _$TokenObtainPairFromJson(Map<String, dynamic> json) => TokenObtainPair(
+TokenObtainPair _$TokenObtainPairFromJson(Map<String, dynamic> json) =>
+    TokenObtainPair(
       username: json['username'] as String?,
       password: json['password'] as String?,
       access: json['access'] as String?,
       refresh: json['refresh'] as String?,
     );
 
-Map<String, dynamic> _$TokenObtainPairToJson(TokenObtainPair instance) => <String, dynamic>{
+Map<String, dynamic> _$TokenObtainPairToJson(TokenObtainPair instance) =>
+    <String, dynamic>{
       'username': instance.username,
       'password': instance.password,
       'access': instance.access,
@@ -1152,12 +1295,14 @@ TokenRefresh _$TokenRefreshFromJson(Map<String, dynamic> json) => TokenRefresh(
       refresh: json['refresh'] as String?,
     );
 
-Map<String, dynamic> _$TokenRefreshToJson(TokenRefresh instance) => <String, dynamic>{
+Map<String, dynamic> _$TokenRefreshToJson(TokenRefresh instance) =>
+    <String, dynamic>{
       'access': instance.access,
       'refresh': instance.refresh,
     };
 
-UserChangePasswordSerializers _$UserChangePasswordSerializersFromJson(Map<String, dynamic> json) =>
+UserChangePasswordSerializers _$UserChangePasswordSerializersFromJson(
+        Map<String, dynamic> json) =>
     UserChangePasswordSerializers(
       id: json['id'] as int?,
       password: json['password'] as String?,
@@ -1174,7 +1319,8 @@ Map<String, dynamic> _$UserChangePasswordSerializersToJson(
       'old_password': instance.oldPassword,
     };
 
-UserCurrentShelterSerializers _$UserCurrentShelterSerializersFromJson(Map<String, dynamic> json) =>
+UserCurrentShelterSerializers _$UserCurrentShelterSerializersFromJson(
+        Map<String, dynamic> json) =>
     UserCurrentShelterSerializers(
       currentShelter: json['current_shelter'] as int?,
       currentShelterUserRole: json['current_shelter_user_role'] as String?,
@@ -1191,21 +1337,24 @@ Map<String, dynamic> _$UserCurrentShelterSerializersToJson(
       'is_user_can_delete': instance.isUserCanDelete,
     };
 
-UserResetPasswordComplete _$UserResetPasswordCompleteFromJson(Map<String, dynamic> json) =>
+UserResetPasswordComplete _$UserResetPasswordCompleteFromJson(
+        Map<String, dynamic> json) =>
     UserResetPasswordComplete(
       uidb64: json['uidb64'] as String?,
       token: json['token'] as String?,
       newPassword: json['new_password'] as String?,
     );
 
-Map<String, dynamic> _$UserResetPasswordCompleteToJson(UserResetPasswordComplete instance) =>
+Map<String, dynamic> _$UserResetPasswordCompleteToJson(
+        UserResetPasswordComplete instance) =>
     <String, dynamic>{
       'uidb64': instance.uidb64,
       'token': instance.token,
       'new_password': instance.newPassword,
     };
 
-UserSerializers _$UserSerializersFromJson(Map<String, dynamic> json) => UserSerializers(
+UserSerializers _$UserSerializersFromJson(Map<String, dynamic> json) =>
+    UserSerializers(
       id: json['id'] as int?,
       username: json['username'] as String?,
       firstName: json['first_name'] as String?,
@@ -1215,12 +1364,14 @@ UserSerializers _$UserSerializersFromJson(Map<String, dynamic> json) => UserSeri
       email: json['email'] as String?,
       phoneNumber: json['phone_number'] as String?,
       address: json['address'] as String?,
-      dateJoined:
-          json['date_joined'] == null ? null : DateTime.parse(json['date_joined'] as String),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
       isVerified: json['is_verified'] as bool?,
     );
 
-Map<String, dynamic> _$UserSerializersToJson(UserSerializers instance) => <String, dynamic>{
+Map<String, dynamic> _$UserSerializersToJson(UserSerializers instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'username': instance.username,
       'first_name': instance.firstName,
@@ -1234,7 +1385,8 @@ Map<String, dynamic> _$UserSerializersToJson(UserSerializers instance) => <Strin
       'is_verified': instance.isVerified,
     };
 
-UserShelterAdminSerializers _$UserShelterAdminSerializersFromJson(Map<String, dynamic> json) =>
+UserShelterAdminSerializers _$UserShelterAdminSerializersFromJson(
+        Map<String, dynamic> json) =>
     UserShelterAdminSerializers(
       id: json['id'] as int?,
       firstName: json['first_name'] as String?,
@@ -1248,7 +1400,8 @@ UserShelterAdminSerializers _$UserShelterAdminSerializersFromJson(Map<String, dy
       shelter: json['shelter'],
     );
 
-Map<String, dynamic> _$UserShelterAdminSerializersToJson(UserShelterAdminSerializers instance) =>
+Map<String, dynamic> _$UserShelterAdminSerializersToJson(
+        UserShelterAdminSerializers instance) =>
     <String, dynamic>{
       'id': instance.id,
       'first_name': instance.firstName,
@@ -1262,7 +1415,8 @@ Map<String, dynamic> _$UserShelterAdminSerializersToJson(UserShelterAdminSeriali
       'shelter': instance.shelter,
     };
 
-UserShelterWorkerSerializers _$UserShelterWorkerSerializersFromJson(Map<String, dynamic> json) =>
+UserShelterWorkerSerializers _$UserShelterWorkerSerializersFromJson(
+        Map<String, dynamic> json) =>
     UserShelterWorkerSerializers(
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
@@ -1276,7 +1430,8 @@ UserShelterWorkerSerializers _$UserShelterWorkerSerializersFromJson(Map<String, 
       role: json['role'],
     );
 
-Map<String, dynamic> _$UserShelterWorkerSerializersToJson(UserShelterWorkerSerializers instance) =>
+Map<String, dynamic> _$UserShelterWorkerSerializersToJson(
+        UserShelterWorkerSerializers instance) =>
     <String, dynamic>{
       'first_name': instance.firstName,
       'last_name': instance.lastName,
@@ -1290,7 +1445,8 @@ Map<String, dynamic> _$UserShelterWorkerSerializersToJson(UserShelterWorkerSeria
       'role': instance.role,
     };
 
-UserSheltersAdminSerializers _$UserSheltersAdminSerializersFromJson(Map<String, dynamic> json) =>
+UserSheltersAdminSerializers _$UserSheltersAdminSerializersFromJson(
+        Map<String, dynamic> json) =>
     UserSheltersAdminSerializers(
       id: json['id'] as int?,
       user: json['user'],
@@ -1299,7 +1455,8 @@ UserSheltersAdminSerializers _$UserSheltersAdminSerializersFromJson(Map<String, 
       isVerifiedByAdmin: json['is_verified_by_admin'] as bool?,
     );
 
-Map<String, dynamic> _$UserSheltersAdminSerializersToJson(UserSheltersAdminSerializers instance) =>
+Map<String, dynamic> _$UserSheltersAdminSerializersToJson(
+        UserSheltersAdminSerializers instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user': instance.user,
@@ -1308,7 +1465,8 @@ Map<String, dynamic> _$UserSheltersAdminSerializersToJson(UserSheltersAdminSeria
       'is_verified_by_admin': instance.isVerifiedByAdmin,
     };
 
-UserSheltersWorkerSerializers _$UserSheltersWorkerSerializersFromJson(Map<String, dynamic> json) =>
+UserSheltersWorkerSerializers _$UserSheltersWorkerSerializersFromJson(
+        Map<String, dynamic> json) =>
     UserSheltersWorkerSerializers(
       shelter: json['shelter'] as int?,
       role: roleEnumFromJson(json['role'] as String?),
@@ -1321,7 +1479,8 @@ Map<String, dynamic> _$UserSheltersWorkerSerializersToJson(
       'role': roleEnumToJson(instance.role),
     };
 
-UserShortSerializers _$UserShortSerializersFromJson(Map<String, dynamic> json) =>
+UserShortSerializers _$UserShortSerializersFromJson(
+        Map<String, dynamic> json) =>
     UserShortSerializers(
       id: json['id'] as int?,
       fullName: json['full_name'] as String?,
@@ -1330,7 +1489,8 @@ UserShortSerializers _$UserShortSerializersFromJson(Map<String, dynamic> json) =
       address: json['address'] as String?,
     );
 
-Map<String, dynamic> _$UserShortSerializersToJson(UserShortSerializers instance) =>
+Map<String, dynamic> _$UserShortSerializersToJson(
+        UserShortSerializers instance) =>
     <String, dynamic>{
       'id': instance.id,
       'full_name': instance.fullName,
@@ -1339,24 +1499,29 @@ Map<String, dynamic> _$UserShortSerializersToJson(UserShortSerializers instance)
       'address': instance.address,
     };
 
-ValuesForSelection _$ValuesForSelectionFromJson(Map<String, dynamic> json) => ValuesForSelection(
+ValuesForSelection _$ValuesForSelectionFromJson(Map<String, dynamic> json) =>
+    ValuesForSelection(
       choicesName: (json['choices_name'] as List<dynamic>?)
-              ?.map((e) => ValuesForSelectionItem.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  ValuesForSelectionItem.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
 
-Map<String, dynamic> _$ValuesForSelectionToJson(ValuesForSelection instance) => <String, dynamic>{
+Map<String, dynamic> _$ValuesForSelectionToJson(ValuesForSelection instance) =>
+    <String, dynamic>{
       'choices_name': instance.choicesName?.map((e) => e.toJson()).toList(),
     };
 
-ValuesForSelectionItem _$ValuesForSelectionItemFromJson(Map<String, dynamic> json) =>
+ValuesForSelectionItem _$ValuesForSelectionItemFromJson(
+        Map<String, dynamic> json) =>
     ValuesForSelectionItem(
       displayName: json['display_name'] as String?,
       value: json['value'] as String?,
     );
 
-Map<String, dynamic> _$ValuesForSelectionItemToJson(ValuesForSelectionItem instance) =>
+Map<String, dynamic> _$ValuesForSelectionItemToJson(
+        ValuesForSelectionItem instance) =>
     <String, dynamic>{
       'display_name': instance.displayName,
       'value': instance.value,
