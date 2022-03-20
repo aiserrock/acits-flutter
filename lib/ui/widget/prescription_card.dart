@@ -27,8 +27,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          color: ColorRes.foreground,
-          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          color: ColorRes.foreground, borderRadius: BorderRadius.all(Radius.circular(8.0))),
       padding: const EdgeInsets.symmetric(
         horizontal: 12.0,
         vertical: 16.0,
@@ -39,7 +38,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         children: [
           _buildTimeAction(),
           const SizedBox(height: 4.0),
-          if (widget.itemData?.myType != null) _buildType(),
+          if (widget.itemData?.prescription?.myType != null) _buildType(),
           const SizedBox(height: 4.0),
           _buildAnimal(),
         ],
@@ -64,11 +63,11 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
           TextSpan(
             children: [
               TextSpan(
-                  text: (widget.itemData?.animal?.specParentName ?? ''),
+                  text: (widget.itemData?.prescription?.animal?.specParentName ?? ''),
                   style: StyleRes.mainContent),
               const TextSpan(text: (', '), style: StyleRes.mainContent),
               TextSpan(
-                  text: widget.itemData?.animal?.specName ?? '',
+                  text: widget.itemData?.prescription?.animal?.specName ?? '',
                   style: StyleRes.mainContent),
             ],
           ),
@@ -86,21 +85,17 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         const Divider(height: 24.0),
         Text(StringRes.current.mainAppoinment, style: StyleRes.content),
         const SizedBox(height: 4.0),
-        if (widget.itemData?.drugs != null)
-          ...widget.itemData!.drugs!.map<Widget>(
+        if (widget.itemData?.prescription?.drugs != null)
+          ...widget.itemData!.prescription!.drugs!.map<Widget>(
             (drug) => Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(
-                      text: (drug.drugName ?? ''), style: StyleRes.mainContent),
+                  TextSpan(text: (drug.drugName ?? ''), style: StyleRes.mainContent),
                   const TextSpan(text: (', '), style: StyleRes.mainContent),
                   if (drug.drugDosage != null)
-                    TextSpan(
-                        text: (drug.drugDosage.toString()),
-                        style: StyleRes.mainContent),
+                    TextSpan(text: (drug.drugDosage.toString()), style: StyleRes.mainContent),
                   if (drug.formOfDrug != null)
-                    TextSpan(
-                        text: (drug.formOfDrug), style: StyleRes.mainContent),
+                    TextSpan(text: (drug.formOfDrug), style: StyleRes.mainContent),
                 ],
               ),
               maxLines: 3,
@@ -112,9 +107,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             Assets.icon.comment.svg(color: ColorRes.accent),
             const SizedBox(width: 8.0),
             //TODO: разобраться с комментариями к карточке
-            Text('2',
-                style: StyleRes.mainContent
-                    .copyWith(color: ColorRes.textSecondary))
+            Text('2', style: StyleRes.mainContent.copyWith(color: ColorRes.textSecondary))
           ],
         ),
       ],
@@ -129,15 +122,11 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             TextSpan(
               children: [
                 TextSpan(
-                    text: (widget.itemData?.animal?.name ?? ''),
-                    style:
-                        StyleRes.content.copyWith(color: ColorRes.textPrimary)),
+                    text: (widget.itemData?.prescription?.animal?.name ?? ''),
+                    style: StyleRes.content.copyWith(color: ColorRes.textPrimary)),
+                TextSpan(text: ' ', style: StyleRes.content.copyWith(color: ColorRes.textPrimary)),
                 TextSpan(
-                    text: ' ',
-                    style:
-                        StyleRes.content.copyWith(color: ColorRes.textPrimary)),
-                TextSpan(
-                    text: (widget.itemData?.animal?.id ?? '').toString(),
+                    text: (widget.itemData?.prescription?.animal?.id ?? '').toString(),
                     style: StyleRes.content.copyWith()),
               ],
             ),
@@ -161,7 +150,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
 
   Widget _buildType() {
     return Text(
-      widget.itemData?.typeString ?? '',
+      widget.itemData?.prescription?.typeString ?? '',
       style: StyleRes.subTitle,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,

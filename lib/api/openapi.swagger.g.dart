@@ -150,37 +150,6 @@ Map<String, dynamic> _$AnimalNoteFileToJson(AnimalNoteFile instance) =>
       'created_at': instance.createdAt?.toIso8601String(),
     };
 
-AnimalPrescription _$AnimalPrescriptionFromJson(Map<String, dynamic> json) =>
-    AnimalPrescription(
-      id: json['id'] as int?,
-      myType: json['myType'],
-      duration: durationEnumFromJson(json['duration'] as String?),
-      description: json['description'] as String?,
-      createdBy: json['created_by'] as String?,
-      updatedBy: json['updated_by'] as String?,
-      drugs: (json['drugs'] as List<dynamic>?)
-              ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      executions: (json['executions'] as List<dynamic>?)
-              ?.map((e) =>
-                  PrescriptionExecution.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
-
-Map<String, dynamic> _$AnimalPrescriptionToJson(AnimalPrescription instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'myType': instance.myType,
-      'duration': durationEnumToJson(instance.duration),
-      'description': instance.description,
-      'created_by': instance.createdBy,
-      'updated_by': instance.updatedBy,
-      'drugs': instance.drugs?.map((e) => e.toJson()).toList(),
-      'executions': instance.executions?.map((e) => e.toJson()).toList(),
-    };
-
 AnimalRead _$AnimalReadFromJson(Map<String, dynamic> json) => AnimalRead(
       id: json['id'] as int?,
       url: json['url'] as String?,
@@ -201,6 +170,7 @@ AnimalRead _$AnimalReadFromJson(Map<String, dynamic> json) => AnimalRead(
           ? null
           : DateTime.parse(json['death_date'] as String),
       deathReason: json['death_reason'] as String?,
+      defaultImageId: json['default_image_id'] as int?,
       placeOfCatch: json['place_of_catch'] as String?,
       placeOfRelease: json['place_of_release'] as String?,
       dateOfChipping: json['date_of_chipping'] == null
@@ -235,6 +205,7 @@ Map<String, dynamic> _$AnimalReadToJson(AnimalRead instance) =>
       'birth_date': _dateToJson(instance.birthDate),
       'death_date': _dateToJson(instance.deathDate),
       'death_reason': instance.deathReason,
+      'default_image_id': instance.defaultImageId,
       'place_of_catch': instance.placeOfCatch,
       'place_of_release': instance.placeOfRelease,
       'date_of_chipping': _dateToJson(instance.dateOfChipping),
@@ -248,6 +219,25 @@ Map<String, dynamic> _$AnimalReadToJson(AnimalRead instance) =>
       'animal_attributes':
           instance.animalAttributes?.map((e) => e.toJson()).toList(),
       'deleted_at': instance.deletedAt?.toIso8601String(),
+    };
+
+AnimalShort _$AnimalShortFromJson(Map<String, dynamic> json) => AnimalShort(
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+      specName: json['spec_name'] as String?,
+      specParentName: json['spec_parent_name'] as String?,
+      avatar: json['avatar'] as String?,
+      defaultImageId: json['default_image_id'] as int?,
+    );
+
+Map<String, dynamic> _$AnimalShortToJson(AnimalShort instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'spec_name': instance.specName,
+      'spec_parent_name': instance.specParentName,
+      'avatar': instance.avatar,
+      'default_image_id': instance.defaultImageId,
     };
 
 AnimalWrite _$AnimalWriteFromJson(Map<String, dynamic> json) => AnimalWrite(
@@ -272,6 +262,7 @@ AnimalWrite _$AnimalWriteFromJson(Map<String, dynamic> json) => AnimalWrite(
           ? null
           : DateTime.parse(json['death_date'] as String),
       deathReason: json['death_reason'] as String?,
+      defaultImageId: json['default_image_id'] as int?,
       placeOfCatch: json['place_of_catch'] as String?,
       placeOfRelease: json['place_of_release'] as String?,
       dateOfChipping: json['date_of_chipping'] == null
@@ -301,6 +292,7 @@ Map<String, dynamic> _$AnimalWriteToJson(AnimalWrite instance) =>
       'birth_date': _dateToJson(instance.birthDate),
       'death_date': _dateToJson(instance.deathDate),
       'death_reason': instance.deathReason,
+      'default_image_id': instance.defaultImageId,
       'place_of_catch': instance.placeOfCatch,
       'place_of_release': instance.placeOfRelease,
       'date_of_chipping': _dateToJson(instance.dateOfChipping),
@@ -519,28 +511,6 @@ PaginatedAnimalNoteList _$PaginatedAnimalNoteListFromJson(
 
 Map<String, dynamic> _$PaginatedAnimalNoteListToJson(
         PaginatedAnimalNoteList instance) =>
-    <String, dynamic>{
-      'count': instance.count,
-      'next': instance.next,
-      'previous': instance.previous,
-      'results': instance.results?.map((e) => e.toJson()).toList(),
-    };
-
-PaginatedAnimalPrescriptionList _$PaginatedAnimalPrescriptionListFromJson(
-        Map<String, dynamic> json) =>
-    PaginatedAnimalPrescriptionList(
-      count: json['count'] as int?,
-      next: json['next'] as String?,
-      previous: json['previous'] as String?,
-      results: (json['results'] as List<dynamic>?)
-              ?.map(
-                  (e) => AnimalPrescription.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-    );
-
-Map<String, dynamic> _$PaginatedAnimalPrescriptionListToJson(
-        PaginatedAnimalPrescriptionList instance) =>
     <String, dynamic>{
       'count': instance.count,
       'next': instance.next,
@@ -822,6 +792,7 @@ PatchedAnimalWrite _$PatchedAnimalWriteFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['death_date'] as String),
       deathReason: json['death_reason'] as String?,
+      defaultImageId: json['default_image_id'] as int?,
       placeOfCatch: json['place_of_catch'] as String?,
       placeOfRelease: json['place_of_release'] as String?,
       dateOfChipping: json['date_of_chipping'] == null
@@ -851,6 +822,7 @@ Map<String, dynamic> _$PatchedAnimalWriteToJson(PatchedAnimalWrite instance) =>
       'birth_date': _dateToJson(instance.birthDate),
       'death_date': _dateToJson(instance.deathDate),
       'death_reason': instance.deathReason,
+      'default_image_id': instance.defaultImageId,
       'place_of_catch': instance.placeOfCatch,
       'place_of_release': instance.placeOfRelease,
       'date_of_chipping': _dateToJson(instance.dateOfChipping),
@@ -1096,22 +1068,6 @@ Map<String, dynamic> _$PrescriptionToJson(Prescription instance) =>
       'files': instance.files?.map((e) => e.toJson()).toList(),
     };
 
-PrescriptionAnimal _$PrescriptionAnimalFromJson(Map<String, dynamic> json) =>
-    PrescriptionAnimal(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      specName: json['spec_name'] as String?,
-      specParentName: json['spec_parent_name'] as String?,
-    );
-
-Map<String, dynamic> _$PrescriptionAnimalToJson(PrescriptionAnimal instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'spec_name': instance.specName,
-      'spec_parent_name': instance.specParentName,
-    };
-
 PrescriptionDrug _$PrescriptionDrugFromJson(Map<String, dynamic> json) =>
     PrescriptionDrug(
       drugId: json['drug_id'] as int?,
@@ -1151,16 +1107,11 @@ Map<String, dynamic> _$PrescriptionExecutionToJson(
 PrescriptionExecutionToday _$PrescriptionExecutionTodayFromJson(
         Map<String, dynamic> json) =>
     PrescriptionExecutionToday(
-      prescription: json['prescription'] as int?,
-      animal: json['animal'] == null
+      id: json['id'] as int?,
+      prescription: json['prescription'] == null
           ? null
-          : PrescriptionAnimal.fromJson(json['animal'] as Map<String, dynamic>),
-      myType: myTypeEnumFromJson(json['my_type'] as String?),
-      drugs: (json['drugs'] as List<dynamic>?)
-              ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      description: json['description'] as String?,
+          : PrescriptionShort.fromJson(
+              json['prescription'] as Map<String, dynamic>),
       executeAt: json['execute_at'] == null
           ? null
           : DateTime.parse(json['execute_at'] as String),
@@ -1169,11 +1120,8 @@ PrescriptionExecutionToday _$PrescriptionExecutionTodayFromJson(
 Map<String, dynamic> _$PrescriptionExecutionTodayToJson(
         PrescriptionExecutionToday instance) =>
     <String, dynamic>{
-      'prescription': instance.prescription,
-      'animal': instance.animal?.toJson(),
-      'my_type': myTypeEnumToJson(instance.myType),
-      'drugs': instance.drugs?.map((e) => e.toJson()).toList(),
-      'description': instance.description,
+      'id': instance.id,
+      'prescription': instance.prescription?.toJson(),
       'execute_at': instance.executeAt?.toIso8601String(),
     };
 
@@ -1195,6 +1143,33 @@ Map<String, dynamic> _$PrescriptionFileToJson(PrescriptionFile instance) =>
       'name': instance.name,
       'filename': instance.filename,
       'created_at': instance.createdAt?.toIso8601String(),
+    };
+
+PrescriptionShort _$PrescriptionShortFromJson(Map<String, dynamic> json) =>
+    PrescriptionShort(
+      id: json['id'] as int?,
+      myType: json['my_type'],
+      description: json['description'] as String?,
+      animal: json['animal'] == null
+          ? null
+          : AnimalShort.fromJson(json['animal'] as Map<String, dynamic>),
+      drugs: (json['drugs'] as List<dynamic>?)
+              ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      createdBy: json['created_by'] as String?,
+      updatedBy: json['updated_by'] as String?,
+    );
+
+Map<String, dynamic> _$PrescriptionShortToJson(PrescriptionShort instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'myType': instance.myType,
+      'description': instance.description,
+      'animal': instance.animal?.toJson(),
+      'drugs': instance.drugs?.map((e) => e.toJson()).toList(),
+      'created_by': instance.createdBy,
+      'updated_by': instance.updatedBy,
     };
 
 ShelterDrug _$ShelterDrugFromJson(Map<String, dynamic> json) => ShelterDrug(

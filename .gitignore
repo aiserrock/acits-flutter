@@ -49,3 +49,7 @@ app.*.map.json
 
 .fvm/flutter_sdk
 .fvm/fvm_config.json
+
+# CI/CD build
+/archive/
+/artifact/

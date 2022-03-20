@@ -89,6 +89,9 @@ class $AssetsImageGen {
 class $AssetsLottieGen {
   const $AssetsLottieGen();
 
+  /// File path: assets/lottie/cats_loading.json
+  String get catsLoading => 'assets/lottie/cats_loading.json';
+
   /// File path: assets/lottie/crash.json
   String get crash => 'assets/lottie/crash.json';
 
@@ -97,6 +100,9 @@ class $AssetsLottieGen {
 
   /// File path: assets/lottie/loading.json
   String get loading => 'assets/lottie/loading.json';
+
+  /// File path: assets/lottie/paw_loading.json
+  String get pawLoading => 'assets/lottie/paw_loading.json';
 
   /// File path: assets/lottie/success.json
   String get success => 'assets/lottie/success.json';

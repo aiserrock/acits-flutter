@@ -1,5 +1,4 @@
 import 'package:acits_flutter/export.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,16 +24,6 @@ class AnimalEditCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: item.content == null
                 ? [
-                    // if (item.onPressed == null) _buildField(item),
-                    // if (item.onPressed != null)
-                    //   CupertinoButton(
-                    //     padding: const EdgeInsets.only(),
-                    //     onPressed: item.onPressed,
-                    //     child: _buildField(
-                    //       item,
-                    //       enabled: true,
-                    //     ),
-                    //   ),
                     Stack(
                       children: [
                         _buildField(item),

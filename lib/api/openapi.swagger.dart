@@ -191,23 +191,6 @@ abstract class Openapi extends ChopperService {
           @Header('x-current-shelter') String? xCurrentShelter});
 
   ///
-  ///@param execute_at__gte
-  ///@param execute_at__lt
-  ///@param id
-  ///@param limit Number of results to return per page.
-  ///@param offset The initial index from which to return the results.
-  ///@param x-current-shelter Set current shelter id
-  @Get(path: '/api/v1/animals/{id}/prescriptions/')
-  Future<chopper.Response<PaginatedAnimalPrescriptionList>>
-      apiV1AnimalsIdPrescriptionsGet(
-          {@Query('execute_at__gte') String? executeAtGte,
-          @Query('execute_at__lt') String? executeAtLt,
-          @Path('id') required int? id,
-          @Query('limit') int? limit,
-          @Query('offset') int? offset,
-          @Header('x-current-shelter') String? xCurrentShelter});
-
-  ///
   ///@param id
   ///@param image_pk
   ///@param x-current-shelter Set current shelter id
@@ -481,12 +464,16 @@ abstract class Openapi extends ChopperService {
 
   ///
   ///@param animal
+  ///@param execute_at__gte
+  ///@param execute_at__lt
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/prescriptions/')
   Future<chopper.Response<PaginatedPrescriptionList>> apiV1PrescriptionsGet(
       {@Query('animal') int? animal,
+      @Query('execute_at__gte') String? executeAtGte,
+      @Query('execute_at__lt') String? executeAtLt,
       @Query('limit') int? limit,
       @Query('offset') int? offset,
       @Header('x-current-shelter') String? xCurrentShelter});
@@ -538,17 +525,17 @@ abstract class Openapi extends ChopperService {
   ///@param offset The initial index from which to return the results.
   ///@param ordering Which field to use when ordering the results.
   ///@param search A search term.
-  ///@param to From datetime
+  ///@param to To datetime
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/prescriptions/executions/')
   Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>>
       apiV1PrescriptionsExecutionsGet(
-          {@Query('from') required String? from,
+          {@Path('from') required String? from,
           @Query('limit') int? limit,
           @Query('offset') int? offset,
           @Query('ordering') String? ordering,
           @Query('search') String? search,
-          @Query('to') required String? to,
+          @Path('to') required String? to,
           @Header('x-current-shelter') String? xCurrentShelter});
 
   ///
@@ -804,8 +791,8 @@ final Map<Type, Object Function(Map<String, dynamic>)>
   AnimalImageWrite: AnimalImageWrite.fromJsonFactory,
   AnimalNote: AnimalNote.fromJsonFactory,
   AnimalNoteFile: AnimalNoteFile.fromJsonFactory,
-  AnimalPrescription: AnimalPrescription.fromJsonFactory,
   AnimalRead: AnimalRead.fromJsonFactory,
+  AnimalShort: AnimalShort.fromJsonFactory,
   AnimalWrite: AnimalWrite.fromJsonFactory,
   Applicant: Applicant.fromJsonFactory,
   ApplicantFile: ApplicantFile.fromJsonFactory,
@@ -819,8 +806,6 @@ final Map<Type, Object Function(Map<String, dynamic>)>
   PaginatedAnimalHistorySnapshotList:
       PaginatedAnimalHistorySnapshotList.fromJsonFactory,
   PaginatedAnimalNoteList: PaginatedAnimalNoteList.fromJsonFactory,
-  PaginatedAnimalPrescriptionList:
-      PaginatedAnimalPrescriptionList.fromJsonFactory,
   PaginatedAnimalReadList: PaginatedAnimalReadList.fromJsonFactory,
   PaginatedApplicantList: PaginatedApplicantList.fromJsonFactory,
   PaginatedCuratorList: PaginatedCuratorList.fromJsonFactory,
@@ -846,11 +831,11 @@ final Map<Type, Object Function(Map<String, dynamic>)>
   PatchedUserSheltersAdminSerializers:
       PatchedUserSheltersAdminSerializers.fromJsonFactory,
   Prescription: Prescription.fromJsonFactory,
-  PrescriptionAnimal: PrescriptionAnimal.fromJsonFactory,
   PrescriptionDrug: PrescriptionDrug.fromJsonFactory,
   PrescriptionExecution: PrescriptionExecution.fromJsonFactory,
   PrescriptionExecutionToday: PrescriptionExecutionToday.fromJsonFactory,
   PrescriptionFile: PrescriptionFile.fromJsonFactory,
+  PrescriptionShort: PrescriptionShort.fromJsonFactory,
   ShelterDrug: ShelterDrug.fromJsonFactory,
   ShelterSerializers: ShelterSerializers.fromJsonFactory,
   ShelterShortSerializers: ShelterShortSerializers.fromJsonFactory,
@@ -1370,107 +1355,6 @@ extension $AnimalNoteFileExtension on AnimalNoteFile {
 }
 
 @JsonSerializable(explicitToJson: true)
-class AnimalPrescription {
-  AnimalPrescription({
-    this.id,
-    this.myType,
-    this.duration,
-    this.description,
-    this.createdBy,
-    this.updatedBy,
-    this.drugs,
-    this.executions,
-  });
-
-  factory AnimalPrescription.fromJson(Map<String, dynamic> json) =>
-      _$AnimalPrescriptionFromJson(json);
-
-  @JsonKey(name: 'id')
-  final int? id;
-  @JsonKey(name: 'myType')
-  final dynamic myType;
-  @JsonKey(
-      name: 'duration',
-      toJson: durationEnumToJson,
-      fromJson: durationEnumFromJson)
-  final enums.DurationEnum? duration;
-  @JsonKey(name: 'description')
-  final String? description;
-  @JsonKey(name: 'created_by')
-  final String? createdBy;
-  @JsonKey(name: 'updated_by')
-  final String? updatedBy;
-  @JsonKey(name: 'drugs', defaultValue: <PrescriptionDrug>[])
-  final List<PrescriptionDrug>? drugs;
-  @JsonKey(name: 'executions', defaultValue: <PrescriptionExecution>[])
-  final List<PrescriptionExecution>? executions;
-  static const fromJsonFactory = _$AnimalPrescriptionFromJson;
-  static const toJsonFactory = _$AnimalPrescriptionToJson;
-  Map<String, dynamic> toJson() => _$AnimalPrescriptionToJson(this);
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is AnimalPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality()
-                    .equals(other.duration, duration)) &&
-            (identical(other.description, description) ||
-                const DeepCollectionEquality()
-                    .equals(other.description, description)) &&
-            (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdBy, createdBy)) &&
-            (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality()
-                    .equals(other.updatedBy, updatedBy)) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
-            (identical(other.executions, executions) ||
-                const DeepCollectionEquality()
-                    .equals(other.executions, executions)));
-  }
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(myType) ^
-      const DeepCollectionEquality().hash(duration) ^
-      const DeepCollectionEquality().hash(description) ^
-      const DeepCollectionEquality().hash(createdBy) ^
-      const DeepCollectionEquality().hash(updatedBy) ^
-      const DeepCollectionEquality().hash(drugs) ^
-      const DeepCollectionEquality().hash(executions) ^
-      runtimeType.hashCode;
-}
-
-extension $AnimalPrescriptionExtension on AnimalPrescription {
-  AnimalPrescription copyWith(
-      {int? id,
-      dynamic? myType,
-      enums.DurationEnum? duration,
-      String? description,
-      String? createdBy,
-      String? updatedBy,
-      List<PrescriptionDrug>? drugs,
-      List<PrescriptionExecution>? executions}) {
-    return AnimalPrescription(
-        id: id ?? this.id,
-        myType: myType ?? this.myType,
-        duration: duration ?? this.duration,
-        description: description ?? this.description,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        drugs: drugs ?? this.drugs,
-        executions: executions ?? this.executions);
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class AnimalRead {
   AnimalRead({
     this.id,
@@ -1483,6 +1367,7 @@ class AnimalRead {
     this.birthDate,
     this.deathDate,
     this.deathReason,
+    this.defaultImageId,
     this.placeOfCatch,
     this.placeOfRelease,
     this.dateOfChipping,
@@ -1523,6 +1408,8 @@ class AnimalRead {
   final DateTime? deathDate;
   @JsonKey(name: 'death_reason')
   final String? deathReason;
+  @JsonKey(name: 'default_image_id')
+  final int? defaultImageId;
   @JsonKey(name: 'place_of_catch')
   final String? placeOfCatch;
   @JsonKey(name: 'place_of_release')
@@ -1579,6 +1466,9 @@ class AnimalRead {
             (identical(other.deathReason, deathReason) ||
                 const DeepCollectionEquality()
                     .equals(other.deathReason, deathReason)) &&
+            (identical(other.defaultImageId, defaultImageId) ||
+                const DeepCollectionEquality()
+                    .equals(other.defaultImageId, defaultImageId)) &&
             (identical(other.placeOfCatch, placeOfCatch) ||
                 const DeepCollectionEquality()
                     .equals(other.placeOfCatch, placeOfCatch)) &&
@@ -1627,6 +1517,7 @@ class AnimalRead {
       const DeepCollectionEquality().hash(birthDate) ^
       const DeepCollectionEquality().hash(deathDate) ^
       const DeepCollectionEquality().hash(deathReason) ^
+      const DeepCollectionEquality().hash(defaultImageId) ^
       const DeepCollectionEquality().hash(placeOfCatch) ^
       const DeepCollectionEquality().hash(placeOfRelease) ^
       const DeepCollectionEquality().hash(dateOfChipping) ^
@@ -1654,6 +1545,7 @@ extension $AnimalReadExtension on AnimalRead {
       DateTime? birthDate,
       DateTime? deathDate,
       String? deathReason,
+      int? defaultImageId,
       String? placeOfCatch,
       String? placeOfRelease,
       DateTime? dateOfChipping,
@@ -1677,6 +1569,7 @@ extension $AnimalReadExtension on AnimalRead {
         birthDate: birthDate ?? this.birthDate,
         deathDate: deathDate ?? this.deathDate,
         deathReason: deathReason ?? this.deathReason,
+        defaultImageId: defaultImageId ?? this.defaultImageId,
         placeOfCatch: placeOfCatch ?? this.placeOfCatch,
         placeOfRelease: placeOfRelease ?? this.placeOfRelease,
         dateOfChipping: dateOfChipping ?? this.dateOfChipping,
@@ -1693,6 +1586,86 @@ extension $AnimalReadExtension on AnimalRead {
 }
 
 @JsonSerializable(explicitToJson: true)
+class AnimalShort {
+  AnimalShort({
+    this.id,
+    this.name,
+    this.specName,
+    this.specParentName,
+    this.avatar,
+    this.defaultImageId,
+  });
+
+  factory AnimalShort.fromJson(Map<String, dynamic> json) =>
+      _$AnimalShortFromJson(json);
+
+  @JsonKey(name: 'id')
+  final int? id;
+  @JsonKey(name: 'name')
+  final String? name;
+  @JsonKey(name: 'spec_name')
+  final String? specName;
+  @JsonKey(name: 'spec_parent_name')
+  final String? specParentName;
+  @JsonKey(name: 'avatar')
+  final String? avatar;
+  @JsonKey(name: 'default_image_id')
+  final int? defaultImageId;
+  static const fromJsonFactory = _$AnimalShortFromJson;
+  static const toJsonFactory = _$AnimalShortToJson;
+  Map<String, dynamic> toJson() => _$AnimalShortToJson(this);
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is AnimalShort &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) ||
+                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.specName, specName) ||
+                const DeepCollectionEquality()
+                    .equals(other.specName, specName)) &&
+            (identical(other.specParentName, specParentName) ||
+                const DeepCollectionEquality()
+                    .equals(other.specParentName, specParentName)) &&
+            (identical(other.avatar, avatar) ||
+                const DeepCollectionEquality().equals(other.avatar, avatar)) &&
+            (identical(other.defaultImageId, defaultImageId) ||
+                const DeepCollectionEquality()
+                    .equals(other.defaultImageId, defaultImageId)));
+  }
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(specName) ^
+      const DeepCollectionEquality().hash(specParentName) ^
+      const DeepCollectionEquality().hash(avatar) ^
+      const DeepCollectionEquality().hash(defaultImageId) ^
+      runtimeType.hashCode;
+}
+
+extension $AnimalShortExtension on AnimalShort {
+  AnimalShort copyWith(
+      {int? id,
+      String? name,
+      String? specName,
+      String? specParentName,
+      String? avatar,
+      int? defaultImageId}) {
+    return AnimalShort(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        specName: specName ?? this.specName,
+        specParentName: specParentName ?? this.specParentName,
+        avatar: avatar ?? this.avatar,
+        defaultImageId: defaultImageId ?? this.defaultImageId);
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
 class AnimalWrite {
   AnimalWrite({
     this.name,
@@ -1704,6 +1677,7 @@ class AnimalWrite {
     this.birthDate,
     this.deathDate,
     this.deathReason,
+    this.defaultImageId,
     this.placeOfCatch,
     this.placeOfRelease,
     this.dateOfChipping,
@@ -1740,6 +1714,8 @@ class AnimalWrite {
   final DateTime? deathDate;
   @JsonKey(name: 'death_reason')
   final String? deathReason;
+  @JsonKey(name: 'default_image_id')
+  final int? defaultImageId;
   @JsonKey(name: 'place_of_catch')
   final String? placeOfCatch;
   @JsonKey(name: 'place_of_release')
@@ -1791,6 +1767,9 @@ class AnimalWrite {
             (identical(other.deathReason, deathReason) ||
                 const DeepCollectionEquality()
                     .equals(other.deathReason, deathReason)) &&
+            (identical(other.defaultImageId, defaultImageId) ||
+                const DeepCollectionEquality()
+                    .equals(other.defaultImageId, defaultImageId)) &&
             (identical(other.placeOfCatch, placeOfCatch) ||
                 const DeepCollectionEquality()
                     .equals(other.placeOfCatch, placeOfCatch)) &&
@@ -1832,6 +1811,7 @@ class AnimalWrite {
       const DeepCollectionEquality().hash(birthDate) ^
       const DeepCollectionEquality().hash(deathDate) ^
       const DeepCollectionEquality().hash(deathReason) ^
+      const DeepCollectionEquality().hash(defaultImageId) ^
       const DeepCollectionEquality().hash(placeOfCatch) ^
       const DeepCollectionEquality().hash(placeOfRelease) ^
       const DeepCollectionEquality().hash(dateOfChipping) ^
@@ -1856,6 +1836,7 @@ extension $AnimalWriteExtension on AnimalWrite {
       DateTime? birthDate,
       DateTime? deathDate,
       String? deathReason,
+      int? defaultImageId,
       String? placeOfCatch,
       String? placeOfRelease,
       DateTime? dateOfChipping,
@@ -1876,6 +1857,7 @@ extension $AnimalWriteExtension on AnimalWrite {
         birthDate: birthDate ?? this.birthDate,
         deathDate: deathDate ?? this.deathDate,
         deathReason: deathReason ?? this.deathReason,
+        defaultImageId: defaultImageId ?? this.defaultImageId,
         placeOfCatch: placeOfCatch ?? this.placeOfCatch,
         placeOfRelease: placeOfRelease ?? this.placeOfRelease,
         dateOfChipping: dateOfChipping ?? this.dateOfChipping,
@@ -2672,70 +2654,6 @@ extension $PaginatedAnimalNoteListExtension on PaginatedAnimalNoteList {
 }
 
 @JsonSerializable(explicitToJson: true)
-class PaginatedAnimalPrescriptionList {
-  PaginatedAnimalPrescriptionList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
-
-  factory PaginatedAnimalPrescriptionList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedAnimalPrescriptionListFromJson(json);
-
-  @JsonKey(name: 'count')
-  final int? count;
-  @JsonKey(name: 'next')
-  final String? next;
-  @JsonKey(name: 'previous')
-  final String? previous;
-  @JsonKey(name: 'results', defaultValue: <AnimalPrescription>[])
-  final List<AnimalPrescription>? results;
-  static const fromJsonFactory = _$PaginatedAnimalPrescriptionListFromJson;
-  static const toJsonFactory = _$PaginatedAnimalPrescriptionListToJson;
-  Map<String, dynamic> toJson() =>
-      _$PaginatedAnimalPrescriptionListToJson(this);
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is PaginatedAnimalPrescriptionList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality()
-                    .equals(other.previous, previous)) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
-  }
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(count) ^
-      const DeepCollectionEquality().hash(next) ^
-      const DeepCollectionEquality().hash(previous) ^
-      const DeepCollectionEquality().hash(results) ^
-      runtimeType.hashCode;
-}
-
-extension $PaginatedAnimalPrescriptionListExtension
-    on PaginatedAnimalPrescriptionList {
-  PaginatedAnimalPrescriptionList copyWith(
-      {int? count,
-      String? next,
-      String? previous,
-      List<AnimalPrescription>? results}) {
-    return PaginatedAnimalPrescriptionList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class PaginatedAnimalReadList {
   PaginatedAnimalReadList({
     this.count,
@@ -3486,6 +3404,7 @@ class PatchedAnimalWrite {
     this.birthDate,
     this.deathDate,
     this.deathReason,
+    this.defaultImageId,
     this.placeOfCatch,
     this.placeOfRelease,
     this.dateOfChipping,
@@ -3522,6 +3441,8 @@ class PatchedAnimalWrite {
   final DateTime? deathDate;
   @JsonKey(name: 'death_reason')
   final String? deathReason;
+  @JsonKey(name: 'default_image_id')
+  final int? defaultImageId;
   @JsonKey(name: 'place_of_catch')
   final String? placeOfCatch;
   @JsonKey(name: 'place_of_release')
@@ -3573,6 +3494,9 @@ class PatchedAnimalWrite {
             (identical(other.deathReason, deathReason) ||
                 const DeepCollectionEquality()
                     .equals(other.deathReason, deathReason)) &&
+            (identical(other.defaultImageId, defaultImageId) ||
+                const DeepCollectionEquality()
+                    .equals(other.defaultImageId, defaultImageId)) &&
             (identical(other.placeOfCatch, placeOfCatch) ||
                 const DeepCollectionEquality()
                     .equals(other.placeOfCatch, placeOfCatch)) &&
@@ -3614,6 +3538,7 @@ class PatchedAnimalWrite {
       const DeepCollectionEquality().hash(birthDate) ^
       const DeepCollectionEquality().hash(deathDate) ^
       const DeepCollectionEquality().hash(deathReason) ^
+      const DeepCollectionEquality().hash(defaultImageId) ^
       const DeepCollectionEquality().hash(placeOfCatch) ^
       const DeepCollectionEquality().hash(placeOfRelease) ^
       const DeepCollectionEquality().hash(dateOfChipping) ^
@@ -3638,6 +3563,7 @@ extension $PatchedAnimalWriteExtension on PatchedAnimalWrite {
       DateTime? birthDate,
       DateTime? deathDate,
       String? deathReason,
+      int? defaultImageId,
       String? placeOfCatch,
       String? placeOfRelease,
       DateTime? dateOfChipping,
@@ -3658,6 +3584,7 @@ extension $PatchedAnimalWriteExtension on PatchedAnimalWrite {
         birthDate: birthDate ?? this.birthDate,
         deathDate: deathDate ?? this.deathDate,
         deathReason: deathReason ?? this.deathReason,
+        defaultImageId: defaultImageId ?? this.defaultImageId,
         placeOfCatch: placeOfCatch ?? this.placeOfCatch,
         placeOfRelease: placeOfRelease ?? this.placeOfRelease,
         dateOfChipping: dateOfChipping ?? this.dateOfChipping,
@@ -4471,66 +4398,6 @@ extension $PrescriptionExtension on Prescription {
 }
 
 @JsonSerializable(explicitToJson: true)
-class PrescriptionAnimal {
-  PrescriptionAnimal({
-    this.id,
-    this.name,
-    this.specName,
-    this.specParentName,
-  });
-
-  factory PrescriptionAnimal.fromJson(Map<String, dynamic> json) =>
-      _$PrescriptionAnimalFromJson(json);
-
-  @JsonKey(name: 'id')
-  final int? id;
-  @JsonKey(name: 'name')
-  final String? name;
-  @JsonKey(name: 'spec_name')
-  final String? specName;
-  @JsonKey(name: 'spec_parent_name')
-  final String? specParentName;
-  static const fromJsonFactory = _$PrescriptionAnimalFromJson;
-  static const toJsonFactory = _$PrescriptionAnimalToJson;
-  Map<String, dynamic> toJson() => _$PrescriptionAnimalToJson(this);
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is PrescriptionAnimal &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.specName, specName) ||
-                const DeepCollectionEquality()
-                    .equals(other.specName, specName)) &&
-            (identical(other.specParentName, specParentName) ||
-                const DeepCollectionEquality()
-                    .equals(other.specParentName, specParentName)));
-  }
-
-  @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(specName) ^
-      const DeepCollectionEquality().hash(specParentName) ^
-      runtimeType.hashCode;
-}
-
-extension $PrescriptionAnimalExtension on PrescriptionAnimal {
-  PrescriptionAnimal copyWith(
-      {int? id, String? name, String? specName, String? specParentName}) {
-    return PrescriptionAnimal(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        specName: specName ?? this.specName,
-        specParentName: specParentName ?? this.specParentName);
-  }
-}
-
-@JsonSerializable(explicitToJson: true)
 class PrescriptionDrug {
   PrescriptionDrug({
     this.drugId,
@@ -4658,28 +4525,18 @@ extension $PrescriptionExecutionExtension on PrescriptionExecution {
 @JsonSerializable(explicitToJson: true)
 class PrescriptionExecutionToday {
   PrescriptionExecutionToday({
+    this.id,
     this.prescription,
-    this.animal,
-    this.myType,
-    this.drugs,
-    this.description,
     this.executeAt,
   });
 
   factory PrescriptionExecutionToday.fromJson(Map<String, dynamic> json) =>
       _$PrescriptionExecutionTodayFromJson(json);
 
+  @JsonKey(name: 'id')
+  final int? id;
   @JsonKey(name: 'prescription')
-  final int? prescription;
-  @JsonKey(name: 'animal')
-  final PrescriptionAnimal? animal;
-  @JsonKey(
-      name: 'my_type', toJson: myTypeEnumToJson, fromJson: myTypeEnumFromJson)
-  final enums.MyTypeEnum? myType;
-  @JsonKey(name: 'drugs', defaultValue: <PrescriptionDrug>[])
-  final List<PrescriptionDrug>? drugs;
-  @JsonKey(name: 'description')
-  final String? description;
+  final PrescriptionShort? prescription;
   @JsonKey(name: 'execute_at')
   final DateTime? executeAt;
   static const fromJsonFactory = _$PrescriptionExecutionTodayFromJson;
@@ -4690,18 +4547,11 @@ class PrescriptionExecutionToday {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is PrescriptionExecutionToday &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.prescription, prescription) ||
                 const DeepCollectionEquality()
                     .equals(other.prescription, prescription)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
-            (identical(other.description, description) ||
-                const DeepCollectionEquality()
-                    .equals(other.description, description)) &&
             (identical(other.executeAt, executeAt) ||
                 const DeepCollectionEquality()
                     .equals(other.executeAt, executeAt)));
@@ -4709,29 +4559,18 @@ class PrescriptionExecutionToday {
 
   @override
   int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(prescription) ^
-      const DeepCollectionEquality().hash(animal) ^
-      const DeepCollectionEquality().hash(myType) ^
-      const DeepCollectionEquality().hash(drugs) ^
-      const DeepCollectionEquality().hash(description) ^
       const DeepCollectionEquality().hash(executeAt) ^
       runtimeType.hashCode;
 }
 
 extension $PrescriptionExecutionTodayExtension on PrescriptionExecutionToday {
   PrescriptionExecutionToday copyWith(
-      {int? prescription,
-      PrescriptionAnimal? animal,
-      enums.MyTypeEnum? myType,
-      List<PrescriptionDrug>? drugs,
-      String? description,
-      DateTime? executeAt}) {
+      {int? id, PrescriptionShort? prescription, DateTime? executeAt}) {
     return PrescriptionExecutionToday(
+        id: id ?? this.id,
         prescription: prescription ?? this.prescription,
-        animal: animal ?? this.animal,
-        myType: myType ?? this.myType,
-        drugs: drugs ?? this.drugs,
-        description: description ?? this.description,
         executeAt: executeAt ?? this.executeAt);
   }
 }
@@ -4804,6 +4643,94 @@ extension $PrescriptionFileExtension on PrescriptionFile {
         name: name ?? this.name,
         filename: filename ?? this.filename,
         createdAt: createdAt ?? this.createdAt);
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+class PrescriptionShort {
+  PrescriptionShort({
+    this.id,
+    this.myType,
+    this.description,
+    this.animal,
+    this.drugs,
+    this.createdBy,
+    this.updatedBy,
+  });
+
+  factory PrescriptionShort.fromJson(Map<String, dynamic> json) =>
+      _$PrescriptionShortFromJson(json);
+
+  @JsonKey(name: 'id')
+  final int? id;
+  @JsonKey(name: 'my_type')
+  final dynamic myType;
+  @JsonKey(name: 'description')
+  final String? description;
+  @JsonKey(name: 'animal')
+  final AnimalShort? animal;
+  @JsonKey(name: 'drugs', defaultValue: <PrescriptionDrug>[])
+  final List<PrescriptionDrug>? drugs;
+  @JsonKey(name: 'created_by')
+  final String? createdBy;
+  @JsonKey(name: 'updated_by')
+  final String? updatedBy;
+  static const fromJsonFactory = _$PrescriptionShortFromJson;
+  static const toJsonFactory = _$PrescriptionShortToJson;
+  Map<String, dynamic> toJson() => _$PrescriptionShortToJson(this);
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is PrescriptionShort &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.myType, myType) ||
+                const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.description, description) ||
+                const DeepCollectionEquality()
+                    .equals(other.description, description)) &&
+            (identical(other.animal, animal) ||
+                const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.drugs, drugs) ||
+                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+            (identical(other.createdBy, createdBy) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdBy, createdBy)) &&
+            (identical(other.updatedBy, updatedBy) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedBy, updatedBy)));
+  }
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(myType) ^
+      const DeepCollectionEquality().hash(description) ^
+      const DeepCollectionEquality().hash(animal) ^
+      const DeepCollectionEquality().hash(drugs) ^
+      const DeepCollectionEquality().hash(createdBy) ^
+      const DeepCollectionEquality().hash(updatedBy) ^
+      runtimeType.hashCode;
+}
+
+extension $PrescriptionShortExtension on PrescriptionShort {
+  PrescriptionShort copyWith(
+      {int? id,
+      dynamic? myType,
+      String? description,
+      AnimalShort? animal,
+      List<PrescriptionDrug>? drugs,
+      String? createdBy,
+      String? updatedBy}) {
+    return PrescriptionShort(
+        id: id ?? this.id,
+        myType: myType ?? this.myType,
+        description: description ?? this.description,
+        animal: animal ?? this.animal,
+        drugs: drugs ?? this.drugs,
+        createdBy: createdBy ?? this.createdBy,
+        updatedBy: updatedBy ?? this.updatedBy);
   }
 }
 

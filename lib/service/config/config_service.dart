@@ -62,10 +62,14 @@ class ConfigService {
     }
   }
 
-  String? getMyTypeName(MyTypeEnum? type) {
+  /// После изменений в схеме API тип приходит как в виде MyTypeEnum, так и строки. Сделал
+  /// обобщение и резолвинг типа внутри метода.
+  String? getMyTypeName(Object? type) {
     if (type == null) return null;
+    if (!(type is String || type is MyTypeEnum)) return null;
     if (_prescriptionTypeNames.isEmpty) _parsePrescriptionTypes();
-    return _prescriptionTypeNames[type];
+    final _type = (type is MyTypeEnum) ? type : myTypeEnumFromJson(type as String);
+    return _prescriptionTypeNames[_type];
   }
 
   String? getStatus131Name(Status131Enum? type) {

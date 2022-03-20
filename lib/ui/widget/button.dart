@@ -24,11 +24,16 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       onLongPress: onLongPress,
       style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
         textStyle: MaterialStateProperty.all(
           const TextStyle(fontSize: 16.0),
         ),
         padding: MaterialStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         ),
         backgroundColor: MaterialStateProperty.all(ColorRes.primaryButton),
       ),

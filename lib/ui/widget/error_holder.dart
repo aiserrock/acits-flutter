@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/res/lottie.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,7 @@ class ErrorHolderWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Lottie.asset(
-              assetPath ?? 'assets/lottie/crash_1.json',
+              assetPath ?? LottieRes.crashBox,
               height: size,
               width: size,
             ),
@@ -70,6 +72,8 @@ extension _ErrorX on Object {
     switch (runtimeType) {
       case MessagedException:
         return 'Ошибка';
+      case SocketException:
+        return 'Нет интернета :(';
       default:
         return 'Ошибка';
     }
@@ -79,6 +83,8 @@ extension _ErrorX on Object {
     switch (runtimeType) {
       case MessagedException:
         return 'Что-то пошло не так, попробуйте еще раз позже';
+      case SocketException:
+        return 'Неустойчивое соединение, попробуйте еще раз позже';
       default:
         return 'Что-то пошло не так, попробуйте еще раз позже';
     }

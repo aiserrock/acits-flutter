@@ -10,7 +10,7 @@ class AnimalPrescriptionCard extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final AnimalPrescription prescription;
+  final Prescription prescription;
 
   @override
   _AnimalPrescriptionCardState createState() => _AnimalPrescriptionCardState();

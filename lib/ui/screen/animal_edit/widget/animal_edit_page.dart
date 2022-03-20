@@ -1,8 +1,8 @@
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 
 abstract class AnimalEditPage extends StatefulWidget {
   const AnimalEditPage({

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -38,7 +38,7 @@ class SuccessHolderWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Lottie.asset(
-                assetPath ?? 'assets/lottie/success.json',
+                assetPath ?? LottieRes.success,
                 height: size,
                 width: size,
               ),
