@@ -9,15 +9,5 @@ import '../di/di_container.dart';
 @dev
 abstract class EnvDevRegistrer {
   @dev
-  Env createEnv() {
-    final savedProxy = getIt.get<SharedPreferences>().getString('proxy');
-
-    return Env(
-      'https://dev.acits.ru',
-      proxy: savedProxy,
-    );
-  }
+  Env createEnv() => Env('https://dev.acits.ru');
 }
-
-// getIt.reset();
-// initDevDi();

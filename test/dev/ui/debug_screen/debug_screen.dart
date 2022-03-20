@@ -1,7 +1,13 @@
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen_route.dart';
+import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../di/di_container.dart';
+import '../../service/debug/debug_dev_service.dart';
 
 class DebugScreen extends StatelessWidget {
   const DebugScreen({Key? key}) : super(key: key);
@@ -36,10 +42,73 @@ class DebugScreen extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     return ListView(
-      children: const [
-        _SearchSpeciesCard(),
+      children: [
+        const _SearchSpeciesCard(),
+        _ConnectionCard(),
       ],
     );
+  }
+}
+
+class _ConnectionCard extends StatelessWidget {
+  _ConnectionCard({
+    Key? key,
+  })  : _debugDevService = getIt.get<DebugService>() as DebugDevService,
+        super(key: key);
+
+  final DebugDevService _debugDevService;
+
+  final _formKey = GlobalKey<FormState>();
+  final _proxyController = TextEditingController(text: getIt.get<PreferenceStorage>().proxy);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Form(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 8.0),
+                const Text(
+                  'Connection',
+                  style: StyleRes.subTitle,
+                ),
+                TextField(
+                  key: _formKey,
+                  controller: _proxyController,
+                  decoration: const InputDecoration(
+                    hintText: '192.168.0.102:9000',
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                PrimaryButton(
+                  text: 'Применить',
+                  onPressed: () => _accept(context),
+                ),
+                const SizedBox(height: 16.0),
+                PrimaryButton(
+                  text: 'Сбросить',
+                  onPressed: () => _reset(context),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _accept(BuildContext context) {
+    Navigator.of(context).pop();
+    _debugDevService.setProxy(_proxyController.text);
+  }
+
+  void _reset(BuildContext context) {
+    Navigator.of(context).pop();
+    _debugDevService.setProxy(null);
   }
 }
 
@@ -73,8 +142,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               title: Text(_category?.name ?? '* tap to select'),
               subtitle: const Text('category'),
               onTap: () async {
-                final result =
-                    await Navigator.of(context).push(SearchScreenRoute());
+                final result = await Navigator.of(context).push(SearchScreenRoute());
                 if (result != null) {
                   setState(() {
                     _category = result;
@@ -89,8 +157,8 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('family'),
               onTap: () async {
                 if (_category != null) {
-                  final result = await Navigator.of(context).push<Species>(
-                      SearchScreenRoute(parentSearch: _category));
+                  final result = await Navigator.of(context)
+                      .push<Species>(SearchScreenRoute(parentSearch: _category));
                   if (result != null) {
                     setState(() {
                       _family = result;
@@ -105,8 +173,8 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('kind'),
               onTap: () async {
                 if (_family != null) {
-                  final result = await Navigator.of(context)
-                      .push(SearchScreenRoute(parentSearch: _family));
+                  final result =
+                      await Navigator.of(context).push(SearchScreenRoute(parentSearch: _family));
                   if (result != null) {
                     setState(() {
                       _kind = result;
