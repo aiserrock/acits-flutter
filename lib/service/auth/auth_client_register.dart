@@ -1,20 +1,35 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:chopper/chopper.dart';
 import 'package:injectable/injectable.dart';
+
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
+import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/domain/env.dart';
+import 'package:acits_flutter/service/auth/auth_service.dart';
 
 @module
 abstract class AuthClientRegister {
   Openapi createClient(
     AuthInterceptor authInterceptor,
     HeaderInterceptor headerInterceptor,
+    Env env,
+    PreferenceStorage ps,
   ) {
+    final proxyUrl = ps.proxy;
+
+    final t = HttpClient();
+
+    if (proxyUrl != null) {
+      t.findProxy = (url) => 'PROXY $proxyUrl';
+    }
+
     final chopper = ChopperClient(
-      baseUrl: 'https://dev.acits.ru',
+      client: http.IOClient(t),
+      baseUrl: env.apiUrl,
       interceptors: [
         headerInterceptor,
         HttpLoggingInterceptor(),
@@ -27,9 +42,21 @@ abstract class AuthClientRegister {
   }
 
   @Named('guest')
-  Openapi createGuestClient() {
+  Openapi createGuestClient(
+    Env env,
+    PreferenceStorage ps,
+  ) {
+    final proxyUrl = ps.proxy;
+
+    final t = HttpClient();
+
+    if (proxyUrl != null) {
+      t.findProxy = (url) => 'PROXY $proxyUrl';
+    }
+    
     final chopper = ChopperClient(
-        baseUrl: 'https://dev.acits.ru',
+        client: http.IOClient(t),
+        baseUrl: env.apiUrl,
         converter: $JsonSerializableConverter(),
         interceptors: [HttpLoggingInterceptor()]);
     final client = Openapi.create(chopper);
@@ -52,8 +79,9 @@ class AuthInterceptor implements Authenticator {
   @override
   FutureOr<Request?> authenticate(
     Request request,
-    Response response,
-  ) async {
+    Response response, [
+    Request? _,
+  ]) async {
     if (response.statusCode == HttpStatus.unauthorized) {
       final authService = getIt<AuthService>();
       final token = await authService.refreshToken().then((value) => value?.access);
@@ -64,5 +92,6 @@ class AuthInterceptor implements Authenticator {
     } else {
       return null;
     }
+    return null;
   }
 }

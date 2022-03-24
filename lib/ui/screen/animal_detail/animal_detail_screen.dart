@@ -397,9 +397,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
           },
           groupValue: _currentTab,
           backgroundColor: ColorRes.indicatorActive,
-          onValueChanged: (int? index) => setState(() {
-            if (index != null) _currentTab = index;
-          }),
+          onValueChanged: (int? index) {
+            setState(() {
+              if (index != null) _currentTab = index;
+            });
+            proceedOnNextFrame(_onScroll);
+            // Future.delayed(Duration(milliseconds: 16), _onScroll);
+            // _scrollController.jumpTo(_scrollController.position.pixels + .01);
+          },
         ),
       ),
     );

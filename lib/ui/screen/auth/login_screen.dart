@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'package:acits_flutter/ui/screen/debug_screen/debug_screen.dart';
-import 'package:acits_flutter/ui/screen/root_screen.dart';
-import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +8,9 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
 
+import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/ui/screen/root_screen.dart';
+import 'package:acits_flutter/util/validator.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
@@ -33,7 +33,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late final AuthService _authService;
+  _LoginScreenState()
+      : _authService = getIt.get<AuthService>(),
+        _debugService = getIt.get<DebugService>();
+
+  final AuthService _authService;
+  final DebugService _debugService;
   final loginFormKey = GlobalKey<FormState>();
   final passNode = FocusNode();
   final loginController = TextEditingController();
@@ -42,12 +47,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isObscure = true;
   String? _errorMessage;
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _authService = getIt<AuthService>();
-  }
 
   @override
   void dispose() {
@@ -285,6 +284,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _openDebug() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DebugScreen()));
+    _debugService.openDebugScreen();
   }
 }

@@ -1,8 +1,7 @@
-
-import 'package:acits_flutter/ui/screen/debug_screen/debug_screen.dart';
-import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:flutter/material.dart';
 
+import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
@@ -21,6 +20,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  _MainScreenState()
+      : _prescriptionService = getIt.get<PrescriptionService>(),
+        _debugService = getIt.get<DebugService>();
+
+  final PrescriptionService _prescriptionService;
+  final DebugService _debugService;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late bool _isSmallScreen;
   bool _isSearchActive = false;
@@ -44,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       key: scaffoldKey,
       drawer: _buildDrawer(),
-      backgroundColor: ColorRes.background, 
+      backgroundColor: ColorRes.background,
       appBar: AppBar(
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
@@ -142,16 +148,14 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _loadExecutions() async {
     setState(() => _state = WidgetState()..loading());
-    final service = getIt<PrescriptionService>();
-    await service
+    await _prescriptionService
         .fetchTodayPrescriptionList()
         .then((value) => setState(() => _state = WidgetState()..content(value)))
         .catchError((e) => _state = WidgetState()..error = e);
   }
 
   void _openDebug(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => const DebugScreen()));
+    _debugService.openDebugScreen();
   }
 }
 
