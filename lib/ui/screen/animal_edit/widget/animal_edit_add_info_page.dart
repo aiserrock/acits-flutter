@@ -44,6 +44,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
   final _sexController = TextEditingController();
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
+  //ignore: unused_field
   final _weightUnitController = TextEditingController();
   final _colorController = TextEditingController();
   final _specController = TextEditingController();

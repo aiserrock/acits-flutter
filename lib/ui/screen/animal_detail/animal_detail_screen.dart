@@ -16,7 +16,6 @@ import 'package:acits_flutter/ui/widget/default_icon_button.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
 
-part 'animal_card_header.dart';
 part 'animal_common_info.dart';
 part 'animal_prescriptions.dart';
 part 'animal_curator.dart';

@@ -221,6 +221,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
   Future<void> _reschedule() async {
     final now = DateTime.now();
     //TODO: reschedule request
+    //ignore: unused_local_variable
     final result = showDatePicker(
       context: context,
       initialDate: now,
