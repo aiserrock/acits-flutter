@@ -1,7 +1,6 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildPrescriptionsPage(
-    WidgetState<List<Prescription?>?> state) {
+SliverList _buildPrescriptionsPage(WidgetState<List<Prescription?>?> state) {
   return state.isContent
       ? SliverList(
           delegate: SliverChildListDelegate(

@@ -53,7 +53,7 @@ abstract class AuthClientRegister {
     if (proxyUrl != null) {
       t.findProxy = (url) => 'PROXY $proxyUrl';
     }
-    
+
     final chopper = ChopperClient(
         client: http.IOClient(t),
         baseUrl: env.apiUrl,

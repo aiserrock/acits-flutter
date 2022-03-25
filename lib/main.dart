@@ -44,8 +44,7 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: const InputDecorationTheme(
           iconColor: ColorRes.accent,
         ),
-        textSelectionTheme:
-            const TextSelectionThemeData(cursorColor: ColorRes.accent),
+        textSelectionTheme: const TextSelectionThemeData(cursorColor: ColorRes.accent),
       ),
       localizationsDelegates: const [
         StringRes.delegate,

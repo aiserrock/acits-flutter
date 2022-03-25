@@ -38,9 +38,7 @@ List<Widget> _buildCommonInfoContent(AnimalRead animal) {
     AnimalContentCard([
       CardData(
         firstCaption: StringRes.current.animalReceiptDate,
-        firstValue: animal.dateJoined != null
-            ? _dateFormatter.format(animal.dateJoined!)
-            : '',
+        firstValue: animal.dateJoined != null ? _dateFormatter.format(animal.dateJoined!) : '',
         secondCaption: StringRes.current.animalStatus,
         secondValue: animal.statusString ?? '',
       ),
@@ -80,9 +78,8 @@ List<Widget> _buildCommonInfoContent(AnimalRead animal) {
       ),
       CardData(
         firstCaption: StringRes.current.animalChipDate,
-        firstValue: animal.dateOfChipping != null
-            ? _dateFormatter.format(animal.dateOfChipping!)
-            : '',
+        firstValue:
+            animal.dateOfChipping != null ? _dateFormatter.format(animal.dateOfChipping!) : '',
       ),
     ]),
     const SizedBox(
