@@ -156,7 +156,6 @@ extension AnimalX on AnimalRead {
     );
   }
 
-  //ignore: unused_element
   List<AnimalImageWrite>? get _imageWriteList {
     final out = images
         ?.map(
