@@ -5,6 +5,5 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class SharedPreferenceRegister {
   static SharedPreferences? _instance;
   @preResolve
-  Future<SharedPreferences> createSp() async =>
-      _instance ??= await SharedPreferences.getInstance();
+  Future<SharedPreferences> createSp() async => _instance ??= await SharedPreferences.getInstance();
 }

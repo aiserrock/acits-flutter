@@ -25,8 +25,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          color: ColorRes.foreground,
-          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          color: ColorRes.foreground, borderRadius: BorderRadius.all(Radius.circular(8.0))),
       margin: const EdgeInsets.symmetric(
         horizontal: 16.0,
         vertical: 8.0,
@@ -75,18 +74,12 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
                 (drug) => Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
-                          text: (drug.drugName ?? ''),
-                          style: StyleRes.mainContent),
+                      TextSpan(text: (drug.drugName ?? ''), style: StyleRes.mainContent),
                       const TextSpan(text: (', '), style: StyleRes.mainContent),
                       if (drug.drugDosage != null)
-                        TextSpan(
-                            text: (drug.drugDosage.toString()),
-                            style: StyleRes.mainContent),
+                        TextSpan(text: (drug.drugDosage.toString()), style: StyleRes.mainContent),
                       if (drug.formOfDrug != null)
-                        TextSpan(
-                            text: (drug.formOfDrug),
-                            style: StyleRes.mainContent),
+                        TextSpan(text: (drug.formOfDrug), style: StyleRes.mainContent),
                     ],
                   ),
                   maxLines: 3,

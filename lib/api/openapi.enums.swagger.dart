@@ -28,11 +28,7 @@ enum LevelEnum {
   value_3
 }
 
-const $LevelEnumMap = {
-  LevelEnum.value_1: '1',
-  LevelEnum.value_2: '2',
-  LevelEnum.value_3: '3'
-};
+const $LevelEnumMap = {LevelEnum.value_1: '1', LevelEnum.value_2: '2', LevelEnum.value_3: '3'};
 
 enum MyTypeEnum {
   @JsonValue('swaggerGeneratedUnknown')
@@ -132,10 +128,7 @@ enum ApiSchemaGetFormat {
   yaml
 }
 
-const $ApiSchemaGetFormatMap = {
-  ApiSchemaGetFormat.json: 'json',
-  ApiSchemaGetFormat.yaml: 'yaml'
-};
+const $ApiSchemaGetFormatMap = {ApiSchemaGetFormat.json: 'json', ApiSchemaGetFormat.yaml: 'yaml'};
 
 enum ApiSchemaGetLang {
   @JsonValue('swaggerGeneratedUnknown')
@@ -146,10 +139,7 @@ enum ApiSchemaGetLang {
   ru
 }
 
-const $ApiSchemaGetLangMap = {
-  ApiSchemaGetLang.en: 'en',
-  ApiSchemaGetLang.ru: 'ru'
-};
+const $ApiSchemaGetLangMap = {ApiSchemaGetLang.en: 'en', ApiSchemaGetLang.ru: 'ru'};
 
 enum ApiV1AnimalsIdHistoryGetCreatedAtRange {
   @JsonValue('swaggerGeneratedUnknown')

@@ -13,16 +13,14 @@ class $AssetsCommonGen {
   const $AssetsCommonGen();
 
   /// File path: assets/common/empty_state.svg
-  SvgGenImage get emptyState =>
-      const SvgGenImage('assets/common/empty_state.svg');
+  SvgGenImage get emptyState => const SvgGenImage('assets/common/empty_state.svg');
 }
 
 class $AssetsIconGen {
   const $AssetsIconGen();
 
   /// File path: assets/icon/animal_face.svg
-  SvgGenImage get animalFace =>
-      const SvgGenImage('assets/icon/animal_face.svg');
+  SvgGenImage get animalFace => const SvgGenImage('assets/icon/animal_face.svg');
 
   /// File path: assets/icon/applicant.svg
   SvgGenImage get applicant => const SvgGenImage('assets/icon/applicant.svg');
@@ -46,8 +44,7 @@ class $AssetsIconGen {
   SvgGenImage get paw => const SvgGenImage('assets/icon/paw.svg');
 
   /// File path: assets/icon/prescription.svg
-  SvgGenImage get prescription =>
-      const SvgGenImage('assets/icon/prescription.svg');
+  SvgGenImage get prescription => const SvgGenImage('assets/icon/prescription.svg');
 
   /// File path: assets/icon/today.svg
   SvgGenImage get today => const SvgGenImage('assets/icon/today.svg');
@@ -56,16 +53,14 @@ class $AssetsIconGen {
   SvgGenImage get visible => const SvgGenImage('assets/icon/visible.svg');
 
   /// File path: assets/icon/visible_off.svg
-  SvgGenImage get visibleOff =>
-      const SvgGenImage('assets/icon/visible_off.svg');
+  SvgGenImage get visibleOff => const SvgGenImage('assets/icon/visible_off.svg');
 }
 
 class $AssetsImageGen {
   const $AssetsImageGen();
 
   /// File path: assets/image/animal_stub.png
-  AssetGenImage get animalStub =>
-      const AssetGenImage('assets/image/animal_stub.png');
+  AssetGenImage get animalStub => const AssetGenImage('assets/image/animal_stub.png');
 
   /// File path: assets/image/error_stub.svg
   SvgGenImage get errorStub => const SvgGenImage('assets/image/error_stub.svg');
@@ -74,16 +69,13 @@ class $AssetsImageGen {
   SvgGenImage get logoBar => const SvgGenImage('assets/image/logo_bar.svg');
 
   /// File path: assets/image/logo_leading_bar.svg
-  SvgGenImage get logoLeadingBar =>
-      const SvgGenImage('assets/image/logo_leading_bar.svg');
+  SvgGenImage get logoLeadingBar => const SvgGenImage('assets/image/logo_leading_bar.svg');
 
   /// File path: assets/image/logo_native.png
-  AssetGenImage get logoNative =>
-      const AssetGenImage('assets/image/logo_native.png');
+  AssetGenImage get logoNative => const AssetGenImage('assets/image/logo_native.png');
 
   /// File path: assets/image/logo_splash.svg
-  SvgGenImage get logoSplash =>
-      const SvgGenImage('assets/image/logo_splash.svg');
+  SvgGenImage get logoSplash => const SvgGenImage('assets/image/logo_splash.svg');
 }
 
 class $AssetsLottieGen {
