@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.000612">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="01: fvm flutter build ios --flavor dev -t test/dev/main.dart" time="31.674576">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="02: increment_build_number" time="1.952686">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="03: increment_version_number" time="1.430586">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="04: Switch to ios get_app_store_connect_api_key lane" time="0.000448">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="05: app_store_connect_api_key" time="0.006201">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="06: cert" time="1.524968">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="07: Switch to ios get_app_store_connect_api_key lane" time="0.000411">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="08: app_store_connect_api_key" time="0.004711">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="09: get_provisioning_profile" time="1.476007">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: gym" time="180.69024">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="11: Switch to ios get_app_store_connect_api_key lane" time="0.000573">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="12: app_store_connect_api_key" time="0.003961">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="13: upload_to_testflight" time="89.64741">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
