@@ -53,3 +53,10 @@ app.*.map.json
 # CI/CD build
 /archive/
 /artifact/
+
+# fastlane
+ios/fastlane/*.p8
+ios/*.cer
+ios/*.ipa
+ios/*.app.dSYM.zip
+ios/*.mobileprovision
