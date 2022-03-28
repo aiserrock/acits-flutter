@@ -13,7 +13,7 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-sh_flutter_build_dev="fvm flutter build ios --flavor dev -t test/dev/main.dart"
+# sh_flutter_build_dev="fvm flutter build ios --flavor dev -t test/dev/main.dart"
 
 prod_scheme="prod"
 dev_scheme="dev"
@@ -27,7 +27,7 @@ platform :ios do
 
   lane :relese_dev do 
 
-    sh sh_flutter_build_dev
+    # sh sh_flutter_build_dev
 
     increment_build_number(
       build_number: "7" # set a specific number
