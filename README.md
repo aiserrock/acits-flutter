@@ -38,3 +38,8 @@ https://pub.dev/packages/swagger_dart_code_generator
 ```bash
 fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```
+
+### Build apk/aab
+```bash
+fvm flutter build appbundle -t test/dev/main.dart --release --obfuscate --split-debug-info=./build/app/outputs/symbols/dev
+```
