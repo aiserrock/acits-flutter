@@ -75,6 +75,7 @@ flutter:
     - assets/onboarding/
     - assets/common/
     - assets/lottie/
+    - assets/cert/
 
   fonts:
     - family: icomoon
