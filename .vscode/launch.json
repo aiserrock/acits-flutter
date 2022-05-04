@@ -14,7 +14,7 @@
       "name": "dev_debug",
       "request": "launch",
       "type": "dart",
-      // "flutterMode": "debug",
+      "flutterMode": "debug",
       "program": "test/dev/main.dart",
       "args": [
         "--flavor",

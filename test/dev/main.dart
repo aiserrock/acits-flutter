@@ -12,7 +12,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome?.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _setupLogging();
-  _addDebugHttpCerts();
+  await _addDebugHttpCerts();
   await initDevDi();
   runApp(const MyApp());
 }
@@ -25,14 +25,23 @@ void _setupLogging() {
   });
 }
 
-void _addDebugHttpCerts() {
+Future<void> _addDebugHttpCerts() async {
+  final cert = await rootBundle
+      .loadString(CertRes.nikitaAir13)
+      .then((value) => value.split('').map(int.parse).toList());
+  final cert1 = await rootBundle
+      .loadString(CertRes.nikitaMac2013)
+      .then((value) => value.split('').map(int.parse).toList());
+  final cert2 = await rootBundle
+      .loadString(CertRes.nikitaMacPro13)
+      .then((value) => value.split('').map(int.parse).toList());
+
   HttpOverrides.global = SslHttpOverrides(
-    //ignore: avoid_redundant_argument_values
     withTrustedRoots: true,
-    certFilePathes: [
-      CertRes.nikitaAir13,
-      CertRes.nikitaMac2013,
-      CertRes.nikitaMacPro13,
+    certBytes: [
+      cert,
+      cert1,
+      cert2,
     ],
   );
 }
