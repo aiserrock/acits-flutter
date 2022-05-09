@@ -153,6 +153,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     BuildContext context,
     AnimalRead animal,
   ) {
+    final avatar = animal.thumb;
     return Column(
       children: [
         DefaultAppBar(
@@ -168,12 +169,15 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               child: Row(
                 children: [
                   InkWell(
+                    borderRadius: BorderRadius.circular(30.0),
                     onTap: () => _onPhotoPressed(context, animal),
-                    child: CircleAvatar(
-                      radius: 30.0,
-                      backgroundColor: ColorRes.background,
-                      backgroundImage: NetworkImage(animal.avatar?.image?.small ?? ''),
-                    ),
+                    child: avatar != null
+                        ? CircleAvatar(
+                            radius: 30.0,
+                            backgroundColor: ColorRes.background,
+                            backgroundImage: NetworkImage(avatar),
+                          )
+                        : _buildAddPhotoIcon(30.0),
                   ),
                   const SizedBox(width: 16.0),
                   Column(
@@ -202,22 +206,51 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  Widget _buildHeaderImagePager(BuildContext context, AnimalRead animal) {
+  Widget _buildAddPhotoIcon(double radius) {
+    return Container(
+      height: radius * 2,
+      width: radius * 2,
+      decoration: BoxDecoration(
+        color: ColorRes.background,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: const Center(
+        child: Icon(
+          Icons.add_a_photo_outlined,
+          color: ColorRes.accent,
+          size: 32.0,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderImagePager(
+    BuildContext context,
+    AnimalRead animal,
+  ) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 100.0),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16.0),
-                bottomRight: Radius.circular(16.0),
-              ),
-              child: PageView(
-                controller: _imagePageController,
-                children: animal.images
-                        ?.map<Widget>(
-                          (image) => Stack(
+        if (animal.images?.isEmpty ?? true)
+          Center(
+            child: CupertinoButton(
+              onPressed: () => _onPhotoPressed(context, animal),
+              child: _buildAddPhotoIcon(60.0),
+            ),
+          ),
+        if (animal.images?.isNotEmpty ?? false)
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 100.0),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.circular(16.0),
+                ),
+                child: PageView(
+                  controller: _imagePageController,
+                  children: animal.images?.map<Widget>(
+                        (image) {
+                          return Stack(
                             children: [
                               Positioned.fill(
                                 child: Image.network(
@@ -235,14 +268,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                                 ),
                               ),
                             ],
-                          ),
-                        )
-                        .toList() ??
-                    [],
+                          );
+                        },
+                      ).toList() ??
+                      [],
+                ),
               ),
             ),
           ),
-        ),
         _buildHeaderExpandedTitle(animal),
         _buildHeaderImageIndicator(context, animal),
       ],
@@ -324,7 +357,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                 Icons.share_outlined,
                 color: ColorRes.accent,
               ),
-              onPressed: () => _onPhotoPressed(context, animal),
+              onPressed: () {},
             ),
           ],
         ),
