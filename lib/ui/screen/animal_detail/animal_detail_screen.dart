@@ -167,10 +167,13 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               opacity: Curves.easeInOutExpo.transform(_titleOpacity),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: ColorRes.background,
-                    backgroundImage: NetworkImage(animal.avatar?.image?.small ?? ''),
+                  InkWell(
+                    onTap: () => _onPhotoPressed(context, animal),
+                    child: CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: ColorRes.background,
+                      backgroundImage: NetworkImage(animal.avatar?.image?.small ?? ''),
+                    ),
                   ),
                   const SizedBox(width: 16.0),
                   Column(
@@ -321,7 +324,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                 Icons.share_outlined,
                 color: ColorRes.accent,
               ),
-              onPressed: () {},
+              onPressed: () => _onPhotoPressed(context, animal),
             ),
           ],
         ),
@@ -428,7 +431,11 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   void _onPhotoPressed(BuildContext context, AnimalRead animal) {
     final id = animal.id;
     if (id != null) {
-      Navigator.of(context).push(PhotoGalleryScreenRoute(animalId: animal.id!));
+      Navigator.of(context).push(PhotoGalleryScreenRoute(animalId: animal.id!)).then(
+        (value) {
+          if (value is bool && value) _loadAnimal();
+        },
+      );
     }
   }
 

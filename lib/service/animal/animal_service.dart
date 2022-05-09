@@ -1,8 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
+import 'package:acits_flutter/domain/gallery_item_data.dart';
+import 'package:acits_flutter/export.dart';
+import 'package:flutter/services.dart';
+import 'package:image/image.dart' as image_util;
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/api/openapi.swagger.dart';
+
+const _maxAnimalImageSize = 1024;
 
 @singleton
 class AnimalService {
@@ -119,5 +128,73 @@ class AnimalService {
     assert(value >= 0);
     assert(value < ApiV1AnimalsSpeciesGetLevel.values.length - 1);
     return ApiV1AnimalsSpeciesGetLevel.values[value + 1];
+  }
+
+  Future<AnimalRead> changeAnimalPhotos(
+    int animalId,
+    List<GalleryItemData> images,
+  ) async {
+    final animal = await _client.apiV1AnimalsIdGet(
+      id: animalId.toString(),
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    final retainImages = <int>[];
+    images.where((e) => e.network != null).forEach((e) {
+      if (e.isChoosed) retainImages.add(e.network?.id ?? -1);
+    });
+
+    final additional = <AnimalImageWrite>[];
+    final assets = images.where((e) => e.assetPath != null && e.isChoosed);
+    if (assets.isNotEmpty) {
+      await Future.wait(
+        assets.map((e) async {
+          final fileBytes = (await rootBundle.load(e.assetPath!));
+          final buffer = fileBytes.buffer;
+          additional.add(AnimalImageWrite(
+            isPrimary: false,
+            name: e.assetPath,
+            image:
+                base64Encode(buffer.asUint8List(fileBytes.offsetInBytes, fileBytes.lengthInBytes)),
+          ));
+        }),
+      );
+    }
+
+    images.where((e) => e.filePath != null && e.isChoosed).forEach((e) {
+      var image = image_util.decodeImage(File(e.filePath!).readAsBytesSync());
+      if (image == null) return;
+      if (image.height > _maxAnimalImageSize || image.width > _maxAnimalImageSize) {
+        final ratio = _maxAnimalImageSize / max(image.height, image.width);
+        image = image_util.copyResize(
+          image,
+          height: (image.height * ratio).floor(),
+          width: (image.width * ratio).floor(),
+        );
+      }
+
+      additional.add(AnimalImageWrite(
+        isPrimary: false,
+        name: e.filePath,
+        image: base64Encode(image_util.encodePng(image)),
+      ));
+    });
+
+    final result = await _client.apiV1AnimalsIdPut(
+      xCurrentShelter: _authService.currentShelterId,
+      id: animalId.toString(),
+      body: animal.body?.write.copyWith(
+        images: additional,
+        validImages: retainImages,
+      ),
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
   }
 }

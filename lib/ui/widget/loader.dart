@@ -6,8 +6,8 @@ import 'package:lottie/lottie.dart';
 
 const _sizePart = .75;
 
-class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({
+class LoaderHolderWidget extends StatelessWidget {
+  const LoaderHolderWidget({
     this.assetPath,
     Key? key,
   }) : super(key: key);
