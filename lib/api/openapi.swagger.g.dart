@@ -1027,7 +1027,7 @@ PrescriptionShort _$PrescriptionShortFromJson(Map<String, dynamic> json) => Pres
 
 Map<String, dynamic> _$PrescriptionShortToJson(PrescriptionShort instance) => <String, dynamic>{
       'id': instance.id,
-      'myType': instance.myType,
+      'my_type': instance.myType,
       'description': instance.description,
       'animal': instance.animal?.toJson(),
       'drugs': instance.drugs?.map((e) => e.toJson()).toList(),

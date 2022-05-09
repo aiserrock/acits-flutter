@@ -631,9 +631,7 @@ class _$Openapi extends Openapi {
       'limit': limit,
       'offset': offset,
       'ordering': ordering,
-      'search': search,
-      'from': from,
-      'to': to,
+      'search': search
     };
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,

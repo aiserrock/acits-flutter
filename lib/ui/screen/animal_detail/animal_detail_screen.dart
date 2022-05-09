@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -213,9 +214,24 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                 controller: _imagePageController,
                 children: animal.images
                         ?.map<Widget>(
-                          (image) => Image.network(
-                            image.image?.medium ?? '',
-                            fit: BoxFit.cover,
+                          (image) => Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Image.network(
+                                  image.image?.medium ?? '',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned.fill(
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    splashColor: ColorRes.accent.withOpacity(.4),
+                                    onTap: () => _onPhotoPressed(context, animal),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         )
                         .toList() ??
@@ -407,6 +423,13 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         ),
       ),
     );
+  }
+
+  void _onPhotoPressed(BuildContext context, AnimalRead animal) {
+    final id = animal.id;
+    if (id != null) {
+      Navigator.of(context).push(PhotoGalleryScreenRoute(animalId: animal.id!));
+    }
   }
 
   void _onScroll() {
