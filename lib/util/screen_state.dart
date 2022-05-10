@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class WidgetState<T> {
+  WidgetState([T? value]) : _value = value;
+
   T? _value;
   Object? _error;
   bool _loading = false;

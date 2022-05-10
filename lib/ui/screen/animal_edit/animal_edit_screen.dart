@@ -115,7 +115,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
         child: _isEdit
             ? StateBuilder<_AnimalEditScreenMode>(
                 state: _editState,
-                loader: (_) => const LoadingWidget(),
+                loader: (_) => const LoaderHolderWidget(),
                 errorBuilder: (_, e) => ErrorHolderWidget(error: e),
                 builder: (context, mode) {
                   return mode == _AnimalEditScreenMode.form

@@ -16,6 +16,31 @@ class $AssetsCommonGen {
   SvgGenImage get emptyState => const SvgGenImage('assets/common/empty_state.svg');
 }
 
+class $AssetsGalleryGen {
+  const $AssetsGalleryGen();
+
+  /// File path: assets/gallery/avatar_alpaka.png
+  AssetGenImage get avatarAlpaka => const AssetGenImage('assets/gallery/avatar_alpaka.png');
+
+  /// File path: assets/gallery/avatar_cat_0.png
+  AssetGenImage get avatarCat0 => const AssetGenImage('assets/gallery/avatar_cat_0.png');
+
+  /// File path: assets/gallery/avatar_cat_1.png
+  AssetGenImage get avatarCat1 => const AssetGenImage('assets/gallery/avatar_cat_1.png');
+
+  /// File path: assets/gallery/avatar_dog.png
+  AssetGenImage get avatarDog => const AssetGenImage('assets/gallery/avatar_dog.png');
+
+  /// File path: assets/gallery/avatar_dolphin.png
+  AssetGenImage get avatarDolphin => const AssetGenImage('assets/gallery/avatar_dolphin.png');
+
+  /// File path: assets/gallery/avatar_eagle.png
+  AssetGenImage get avatarEagle => const AssetGenImage('assets/gallery/avatar_eagle.png');
+
+  /// File path: assets/gallery/avatar_mouse.png
+  AssetGenImage get avatarMouse => const AssetGenImage('assets/gallery/avatar_mouse.png');
+}
+
 class $AssetsIconGen {
   const $AssetsIconGen();
 
@@ -120,6 +145,7 @@ class Assets {
   Assets._();
 
   static const $AssetsCommonGen common = $AssetsCommonGen();
+  static const $AssetsGalleryGen gallery = $AssetsGalleryGen();
   static const $AssetsIconGen icon = $AssetsIconGen();
   static const $AssetsImageGen image = $AssetsImageGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
