@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -365,7 +366,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  SliverList _buildPage(int count, AnimalRead animal) {
+  Widget _buildPage(int count, AnimalRead animal) {
     switch (_currentTab) {
       case 0:
         return _buildCommonInfoPage(animal);
@@ -376,22 +377,24 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       case 3:
         return _buildApplicantPage(animal);
       default:
-        return SliverList(
-          delegate: SliverChildListDelegate(
-            List.filled(
-              count,
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 64.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: ColorRes.textSecondary, borderRadius: BorderRadius.circular(8.0)),
-                ),
-              ),
-            ),
-          ),
-        );
+        return CommentListWidget(animal.id!);
+        
+        // SliverList(
+        //   delegate: SliverChildListDelegate(
+        //     List.filled(
+        //       count,
+        //       Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: Container(
+        //           height: 64.0,
+        //           width: double.infinity,
+        //           decoration: BoxDecoration(
+        //               color: ColorRes.textSecondary, borderRadius: BorderRadius.circular(8.0)),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // );
     }
   }
 
@@ -453,8 +456,6 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               if (index != null) _currentTab = index;
             });
             proceedOnNextFrame(_onScroll);
-            // Future.delayed(Duration(milliseconds: 16), _onScroll);
-            // _scrollController.jumpTo(_scrollController.position.pixels + .01);
           },
         ),
       ),

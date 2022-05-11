@@ -61,6 +61,7 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
   @override
   void dispose() {
     _screenState.close();
+    _isSelectorChanged.close();
     super.dispose();
   }
 

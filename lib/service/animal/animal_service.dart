@@ -12,6 +12,7 @@ import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 
 const _maxAnimalImageSize = 1024;
+const _notesListLimit = 25;
 
 @singleton
 class AnimalService {
@@ -187,6 +188,27 @@ class AnimalService {
         images: additional,
         validImages: retainImages,
       ),
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  Future<PaginatedAnimalNoteList?> fetchAnimalNotes(
+    int animalId, {
+    int limit = _notesListLimit,
+    int offset = 0,
+  }) async {
+    final result = await _client.apiV1AnimalsNotesGet(
+      animal: animalId,
+      limit: limit,
+      offset: offset,
+      xCurrentShelter: _authService.currentShelterId,
     );
 
     final data = result.body;
