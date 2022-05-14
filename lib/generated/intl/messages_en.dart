@@ -70,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalGenderUndefined":
             MessageLookupByLibrary.simpleMessage("Unknown"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Kind"),
+        "animalMaxImagesCountIs": MessageLookupByLibrary.simpleMessage(
+            "Max images count for animal is "),
         "animalName": MessageLookupByLibrary.simpleMessage("Nickname"),
         "animalPickCurator":
             MessageLookupByLibrary.simpleMessage("Pick curator"),
@@ -94,6 +96,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Size, cm"),
         "applicantAdd": MessageLookupByLibrary.simpleMessage("New applicant"),
         "applicantEdit": MessageLookupByLibrary.simpleMessage("Edit applicant"),
+        "commentDeletingFail":
+            MessageLookupByLibrary.simpleMessage("Comment deletion failed"),
         "common": MessageLookupByLibrary.simpleMessage("common"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Add"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Animals"),
@@ -105,10 +109,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonDone": MessageLookupByLibrary.simpleMessage("Done"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Edit"),
+        "commonError": MessageLookupByLibrary.simpleMessage("Error"),
         "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
             "Failed to load data.\nPlease try again."),
         "commonErrorStubTitle":
             MessageLookupByLibrary.simpleMessage("Oh, something went wrong..."),
+        "commonErrorTryAgainMessage": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong. Try again later."),
+        "commonLoading": MessageLookupByLibrary.simpleMessage("Loading"),
         "commonMonth": MessageLookupByLibrary.simpleMessage("month"),
         "commonNDays": m0,
         "commonNMonth": m1,
@@ -124,6 +132,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonYear": MessageLookupByLibrary.simpleMessage("year"),
         "curatorAdd": MessageLookupByLibrary.simpleMessage("New curator"),
         "curatorEdit": MessageLookupByLibrary.simpleMessage("Edit curator"),
+        "errorDefaultMsg": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong. Try again later."),
+        "errorInternetFail":
+            MessageLookupByLibrary.simpleMessage("No internet :("),
+        "errorInternetFailMsg":
+            MessageLookupByLibrary.simpleMessage("Try again later"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Wrong login or password"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
+import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _scrollController = ScrollController();
   final _imagePageController = PageController();
+
+  final _onCreateCommentStream = StreamController<AnimalNote>.broadcast();
+
   late bool _isSmallScreen;
   int _currentTab = 0;
   double _titleOpacity = .0;
@@ -67,6 +72,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
+    _onCreateCommentStream.close();
     super.dispose();
   }
 
@@ -90,7 +96,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               color: Colors.white,
             ),
             foregroundColor: ColorRes.accent,
-            onPressed: () {},
+            onPressed: () => _onFabPressed(context),
           )
         : null;
   }
@@ -365,7 +371,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  SliverList _buildPage(int count, AnimalRead animal) {
+  Widget _buildPage(int count, AnimalRead animal) {
     switch (_currentTab) {
       case 0:
         return _buildCommonInfoPage(animal);
@@ -376,21 +382,10 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       case 3:
         return _buildApplicantPage(animal);
       default:
-        return SliverList(
-          delegate: SliverChildListDelegate(
-            List.filled(
-              count,
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 64.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: ColorRes.textSecondary, borderRadius: BorderRadius.circular(8.0)),
-                ),
-              ),
-            ),
-          ),
+        return CommentListWidget(
+          animal.id!,
+          scrollController: _scrollController,
+          onCreateCommentStream: _onCreateCommentStream,
         );
     }
   }
@@ -453,8 +448,6 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               if (index != null) _currentTab = index;
             });
             proceedOnNextFrame(_onScroll);
-            // Future.delayed(Duration(milliseconds: 16), _onScroll);
-            // _scrollController.jumpTo(_scrollController.position.pixels + .01);
           },
         ),
       ),
@@ -498,5 +491,17 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         .then(
             (value) => setState(() => _statePrescriptions = WidgetState()..content(value?.results)))
         .catchError((e) => setState(() => _state = WidgetState()..error = e));
+  }
+
+  void _onFabPressed(BuildContext context) {
+    if (_currentTab == 4) {
+      Navigator.of(context).push(CommentEditScreenRoute(animalId: widget.id)).then(
+        (value) {
+          if (value != null) {
+            _onCreateCommentStream.add(value);
+          }
+        },
+      );
+    }
   }
 }

@@ -17,7 +17,7 @@
   "@commonNYears": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int" 
       }
     }
   },
@@ -55,6 +55,7 @@
   "animalGenderMiddle": "Middle",
   "animalGenderUndefined": "Unknown",
   "animalKind": "Kind",
+  "animalMaxImagesCountIs": "Max images count for animal is ",
   "animalName": "Nickname",
   "animalPickCurator": "Pick curator",
   "animalPrescriptions": "Prescriptions",
@@ -72,6 +73,7 @@
   "aninmalSize": "Size, cm",
   "applicantAdd": "New applicant",
   "applicantEdit": "Edit applicant",
+  "commentDeletingFail": "Comment deletion failed",
   "common": "common",
   "commonAdd": "Add",
   "commonAnimals": "Animals",
@@ -83,8 +85,11 @@
   "commonDone": "Done",
   "commonDrugs": "Drugs",
   "commonEdit": "Edit",
+  "commonError": "Error",
   "commonErrorStubMsg": "Failed to load data.\nPlease try again.",
   "commonErrorStubTitle": "Oh, something went wrong...",
+  "commonErrorTryAgainMessage": "Something went wrong. Try again later.",
+  "commonLoading": "Loading",
   "commonMonth": "month",
   "commonNDays": "{count,plural, =0{no {day}s} =1{{count} {day}} =2{{count} {day}s} few{{count} {day}s} other{{count} {day}s}}",
   "commonNMonth": "{count,plural, =0{no {month}s} =1{{count} {month}} =2{{count} {month}s} few{{count} {month}s} other{{count} {month}s}}",
@@ -99,6 +104,9 @@
   "commonYear": "year",
   "curatorAdd": "New curator",
   "curatorEdit": "Edit curator",
+  "errorDefaultMsg": "Something went wrong. Try again later.",
+  "errorInternetFail": "No internet :(",
+  "errorInternetFailMsg": "Try again later",
   "loginAuthorizeError": "Wrong login or password",
   "loginDescribeMsg": "ACITS - Animal control\nin the shelter",
   "loginEntryBtn": "Enter",

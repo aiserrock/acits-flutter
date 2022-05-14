@@ -1,4 +1,4 @@
-import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
+import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen_route.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -240,10 +240,6 @@ class AnimalCardWidget extends StatelessWidget {
 
   void _navigateDetail(BuildContext context) {
     if (itemData?.id == null) return;
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (_) => AnimalDetailScreen(id: itemData!.id!),
-      ),
-    );
+    Navigator.of(context, rootNavigator: true).push(AnimalDetailScreenRoute(id: itemData!.id!));
   }
 }

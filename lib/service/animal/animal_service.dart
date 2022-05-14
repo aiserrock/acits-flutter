@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:acits_flutter/domain/gallery_item_data.dart';
 import 'package:acits_flutter/export.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as image_util;
 import 'package:injectable/injectable.dart';
@@ -12,6 +13,7 @@ import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 
 const _maxAnimalImageSize = 1024;
+const _notesListLimit = 25;
 
 @singleton
 class AnimalService {
@@ -196,5 +198,109 @@ class AnimalService {
     } else {
       throw MessagedException(error: result.error);
     }
+  }
+
+  Future<PaginatedAnimalNoteList?> fetchAnimalNotes(
+    int animalId, {
+    int limit = _notesListLimit,
+    int? offset = 0,
+  }) async {
+    final result = await _client.apiV1AnimalsNotesGet(
+      animal: animalId,
+      limit: limit,
+      offset: offset,
+      ordering: '-created_at',
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  Future<AnimalNote?> patchAnimalNote({
+    required int id,
+    required int animalId,
+    required String text,
+    List<PlatformFile>? files,
+  }) async {
+    final content = PatchedAnimalNote(
+      id: id,
+      animal: animalId,
+      content: text,
+      files: _prepareNoteFiles(files),
+    );
+    final result = await _client.apiV1AnimalsNotesIdPatch(
+      id: id,
+      body: content,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  Future<bool> deleteAnimalNote({required int id}) async {
+    final result = await _client.apiV1AnimalsNotesIdDelete(
+      id: id,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    if (result.error == null) {
+      return true;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  Future<AnimalNote?> createAnimalNote({
+    required int animalId,
+    required String text,
+    List<PlatformFile>? files,
+  }) async {
+    final content = AnimalNote(
+      animal: animalId,
+      content: text,
+      files: _prepareNoteFiles(files),
+    );
+
+    final result = await _client.apiV1AnimalsNotesPost(
+      body: content,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    final data = result.body;
+
+    if (data != null) {
+      return data;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  List<AnimalNoteFile>? _prepareNoteFiles(List<PlatformFile>? files) {
+    final preparedfiles = files?.where((file) => file.path != null).map<AnimalNoteFile>(
+      (file) {
+        int indexOfExtSplit = file.name.lastIndexOf('.');
+        if (indexOfExtSplit < 0) indexOfExtSplit = file.name.length;
+        return AnimalNoteFile(
+          name: file.name.substring(0, indexOfExtSplit),
+          file: 'data:application/${file.extension};base64,' +
+              base64Encode(
+                File(file.path!).readAsBytesSync(),
+              ),
+        );
+      },
+    ).toList();
+    return preparedfiles;
   }
 }

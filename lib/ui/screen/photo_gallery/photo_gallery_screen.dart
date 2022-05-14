@@ -61,6 +61,7 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
   @override
   void dispose() {
     _screenState.close();
+    _isSelectorChanged.close();
     super.dispose();
   }
 
@@ -197,8 +198,8 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
     if (list.countChoosedItems > 6) {
       final ctx = _scaffoldKey.currentContext ?? context;
       ScaffoldMessenger.of(ctx).showSnackBar(
-        const SnackBar(
-          content: Text('Max count images for animal is $_maxCountImages'),
+        SnackBar(
+          content: Text('${StringRes.current.animalMaxImagesCountIs} $_maxCountImages'),
         ),
       );
       return;

@@ -10,12 +10,12 @@ SliverList _buildPrescriptionsPage(WidgetState<List<Prescription?>?> state) {
       : state.isLoading
           ? SliverList(
               delegate: SliverChildListDelegate(
-                [const Text('loading')],
+                [Text(StringRes.current.commonLoading)],
               ),
             )
           : SliverList(
               delegate: SliverChildListDelegate(
-                [const Text('error')],
+                [Text(StringRes.current.commonError)],
               ),
             );
 }

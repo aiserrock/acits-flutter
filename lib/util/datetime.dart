@@ -6,4 +6,6 @@ extension DateTimeX on DateTime {
   String toIsoDateOnly() {
     return _dateOnlyFormat.format(this);
   }
+
+  String get toDateTimeHuman => DateFormat('dd.MM.yyyy HH:mm').format(toLocal());
 }
