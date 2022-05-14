@@ -74,6 +74,8 @@
   "applicantAdd": "New applicant",
   "applicantEdit": "Edit applicant",
   "commentDeletingFail": "Comment deletion failed",
+  "commentTitleEdit": "Edit comment",
+  "commentTitleNew": "New comment",
   "common": "common",
   "commonAdd": "Add",
   "commonAnimals": "Animals",

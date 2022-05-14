@@ -107,6 +107,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "applicantEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
         "commentDeletingFail": MessageLookupByLibrary.simpleMessage(
             "Не удалось удалить комментарий"),
+        "commentTitleEdit":
+            MessageLookupByLibrary.simpleMessage("Редактирование"),
+        "commentTitleNew":
+            MessageLookupByLibrary.simpleMessage("Новый комментарий"),
         "common": MessageLookupByLibrary.simpleMessage("общий"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Добавить"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Животные"),

@@ -580,6 +580,26 @@ class StringRes {
     );
   }
 
+  /// `Edit comment`
+  String get commentTitleEdit {
+    return Intl.message(
+      'Edit comment',
+      name: 'commentTitleEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New comment`
+  String get commentTitleNew {
+    return Intl.message(
+      'New comment',
+      name: 'commentTitleNew',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `common`
   String get common {
     return Intl.message(

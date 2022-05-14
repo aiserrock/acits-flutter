@@ -280,7 +280,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
       context,
       <Widget, dynamic Function()>{
         Text(
-          'Edit',
+          StringRes.current.commonEdit,
           style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
         ): () async {
           final result = await Navigator.of(context).push(
@@ -293,7 +293,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
           Navigator.of(context).pop();
         },
         Text(
-          'Delete',
+          StringRes.current.commonDelete,
           style: StyleRes.mainContent.copyWith(color: ColorRes.error),
         ): () {
           _deleteComment(context, comment);
