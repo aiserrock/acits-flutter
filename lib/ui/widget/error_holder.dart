@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/lottie.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
@@ -57,7 +58,7 @@ class ErrorHolderWidget extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: PrimaryButton(
                 onPressed: () => onPressed?.call(),
-                text: 'Повторить',
+                text: StringRes.current.commonReloadBtn,
               ),
             )
           ],
@@ -71,22 +72,22 @@ extension _ErrorX on Object {
   String get title {
     switch (runtimeType) {
       case MessagedException:
-        return 'Ошибка';
+        return StringRes.current.commonError;
       case SocketException:
-        return 'Нет интернета :(';
+        return StringRes.current.errorInternetFail;
       default:
-        return 'Ошибка';
+        return StringRes.current.commonError;
     }
   }
 
   String get message {
     switch (runtimeType) {
       case MessagedException:
-        return 'Что-то пошло не так, попробуйте еще раз позже';
+        return StringRes.current.errorDefaultMsg;
       case SocketException:
-        return 'Неустойчивое соединение, попробуйте еще раз позже';
+        return StringRes.current.errorInternetFailMsg;
       default:
-        return 'Что-то пошло не так, попробуйте еще раз позже';
+        return StringRes.current.errorDefaultMsg;
     }
   }
 }

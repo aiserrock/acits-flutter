@@ -243,8 +243,8 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
   ) {
     _submitState.add(WidgetState()..error = error);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Произошла ошибка. Попробуйте позже.'),
+       SnackBar(
+        content: Text(StringRes.current.commonErrorTryAgainMessage),
       ),
     );
   }

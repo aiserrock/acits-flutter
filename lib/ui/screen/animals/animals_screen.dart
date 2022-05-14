@@ -185,9 +185,9 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                   height: 48.0,
                   child: Center(child: CircularProgressIndicator()),
                 ),
-                errorBuilder: (_, __) => const SizedBox(
+                errorBuilder: (_, __) => SizedBox(
                   height: 64.0,
-                  child: Center(child: Text('error')),
+                  child: Center(child: Text(StringRes.current.commonError)),
                 ),
               ),
             )

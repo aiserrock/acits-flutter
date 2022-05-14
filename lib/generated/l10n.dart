@@ -390,6 +390,16 @@ class StringRes {
     );
   }
 
+  /// `Max images count for animal is `
+  String get animalMaxImagesCountIs {
+    return Intl.message(
+      'Max images count for animal is ',
+      name: 'animalMaxImagesCountIs',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Nickname`
   String get animalName {
     return Intl.message(
@@ -560,6 +570,16 @@ class StringRes {
     );
   }
 
+  /// `Comment deletion failed`
+  String get commentDeletingFail {
+    return Intl.message(
+      'Comment deletion failed',
+      name: 'commentDeletingFail',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `common`
   String get common {
     return Intl.message(
@@ -670,6 +690,16 @@ class StringRes {
     );
   }
 
+  /// `Error`
+  String get commonError {
+    return Intl.message(
+      'Error',
+      name: 'commonError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Failed to load data.\nPlease try again.`
   String get commonErrorStubMsg {
     return Intl.message(
@@ -685,6 +715,26 @@ class StringRes {
     return Intl.message(
       'Oh, something went wrong...',
       name: 'commonErrorStubTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong. Try again later.`
+  String get commonErrorTryAgainMessage {
+    return Intl.message(
+      'Something went wrong. Try again later.',
+      name: 'commonErrorTryAgainMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading`
+  String get commonLoading {
+    return Intl.message(
+      'Loading',
+      name: 'commonLoading',
       desc: '',
       args: [],
     );
@@ -840,6 +890,36 @@ class StringRes {
     return Intl.message(
       'Edit curator',
       name: 'curatorEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong. Try again later.`
+  String get errorDefaultMsg {
+    return Intl.message(
+      'Something went wrong. Try again later.',
+      name: 'errorDefaultMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No internet :(`
+  String get errorInternetFail {
+    return Intl.message(
+      'No internet :(',
+      name: 'errorInternetFail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try again later`
+  String get errorInternetFailMsg {
+    return Intl.message(
+      'Try again later',
+      name: 'errorInternetFailMsg',
       desc: '',
       args: [],
     );

@@ -319,7 +319,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
         .catchError(
       (e) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Fail delete comment')));
+            .showSnackBar(SnackBar(content: Text(StringRes.current.commentDeletingFail)));
       },
     );
   }

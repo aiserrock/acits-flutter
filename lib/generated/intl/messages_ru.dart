@@ -77,6 +77,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalGenderUndefined":
             MessageLookupByLibrary.simpleMessage("Неизвестен"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Вид"),
+        "animalMaxImagesCountIs": MessageLookupByLibrary.simpleMessage(
+            "Максимальное число фото не должно превышать "),
         "animalName": MessageLookupByLibrary.simpleMessage("Кличка"),
         "animalPickCurator":
             MessageLookupByLibrary.simpleMessage("Выбрать куратора"),
@@ -103,6 +105,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Рост, см"),
         "applicantAdd": MessageLookupByLibrary.simpleMessage("Новый заявитель"),
         "applicantEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
+        "commentDeletingFail": MessageLookupByLibrary.simpleMessage(
+            "Не удалось удалить комментарий"),
         "common": MessageLookupByLibrary.simpleMessage("общий"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Добавить"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Животные"),
@@ -114,10 +118,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonDone": MessageLookupByLibrary.simpleMessage("Выполнено"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Медикаменты"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
+        "commonError": MessageLookupByLibrary.simpleMessage("Ошибка"),
         "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
             "Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз."),
         "commonErrorStubTitle":
             MessageLookupByLibrary.simpleMessage("Ой, что-то пошло не так..."),
+        "commonErrorTryAgainMessage": MessageLookupByLibrary.simpleMessage(
+            "Произошла ошибка. Попробуйте позже."),
+        "commonLoading": MessageLookupByLibrary.simpleMessage("Загрузка"),
         "commonMonth": MessageLookupByLibrary.simpleMessage("месяц"),
         "commonNDays": m0,
         "commonNMonth": m1,
@@ -133,6 +141,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonYear": MessageLookupByLibrary.simpleMessage("год"),
         "curatorAdd": MessageLookupByLibrary.simpleMessage("Новый куратор"),
         "curatorEdit": MessageLookupByLibrary.simpleMessage("Редактирование"),
+        "errorDefaultMsg": MessageLookupByLibrary.simpleMessage(
+            "Что-то пошло не так, попробуйте еще раз позже"),
+        "errorInternetFail":
+            MessageLookupByLibrary.simpleMessage("Нет интернета :("),
+        "errorInternetFailMsg": MessageLookupByLibrary.simpleMessage(
+            "Неустойчивое соединение, попробуйте еще раз позже"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Неверный логин или пароль"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
