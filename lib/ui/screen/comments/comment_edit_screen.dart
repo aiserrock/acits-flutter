@@ -108,7 +108,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
   }
 
   PreferredSizeWidget? _buildFileBar(PlatformFile? file) {
-    final fileName = file?.name ?? _sourceFileName;
+    final fileName = file?.name;
     return fileName == null
         ? null
         : AppBar(
@@ -147,20 +147,57 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
 
   Widget _buildBody(BuildContext context) {
     return SafeArea(
-      child: TextField(
-        autofocus: true,
-        controller: _textController,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 16.0,
+      child: Column(
+        children: [
+          if (_sourceFileName != null)
+            AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: ColorRes.foreground,
+              shadowColor: Colors.transparent,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      _sourceFileName ?? '',
+                      style: StyleRes.content.copyWith(
+                        color: ColorRes.textSecondary,
+                        decoration: TextDecoration.underline,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
+              actions: const [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Icon(
+                    Icons.cloud_done,
+                    color: ColorRes.textSecondary,
+                  ),
+                )
+              ],
+            ),
+          Expanded(
+            child: TextField(
+              autofocus: true,
+              controller: _textController,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
+                border: InputBorder.none,
+              ),
+              expands: true,
+              maxLines: null,
+              minLines: null,
+              onEditingComplete: () => _onSubmit(context),
+            ),
           ),
-          border: InputBorder.none,
-        ),
-        expands: true,
-        maxLines: null,
-        minLines: null,
-        onEditingComplete: () => _onSubmit(context),
+        ],
       ),
     );
   }

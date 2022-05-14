@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
@@ -12,16 +14,19 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CommentListWidget extends StatefulWidget {
   const CommentListWidget(
     this.animalId, {
     this.scrollController,
+    this.onCreateCommentStream,
     Key? key,
   }) : super(key: key);
 
   final int animalId;
   final ScrollController? scrollController;
+  final StreamController<AnimalNote>? onCreateCommentStream;
 
   @override
   State<CommentListWidget> createState() => _CommentListWidgetState(animalId);
@@ -42,6 +47,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
   @override
   void initState() {
     _scrollController = widget.scrollController ?? ScrollController();
+    widget.onCreateCommentStream?.stream.forEach(_onCreateComment);
     _init();
     super.initState();
   }
@@ -180,7 +186,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
               ?.map<Widget>(
                 (file) => CupertinoButton(
                   padding: const EdgeInsets.only(top: 8.0),
-                  onPressed: () {},
+                  onPressed: () => _onFilePressed(file),
                   child: Text(
                     file.filename ?? '',
                     style: StyleRes.content.copyWith(
@@ -222,18 +228,21 @@ class _CommentListWidgetState extends State<CommentListWidget> {
             ),
           ),
         ),
-        const SizedBox(width: 16.0),
-        Builder(builder: (context) {
-          return CupertinoButton(
-            onPressed: () => _onMorePressed(context, comment),
-            padding: EdgeInsets.zero,
-            minSize: .0,
-            child: const Icon(
-              Icons.more_vert,
-              color: ColorRes.accent,
-            ),
-          );
-        }),
+        if (comment.isUserCanEditOrDelete ?? false)
+          Builder(builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: CupertinoButton(
+                onPressed: () => _onMorePressed(context, comment),
+                padding: EdgeInsets.zero,
+                minSize: .0,
+                child: const Icon(
+                  Icons.more_vert,
+                  color: ColorRes.accent,
+                ),
+              ),
+            );
+          }),
       ],
     );
   }
@@ -259,7 +268,9 @@ class _CommentListWidgetState extends State<CommentListWidget> {
     );
   }
 
-  void _onUrlPressed(String url) {}
+  void _onUrlPressed(String url) {
+    launchUrlString(url);
+  }
 
   void _onMorePressed(
     BuildContext context,
@@ -319,6 +330,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
   }
 
   void _onCommentEdited(AnimalNote editedComment) {
+    if (!_widgetState.value.isContent) return;
     final commentList = _widgetState.value.value;
     final index = commentList?.indexWhere((comment) => comment.id == editedComment.id);
     if (index == null || index < 0) return;
@@ -356,5 +368,15 @@ class _CommentListWidgetState extends State<CommentListWidget> {
     }).catchError((e) {
       _pagingState.add(WidgetState()..error = e);
     });
+  }
+
+  void _onFilePressed(AnimalNoteFile file) {
+    final url = file.file;
+    if (url != null) launchUrlString(url);
+  }
+
+  void _onCreateComment(AnimalNote comment) {
+    if (!_widgetState.value.isContent) return;
+    _widgetState.add(WidgetState(_widgetState.value.value?..add(comment)));
   }
 }

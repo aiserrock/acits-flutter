@@ -46,6 +46,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   final _scrollController = ScrollController();
   final _imagePageController = PageController();
 
+  final _onCreateCommentStream = StreamController<AnimalNote>.broadcast();
+
   late bool _isSmallScreen;
   int _currentTab = 0;
   double _titleOpacity = .0;
@@ -70,6 +72,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
+    _onCreateCommentStream.close();
     super.dispose();
   }
 
@@ -382,6 +385,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         return CommentListWidget(
           animal.id!,
           scrollController: _scrollController,
+          onCreateCommentStream: _onCreateCommentStream,
         );
     }
   }
@@ -490,6 +494,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   }
 
   void _onFabPressed(BuildContext context) {
-    if (_currentTab == 4) Navigator.of(context).push(CommentEditScreenRoute(animalId: widget.id));
+    if (_currentTab == 4) {
+      Navigator.of(context).push(CommentEditScreenRoute(animalId: widget.id)).then(
+        (value) {
+          if (value != null) {
+            _onCreateCommentStream.add(value);
+          }
+        },
+      );
+    }
   }
 }
