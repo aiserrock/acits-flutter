@@ -28,7 +28,7 @@ final _bottomNavItems = <BottomNavigationBarItem>[
   ),
   BottomNavigationBarItem(
     icon: Assets.icon.calendar.svg(
-      color: ColorRes.inactiveIcon,
+      color: ColorRes.inactiveIcon.withOpacity(.5),
     ),
     activeIcon: Assets.icon.calendar.svg(
       color: ColorRes.accent,
@@ -37,7 +37,7 @@ final _bottomNavItems = <BottomNavigationBarItem>[
   ),
   BottomNavigationBarItem(
     icon: Assets.icon.drugs.svg(
-      color: ColorRes.inactiveIcon,
+      color: ColorRes.inactiveIcon.withOpacity(.5),
     ),
     activeIcon: Assets.icon.drugs.svg(
       color: ColorRes.accent,
@@ -63,7 +63,17 @@ class _RootScreenState extends State<RootScreen> {
         items: _bottomNavItems,
         onTap: (index) => setState(
           () {
-            if (_current != index) _current = index;
+            if (index > 1) {
+              ScaffoldMessenger.of(context)
+                ..clearSnackBars()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(StringRes.current.commonDidNotImpl),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+            }
+            if (_current != index && index < 2) _current = index;
           },
         ),
         currentIndex: _current,
