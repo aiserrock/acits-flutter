@@ -74,6 +74,8 @@
   "applicantAdd": "Новый заявитель",
   "applicantEdit": "Редактировать",
   "commentDeletingFail": "Не удалось удалить комментарий",
+  "commentTitleEdit": "Редактирование",
+  "commentTitleNew": "Новый комментарий",
   "common": "общий",
   "commonAdd": "Добавить",
   "commonAnimals": "Животные",

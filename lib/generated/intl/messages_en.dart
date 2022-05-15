@@ -98,6 +98,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "applicantEdit": MessageLookupByLibrary.simpleMessage("Edit applicant"),
         "commentDeletingFail":
             MessageLookupByLibrary.simpleMessage("Comment deletion failed"),
+        "commentTitleEdit":
+            MessageLookupByLibrary.simpleMessage("Edit comment"),
+        "commentTitleNew": MessageLookupByLibrary.simpleMessage("New comment"),
         "common": MessageLookupByLibrary.simpleMessage("common"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Add"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Animals"),

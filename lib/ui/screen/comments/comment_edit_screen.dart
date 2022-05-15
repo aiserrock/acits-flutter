@@ -73,7 +73,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
         onTap: () => Navigator.of(context).pop(),
       ),
       title: Text(
-        _isEdit ? 'Редактирование' : 'Новый комментарий',
+        _isEdit ? StringRes.current.commentTitleEdit : StringRes.current.commentTitleNew,
         style: const TextStyle(color: ColorRes.textPrimary),
       ),
       centerTitle: true,
@@ -243,7 +243,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
   ) {
     _submitState.add(WidgetState()..error = error);
     ScaffoldMessenger.of(context).showSnackBar(
-       SnackBar(
+      SnackBar(
         content: Text(StringRes.current.commonErrorTryAgainMessage),
       ),
     );
