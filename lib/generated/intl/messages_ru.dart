@@ -119,6 +119,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonCancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "commonDay": MessageLookupByLibrary.simpleMessage("день"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Удалить"),
+        "commonDidNotImpl":
+            MessageLookupByLibrary.simpleMessage("Пока не реализовано :("),
         "commonDone": MessageLookupByLibrary.simpleMessage("Выполнено"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Медикаменты"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),

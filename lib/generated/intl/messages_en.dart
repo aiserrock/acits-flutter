@@ -109,6 +109,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "commonDay": MessageLookupByLibrary.simpleMessage("day"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "commonDidNotImpl":
+            MessageLookupByLibrary.simpleMessage("Did not implemented yet :("),
         "commonDone": MessageLookupByLibrary.simpleMessage("Done"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Edit"),

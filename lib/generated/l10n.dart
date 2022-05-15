@@ -680,6 +680,16 @@ class StringRes {
     );
   }
 
+  /// `Did not implemented yet :(`
+  String get commonDidNotImpl {
+    return Intl.message(
+      'Did not implemented yet :(',
+      name: 'commonDidNotImpl',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Done`
   String get commonDone {
     return Intl.message(
