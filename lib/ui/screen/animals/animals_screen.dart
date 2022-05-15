@@ -6,6 +6,7 @@ import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:acits_flutter/ui/widget/animal_card.dart';
+import 'package:acits_flutter/ui/widget/personal_drawer.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/util/screen_state.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
     );
   }
 
-  Widget _buildDrawer() => const Drawer();
+  Widget _buildDrawer() => const PersonalDrawerWidget();
 
   Widget _buildTitle() {
     return _isSearchActive

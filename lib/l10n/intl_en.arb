@@ -133,5 +133,11 @@
   "onboardingNewsTitle": "Unified card of the animal",
   "onboardingPlanMsg": "Allows you to clearly plan working hours and provide timely medical assistance to animals",
   "onboardingPlanTitle": "Summary of appointments for the current day",
+  "personChangePass": "Change pass",
+  "personChangeShelter": "Change shelter",
+  "personFeedback": "Feedback",
+  "personLogout": "Logout",
+  "personMyData": "My data",
+  "personMyShelters": "My shelters",
   "shelterSelectShelter": "Pick the shelter"
 }

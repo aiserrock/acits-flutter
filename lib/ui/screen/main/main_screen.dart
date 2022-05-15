@@ -1,3 +1,4 @@
+import 'package:acits_flutter/ui/widget/personal_drawer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/service/debug/debug_service.dart';
@@ -116,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildDrawer() => const Drawer();
+  Widget _buildDrawer() => const PersonalDrawerWidget();
 
   Widget _buildTitle() {
     return _isSearchActive

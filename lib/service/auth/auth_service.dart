@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/export.dart';
 
 @singleton
-class AuthService {
+class AuthService  extends ChangeNotifier{
   AuthService(
     this._acitsClient,
     @Named('guest') this._acitsGuestClient,
@@ -21,9 +22,14 @@ class AuthService {
 
   UserCurrentShelterSerializers? _shelterRole;
 
+  PaginatedShelterShortSerializersList? get shelterList => _shelterList;
+
   UserCurrentShelterSerializers? get shelterRole => _shelterRole;
 
   String? get currentShelterId => _shelterRole?.currentShelter?.toString();
+
+  ShelterShortSerializers? get currentShelter => _shelterList?.results
+      ?.firstWhereOrNull((shelter) => shelter.id.toString() == currentShelterId);
 
   Future<TokenRefresh?> refreshToken() async {
     final request = TokenRefresh(access: _access, refresh: _refresh);

@@ -133,5 +133,11 @@
   "onboardingNewsTitle": "Единая карта животного",
   "onboardingPlanMsg": "Позволяет четко планировать рабочее время и своевременно оказывать медицинскую помощь животным",
   "onboardingPlanTitle": "Сводка назначений на текущий день",
+  "personChangePass": "Сменить пароль",
+  "personChangeShelter": "Сменить приют",
+  "personFeedback": "Обратная связь",
+  "personLogout": "Выйти",
+  "personMyData": "Мои данные",
+  "personMyShelters": "Мои приюты",
   "shelterSelectShelter": "Выберите приют"
 }
