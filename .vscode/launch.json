@@ -8,25 +8,24 @@
       "name": "prod_run",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main.dart"
+      "program": "lib/main.dart",
+      "args": ["--flavor", "prod"]
     },
     {
       "name": "dev_debug",
       "request": "launch",
       "type": "dart",
-      // "flutterMode": "debug",
+      "flutterMode": "debug",
       "program": "test/dev/main.dart",
-      "args": [
-        "--flavor",
-        "dev"
-      ]
+      "args": ["--flavor", "dev"]
     },
     {
       "name": "dev_profile",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile",
-      "program": "test/dev/main.dart"
+      "program": "test/dev/main.dart",
+      "args": ["--flavor", "dev"]
     }
   ]
 }
