@@ -1,10 +1,13 @@
+import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/export.dart';
 
 @singleton
-class AuthService {
+class AuthService extends ChangeNotifier {
   AuthService(
     this._acitsClient,
     @Named('guest') this._acitsGuestClient,
@@ -15,15 +18,20 @@ class AuthService {
   String? _access;
   String? _refresh;
 
-  String? get access => _access;
-
   PaginatedShelterShortSerializersList? _shelterList;
 
   UserCurrentShelterSerializers? _shelterRole;
 
+  String? get access => _access;
+
+  PaginatedShelterShortSerializersList? get shelterList => _shelterList;
+
   UserCurrentShelterSerializers? get shelterRole => _shelterRole;
 
   String? get currentShelterId => _shelterRole?.currentShelter?.toString();
+
+  ShelterShortSerializers? get currentShelter => _shelterList?.results
+      ?.firstWhereOrNull((shelter) => shelter.id.toString() == currentShelterId);
 
   Future<TokenRefresh?> refreshToken() async {
     final request = TokenRefresh(access: _access, refresh: _refresh);
@@ -73,5 +81,13 @@ class AuthService {
       return _shelterRole;
     }
     throw MessagedException(error: result.error);
+  }
+
+  void logout() {
+    _access = _refresh = _shelterList = _shelterRole = null;
+    notifyListeners();
+    getIt<GlobalKey<NavigatorState>>().currentState
+      ?..popUntil((route) => false)
+      ..push(LoginScreenRoute());
   }
 }

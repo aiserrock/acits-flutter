@@ -1185,6 +1185,66 @@ class StringRes {
     );
   }
 
+  /// `Change pass`
+  String get personChangePass {
+    return Intl.message(
+      'Change pass',
+      name: 'personChangePass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change shelter`
+  String get personChangeShelter {
+    return Intl.message(
+      'Change shelter',
+      name: 'personChangeShelter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Feedback`
+  String get personFeedback {
+    return Intl.message(
+      'Feedback',
+      name: 'personFeedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get personLogout {
+    return Intl.message(
+      'Logout',
+      name: 'personLogout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My data`
+  String get personMyData {
+    return Intl.message(
+      'My data',
+      name: 'personMyData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My shelters`
+  String get personMyShelters {
+    return Intl.message(
+      'My shelters',
+      name: 'personMyShelters',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pick the shelter`
   String get shelterSelectShelter {
     return Intl.message(

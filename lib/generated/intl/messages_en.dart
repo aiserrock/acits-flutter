@@ -183,6 +183,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Allows you to clearly plan working hours and provide timely medical assistance to animals"),
         "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
             "Summary of appointments for the current day"),
+        "personChangePass": MessageLookupByLibrary.simpleMessage("Change pass"),
+        "personChangeShelter":
+            MessageLookupByLibrary.simpleMessage("Change shelter"),
+        "personFeedback": MessageLookupByLibrary.simpleMessage("Feedback"),
+        "personLogout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "personMyData": MessageLookupByLibrary.simpleMessage("My data"),
+        "personMyShelters": MessageLookupByLibrary.simpleMessage("My shelters"),
         "shelterSelectShelter":
             MessageLookupByLibrary.simpleMessage("Pick the shelter")
       };

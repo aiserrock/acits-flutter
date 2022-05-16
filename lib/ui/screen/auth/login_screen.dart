@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,9 +19,7 @@ import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
-import 'package:acits_flutter/ui/widget/debug_drawer.dart';
 
 /// Экран входа по логину - паролю
 class LoginScreen extends StatefulWidget {
@@ -58,9 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const Drawer(
-        child: DebugDrawerContent(),
-      ),
       appBar: AppBar(
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
@@ -269,18 +265,20 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
     if (list != null) {
-      final selectedShelter = await Navigator.of(context).push<ShelterShortSerializers?>(
-          MaterialPageRoute(builder: (_) => PickShelterList(shelterList: list)));
-      if (selectedShelter != null) {
-        await _authService.setCurrentShelter(selectedShelter.id!);
-        _onSuccess();
-      }
+      final selectedShelter = await Navigator.of(context)
+          .push<ShelterShortSerializers?>(PickShelterScreenRoute(shelterList: list));
+      // if (selectedShelter != null) {
+      //   await _authService.setCurrentShelter(selectedShelter.id!);
+      //   _onSuccess();
+      // }
     }
   }
 
   void _onSuccess() {
     setState(() => _errorMessage = null);
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const RootScreen()));
+    Navigator.of(context)
+      ..popUntil((route) => false)
+      ..push(MaterialPageRoute(builder: (_) => const RootScreen()));
   }
 
   void _openDebug() {
