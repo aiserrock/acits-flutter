@@ -39,7 +39,6 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
       child: StreamBuilder<WidgetState<UserSerializers>>(
           stream: _widgetState,
           builder: (_, snapshot) {
-            // final isLoading = true;
             final isLoading = snapshot.data?.isLoading ?? false;
             final hasError = snapshot.data?.hasError ?? false;
             final person = snapshot.data?.value;
@@ -53,7 +52,7 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
                 ListTile(
                   title: Text(
                     StringRes.current.personMyShelters,
-                    style: StyleRes.title,
+                    style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
                   ),
                   // onTap: () {},
                 ),
@@ -61,7 +60,7 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
                 ListTile(
                   title: Text(
                     StringRes.current.personChangePass,
-                    style: StyleRes.title,
+                    style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
                   ),
                   // onTap: () {},
                 ),
@@ -70,17 +69,15 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
                     StringRes.current.personChangeShelter,
                     style: StyleRes.title,
                   ),
-                  onTap: ()async{
-                    final shelter =  await Navigator.of(context).push(PickShelterScreenRoute());
-                    if(shelter == null) return;
-                     
-
+                  onTap: () async {
+                    final shelter = await Navigator.of(context).push(PickShelterScreenRoute());
+                    if (shelter == null) return;
                   },
                 ),
                 ListTile(
                   title: Text(
                     StringRes.current.personFeedback,
-                    style: StyleRes.title,
+                    style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
                   ),
                   // onTap: () {},
                 ),
@@ -103,7 +100,7 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
           ? _buildSkeleton(156.0)
           : Text(
               StringRes.current.personMyData,
-              style: StyleRes.title,
+              style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
             ),
       // onTap: () {},
     );
