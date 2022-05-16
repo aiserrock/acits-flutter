@@ -2,6 +2,7 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/personal/personal_service.dart';
+import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen_route.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
@@ -54,7 +55,7 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
                     StringRes.current.personMyShelters,
                     style: StyleRes.title,
                   ),
-                  onTap: () {},
+                  // onTap: () {},
                 ),
                 _buildDivider(),
                 ListTile(
@@ -62,28 +63,33 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
                     StringRes.current.personChangePass,
                     style: StyleRes.title,
                   ),
-                  onTap: () {},
+                  // onTap: () {},
                 ),
                 ListTile(
                   title: Text(
                     StringRes.current.personChangeShelter,
                     style: StyleRes.title,
                   ),
-                  onTap: () {},
+                  onTap: ()async{
+                    final shelter =  await Navigator.of(context).push(PickShelterScreenRoute());
+                    if(shelter == null) return;
+                     
+
+                  },
                 ),
                 ListTile(
                   title: Text(
                     StringRes.current.personFeedback,
                     style: StyleRes.title,
                   ),
-                  onTap: () {},
+                  // onTap: () {},
                 ),
                 ListTile(
                   title: Text(
                     StringRes.current.personLogout,
                     style: StyleRes.title,
                   ),
-                  onTap: () {},
+                  onTap: _authService.logout,
                 ),
               ],
             );
@@ -91,7 +97,7 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
     );
   }
 
-  ListTile _buildDataTileWidget(bool isLoading) {
+  Widget _buildDataTileWidget(bool isLoading) {
     return ListTile(
       title: isLoading
           ? _buildSkeleton(156.0)
@@ -99,11 +105,11 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
               StringRes.current.personMyData,
               style: StyleRes.title,
             ),
-      onTap: () {},
+      // onTap: () {},
     );
   }
 
-  ListTile _buildPersonTile(bool isLoading, UserSerializers? person) {
+  Widget _buildPersonTile(bool isLoading, UserSerializers? person) {
     return ListTile(
       title: isLoading
           ? _buildSkeleton(156.0)
@@ -112,11 +118,11 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
               style: StyleRes.title,
             ),
       subtitle: isLoading ? null : Text(_authService.shelterRole?.currentShelterUserRole ?? ''),
-      onTap: () {},
+      // onTap: () {},
     );
   }
 
-  SafeArea _buildHeader() {
+  Widget _buildHeader() {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),

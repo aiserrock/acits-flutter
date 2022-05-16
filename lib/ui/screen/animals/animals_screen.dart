@@ -5,8 +5,8 @@ import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
+import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/widget/animal_card.dart';
-import 'package:acits_flutter/ui/widget/personal_drawer.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/util/screen_state.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +56,6 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      drawer: _buildDrawer(),
       backgroundColor: ColorRes.background,
       appBar: AppBar(
         backgroundColor: ColorRes.foreground,
@@ -66,7 +65,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
             Icons.menu,
             color: ColorRes.accent,
           ),
-          onTap: () => scaffoldKey.currentState?.openDrawer(),
+          onTap: RootDrawerProvider.of(context)?.openDrawer,
         ),
         title: _buildTitle(),
         actions: _buildAppBarActions,
@@ -121,8 +120,6 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
       errorBuilder: (_, error) => Column(),
     );
   }
-
-  Widget _buildDrawer() => const PersonalDrawerWidget();
 
   Widget _buildTitle() {
     return _isSearchActive

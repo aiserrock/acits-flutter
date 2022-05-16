@@ -1,3 +1,5 @@
+import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
@@ -5,7 +7,7 @@ import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/export.dart';
 
 @singleton
-class AuthService  extends ChangeNotifier{
+class AuthService extends ChangeNotifier {
   AuthService(
     this._acitsClient,
     @Named('guest') this._acitsGuestClient,
@@ -16,11 +18,11 @@ class AuthService  extends ChangeNotifier{
   String? _access;
   String? _refresh;
 
-  String? get access => _access;
-
   PaginatedShelterShortSerializersList? _shelterList;
 
   UserCurrentShelterSerializers? _shelterRole;
+
+  String? get access => _access;
 
   PaginatedShelterShortSerializersList? get shelterList => _shelterList;
 
@@ -79,5 +81,13 @@ class AuthService  extends ChangeNotifier{
       return _shelterRole;
     }
     throw MessagedException(error: result.error);
+  }
+
+  void logout() {
+    _access = _refresh = _shelterList = _shelterRole = null;
+    notifyListeners();
+    getIt<GlobalKey<NavigatorState>>().currentState
+      ?..popUntil((route) => false)
+      ..push(LoginScreenRoute());
   }
 }
