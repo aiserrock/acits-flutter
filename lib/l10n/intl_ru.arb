@@ -99,6 +99,7 @@
   "commonNMonth": "{count,plural, =0{0 месяцев} =1{{count} {month}} =2{{count} {month}а} few{{count} месяцев} other{{count} месяцев}}",
   "commonNYears": "{count,plural, =0{0 лет} =1{{count} {year}} =2{{count} {year}а} few{{count} лет} other{{count} лет}}",
   "commonNext": "Далее",
+  "commonNoAppToOpenFileMsg": "Нет подходящего приложения для открытия этого файла :(",
   "commonNotCompleted": "Не выполнено",
   "commonReloadBtn": "Обновить",
   "commonReschedule": "Перенести",

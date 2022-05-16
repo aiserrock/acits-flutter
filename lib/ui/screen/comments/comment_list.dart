@@ -1,20 +1,23 @@
 import 'dart:async';
 
-import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
-import 'package:acits_flutter/ui/widget/action_bs.dart';
-import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:acits_flutter/service/file/file_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:open_file/open_file.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
+import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
+import 'package:acits_flutter/ui/widget/action_bs.dart';
+import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class CommentListWidget extends StatefulWidget {
   const CommentListWidget(
@@ -33,10 +36,13 @@ class CommentListWidget extends StatefulWidget {
 }
 
 class _CommentListWidgetState extends State<CommentListWidget> {
-  _CommentListWidgetState(this._animalId) : _animalService = getIt<AnimalService>();
+  _CommentListWidgetState(this._animalId)
+      : _animalService = getIt<AnimalService>(),
+        _fileService = getIt<FileService>();
 
   final int _animalId;
   final AnimalService _animalService;
+  final FileService _fileService;
 
   final _widgetState =
       BehaviorSubject<WidgetState<List<AnimalNote>>>.seeded(WidgetState()..loading());
@@ -186,7 +192,11 @@ class _CommentListWidgetState extends State<CommentListWidget> {
               ?.map<Widget>(
                 (file) => CupertinoButton(
                   padding: const EdgeInsets.only(top: 8.0),
-                  onPressed: () => _onFilePressed(file),
+                  onPressed: () => _onFilePressed(context, file).catchError(
+                    (e) {
+                      _onError(context, StringRes.current.commonErrorStubMsg);
+                    },
+                  ),
                   child: Text(
                     file.filename ?? '',
                     style: StyleRes.content.copyWith(
@@ -268,10 +278,6 @@ class _CommentListWidgetState extends State<CommentListWidget> {
     );
   }
 
-  void _onUrlPressed(String url) {
-    launchUrlString(url);
-  }
-
   void _onMorePressed(
     BuildContext context,
     AnimalNote comment,
@@ -318,8 +324,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
         .then((_) => _onCommentDeleted(comment))
         .catchError(
       (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(StringRes.current.commentDeletingFail)));
+        _onError(context, StringRes.current.commentDeletingFail);
       },
     );
   }
@@ -370,13 +375,43 @@ class _CommentListWidgetState extends State<CommentListWidget> {
     });
   }
 
-  void _onFilePressed(AnimalNoteFile file) {
+  Future<void> _onFilePressed(
+    BuildContext context,
+    AnimalNoteFile file,
+  ) async {
     final url = file.file;
-    if (url != null) launchUrlString(url);
+    final fileName = file.filename;
+
+    if (url == null || fileName == null) return;
+    final localFile = await _fileService.loadFile(url, fileName).catchError((_) {
+      _onError(context, StringRes.current.commentDeletingFail);
+    });
+
+    final openResult = await OpenFile.open(localFile.absolute.path);
+    String errorMsg = '';
+    switch (openResult.type) {
+      case ResultType.noAppToOpen:
+        errorMsg = StringRes.current.commonNoAppToOpenFileMsg;
+        break;
+      case ResultType.error:
+        errorMsg = StringRes.current.commonErrorTryAgainMessage;
+        break;
+      default:
+    }
+    if (errorMsg.isNotEmpty) _onError(context, errorMsg);
+  }
+
+  Future<void> _onUrlPressed(String url) async {
+    FlutterWebBrowser.openWebPage(url: url);
   }
 
   void _onCreateComment(AnimalNote comment) {
     if (!_widgetState.value.isContent) return;
     _widgetState.add(WidgetState(_widgetState.value.value?..add(comment)));
+  }
+
+  void _onError(BuildContext context, String? msg) {
+    if (msg == null || msg.isEmpty) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 }

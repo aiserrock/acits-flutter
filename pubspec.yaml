@@ -21,6 +21,8 @@ dependencies:
 
   injectable: 1.5.0
 
+  dio: 4.0.6
+
   chopper: ^4.0.1
 
   json_annotation: ^4.1.0
@@ -54,6 +56,12 @@ dependencies:
   file_picker: 4.5.1
 
   url_launcher: 6.1.2
+
+  path_provider: 2.0.10
+
+  flutter_web_browser: 0.17.1
+
+  open_file: 3.2.1
 
 dev_dependencies:
   flutter_test:
