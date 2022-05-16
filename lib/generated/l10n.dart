@@ -845,6 +845,16 @@ class StringRes {
     );
   }
 
+  /// `No app to open this file :(`
+  String get commonNoAppToOpenFileMsg {
+    return Intl.message(
+      'No app to open this file :(',
+      name: 'commonNoAppToOpenFileMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Not completed`
   String get commonNotCompleted {
     return Intl.message(

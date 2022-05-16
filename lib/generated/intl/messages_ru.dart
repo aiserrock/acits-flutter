@@ -139,6 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonNMonth": m1,
         "commonNYears": m2,
         "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
+        "commonNoAppToOpenFileMsg": MessageLookupByLibrary.simpleMessage(
+            "Нет подходящего приложения для открытия этого файла :("),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Не выполнено"),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Обновить"),

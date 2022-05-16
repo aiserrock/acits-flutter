@@ -1,7 +1,9 @@
-import 'package:acits_flutter/main.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
+
+import 'package:acits_flutter/main.dart';
 import 'di/di_container.dart';
 
 Future<void> main() async {
