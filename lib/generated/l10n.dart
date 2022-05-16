@@ -310,6 +310,16 @@ class StringRes {
     );
   }
 
+  /// `Do you sure to delete`
+  String get animalDeleteAcceptMsg {
+    return Intl.message(
+      'Do you sure to delete',
+      name: 'animalDeleteAcceptMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit animal`
   String get animalEdit {
     return Intl.message(
@@ -890,6 +900,16 @@ class StringRes {
     return Intl.message(
       'Today',
       name: 'commonToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Warning`
+  String get commonWarning {
+    return Intl.message(
+      'Warning',
+      name: 'commonWarning',
       desc: '',
       args: [],
     );

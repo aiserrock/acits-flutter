@@ -61,6 +61,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalCuratorName": MessageLookupByLibrary.simpleMessage("Name"),
         "animalCuratorPhone": MessageLookupByLibrary.simpleMessage("Phone"),
         "animalDateAdmitt": MessageLookupByLibrary.simpleMessage("Admitt date"),
+        "animalDeleteAcceptMsg":
+            MessageLookupByLibrary.simpleMessage("Do you sure to delete"),
         "animalEdit": MessageLookupByLibrary.simpleMessage("Edit animal"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Family"),
         "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Female"),
@@ -134,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Today"),
+        "commonWarning": MessageLookupByLibrary.simpleMessage("Warning"),
         "commonYear": MessageLookupByLibrary.simpleMessage("year"),
         "curatorAdd": MessageLookupByLibrary.simpleMessage("New curator"),
         "curatorEdit": MessageLookupByLibrary.simpleMessage("Edit curator"),
