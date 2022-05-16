@@ -10,7 +10,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
 
 import 'package:acits_flutter/service/debug/debug_service.dart';
-import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -265,20 +264,9 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
     if (list != null) {
-      final selectedShelter = await Navigator.of(context)
+      await Navigator.of(context)
           .push<ShelterShortSerializers?>(PickShelterScreenRoute(shelterList: list));
-      // if (selectedShelter != null) {
-      //   await _authService.setCurrentShelter(selectedShelter.id!);
-      //   _onSuccess();
-      // }
     }
-  }
-
-  void _onSuccess() {
-    setState(() => _errorMessage = null);
-    Navigator.of(context)
-      ..popUntil((route) => false)
-      ..push(MaterialPageRoute(builder: (_) => const RootScreen()));
   }
 
   void _openDebug() {
