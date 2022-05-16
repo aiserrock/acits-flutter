@@ -13,8 +13,6 @@ const _allowedFileAttachExtensions = [
   'txt',
   'xls',
   'xlsx',
-  'png',
-  'jpg',
 ];
 
 class CommentEditScreen extends StatefulWidget {
