@@ -3,9 +3,12 @@ import 'dart:math';
 import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
+import 'package:acits_flutter/ui/widget/error_holder.dart';
+import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
@@ -47,6 +50,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   final _imagePageController = PageController();
 
   final _onCreateCommentStream = StreamController<AnimalNote>.broadcast();
+  final _prescriptionSwichState = BehaviorSubject.seeded(_PrescriptionState.active);
 
   late bool _isSmallScreen;
   int _currentTab = 0;
@@ -67,12 +71,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     super.initState();
     _loadAnimal();
     _loadPrescriptions();
+    _prescriptionSwichState.listen((value) => _loadPrescriptions());
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _onCreateCommentStream.close();
+    _prescriptionSwichState.close();
     super.dispose();
   }
 
@@ -376,7 +382,11 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       case 0:
         return _buildCommonInfoPage(animal);
       case 1:
-        return _buildPrescriptionsPage(_statePrescriptions);
+        return _buildPrescriptionsPage(
+          _statePrescriptions,
+          _prescriptionSwichState,
+          _loadPrescriptions,
+        );
       case 2:
         return _buildCuratorPage(animal);
       case 3:
@@ -486,7 +496,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     await getIt<PrescriptionService>()
         .fetchPrescriptionListByAnimal(
           widget.id,
-          isOld: true,
+          isActual: _prescriptionSwichState.value == _PrescriptionState.active,
+          isOld: _prescriptionSwichState.value == _PrescriptionState.inactive,
         )
         .then(
             (value) => setState(() => _statePrescriptions = WidgetState()..content(value?.results)))

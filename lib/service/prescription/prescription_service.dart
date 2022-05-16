@@ -1,10 +1,10 @@
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/export.dart';
 
 import 'package:acits_flutter/service/auth/auth_service.dart';
+import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/service/config/config_service.dart';
 
 @singleton
 class PrescriptionService {
@@ -42,8 +42,8 @@ class PrescriptionService {
     int animalId, {
     int? limit,
     int offset = 0,
-    bool? isActual,
-    bool? isOld,
+    bool isActual = false,
+    bool isOld = false,
   }) async {
     if (_configService.typeValues == null) {
       await _configService.getTypeValues();
@@ -54,8 +54,8 @@ class PrescriptionService {
       xCurrentShelter: _authService.currentShelterId,
       limit: limit,
       offset: offset,
-      executeAtGte: isActual ?? false ? DateTime.now().toIso8601String() : null,
-      executeAtLt: isOld ?? false ? DateTime.now().toIso8601String() : null,
+      executeAtGte: isActual ? DateTime.now().toUtc().toPatchApiDate : null,
+      executeAtLt: isOld ? DateTime.now().toIso8601String() : null,
     );
     if (result.body != null) {
       return result.body;

@@ -1275,6 +1275,26 @@ class StringRes {
     );
   }
 
+  /// `Current`
+  String get prescriptionCurrent {
+    return Intl.message(
+      'Current',
+      name: 'prescriptionCurrent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Past`
+  String get prescriptionPast {
+    return Intl.message(
+      'Past',
+      name: 'prescriptionPast',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pick the shelter`
   String get shelterSelectShelter {
     return Intl.message(

@@ -195,6 +195,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "personLogout": MessageLookupByLibrary.simpleMessage("Logout"),
         "personMyData": MessageLookupByLibrary.simpleMessage("My data"),
         "personMyShelters": MessageLookupByLibrary.simpleMessage("My shelters"),
+        "prescriptionCurrent": MessageLookupByLibrary.simpleMessage("Current"),
+        "prescriptionPast": MessageLookupByLibrary.simpleMessage("Past"),
         "shelterSelectShelter":
             MessageLookupByLibrary.simpleMessage("Pick the shelter")
       };
