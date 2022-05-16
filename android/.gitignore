@@ -10,6 +10,8 @@ GeneratedPluginRegistrant.java
 # See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app
 key-release.properties
 keystore_release.properties
+upload.properties
+local.properties
 key.properties
 **/key.properties
 **/*.jks
