@@ -141,5 +141,7 @@
   "personLogout": "Выйти",
   "personMyData": "Мои данные",
   "personMyShelters": "Мои приюты",
+  "prescriptionCurrent": "Текущие",
+  "prescriptionPast": "Прошедшие",
   "shelterSelectShelter": "Выберите приют"
 }

@@ -25,7 +25,9 @@ SliverList _buildPrescriptionsPage(
                         style: StyleRes.title.copyWith(fontSize: 22.0),
                       ),
                     ),
-                    Text(snapshot.data == _PrescriptionState.active ? 'Current' : 'Past'),
+                    Text(snapshot.data == _PrescriptionState.active
+                        ? StringRes.current.prescriptionCurrent
+                        : StringRes.current.prescriptionPast),
                     Switch(
                       value: snapshot.data == _PrescriptionState.active,
                       onChanged: (state) => switchState.add(

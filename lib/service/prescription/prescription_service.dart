@@ -1,6 +1,5 @@
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/export.dart';
 
 import 'package:acits_flutter/service/auth/auth_service.dart';
@@ -49,7 +48,6 @@ class PrescriptionService {
     if (_configService.typeValues == null) {
       await _configService.getTypeValues();
     }
-    print(DateTime.now().toUtc().toPatchApiDate);
 
     final result = await _acitsClient.apiV1PrescriptionsGet(
       animal: animalId,
