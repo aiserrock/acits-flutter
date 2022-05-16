@@ -1,9 +1,10 @@
+import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen_route.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 
 import 'package:acits_flutter/export.dart';
 
@@ -11,16 +12,21 @@ import 'package:acits_flutter/export.dart';
 class AnimalCardWidget extends StatelessWidget {
   AnimalCardWidget(
     this.itemData, {
+    this.onDelete,
     Key? key,
-  }) : super(key: key);
+  })  : isEditable = getIt<AuthService>().shelterRole?.isUserCanEdit ?? false,
+        isDeletable = getIt<AuthService>().shelterRole?.isUserCanDelete ?? false,
+        super(key: key);
 
   final AnimalRead? itemData;
-  final _formatter = DateFormat('dd.MM.yyyy');
+  final VoidCallback? onDelete;
+  final bool isEditable;
+  final bool isDeletable;
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      endActionPane: _buildSlidablePane(context),
+      endActionPane: _hasActions ? _buildSlidablePane(context) : null,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Stack(
@@ -53,17 +59,18 @@ class AnimalCardWidget extends StatelessWidget {
       child: Builder(builder: (context) {
         return Column(
           children: [
-            CupertinoButton(
-              padding: const EdgeInsets.only(),
-              child: const Icon(
-                Icons.more_vert,
-                color: ColorRes.accent,
+            if (_hasActions)
+              CupertinoButton(
+                padding: const EdgeInsets.only(),
+                child: const Icon(
+                  Icons.more_vert,
+                  color: ColorRes.accent,
+                ),
+                onPressed: () {
+                  SlidableController? controller = Slidable.of(context);
+                  controller?.openEndActionPane();
+                },
               ),
-              onPressed: () {
-                SlidableController? controller = Slidable.of(context);
-                controller?.openEndActionPane();
-              },
-            ),
             CupertinoButton(
               padding: const EdgeInsets.only(),
               child: const Icon(
@@ -82,35 +89,77 @@ class AnimalCardWidget extends StatelessWidget {
     return ActionPane(
       motion: const BehindMotion(),
       children: [
-        SlidableAction(
-          onPressed: (_) {},
-          backgroundColor: ColorRes.background,
-          icon: IconRes.prescription,
-          foregroundColor: ColorRes.accent,
-        ),
-        SlidableAction(
-          onPressed: (_) {},
-          backgroundColor: ColorRes.background,
-          icon: IconRes.comment,
-          foregroundColor: ColorRes.accent,
-        ),
-        SlidableAction(
-          onPressed: (_) => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => AnimalEditScreen(id: itemData?.id),
+        //TODO: утвердить реализацию (нет в ТЗ)
+        // SlidableAction(
+        //   onPressed: (_) {},
+        //   backgroundColor: ColorRes.background,
+        //   icon: IconRes.prescription,
+        //   foregroundColor: ColorRes.accent,
+        // ),
+        // SlidableAction(
+        //   onPressed: (_) {},
+        //   backgroundColor: ColorRes.background,
+        //   icon: IconRes.comment,
+        //   foregroundColor: ColorRes.accent,
+        // ),
+
+        if (isEditable)
+          SlidableAction(
+            onPressed: (_) => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => AnimalEditScreen(id: itemData?.id),
+              ),
             ),
+            backgroundColor: ColorRes.background,
+            icon: Icons.edit_outlined,
+            foregroundColor: ColorRes.accent,
           ),
-          backgroundColor: ColorRes.background,
-          icon: Icons.edit_outlined,
-          foregroundColor: ColorRes.accent,
-        ),
-        SlidableAction(
-          onPressed: (_) {},
-          backgroundColor: ColorRes.background,
-          icon: Icons.delete_forever,
-          foregroundColor: ColorRes.error,
-        ),
+
+        if (isDeletable) _buildDeleteAction(),
       ],
+    );
+  }
+
+  Widget _buildDeleteAction() {
+    return SlidableAction(
+      onPressed: (ctx) {
+        showDialog(
+          context: ctx,
+          builder: (dialogCtx) {
+            final msg = '${StringRes.current.animalDeleteAcceptMsg} ${itemData?.name ?? ""}?';
+            return CupertinoAlertDialog(
+              title: Text(StringRes.current.commonWarning),
+              content: Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(msg),
+              ),
+              actions: [
+                CupertinoButton(
+                  child: Text(
+                    StringRes.current.commonDelete,
+                    style: const TextStyle(color: ColorRes.error),
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogCtx).pop();
+                    onDelete?.call();
+                  },
+                ),
+                CupertinoButton(
+                  child: Text(
+                    StringRes.current.commonCancel,
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogCtx).pop();
+                  },
+                )
+              ],
+            );
+          },
+        );
+      },
+      backgroundColor: ColorRes.background,
+      icon: Icons.delete_forever,
+      foregroundColor: ColorRes.error,
     );
   }
 
@@ -204,7 +253,7 @@ class AnimalCardWidget extends StatelessWidget {
           TextSpan(text: StringRes.current.animalAdmitted, style: StyleRes.content),
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
-            text: itemData?.dateJoined != null ? _formatter.format(itemData!.dateJoined!) : '',
+            text: itemData?.dateJoined?.toDateShortOnly ?? '',
             style: StyleRes.content.copyWith(
               color: ColorRes.textPrimary,
             ),
@@ -242,4 +291,6 @@ class AnimalCardWidget extends StatelessWidget {
     if (itemData?.id == null) return;
     Navigator.of(context, rootNavigator: true).push(AnimalDetailScreenRoute(id: itemData!.id!));
   }
+
+  bool get _hasActions => isEditable || isDeletable;
 }

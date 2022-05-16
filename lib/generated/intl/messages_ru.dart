@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Номер телефона"),
         "animalDateAdmitt":
             MessageLookupByLibrary.simpleMessage("Дата поступления"),
+        "animalDeleteAcceptMsg": MessageLookupByLibrary.simpleMessage(
+            "Вы уверены, что хотите удалить"),
         "animalEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Семейство"),
         "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Женский"),
@@ -144,6 +146,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Сегодня"),
+        "commonWarning": MessageLookupByLibrary.simpleMessage("Внимание"),
         "commonYear": MessageLookupByLibrary.simpleMessage("год"),
         "curatorAdd": MessageLookupByLibrary.simpleMessage("Новый куратор"),
         "curatorEdit": MessageLookupByLibrary.simpleMessage("Редактирование"),

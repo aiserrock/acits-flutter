@@ -200,6 +200,17 @@ class AnimalService {
     }
   }
 
+  Future<void> deleteAnimal(String id) async {
+    final result = await _client.apiV1AnimalsIdDelete(
+      id: id,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    if (result.error != null) {
+      throw MessagedException(error: result.error);
+    }
+  }
+
   Future<PaginatedAnimalNoteList?> fetchAnimalNotes(
     int animalId, {
     int limit = _notesListLimit,

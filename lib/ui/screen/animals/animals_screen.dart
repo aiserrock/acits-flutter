@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
@@ -9,9 +12,7 @@ import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/widget/animal_card.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/util/screen_state.dart';
-import 'package:flutter/material.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 const _animalPageLength = 25;
 const _scrollTopPadding = 16.0;
@@ -24,6 +25,9 @@ class AnimalsScreen extends StatefulWidget {
 }
 
 class _AnimalsScreenState extends State<AnimalsScreen> {
+  _AnimalsScreenState() : _animalService = getIt<AnimalService>();
+
+  final AnimalService _animalService;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _scrollController = ScrollController();
   late bool _isSmallScreen;
@@ -164,14 +168,23 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
             const SliverToBoxAdapter(child: SizedBox(height: _scrollTopPadding)),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (_, index) => Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
-                    bottom: 16.0,
-                  ),
-                  child: AnimalCardWidget(_state.value?[index]),
-                ),
+                (_, index) {
+                  final animal = _state.value?[index];
+                  final isDeleted = animal?.deletedAt != null;
+                  return isDeleted
+                      ? const SizedBox()
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 16.0,
+                          ),
+                          child: AnimalCardWidget(
+                            animal,
+                            onDelete: () => _onDelete(context, animal),
+                          ),
+                        );
+                },
                 childCount: _state.value?.length ?? 0,
               ),
             ),
@@ -238,8 +251,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
       _currentListOffset = 0;
       setState(() => _state = WidgetState()..loading());
     }
-    final _service = getIt<AnimalService>();
-    await _service
+    await _animalService
         .fetchAnimalList(
       offset: _currentListOffset,
       limit: _animalPageLength,
@@ -261,6 +273,26 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         } else {
           setState(() => _statePageLoading = WidgetState()..error = e);
         }
+      },
+    );
+  }
+
+  void _onDelete(
+    BuildContext context,
+    AnimalRead? item,
+  ) {
+    if (item == null) return;
+    final index = _state.value?.indexOf(item) ?? 0;
+    setState(() {
+      _state = WidgetState()..content(_state.value?..remove(item));
+    });
+    _animalService.deleteAnimal(item.id.toString()).catchError(
+      (e) {
+        setState(() {
+          _state = WidgetState()..content(_state.value?..insert(index, item));
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(StringRes.current.errorDefaultMsg)));
       },
     );
   }
