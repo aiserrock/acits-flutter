@@ -12,6 +12,14 @@
       "args": ["--flavor", "prod"]
     },
     {
+      "name": "prod_debud",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.dart",
+      "args": ["--flavor", "prod"]
+    },
+    {
       "name": "dev_debug",
       "request": "launch",
       "type": "dart",
