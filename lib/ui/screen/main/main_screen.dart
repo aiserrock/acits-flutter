@@ -1,3 +1,4 @@
+import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/ui/screen/root_screen.dart';
@@ -68,16 +69,16 @@ class _MainScreenState extends State<MainScreen> {
         actions: _buildAppBarActions,
         centerTitle: true,
       ),
-      floatingActionButton: _buidFab(),
+      floatingActionButton: _buidFab(context),
       body: _buildBody(),
     );
   }
 
-  Widget _buidFab() {
+  Widget _buidFab(BuildContext context) {
     return FloatingActionButton(
       heroTag: 'MainFab',
       mini: _isSmallScreen,
-      onPressed: () {},
+      onPressed: () => _onFabPressed(context),
       child: const Icon(
         Icons.add,
         color: ColorRes.foreground,
@@ -155,6 +156,10 @@ class _MainScreenState extends State<MainScreen> {
   void _openDebug(BuildContext context) {
     _debugService.openDebugScreen();
   }
+
+  void _onFabPressed(BuildContext context) {
+    Navigator.of(context).push(PrescriptionEditScreenRoute()).then((value) {});
+  }
 }
 
 class _MainScreenContent extends StatelessWidget {
@@ -178,9 +183,13 @@ class _MainScreenContent extends StatelessWidget {
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
-        itemBuilder: (_, index) => PrescriptionCardWidget(
-          (data?.results ?? [])[index],
-        ),
+        itemBuilder: (_, index) {
+          final item = (data?.results ?? [])[index];
+          return PrescriptionCardWidget(
+            item,
+            onEditedPrescription: () => _onEditPrescriptionPressed(item),
+          );
+        },
         itemCount: data?.results?.length ?? 0,
         separatorBuilder: (_, __) => const SizedBox(height: 16.0),
       ),
@@ -217,5 +226,12 @@ class _MainScreenContent extends StatelessWidget {
         ),
       );
     });
+  }
+
+  void _onEditPrescriptionPressed(PrescriptionExecutionToday item) {
+    getIt<GlobalKey<NavigatorState>>()
+        .currentState
+        ?.push(PrescriptionEditScreenRoute(editPrescriptionId: item.prescription?.id))
+        .then((value) {});
   }
 }

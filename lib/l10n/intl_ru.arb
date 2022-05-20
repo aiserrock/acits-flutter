@@ -144,5 +144,7 @@
   "personMyShelters": "Мои приюты",
   "prescriptionCurrent": "Текущие",
   "prescriptionPast": "Прошедшие",
+  "prescriptionTitleAdd": "Новое назначение",
+  "prescriptionTitleEdit": "Редактирование",
   "shelterSelectShelter": "Выберите приют"
 }

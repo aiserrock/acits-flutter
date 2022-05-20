@@ -208,6 +208,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "personMyShelters": MessageLookupByLibrary.simpleMessage("Мои приюты"),
         "prescriptionCurrent": MessageLookupByLibrary.simpleMessage("Текущие"),
         "prescriptionPast": MessageLookupByLibrary.simpleMessage("Прошедшие"),
+        "prescriptionTitleAdd":
+            MessageLookupByLibrary.simpleMessage("Новое назначение"),
+        "prescriptionTitleEdit":
+            MessageLookupByLibrary.simpleMessage("Редактирование"),
         "shelterSelectShelter":
             MessageLookupByLibrary.simpleMessage("Выберите приют")
       };

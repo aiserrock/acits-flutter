@@ -3971,7 +3971,7 @@ class Prescription {
   @JsonKey(name: 'animal')
   final int? animal;
   @JsonKey(name: 'myType')
-  final dynamic myType;
+  final enums.MyTypeEnum? myType;
   @JsonKey(name: 'duration', toJson: durationEnumToJson, fromJson: durationEnumFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')

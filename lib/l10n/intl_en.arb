@@ -10,14 +10,14 @@
   "@commonNMonth": {
     "placeholders": {
       "count": {
-        "type": "int" 
+        "type": "int"
       }
     }
   },
   "@commonNYears": {
     "placeholders": {
       "count": {
-        "type": "int"
+        "type": "int" 
       }
     }
   },
@@ -144,5 +144,7 @@
   "personMyShelters": "My shelters",
   "prescriptionCurrent": "Current",
   "prescriptionPast": "Past",
+  "prescriptionTitleAdd": "Add prescription",
+  "prescriptionTitleEdit": "Edit prescription",
   "shelterSelectShelter": "Pick the shelter"
 }

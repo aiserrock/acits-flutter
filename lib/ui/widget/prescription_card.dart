@@ -9,10 +9,12 @@ const _reschedulePeriod = Duration(days: 90);
 class PrescriptionCardWidget extends StatefulWidget {
   const PrescriptionCardWidget(
     this.itemData, {
+    this.onEditedPrescription,
     Key? key,
   }) : super(key: key);
 
   final PrescriptionExecutionToday? itemData;
+  final VoidCallback? onEditedPrescription;
 
   @override
   State<PrescriptionCardWidget> createState() => _PrescriptionCardWidgetState();
@@ -127,7 +129,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
                 TextSpan(text: ' ', style: StyleRes.content.copyWith(color: ColorRes.textPrimary)),
                 TextSpan(
                     text: (widget.itemData?.prescription?.animal?.id ?? '').toString(),
-                    style: StyleRes.content.copyWith()),
+                    style: StyleRes.content),
               ],
             ),
             maxLines: 3,
@@ -204,6 +206,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
           ): () {
             Navigator.of(context).pop();
+            widget.onEditedPrescription?.call();
           },
           Text(
             StringRes.current.commonDelete,
