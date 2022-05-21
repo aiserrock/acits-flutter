@@ -1,7 +1,7 @@
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/staff/staff_service.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
+import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/util/validator.dart';
@@ -105,7 +105,7 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
       children: [
         Form(
           key: formKey,
-          child: AnimalEditCard(
+          child: FormEditCard(
             [
               EditCardData(
                 label: StringRes.current.animalCuratorName + ' *',

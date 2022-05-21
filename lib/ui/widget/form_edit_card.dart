@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Контейнер полей ввода/редактирования данных
-/// животного при создании или редактировании
-class AnimalEditCard extends StatelessWidget {
-  const AnimalEditCard(
+/// при создании или редактировании
+class FormEditCard extends StatelessWidget {
+  const FormEditCard(
     this.data, {
     this.formKey,
     Key? key,
@@ -76,6 +76,7 @@ class AnimalEditCard extends StatelessWidget {
       controller: item.controller,
       initialValue: item.initValue,
       decoration: InputDecoration(
+        
         labelText: item.label,
         suffixIcon: item.suffix,
         errorStyle: const TextStyle(fontSize: .0),
