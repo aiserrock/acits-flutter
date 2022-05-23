@@ -9,6 +9,9 @@ import 'package:acits_flutter/ui/screen/search_screen/search_animal_screen_route
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+const _shiftFirtsStartDate = Duration(days: 30);
+const _shiftLastStartDate = Duration(days: 120);
+
 class PrescriptionEditScreenController {
   PrescriptionEditScreenController({
     required this.scaffoldKey,
@@ -36,9 +39,14 @@ class PrescriptionEditScreenController {
   final AnimalService _animalService;
   final TabController tabController;
 
+  final startDateContoroller = TextEditingController();
+  final drugDosageContoroller = TextEditingController();
+
   final loadingState = BehaviorSubject<bool>.seeded(false);
   final screenState = BehaviorSubject<WidgetState<Prescription>?>();
   final animalState = BehaviorSubject<AnimalRead?>();
+  final treatmentPeriodState = BehaviorSubject<TreatmentPeriod>.seeded(TreatmentPeriod.daily);
+  final atTimeListState = BehaviorSubject<List<TimeOfDay>>.seeded([]);
 
   static PrescriptionEditScreenController get controller =>
       getIt<PrescriptionEditScreenController>();
@@ -111,6 +119,37 @@ class PrescriptionEditScreenController {
     );
   }
 
+  void onTreatmentPeriodChanged(TreatmentPeriod? period) {
+    if (period == null) return;
+    treatmentPeriodState.add(period);
+  }
+
+  void pickStartDate(BuildContext context) async {
+    final now = DateTime.now();
+    final result = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: now.subtract(_shiftFirtsStartDate),
+      lastDate: now.add(_shiftLastStartDate),
+    );
+    if (result != null) {
+      startDateContoroller.text = result.toDateShortOnly;
+    }
+  }
+
+  void pickAtTime(
+    BuildContext context,
+    int index,
+  ) async {
+    final result = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (result != null) {
+      atTimeListState.add(atTimeListState.value..add(result));
+    }
+  }
+
   void _showError(String msg) {
     scaffoldKey.currentState
       //ignore: deprecated_member_use
@@ -120,4 +159,10 @@ class PrescriptionEditScreenController {
   }
 
   BuildContext? get _context => scaffoldKey.currentContext;
+}
+
+enum TreatmentPeriod {
+  daily,
+  weekly,
+  date,
 }

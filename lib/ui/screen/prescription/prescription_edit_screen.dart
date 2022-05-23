@@ -1,3 +1,4 @@
+import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -92,6 +93,8 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
         title: _buildTitle(),
         centerTitle: true,
         bottom: TabBar(
+          indicatorColor: ColorRes.accent,
+          indicatorWeight: 4.0,
           tabs: (controller?.getTabs() ?? [])
               .map<Widget>(
                 (tab) => SizedBox(
@@ -180,7 +183,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
       child: FormEditCard(
         [
           EditCardData(
-            label: '  Animal*',
+            label: 'Animal*',
             enabled: false,
             content: animal != null
                 ? Column(
@@ -238,12 +241,113 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
 
   List<Widget> _buildTabs() {
     return [
-      const Center(child: Text('0')),
+      const TreatmentForm(),
       const Center(child: Text('1')),
       const Center(child: Text('2')),
       const Center(child: Text('3')),
       const Center(child: Text('4')),
       const Center(child: Text('5')),
     ];
+  }
+}
+
+class TreatmentForm extends StatelessWidget {
+  const TreatmentForm({Key? key}) : super(key: key);
+
+  PrescriptionEditScreenController get controller => PrescriptionEditScreenController.controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          _buildPeriodSelector(),
+          StreamBuilder<TreatmentPeriod>(
+              stream: controller.treatmentPeriodState,
+              builder: (_, data) {
+                return FormEditCard(
+                  [
+                    EditCardData(
+                      label: 'Start date*',
+                      controller: controller.startDateContoroller,
+                      suffix: const Icon(
+                        Icons.calendar_today_outlined,
+                        color: ColorRes.accent,
+                      ),
+                      onPressed: () => controller.pickStartDate(context),
+                      validator: Validator.emptyValidator,
+                    ),
+                    EditCardData(
+                      label: 'Repeat count*',
+                      digitsOnly: true,
+                      validator: Validator.intValidator,
+                    ),
+                    if (data.data == TreatmentPeriod.weekly)
+                      EditCardData(
+                        label: 'Week day*',
+                        onPressed: () {},
+                        validator: Validator.emptyValidator,
+                      ),
+                    EditCardData(
+                      label: 'At time*',
+                      onPressed: () => controller.pickAtTime(context, 0),
+                      validator: Validator.emptyValidator,
+                    ),
+                  ],
+                );
+              }),
+          FormEditCard(
+            [
+              EditCardData(
+                label: 'Drug*',
+                controller: controller.startDateContoroller,
+                suffix: const Icon(
+                  Icons.calendar_today_outlined,
+                  color: ColorRes.accent,
+                ),
+                onPressed: () => controller.pickStartDate(context),
+                validator: Validator.emptyValidator,
+              ),
+              EditCardData(
+                label: 'Dosage*',
+                decimalOnly: true,
+                validator: Validator.doubleValidator,
+              ),
+            ],
+          ),
+          FormEditCard(
+            [
+              EditCardData(
+                label: 'Comment',
+              ),
+            ],
+          ),
+          const SizedBox(height: 64.0),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPeriodSelector() {
+    return StreamBuilder<TreatmentPeriod>(
+        stream: controller.treatmentPeriodState,
+        builder: (_, data) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: CupertinoSlidingSegmentedControl(
+                groupValue: data.data,
+                children: const <TreatmentPeriod, Widget>{
+                  TreatmentPeriod.daily: Text('Daily'),
+                  TreatmentPeriod.weekly: Text('Weekly'),
+                  TreatmentPeriod.date: Text('Choose date'),
+                },
+                onValueChanged: controller.onTreatmentPeriodChanged,
+              ),
+            ),
+          );
+        });
   }
 }

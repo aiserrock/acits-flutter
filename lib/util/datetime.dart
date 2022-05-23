@@ -17,3 +17,8 @@ extension DateTimeX on DateTime {
   /// 2022-01-04 (формат для бэкенда, не принимает ISO!)
   String get toPatchApiDate => DateFormat('yyyy-MM-dd').format(this);
 }
+
+extension DateTimeStringX on String {
+  /// 01.04.2022 to DateTime
+  DateTime get toDateShortOnlyParse => DateFormat('dd.MM.yyyy').parse(this);
+}

@@ -64,13 +64,27 @@ class PrescriptionService {
     }
   }
 
-  /// получить назначение для животного по его ID назначения
+  /// получить назначение для животного по ID назначения
   Future<Prescription?> fetchPrescriptionById(int id) async {
     final result = await _acitsClient.apiV1PrescriptionsIdGet(
       id: id,
       xCurrentShelter: _authService.currentShelterId,
     );
-    
+
+    if (result.body != null) {
+      return result.body;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  /// получить назначение для животного по ID назначения
+  Future<Prescription?> createPrescriptionById(Prescription prescription) async {
+    final result = await _acitsClient.apiV1PrescriptionsPost(
+      body: prescription,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
     if (result.body != null) {
       return result.body;
     } else {
