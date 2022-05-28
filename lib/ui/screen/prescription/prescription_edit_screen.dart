@@ -1,5 +1,7 @@
+import 'package:acits_flutter/ui/widget/visible_item.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
@@ -53,6 +55,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
   @override
   void dispose() {
     getIt.popScope();
+    controller.dispose();
     super.dispose();
   }
 
@@ -145,17 +148,15 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
 
   Widget _buildBody() {
     return Builder(builder: (context) {
+      final sw = MediaQuery.of(context).size.width;
       return Column(
         children: [
           StreamBuilder<bool>(
             stream: controller.loadingState,
             builder: (_, state) {
-              return AnimatedCrossFade(
-                duration: kThemeAnimationDuration,
-                crossFadeState:
-                    state.data ?? false ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                firstChild: const SizedBox(),
-                secondChild: SizedBox(
+              return VisibleItem(
+                isVisible: state.data ?? false,
+                child: SizedBox(
                   height: 64.0,
                   child: Center(child: LottieBuilder.asset(LottieRes.dogLoading)),
                 ),
@@ -169,7 +170,48 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
                 return _buildAnimalField(animal);
               }),
           Expanded(
-            child: _buildPages(),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onHorizontalDragUpdate: (details) {
+                    final dx = -1 * (details.delta.dx / sw);
+                    final offset = controller.tabController.offset;
+                    final dBound = dx + controller.tabController.index;
+                    if (dBound < .0 || dBound > controller.tabController.length - 1) return;
+                    controller.tabController.offset = offset + dx;
+                  },
+                  onHorizontalDragEnd: (details) {
+                    final indexOffset = controller.tabController.offset.round();
+
+                    if (indexOffset != 0) {
+                      controller.tabController
+                          .animateTo(controller.tabController.index + indexOffset);
+                    } else {
+                      final offset = controller.tabController.offset;
+                      final animation = AnimationController(
+                        vsync: this,
+                        value: offset,
+                        lowerBound: -1.0,
+                        duration: kTabScrollDuration * offset.abs(),
+                        reverseDuration: kTabScrollDuration * offset.abs(),
+                      );
+                      // ignore: prefer_function_declarations_over_variables
+                      final VoidCallback onAnimation = () {
+                        controller.tabController.offset = animation.value;
+                      };
+                      animation.addListener(onAnimation);
+                      animation.addStatusListener((status) {
+                        if (status == AnimationStatus.completed) {
+                          animation.removeListener(onAnimation);
+                        }
+                      });
+                      animation.animateTo(.0, duration: kTabScrollDuration);
+                    }
+                  },
+                  child: const TreatmentForm(),
+                ),
+              ],
+            ),
           ),
         ],
       );
@@ -229,26 +271,6 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
       ),
     );
   }
-
-  Widget _buildPages() {
-    return Builder(builder: (context) {
-      return TabBarView(
-        controller: controller.tabController,
-        children: _buildTabs(),
-      );
-    });
-  }
-
-  List<Widget> _buildTabs() {
-    return [
-      const TreatmentForm(),
-      const Center(child: Text('1')),
-      const Center(child: Text('2')),
-      const Center(child: Text('3')),
-      const Center(child: Text('4')),
-      const Center(child: Text('5')),
-    ];
-  }
 }
 
 class TreatmentForm extends StatelessWidget {
@@ -260,72 +282,85 @@ class TreatmentForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          _buildPeriodSelector(),
-          StreamBuilder<TreatmentPeriod>(
-              stream: controller.treatmentPeriodState,
-              builder: (_, data) {
-                return FormEditCard(
+      child: StreamBuilder<MyTypeEnum>(
+          stream: controller.typeState,
+          builder: (_, typeSnapshot) {
+            final type = typeSnapshot.data;
+            return Column(
+              children: [
+                if (type == MyTypeEnum.courseOfTreatment) _buildPeriodSelector(),
+                StreamBuilder<TreatmentPeriod>(
+                    stream: controller.treatmentPeriodState,
+                    builder: (_, data) {
+                      final periodData = data.data;
+                      return _periodForm(context, periodData);
+                    }),
+                FormEditCard(
                   [
                     EditCardData(
-                      label: 'Start date*',
+                      label: 'Drug*',
                       controller: controller.startDateContoroller,
                       suffix: const Icon(
-                        Icons.calendar_today_outlined,
+                        Icons.menu_open_rounded,
                         color: ColorRes.accent,
                       ),
                       onPressed: () => controller.pickStartDate(context),
                       validator: Validator.emptyValidator,
                     ),
                     EditCardData(
-                      label: 'Repeat count*',
-                      digitsOnly: true,
-                      validator: Validator.intValidator,
-                    ),
-                    if (data.data == TreatmentPeriod.weekly)
-                      EditCardData(
-                        label: 'Week day*',
-                        onPressed: () {},
-                        validator: Validator.emptyValidator,
-                      ),
-                    EditCardData(
-                      label: 'At time*',
-                      onPressed: () => controller.pickAtTime(context, 0),
-                      validator: Validator.emptyValidator,
+                      label: 'Dosage*',
+                      decimalOnly: true,
+                      validator: Validator.doubleValidator,
                     ),
                   ],
-                );
-              }),
-          FormEditCard(
-            [
-              EditCardData(
-                label: 'Drug*',
-                controller: controller.startDateContoroller,
-                suffix: const Icon(
-                  Icons.calendar_today_outlined,
-                  color: ColorRes.accent,
                 ),
-                onPressed: () => controller.pickStartDate(context),
-                validator: Validator.emptyValidator,
-              ),
-              EditCardData(
-                label: 'Dosage*',
-                decimalOnly: true,
-                validator: Validator.doubleValidator,
-              ),
-            ],
+                FormEditCard(
+                  [
+                    EditCardData(
+                      label: 'Comment',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 64.0),
+              ],
+            );
+          }),
+    );
+  }
+
+  Widget _periodForm(
+    BuildContext context,
+    TreatmentPeriod? data,
+  ) {
+    return FormEditCard(
+      [
+        EditCardData(
+          label: 'Start date*',
+          controller: controller.startDateContoroller,
+          suffix: const Icon(
+            Icons.calendar_today_outlined,
+            color: ColorRes.accent,
           ),
-          FormEditCard(
-            [
-              EditCardData(
-                label: 'Comment',
-              ),
-            ],
+          onPressed: () => controller.pickStartDate(context),
+          validator: Validator.emptyValidator,
+        ),
+        EditCardData(
+          label: 'Repeat count*',
+          digitsOnly: true,
+          validator: Validator.intValidator,
+        ),
+        if (data == TreatmentPeriod.weekly)
+          EditCardData(
+            label: 'Week day*',
+            onPressed: () {},
+            validator: Validator.emptyValidator,
           ),
-          const SizedBox(height: 64.0),
-        ],
-      ),
+        EditCardData(
+          label: 'At time*',
+          onPressed: () => controller.pickAtTime(context, 0),
+          validator: Validator.emptyValidator,
+        ),
+      ],
     );
   }
 

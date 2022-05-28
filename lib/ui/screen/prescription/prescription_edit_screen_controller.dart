@@ -29,6 +29,8 @@ class PrescriptionEditScreenController {
         _configService = getIt<ConfigService>(),
         _prescriptionService = getIt<PrescriptionService>() {
     if (isEdit) setEditedState();
+    tabController.addListener(_onTabChanged);
+    typeState.add(getTypes()[tabController.index]);
   }
 
   final int? editPrescriptionId;
@@ -42,16 +44,30 @@ class PrescriptionEditScreenController {
   final startDateContoroller = TextEditingController();
   final drugDosageContoroller = TextEditingController();
 
+  final typeState = BehaviorSubject<MyTypeEnum>();
   final loadingState = BehaviorSubject<bool>.seeded(false);
   final screenState = BehaviorSubject<WidgetState<Prescription>?>();
   final animalState = BehaviorSubject<AnimalRead?>();
   final treatmentPeriodState = BehaviorSubject<TreatmentPeriod>.seeded(TreatmentPeriod.daily);
   final atTimeListState = BehaviorSubject<List<TimeOfDay>>.seeded([]);
+  final drugsState = BehaviorSubject<List<PrescriptionDrug>>.seeded([]);
 
   static PrescriptionEditScreenController get controller =>
       getIt<PrescriptionEditScreenController>();
 
   bool get isEdit => editPrescription != null || editPrescriptionId != null;
+
+  void dispose() {
+    loadingState.close();
+    screenState.close();
+    animalState.close();
+    treatmentPeriodState.close();
+    atTimeListState.close();
+    tabController
+      ..removeListener(_onTabChanged)
+      ..dispose();
+    typeState.close();
+  }
 
   void onFabPressed() {
     if (_checkIsLoading) return;
@@ -59,11 +75,12 @@ class PrescriptionEditScreenController {
     Future.delayed(const Duration(seconds: 3), () => loadingState.add(false));
   }
 
+  List<MyTypeEnum> getTypes() {
+    return MyTypeEnum.values.where((type) => type != MyTypeEnum.swaggerGeneratedUnknown).toList();
+  }
+
   List<String> getTabs() {
-    return MyTypeEnum.values
-        .where((type) => type != MyTypeEnum.swaggerGeneratedUnknown)
-        .map<String>((type) => _configService.getMyTypeName(type) ?? '')
-        .toList();
+    return getTypes().map<String>((type) => _configService.getMyTypeName(type) ?? '').toList();
   }
 
   bool get _checkIsLoading {
@@ -148,6 +165,10 @@ class PrescriptionEditScreenController {
     if (result != null) {
       atTimeListState.add(atTimeListState.value..add(result));
     }
+  }
+
+  void _onTabChanged() {
+    typeState.add(getTypes()[tabController.index]);
   }
 
   void _showError(String msg) {
