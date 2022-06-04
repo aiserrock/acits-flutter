@@ -13,5 +13,5 @@ keystore_release.properties
 upload.properties
 local.properties
 key.properties
-**/key.properties
+**/key*.properties
 **/*.jks
