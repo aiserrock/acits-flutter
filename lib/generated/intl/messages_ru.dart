@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Номер телефона"),
         "animalDateAdmitt":
             MessageLookupByLibrary.simpleMessage("Дата поступления"),
+        "animalDeleteAcceptMsg": MessageLookupByLibrary.simpleMessage(
+            "Вы уверены, что хотите удалить"),
         "animalEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Семейство"),
         "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Женский"),
@@ -77,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalGenderUndefined":
             MessageLookupByLibrary.simpleMessage("Неизвестен"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Вид"),
+        "animalMaxImagesCountIs": MessageLookupByLibrary.simpleMessage(
+            "Максимальное число фото не должно превышать "),
         "animalName": MessageLookupByLibrary.simpleMessage("Кличка"),
         "animalPickCurator":
             MessageLookupByLibrary.simpleMessage("Выбрать куратора"),
@@ -103,6 +107,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Рост, см"),
         "applicantAdd": MessageLookupByLibrary.simpleMessage("Новый заявитель"),
         "applicantEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
+        "commentDeletingFail": MessageLookupByLibrary.simpleMessage(
+            "Не удалось удалить комментарий"),
+        "commentTitleEdit":
+            MessageLookupByLibrary.simpleMessage("Редактирование"),
+        "commentTitleNew":
+            MessageLookupByLibrary.simpleMessage("Новый комментарий"),
         "common": MessageLookupByLibrary.simpleMessage("общий"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Добавить"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Животные"),
@@ -111,18 +121,26 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonCancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "commonDay": MessageLookupByLibrary.simpleMessage("день"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Удалить"),
+        "commonDidNotImpl":
+            MessageLookupByLibrary.simpleMessage("Пока не реализовано :("),
         "commonDone": MessageLookupByLibrary.simpleMessage("Выполнено"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Медикаменты"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Редактировать"),
+        "commonError": MessageLookupByLibrary.simpleMessage("Ошибка"),
         "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
             "Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз."),
         "commonErrorStubTitle":
             MessageLookupByLibrary.simpleMessage("Ой, что-то пошло не так..."),
+        "commonErrorTryAgainMessage": MessageLookupByLibrary.simpleMessage(
+            "Произошла ошибка. Попробуйте позже."),
+        "commonLoading": MessageLookupByLibrary.simpleMessage("Загрузка"),
         "commonMonth": MessageLookupByLibrary.simpleMessage("месяц"),
         "commonNDays": m0,
         "commonNMonth": m1,
         "commonNYears": m2,
         "commonNext": MessageLookupByLibrary.simpleMessage("Далее"),
+        "commonNoAppToOpenFileMsg": MessageLookupByLibrary.simpleMessage(
+            "Нет подходящего приложения для открытия этого файла :("),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Не выполнено"),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Обновить"),
@@ -130,9 +148,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Сегодня"),
+        "commonWarning": MessageLookupByLibrary.simpleMessage("Внимание"),
         "commonYear": MessageLookupByLibrary.simpleMessage("год"),
         "curatorAdd": MessageLookupByLibrary.simpleMessage("Новый куратор"),
         "curatorEdit": MessageLookupByLibrary.simpleMessage("Редактирование"),
+        "errorDefaultMsg": MessageLookupByLibrary.simpleMessage(
+            "Что-то пошло не так, попробуйте еще раз позже"),
+        "errorInternetFail":
+            MessageLookupByLibrary.simpleMessage("Нет интернета :("),
+        "errorInternetFailMsg": MessageLookupByLibrary.simpleMessage(
+            "Неустойчивое соединение, попробуйте еще раз позже"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Неверный логин или пароль"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
@@ -172,6 +197,17 @@ class MessageLookup extends MessageLookupByLibrary {
             "Позволяет четко планировать рабочее время и своевременно оказывать медицинскую помощь животным"),
         "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
             "Сводка назначений на текущий день"),
+        "personChangePass":
+            MessageLookupByLibrary.simpleMessage("Сменить пароль"),
+        "personChangeShelter":
+            MessageLookupByLibrary.simpleMessage("Сменить приют"),
+        "personFeedback":
+            MessageLookupByLibrary.simpleMessage("Обратная связь"),
+        "personLogout": MessageLookupByLibrary.simpleMessage("Выйти"),
+        "personMyData": MessageLookupByLibrary.simpleMessage("Мои данные"),
+        "personMyShelters": MessageLookupByLibrary.simpleMessage("Мои приюты"),
+        "prescriptionCurrent": MessageLookupByLibrary.simpleMessage("Текущие"),
+        "prescriptionPast": MessageLookupByLibrary.simpleMessage("Прошедшие"),
         "shelterSelectShelter":
             MessageLookupByLibrary.simpleMessage("Выберите приют")
       };

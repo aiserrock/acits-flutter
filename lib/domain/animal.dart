@@ -1,5 +1,3 @@
-import 'package:collection/collection.dart';
-
 import 'package:acits_flutter/di/di_container.dart';
 
 import 'package:acits_flutter/service/config/config_service.dart';
@@ -137,7 +135,7 @@ extension AnimalX on AnimalRead {
       // images: _imageWriteList ?? [],
       images: [],
       validImages: _validImages,
-      specId: spec['id'],
+      specId: spec?['id'],
       status: status,
       dateJoined: dateJoined,
       birthDate: birthDate,
@@ -150,8 +148,8 @@ extension AnimalX on AnimalRead {
       height: height,
       weight: weight,
       shelter: shelter,
-      curatorId: curator['id'],
-      applicantId: applicant['id'],
+      curatorId: curator?['id'],
+      applicantId: applicant?['id'],
       animalAttributes: animalAttributes,
     );
   }

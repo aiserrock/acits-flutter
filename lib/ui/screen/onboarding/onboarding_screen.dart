@@ -2,7 +2,7 @@ import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
-import 'package:acits_flutter/ui/screen/auth/login_screen.dart';
+import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
 import 'package:flutter/cupertino.dart';
@@ -163,7 +163,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       alignment: Alignment.topRight,
       child: CupertinoButton(
         onPressed: () => Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen())),
+            .pushReplacement(LoginScreenRoute()),
         child: Assets.icon.close.svg(),
       ),
     );
@@ -184,7 +184,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.linear,
       );
     } else {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      Navigator.of(context).pushReplacement(LoginScreenRoute());
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
@@ -49,7 +50,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      drawer: _buildDrawer(),
       backgroundColor: ColorRes.background,
       appBar: AppBar(
         backgroundColor: ColorRes.foreground,
@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
               Icons.menu,
               color: ColorRes.accent,
             ),
-            onTap: () => scaffoldKey.currentState?.openDrawer(),
+            onTap: RootDrawerProvider.of(context)?.openDrawer,
             onLongPress: () => _openDebug(context),
           );
         }),
@@ -115,8 +115,6 @@ class _MainScreenState extends State<MainScreen> {
       errorBuilder: (_, error) => Column(),
     );
   }
-
-  Widget _buildDrawer() => const Drawer();
 
   Widget _buildTitle() {
     return _isSearchActive

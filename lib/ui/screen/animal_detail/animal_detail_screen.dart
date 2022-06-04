@@ -1,8 +1,14 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
+import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
+import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
+import 'package:acits_flutter/ui/widget/error_holder.dart';
+import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
@@ -42,6 +48,10 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _scrollController = ScrollController();
   final _imagePageController = PageController();
+
+  final _onCreateCommentStream = StreamController<AnimalNote>.broadcast();
+  final _prescriptionSwichState = BehaviorSubject.seeded(_PrescriptionState.active);
+
   late bool _isSmallScreen;
   int _currentTab = 0;
   double _titleOpacity = .0;
@@ -61,11 +71,14 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     super.initState();
     _loadAnimal();
     _loadPrescriptions();
+    _prescriptionSwichState.listen((value) => _loadPrescriptions());
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
+    _onCreateCommentStream.close();
+    _prescriptionSwichState.close();
     super.dispose();
   }
 
@@ -89,7 +102,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               color: Colors.white,
             ),
             foregroundColor: ColorRes.accent,
-            onPressed: () {},
+            onPressed: () => _onFabPressed(context),
           )
         : null;
   }
@@ -152,6 +165,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     BuildContext context,
     AnimalRead animal,
   ) {
+    final avatar = animal.thumb;
     return Column(
       children: [
         DefaultAppBar(
@@ -166,10 +180,16 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               opacity: Curves.easeInOutExpo.transform(_titleOpacity),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: ColorRes.background,
-                    backgroundImage: NetworkImage(animal.avatar?.image?.small ?? ''),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(30.0),
+                    onTap: () => _onPhotoPressed(context, animal),
+                    child: avatar != null
+                        ? CircleAvatar(
+                            radius: 30.0,
+                            backgroundColor: ColorRes.background,
+                            backgroundImage: NetworkImage(avatar),
+                          )
+                        : _buildAddPhotoIcon(30.0),
                   ),
                   const SizedBox(width: 16.0),
                   Column(
@@ -198,32 +218,76 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  Widget _buildHeaderImagePager(BuildContext context, AnimalRead animal) {
+  Widget _buildAddPhotoIcon(double radius) {
+    return Container(
+      height: radius * 2,
+      width: radius * 2,
+      decoration: BoxDecoration(
+        color: ColorRes.background,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: const Center(
+        child: Icon(
+          Icons.add_a_photo_outlined,
+          color: ColorRes.accent,
+          size: 32.0,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderImagePager(
+    BuildContext context,
+    AnimalRead animal,
+  ) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 100.0),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16.0),
-                bottomRight: Radius.circular(16.0),
-              ),
-              child: PageView(
-                controller: _imagePageController,
-                children: animal.images
-                        ?.map<Widget>(
-                          (image) => Image.network(
-                            image.image?.medium ?? '',
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                        .toList() ??
-                    [],
+        if (animal.images?.isEmpty ?? true)
+          Center(
+            child: CupertinoButton(
+              onPressed: () => _onPhotoPressed(context, animal),
+              child: _buildAddPhotoIcon(60.0),
+            ),
+          ),
+        if (animal.images?.isNotEmpty ?? false)
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 100.0),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.circular(16.0),
+                ),
+                child: PageView(
+                  controller: _imagePageController,
+                  children: animal.images?.map<Widget>(
+                        (image) {
+                          return Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Image.network(
+                                  image.image?.medium ?? '',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned.fill(
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    splashColor: ColorRes.accent.withOpacity(.4),
+                                    onTap: () => _onPhotoPressed(context, animal),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ).toList() ??
+                      [],
+                ),
               ),
             ),
           ),
-        ),
         _buildHeaderExpandedTitle(animal),
         _buildHeaderImageIndicator(context, animal),
       ],
@@ -313,32 +377,25 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  SliverList _buildPage(int count, AnimalRead animal) {
+  Widget _buildPage(int count, AnimalRead animal) {
     switch (_currentTab) {
       case 0:
         return _buildCommonInfoPage(animal);
       case 1:
-        return _buildPrescriptionsPage(_statePrescriptions);
+        return _buildPrescriptionsPage(
+          _statePrescriptions,
+          _prescriptionSwichState,
+          _loadPrescriptions,
+        );
       case 2:
         return _buildCuratorPage(animal);
       case 3:
         return _buildApplicantPage(animal);
       default:
-        return SliverList(
-          delegate: SliverChildListDelegate(
-            List.filled(
-              count,
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 64.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: ColorRes.textSecondary, borderRadius: BorderRadius.circular(8.0)),
-                ),
-              ),
-            ),
-          ),
+        return CommentListWidget(
+          animal.id!,
+          scrollController: _scrollController,
+          onCreateCommentStream: _onCreateCommentStream,
         );
     }
   }
@@ -401,12 +458,21 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               if (index != null) _currentTab = index;
             });
             proceedOnNextFrame(_onScroll);
-            // Future.delayed(Duration(milliseconds: 16), _onScroll);
-            // _scrollController.jumpTo(_scrollController.position.pixels + .01);
           },
         ),
       ),
     );
+  }
+
+  void _onPhotoPressed(BuildContext context, AnimalRead animal) {
+    final id = animal.id;
+    if (id != null) {
+      Navigator.of(context).push(PhotoGalleryScreenRoute(animalId: animal.id!)).then(
+        (value) {
+          if (value is bool && value) _loadAnimal();
+        },
+      );
+    }
   }
 
   void _onScroll() {
@@ -430,10 +496,23 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     await getIt<PrescriptionService>()
         .fetchPrescriptionListByAnimal(
           widget.id,
-          isOld: true,
+          isActual: _prescriptionSwichState.value == _PrescriptionState.active,
+          isOld: _prescriptionSwichState.value == _PrescriptionState.inactive,
         )
         .then(
             (value) => setState(() => _statePrescriptions = WidgetState()..content(value?.results)))
         .catchError((e) => setState(() => _state = WidgetState()..error = e));
+  }
+
+  void _onFabPressed(BuildContext context) {
+    if (_currentTab == 4) {
+      Navigator.of(context).push(CommentEditScreenRoute(animalId: widget.id)).then(
+        (value) {
+          if (value != null) {
+            _onCreateCommentStream.add(value);
+          }
+        },
+      );
+    }
   }
 }

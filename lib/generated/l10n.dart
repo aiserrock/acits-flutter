@@ -310,6 +310,16 @@ class StringRes {
     );
   }
 
+  /// `Do you sure to delete`
+  String get animalDeleteAcceptMsg {
+    return Intl.message(
+      'Do you sure to delete',
+      name: 'animalDeleteAcceptMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit animal`
   String get animalEdit {
     return Intl.message(
@@ -385,6 +395,16 @@ class StringRes {
     return Intl.message(
       'Kind',
       name: 'animalKind',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Max images count for animal is `
+  String get animalMaxImagesCountIs {
+    return Intl.message(
+      'Max images count for animal is ',
+      name: 'animalMaxImagesCountIs',
       desc: '',
       args: [],
     );
@@ -560,6 +580,36 @@ class StringRes {
     );
   }
 
+  /// `Comment deletion failed`
+  String get commentDeletingFail {
+    return Intl.message(
+      'Comment deletion failed',
+      name: 'commentDeletingFail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit comment`
+  String get commentTitleEdit {
+    return Intl.message(
+      'Edit comment',
+      name: 'commentTitleEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New comment`
+  String get commentTitleNew {
+    return Intl.message(
+      'New comment',
+      name: 'commentTitleNew',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `common`
   String get common {
     return Intl.message(
@@ -640,6 +690,16 @@ class StringRes {
     );
   }
 
+  /// `Did not implemented yet :(`
+  String get commonDidNotImpl {
+    return Intl.message(
+      'Did not implemented yet :(',
+      name: 'commonDidNotImpl',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Done`
   String get commonDone {
     return Intl.message(
@@ -670,6 +730,16 @@ class StringRes {
     );
   }
 
+  /// `Error`
+  String get commonError {
+    return Intl.message(
+      'Error',
+      name: 'commonError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Failed to load data.\nPlease try again.`
   String get commonErrorStubMsg {
     return Intl.message(
@@ -685,6 +755,26 @@ class StringRes {
     return Intl.message(
       'Oh, something went wrong...',
       name: 'commonErrorStubTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong. Try again later.`
+  String get commonErrorTryAgainMessage {
+    return Intl.message(
+      'Something went wrong. Try again later.',
+      name: 'commonErrorTryAgainMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading`
+  String get commonLoading {
+    return Intl.message(
+      'Loading',
+      name: 'commonLoading',
       desc: '',
       args: [],
     );
@@ -755,6 +845,16 @@ class StringRes {
     );
   }
 
+  /// `No app to open this file :(`
+  String get commonNoAppToOpenFileMsg {
+    return Intl.message(
+      'No app to open this file :(',
+      name: 'commonNoAppToOpenFileMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Not completed`
   String get commonNotCompleted {
     return Intl.message(
@@ -815,6 +915,16 @@ class StringRes {
     );
   }
 
+  /// `Warning`
+  String get commonWarning {
+    return Intl.message(
+      'Warning',
+      name: 'commonWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `year`
   String get commonYear {
     return Intl.message(
@@ -840,6 +950,36 @@ class StringRes {
     return Intl.message(
       'Edit curator',
       name: 'curatorEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong. Try again later.`
+  String get errorDefaultMsg {
+    return Intl.message(
+      'Something went wrong. Try again later.',
+      name: 'errorDefaultMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No internet :(`
+  String get errorInternetFail {
+    return Intl.message(
+      'No internet :(',
+      name: 'errorInternetFail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try again later`
+  String get errorInternetFailMsg {
+    return Intl.message(
+      'Try again later',
+      name: 'errorInternetFailMsg',
       desc: '',
       args: [],
     );
@@ -1070,6 +1210,86 @@ class StringRes {
     return Intl.message(
       'Summary of appointments for the current day',
       name: 'onboardingPlanTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change pass`
+  String get personChangePass {
+    return Intl.message(
+      'Change pass',
+      name: 'personChangePass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change shelter`
+  String get personChangeShelter {
+    return Intl.message(
+      'Change shelter',
+      name: 'personChangeShelter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Feedback`
+  String get personFeedback {
+    return Intl.message(
+      'Feedback',
+      name: 'personFeedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get personLogout {
+    return Intl.message(
+      'Logout',
+      name: 'personLogout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My data`
+  String get personMyData {
+    return Intl.message(
+      'My data',
+      name: 'personMyData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My shelters`
+  String get personMyShelters {
+    return Intl.message(
+      'My shelters',
+      name: 'personMyShelters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current`
+  String get prescriptionCurrent {
+    return Intl.message(
+      'Current',
+      name: 'prescriptionCurrent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Past`
+  String get prescriptionPast {
+    return Intl.message(
+      'Past',
+      name: 'prescriptionPast',
       desc: '',
       args: [],
     );

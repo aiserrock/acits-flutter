@@ -92,7 +92,7 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
       child: SafeArea(
         child: StateBuilder<Applicant?>(
           state: _state,
-          loader: (_) => const LoadingWidget(),
+          loader: (_) => const LoaderHolderWidget(),
           errorBuilder: (_, e) => ErrorHolderWidget(error: e),
           builder: (_, __) => _buildApplicantCard(),
         ),

@@ -9,3 +9,4 @@ export 'package:acits_flutter/res/style.dart';
 export 'package:acits_flutter/res/icon.dart';
 export 'package:acits_flutter/res/lottie.dart';
 export 'package:acits_flutter/generated/l10n.dart';
+export 'package:collection/collection.dart';

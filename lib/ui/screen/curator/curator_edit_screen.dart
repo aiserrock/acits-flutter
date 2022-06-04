@@ -91,7 +91,7 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
       child: SafeArea(
         child: StateBuilder<Curator?>(
           state: _state,
-          loader: (_) => const LoadingWidget(),
+          loader: (_) => const LoaderHolderWidget(),
           errorBuilder: (_, __) => Container(),
           builder: (_, __) => _buildApplicantCard(),
         ),

@@ -61,6 +61,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalCuratorName": MessageLookupByLibrary.simpleMessage("Name"),
         "animalCuratorPhone": MessageLookupByLibrary.simpleMessage("Phone"),
         "animalDateAdmitt": MessageLookupByLibrary.simpleMessage("Admitt date"),
+        "animalDeleteAcceptMsg":
+            MessageLookupByLibrary.simpleMessage("Do you sure to delete"),
         "animalEdit": MessageLookupByLibrary.simpleMessage("Edit animal"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Family"),
         "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Female"),
@@ -70,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalGenderUndefined":
             MessageLookupByLibrary.simpleMessage("Unknown"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Kind"),
+        "animalMaxImagesCountIs": MessageLookupByLibrary.simpleMessage(
+            "Max images count for animal is "),
         "animalName": MessageLookupByLibrary.simpleMessage("Nickname"),
         "animalPickCurator":
             MessageLookupByLibrary.simpleMessage("Pick curator"),
@@ -94,6 +98,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Size, cm"),
         "applicantAdd": MessageLookupByLibrary.simpleMessage("New applicant"),
         "applicantEdit": MessageLookupByLibrary.simpleMessage("Edit applicant"),
+        "commentDeletingFail":
+            MessageLookupByLibrary.simpleMessage("Comment deletion failed"),
+        "commentTitleEdit":
+            MessageLookupByLibrary.simpleMessage("Edit comment"),
+        "commentTitleNew": MessageLookupByLibrary.simpleMessage("New comment"),
         "common": MessageLookupByLibrary.simpleMessage("common"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Add"),
         "commonAnimals": MessageLookupByLibrary.simpleMessage("Animals"),
@@ -102,18 +111,26 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "commonDay": MessageLookupByLibrary.simpleMessage("day"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "commonDidNotImpl":
+            MessageLookupByLibrary.simpleMessage("Did not implemented yet :("),
         "commonDone": MessageLookupByLibrary.simpleMessage("Done"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Edit"),
+        "commonError": MessageLookupByLibrary.simpleMessage("Error"),
         "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
             "Failed to load data.\nPlease try again."),
         "commonErrorStubTitle":
             MessageLookupByLibrary.simpleMessage("Oh, something went wrong..."),
+        "commonErrorTryAgainMessage": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong. Try again later."),
+        "commonLoading": MessageLookupByLibrary.simpleMessage("Loading"),
         "commonMonth": MessageLookupByLibrary.simpleMessage("month"),
         "commonNDays": m0,
         "commonNMonth": m1,
         "commonNYears": m2,
         "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
+        "commonNoAppToOpenFileMsg":
+            MessageLookupByLibrary.simpleMessage("No app to open this file :("),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Not completed"),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Reload"),
@@ -121,9 +138,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Today"),
+        "commonWarning": MessageLookupByLibrary.simpleMessage("Warning"),
         "commonYear": MessageLookupByLibrary.simpleMessage("year"),
         "curatorAdd": MessageLookupByLibrary.simpleMessage("New curator"),
         "curatorEdit": MessageLookupByLibrary.simpleMessage("Edit curator"),
+        "errorDefaultMsg": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong. Try again later."),
+        "errorInternetFail":
+            MessageLookupByLibrary.simpleMessage("No internet :("),
+        "errorInternetFailMsg":
+            MessageLookupByLibrary.simpleMessage("Try again later"),
         "loginAuthorizeError":
             MessageLookupByLibrary.simpleMessage("Wrong login or password"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
@@ -164,6 +188,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "Allows you to clearly plan working hours and provide timely medical assistance to animals"),
         "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
             "Summary of appointments for the current day"),
+        "personChangePass": MessageLookupByLibrary.simpleMessage("Change pass"),
+        "personChangeShelter":
+            MessageLookupByLibrary.simpleMessage("Change shelter"),
+        "personFeedback": MessageLookupByLibrary.simpleMessage("Feedback"),
+        "personLogout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "personMyData": MessageLookupByLibrary.simpleMessage("My data"),
+        "personMyShelters": MessageLookupByLibrary.simpleMessage("My shelters"),
+        "prescriptionCurrent": MessageLookupByLibrary.simpleMessage("Current"),
+        "prescriptionPast": MessageLookupByLibrary.simpleMessage("Past"),
         "shelterSelectShelter":
             MessageLookupByLibrary.simpleMessage("Pick the shelter")
       };
