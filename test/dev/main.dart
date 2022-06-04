@@ -27,22 +27,16 @@ void _setupLogging() {
 }
 
 Future<void> _addDebugHttpCerts() async {
-  final cert = await rootBundle
-      .loadString(CertRes.nikitaAir13)
-      .then((value) => value.split('').map(int.parse).toList());
-  final cert1 = await rootBundle
-      .loadString(CertRes.nikitaMac2013)
-      .then((value) => value.split('').map(int.parse).toList());
-  final cert2 = await rootBundle
-      .loadString(CertRes.nikitaMacPro13)
-      .then((value) => value.split('').map(int.parse).toList());
+  final certs = await Future.wait(
+    [
+      CertRes.nikitaAir13,
+      CertRes.nikitaMac2013,
+      CertRes.nikitaMacPro13,
+    ].map(rootBundle.load),
+  );
 
   HttpOverrides.global = SslHttpOverrides(
     withTrustedRoots: true,
-    certBytes: [
-      cert,
-      cert1,
-      cert2,
-    ],
+    certBytes: certs.map((e) => e.buffer.asInt8List()).toList(),
   );
 }

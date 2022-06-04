@@ -12,7 +12,7 @@
       "args": ["--flavor", "prod"]
     },
     {
-      "name": "prod_debud",
+      "name": "prod_debug",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
