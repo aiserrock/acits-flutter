@@ -3,7 +3,7 @@ description: Flutter client for https://acits.ru/
 
 publish_to: "none"
 
-version: 0.1.2+11
+version: 0.1.3+12
 
 environment:
   sdk: ">=2.15.1 <3.0.0"
