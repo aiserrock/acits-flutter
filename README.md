@@ -42,7 +42,7 @@ fvm flutter pub run build_runner build --delete-conflicting-outputs
 ### Build apk/aab
 ```bash
 fvm flutter build appbundle -t test/dev/main.dart --flavor dev --release --obfuscate --split-debug-info=./build/app/outputs/symbols/dev
-fvm flutter build apk -t test/dev/main.dart --flavor dev --release --obfuscate --split-debug-info=./build/app/debug_info
+fvm flutter build apk -t test/dev/main.dart --flavor dev --release
 
 fvm flutter build appbundle -t lib/main.dart --flavor prod --release --obfuscate --split-debug-info=./build/app/outputs/symbols/prod
 fvm flutter build apk -t lib/main.dart --flavor prod --release --obfuscate --split-debug-info=./build/app/debug_info  
