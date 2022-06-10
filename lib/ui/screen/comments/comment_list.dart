@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:acits_flutter/service/file/file_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:open_file/open_file.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
+import 'package:acits_flutter/service/file/file_service.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
