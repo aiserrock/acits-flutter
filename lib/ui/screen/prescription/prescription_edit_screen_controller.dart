@@ -1,13 +1,17 @@
 import 'dart:math';
 
+import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:rxdart/rxdart.dart';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_animal_screen_route.dart';
-import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:acits_flutter/ui/screen/search_screen/search_drug_screen_route.dart';
 
 const _shiftFirtsStartDate = Duration(days: 30);
 const _shiftLastStartDate = Duration(days: 120);
@@ -41,15 +45,35 @@ class PrescriptionEditScreenController {
   final AnimalService _animalService;
   final TabController tabController;
 
-  final startDateContoroller = TextEditingController();
+  final dateTimeFormKey = GlobalKey<FormState>();
+  final drugFormKey = GlobalKey<FormState>();
+
+  /// Дата начала процедур
+  // final startDateContoroller = TextEditingController();
   final drugDosageContoroller = TextEditingController();
 
+  /// Тип назначения
   final typeState = BehaviorSubject<MyTypeEnum>();
+
+  /// Сочтояние загрузки экрана
   final loadingState = BehaviorSubject<bool>.seeded(false);
+
+  /// Состояние данных назначения
   final screenState = BehaviorSubject<WidgetState<Prescription>?>();
+
+  /// Выбранное животное
   final animalState = BehaviorSubject<AnimalRead?>();
+
+  /// Тип периодичности назначения (ежедневно | еженедельно | определенная дата)
   final treatmentPeriodState = BehaviorSubject<TreatmentPeriod>.seeded(TreatmentPeriod.daily);
+
+  /// Время назначения
   final atTimeListState = BehaviorSubject<List<TimeOfDay>>.seeded([]);
+
+  /// Дата назначения
+  final daysListState = BehaviorSubject<List<DateTime>>.seeded([]);
+
+  /// Список лекарств и дозировок
   final drugsState = BehaviorSubject<List<PrescriptionDrug>>.seeded([]);
 
   static PrescriptionEditScreenController get controller =>
@@ -63,6 +87,8 @@ class PrescriptionEditScreenController {
     animalState.close();
     treatmentPeriodState.close();
     atTimeListState.close();
+    daysListState.close();
+    drugsState.close();
     tabController
       ..removeListener(_onTabChanged)
       ..dispose();
@@ -73,6 +99,9 @@ class PrescriptionEditScreenController {
     if (_checkIsLoading) return;
     loadingState.add(true);
     Future.delayed(const Duration(seconds: 3), () => loadingState.add(false));
+
+    dateTimeFormKey.currentState?.validate();
+    drugFormKey.currentState?.validate();
   }
 
   List<MyTypeEnum> getTypes() {
@@ -143,15 +172,25 @@ class PrescriptionEditScreenController {
 
   void pickStartDate(BuildContext context) async {
     final now = DateTime.now();
+    final dateShift = treatmentPeriodState.value == TreatmentPeriod.weekly ? 7 : 1;
+    final initDate = daysListState.value.isNotEmpty
+        ? daysListState.value.max.add(Duration(days: dateShift))
+        : now;
     final result = await showDatePicker(
       context: context,
-      initialDate: now,
+      initialDate: initDate,
       firstDate: now.subtract(_shiftFirtsStartDate),
       lastDate: now.add(_shiftLastStartDate),
     );
     if (result != null) {
-      startDateContoroller.text = result.toDateShortOnly;
+      daysListState.add(daysListState.value
+        ..add(result)
+        ..sort());
     }
+  }
+
+  void removeDate(int index) {
+    daysListState.add(daysListState.value..removeAt(index));
   }
 
   void pickAtTime(
@@ -163,8 +202,96 @@ class PrescriptionEditScreenController {
       initialTime: TimeOfDay.now(),
     );
     if (result != null) {
-      atTimeListState.add(atTimeListState.value..add(result));
+      atTimeListState.add(
+        atTimeListState.value
+          ..add(result)
+          ..sort(TimeOfDayX.timeSort),
+      );
     }
+  }
+
+  void removeTime(int index) {
+    atTimeListState.add(atTimeListState.value..removeAt(index));
+  }
+
+  void pickDrug() async {
+    final ctx = _context;
+    if (ctx == null) return;
+
+    final drug = await Navigator.of(ctx).push(SearchDrugScreenRoute());
+
+    if (drug == null) return;
+
+    final dosage = await showModalBottomSheet<double>(
+      context: ctx,
+      backgroundColor: Colors.transparent,
+      builder: (bsCtx) {
+        final controller = TextEditingController();
+        onSubmit() {
+          final parsed = double.tryParse(controller.text);
+          if (parsed == null) {
+            return;
+          } else {}
+          Navigator.of(bsCtx).pop(parsed);
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.0),
+              color: ColorRes.foreground,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 8.0),
+                  Text(
+                    '${drug.drug?.name}, ${drug.drug?.formOfDrugName}',
+                    style: StyleRes.subTitle,
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    controller: controller,
+                    autofocus: true,
+                    decoration: const InputDecoration(labelText: 'Dosage*'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    onEditingComplete: onSubmit,
+                  ),
+                  const SizedBox(height: 24.0),
+                  PrimaryButton(
+                    text: 'Принять',
+                    onPressed: onSubmit,
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    if (dosage == null) return;
+
+    drugsState.add(
+      drugsState.value
+        ..add(
+          PrescriptionDrug(
+            drugId: drug.drug?.id,
+            drugDosage: dosage,
+            drugName: drug.drug?.name,
+            formOfDrug: drug.drug?.formOfDrugName,
+          ),
+        ),
+    );
+  }
+
+  void removeDrug(int index) {
+    drugsState.add(drugsState.value..removeAt(index));
   }
 
   void _onTabChanged() {

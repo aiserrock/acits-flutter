@@ -1,11 +1,9 @@
-import 'package:acits_flutter/ui/widget/visible_item.dart';
-import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lottie/lottie.dart';
 
+import 'package:acits_flutter/ui/widget/visible_item.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
@@ -117,7 +115,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
         ),
       ),
       floatingActionButton: _buildFab(),
-      body: _buildBody(),
+      body: KeyboardDismissOnTap(child: _buildBody()),
     );
   }
 
@@ -293,27 +291,12 @@ class TreatmentForm extends StatelessWidget {
                     stream: controller.treatmentPeriodState,
                     builder: (_, data) {
                       final periodData = data.data;
-                      return _periodForm(context, periodData);
+                      return _periodForm(
+                        context,
+                        periodData,
+                      );
                     }),
-                FormEditCard(
-                  [
-                    EditCardData(
-                      label: 'Drug*',
-                      controller: controller.startDateContoroller,
-                      suffix: const Icon(
-                        Icons.menu_open_rounded,
-                        color: ColorRes.accent,
-                      ),
-                      onPressed: () => controller.pickStartDate(context),
-                      validator: Validator.emptyValidator,
-                    ),
-                    EditCardData(
-                      label: 'Dosage*',
-                      decimalOnly: true,
-                      validator: Validator.doubleValidator,
-                    ),
-                  ],
-                ),
+                _buildDrugList(),
                 FormEditCard(
                   [
                     EditCardData(
@@ -328,40 +311,101 @@ class TreatmentForm extends StatelessWidget {
     );
   }
 
+  Widget _buildDrugList() {
+    return StreamBuilder<List<PrescriptionDrug>>(
+        initialData: const [],
+        stream: controller.drugsState,
+        builder: (_, drugList) {
+          return Form(
+            key: controller.drugFormKey,
+            child: FormEditCard(
+              [
+                ...(drugList.data ?? []).mapIndexed<EditCardData>(
+                  (index, drug) => EditCardData(
+                    initValue: '${drug.drugName}, ${drug.formOfDrug}, ${drug.drugDosage}',
+                    suffix: const Icon(
+                      Icons.remove_circle_outline_rounded,
+                      color: ColorRes.error,
+                    ),
+                    onPressed: () => controller.removeDrug(index),
+                  ),
+                ),
+                EditCardData(
+                  label: 'Drug*',
+                  suffix: const Icon(
+                    Icons.menu_open_rounded,
+                    color: ColorRes.accent,
+                  ),
+                  onPressed: () => controller.pickDrug(),
+                  validator: (_) => drugList.data?.isEmpty ?? true ? '' : null,
+                ),
+              ],
+              key: UniqueKey(),
+            ),
+          );
+        });
+  }
+
   Widget _periodForm(
     BuildContext context,
     TreatmentPeriod? data,
   ) {
-    return FormEditCard(
-      [
-        EditCardData(
-          label: 'Start date*',
-          controller: controller.startDateContoroller,
-          suffix: const Icon(
-            Icons.calendar_today_outlined,
-            color: ColorRes.accent,
-          ),
-          onPressed: () => controller.pickStartDate(context),
-          validator: Validator.emptyValidator,
-        ),
-        EditCardData(
-          label: 'Repeat count*',
-          digitsOnly: true,
-          validator: Validator.intValidator,
-        ),
-        if (data == TreatmentPeriod.weekly)
-          EditCardData(
-            label: 'Week day*',
-            onPressed: () {},
-            validator: Validator.emptyValidator,
-          ),
-        EditCardData(
-          label: 'At time*',
-          onPressed: () => controller.pickAtTime(context, 0),
-          validator: Validator.emptyValidator,
-        ),
-      ],
-    );
+    return StreamBuilder<List<DateTime>>(
+        initialData: const [],
+        stream: controller.daysListState,
+        builder: (_, daysData) {
+          return StreamBuilder<List<TimeOfDay>>(
+              initialData: const [],
+              stream: controller.atTimeListState,
+              builder: (_, timesData) {
+                return Form(
+                  key: controller.dateTimeFormKey,
+                  child: FormEditCard(
+                    [
+                      ...(daysData.data ?? []).mapIndexed<EditCardData>(
+                        (index, date) => EditCardData(
+                          initValue: date.toDateShortWeekDay,
+                          suffix: const Icon(
+                            Icons.remove_circle_outline_rounded,
+                            color: ColorRes.error,
+                          ),
+                          onPressed: () => controller.removeDate(index),
+                        ),
+                      ),
+                      EditCardData(
+                        label: 'Date${daysData.data?.isNotEmpty ?? false ? '+' : '*'}',
+                        suffix: const Icon(
+                          Icons.calendar_today_outlined,
+                          color: ColorRes.accent,
+                        ),
+                        onPressed: () => controller.pickStartDate(context),
+                        validator: (_) => daysData.data?.isEmpty ?? true ? '' : null,
+                      ),
+                      ...(timesData.data ?? []).mapIndexed<EditCardData>(
+                        (index, time) => EditCardData(
+                          initValue: time.format(context),
+                          suffix: const Icon(
+                            Icons.remove_circle_outline_rounded,
+                            color: ColorRes.error,
+                          ),
+                          onPressed: () => controller.removeTime(index),
+                        ),
+                      ),
+                      EditCardData(
+                        label: 'At time${timesData.data?.isNotEmpty ?? false ? '+' : '*'}',
+                        onPressed: () => controller.pickAtTime(context, 0),
+                        validator: (_) => timesData.data?.isEmpty ?? true ? '' : null,
+                        suffix: const Icon(
+                          Icons.watch_later_outlined,
+                          color: ColorRes.accent,
+                        ),
+                      ),
+                    ],
+                    key: UniqueKey(),
+                  ),
+                );
+              });
+        });
   }
 
   Widget _buildPeriodSelector() {
