@@ -5,6 +5,8 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_controller.dart';
 
+const _maxCommentLength = 1024;
+
 /// Виджет ввода данных назначения
 class PrescriptionForm extends StatelessWidget {
   const PrescriptionForm({Key? key}) : super(key: key);
@@ -40,6 +42,7 @@ class PrescriptionForm extends StatelessWidget {
                     EditCardData(
                       controller: controller.commentContoroller,
                       label: StringRes.current.prescriptionComment,
+                      maxLength: _maxCommentLength,
                     ),
                   ],
                 ),

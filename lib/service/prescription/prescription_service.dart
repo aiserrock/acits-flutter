@@ -6,6 +6,7 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 
+/// Сервис назначений
 @singleton
 class PrescriptionService {
   PrescriptionService(

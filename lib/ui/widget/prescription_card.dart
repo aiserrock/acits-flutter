@@ -78,10 +78,9 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         const Divider(height: 24.0),
         Text(StringRes.current.mainAppoinmentAuthor, style: StyleRes.content),
         const SizedBox(height: 4.0),
-        // TODO: разобраться с данными по автору назначения
-        const Text(
-          ' ',
-          style: StyleRes.content,
+        Text(
+          widget.itemData?.prescription?.createdBy ?? ' ',
+          style: StyleRes.mainContent,
           maxLines: 3,
         ),
         const Divider(height: 24.0),
@@ -104,13 +103,11 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             ),
           ),
         const Divider(height: 24.0),
-        Row(
-          children: [
-            Assets.icon.comment.svg(color: ColorRes.accent),
-            const SizedBox(width: 8.0),
-            //TODO: разобраться с комментариями к карточке
-            Text('2', style: StyleRes.mainContent.copyWith(color: ColorRes.textSecondary))
-          ],
+        Text(StringRes.current.animalComments, style: StyleRes.content),
+        const SizedBox(height: 4.0),
+        Text(
+          widget.itemData?.prescription?.description ?? '',
+          style: StyleRes.mainContent.copyWith(fontSize: 16.0),
         ),
       ],
     );
