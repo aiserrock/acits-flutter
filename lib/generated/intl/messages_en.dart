@@ -133,6 +133,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No app to open this file :("),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Not completed"),
+        "commonNotFound":
+            MessageLookupByLibrary.simpleMessage("Nothing was found :("),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Reload"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Reschedule"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
@@ -195,12 +197,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "personLogout": MessageLookupByLibrary.simpleMessage("Logout"),
         "personMyData": MessageLookupByLibrary.simpleMessage("My data"),
         "personMyShelters": MessageLookupByLibrary.simpleMessage("My shelters"),
+        "prescriptionAnimal": MessageLookupByLibrary.simpleMessage("Animal*"),
+        "prescriptionCantChangeAnimalMsg": MessageLookupByLibrary.simpleMessage(
+            "Can\\\'t change animal when editing prescription"),
+        "prescriptionComment": MessageLookupByLibrary.simpleMessage("Comment"),
         "prescriptionCurrent": MessageLookupByLibrary.simpleMessage("Current"),
+        "prescriptionDaily": MessageLookupByLibrary.simpleMessage("Daily"),
+        "prescriptionDate": MessageLookupByLibrary.simpleMessage("Date"),
+        "prescriptionDrug": MessageLookupByLibrary.simpleMessage("Drug"),
         "prescriptionPast": MessageLookupByLibrary.simpleMessage("Past"),
+        "prescriptionPickAnimalMsg":
+            MessageLookupByLibrary.simpleMessage("Need pick the animal"),
+        "prescriptionTime": MessageLookupByLibrary.simpleMessage("At time"),
         "prescriptionTitleAdd":
             MessageLookupByLibrary.simpleMessage("Add prescription"),
         "prescriptionTitleEdit":
             MessageLookupByLibrary.simpleMessage("Edit prescription"),
+        "prescriptionWaitLoadingMsg": MessageLookupByLibrary.simpleMessage(
+            "Wait when loading is done please"),
+        "prescriptionWeekly": MessageLookupByLibrary.simpleMessage("Weekly"),
         "shelterSelectShelter":
             MessageLookupByLibrary.simpleMessage("Pick the shelter")
       };

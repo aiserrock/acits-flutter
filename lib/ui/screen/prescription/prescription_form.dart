@@ -39,7 +39,7 @@ class PrescriptionForm extends StatelessWidget {
                   [
                     EditCardData(
                       controller: controller.commentContoroller,
-                      label: 'Comment',
+                      label: StringRes.current.prescriptionComment,
                     ),
                   ],
                 ),
@@ -70,7 +70,8 @@ class PrescriptionForm extends StatelessWidget {
                   ),
                 ),
                 EditCardData(
-                  label: 'Drug${drugList.data?.isNotEmpty ?? false ? '+' : '*'}',
+                  label:
+                      '${StringRes.current.prescriptionDrug}${drugList.data?.isNotEmpty ?? false ? '+' : '*'}',
                   suffix: const Icon(
                     Icons.menu_open_rounded,
                     color: ColorRes.accent,
@@ -101,7 +102,7 @@ class PrescriptionForm extends StatelessWidget {
                   key: controller.dateTimeFormKey,
                   child: FormEditCard(
                     [
-                      ...(daysData.data ?? []) .mapIndexed<EditCardData>(
+                      ...(daysData.data ?? []).mapIndexed<EditCardData>(
                         (index, date) => EditCardData(
                           initValue: date.toDateShortWeekDay,
                           suffix: const Icon(
@@ -113,7 +114,8 @@ class PrescriptionForm extends StatelessWidget {
                       ),
                       if (controller.allowMultiDate || (daysData.data ?? []).isEmpty)
                         EditCardData(
-                          label: 'Date${daysData.data?.isNotEmpty ?? false ? '+' : '*'}',
+                          label:
+                              '${StringRes.current.prescriptionDate}${daysData.data?.isNotEmpty ?? false ? '+' : '*'}',
                           suffix: const Icon(
                             Icons.calendar_today_outlined,
                             color: ColorRes.accent,
@@ -133,7 +135,8 @@ class PrescriptionForm extends StatelessWidget {
                       ),
                       if (controller.allowMultiTime || (timesData.data ?? []).isEmpty)
                         EditCardData(
-                          label: 'At time${timesData.data?.isNotEmpty ?? false ? '+' : '*'}',
+                          label:
+                              '${StringRes.current.prescriptionTime}${timesData.data?.isNotEmpty ?? false ? '+' : '*'}',
                           onPressed: () => controller.pickAtTime(context, 0),
                           validator: (_) => timesData.data?.isEmpty ?? true ? '' : null,
                           suffix: const Icon(
@@ -159,9 +162,9 @@ class PrescriptionForm extends StatelessWidget {
               width: double.infinity,
               child: CupertinoSlidingSegmentedControl(
                 groupValue: data.data,
-                children: const <TreatmentPeriod, Widget>{
-                  TreatmentPeriod.daily: Text('Daily'),
-                  TreatmentPeriod.weekly: Text('Weekly'),
+                children: <TreatmentPeriod, Widget>{
+                  TreatmentPeriod.daily: Text(StringRes.current.prescriptionDaily),
+                  TreatmentPeriod.weekly: Text(StringRes.current.prescriptionWeekly),
                 },
                 onValueChanged: controller.onTreatmentPeriodChanged,
               ),

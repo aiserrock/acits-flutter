@@ -103,7 +103,7 @@ class PrescriptionEditScreenController {
     final animalId = animalState.valueOrNull?.id;
 
     if (animalId == null) {
-      _showError('Need pick the animal');
+      _showError(StringRes.current.prescriptionPickAnimalMsg);
       return;
     }
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return;
@@ -160,7 +160,7 @@ class PrescriptionEditScreenController {
 
   bool get _checkIsLoading {
     if (loadingState.value) {
-      _showError('Wait when loading is done please');
+      _showError(StringRes.current.prescriptionWaitLoadingMsg);
     }
     return loadingState.value;
   }
@@ -197,7 +197,7 @@ class PrescriptionEditScreenController {
 
   void onAnimalPressed() {
     if (isEdit) {
-      _showError('Can\'t change animal when editing prescription');
+      _showError(StringRes.current.prescriptionCantChangeAnimalMsg);
       return;
     }
     final ctx = _context;

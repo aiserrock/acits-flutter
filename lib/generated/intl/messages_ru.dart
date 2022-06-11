@@ -143,6 +143,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Нет подходящего приложения для открытия этого файла :("),
         "commonNotCompleted":
             MessageLookupByLibrary.simpleMessage("Не выполнено"),
+        "commonNotFound":
+            MessageLookupByLibrary.simpleMessage("Ничего не нашлось :("),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Обновить"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Перенести"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
@@ -206,12 +208,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "personLogout": MessageLookupByLibrary.simpleMessage("Выйти"),
         "personMyData": MessageLookupByLibrary.simpleMessage("Мои данные"),
         "personMyShelters": MessageLookupByLibrary.simpleMessage("Мои приюты"),
+        "prescriptionAnimal": MessageLookupByLibrary.simpleMessage("Животное*"),
+        "prescriptionCantChangeAnimalMsg": MessageLookupByLibrary.simpleMessage(
+            "Нельзя изменить животное при редактировании назначения"),
+        "prescriptionComment":
+            MessageLookupByLibrary.simpleMessage("Комментарий"),
         "prescriptionCurrent": MessageLookupByLibrary.simpleMessage("Текущие"),
+        "prescriptionDaily": MessageLookupByLibrary.simpleMessage("Ежедневно"),
+        "prescriptionDate": MessageLookupByLibrary.simpleMessage("Дата"),
+        "prescriptionDrug": MessageLookupByLibrary.simpleMessage("Лекарство"),
         "prescriptionPast": MessageLookupByLibrary.simpleMessage("Прошедшие"),
+        "prescriptionPickAnimalMsg":
+            MessageLookupByLibrary.simpleMessage("Выберите животное"),
+        "prescriptionTime": MessageLookupByLibrary.simpleMessage("Время"),
         "prescriptionTitleAdd":
             MessageLookupByLibrary.simpleMessage("Новое назначение"),
         "prescriptionTitleEdit":
             MessageLookupByLibrary.simpleMessage("Редактирование"),
+        "prescriptionWaitLoadingMsg": MessageLookupByLibrary.simpleMessage(
+            "Дождитесь окончания загрузки"),
+        "prescriptionWeekly":
+            MessageLookupByLibrary.simpleMessage("Еженедельно"),
         "shelterSelectShelter":
             MessageLookupByLibrary.simpleMessage("Выберите приют")
       };

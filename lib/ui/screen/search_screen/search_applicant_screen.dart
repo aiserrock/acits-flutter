@@ -168,8 +168,8 @@ class _SearchApplicantScreenState extends State<SearchApplicantScreen> {
                   child: Assets.common.emptyState.svg(),
                 ),
                 const SizedBox(height: 32.0),
-                const Text(
-                  'Ничего не нашлось :(',
+                Text(
+                  StringRes.current.commonNotFound,
                   style: StyleRes.title,
                 ),
               ],
