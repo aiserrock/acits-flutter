@@ -158,7 +158,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onFabPressed(BuildContext context) {
-    Navigator.of(context).push(PrescriptionEditScreenRoute()).then((value) {});
+    Navigator.of(context).push(PrescriptionEditScreenRoute()).then(
+      (value) {
+        if (value != null) _loadExecutions();
+      },
+    );
   }
 }
 

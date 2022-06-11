@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:acits_flutter/ui/screen/prescription/dosage_bs.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
@@ -22,6 +22,7 @@ class PrescriptionEditScreenController {
     required TickerProvider tickerProvider,
     this.editPrescriptionId,
     this.editPrescription,
+    AnimalRead? initAnimal,
   })  : tabController = TabController(
           initialIndex: editPrescription?.myType is MyTypeEnum
               ? max(MyTypeEnum.values.indexOf(editPrescription!.myType!), 0)
@@ -35,6 +36,7 @@ class PrescriptionEditScreenController {
     if (isEdit) setEditedState();
     tabController.addListener(_onTabChanged);
     typeState.add(getTypes()[tabController.index]);
+    if (initAnimal != null) animalState.add(initAnimal);
   }
 
   final int? editPrescriptionId;
@@ -48,9 +50,8 @@ class PrescriptionEditScreenController {
   final dateTimeFormKey = GlobalKey<FormState>();
   final drugFormKey = GlobalKey<FormState>();
 
-  /// Дата начала процедур
-  // final startDateContoroller = TextEditingController();
-  final drugDosageContoroller = TextEditingController();
+  /// Комментарий
+  final commentContoroller = TextEditingController();
 
   /// Тип назначения
   final typeState = BehaviorSubject<MyTypeEnum>();
@@ -79,6 +80,7 @@ class PrescriptionEditScreenController {
   static PrescriptionEditScreenController get controller =>
       getIt<PrescriptionEditScreenController>();
 
+  /// Является ли данный экран Редактированием назначения (по дефолту - false, Создание нового)
   bool get isEdit => editPrescription != null || editPrescriptionId != null;
 
   void dispose() {
@@ -97,11 +99,49 @@ class PrescriptionEditScreenController {
 
   void onFabPressed() {
     if (_checkIsLoading) return;
-    loadingState.add(true);
-    Future.delayed(const Duration(seconds: 3), () => loadingState.add(false));
 
-    dateTimeFormKey.currentState?.validate();
-    drugFormKey.currentState?.validate();
+    final animalId = animalState.valueOrNull?.id;
+
+    if (animalId == null) {
+      _showError('Need pick the animal');
+      return;
+    }
+    if (!(dateTimeFormKey.currentState?.validate() ?? false)) return;
+    if (typeState.value.hasDrugs && !(drugFormKey.currentState?.validate() ?? false)) return;
+
+    // loadingState.add(true);
+    // Future.delayed(const Duration(seconds: 3), () => loadingState.add(false));
+
+    screenState.add(WidgetState()..loading());
+    final data = Prescription(
+      animal: animalId,
+      myType: typeState.value,
+      description: commentContoroller.text,
+      drugs: drugsState.valueOrNull,
+      duration: typeState.valueOrNull == MyTypeEnum.courseOfTreatment &&
+              treatmentPeriodState.valueOrNull == TreatmentPeriod.weekly
+          ? DurationEnum.everyWeek
+          : DurationEnum.custom,
+      executions: [
+        ...daysListState.value
+            .map<Iterable<PrescriptionExecution>>(
+              (day) => atTimeListState.value.map(
+                (time) => PrescriptionExecution(
+                  executeAt: day.mergeTime(time),
+                ),
+              ),
+            )
+            .expand((list) => list)
+      ],
+    );
+
+    final ctx = _context;
+    if (ctx == null) return;
+    _prescriptionService.createPrescription(data).then((result) {
+      Navigator.of(ctx).pop(result);
+    }).catchError((e) {
+      screenState.add(WidgetState()..error = e);
+    });
   }
 
   List<MyTypeEnum> getTypes() {
@@ -112,9 +152,15 @@ class PrescriptionEditScreenController {
     return getTypes().map<String>((type) => _configService.getMyTypeName(type) ?? '').toList();
   }
 
+  /// Можно ли установить несколько дат для данного типа назначения
+  bool get allowMultiDate => typeState.value.allowMultiDate;
+
+  /// Можно ли установить время несколько время для данного типа назначения
+  bool get allowMultiTime => typeState.value.allowMultiTime;
+
   bool get _checkIsLoading {
     if (loadingState.value) {
-      _showError('Wait when loading is done please.');
+      _showError('Wait when loading is done please');
     }
     return loadingState.value;
   }
@@ -226,52 +272,7 @@ class PrescriptionEditScreenController {
       context: ctx,
       backgroundColor: Colors.transparent,
       builder: (bsCtx) {
-        final controller = TextEditingController();
-        onSubmit() {
-          final parsed = double.tryParse(controller.text);
-          if (parsed == null) {
-            return;
-          } else {}
-          Navigator.of(bsCtx).pop(parsed);
-        }
-
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.0),
-              color: ColorRes.foreground,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  const SizedBox(height: 8.0),
-                  Text(
-                    '${drug.drug?.name}, ${drug.drug?.formOfDrugName}',
-                    style: StyleRes.subTitle,
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                    controller: controller,
-                    autofocus: true,
-                    decoration: const InputDecoration(labelText: 'Dosage*'),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    onEditingComplete: onSubmit,
-                  ),
-                  const SizedBox(height: 24.0),
-                  PrimaryButton(
-                    text: 'Принять',
-                    onPressed: onSubmit,
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
+        return BsDosage(drug: drug);
       },
     );
 
@@ -296,6 +297,12 @@ class PrescriptionEditScreenController {
 
   void _onTabChanged() {
     typeState.add(getTypes()[tabController.index]);
+    if (!allowMultiDate && daysListState.value.length > 1) {
+      daysListState.add(daysListState.value.take(1).toList());
+    }
+    if (!allowMultiTime && atTimeListState.value.length > 1) {
+      atTimeListState.add(atTimeListState.value.take(1).toList());
+    }
   }
 
   void _showError(String msg) {
@@ -303,7 +310,17 @@ class PrescriptionEditScreenController {
       //ignore: deprecated_member_use
       ?..hideCurrentSnackBar()
       //ignore: deprecated_member_use
-      ..showSnackBar(SnackBar(content: Text(msg)));
+      ..showSnackBar(SnackBar(
+          content: Row(
+        children: [
+          SizedBox(
+            height: 40.0,
+            width: 40.0,
+            child: LottieBuilder.asset(LottieRes.crashScratch),
+          ),
+          Expanded(child: Text(msg)),
+        ],
+      )));
   }
 
   BuildContext? get _context => scaffoldKey.currentContext;
@@ -312,5 +329,18 @@ class PrescriptionEditScreenController {
 enum TreatmentPeriod {
   daily,
   weekly,
-  date,
+}
+
+extension MyTypeEnumX on MyTypeEnum? {
+  /// Нужны ли лекарства для данного типа назначения
+  bool get hasDrugs =>
+      this == MyTypeEnum.courseOfTreatment ||
+      this == MyTypeEnum.removingStitches ||
+      this == MyTypeEnum.woundHealing;
+
+  /// Можно ли установить несколько дат для данного типа назначения
+  bool get allowMultiDate => this == MyTypeEnum.courseOfTreatment;
+
+  /// Можно ли установить время несколько время для данного типа назначения
+  bool get allowMultiTime => this == MyTypeEnum.courseOfTreatment;
 }

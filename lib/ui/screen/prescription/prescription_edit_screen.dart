@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lottie/lottie.dart';
 
+import 'package:acits_flutter/ui/screen/prescription/prescription_form.dart';
 import 'package:acits_flutter/ui/widget/visible_item.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -16,11 +17,13 @@ class PrescriptionEditScreen extends StatefulWidget {
   const PrescriptionEditScreen({
     this.editPrescription,
     this.editPrescriptionId,
+    this.animal,
     Key? key,
   }) : super(key: key);
 
   final int? editPrescriptionId;
   final Prescription? editPrescription;
+  final AnimalRead? animal;
 
   @override
   State<PrescriptionEditScreen> createState() => _PrescriptionEditScreenState();
@@ -43,6 +46,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
             tickerProvider: this,
             editPrescriptionId: widget.editPrescriptionId,
             editPrescription: widget.editPrescription,
+            initAnimal: widget.animal,
           ),
         );
       },
@@ -161,12 +165,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
               );
             },
           ),
-          StreamBuilder<AnimalRead?>(
-              stream: controller.animalState,
-              builder: (_, data) {
-                final animal = data.data;
-                return _buildAnimalField(animal);
-              }),
+          _buildAnimalField(),
           Expanded(
             child: Stack(
               children: [
@@ -206,7 +205,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
                       animation.animateTo(.0, duration: kTabScrollDuration);
                     }
                   },
-                  child: const TreatmentForm(),
+                  child: const PrescriptionForm(),
                 ),
               ],
             ),
@@ -216,217 +215,77 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
     });
   }
 
-  Widget _buildAnimalField(AnimalRead? animal) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      onPressed: controller.onAnimalPressed,
-      child: FormEditCard(
-        [
-          EditCardData(
-            label: 'Animal*',
-            enabled: false,
-            content: animal != null
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
+  Widget _buildAnimalField() {
+    return StreamBuilder<AnimalRead?>(
+        stream: controller.animalState,
+        builder: (_, data) {
+          final animal = data.data;
+          return CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: controller.onAnimalPressed,
+            child: FormEditCard(
+              [
+                EditCardData(
+                  label: 'Animal*',
+                  enabled: false,
+                  content: animal != null
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Expanded(
-                              child: _buildAnimalTitle(animal),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildAnimalTitle(animal),
+                                  ),
+                                ],
+                              ),
                             ),
+                            const Divider(height: 8.0, thickness: 1.0),
                           ],
-                        ),
-                      ),
-                      const Divider(height: 8.0, thickness: 1.0),
-                    ],
-                  )
-                : null,
-          )
-        ],
-      ),
-    );
+                        )
+                      : null,
+                )
+              ],
+            ),
+          );
+        });
   }
 
   Widget _buildAnimalTitle(AnimalRead animal) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: animal.name,
-            style: StyleRes.subTitle,
+    final avatarUrl = animal.avatar?.image?.small;
+    return Row(
+      children: [
+        if (avatarUrl != null)
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(avatarUrl),
+              radius: 20.0,
+            ),
           ),
-          const TextSpan(
-            text: ', ',
-            style: StyleRes.subTitle,
-          ),
-          TextSpan(
-            text: animal.id.toString(),
-            style: StyleRes.content.copyWith(color: ColorRes.textSecondary),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TreatmentForm extends StatelessWidget {
-  const TreatmentForm({Key? key}) : super(key: key);
-
-  PrescriptionEditScreenController get controller => PrescriptionEditScreenController.controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: StreamBuilder<MyTypeEnum>(
-          stream: controller.typeState,
-          builder: (_, typeSnapshot) {
-            final type = typeSnapshot.data;
-            return Column(
+        Expanded(
+          child: Text.rich(
+            TextSpan(
               children: [
-                if (type == MyTypeEnum.courseOfTreatment) _buildPeriodSelector(),
-                StreamBuilder<TreatmentPeriod>(
-                    stream: controller.treatmentPeriodState,
-                    builder: (_, data) {
-                      final periodData = data.data;
-                      return _periodForm(
-                        context,
-                        periodData,
-                      );
-                    }),
-                _buildDrugList(),
-                FormEditCard(
-                  [
-                    EditCardData(
-                      label: 'Comment',
-                    ),
-                  ],
+                TextSpan(
+                  text: animal.name,
+                  style: StyleRes.subTitle,
                 ),
-                const SizedBox(height: 64.0),
+                const TextSpan(
+                  text: ', ',
+                  style: StyleRes.subTitle,
+                ),
+                TextSpan(
+                  text: animal.id.toString(),
+                  style: StyleRes.content.copyWith(color: ColorRes.textSecondary),
+                ),
               ],
-            );
-          }),
+            ),
+          ),
+        ),
+      ],
     );
-  }
-
-  Widget _buildDrugList() {
-    return StreamBuilder<List<PrescriptionDrug>>(
-        initialData: const [],
-        stream: controller.drugsState,
-        builder: (_, drugList) {
-          return Form(
-            key: controller.drugFormKey,
-            child: FormEditCard(
-              [
-                ...(drugList.data ?? []).mapIndexed<EditCardData>(
-                  (index, drug) => EditCardData(
-                    initValue: '${drug.drugName}, ${drug.formOfDrug}, ${drug.drugDosage}',
-                    suffix: const Icon(
-                      Icons.remove_circle_outline_rounded,
-                      color: ColorRes.error,
-                    ),
-                    onPressed: () => controller.removeDrug(index),
-                  ),
-                ),
-                EditCardData(
-                  label: 'Drug*',
-                  suffix: const Icon(
-                    Icons.menu_open_rounded,
-                    color: ColorRes.accent,
-                  ),
-                  onPressed: () => controller.pickDrug(),
-                  validator: (_) => drugList.data?.isEmpty ?? true ? '' : null,
-                ),
-              ],
-              key: UniqueKey(),
-            ),
-          );
-        });
-  }
-
-  Widget _periodForm(
-    BuildContext context,
-    TreatmentPeriod? data,
-  ) {
-    return StreamBuilder<List<DateTime>>(
-        initialData: const [],
-        stream: controller.daysListState,
-        builder: (_, daysData) {
-          return StreamBuilder<List<TimeOfDay>>(
-              initialData: const [],
-              stream: controller.atTimeListState,
-              builder: (_, timesData) {
-                return Form(
-                  key: controller.dateTimeFormKey,
-                  child: FormEditCard(
-                    [
-                      ...(daysData.data ?? []).mapIndexed<EditCardData>(
-                        (index, date) => EditCardData(
-                          initValue: date.toDateShortWeekDay,
-                          suffix: const Icon(
-                            Icons.remove_circle_outline_rounded,
-                            color: ColorRes.error,
-                          ),
-                          onPressed: () => controller.removeDate(index),
-                        ),
-                      ),
-                      EditCardData(
-                        label: 'Date${daysData.data?.isNotEmpty ?? false ? '+' : '*'}',
-                        suffix: const Icon(
-                          Icons.calendar_today_outlined,
-                          color: ColorRes.accent,
-                        ),
-                        onPressed: () => controller.pickStartDate(context),
-                        validator: (_) => daysData.data?.isEmpty ?? true ? '' : null,
-                      ),
-                      ...(timesData.data ?? []).mapIndexed<EditCardData>(
-                        (index, time) => EditCardData(
-                          initValue: time.format(context),
-                          suffix: const Icon(
-                            Icons.remove_circle_outline_rounded,
-                            color: ColorRes.error,
-                          ),
-                          onPressed: () => controller.removeTime(index),
-                        ),
-                      ),
-                      EditCardData(
-                        label: 'At time${timesData.data?.isNotEmpty ?? false ? '+' : '*'}',
-                        onPressed: () => controller.pickAtTime(context, 0),
-                        validator: (_) => timesData.data?.isEmpty ?? true ? '' : null,
-                        suffix: const Icon(
-                          Icons.watch_later_outlined,
-                          color: ColorRes.accent,
-                        ),
-                      ),
-                    ],
-                    key: UniqueKey(),
-                  ),
-                );
-              });
-        });
-  }
-
-  Widget _buildPeriodSelector() {
-    return StreamBuilder<TreatmentPeriod>(
-        stream: controller.treatmentPeriodState,
-        builder: (_, data) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: CupertinoSlidingSegmentedControl(
-                groupValue: data.data,
-                children: const <TreatmentPeriod, Widget>{
-                  TreatmentPeriod.daily: Text('Daily'),
-                  TreatmentPeriod.weekly: Text('Weekly'),
-                  TreatmentPeriod.date: Text('Choose date'),
-                },
-                onValueChanged: controller.onTreatmentPeriodChanged,
-              ),
-            ),
-          );
-        });
   }
 }

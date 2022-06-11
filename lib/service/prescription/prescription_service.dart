@@ -78,10 +78,10 @@ class PrescriptionService {
     }
   }
 
-  /// получить назначение для животного по ID назначения
-  Future<Prescription?> createPrescriptionById(Prescription prescription) async {
+  /// Создать новое назначение
+  Future<Prescription?> createPrescription(Prescription prescription) async {
     final result = await _acitsClient.apiV1PrescriptionsPost(
-      body: prescription,
+      body: prescription.copyWith(files: prescription.files ?? []),
       xCurrentShelter: _authService.currentShelterId,
     );
 

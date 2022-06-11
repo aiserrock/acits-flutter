@@ -20,6 +20,15 @@ extension DateTimeX on DateTime {
 
   /// 2022-01-04 (формат для бэкенда, не принимает ISO!)
   String get toPatchApiDate => DateFormat('yyyy-MM-dd').format(this);
+
+  /// Установить в текущей дате нужное время дня
+  DateTime mergeTime(TimeOfDay time) => DateTime(
+        year,
+        month,
+        day,
+        time.hour,
+        time.minute,
+      );
 }
 
 extension DateTimeStringX on String {
