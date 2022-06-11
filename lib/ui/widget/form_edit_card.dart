@@ -76,11 +76,11 @@ class FormEditCard extends StatelessWidget {
       controller: item.controller,
       initialValue: item.initValue,
       decoration: InputDecoration(
-        
         labelText: item.label,
         suffixIcon: item.suffix,
         errorStyle: const TextStyle(fontSize: .0),
       ),
+      maxLength: item.maxLength,
       style: item.enabled ? null : const TextStyle().copyWith(color: ColorRes.textSecondary),
       maxLines: 8,
       minLines: 1,
@@ -102,6 +102,7 @@ class EditCardData {
     this.decimalOnly = false,
     this.enabled = true,
     this.initValue,
+    this.maxLength,
   });
 
   final String? label;
@@ -114,4 +115,5 @@ class EditCardData {
   final bool decimalOnly;
   final bool enabled;
   final String? initValue;
+  final int? maxLength;
 }
