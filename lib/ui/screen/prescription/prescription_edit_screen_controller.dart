@@ -109,11 +109,9 @@ class PrescriptionEditScreenController {
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return;
     if (typeState.value.hasDrugs && !(drugFormKey.currentState?.validate() ?? false)) return;
 
-    // loadingState.add(true);
-    // Future.delayed(const Duration(seconds: 3), () => loadingState.add(false));
-
     screenState.add(WidgetState()..loading());
     final data = Prescription(
+      id: editPrescription?.id ?? editPrescriptionId,
       animal: animalId,
       myType: typeState.value,
       description: commentContoroller.text,
@@ -137,11 +135,21 @@ class PrescriptionEditScreenController {
 
     final ctx = _context;
     if (ctx == null) return;
-    _prescriptionService.createPrescription(data).then((result) {
-      Navigator.of(ctx).pop(result);
-    }).catchError((e) {
-      screenState.add(WidgetState()..error = e);
-    });
+
+    screenState.add(WidgetState()..loading());
+    if (isEdit) {
+      _prescriptionService.updatePrescription(data).then((result) {
+        Navigator.of(ctx).pop(result);
+      }).catchError((e) {
+        screenState.add(WidgetState()..error = e);
+      });
+    } else {
+      _prescriptionService.createPrescription(data).then((result) {
+        Navigator.of(ctx).pop(result);
+      }).catchError((e) {
+        screenState.add(WidgetState()..error = e);
+      });
+    }
   }
 
   List<MyTypeEnum> getTypes() {
@@ -166,20 +174,20 @@ class PrescriptionEditScreenController {
   }
 
   Future<void> setEditedState() async {
-    if (editPrescription != null) {
-      screenState.add(WidgetState(editPrescription));
-      return;
-    }
+    Prescription? prescription;
     final id = editPrescriptionId;
-    if (id != null) {
-      screenState.add(WidgetState()..loading());
-      final prescription = await _prescriptionService.fetchPrescriptionById(id).catchError(
+    if (editPrescription != null) {
+      prescription = editPrescription;
+    } else if (id != null) {
+      prescription = await _prescriptionService.fetchPrescriptionById(id).catchError(
         (e) {
           screenState.add(WidgetState()..error = e);
         },
       );
+    }
 
-      final animalId = prescription?.animal;
+    if (prescription != null) {
+      final animalId = prescription.animal;
       if (animalId == null) return;
       final animal = await _animalService.fetchAnimalDetail(id: animalId).catchError(
         (e) {
@@ -188,10 +196,51 @@ class PrescriptionEditScreenController {
       );
 
       screenState.add(WidgetState(prescription));
-      final type = prescription?.myType;
+      final type = prescription.myType;
       final tabIndex = type != null ? MyTypeEnum.values.indexOf(type) : -1;
       if (tabIndex >= 0) tabController.animateTo(tabIndex - 1);
       animalState.add(animal);
+
+      final drugs = prescription.drugs;
+      if (drugs != null && drugs.isNotEmpty) {
+        drugsState.add(drugs);
+      }
+
+      final executuons = prescription.executions;
+      if (executuons != null) {
+        final days = <DateTime>{}..addAll(
+            executuons.map((item) => item.executeAt).whereNotNull().map(
+                  (date) => DateTime(
+                    date.year,
+                    date.month,
+                    date.day,
+                  ),
+                ),
+          );
+        final times = <TimeOfDay>{}..addAll(
+            executuons.map((item) => item.executeAt).whereNotNull().map(
+                  (time) => TimeOfDay(
+                    hour: time.hour,
+                    minute: time.minute,
+                  ),
+                ),
+          );
+
+        if (days.isNotEmpty && times.isNotEmpty) {
+          daysListState.add(days.toList()..sort());
+          atTimeListState.add(times.toList()..sort(TimeOfDayX.timeSort));
+        }
+      }
+
+      final comment = prescription.description;
+      if (comment != null) {
+        commentContoroller.text = comment;
+      }
+
+      if (prescription.duration == DurationEnum.everyWeek &&
+          prescription.myType == MyTypeEnum.courseOfTreatment) {
+        treatmentPeriodState.add(TreatmentPeriod.weekly);
+      }
     }
   }
 
