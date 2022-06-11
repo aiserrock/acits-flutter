@@ -31,9 +31,9 @@ class PrescriptionService {
       to: to.toIso8601String(),
     );
     if (result.body != null) {
-      return result.body;
+      return _toLocalExecutionsList(result.body);
     } else {
-      throw MessagedException(error: result.error);
+      throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
 
@@ -55,12 +55,12 @@ class PrescriptionService {
       limit: limit,
       offset: offset,
       executeAtGte: isActual ? DateTime.now().toUtc().toPatchApiDate : null,
-      executeAtLt: isOld ? DateTime.now().toIso8601String() : null,
+      executeAtLt: isOld ? DateTime.now().toUtc().toIso8601String() : null,
     );
     if (result.body != null) {
-      return result.body;
+      return _toLocalList(result.body);
     } else {
-      throw MessagedException(error: result.error);
+      throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
 
@@ -72,23 +72,32 @@ class PrescriptionService {
     );
 
     if (result.body != null) {
-      return result.body;
+      return result.body?.copyWith(
+        executions: _toLocal(
+          result.body?.executions ?? [],
+        ),
+      );
     } else {
-      throw MessagedException(error: result.error);
+      throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
 
   /// Создать новое назначение
   Future<Prescription?> createPrescription(Prescription prescription) async {
     final result = await _acitsClient.apiV1PrescriptionsPost(
-      body: prescription.copyWith(files: prescription.files ?? []),
+      body: prescription.copyWith(
+        files: prescription.files ?? [],
+        executions: _toUtc(
+          prescription.executions ?? [],
+        ),
+      ),
       xCurrentShelter: _authService.currentShelterId,
     );
 
     if (result.body != null) {
       return result.body;
     } else {
-      throw MessagedException(error: result.error);
+      throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
 
@@ -109,7 +118,54 @@ class PrescriptionService {
     if (result.body != null) {
       return result.body;
     } else {
-      throw MessagedException(error: result.error);
+      throw MessagedException(error: result.error ?? result.bodyString);
     }
+  }
+
+  /// Изменить назначение
+  Future<Prescription?> updatePrescription(Prescription prescription) async {
+    final result = await _acitsClient.apiV1PrescriptionsIdPut(
+      id: prescription.id,
+      body: prescription.copyWith(
+        files: prescription.files ?? [],
+        executions: _toUtc(
+          prescription.executions ?? [],
+        ),
+      ),
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    if (result.body != null) {
+      return result.body;
+    } else {
+      throw MessagedException(error: result.error ?? result.bodyString);
+    }
+  }
+
+  List<PrescriptionExecution> _toUtc(List<PrescriptionExecution> local) {
+    return local.map((item) => item.copyWith(executeAt: item.executeAt?.toUtc())).toList();
+  }
+
+  List<PrescriptionExecution> _toLocal(List<PrescriptionExecution> utc) {
+    return utc.map((item) => item.copyWith(executeAt: item.executeAt?.toLocal())).toList();
+  }
+
+  PaginatedPrescriptionList? _toLocalList(PaginatedPrescriptionList? utc) {
+    if (utc == null) return null;
+
+    return utc.copyWith(
+        results: utc.results
+            ?.map((item) => item.copyWith(executions: _toLocal(item.executions ?? [])))
+            .toList());
+  }
+
+  PaginatedPrescriptionExecutionTodayList? _toLocalExecutionsList(
+      PaginatedPrescriptionExecutionTodayList? utc) {
+    if (utc == null) return null;
+
+    return utc.copyWith(
+        results: utc.results
+            ?.map((item) => item.copyWith(executeAt: item.executeAt?.toLocal()))
+            .toList());
   }
 }

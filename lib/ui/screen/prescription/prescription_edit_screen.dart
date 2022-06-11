@@ -192,10 +192,11 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
                         duration: kTabScrollDuration * offset.abs(),
                         reverseDuration: kTabScrollDuration * offset.abs(),
                       );
-                      // ignore: prefer_function_declarations_over_variables
-                      final VoidCallback onAnimation = () {
+
+                      void onAnimation() {
                         controller.tabController.offset = animation.value;
-                      };
+                      }
+
                       animation.addListener(onAnimation);
                       animation.addStatusListener((status) {
                         if (status == AnimationStatus.completed) {
@@ -226,7 +227,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
             child: FormEditCard(
               [
                 EditCardData(
-                  label: 'Animal*',
+                  label: StringRes.current.prescriptionAnimal,
                   enabled: false,
                   content: animal != null
                       ? Column(

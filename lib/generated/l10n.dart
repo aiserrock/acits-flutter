@@ -865,6 +865,16 @@ class StringRes {
     );
   }
 
+  /// `Nothing was found :(`
+  String get commonNotFound {
+    return Intl.message(
+      'Nothing was found :(',
+      name: 'commonNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Reload`
   String get commonReloadBtn {
     return Intl.message(
@@ -1275,6 +1285,36 @@ class StringRes {
     );
   }
 
+  /// `Animal*`
+  String get prescriptionAnimal {
+    return Intl.message(
+      'Animal*',
+      name: 'prescriptionAnimal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Can\'t change animal when editing prescription`
+  String get prescriptionCantChangeAnimalMsg {
+    return Intl.message(
+      'Can\\\'t change animal when editing prescription',
+      name: 'prescriptionCantChangeAnimalMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comment`
+  String get prescriptionComment {
+    return Intl.message(
+      'Comment',
+      name: 'prescriptionComment',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Current`
   String get prescriptionCurrent {
     return Intl.message(
@@ -1285,11 +1325,61 @@ class StringRes {
     );
   }
 
+  /// `Daily`
+  String get prescriptionDaily {
+    return Intl.message(
+      'Daily',
+      name: 'prescriptionDaily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get prescriptionDate {
+    return Intl.message(
+      'Date',
+      name: 'prescriptionDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Drug`
+  String get prescriptionDrug {
+    return Intl.message(
+      'Drug',
+      name: 'prescriptionDrug',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Past`
   String get prescriptionPast {
     return Intl.message(
       'Past',
       name: 'prescriptionPast',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Need pick the animal`
+  String get prescriptionPickAnimalMsg {
+    return Intl.message(
+      'Need pick the animal',
+      name: 'prescriptionPickAnimalMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At time`
+  String get prescriptionTime {
+    return Intl.message(
+      'At time',
+      name: 'prescriptionTime',
       desc: '',
       args: [],
     );
@@ -1310,6 +1400,26 @@ class StringRes {
     return Intl.message(
       'Edit prescription',
       name: 'prescriptionTitleEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wait when loading is done please`
+  String get prescriptionWaitLoadingMsg {
+    return Intl.message(
+      'Wait when loading is done please',
+      name: 'prescriptionWaitLoadingMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly`
+  String get prescriptionWeekly {
+    return Intl.message(
+      'Weekly',
+      name: 'prescriptionWeekly',
       desc: '',
       args: [],
     );
