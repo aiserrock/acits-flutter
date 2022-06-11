@@ -27,13 +27,15 @@ class AnimalService {
 
   /// Получить список живолных в приюте
   Future<PaginatedAnimalReadList?> fetchAnimalList({
-    required int limit,
+    int limit = 25,
     int offset = 0,
+    String? searchRequest,
   }) async {
     final result = await _client.apiV1AnimalsGet(
       limit: limit,
       offset: offset,
       xCurrentShelter: _authService.currentShelterId,
+      search: searchRequest,
     );
 
     if (result.body != null) {

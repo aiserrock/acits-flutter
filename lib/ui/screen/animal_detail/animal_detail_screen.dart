@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
+import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_route.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
@@ -510,6 +511,15 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         (value) {
           if (value != null) {
             _onCreateCommentStream.add(value);
+          }
+        },
+      );
+    }
+    if (_currentTab == 1) {
+      Navigator.of(context).push(PrescriptionEditScreenRoute(animal: _state.value)).then(
+        (value) {
+          if (value != null) {
+            _loadPrescriptions();
           }
         },
       );

@@ -1,6 +1,6 @@
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
+import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
@@ -75,7 +75,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
     return Builder(builder: (context) {
       return Form(
         key: widget.formKey,
-        child: AnimalEditCard(
+        child: FormEditCard(
           [
             EditCardData(
               label: StringRes.current.animalDateAdmitt + ' *',

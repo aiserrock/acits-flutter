@@ -64,5 +64,52 @@ class PrescriptionService {
     }
   }
 
+  /// получить назначение для животного по ID назначения
+  Future<Prescription?> fetchPrescriptionById(int id) async {
+    final result = await _acitsClient.apiV1PrescriptionsIdGet(
+      id: id,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    if (result.body != null) {
+      return result.body;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  /// Создать новое назначение
+  Future<Prescription?> createPrescription(Prescription prescription) async {
+    final result = await _acitsClient.apiV1PrescriptionsPost(
+      body: prescription.copyWith(files: prescription.files ?? []),
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    if (result.body != null) {
+      return result.body;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
   String? getTypeName(MyTypeEnum? type) => _configService.getMyTypeName(type);
+
+  /// Получить список лекарств
+  Future<PaginatedShelterDrugList?> fetchDrugList({
+    String? search,
+    int? limit,
+    int offset = 0,
+  }) async {
+    final result = await _acitsClient.apiV1ShelterDrugsGet(
+      xCurrentShelter: _authService.currentShelterId,
+      search: search,
+      limit: limit,
+      offset: offset,
+    );
+    if (result.body != null) {
+      return result.body;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
 }

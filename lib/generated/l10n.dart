@@ -1295,6 +1295,26 @@ class StringRes {
     );
   }
 
+  /// `Add prescription`
+  String get prescriptionTitleAdd {
+    return Intl.message(
+      'Add prescription',
+      name: 'prescriptionTitleAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit prescription`
+  String get prescriptionTitleEdit {
+    return Intl.message(
+      'Edit prescription',
+      name: 'prescriptionTitleEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pick the shelter`
   String get shelterSelectShelter {
     return Intl.message(

@@ -1,6 +1,6 @@
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_card.dart';
+import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/screen/curator/curator_edit_screen_route.dart';
@@ -99,7 +99,7 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
 
   Widget _buildCuratorCard() {
     return Form(
-      child: AnimalEditCard(
+      child: FormEditCard(
         [
           EditCardData(
             label: StringRes.current.animalPickCurator,

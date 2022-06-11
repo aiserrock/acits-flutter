@@ -3619,7 +3619,7 @@ class PatchedPrescription {
   final String? url;
   @JsonKey(name: 'animal')
   final int? animal;
-  @JsonKey(name: 'myType')
+  @JsonKey(name: 'my_type')
   final dynamic myType;
   @JsonKey(name: 'duration', toJson: durationEnumToJson, fromJson: durationEnumFromJson)
   final enums.DurationEnum? duration;
@@ -3970,8 +3970,8 @@ class Prescription {
   final String? url;
   @JsonKey(name: 'animal')
   final int? animal;
-  @JsonKey(name: 'myType')
-  final dynamic myType;
+  @JsonKey(name: 'my_type', toJson: myTypeEnumToJson)
+  final enums.MyTypeEnum? myType;
   @JsonKey(name: 'duration', toJson: durationEnumToJson, fromJson: durationEnumFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
