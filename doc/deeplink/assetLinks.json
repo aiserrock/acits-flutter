@@ -1,0 +1,22 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.andx2.acits",
+      "sha256_cert_fingerprints": [
+        "70:AC:9F:2F:BE:C7:84:55:8C:AC:49:32:32:7C:0E:88:90:36:34:6B:4C:46:84:38:7A:83:18:62:7B:51:CD:00"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.andx2.acits.dev",
+      "sha256_cert_fingerprints": [
+        "70:AC:9F:2F:BE:C7:84:55:8C:AC:49:32:32:7C:0E:88:90:36:34:6B:4C:46:84:38:7A:83:18:62:7B:51:CD:00"
+      ]
+    }
+  }
+]

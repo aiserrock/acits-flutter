@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "97H6SSU25U.io.github.andx2.dev",
+        "paths": [
+          "/api/v1/users/verify-email/*"
+        ]
+      },
+      {
+        "appID": "97H6SSU25U.io.github.andx2",
+        "paths": [
+          "/api/v1/users/verify-email/*"
+        ]
+      }
+    ]
+  }
+}
