@@ -1,7 +1,9 @@
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
@@ -53,6 +55,9 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+  _OnboardingScreenState() : _configService = getIt<ConfigService>();
+
+  final ConfigService _configService;
   late final PageController _controller;
   int _currentPage = 0;
 
@@ -66,6 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void dispose() {
     _controller.removeListener(_pageScrollListen);
+    _configService.setFirstLaunch();
     super.dispose();
   }
 
@@ -84,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: [
                     _buildPager(),
                     const SizedBox(height: 24.0),
-                    _buildBtn(),
+                    _buildBtn(context),
                     const SizedBox(height: 24.0),
                     _buildIndicator(),
                     const SizedBox(height: 16.0),
@@ -113,9 +119,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildBtn() {
+  Widget _buildBtn(BuildContext context) {
     return PrimaryButton(
-      onPressed: _tapNext,
+      onPressed: () => _tapNext(context),
       text: _currentPage == _onboardingData.length - 1
           ? StringRes.current.commonBegin.toUpperCase()
           : StringRes.current.commonNext.toUpperCase(),
@@ -162,8 +168,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Align(
       alignment: Alignment.topRight,
       child: CupertinoButton(
-        onPressed: () => Navigator.of(context)
-            .pushReplacement(LoginScreenRoute()),
+        onPressed: () => _closeScreen(context),
         child: Assets.icon.close.svg(),
       ),
     );
@@ -176,7 +181,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void _tapNext() {
+  void _tapNext(BuildContext context) {
     if (_currentPage < _onboardingData.length - 1) {
       _controller.animateToPage(
         _currentPage + 1,
@@ -184,7 +189,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.linear,
       );
     } else {
-      Navigator.of(context).pushReplacement(LoginScreenRoute());
+      _closeScreen(context);
     }
   }
 
@@ -196,5 +201,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.linear,
       );
     }
+  }
+
+  void _closeScreen(BuildContext context) {
+    Navigator.of(context).pushReplacement(LoginScreenRoute());
   }
 }

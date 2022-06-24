@@ -1,4 +1,5 @@
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -6,17 +7,28 @@ import 'package:injectable/injectable.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/export.dart';
 
+/// Сервис авторизации / регистрации
 @singleton
 class AuthService extends ChangeNotifier {
   AuthService(
     this._acitsClient,
     @Named('guest') this._acitsGuestClient,
+    this._authRepository,
   );
 
   final Openapi _acitsClient;
   final Openapi _acitsGuestClient;
+  final AuthRepository _authRepository;
+
   String? _access;
-  String? _refresh;
+  String? _refreshValue;
+
+  String? get _refresh => _refreshValue;
+
+  set _refresh(String? token) {
+    _refreshValue = token;
+    _authRepository.setRefresh(token);
+  }
 
   PaginatedShelterShortSerializersList? _shelterList;
 
@@ -33,8 +45,8 @@ class AuthService extends ChangeNotifier {
   ShelterShortSerializers? get currentShelter => _shelterList?.results
       ?.firstWhereOrNull((shelter) => shelter.id.toString() == currentShelterId);
 
-  Future<TokenRefresh?> refreshToken() async {
-    final request = TokenRefresh(access: _access, refresh: _refresh);
+  Future<TokenRefresh?> refreshToken({String? refresh}) async {
+    final request = TokenRefresh(access: _access, refresh: refresh ?? _refresh);
     final result = await _acitsClient.apiTokenRefreshPost(body: request);
     if (result.body != null) {
       _access = result.body?.access;
@@ -89,5 +101,16 @@ class AuthService extends ChangeNotifier {
     getIt<GlobalKey<NavigatorState>>().currentState
       ?..popUntil((route) => false)
       ..push(LoginScreenRoute());
+  }
+
+  /// Попробовать обновить авторизацию из прошлой сессии если срок
+  /// действия токена не истек
+  Future<bool> tryRefreshLastAuth() async {
+    if (_refresh != null) return false;
+    final oldRefresh = await _authRepository.refresh;
+    if (oldRefresh == null) return false;
+    return await refreshToken(refresh: oldRefresh)
+        .then((value) => value is TokenRefresh)
+        .catchError((e) => false);
   }
 }
