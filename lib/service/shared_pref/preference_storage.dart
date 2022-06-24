@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _proxyKey = 'proxy';
+const _isFirstKey = 'isFirstKey';
 
 @injectable
 class PreferenceStorage {
@@ -17,4 +18,8 @@ class PreferenceStorage {
   String? get proxy => _sp.getString(_proxyKey);
 
   SharedPreferences get _sp => getIt.get<SharedPreferences>();
+
+  bool? get isFirstLaunch => _sp.getBool(_isFirstKey);
+
+  set isFirstLaunch(bool? isFirst) => _sp.setBool(_isFirstKey, isFirst ?? false);
 }

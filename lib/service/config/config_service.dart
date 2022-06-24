@@ -1,20 +1,24 @@
 import 'dart:convert';
 
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/export.dart';
 
+/// Сервис конфигурации
 @singleton
 class ConfigService {
   ConfigService(
     this._acitsClient,
     this._authService,
+    this._preferenceStorage,
   );
 
   final Openapi _acitsClient;
   final AuthService _authService;
+  final PreferenceStorage _preferenceStorage;
 
   Map<String, dynamic>? _typeValues;
 
@@ -104,4 +108,10 @@ class ConfigService {
       }
     }
   }
+
+  /// Первый ли запуск приложения
+  bool get isFirstLaunch => _preferenceStorage.isFirstLaunch ?? true;
+
+  /// Первый ли запуск приложения
+  void setFirstLaunch({bool value = false}) => _preferenceStorage.isFirstLaunch = value;
 }

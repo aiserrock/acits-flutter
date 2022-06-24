@@ -47,6 +47,12 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _tryRefreshLastSession();
+  }
+
+  @override
   void dispose() {
     loginController.dispose();
     passController.dispose();
@@ -271,5 +277,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _openDebug() {
     _debugService.openDebugScreen();
+  }
+
+  void _tryRefreshLastSession() {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+    _authService.tryRefreshLastAuth().then(
+      (value) {
+        setState(() => _isLoading = false);
+        if (value) {
+          _pickShelter();
+        }
+      },
+    );
   }
 }
