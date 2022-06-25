@@ -1,6 +1,5 @@
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
-import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen_route.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,24 +41,44 @@ class DebugScreen extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     return ListView(
-      children: [
-        const _SearchSpeciesCard(),
+      children:const [
+         _SearchSpeciesCard(),
         _ConnectionCard(),
       ],
     );
   }
 }
 
-class _ConnectionCard extends StatelessWidget {
-  _ConnectionCard({
+const _domainUrlList = [
+  'https://app.acits.ru',
+  'https://dev.acits.ru',
+  'https://test.acits.ru',
+];
+
+class _ConnectionCard extends StatefulWidget {
+  const _ConnectionCard({
     Key? key,
-  })  : _debugDevService = getIt.get<DebugService>() as DebugDevService,
-        super(key: key);
+  }) : super(key: key);
+
+  @override
+  State<_ConnectionCard> createState() => _ConnectionCardState();
+}
+
+class _ConnectionCardState extends State<_ConnectionCard> {
+  _ConnectionCardState() : _debugDevService = getIt.get<DebugService>() as DebugDevService;
 
   final DebugDevService _debugDevService;
 
   final _formKey = GlobalKey<FormState>();
-  final _proxyController = TextEditingController(text: getIt.get<PreferenceStorage>().proxy);
+  final _proxyController = TextEditingController();
+
+  int _domainIndex = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +92,7 @@ class _ConnectionCard extends StatelessWidget {
               children: [
                 const SizedBox(height: 8.0),
                 const Text(
-                  'Connection',
+                  'Proxy',
                   style: StyleRes.subTitle,
                 ),
                 TextField(
@@ -82,6 +101,29 @@ class _ConnectionCard extends StatelessWidget {
                   decoration: const InputDecoration(
                     hintText: '192.168.0.102:9000',
                   ),
+                ),
+                const SizedBox(height: 24.0),
+                const Text(
+                  'Domain',
+                  style: StyleRes.subTitle,
+                ),
+                RadioListTile<int>(
+                  value: 0,
+                  groupValue: _domainIndex,
+                  onChanged: _domainUrlChanged,
+                  title: Text(_domainUrlList[0]),
+                ),
+                RadioListTile<int>(
+                  value: 1,
+                  groupValue: _domainIndex,
+                  onChanged: _domainUrlChanged,
+                  title: Text(_domainUrlList[1]),
+                ),
+                RadioListTile<int>(
+                  value: 2,
+                  groupValue: _domainIndex,
+                  onChanged: _domainUrlChanged,
+                  title: Text(_domainUrlList[2]),
                 ),
                 const SizedBox(height: 16.0),
                 PrimaryButton(
@@ -101,14 +143,29 @@ class _ConnectionCard extends StatelessWidget {
     );
   }
 
+  void _init() {
+    _proxyController.text = _debugDevService.proxyUrl ?? '';
+    final domain = _debugDevService.domainUrl;
+    if (domain != null) {
+      final index = _domainUrlList.indexOf(domain);
+      if (index > -1) _domainIndex = index;
+    }
+  }
+
+  void _domainUrlChanged(int? index) => setState(() => _domainIndex = index ?? 0);
+
   void _accept(BuildContext context) {
     Navigator.of(context).pop();
-    _debugDevService.setProxy(_proxyController.text);
+    _debugDevService.proxyUrl = _proxyController.text;
+    _debugDevService.domainUrl = _domainUrlList[_domainIndex];
+    _debugDevService.reloadApp();
   }
 
   void _reset(BuildContext context) {
     Navigator.of(context).pop();
-    _debugDevService.setProxy(null);
+    _debugDevService.proxyUrl = null;
+    _debugDevService.domainUrl = null;
+    _debugDevService.reloadApp();
   }
 }
 

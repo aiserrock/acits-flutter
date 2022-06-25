@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/service/debug/debug_service.dart';
-import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
 import 'package:acits_flutter/ui/screen/onboarding/onboarding_route.dart';
 
 import '../../di/di_container.dart';
 import '../../ui/debug_screen/debug_screen.dart';
+import '../shared_pref/debug_preference_storage.dart';
 
 /// Сервис отладки приложения
 @Singleton(
@@ -16,7 +16,7 @@ import '../../ui/debug_screen/debug_screen.dart';
 class DebugDevService implements DebugService {
   DebugDevService(this._storage);
 
-  final PreferenceStorage _storage;
+  final DebugPreferenceStorage _storage;
 
   /// Открыть экран отладки
   @override
@@ -25,10 +25,17 @@ class DebugDevService implements DebugService {
     navigator.currentState?.push(MaterialPageRoute(builder: (_) => const DebugScreen()));
   }
 
-  void setProxy(String? proxyUrl) {
+  set proxyUrl(String? proxyUrl) {
     _storage.proxy = proxyUrl;
-    reloadApp();
   }
+
+  String? get proxyUrl => _storage.proxy;
+
+  set domainUrl(String? domainUrl) {
+    _storage.baseUrl = domainUrl;
+  }
+
+  String? get domainUrl => _storage.baseUrl;
 
   Future<void> reloadApp() async {
     final navigator = getIt<GlobalKey<NavigatorState>>();

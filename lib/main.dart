@@ -1,6 +1,5 @@
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/ui/screen/auth/login_screen.dart';
-import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

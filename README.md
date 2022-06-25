@@ -28,7 +28,7 @@ https://pub.dev/packages/get_it
 https://pub.dev/packages/injectable
 
 ```bash
-fvm flutter pub run build_runner build
+fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
 ### OpenAPI
@@ -43,10 +43,14 @@ fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```bash
 fvm flutter build appbundle -t test/dev/main.dart --flavor dev --release --obfuscate --split-debug-info=./build/app/outputs/symbols/dev
 fvm flutter build apk -t test/dev/main.dart --flavor dev --release
+```
 
+```bash
 fvm flutter build appbundle -t lib/main.dart --flavor prod --release --obfuscate --split-debug-info=./build/app/outputs/symbols/prod
 fvm flutter build apk -t lib/main.dart --flavor prod --release --obfuscate --split-debug-info=./build/app/debug_info  
+```
 
+```bash
 fvm flutter build ios -t test/dev/main.dart --flavor dev --release --obfuscate --split-debug-info=./build/app/outputs/symbols/prod
 fvm flutter build ios -t lib/main.dart --flavor prod --release --obfuscate --split-debug-info=./build/app/outputs/symbols/prod
 ```
