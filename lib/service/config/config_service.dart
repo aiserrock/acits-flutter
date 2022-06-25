@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/export.dart';
+import 'package:intl/intl.dart';
 
 /// Сервис конфигурации
 @singleton
@@ -114,4 +115,7 @@ class ConfigService {
 
   /// Первый ли запуск приложения
   void setFirstLaunch({bool value = false}) => _preferenceStorage.isFirstLaunch = value;
+
+  /// Текущая локаль приложения в формате ru-RU
+  String get local => Intl.getCurrentLocale().replaceAll('_', '-');
 }
