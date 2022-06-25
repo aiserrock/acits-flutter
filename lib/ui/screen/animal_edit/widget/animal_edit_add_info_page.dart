@@ -1,4 +1,4 @@
-
+import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -115,12 +115,13 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
               onPressed: _setBirthDate,
             ),
           EditCardData(
-            label: StringRes.current.animalSex,
+            label: '${StringRes.current.animalSex}*',
             controller: _sexController,
             suffix: const Icon(
               Icons.keyboard_arrow_down_rounded,
               color: ColorRes.accent,
             ),
+            validator: Validator.emptyValidator,
             onPressed: () => _selectGender(context),
           ),
           EditCardData(
@@ -144,6 +145,11 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
           EditCardData(
             label: StringRes.current.animalChip,
             controller: _chipController,
+            validator: (value) {
+              if (_dateChipController.text.isNotEmpty && (value == null || value.isEmpty)) {
+                return '';
+              }
+            },
           ),
           EditCardData(
             label: StringRes.current.animalChipDate,
@@ -152,6 +158,11 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
               Icons.calendar_today_outlined,
               color: ColorRes.accent,
             ),
+            validator: (value) {
+              if (_chipController.text.isNotEmpty && (value == null || value.isEmpty)) {
+                return '';
+              }
+            },
             onPressed: _setChipDate,
           ),
         ],
@@ -346,6 +357,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
         (int.tryParse(_ageMonthController.text) ?? 0);
     final _birth =
         _currentAgeTab == 0 ? DateTime.now().subtract(Duration(days: months * 30)) : birthDate;
+
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
       birthDate: _birth,
       animalAttributes: attr,

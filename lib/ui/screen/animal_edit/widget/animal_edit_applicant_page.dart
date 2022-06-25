@@ -107,7 +107,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
       child: FormEditCard(
         [
           EditCardData(
-            label: StringRes.current.animalCuratorName + ' *',
+            label: StringRes.current.animalCuratorName,
             controller: _applicantNameController,
             suffix: const Icon(
               Icons.keyboard_arrow_down_rounded,
