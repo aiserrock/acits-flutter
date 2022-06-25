@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:http/io_client.dart' as http;
 import 'package:chopper/chopper.dart';
 import 'package:injectable/injectable.dart';
 
@@ -6,16 +9,30 @@ import 'package:acits_flutter/domain/env.dart';
 import 'package:acits_flutter/service/client/auth_interceptor.dart';
 import 'package:acits_flutter/service/client/header_inteceptor.dart';
 
+import '../shared_pref/debug_preference_storage.dart';
+
 @module
-abstract class ClientRegister {
-  @prod
+abstract class ClientRegisterDev {
+  @dev
   Openapi createClient(
     AuthInterceptor authInterceptor,
     HeaderInterceptor headerInterceptor,
     Env env,
+    DebugPreferenceStorage ps,
   ) {
+    final proxyUrl = ps.proxy;
+
+    final t = HttpClient();
+
+    if (proxyUrl != null && proxyUrl.isNotEmpty) {
+      t.findProxy = (url) => 'PROXY $proxyUrl';
+    }
+
+    final baseUrl = ps.baseUrl;
+
     final chopper = ChopperClient(
-      baseUrl: env.apiUrl,
+      client: http.IOClient(t),
+      baseUrl: baseUrl ?? env.apiUrl,
       interceptors: [
         headerInterceptor,
         HttpLoggingInterceptor(),
@@ -27,13 +44,25 @@ abstract class ClientRegister {
     return client;
   }
 
-  @prod
+  @dev
   @Named('guest')
   Openapi createGuestClient(
     Env env,
+    DebugPreferenceStorage ps,
   ) {
+    final proxyUrl = ps.proxy;
+
+    final t = HttpClient();
+
+    if (proxyUrl != null && proxyUrl.isNotEmpty) {
+      t.findProxy = (url) => 'PROXY $proxyUrl';
+    }
+
+    final baseUrl = ps.baseUrl;
+
     final chopper = ChopperClient(
-        baseUrl: env.apiUrl,
+        client: http.IOClient(t),
+        baseUrl: baseUrl ?? env.apiUrl,
         converter: $JsonSerializableConverter(),
         interceptors: [HttpLoggingInterceptor()]);
     final client = Openapi.create(chopper);

@@ -2,7 +2,7 @@ import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/export.dart';
 
 /// Сервис сотрудников (заявителей и пр.)
 @singleton

@@ -4,6 +4,6 @@ import 'package:injectable/injectable.dart';
 @module
 abstract class SecureStorageRegister {
   static FlutterSecureStorage? _instance;
-  @preResolve
+
   FlutterSecureStorage createSp() => _instance ??= const FlutterSecureStorage();
 }
