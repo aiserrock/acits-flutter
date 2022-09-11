@@ -267,6 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           setState(() => _errorMessage = error.toString());
         }
+        return null;
       },
     );
     if (list != null) {

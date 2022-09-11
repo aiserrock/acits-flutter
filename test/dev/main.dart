@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
@@ -11,9 +12,9 @@ import 'ssl/http_overrides.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome?.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _setupLogging();
-  await _addDebugHttpCerts();
+  if (!kIsWeb) await _addDebugHttpCerts();
   await initDevDi();
   runApp(const MyApp());
 }

@@ -53,6 +53,7 @@ class AuthService extends ChangeNotifier {
       _refresh = result.body?.refresh ?? _refresh;
       return result.body;
     }
+    return null;
   }
 
   Future<TokenObtainPair?> login(
@@ -74,6 +75,7 @@ class AuthService extends ChangeNotifier {
           throw MessagedException(message: result.error.toString());
       }
     }
+    return null;
   }
 
   Future<PaginatedShelterShortSerializersList?> getShelterList() async {
