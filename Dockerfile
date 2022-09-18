@@ -1,4 +1,4 @@
-FROM cirrusci/flutter:3.3.0 AS build
+FROM cirrusci/flutter:3.3.1 AS build
 WORKDIR /usr/src/app
 COPY . .
 RUN flutter build web -t lib/main.dart
