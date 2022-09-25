@@ -41,8 +41,8 @@ class DebugScreen extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     return ListView(
-      children:const [
-         _SearchSpeciesCard(),
+      children: const [
+        _SearchSpeciesCard(),
         _ConnectionCard(),
       ],
     );

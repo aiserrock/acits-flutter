@@ -32,17 +32,14 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "animalAdd": MessageLookupByLibrary.simpleMessage("New animal"),
-        "animalAdditionalInfo":
-            MessageLookupByLibrary.simpleMessage("Additional info"),
+        "animalAdditionalInfo": MessageLookupByLibrary.simpleMessage("Additional info"),
         "animalAdmitted": MessageLookupByLibrary.simpleMessage("Admitted"),
         "animalAge": MessageLookupByLibrary.simpleMessage("Age"),
         "animalAgeAppox": MessageLookupByLibrary.simpleMessage("Approximate"),
         "animalAgeExact": MessageLookupByLibrary.simpleMessage("Exact"),
-        "animalAnimalFamily":
-            MessageLookupByLibrary.simpleMessage("Animal family"),
+        "animalAnimalFamily": MessageLookupByLibrary.simpleMessage("Animal family"),
         "animalAnimalKind": MessageLookupByLibrary.simpleMessage("Animal kind"),
-        "animalAnimalStatus":
-            MessageLookupByLibrary.simpleMessage("Animal status"),
+        "animalAnimalStatus": MessageLookupByLibrary.simpleMessage("Animal status"),
         "animalApplicant": MessageLookupByLibrary.simpleMessage("Applicant"),
         "animalBirth": MessageLookupByLibrary.simpleMessage("Birth date"),
         "animalCardTitle": MessageLookupByLibrary.simpleMessage("Animal card"),
@@ -56,52 +53,40 @@ class MessageLookup extends MessageLookupByLibrary {
         "animalCurator": MessageLookupByLibrary.simpleMessage("Curator"),
         "animalCuratorAddress": MessageLookupByLibrary.simpleMessage("Address"),
         "animalCuratorEmail": MessageLookupByLibrary.simpleMessage("E-mail"),
-        "animalCuratorLastName":
-            MessageLookupByLibrary.simpleMessage("Last name"),
+        "animalCuratorLastName": MessageLookupByLibrary.simpleMessage("Last name"),
         "animalCuratorName": MessageLookupByLibrary.simpleMessage("Name"),
         "animalCuratorPhone": MessageLookupByLibrary.simpleMessage("Phone"),
         "animalDateAdmitt": MessageLookupByLibrary.simpleMessage("Admitt date"),
-        "animalDeleteAcceptMsg":
-            MessageLookupByLibrary.simpleMessage("Do you sure to delete"),
+        "animalDeleteAcceptMsg": MessageLookupByLibrary.simpleMessage("Do you sure to delete"),
         "animalEdit": MessageLookupByLibrary.simpleMessage("Edit animal"),
         "animalFamily": MessageLookupByLibrary.simpleMessage("Family"),
         "animalGenderFemale": MessageLookupByLibrary.simpleMessage("Female"),
         "animalGenderLess": MessageLookupByLibrary.simpleMessage("Gengerless"),
         "animalGenderMale": MessageLookupByLibrary.simpleMessage("Male"),
         "animalGenderMiddle": MessageLookupByLibrary.simpleMessage("Middle"),
-        "animalGenderUndefined":
-            MessageLookupByLibrary.simpleMessage("Unknown"),
+        "animalGenderUndefined": MessageLookupByLibrary.simpleMessage("Unknown"),
         "animalKind": MessageLookupByLibrary.simpleMessage("Kind"),
-        "animalMaxImagesCountIs": MessageLookupByLibrary.simpleMessage(
-            "Max images count for animal is "),
+        "animalMaxImagesCountIs":
+            MessageLookupByLibrary.simpleMessage("Max images count for animal is "),
         "animalName": MessageLookupByLibrary.simpleMessage("Nickname"),
-        "animalPickCurator":
-            MessageLookupByLibrary.simpleMessage("Pick curator"),
-        "animalPrescriptions":
-            MessageLookupByLibrary.simpleMessage("Prescriptions"),
+        "animalPickCurator": MessageLookupByLibrary.simpleMessage("Pick curator"),
+        "animalPrescriptions": MessageLookupByLibrary.simpleMessage("Prescriptions"),
         "animalQtyMonth": MessageLookupByLibrary.simpleMessage("Qty month"),
         "animalQtyYear": MessageLookupByLibrary.simpleMessage("Year qty"),
-        "animalReceiptDate":
-            MessageLookupByLibrary.simpleMessage("Receipt date"),
+        "animalReceiptDate": MessageLookupByLibrary.simpleMessage("Receipt date"),
         "animalSex": MessageLookupByLibrary.simpleMessage("Sex"),
         "animalSocialLink": MessageLookupByLibrary.simpleMessage("Social link"),
-        "animalSpecSigns":
-            MessageLookupByLibrary.simpleMessage("Special signs"),
+        "animalSpecSigns": MessageLookupByLibrary.simpleMessage("Special signs"),
         "animalStatus": MessageLookupByLibrary.simpleMessage("Status"),
-        "animalStatusAndJoin":
-            MessageLookupByLibrary.simpleMessage("Status and join"),
-        "animalTransferAct":
-            MessageLookupByLibrary.simpleMessage("Transfer act"),
-        "animalUploadAct":
-            MessageLookupByLibrary.simpleMessage("Upload transfer act"),
+        "animalStatusAndJoin": MessageLookupByLibrary.simpleMessage("Status and join"),
+        "animalTransferAct": MessageLookupByLibrary.simpleMessage("Transfer act"),
+        "animalUploadAct": MessageLookupByLibrary.simpleMessage("Upload transfer act"),
         "animalWeight": MessageLookupByLibrary.simpleMessage("Weight, kg"),
         "aninmalSize": MessageLookupByLibrary.simpleMessage("Size, cm"),
         "applicantAdd": MessageLookupByLibrary.simpleMessage("New applicant"),
         "applicantEdit": MessageLookupByLibrary.simpleMessage("Edit applicant"),
-        "commentDeletingFail":
-            MessageLookupByLibrary.simpleMessage("Comment deletion failed"),
-        "commentTitleEdit":
-            MessageLookupByLibrary.simpleMessage("Edit comment"),
+        "commentDeletingFail": MessageLookupByLibrary.simpleMessage("Comment deletion failed"),
+        "commentTitleEdit": MessageLookupByLibrary.simpleMessage("Edit comment"),
         "commentTitleNew": MessageLookupByLibrary.simpleMessage("New comment"),
         "common": MessageLookupByLibrary.simpleMessage("common"),
         "commonAdd": MessageLookupByLibrary.simpleMessage("Add"),
@@ -111,18 +96,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "commonDay": MessageLookupByLibrary.simpleMessage("day"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Delete"),
-        "commonDidNotImpl":
-            MessageLookupByLibrary.simpleMessage("Did not implemented yet :("),
+        "commonDidNotImpl": MessageLookupByLibrary.simpleMessage("Did not implemented yet :("),
         "commonDone": MessageLookupByLibrary.simpleMessage("Done"),
         "commonDrugs": MessageLookupByLibrary.simpleMessage("Drugs"),
         "commonEdit": MessageLookupByLibrary.simpleMessage("Edit"),
         "commonError": MessageLookupByLibrary.simpleMessage("Error"),
-        "commonErrorStubMsg": MessageLookupByLibrary.simpleMessage(
-            "Failed to load data.\nPlease try again."),
-        "commonErrorStubTitle":
-            MessageLookupByLibrary.simpleMessage("Oh, something went wrong..."),
-        "commonErrorTryAgainMessage": MessageLookupByLibrary.simpleMessage(
-            "Something went wrong. Try again later."),
+        "commonErrorStubMsg":
+            MessageLookupByLibrary.simpleMessage("Failed to load data.\nPlease try again."),
+        "commonErrorStubTitle": MessageLookupByLibrary.simpleMessage("Oh, something went wrong..."),
+        "commonErrorTryAgainMessage":
+            MessageLookupByLibrary.simpleMessage("Something went wrong. Try again later."),
         "commonLoading": MessageLookupByLibrary.simpleMessage("Loading"),
         "commonMonth": MessageLookupByLibrary.simpleMessage("month"),
         "commonNDays": m0,
@@ -131,10 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonNext": MessageLookupByLibrary.simpleMessage("Next"),
         "commonNoAppToOpenFileMsg":
             MessageLookupByLibrary.simpleMessage("No app to open this file :("),
-        "commonNotCompleted":
-            MessageLookupByLibrary.simpleMessage("Not completed"),
-        "commonNotFound":
-            MessageLookupByLibrary.simpleMessage("Nothing was found :("),
+        "commonNotCompleted": MessageLookupByLibrary.simpleMessage("Not completed"),
+        "commonNotFound": MessageLookupByLibrary.simpleMessage("Nothing was found :("),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Reload"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Reschedule"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
@@ -144,55 +125,43 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonYear": MessageLookupByLibrary.simpleMessage("year"),
         "curatorAdd": MessageLookupByLibrary.simpleMessage("New curator"),
         "curatorEdit": MessageLookupByLibrary.simpleMessage("Edit curator"),
-        "errorDefaultMsg": MessageLookupByLibrary.simpleMessage(
-            "Something went wrong. Try again later."),
-        "errorInternetFail":
-            MessageLookupByLibrary.simpleMessage("No internet :("),
-        "errorInternetFailMsg":
-            MessageLookupByLibrary.simpleMessage("Try again later"),
-        "loginAuthorizeError":
-            MessageLookupByLibrary.simpleMessage("Wrong login or password"),
-        "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
-            "ACITS - Animal control\nin the shelter"),
+        "errorDefaultMsg":
+            MessageLookupByLibrary.simpleMessage("Something went wrong. Try again later."),
+        "errorInternetFail": MessageLookupByLibrary.simpleMessage("No internet :("),
+        "errorInternetFailMsg": MessageLookupByLibrary.simpleMessage("Try again later"),
+        "loginAuthorizeError": MessageLookupByLibrary.simpleMessage("Wrong login or password"),
+        "loginDescribeMsg":
+            MessageLookupByLibrary.simpleMessage("ACITS - Animal control\nin the shelter"),
         "loginEntryBtn": MessageLookupByLibrary.simpleMessage("Enter"),
-        "loginForgetPass":
-            MessageLookupByLibrary.simpleMessage("Forgot your password?"),
-        "loginLoginHint":
-            MessageLookupByLibrary.simpleMessage("Enter your email or login"),
+        "loginForgetPass": MessageLookupByLibrary.simpleMessage("Forgot your password?"),
+        "loginLoginHint": MessageLookupByLibrary.simpleMessage("Enter your email or login"),
         "loginLoginLabel": MessageLookupByLibrary.simpleMessage("Login"),
         "loginPassLabel": MessageLookupByLibrary.simpleMessage("Password"),
-        "loginToRegistration":
-            MessageLookupByLibrary.simpleMessage("Register now"),
-        "mainAddAppointments":
-            MessageLookupByLibrary.simpleMessage("Add appointments"),
+        "loginToRegistration": MessageLookupByLibrary.simpleMessage("Register now"),
+        "mainAddAppointments": MessageLookupByLibrary.simpleMessage("Add appointments"),
         "mainAnimal": MessageLookupByLibrary.simpleMessage("Animal"),
         "mainAppoinment": MessageLookupByLibrary.simpleMessage("Appoinment"),
-        "mainAppoinmentAuthor":
-            MessageLookupByLibrary.simpleMessage("Appoinment author"),
-        "mainAppointments":
-            MessageLookupByLibrary.simpleMessage("Appointments"),
-        "mainEmptyState": MessageLookupByLibrary.simpleMessage(
-            "There are no appointments for today"),
+        "mainAppoinmentAuthor": MessageLookupByLibrary.simpleMessage("Appoinment author"),
+        "mainAppointments": MessageLookupByLibrary.simpleMessage("Appointments"),
+        "mainEmptyState":
+            MessageLookupByLibrary.simpleMessage("There are no appointments for today"),
         "mainTitle": MessageLookupByLibrary.simpleMessage("Today"),
         "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
             "We have prepared in advance the maximum number of medical appointments for shelters"),
-        "onboardingDrugsTitle": MessageLookupByLibrary.simpleMessage(
-            "Flexible system of work with appointments"),
+        "onboardingDrugsTitle":
+            MessageLookupByLibrary.simpleMessage("Flexible system of work with appointments"),
         "onboardingFreeMsg": MessageLookupByLibrary.simpleMessage(
             "All functionality will be available to you in full, without restrictions"),
-        "onboardingFreeTitle":
-            MessageLookupByLibrary.simpleMessage("Absolutely free"),
+        "onboardingFreeTitle": MessageLookupByLibrary.simpleMessage("Absolutely free"),
         "onboardingNewsMsg": MessageLookupByLibrary.simpleMessage(
             "The map is maintained throughout the life of the animal and does not depend on the shelter"),
-        "onboardingNewsTitle":
-            MessageLookupByLibrary.simpleMessage("Unified card of the animal"),
+        "onboardingNewsTitle": MessageLookupByLibrary.simpleMessage("Unified card of the animal"),
         "onboardingPlanMsg": MessageLookupByLibrary.simpleMessage(
             "Allows you to clearly plan working hours and provide timely medical assistance to animals"),
-        "onboardingPlanTitle": MessageLookupByLibrary.simpleMessage(
-            "Summary of appointments for the current day"),
+        "onboardingPlanTitle":
+            MessageLookupByLibrary.simpleMessage("Summary of appointments for the current day"),
         "personChangePass": MessageLookupByLibrary.simpleMessage("Change pass"),
-        "personChangeShelter":
-            MessageLookupByLibrary.simpleMessage("Change shelter"),
+        "personChangeShelter": MessageLookupByLibrary.simpleMessage("Change shelter"),
         "personFeedback": MessageLookupByLibrary.simpleMessage("Feedback"),
         "personLogout": MessageLookupByLibrary.simpleMessage("Logout"),
         "personMyData": MessageLookupByLibrary.simpleMessage("My data"),
@@ -206,17 +175,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "prescriptionDate": MessageLookupByLibrary.simpleMessage("Date"),
         "prescriptionDrug": MessageLookupByLibrary.simpleMessage("Drug"),
         "prescriptionPast": MessageLookupByLibrary.simpleMessage("Past"),
-        "prescriptionPickAnimalMsg":
-            MessageLookupByLibrary.simpleMessage("Need pick the animal"),
+        "prescriptionPickAnimalMsg": MessageLookupByLibrary.simpleMessage("Need pick the animal"),
         "prescriptionTime": MessageLookupByLibrary.simpleMessage("At time"),
-        "prescriptionTitleAdd":
-            MessageLookupByLibrary.simpleMessage("Add prescription"),
-        "prescriptionTitleEdit":
-            MessageLookupByLibrary.simpleMessage("Edit prescription"),
-        "prescriptionWaitLoadingMsg": MessageLookupByLibrary.simpleMessage(
-            "Wait when loading is done please"),
+        "prescriptionTitleAdd": MessageLookupByLibrary.simpleMessage("Add prescription"),
+        "prescriptionTitleEdit": MessageLookupByLibrary.simpleMessage("Edit prescription"),
+        "prescriptionWaitLoadingMsg":
+            MessageLookupByLibrary.simpleMessage("Wait when loading is done please"),
         "prescriptionWeekly": MessageLookupByLibrary.simpleMessage("Weekly"),
-        "shelterSelectShelter":
-            MessageLookupByLibrary.simpleMessage("Pick the shelter")
+        "shelterSelectShelter": MessageLookupByLibrary.simpleMessage("Pick the shelter")
       };
 }

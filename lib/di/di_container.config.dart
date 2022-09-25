@@ -20,14 +20,10 @@ import 'package:acits_flutter/service/env/env_register.dart' as _i23;
 import 'package:acits_flutter/service/file/file_repository.dart' as _i6;
 import 'package:acits_flutter/service/file/file_service.dart' as _i7;
 import 'package:acits_flutter/service/personal/personal_service.dart' as _i18;
-import 'package:acits_flutter/service/prescription/prescription_service.dart'
-    as _i19;
-import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart'
-    as _i24;
-import 'package:acits_flutter/service/shared_pref/preference_storage.dart'
-    as _i11;
-import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart'
-    as _i26;
+import 'package:acits_flutter/service/prescription/prescription_service.dart' as _i19;
+import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart' as _i24;
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart' as _i11;
+import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart' as _i26;
 import 'package:acits_flutter/service/staff/staff_service.dart' as _i20;
 import 'package:dio/dio.dart' as _i4;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i8;
@@ -55,31 +51,26 @@ Future<_i1.GetIt> $initGetIt(_i1.GetIt get,
   gh.factory<_i8.FlutterSecureStorage>(() => secureStorageRegister.createSp());
   gh.factory<_i9.HeaderInterceptor>(() => _i9.HeaderInterceptor());
   gh.factory<_i10.Openapi>(
-      () => clientRegister.createClient(get<_i3.AuthInterceptor>(),
-          get<_i9.HeaderInterceptor>(), get<_i5.Env>()),
+      () => clientRegister.createClient(
+          get<_i3.AuthInterceptor>(), get<_i9.HeaderInterceptor>(), get<_i5.Env>()),
       registerFor: {_prod});
-  gh.factory<_i10.Openapi>(
-      () => clientRegister.createGuestClient(get<_i5.Env>()),
-      instanceName: 'guest',
-      registerFor: {_prod});
+  gh.factory<_i10.Openapi>(() => clientRegister.createGuestClient(get<_i5.Env>()),
+      instanceName: 'guest', registerFor: {_prod});
   gh.factory<_i11.PreferenceStorage>(() => _i11.PreferenceStorage());
-  await gh.factoryAsync<_i12.SharedPreferences>(
-      () => sharedPreferenceRegister.createSp(),
+  await gh.factoryAsync<_i12.SharedPreferences>(() => sharedPreferenceRegister.createSp(),
       preResolve: true);
-  gh.factory<_i13.AuthRepository>(
-      () => _i13.AuthRepository(get<_i8.FlutterSecureStorage>()));
+  gh.factory<_i13.AuthRepository>(() => _i13.AuthRepository(get<_i8.FlutterSecureStorage>()));
   gh.singleton<_i14.ColorRes>(_i14.ColorRes());
   gh.singleton<_i15.DebugService>(_i15.DebugService(), registerFor: {_prod});
-  gh.singleton<_i16.AuthService>(_i16.AuthService(get<_i10.Openapi>(),
-      get<_i10.Openapi>(instanceName: 'guest'), get<_i13.AuthRepository>()));
-  gh.singleton<_i17.ConfigService>(_i17.ConfigService(get<_i10.Openapi>(),
-      get<_i16.AuthService>(), get<_i11.PreferenceStorage>()));
+  gh.singleton<_i16.AuthService>(_i16.AuthService(
+      get<_i10.Openapi>(), get<_i10.Openapi>(instanceName: 'guest'), get<_i13.AuthRepository>()));
+  gh.singleton<_i17.ConfigService>(_i17.ConfigService(
+      get<_i10.Openapi>(), get<_i16.AuthService>(), get<_i11.PreferenceStorage>()));
   gh.singleton<_i18.PersonalService>(
       _i18.PersonalService(get<_i10.Openapi>(), get<_i16.AuthService>()));
   gh.singleton<_i19.PrescriptionService>(_i19.PrescriptionService(
       get<_i10.Openapi>(), get<_i16.AuthService>(), get<_i17.ConfigService>()));
-  gh.singleton<_i20.StaffService>(
-      _i20.StaffService(get<_i16.AuthService>(), get<_i10.Openapi>()));
+  gh.singleton<_i20.StaffService>(_i20.StaffService(get<_i16.AuthService>(), get<_i10.Openapi>()));
   gh.singleton<_i21.AnimalService>(
       _i21.AnimalService(get<_i16.AuthService>(), get<_i10.Openapi>()));
   return get;
