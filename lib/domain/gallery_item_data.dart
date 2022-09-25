@@ -1,4 +1,3 @@
-
 import 'package:acits_flutter/export.dart';
 
 class GalleryItemData {
@@ -33,5 +32,4 @@ class GalleryItemData {
         filePath: filePath ?? this.filePath,
         isChoosed: isChoosed ?? this.isChoosed,
       );
-
 }

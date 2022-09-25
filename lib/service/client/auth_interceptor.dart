@@ -7,7 +7,6 @@ import 'package:injectable/injectable.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 
-
 @injectable
 class AuthInterceptor implements Authenticator {
   @override

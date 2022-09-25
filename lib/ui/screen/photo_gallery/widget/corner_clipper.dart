@@ -1,6 +1,4 @@
-
-part of'../photo_gallery_screen.dart';
-
+part of '../photo_gallery_screen.dart';
 
 class _CornerClipper extends CustomClipper<Path> {
   @override

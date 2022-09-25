@@ -13,7 +13,7 @@ import 'package:acits_flutter/di/di_container.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome?.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initDi();
   runApp(const MyApp());
 }
@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
       home: _isFirstLaunch ? const OnboardingScreen() : const LoginScreen(),
       color: ColorRes.accent,
       navigatorKey: getIt<GlobalKey<NavigatorState>>(),
+      scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
     );
   }
 

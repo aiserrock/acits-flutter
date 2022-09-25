@@ -275,6 +275,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         }
       },
     );
+    return null;
   }
 
   void _onDelete(

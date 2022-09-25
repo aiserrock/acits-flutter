@@ -149,6 +149,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
               if (_dateChipController.text.isNotEmpty && (value == null || value.isEmpty)) {
                 return '';
               }
+              return null;
             },
           ),
           EditCardData(
@@ -162,6 +163,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
               if (_chipController.text.isNotEmpty && (value == null || value.isEmpty)) {
                 return '';
               }
+              return null;
             },
             onPressed: _setChipDate,
           ),

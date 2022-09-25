@@ -8,6 +8,7 @@ import 'di_container.config.dart';
 final getIt = GetIt.instance;
 
 final _navigatorKey = GlobalKey<NavigatorState>();
+final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 @InjectableInit(
   generateForDir: [
@@ -25,4 +26,5 @@ Future<void> initDevDi() async {
     environmentFilter: NoEnvOrContains(Environment.dev),
   );
   getIt.registerSingleton(_navigatorKey);
+  getIt.registerSingleton(_scaffoldMessengerKey);
 }

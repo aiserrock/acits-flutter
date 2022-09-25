@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:chopper/chopper.dart';
 import 'package:injectable/injectable.dart';
@@ -20,18 +21,10 @@ abstract class ClientRegisterDev {
     Env env,
     DebugPreferenceStorage ps,
   ) {
-    final proxyUrl = ps.proxy;
-
-    final t = HttpClient();
-
-    if (proxyUrl != null && proxyUrl.isNotEmpty) {
-      t.findProxy = (url) => 'PROXY $proxyUrl';
-    }
-
     final baseUrl = ps.baseUrl;
 
     final chopper = ChopperClient(
-      client: http.IOClient(t),
+      client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
       baseUrl: baseUrl ?? env.apiUrl,
       interceptors: [
         headerInterceptor,
@@ -41,6 +34,7 @@ abstract class ClientRegisterDev {
       converter: $JsonSerializableConverter(),
     );
     final client = Openapi.create(chopper);
+
     return client;
   }
 
@@ -50,6 +44,19 @@ abstract class ClientRegisterDev {
     Env env,
     DebugPreferenceStorage ps,
   ) {
+    final baseUrl = ps.baseUrl;
+
+    final chopper = ChopperClient(
+        client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
+        baseUrl: baseUrl ?? env.apiUrl,
+        converter: $JsonSerializableConverter(),
+        interceptors: [HttpLoggingInterceptor()]);
+    final client = Openapi.create(chopper);
+
+    return client;
+  }
+
+  HttpClient _proxyClient(DebugPreferenceStorage ps) {
     final proxyUrl = ps.proxy;
 
     final t = HttpClient();
@@ -58,14 +65,6 @@ abstract class ClientRegisterDev {
       t.findProxy = (url) => 'PROXY $proxyUrl';
     }
 
-    final baseUrl = ps.baseUrl;
-
-    final chopper = ChopperClient(
-        client: http.IOClient(t),
-        baseUrl: baseUrl ?? env.apiUrl,
-        converter: $JsonSerializableConverter(),
-        interceptors: [HttpLoggingInterceptor()]);
-    final client = Openapi.create(chopper);
-    return client;
+    return t;
   }
 }

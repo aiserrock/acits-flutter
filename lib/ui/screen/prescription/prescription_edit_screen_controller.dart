@@ -32,6 +32,7 @@ class PrescriptionEditScreenController {
         ),
         _animalService = getIt<AnimalService>(),
         _configService = getIt<ConfigService>(),
+        _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
         _prescriptionService = getIt<PrescriptionService>() {
     if (isEdit) setEditedState();
     tabController.addListener(_onTabChanged);
@@ -42,6 +43,7 @@ class PrescriptionEditScreenController {
   final int? editPrescriptionId;
   final Prescription? editPrescription;
   final GlobalKey<ScaffoldState> scaffoldKey;
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey;
   final ConfigService _configService;
   final PrescriptionService _prescriptionService;
   final AnimalService _animalService;
@@ -355,10 +357,8 @@ class PrescriptionEditScreenController {
   }
 
   void _showError(String msg) {
-    scaffoldKey.currentState
-      //ignore: deprecated_member_use
+    _scaffoldMessengerKey.currentState
       ?..hideCurrentSnackBar()
-      //ignore: deprecated_member_use
       ..showSnackBar(SnackBar(
           content: Row(
         children: [

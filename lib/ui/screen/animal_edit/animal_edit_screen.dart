@@ -289,6 +289,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
     if (scaffoldState != null) {
       return Provider.of<T>(scaffoldState.context, listen: false);
     }
+    return null;
   }
 }
 

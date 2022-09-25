@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 
 final getIt = GetIt.instance;
 final _navigatorKey = GlobalKey<NavigatorState>();
+final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 @InjectableInit(
   initializerName: r'$initGetIt',
@@ -19,4 +20,5 @@ Future<void> initDi() async {
     environmentFilter: NoEnvOrContains(Environment.prod),
   );
   getIt.registerSingleton(_navigatorKey);
+  getIt.registerSingleton(_scaffoldMessengerKey);
 }

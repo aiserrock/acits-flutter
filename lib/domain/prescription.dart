@@ -11,7 +11,6 @@ extension PrescriptionShortX on PrescriptionShort {
 }
 
 extension MyTypeEnumX on MyTypeEnum {
-
   String? get typeString {
     final _service = getIt<ConfigService>();
     return _service.getMyTypeName(this);
