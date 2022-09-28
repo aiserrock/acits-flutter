@@ -42,10 +42,13 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           button: StyleRes.button,
         ),
-        inputDecorationTheme: const InputDecorationTheme(
+        inputDecorationTheme: InputDecorationTheme(
           iconColor: ColorRes.accent,
+          floatingLabelStyle: StyleRes.content,
         ),
-        textSelectionTheme: const TextSelectionThemeData(cursorColor: ColorRes.accent),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: ColorRes.accent,
+        ),
       ),
       localizationsDelegates: const [
         StringRes.delegate,

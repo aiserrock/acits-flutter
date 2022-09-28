@@ -41,10 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final passNode = FocusNode();
   final loginController = TextEditingController();
   final passController = TextEditingController();
+
   double _maxHeight = 0.0;
   bool _isObscure = true;
   String? _errorMessage;
   bool _isLoading = false;
+  bool _loginFocused = false;
+  bool _passFocused = false;
 
   @override
   void didChangeDependencies() {
@@ -73,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: LayoutBuilder(builder: (_, cons) {
           _maxHeight = max(_maxHeight, cons.maxHeight);
           return SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
             child: _buildContent(_maxHeight),
           );
         }),
@@ -96,7 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 16.0),
             _buildLoginButton(),
-            const SizedBox(height: 16.0),
             MaterialButton(
               onPressed: () {},
               child: Text(
@@ -111,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               StringRes.current.loginDescribeMsg,
               textAlign: TextAlign.center,
+              style: StyleRes.content,
             ),
           ],
         ),
@@ -146,66 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: AutofillGroup(
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 72.0,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: TextFormField(
-                          controller: loginController,
-                          validator: Validator.emptyValidator,
-                          autofillHints: const [AutofillHints.email],
-                          decoration: InputDecoration(
-                            hintText: StringRes.current.loginLoginHint,
-                            labelText: StringRes.current.loginLoginLabel,
-                            floatingLabelStyle: const TextStyle(color: ColorRes.accent),
-                            errorStyle: const TextStyle(fontSize: 0.0),
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
-                            ),
-                          ),
-                          cursorColor: ColorRes.accent,
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          onEditingComplete: () {
-                            TextInput.finishAutofillContext();
-                            FocusScope.of(context).requestFocus(passNode);
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 72.0,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: TextFormField(
-                          controller: passController,
-                          focusNode: passNode,
-                          validator: Validator.emptyValidator,
-                          autofillHints: const [AutofillHints.password],
-                          decoration: InputDecoration(
-                            labelText: StringRes.current.loginPassLabel,
-                            floatingLabelStyle: const TextStyle(color: ColorRes.accent),
-                            errorStyle: const TextStyle(fontSize: 0.0),
-                            suffixIcon: CupertinoButton(
-                              onPressed: () => setState(() => _isObscure = !_isObscure),
-                              child: _isObscure
-                                  ? Assets.icon.visible.svg()
-                                  : Assets.icon.visibleOff.svg(),
-                            ),
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
-                            ),
-                          ),
-                          obscureText: _isObscure,
-                          keyboardType: TextInputType.visiblePassword,
-                          textInputAction: TextInputAction.done,
-                          onEditingComplete: () {
-                            TextInput.finishAutofillContext();
-                            _submit();
-                          },
-                        ),
-                      ),
-                    ),
+                    _buildLogin(),
+                    _buildPass(),
                   ],
                 ),
               ),
@@ -237,6 +181,78 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPass() {
+    return SizedBox(
+      height: 72.0,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Focus(
+          onFocusChange: (value) => setState(() => _passFocused = value),
+          child: TextFormField(
+            controller: passController,
+            focusNode: passNode,
+            validator: Validator.emptyValidator,
+            autofillHints: const [AutofillHints.password],
+            decoration: InputDecoration(
+              labelText: StringRes.current.loginPassLabel,
+              floatingLabelStyle:
+                  TextStyle(color: _passFocused ? ColorRes.accent : ColorRes.textSecondary),
+              errorStyle: const TextStyle(fontSize: 0.0),
+              suffixIcon: CupertinoButton(
+                onPressed: () => setState(() => _isObscure = !_isObscure),
+                child: _isObscure ? Assets.icon.visible.svg() : Assets.icon.visibleOff.svg(),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
+              ),
+            ),
+            obscureText: _isObscure,
+            keyboardType: TextInputType.visiblePassword,
+            textInputAction: TextInputAction.done,
+            onEditingComplete: () {
+              TextInput.finishAutofillContext();
+              _submit();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogin() {
+    return SizedBox(
+      height: 72.0,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Focus(
+          onFocusChange: (value) => setState(() => _loginFocused = value),
+          child: TextFormField(
+            controller: loginController,
+            validator: Validator.emptyValidator,
+            autofillHints: const [AutofillHints.email],
+            decoration: InputDecoration(
+              hintText: StringRes.current.loginLoginHint,
+              labelText: StringRes.current.loginLoginLabel,
+              floatingLabelStyle:
+                  TextStyle(color: _loginFocused ? ColorRes.accent : ColorRes.textSecondary),
+              errorStyle: const TextStyle(fontSize: 0.0),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
+              ),
+            ),
+            cursorColor: ColorRes.accent,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            onEditingComplete: () {
+              TextInput.finishAutofillContext();
+              FocusScope.of(context).requestFocus(passNode);
+            },
+          ),
+        ),
+      ),
     );
   }
 
