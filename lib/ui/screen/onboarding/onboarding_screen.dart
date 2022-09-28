@@ -25,14 +25,14 @@ class _OnboardingData {
 
 final _onboardingData = <_OnboardingData>[
   _OnboardingData(
-    image: Assets.onboarding.plan,
-    title: StringRes.current.onboardingPlanTitle,
-    message: StringRes.current.onboardingPlanMsg,
-  ),
-  _OnboardingData(
     image: Assets.onboarding.news,
     title: StringRes.current.onboardingNewsTitle,
     message: StringRes.current.onboardingNewsMsg,
+  ),
+  _OnboardingData(
+    image: Assets.onboarding.plan,
+    title: StringRes.current.onboardingPlanTitle,
+    message: StringRes.current.onboardingPlanMsg,
   ),
   _OnboardingData(
     image: Assets.onboarding.drugs,
