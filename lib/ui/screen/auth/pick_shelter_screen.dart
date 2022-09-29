@@ -17,27 +17,42 @@ import 'package:acits_flutter/api/openapi.swagger.dart';
 
 class PickShelterScreen extends StatefulWidget {
   const PickShelterScreen({
+    required this.autoSelectSingle,
     this.shelterList,
     Key? key,
   }) : super(key: key);
 
   final PaginatedShelterShortSerializersList? shelterList;
+  final bool autoSelectSingle;
 
   @override
-  _PickShelterScreenState createState() => _PickShelterScreenState(shelterList);
+  _PickShelterScreenState createState() => _PickShelterScreenState(
+        shelterList,
+        autoSelectSingle,
+      );
 }
 
 class _PickShelterScreenState extends State<PickShelterScreen> {
-  _PickShelterScreenState(this._shelterList) : _authService = getIt<AuthService>();
+  _PickShelterScreenState(
+    this._shelterList,
+    this._autoSelectSingle,
+  ) : _authService = getIt<AuthService>();
 
   final AuthService _authService;
 
   PaginatedShelterShortSerializersList? _shelterList;
+  final bool _autoSelectSingle;
 
   @override
   void initState() {
     super.initState();
     if (_shelterList == null) _getShelterList();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_autoSelectSingle && _shelterList?.results?.length == 1) _pickShelter(0);
   }
 
   final _state = StreamController<WidgetState<Object>>()..add(WidgetState()..content(Object()));

@@ -71,7 +71,8 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
                     style: StyleRes.title,
                   ),
                   onTap: () async {
-                    final shelter = await Navigator.of(context).push(PickShelterScreenRoute());
+                    final shelter = await Navigator.of(context)
+                        .push(PickShelterScreenRoute(autoSelectSingle: false));
                     if (shelter == null) return;
                   },
                 ),
