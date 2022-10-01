@@ -8,12 +8,17 @@ class FormEditCard extends StatelessWidget {
   const FormEditCard(
     this.data, {
     this.formKey,
+    this.padding,
+    this.margin,
     Key? key,
   }) : super(key: key);
 
   final List<EditCardData> data;
 
   final GlobalKey<FormState>? formKey;
+
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +51,16 @@ class FormEditCard extends StatelessWidget {
         )
         .toList();
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 16.0,
-        horizontal: 8.0,
-      ),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 8.0,
-      ),
+      padding: margin ??
+          const EdgeInsets.symmetric(
+            vertical: 16.0,
+            horizontal: 8.0,
+          ),
+      margin: padding ??
+          const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 8.0,
+          ),
       decoration:
           BoxDecoration(color: ColorRes.foreground, borderRadius: BorderRadius.circular(8.0)),
       child: Column(children: rows),

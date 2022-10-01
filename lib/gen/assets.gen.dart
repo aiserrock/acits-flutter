@@ -79,6 +79,12 @@ class $AssetsIconGen {
 
   /// File path: assets/icon/visible_off.svg
   SvgGenImage get visibleOff => const SvgGenImage('assets/icon/visible_off.svg');
+
+  /// File path: assets/icon/check_off.svg
+  SvgGenImage get checkOff => const SvgGenImage('assets/icon/check_off.svg');
+
+  /// File path: assets/icon/check_on.svg
+  SvgGenImage get checkOn => const SvgGenImage('assets/icon/check_on.svg');
 }
 
 class $AssetsImageGen {

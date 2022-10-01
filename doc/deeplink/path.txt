@@ -1,1 +1,3 @@
 https://dev.acits.ru/api/v1/users/verify-email/MTQ4/Mg/b7ji8d-3b45576b3f2783f8c95a1e41964a3294/
+
+https://dev.acits.ru/api/v1/users/verify-email/MTU1/Mg/bcmlcf-a88339a62e85ff81c35196f10b28cb31/

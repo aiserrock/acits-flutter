@@ -31,49 +31,57 @@ class SuccessHolderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, cons) {
       final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Lottie.asset(
-                assetPath ?? LottieRes.success,
-                height: size,
-                width: size,
-              ),
-              const SizedBox(height: 24.0),
-              Text(
-                title ?? '',
-                style: StyleRes.title,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                message ?? '',
-                style: StyleRes.content,
-                textAlign: TextAlign.center,
-              ),
-              if (onPressed != null && button != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: PrimaryButton(
-                    onPressed: () => onPressed?.call(),
-                    text: button ?? 'Повторить',
-                  ),
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(child: _buildCaption(size)),
+            if (onPressed != null && button != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: PrimaryButton(
+                  onPressed: () => onPressed?.call(),
+                  text: button ?? 'Повторить',
                 ),
-              if (onSecondPressed != null && secondButton != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: PrimaryButton(
-                    onPressed: () => onSecondPressed?.call(),
-                    text: secondButton,
-                  ),
+              ),
+            if (onSecondPressed != null && secondButton != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: PrimaryButton(
+                  onPressed: () => onSecondPressed?.call(),
+                  text: secondButton,
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       );
     });
+  }
+
+  Widget _buildCaption(double size) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Lottie.asset(
+            assetPath ?? LottieRes.success,
+            height: size,
+            width: size,
+          ),
+          const SizedBox(height: 24.0),
+          Text(
+            title ?? '',
+            style: StyleRes.title,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16.0),
+          Text(
+            message ?? '',
+            style: StyleRes.content,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
   }
 }

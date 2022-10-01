@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen_route.dart';
+import 'package:acits_flutter/ui/screen/registration/registration_screen_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 16.0),
             _buildLoginButton(),
             MaterialButton(
-              onPressed: () {},
+              onPressed: () => _onRegistration(context),
               child: Text(
                 StringRes.current.loginToRegistration,
                 style: const TextStyle(
@@ -307,5 +308,9 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
     );
+  }
+
+  void _onRegistration(BuildContext context) {
+    Navigator.of(context).push(RegistrationScreenRoute());
   }
 }
