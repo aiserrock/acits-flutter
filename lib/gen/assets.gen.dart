@@ -9,6 +9,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsCertGen {
+  const $AssetsCertGen();
+
+  /// File path: assets/cert/ssl_charles_mac2013.pem
+  String get sslCharlesMac2013 => 'assets/cert/ssl_charles_mac2013.pem';
+
+  /// File path: assets/cert/ssl_charles_macair13.pem
+  String get sslCharlesMacair13 => 'assets/cert/ssl_charles_macair13.pem';
+
+  /// File path: assets/cert/ssl_charles_macpro13.pem
+  String get sslCharlesMacpro13 => 'assets/cert/ssl_charles_macpro13.pem';
+}
+
 class $AssetsCommonGen {
   const $AssetsCommonGen();
 
@@ -53,6 +66,12 @@ class $AssetsIconGen {
   /// File path: assets/icon/calendar.svg
   SvgGenImage get calendar => const SvgGenImage('assets/icon/calendar.svg');
 
+  /// File path: assets/icon/check_off.svg
+  SvgGenImage get checkOff => const SvgGenImage('assets/icon/check_off.svg');
+
+  /// File path: assets/icon/check_on.svg
+  SvgGenImage get checkOn => const SvgGenImage('assets/icon/check_on.svg');
+
   /// File path: assets/icon/close.svg
   SvgGenImage get close => const SvgGenImage('assets/icon/close.svg');
 
@@ -79,12 +98,6 @@ class $AssetsIconGen {
 
   /// File path: assets/icon/visible_off.svg
   SvgGenImage get visibleOff => const SvgGenImage('assets/icon/visible_off.svg');
-
-  /// File path: assets/icon/check_off.svg
-  SvgGenImage get checkOff => const SvgGenImage('assets/icon/check_off.svg');
-
-  /// File path: assets/icon/check_on.svg
-  SvgGenImage get checkOn => const SvgGenImage('assets/icon/check_on.svg');
 }
 
 class $AssetsImageGen {
@@ -153,6 +166,7 @@ class $AssetsOnboardingGen {
 class Assets {
   Assets._();
 
+  static const $AssetsCertGen cert = $AssetsCertGen();
   static const $AssetsCommonGen common = $AssetsCommonGen();
   static const $AssetsGalleryGen gallery = $AssetsGalleryGen();
   static const $AssetsIconGen icon = $AssetsIconGen();
