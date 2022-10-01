@@ -19,17 +19,12 @@ import 'package:acits_flutter/service/debug/debug_service.dart' as _i15;
 import 'package:acits_flutter/service/env/env_register.dart' as _i24;
 import 'package:acits_flutter/service/file/file_repository.dart' as _i6;
 import 'package:acits_flutter/service/file/file_service.dart' as _i7;
-import 'package:acits_flutter/service/link_handler/deep_link_service.dart'
-    as _i16;
+import 'package:acits_flutter/service/link_handler/deep_link_service.dart' as _i16;
 import 'package:acits_flutter/service/personal/personal_service.dart' as _i19;
-import 'package:acits_flutter/service/prescription/prescription_service.dart'
-    as _i20;
-import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart'
-    as _i25;
-import 'package:acits_flutter/service/shared_pref/preference_storage.dart'
-    as _i11;
-import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart'
-    as _i27;
+import 'package:acits_flutter/service/prescription/prescription_service.dart' as _i20;
+import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart' as _i25;
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart' as _i11;
+import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart' as _i27;
 import 'package:acits_flutter/service/staff/staff_service.dart' as _i21;
 import 'package:dio/dio.dart' as _i4;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i8;
@@ -57,32 +52,27 @@ Future<_i1.GetIt> $initGetIt(_i1.GetIt get,
   gh.factory<_i8.FlutterSecureStorage>(() => secureStorageRegister.createSp());
   gh.factory<_i9.HeaderInterceptor>(() => _i9.HeaderInterceptor());
   gh.factory<_i10.Openapi>(
-      () => clientRegister.createClient(get<_i3.AuthInterceptor>(),
-          get<_i9.HeaderInterceptor>(), get<_i5.Env>()),
+      () => clientRegister.createClient(
+          get<_i3.AuthInterceptor>(), get<_i9.HeaderInterceptor>(), get<_i5.Env>()),
       registerFor: {_prod});
-  gh.factory<_i10.Openapi>(
-      () => clientRegister.createGuestClient(get<_i5.Env>()),
-      instanceName: 'guest',
-      registerFor: {_prod});
+  gh.factory<_i10.Openapi>(() => clientRegister.createGuestClient(get<_i5.Env>()),
+      instanceName: 'guest', registerFor: {_prod});
   gh.factory<_i11.PreferenceStorage>(() => _i11.PreferenceStorage());
-  await gh.factoryAsync<_i12.SharedPreferences>(
-      () => sharedPreferenceRegister.createSp(),
+  await gh.factoryAsync<_i12.SharedPreferences>(() => sharedPreferenceRegister.createSp(),
       preResolve: true);
-  gh.factory<_i13.AuthRepository>(
-      () => _i13.AuthRepository(get<_i8.FlutterSecureStorage>()));
+  gh.factory<_i13.AuthRepository>(() => _i13.AuthRepository(get<_i8.FlutterSecureStorage>()));
   gh.singleton<_i14.ColorRes>(_i14.ColorRes());
   gh.singleton<_i15.DebugService>(_i15.DebugService(), registerFor: {_prod});
   gh.singleton<_i16.DeepLinkService>(_i16.DeepLinkService());
-  gh.singleton<_i17.AuthService>(_i17.AuthService(get<_i10.Openapi>(),
-      get<_i10.Openapi>(instanceName: 'guest'), get<_i13.AuthRepository>()));
-  gh.singleton<_i18.ConfigService>(_i18.ConfigService(get<_i10.Openapi>(),
-      get<_i17.AuthService>(), get<_i11.PreferenceStorage>()));
+  gh.singleton<_i17.AuthService>(_i17.AuthService(
+      get<_i10.Openapi>(), get<_i10.Openapi>(instanceName: 'guest'), get<_i13.AuthRepository>()));
+  gh.singleton<_i18.ConfigService>(_i18.ConfigService(
+      get<_i10.Openapi>(), get<_i17.AuthService>(), get<_i11.PreferenceStorage>()));
   gh.singleton<_i19.PersonalService>(
       _i19.PersonalService(get<_i10.Openapi>(), get<_i17.AuthService>()));
   gh.singleton<_i20.PrescriptionService>(_i20.PrescriptionService(
       get<_i10.Openapi>(), get<_i17.AuthService>(), get<_i18.ConfigService>()));
-  gh.singleton<_i21.StaffService>(
-      _i21.StaffService(get<_i17.AuthService>(), get<_i10.Openapi>()));
+  gh.singleton<_i21.StaffService>(_i21.StaffService(get<_i17.AuthService>(), get<_i10.Openapi>()));
   gh.singleton<_i22.AnimalService>(
       _i22.AnimalService(get<_i17.AuthService>(), get<_i10.Openapi>()));
   return get;
