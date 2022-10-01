@@ -126,8 +126,6 @@ class RegistrationScreenController {
   }
 
   Future<void> onSubmit(BuildContext context) async {
-    _onSuccess(context);
-    return;
     if (screenState.value.isLoading) return;
 
     if (tabState.value == 0) {
