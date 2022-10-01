@@ -33,7 +33,6 @@ android:requestLegacyExternalStorage="true"
                 <data
                     android:host="*.acits.ru"
                     android:pathPrefix="/api/v1/users/verify-email"
-                    android:scheme="http"
                     android:scheme="https" />
             </intent-filter>
         </activity>
