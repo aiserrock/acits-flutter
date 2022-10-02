@@ -14,8 +14,6 @@ class EmailConfirmRepository {
     _client.options = _client.options.copyWith(followRedirects: false);
     _client.interceptors.add(_EmailConfirmInterceptor());
 
-    await Future.delayed(Duration(seconds: 3));
-
     await _client.get(email);
   }
 }

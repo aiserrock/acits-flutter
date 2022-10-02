@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:acits_flutter/ui/screen/registration/email_confirmation_screen_route.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -43,15 +44,7 @@ class DeepLinkService implements Disposable {
   /// Обработчик линков, приходящих в процессе работы приложения
   void onLinkHandle(String link) {
     if (link.contains('api/v1/users/verify-email')) {
-      getIt<GlobalKey<NavigatorState>>().currentState?.push(
-            MaterialPageRoute(
-              builder: (_) => Scaffold(
-                body: Center(
-                  child: Text(link),
-                ),
-              ),
-            ),
-          );
+      getIt<GlobalKey<NavigatorState>>().currentState?.push(EmailConfirmationScreenRoute(link));
     }
   }
 }
