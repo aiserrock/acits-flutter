@@ -6,6 +6,7 @@ import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/lottie.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -34,34 +35,35 @@ class ErrorHolderWidget extends StatelessWidget {
     return LayoutBuilder(builder: (_, cons) {
       final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
       return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Lottie.asset(
-              assetPath ?? LottieRes.crashBox,
-              height: size,
-              width: size,
-            ),
-            const SizedBox(height: 24.0),
-            Text(
-              error?.title ?? '',
-              style: StyleRes.title,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              error?.message ?? '',
-              style: StyleRes.content,
-              textAlign: TextAlign.center,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: PrimaryButton(
-                onPressed: () => onPressed?.call(),
-                text: StringRes.current.commonReloadBtn,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset(
+                assetPath ?? LottieRes.crashBox,
+                height: size,
+                width: size,
               ),
-            )
-          ],
+              const SizedBox(height: 24.0),
+              Text(
+                title ?? error?.title ?? '',
+                style: StyleRes.title,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16.0),
+              Text(
+                message ?? error?.message ?? '',
+                style: StyleRes.content,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24.0),
+              PrimaryButton(
+                onPressed: () => onPressed?.call(),
+                text: button ?? StringRes.current.commonReloadBtn,
+              )
+            ],
+          ),
         ),
       );
     });
@@ -70,6 +72,9 @@ class ErrorHolderWidget extends StatelessWidget {
 
 extension _ErrorX on Object {
   String get title {
+    if (this is DioError) {
+      return StringRes.current.errorInternetFail;
+    }
     switch (runtimeType) {
       case MessagedException:
         return StringRes.current.commonError;
@@ -81,6 +86,9 @@ extension _ErrorX on Object {
   }
 
   String get message {
+    if (this is DioError) {
+      return StringRes.current.errorInternetFail;
+    }
     switch (runtimeType) {
       case MessagedException:
         return StringRes.current.errorDefaultMsg;
