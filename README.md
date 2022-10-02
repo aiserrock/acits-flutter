@@ -36,7 +36,7 @@ fvm flutter pub run build_runner build --delete-conflicting-outputs
 https://pub.dev/packages/swagger_dart_code_generator
 
 ```bash
-fvm flutter pub run build_runner build --delete-conflicting-outputs
+fvm flutter pub run build_runner build --delete-conflicting-outputs && fvm flutter format -l 100 .
 ```
 
 ### Build apk/aab
