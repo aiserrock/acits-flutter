@@ -1,5 +1,6 @@
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
+import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
 import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -16,11 +17,13 @@ class AuthService extends ChangeNotifier {
     this._acitsClient,
     @Named('guest') this._acitsGuestClient,
     this._authRepository,
+    this._confirmRepository,
   );
 
   final Openapi _acitsClient;
   final Openapi _acitsGuestClient;
   final AuthRepository _authRepository;
+  final EmailConfirmRepository _confirmRepository;
 
   String? _access;
   String? _refreshValue;
@@ -163,4 +166,7 @@ class AuthService extends ChangeNotifier {
     }
     throw MessagedException(error: result.error ?? result.bodyString);
   }
+
+  /// Подтвердить электронную почту при регистрации
+  Future<void> confirmEmail(String email) => _confirmRepository.confirmEmail(email);
 }

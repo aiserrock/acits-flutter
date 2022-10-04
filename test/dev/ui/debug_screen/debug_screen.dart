@@ -1,5 +1,6 @@
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/ui/screen/registration/email_confirmation_screen_route.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen_route.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,7 +45,41 @@ class DebugScreen extends StatelessWidget {
       children: const [
         _SearchSpeciesCard(),
         _ConnectionCard(),
+        _UIKitCard(),
       ],
+    );
+  }
+}
+
+class _UIKitCard extends StatelessWidget {
+  const _UIKitCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 8.0),
+              const Text(
+                'UIKit',
+                style: StyleRes.subTitle,
+              ),
+              const SizedBox(height: 8.0),
+              PrimaryButton(
+                onPressed: () {
+                  Navigator.of(context).push(EmailConfirmationScreenRoute(
+                      'https://dev.acits.ru/api/v1/users/verify-email/MTYz/Mg/bcnwgl-1628091c27480b1975f3998b4a2565e6/'));
+                },
+                child: Text('Email confirm'.toUpperCase()),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

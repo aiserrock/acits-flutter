@@ -6,5 +6,5 @@ import 'package:injectable/injectable.dart';
 @dev
 abstract class EnvDevRegistrer {
   @dev
-  Env createEnv() => Env('http://andx2.tplinkdns.com:8085/https://dev.acits.ru');
+  Env createEnv() => Env('https://andx2.tplinkdns.com/cors/https://dev.acits.ru');
 }

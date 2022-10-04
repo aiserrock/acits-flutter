@@ -23,3 +23,18 @@ class MessagedException implements Exception {
     return message ?? super.toString();
   }
 }
+
+class EmailConfirmException implements Exception {
+  EmailConfirmException({
+    this.message,
+    this.error,
+  });
+
+  final String? message;
+  final Object? error;
+
+  @override
+  String toString() {
+    return message ?? super.toString();
+  }
+}
