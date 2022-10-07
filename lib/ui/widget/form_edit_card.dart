@@ -8,12 +8,17 @@ class FormEditCard extends StatelessWidget {
   const FormEditCard(
     this.data, {
     this.formKey,
+    this.background,
+    this.padding,
+    this.margin,
     Key? key,
   }) : super(key: key);
 
   final List<EditCardData> data;
-
   final GlobalKey<FormState>? formKey;
+  final Color? background;
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +51,20 @@ class FormEditCard extends StatelessWidget {
         )
         .toList();
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 16.0,
-        horizontal: 8.0,
+      padding: padding ??
+          const EdgeInsets.symmetric(
+            vertical: 16.0,
+            horizontal: 8.0,
+          ),
+      margin: margin ??
+          const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 8.0,
+          ),
+      decoration: BoxDecoration(
+        color: background ?? ColorRes.foreground,
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 8.0,
-      ),
-      decoration:
-          BoxDecoration(color: ColorRes.foreground, borderRadius: BorderRadius.circular(8.0)),
       child: Column(children: rows),
     );
   }
@@ -76,16 +85,18 @@ class FormEditCard extends StatelessWidget {
       controller: item.controller,
       initialValue: item.initValue,
       decoration: InputDecoration(
-        labelText: item.label,
-        suffixIcon: item.suffix,
-        errorStyle: const TextStyle(fontSize: .0),
-      ),
+          labelText: item.label,
+          suffixIcon: item.suffix,
+          errorStyle: const TextStyle(fontSize: .0),
+          fillColor: Colors.transparent),
       maxLength: item.maxLength,
       style: item.enabled ? null : const TextStyle().copyWith(color: ColorRes.textSecondary),
-      maxLines: 8,
+      maxLines: item.isObscure ? 1 : 8,
       minLines: 1,
       keyboardType: keyboardType,
       inputFormatters: item.digitsOnly ? [FilteringTextInputFormatter.digitsOnly] : null,
+      obscureText: item.isObscure,
+      onChanged: item.onChanged,
     );
   }
 }
@@ -103,6 +114,8 @@ class EditCardData {
     this.enabled = true,
     this.initValue,
     this.maxLength,
+    this.isObscure = false,
+    this.onChanged,
   });
 
   final String? label;
@@ -116,4 +129,6 @@ class EditCardData {
   final bool enabled;
   final String? initValue;
   final int? maxLength;
+  final bool isObscure;
+  final Function(String)? onChanged;
 }
