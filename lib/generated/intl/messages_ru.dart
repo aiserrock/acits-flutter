@@ -170,6 +170,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "personLogout": MessageLookupByLibrary.simpleMessage("Выйти"),
         "personMyData": MessageLookupByLibrary.simpleMessage("Мои данные"),
         "personMyShelters": MessageLookupByLibrary.simpleMessage("Мои приюты"),
+        "personalChangeErrorMsg":
+            MessageLookupByLibrary.simpleMessage("Не удалось изменить пароль\n"),
+        "personalChangePass": MessageLookupByLibrary.simpleMessage("Изменить пароль"),
+        "personalEmptyFieldErrorMsg": MessageLookupByLibrary.simpleMessage("Заполните значения"),
+        "personalNewPass": MessageLookupByLibrary.simpleMessage(" Новый пароль"),
+        "personalOldPass": MessageLookupByLibrary.simpleMessage(" Старый пароль"),
+        "personalPassChanged": MessageLookupByLibrary.simpleMessage("Пароль успешно изменен"),
+        "personalRePass": MessageLookupByLibrary.simpleMessage(" Повторить пароль"),
         "prescriptionAnimal": MessageLookupByLibrary.simpleMessage("Животное*"),
         "prescriptionCantChangeAnimalMsg": MessageLookupByLibrary.simpleMessage(
             "Нельзя изменить животное при редактировании назначения"),

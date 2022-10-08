@@ -168,6 +168,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "personLogout": MessageLookupByLibrary.simpleMessage("Logout"),
         "personMyData": MessageLookupByLibrary.simpleMessage("My data"),
         "personMyShelters": MessageLookupByLibrary.simpleMessage("My shelters"),
+        "personalChangeErrorMsg": MessageLookupByLibrary.simpleMessage("Password did not changed"),
+        "personalChangePass": MessageLookupByLibrary.simpleMessage("Change pass"),
+        "personalEmptyFieldErrorMsg": MessageLookupByLibrary.simpleMessage("Fill field"),
+        "personalNewPass": MessageLookupByLibrary.simpleMessage(" New password"),
+        "personalOldPass": MessageLookupByLibrary.simpleMessage(" Old password"),
+        "personalPassChanged": MessageLookupByLibrary.simpleMessage("Password changed"),
+        "personalRePass": MessageLookupByLibrary.simpleMessage(" Repeat password"),
         "prescriptionAnimal": MessageLookupByLibrary.simpleMessage("Animal*"),
         "prescriptionCantChangeAnimalMsg": MessageLookupByLibrary.simpleMessage(
             "Can\\\'t change animal when editing prescription"),
