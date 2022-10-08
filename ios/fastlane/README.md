@@ -15,13 +15,21 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios relese_dev
+### ios releaseDev
 
 ```sh
-[bundle exec] fastlane ios relese_dev
+[bundle exec] fastlane ios releaseDev
 ```
 
+Build & upload mobDev to Testflight
 
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+Submit a new Release Build to Testflight
 
 ### ios get_app_store_connect_api_key
 

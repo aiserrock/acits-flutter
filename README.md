@@ -54,3 +54,11 @@ fvm flutter build apk -t lib/main.dart --flavor prod --release --obfuscate --spl
 fvm flutter build ios -t test/dev/main.dart --flavor dev --release --obfuscate --split-debug-info=./build/app/outputs/symbols/prod
 fvm flutter build ios -t lib/main.dart --flavor prod --release --obfuscate --split-debug-info=./build/app/outputs/symbols/prod
 ```
+
+### Build iOS testflight
+```bash
+export LANG=en_US.UTF-8
+(fvm flutter clean && fvm flutter pub get && cd ios && pod repo update && pod install)
+fvm flutter build ios --flavor dev -t test/dev/main.dart --no-codesign --obfuscate --split-debug-info=./build/app/outputs/symbols/dev
+(cd ios && fastlane releaseDev)      
+```
