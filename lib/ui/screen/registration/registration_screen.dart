@@ -308,11 +308,11 @@ class RegistrationOrgForm extends StatelessWidget {
             decoration: InputDecoration(
               labelText: '${StringRes.current.loginPassLabel} *',
             ),
-            validator: Validator.emptyValidatorMsg('Минимум 8 символов'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regLeast8Symbols),
           ),
           TextFormField(
             controller: controller.orgEmailController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: '${StringRes.current.animalCuratorEmail} *',
               hintText: 'example@mail.ru',
             ),
@@ -334,19 +334,19 @@ class RegistrationOrgForm extends StatelessWidget {
               labelText: '${StringRes.current.animalCuratorLastName} *',
               hintText: 'Иванов',
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgNameController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: '${StringRes.current.animalCuratorName} *',
               hintText: 'Иван',
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgMNameController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: StringRes.current.regFathersName,
               hintText: 'Иванович',
             ),

@@ -26,7 +26,9 @@ class StringRes {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<StringRes> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -668,6 +670,16 @@ class StringRes {
     );
   }
 
+  /// `Close`
+  String get commonClose {
+    return Intl.message(
+      'Close',
+      name: 'commonClose',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `day`
   String get commonDay {
     return Intl.message(
@@ -878,6 +890,16 @@ class StringRes {
     return Intl.message(
       'Reload',
       name: 'commonReloadBtn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repeat`
+  String get commonRepeat {
+    return Intl.message(
+      'Repeat',
+      name: 'commonRepeat',
       desc: '',
       args: [],
     );
@@ -1418,6 +1440,326 @@ class StringRes {
     return Intl.message(
       'Weekly',
       name: 'prescriptionWeekly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About organization`
+  String get regAboutOrg {
+    return Intl.message(
+      'About organization',
+      name: 'regAboutOrg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About you`
+  String get regAboutYou {
+    return Intl.message(
+      'About you',
+      name: 'regAboutYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Person, whose data was write, will become an admin`
+  String get regAdminRegMsg {
+    return Intl.message(
+      'Person, whose data was write, will become an admin',
+      name: 'regAdminRegMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I agree with terms of `
+  String get regAgreePersonalDataPart0 {
+    return Intl.message(
+      'I agree with terms of ',
+      name: 'regAgreePersonalDataPart0',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `personal data processing`
+  String get regAgreePersonalDataPart1 {
+    return Intl.message(
+      'personal data processing',
+      name: 'regAgreePersonalDataPart1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `City *`
+  String get regCity {
+    return Intl.message(
+      'City *',
+      name: 'regCity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Country *`
+  String get regCountry {
+    return Intl.message(
+      'Country *',
+      name: 'regCountry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email confirmation`
+  String get regEmaiConfirmation {
+    return Intl.message(
+      'Email confirmation',
+      name: 'regEmaiConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If are you an admin of organization, then you can login. Else you need wait for admin confirmation your request.`
+  String get regEmailConfirmSentMsg {
+    return Intl.message(
+      'If are you an admin of organization, then you can login. Else you need wait for admin confirmation your request.',
+      name: 'regEmailConfirmSentMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email confirmed`
+  String get regEmailConfirmed {
+    return Intl.message(
+      'Email confirmed',
+      name: 'regEmailConfirmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Employee`
+  String get regEmployee {
+    return Intl.message(
+      'Employee',
+      name: 'regEmployee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fathers name`
+  String get regFathersName {
+    return Intl.message(
+      'Fathers name',
+      name: 'regFathersName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Need fill the field`
+  String get regFieldEmptyError {
+    return Intl.message(
+      'Need fill the field',
+      name: 'regFieldEmptyError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guest`
+  String get regGuest {
+    return Intl.message(
+      'Guest',
+      name: 'regGuest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you have account?`
+  String get regHaveAccount {
+    return Intl.message(
+      'Do you have account?',
+      name: 'regHaveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Min 8 symbols`
+  String get regLeast8Symbols {
+    return Intl.message(
+      'Min 8 symbols',
+      name: 'regLeast8Symbols',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Require agree with terms of personal data processing`
+  String get regNeedConfirmPolicy {
+    return Intl.message(
+      'Require agree with terms of personal data processing',
+      name: 'regNeedConfirmPolicy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ORGANIZATION`
+  String get regOrg {
+    return Intl.message(
+      'ORGANIZATION',
+      name: 'regOrg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shelter name`
+  String get regOrgName {
+    return Intl.message(
+      'Shelter name',
+      name: 'regOrgName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eng letters, figures, symbols `
+  String get regPassSymbols {
+    return Intl.message(
+      'Eng letters, figures, symbols ',
+      name: 'regPassSymbols',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `+7(ххх)ххх-хх-хх`
+  String get regPhoneMask {
+    return Intl.message(
+      '+7(ххх)ххх-хх-хх',
+      name: 'regPhoneMask',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Region `
+  String get regRegion {
+    return Intl.message(
+      'Region ',
+      name: 'regRegion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please, fill the form correctly, then try it again.`
+  String get regRegisterRejectMsg {
+    return Intl.message(
+      'Please, fill the form correctly, then try it again.',
+      name: 'regRegisterRejectMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your registration request rejected`
+  String get regRegisterRejectTitle {
+    return Intl.message(
+      'Your registration request rejected',
+      name: 'regRegisterRejectTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You'll redirect\nto login page.`
+  String get regTUPmsg {
+    return Intl.message(
+      'You\'ll redirect\nto login page.',
+      name: 'regTUPmsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thanks, we recorded everything!`
+  String get regTUPtitle {
+    return Intl.message(
+      'Thanks, we recorded everything!',
+      name: 'regTUPtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration`
+  String get regTitle {
+    return Intl.message(
+      'Registration',
+      name: 'regTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `USER`
+  String get regUser {
+    return Intl.message(
+      'USER',
+      name: 'regUser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User role`
+  String get regUserRole {
+    return Intl.message(
+      'User role',
+      name: 'regUserRole',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Write the city`
+  String get regWriteCity {
+    return Intl.message(
+      'Write the city',
+      name: 'regWriteCity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Write the country`
+  String get regWriteCountry {
+    return Intl.message(
+      'Write the country',
+      name: 'regWriteCountry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Write the region`
+  String get regWriteRegion {
+    return Intl.message(
+      'Write the region',
+      name: 'regWriteRegion',
       desc: '',
       args: [],
     );
