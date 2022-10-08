@@ -123,6 +123,7 @@ flutter_gen:
 
 flutter_intl:
   main_locale: en
+  line_length: 100
   enabled: true
   localizely:
     project_id: 6d9c91e7-5307-4fce-808b-eb812e21d1fa
