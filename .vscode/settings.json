@@ -26,6 +26,12 @@
         "color": "#ffffff",
         "command": "fvm flutter pub run build_runner watch",
         "singleInstance": true
+      },
+      {
+        "name": "format",
+        "color": "#ffffff",
+        "command": "fvm flutter format -l 100 .",
+        "singleInstance": true
       }
     ]
   },
