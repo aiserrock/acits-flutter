@@ -61,3 +61,4 @@ ios/*.cer
 ios/*.ipa
 ios/*.app.dSYM.zip
 ios/*.mobileprovision
+ios/certs/*
