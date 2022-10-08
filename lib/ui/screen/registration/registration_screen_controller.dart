@@ -137,7 +137,7 @@ class RegistrationScreenController {
     }
 
     if (privateState.value == false) {
-      _showSnack('Необходимо дать согласие на обработку данных');
+      _showSnack(StringRes.current.regNeedConfirmPolicy);
       return;
     }
 
@@ -167,9 +167,9 @@ class RegistrationScreenController {
           body: SafeArea(
             child: SuccessHolderWidget(
               onPressed: Navigator.of(context).pop,
-              title: 'Спасибо, мы все записали!',
-              message: 'Вы будете перенаправлены\nна страницу входа.',
-              button: 'Закрыть'.toUpperCase(),
+              title: StringRes.current.regTUPtitle,
+              message: StringRes.current.regTUPmsg,
+              button: StringRes.current.commonClose.toUpperCase(),
             ),
           ),
         ),

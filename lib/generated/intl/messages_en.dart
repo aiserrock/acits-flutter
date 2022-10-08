@@ -94,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonBegin": MessageLookupByLibrary.simpleMessage("Begin"),
         "commonCalendar": MessageLookupByLibrary.simpleMessage("Calendar"),
         "commonCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "commonClose": MessageLookupByLibrary.simpleMessage("Close"),
         "commonDay": MessageLookupByLibrary.simpleMessage("day"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Delete"),
         "commonDidNotImpl": MessageLookupByLibrary.simpleMessage("Did not implemented yet :("),
@@ -117,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonNotCompleted": MessageLookupByLibrary.simpleMessage("Not completed"),
         "commonNotFound": MessageLookupByLibrary.simpleMessage("Nothing was found :("),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Reload"),
+        "commonRepeat": MessageLookupByLibrary.simpleMessage("Repeat"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Reschedule"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
@@ -182,6 +184,44 @@ class MessageLookup extends MessageLookupByLibrary {
         "prescriptionWaitLoadingMsg":
             MessageLookupByLibrary.simpleMessage("Wait when loading is done please"),
         "prescriptionWeekly": MessageLookupByLibrary.simpleMessage("Weekly"),
+        "regAboutOrg": MessageLookupByLibrary.simpleMessage("About organization"),
+        "regAboutYou": MessageLookupByLibrary.simpleMessage("About you"),
+        "regAdminRegMsg": MessageLookupByLibrary.simpleMessage(
+            "Person, whose data was write, will become an admin"),
+        "regAgreePersonalDataPart0": MessageLookupByLibrary.simpleMessage("I agree with terms of "),
+        "regAgreePersonalDataPart1":
+            MessageLookupByLibrary.simpleMessage("personal data processing"),
+        "regCity": MessageLookupByLibrary.simpleMessage("City *"),
+        "regCountry": MessageLookupByLibrary.simpleMessage("Country *"),
+        "regEmaiConfirmation": MessageLookupByLibrary.simpleMessage("Email confirmation"),
+        "regEmailConfirmSentMsg": MessageLookupByLibrary.simpleMessage(
+            "If are you an admin of organization, then you can login. Else you need wait for admin confirmation your request."),
+        "regEmailConfirmed": MessageLookupByLibrary.simpleMessage("Email confirmed"),
+        "regEmployee": MessageLookupByLibrary.simpleMessage("Employee"),
+        "regFathersName": MessageLookupByLibrary.simpleMessage("Fathers name"),
+        "regFieldEmptyError": MessageLookupByLibrary.simpleMessage("Need fill the field"),
+        "regGuest": MessageLookupByLibrary.simpleMessage("Guest"),
+        "regHaveAccount": MessageLookupByLibrary.simpleMessage("Do you have account?"),
+        "regLeast8Symbols": MessageLookupByLibrary.simpleMessage("Min 8 symbols"),
+        "regNeedConfirmPolicy": MessageLookupByLibrary.simpleMessage(
+            "Require agree with terms of personal data processing"),
+        "regOrg": MessageLookupByLibrary.simpleMessage("ORGANIZATION"),
+        "regOrgName": MessageLookupByLibrary.simpleMessage("Shelter name"),
+        "regPassSymbols": MessageLookupByLibrary.simpleMessage("Eng letters, figures, symbols "),
+        "regPhoneMask": MessageLookupByLibrary.simpleMessage("+7(ххх)ххх-хх-хх"),
+        "regRegion": MessageLookupByLibrary.simpleMessage("Region "),
+        "regRegisterRejectMsg": MessageLookupByLibrary.simpleMessage(
+            "Please, fill the form correctly, then try it again."),
+        "regRegisterRejectTitle":
+            MessageLookupByLibrary.simpleMessage("Your registration request rejected"),
+        "regTUPmsg": MessageLookupByLibrary.simpleMessage("You\'ll redirect\nto login page."),
+        "regTUPtitle": MessageLookupByLibrary.simpleMessage("Thanks, we recorded everything!"),
+        "regTitle": MessageLookupByLibrary.simpleMessage("Registration"),
+        "regUser": MessageLookupByLibrary.simpleMessage("USER"),
+        "regUserRole": MessageLookupByLibrary.simpleMessage("User role"),
+        "regWriteCity": MessageLookupByLibrary.simpleMessage("Write the city"),
+        "regWriteCountry": MessageLookupByLibrary.simpleMessage("Write the country"),
+        "regWriteRegion": MessageLookupByLibrary.simpleMessage("Write the region"),
         "shelterSelectShelter": MessageLookupByLibrary.simpleMessage("Pick the shelter")
       };
 }

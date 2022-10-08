@@ -49,9 +49,9 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
           ),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          'Подтверждение eMail',
-          style: TextStyle(color: ColorRes.textPrimary),
+        title: Text(
+          StringRes.current.regEmaiConfirmation,
+          style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
       ),
@@ -64,10 +64,9 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
             state: _state,
             builder: (BuildContext context, data) {
               return SuccessHolderWidget(
-                title: 'Ваш e-mail подтвержден',
-                message:
-                    'Если вы администратор организации, вы сможете сразу войти на сервис, если вы сотрудник или гость, необходимо подождать подтверждение регистрации от администратора.',
-                button: 'Закрыть'.toUpperCase(),
+                title: StringRes.current.regEmailConfirmed,
+                message: StringRes.current.regEmailConfirmSentMsg,
+                button: StringRes.current.commonClose.toUpperCase(),
                 onPressed: Navigator.of(context).pop,
               );
             },
@@ -75,14 +74,14 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
             errorBuilder: (BuildContext context, Object? error) {
               return ErrorHolderWidget(
                 title: error is DioError && error.error is EmailConfirmException
-                    ? 'К сожалению, вам отказано в регистрации :('
+                    ? StringRes.current.regRegisterRejectTitle
                     : null,
                 message: error is DioError && error.error is EmailConfirmException
-                    ? 'Пожалуйста, заполните все поля регистрации честно и мы вновь рассмотрим вашу заявку.'
+                    ? StringRes.current.regRegisterRejectMsg
                     : null,
                 error: error is DioError && error.error is EmailConfirmException ? null : error,
                 onPressed: _repeat,
-                button: 'Повторить'.toUpperCase(),
+                button: StringRes.current.commonRepeat.toUpperCase(),
               );
             },
           ),
