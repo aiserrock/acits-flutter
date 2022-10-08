@@ -54,9 +54,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
           ),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          'Мои данные',
-          style: TextStyle(color: ColorRes.textPrimary),
+        title: Text(
+          l10n.personMyData,
+          style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
       ),
@@ -86,7 +86,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
             bottom: 64.0,
           ),
           child: Form(
-            // key: widget.formKey,
             child: Builder(builder: (context) {
               return FormEditCard(
                 [
@@ -116,7 +115,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: 'Отчество',
+                    label: l10n.regFathersName,
                     controller: _fatherNameController,
                     onChanged: _onFieldChanged,
                   ),
