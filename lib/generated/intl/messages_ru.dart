@@ -31,7 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "animalAdd": MessageLookupByLibrary.simpleMessage("Новое животное"),
+        "animalAdd": MessageLookupByLibrary.simpleMessage("Новое животное "),
         "animalAdditionalInfo": MessageLookupByLibrary.simpleMessage("Дополнительная информация"),
         "animalAdmitted": MessageLookupByLibrary.simpleMessage("Поступил"),
         "animalAge": MessageLookupByLibrary.simpleMessage("Возраст"),
@@ -96,6 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonBegin": MessageLookupByLibrary.simpleMessage("Начать"),
         "commonCalendar": MessageLookupByLibrary.simpleMessage("Календарь"),
         "commonCancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "commonClose": MessageLookupByLibrary.simpleMessage("Закрыть"),
         "commonDay": MessageLookupByLibrary.simpleMessage("день"),
         "commonDelete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "commonDidNotImpl": MessageLookupByLibrary.simpleMessage("Пока не реализовано :("),
@@ -119,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonNotCompleted": MessageLookupByLibrary.simpleMessage("Не выполнено"),
         "commonNotFound": MessageLookupByLibrary.simpleMessage("Ничего не нашлось :("),
         "commonReloadBtn": MessageLookupByLibrary.simpleMessage("Обновить"),
+        "commonRepeat": MessageLookupByLibrary.simpleMessage("Повторить"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Перенести"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),
@@ -184,6 +186,45 @@ class MessageLookup extends MessageLookupByLibrary {
         "prescriptionWaitLoadingMsg":
             MessageLookupByLibrary.simpleMessage("Дождитесь окончания загрузки"),
         "prescriptionWeekly": MessageLookupByLibrary.simpleMessage("Еженедельно"),
+        "regAboutOrg": MessageLookupByLibrary.simpleMessage("Информация об организации"),
+        "regAboutYou": MessageLookupByLibrary.simpleMessage("Информация о Вас"),
+        "regAdminRegMsg": MessageLookupByLibrary.simpleMessage(
+            "Человек, данные которого указаны, автоматически будет назначен администратором"),
+        "regAgreePersonalDataPart0":
+            MessageLookupByLibrary.simpleMessage("Я даю согласие на обработку "),
+        "regAgreePersonalDataPart1": MessageLookupByLibrary.simpleMessage("персональных данных"),
+        "regCity": MessageLookupByLibrary.simpleMessage("Город *"),
+        "regCountry": MessageLookupByLibrary.simpleMessage("Страна *"),
+        "regEmaiConfirmation": MessageLookupByLibrary.simpleMessage("Подтверждение eMail"),
+        "regEmailConfirmSentMsg": MessageLookupByLibrary.simpleMessage(
+            "Если вы администратор организации, вы сможете сразу войти на сервис, если вы сотрудник или гость, необходимо подождать подтверждение регистрации от администратора."),
+        "regEmailConfirmed": MessageLookupByLibrary.simpleMessage("Ваш e-mail подтвержден"),
+        "regEmployee": MessageLookupByLibrary.simpleMessage("Сотрудник"),
+        "regFathersName": MessageLookupByLibrary.simpleMessage("Отчество"),
+        "regFieldEmptyError": MessageLookupByLibrary.simpleMessage("Поле не должно быть пустым"),
+        "regGuest": MessageLookupByLibrary.simpleMessage("Гость"),
+        "regHaveAccount": MessageLookupByLibrary.simpleMessage("Уже есть аккаунт?"),
+        "regLeast8Symbols": MessageLookupByLibrary.simpleMessage("Минимум 8 символов"),
+        "regNeedConfirmPolicy":
+            MessageLookupByLibrary.simpleMessage("Необходимо дать согласие на обработку данных"),
+        "regOrg": MessageLookupByLibrary.simpleMessage("ОРГАНИЗАЦИЯ"),
+        "regOrgName": MessageLookupByLibrary.simpleMessage("Название приюта/реб.центра *"),
+        "regPassSymbols": MessageLookupByLibrary.simpleMessage("Латинские буквы, цифры, символы"),
+        "regPhoneMask": MessageLookupByLibrary.simpleMessage("+7(ххх)ххх-хх-хх"),
+        "regRegion": MessageLookupByLibrary.simpleMessage("Область "),
+        "regRegisterRejectMsg": MessageLookupByLibrary.simpleMessage(
+            "Пожалуйста, заполните все поля регистрации честно и мы вновь рассмотрим вашу заявку."),
+        "regRegisterRejectTitle":
+            MessageLookupByLibrary.simpleMessage("К сожалению, вам отказано в регистрации :("),
+        "regTUPmsg":
+            MessageLookupByLibrary.simpleMessage("Вы будете перенаправлены\nна страницу входа."),
+        "regTUPtitle": MessageLookupByLibrary.simpleMessage("Спасибо, мы все записали!"),
+        "regTitle": MessageLookupByLibrary.simpleMessage("Регистрация"),
+        "regUser": MessageLookupByLibrary.simpleMessage("ПОЛЬЗОВАТЕЛЬ"),
+        "regUserRole": MessageLookupByLibrary.simpleMessage("Роль пользователя"),
+        "regWriteCity": MessageLookupByLibrary.simpleMessage("Укажите город"),
+        "regWriteCountry": MessageLookupByLibrary.simpleMessage("Укажите страну"),
+        "regWriteRegion": MessageLookupByLibrary.simpleMessage("Укажите область"),
         "shelterSelectShelter": MessageLookupByLibrary.simpleMessage("Выберите приют")
       };
 }

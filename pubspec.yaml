@@ -66,6 +66,10 @@ dependencies:
 
   flutter_secure_storage: 5.0.2
 
+  mask_text_input_formatter: 2.3.0
+
+  app_links: 3.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -105,10 +109,21 @@ flutter:
         - asset: assets/font/icomoon.ttf
 
 flutter_gen:
+  line_length: 100
   integrations:
     flutter_svg: true
+  assets:
+    inputs: 
+      - assets/image/
+      - assets/icon/
+      - assets/onboarding/
+      - assets/common/
+      - assets/lottie/
+      - assets/gallery/  
 
 flutter_intl:
+  main_locale: en
+  line_length: 100
   enabled: true
   localizely:
     project_id: 6d9c91e7-5307-4fce-808b-eb812e21d1fa

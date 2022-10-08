@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,9 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
 
+import 'package:acits_flutter/service/link_handler/deep_link_service.dart';
+import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen_route.dart';
+import 'package:acits_flutter/ui/screen/registration/registration_screen_route.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:acits_flutter/domain/exception.dart';
@@ -33,10 +35,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   _LoginScreenState()
       : _authService = getIt.get<AuthService>(),
+        _deepLinkService = getIt<DeepLinkService>(),
         _debugService = getIt.get<DebugService>();
 
   final AuthService _authService;
   final DebugService _debugService;
+  final DeepLinkService _deepLinkService;
   final loginFormKey = GlobalKey<FormState>();
   final passNode = FocusNode();
   final loginController = TextEditingController();
@@ -52,6 +56,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final initLink = _deepLinkService.getResetInitLink();
+    if (initLink != null) {
+      _handleDeeplink(initLink);
+      return;
+    }
     _tryRefreshLastSession();
   }
 
@@ -99,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 16.0),
             _buildLoginButton(),
             MaterialButton(
-              onPressed: () {},
+              onPressed: () => _onRegistration(context),
               child: Text(
                 StringRes.current.loginToRegistration,
                 style: const TextStyle(
@@ -306,6 +315,17 @@ class _LoginScreenState extends State<LoginScreen> {
           _pickShelter();
         }
       },
+    );
+  }
+
+  void _onRegistration(BuildContext context) {
+    Navigator.of(context).push(RegistrationScreenRoute());
+  }
+
+  void _handleDeeplink(String initLink) {
+    Future.delayed(
+      const Duration(milliseconds: 32),
+      () => _deepLinkService.onLinkHandle(initLink),
     );
   }
 }

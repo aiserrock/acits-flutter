@@ -17,7 +17,7 @@
   "@commonNYears": {
     "placeholders": {
       "count": {
-        "type": "int" 
+        "type": "int"
       }
     }
   },
@@ -83,6 +83,7 @@
   "commonBegin": "Begin",
   "commonCalendar": "Calendar",
   "commonCancel": "Cancel",
+  "commonClose": "Close",
   "commonDay": "day",
   "commonDelete": "Delete",
   "commonDidNotImpl": "Did not implemented yet :(",
@@ -103,6 +104,7 @@
   "commonNotCompleted": "Not completed",
   "commonNotFound": "Nothing was found :(",
   "commonReloadBtn": "Reload",
+  "commonRepeat": "Repeat",
   "commonReschedule": "Reschedule",
   "commonSearch": "Search",
   "commonSort": "Sort",
@@ -157,5 +159,37 @@
   "prescriptionTitleEdit": "Edit prescription",
   "prescriptionWaitLoadingMsg": "Wait when loading is done please",
   "prescriptionWeekly": "Weekly",
+  "regAboutOrg": "About organization",
+  "regAboutYou": "About you",
+  "regAdminRegMsg": "Person, whose data was write, will become an admin",
+  "regAgreePersonalDataPart0": "I agree with terms of ",
+  "regAgreePersonalDataPart1": "personal data processing",
+  "regCity": "City *",
+  "regCountry": "Country *",
+  "regEmaiConfirmation": "Email confirmation",
+  "regEmailConfirmSentMsg": "If are you an admin of organization, then you can login. Else you need wait for admin confirmation your request.",
+  "regEmailConfirmed": "Email confirmed",
+  "regEmployee": "Employee",
+  "regFathersName": "Fathers name",
+  "regFieldEmptyError": "Need fill the field",
+  "regGuest": "Guest",
+  "regHaveAccount": "Do you have account?",
+  "regLeast8Symbols": "Min 8 symbols",
+  "regNeedConfirmPolicy": "Require agree with terms of personal data processing",
+  "regOrg": "ORGANIZATION",
+  "regOrgName": "Shelter name",
+  "regPassSymbols": "Eng letters, figures, symbols ",
+  "regPhoneMask": "+7(ххх)ххх-хх-хх",
+  "regRegion": "Region ",
+  "regRegisterRejectMsg": "Please, fill the form correctly, then try it again.",
+  "regRegisterRejectTitle": "Your registration request rejected",
+  "regTUPmsg": "You'll redirect\nto login page.",
+  "regTUPtitle": "Thanks, we recorded everything!",
+  "regTitle": "Registration",
+  "regUser": "USER",
+  "regUserRole": "User role",
+  "regWriteCity": "Write the city",
+  "regWriteCountry": "Write the country",
+  "regWriteRegion": "Write the region",
   "shelterSelectShelter": "Pick the shelter"
 }
