@@ -1,3 +1,4 @@
+import 'package:acits_flutter/ui/screen/personal_screen/personal_screen_route.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -7,6 +8,8 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/personal/personal_service.dart';
 import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen_route.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
+
+const Duration _kBaseSettleDuration = Duration(milliseconds: 246);
 
 class PersonalDrawerWidget extends StatefulWidget {
   const PersonalDrawerWidget({
@@ -61,9 +64,9 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
                 ListTile(
                   title: Text(
                     StringRes.current.personChangePass,
-                    style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
+                    style: StyleRes.title,
                   ),
-                  // onTap: () {},
+                  onTap: () => _openPersonalScreen(isChangePass: true),
                 ),
                 ListTile(
                   title: Text(
@@ -102,9 +105,9 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
           ? _buildSkeleton(156.0)
           : Text(
               StringRes.current.personMyData,
-              style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
+              style: StyleRes.title,
             ),
-      // onTap: () {},
+      onTap: _openPersonalScreen,
     );
   }
 
@@ -167,5 +170,14 @@ class _PersonalDrawerWidgetState extends State<PersonalDrawerWidget> {
         _widgetState.add(WidgetState()..error = e);
       },
     );
+  }
+
+  void _openPersonalScreen({bool isChangePass = false}) async {
+    final scaffold = Scaffold.maybeOf(context);
+    if (scaffold?.isDrawerOpen ?? false) {
+      scaffold?.closeDrawer();
+      await Future.delayed(_kBaseSettleDuration);
+    }
+    Navigator.of(context).push(PersonalScreenRoute(changePass: isChangePass));
   }
 }

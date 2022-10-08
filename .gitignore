@@ -46,6 +46,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+android/local.properties
 
 .fvm/flutter_sdk
 .fvm/fvm_config.json
@@ -60,3 +61,4 @@ ios/*.cer
 ios/*.ipa
 ios/*.app.dSYM.zip
 ios/*.mobileprovision
+ios/certs/*

@@ -17,9 +17,9 @@ class PersonalService {
 
   UserSerializers? _person;
 
-  Future<UserSerializers> fetchPersonal() async {
+  Future<UserSerializers> fetchPersonal({bool force = false}) async {
     final cached = _person;
-    if (cached != null) return cached;
+    if (!force && cached != null) return cached;
 
     final result = await _acitsClient.apiV1UsersMeGet(
       xCurrentShelter: _authService.currentShelterId,
@@ -34,7 +34,45 @@ class PersonalService {
     }
   }
 
+  /// Изменить данные пользователя
+  Future<UserSerializers> changePersonal(UserSerializers data) async {
+    final result = await _acitsClient.apiV1UsersMePut(
+      body: data,
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    final user = result.body;
+    if (user != null) {
+      _person = user;
+      return user;
+    } else {
+      throw MessagedException(error: result.error);
+    }
+  }
+
+  /// Очистка кеша сервиса при разлогине
   void _onLogout() {
     _person = null;
+  }
+
+  /// Сменить пароль пользователя
+  Future<void> changePass(
+    String oldPass,
+    String newPass,
+  ) async {
+    final result = await _acitsClient.apiV1UsersMeChangePasswordPut(
+      body: UserChangePasswordSerializers(
+        oldPassword: oldPass,
+        password: newPass,
+        rePassword: newPass,
+      ),
+      xCurrentShelter: _authService.currentShelterId,
+    );
+
+    if (result.body != null) {
+      return;
+    } else {
+      throw MessagedException(error: result.error);
+    }
   }
 }
