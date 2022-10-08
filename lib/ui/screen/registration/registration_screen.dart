@@ -32,7 +32,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
   @override
   void initState() {
     getIt.pushNewScope(
-      scopeName: 'Registration',
+      scopeName: StringRes.current.regTitle,
       init: (getIt) {
         getIt.registerSingleton<RegistrationScreenController>(
           RegistrationScreenController(
@@ -97,7 +97,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
     return TabBar(
       indicatorColor: ColorRes.accent,
       indicatorWeight: 4.0,
-      tabs: ['ОРГАНИЗАЦИЯ', 'ПОЛЬЗОВАТЕЛЬ']
+      tabs: [StringRes.current.regOrg, StringRes.current.regUser]
           .mapIndexed<Widget>(
             (index, tab) => StreamBuilder<int>(
                 stream: controller.tabState,
@@ -136,14 +136,14 @@ class RegistrationSubmitBtn extends StatelessWidget {
         return !isLoading
             ? PrimaryButton(
                 onPressed: () => controller.onSubmit(context),
-                text: 'Зарегистрироваться'.toUpperCase(),
+                text: StringRes.current.loginToRegistration.toUpperCase(),
               )
             : Shimmer.fromColors(
                 baseColor: ColorRes.accent,
                 highlightColor: ColorRes.background,
                 child: PrimaryButton(
                   onPressed: () => controller.onSubmit,
-                  text: 'Зарегистрироваться'.toUpperCase(),
+                  text: StringRes.current.loginToRegistration.toUpperCase(),
                 ),
               );
       },
@@ -162,8 +162,8 @@ class RegistrationLoginBtn extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
-          'Уже есть аккаунт?',
+        Text(
+          StringRes.current.regHaveAccount,
         ),
         Builder(builder: (context) {
           return MaterialButton(
@@ -210,9 +210,9 @@ class RegistrationPersonalData extends StatelessWidget {
           child: Text.rich(
             TextSpan(
               children: [
-                const TextSpan(text: 'Я даю согласие на обработку '),
+                TextSpan(text: StringRes.current.regAgreePersonalDataPart0),
                 TextSpan(
-                    text: 'персональных данных',
+                    text: StringRes.current.regAgreePersonalDataPart1,
                     style: StyleRes.content.copyWith(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
@@ -240,10 +240,10 @@ class RegistrationOrgForm extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 8.0),
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Информация о Вас',
+              StringRes.current.regAboutYou,
               style: StyleRes.title,
             ),
           ),
@@ -255,10 +255,10 @@ class RegistrationOrgForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24.0),
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Информация об организации',
+              StringRes.current.regAboutOrg,
               style: StyleRes.title,
             ),
           ),
@@ -291,29 +291,29 @@ class RegistrationOrgForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Человек, данные которого указаны, автоматически будет назначен администратором',
+          Text(
+            StringRes.current.regAdminRegMsg,
             style: StyleRes.content,
           ),
           TextFormField(
             controller: controller.orgLoginController,
-            decoration: const InputDecoration(
-              labelText: 'Логин *',
-              hintText: 'Латинские буквы, цифры, символы',
+            decoration: InputDecoration(
+              labelText: '${StringRes.current.loginLoginLabel} *',
+              hintText: StringRes.current.regPassSymbols,
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgPassController,
-            decoration: const InputDecoration(
-              labelText: 'Пароль *',
+            decoration: InputDecoration(
+              labelText: '${StringRes.current.loginPassLabel} *',
             ),
             validator: Validator.emptyValidatorMsg('Минимум 8 символов'),
           ),
           TextFormField(
             controller: controller.orgEmailController,
             decoration: const InputDecoration(
-              labelText: 'Эл. почта *',
+              labelText: '${StringRes.current.animalCuratorEmail} *',
               hintText: 'example@mail.ru',
             ),
             validator: Validator.emailValidator,
@@ -321,17 +321,17 @@ class RegistrationOrgForm extends StatelessWidget {
           ),
           TextFormField(
             controller: controller.orgPhoneController,
-            decoration: const InputDecoration(
-              labelText: 'Номер телефона',
-              hintText: '+7(ххх)ххх-хх-хх',
+            decoration: InputDecoration(
+              labelText: StringRes.current.animalCuratorPhone,
+              hintText: StringRes.current.regPhoneMask,
             ),
             keyboardType: TextInputType.phone,
             inputFormatters: [controller.phoneFormatter],
           ),
           TextFormField(
             controller: controller.orgSNameController,
-            decoration: const InputDecoration(
-              labelText: 'Фамилия *',
+            decoration: InputDecoration(
+              labelText: '${StringRes.current.animalCuratorLastName} *',
               hintText: 'Иванов',
             ),
             validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
@@ -339,7 +339,7 @@ class RegistrationOrgForm extends StatelessWidget {
           TextFormField(
             controller: controller.orgNameController,
             decoration: const InputDecoration(
-              labelText: 'Имя *',
+              labelText: '${StringRes.current.animalCuratorName} *',
               hintText: 'Иван',
             ),
             validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
@@ -347,7 +347,7 @@ class RegistrationOrgForm extends StatelessWidget {
           TextFormField(
             controller: controller.orgMNameController,
             decoration: const InputDecoration(
-              labelText: 'Отчество',
+              labelText: StringRes.current.regFathersName,
               hintText: 'Иванович',
             ),
           ),
@@ -364,33 +364,33 @@ class RegistrationOrgForm extends StatelessWidget {
         children: [
           TextFormField(
             controller: controller.orgLoginController,
-            decoration: const InputDecoration(
-              labelText: 'Название приюта/реб.центра *',
+            decoration: InputDecoration(
+              labelText: StringRes.current.regOrgName,
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgCountryNameController,
-            decoration: const InputDecoration(
-              labelText: 'Страна *',
-              hintText: 'Укажите страну',
+            decoration: InputDecoration(
+              labelText: StringRes.current.regCountry,
+              hintText: StringRes.current.regWriteCountry,
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgRegionNameController,
-            decoration: const InputDecoration(
-              labelText: 'Область ',
-              hintText: 'Укажите область',
+            decoration: InputDecoration(
+              labelText: StringRes.current.regRegion,
+              hintText: StringRes.current.regWriteRegion,
             ),
           ),
           TextFormField(
             controller: controller.orgCityNameController,
-            decoration: const InputDecoration(
-              labelText: 'Город *',
-              hintText: 'Укажите город',
+            decoration: InputDecoration(
+              labelText: StringRes.current.regCity,
+              hintText: StringRes.current.regWriteCity,
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
         ],
       ),
@@ -411,10 +411,10 @@ class RegistrationCustomerForm extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 8.0),
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Информация о Вас',
+              StringRes.current.regAboutYou,
               style: StyleRes.title,
             ),
           ),
@@ -426,10 +426,10 @@ class RegistrationCustomerForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24.0),
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Информация об приюте',
+              StringRes.current.regAboutOrg,
               style: StyleRes.title,
             ),
           ),
@@ -459,8 +459,8 @@ class RegistrationCustomerForm extends StatelessWidget {
         children: [
           TextFormField(
             controller: controller.customerEmailController,
-            decoration: const InputDecoration(
-              labelText: 'Эл. почта *',
+            decoration: InputDecoration(
+              labelText: '${StringRes.current.animalCuratorEmail} *',
               hintText: 'example@mail.ru',
             ),
             validator: Validator.emailValidator,
@@ -468,26 +468,26 @@ class RegistrationCustomerForm extends StatelessWidget {
           ),
           TextFormField(
             controller: controller.customerPassController,
-            decoration: const InputDecoration(
-              labelText: 'Пароль *',
+            decoration: InputDecoration(
+              labelText: '${StringRes.current.loginPassLabel} *',
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.customerSNameController,
-            decoration: const InputDecoration(
-              labelText: 'Фамилия *',
+            decoration: InputDecoration(
+              labelText: '${StringRes.current.animalCuratorLastName} *',
               hintText: 'Иванов',
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.customerNameController,
-            decoration: const InputDecoration(
-              labelText: 'Имя *',
+            decoration: InputDecoration(
+              labelText: '${StringRes.current.animalCuratorName} *',
               hintText: 'Иван',
             ),
-            validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
           ),
         ],
       ),
@@ -504,7 +504,7 @@ class RegistrationCustomerForm extends StatelessWidget {
               return FormEditCard(
                 [
                   EditCardData(
-                    label: 'Роль пользователя',
+                    label: StringRes.current.regUserRole,
                     content: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: SizedBox(
@@ -527,14 +527,14 @@ class RegistrationCustomerForm extends StatelessWidget {
                     ),
                   ),
                   EditCardData(
-                    label: 'Выберите приют *',
+                    label: StringRes.current.shelterSelectShelter,
                     initValue: shelter.data?.name,
                     suffix: const Icon(
                       Icons.menu_open_rounded,
                       color: ColorRes.accent,
                     ),
                     onPressed: () => controller.pickShelter(context),
-                    validator: Validator.emptyValidatorMsg('Поле не должно быть пустым'),
+                    validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
                   ),
                 ],
                 key: UniqueKey(),
@@ -550,5 +550,6 @@ class RegistrationCustomerForm extends StatelessWidget {
 }
 
 extension CustomerRoleX on CustomerRole {
-  String get value => this == CustomerRole.employer ? 'Сотрудник' : 'Гость';
+  String get value =>
+      this == CustomerRole.employer ? StringRes.current.regEmployee : StringRes.current.regGuest;
 }
