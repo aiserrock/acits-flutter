@@ -54,9 +54,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
           ),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          'Мои данные',
-          style: TextStyle(color: ColorRes.textPrimary),
+        title: Text(
+          l10n.personMyData,
+          style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
       ),
@@ -86,17 +86,16 @@ class _PersonalScreenState extends State<PersonalScreen> {
             bottom: 64.0,
           ),
           child: Form(
-            // key: widget.formKey,
             child: Builder(builder: (context) {
               return FormEditCard(
                 [
                   EditCardData(
-                    label: StringRes.current.loginLoginLabel,
+                    label: l10n.loginLoginLabel,
                     enabled: false,
                     initValue: user.username,
                   ),
                   EditCardData(
-                    label: StringRes.current.loginPassLabel,
+                    label: l10n.loginPassLabel,
                     enabled: false,
                     initValue: '••••••••',
                     suffix: const Icon(
@@ -106,27 +105,27 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     onPressed: () => _onPassChange(context),
                   ),
                   EditCardData(
-                    label: StringRes.current.animalCuratorName,
+                    label: l10n.animalCuratorName,
                     controller: _firstNameController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: StringRes.current.animalCuratorLastName,
+                    label: l10n.animalCuratorLastName,
                     controller: _lastNameController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: 'Отчество',
+                    label: l10n.regFathersName,
                     controller: _fatherNameController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: StringRes.current.animalCuratorPhone,
+                    label: l10n.animalCuratorPhone,
                     controller: _phoneController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: StringRes.current.animalCuratorEmail,
+                    label: l10n.animalCuratorEmail,
                     controller: _emailController,
                     onChanged: _onFieldChanged,
                   ),

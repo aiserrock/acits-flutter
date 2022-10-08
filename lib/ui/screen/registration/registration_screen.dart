@@ -32,7 +32,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
   @override
   void initState() {
     getIt.pushNewScope(
-      scopeName: StringRes.current.regTitle,
+      scopeName: l10n.regTitle,
       init: (getIt) {
         getIt.registerSingleton<RegistrationScreenController>(
           RegistrationScreenController(
@@ -97,7 +97,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
     return TabBar(
       indicatorColor: ColorRes.accent,
       indicatorWeight: 4.0,
-      tabs: [StringRes.current.regOrg, StringRes.current.regUser]
+      tabs: [l10n.regOrg, l10n.regUser]
           .mapIndexed<Widget>(
             (index, tab) => StreamBuilder<int>(
                 stream: controller.tabState,
@@ -136,14 +136,14 @@ class RegistrationSubmitBtn extends StatelessWidget {
         return !isLoading
             ? PrimaryButton(
                 onPressed: () => controller.onSubmit(context),
-                text: StringRes.current.loginToRegistration.toUpperCase(),
+                text: l10n.loginToRegistration.toUpperCase(),
               )
             : Shimmer.fromColors(
                 baseColor: ColorRes.accent,
                 highlightColor: ColorRes.background,
                 child: PrimaryButton(
                   onPressed: () => controller.onSubmit,
-                  text: StringRes.current.loginToRegistration.toUpperCase(),
+                  text: l10n.loginToRegistration.toUpperCase(),
                 ),
               );
       },
@@ -163,7 +163,7 @@ class RegistrationLoginBtn extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          StringRes.current.regHaveAccount,
+          l10n.regHaveAccount,
         ),
         Builder(builder: (context) {
           return MaterialButton(
@@ -210,9 +210,9 @@ class RegistrationPersonalData extends StatelessWidget {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: StringRes.current.regAgreePersonalDataPart0),
+                TextSpan(text: l10n.regAgreePersonalDataPart0),
                 TextSpan(
-                    text: StringRes.current.regAgreePersonalDataPart1,
+                    text: l10n.regAgreePersonalDataPart1,
                     style: StyleRes.content.copyWith(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
@@ -243,7 +243,7 @@ class RegistrationOrgForm extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              StringRes.current.regAboutYou,
+              l10n.regAboutYou,
               style: StyleRes.title,
             ),
           ),
@@ -258,7 +258,7 @@ class RegistrationOrgForm extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              StringRes.current.regAboutOrg,
+              l10n.regAboutOrg,
               style: StyleRes.title,
             ),
           ),
@@ -277,7 +277,7 @@ class RegistrationOrgForm extends StatelessWidget {
           const RegistrationLoginBtn(),
           const SizedBox(height: 16.0),
           Text(
-            StringRes.current.loginDescribeMsg,
+            l10n.loginDescribeMsg,
             textAlign: TextAlign.center,
           ),
         ],
@@ -292,28 +292,28 @@ class RegistrationOrgForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            StringRes.current.regAdminRegMsg,
+            l10n.regAdminRegMsg,
             style: StyleRes.content,
           ),
           TextFormField(
             controller: controller.orgLoginController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.loginLoginLabel} *',
-              hintText: StringRes.current.regPassSymbols,
+              labelText: '${l10n.loginLoginLabel} *',
+              hintText: l10n.regPassSymbols,
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgPassController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.loginPassLabel} *',
+              labelText: '${l10n.loginPassLabel} *',
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regLeast8Symbols),
+            validator: Validator.emptyValidatorMsg(l10n.regLeast8Symbols),
           ),
           TextFormField(
             controller: controller.orgEmailController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.animalCuratorEmail} *',
+              labelText: '${l10n.animalCuratorEmail} *',
               hintText: 'example@mail.ru',
             ),
             validator: Validator.emailValidator,
@@ -322,8 +322,8 @@ class RegistrationOrgForm extends StatelessWidget {
           TextFormField(
             controller: controller.orgPhoneController,
             decoration: InputDecoration(
-              labelText: StringRes.current.animalCuratorPhone,
-              hintText: StringRes.current.regPhoneMask,
+              labelText: l10n.animalCuratorPhone,
+              hintText: l10n.regPhoneMask,
             ),
             keyboardType: TextInputType.phone,
             inputFormatters: [controller.phoneFormatter],
@@ -331,23 +331,23 @@ class RegistrationOrgForm extends StatelessWidget {
           TextFormField(
             controller: controller.orgSNameController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.animalCuratorLastName} *',
+              labelText: '${l10n.animalCuratorLastName} *',
               hintText: 'Иванов',
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgNameController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.animalCuratorName} *',
+              labelText: '${l10n.animalCuratorName} *',
               hintText: 'Иван',
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgMNameController,
             decoration: InputDecoration(
-              labelText: StringRes.current.regFathersName,
+              labelText: l10n.regFathersName,
               hintText: 'Иванович',
             ),
           ),
@@ -365,32 +365,32 @@ class RegistrationOrgForm extends StatelessWidget {
           TextFormField(
             controller: controller.orgLoginController,
             decoration: InputDecoration(
-              labelText: StringRes.current.regOrgName,
+              labelText: l10n.regOrgName,
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgCountryNameController,
             decoration: InputDecoration(
-              labelText: StringRes.current.regCountry,
-              hintText: StringRes.current.regWriteCountry,
+              labelText: l10n.regCountry,
+              hintText: l10n.regWriteCountry,
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgRegionNameController,
             decoration: InputDecoration(
-              labelText: StringRes.current.regRegion,
-              hintText: StringRes.current.regWriteRegion,
+              labelText: l10n.regRegion,
+              hintText: l10n.regWriteRegion,
             ),
           ),
           TextFormField(
             controller: controller.orgCityNameController,
             decoration: InputDecoration(
-              labelText: StringRes.current.regCity,
-              hintText: StringRes.current.regWriteCity,
+              labelText: l10n.regCity,
+              hintText: l10n.regWriteCity,
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
         ],
       ),
@@ -414,7 +414,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              StringRes.current.regAboutYou,
+              l10n.regAboutYou,
               style: StyleRes.title,
             ),
           ),
@@ -429,7 +429,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              StringRes.current.regAboutOrg,
+              l10n.regAboutOrg,
               style: StyleRes.title,
             ),
           ),
@@ -443,7 +443,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           const RegistrationLoginBtn(),
           const SizedBox(height: 16.0),
           Text(
-            StringRes.current.loginDescribeMsg,
+            l10n.loginDescribeMsg,
             textAlign: TextAlign.center,
           ),
         ],
@@ -460,7 +460,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           TextFormField(
             controller: controller.customerEmailController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.animalCuratorEmail} *',
+              labelText: '${l10n.animalCuratorEmail} *',
               hintText: 'example@mail.ru',
             ),
             validator: Validator.emailValidator,
@@ -469,25 +469,25 @@ class RegistrationCustomerForm extends StatelessWidget {
           TextFormField(
             controller: controller.customerPassController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.loginPassLabel} *',
+              labelText: '${l10n.loginPassLabel} *',
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.customerSNameController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.animalCuratorLastName} *',
+              labelText: '${l10n.animalCuratorLastName} *',
               hintText: 'Иванов',
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.customerNameController,
             decoration: InputDecoration(
-              labelText: '${StringRes.current.animalCuratorName} *',
+              labelText: '${l10n.animalCuratorName} *',
               hintText: 'Иван',
             ),
-            validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+            validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
         ],
       ),
@@ -504,7 +504,7 @@ class RegistrationCustomerForm extends StatelessWidget {
               return FormEditCard(
                 [
                   EditCardData(
-                    label: StringRes.current.regUserRole,
+                    label: l10n.regUserRole,
                     content: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: SizedBox(
@@ -527,14 +527,14 @@ class RegistrationCustomerForm extends StatelessWidget {
                     ),
                   ),
                   EditCardData(
-                    label: StringRes.current.shelterSelectShelter,
+                    label: l10n.shelterSelectShelter,
                     initValue: shelter.data?.name,
                     suffix: const Icon(
                       Icons.menu_open_rounded,
                       color: ColorRes.accent,
                     ),
                     onPressed: () => controller.pickShelter(context),
-                    validator: Validator.emptyValidatorMsg(StringRes.current.regFieldEmptyError),
+                    validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
                   ),
                 ],
                 key: UniqueKey(),
@@ -550,6 +550,5 @@ class RegistrationCustomerForm extends StatelessWidget {
 }
 
 extension CustomerRoleX on CustomerRole {
-  String get value =>
-      this == CustomerRole.employer ? StringRes.current.regEmployee : StringRes.current.regGuest;
+  String get value => this == CustomerRole.employer ? l10n.regEmployee : l10n.regGuest;
 }

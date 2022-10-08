@@ -29,7 +29,7 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
-      title: const Text('Изменить пароль'),
+      title: Text(l10n.personalChangePass),
       content: SizedBox(
         width: double.infinity,
         child: Material(
@@ -52,13 +52,13 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
               CupertinoDialogAction(
                 onPressed: Navigator.of(context).pop,
                 child: Text(
-                  StringRes.current.commonCancel,
+                  l10n.commonCancel,
                 ),
               ),
               CupertinoDialogAction(
                 onPressed: () => _submit(context),
                 child: Text(
-                  StringRes.current.commonEdit,
+                  l10n.commonEdit,
                 ),
               ),
             ],
@@ -71,13 +71,13 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
       child: FormEditCard(
         [
           EditCardData(
-            label: ' Старый пароль',
+            label: l10n.personalOldPass,
             controller: _oldPassController,
             isObscure: true,
             validator: Validator.emptyValidator,
           ),
           EditCardData(
-            label: ' Новый пароль',
+            label: l10n.personalNewPass,
             controller: _newPassController,
             suffix: CupertinoButton(
               onPressed: () => setState(() => _isObscure = !_isObscure),
@@ -88,7 +88,7 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
           ),
           if (_isObscure)
             EditCardData(
-              label: ' Повторить пароль',
+              label: l10n.personalRePass,
               isObscure: _isObscure,
               validator: (value) => _newPassController.text != value ? '' : null,
             ),
@@ -102,18 +102,18 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
 
   void _submit(BuildContext context) {
     if (!(_formKey.currentState?.validate() ?? false)) {
-      _showMessage(context, 'Заполните значения');
+      _showMessage(context, l10n.personalEmptyFieldErrorMsg);
       return;
     }
     setState(() => _state = WidgetState()..loading());
     _personalService.changePass(_oldPassController.text, _newPassController.text).then(
       (_) {
-        _showMessage(context, 'Пароль успешно изменен');
+        _showMessage(context, l10n.personalPassChanged);
         Navigator.of(context).pop();
       },
     ).catchError((e) {
       final error = e is MessagedException ? e.error : null;
-      _showMessage(context, 'Не удалось изменить пароль\n${error is String ? error : ''}');
+      _showMessage(context, '${l10n.personalChangeErrorMsg}${error is String ? error : ''}');
       setState(() => _state = WidgetState(Object()));
     });
   }

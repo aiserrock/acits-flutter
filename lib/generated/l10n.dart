@@ -1303,6 +1303,76 @@ class StringRes {
     );
   }
 
+  /// `Password did not changed`
+  String get personalChangeErrorMsg {
+    return Intl.message(
+      'Password did not changed',
+      name: 'personalChangeErrorMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change pass`
+  String get personalChangePass {
+    return Intl.message(
+      'Change pass',
+      name: 'personalChangePass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill field`
+  String get personalEmptyFieldErrorMsg {
+    return Intl.message(
+      'Fill field',
+      name: 'personalEmptyFieldErrorMsg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` New password`
+  String get personalNewPass {
+    return Intl.message(
+      ' New password',
+      name: 'personalNewPass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` Old password`
+  String get personalOldPass {
+    return Intl.message(
+      ' Old password',
+      name: 'personalOldPass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password changed`
+  String get personalPassChanged {
+    return Intl.message(
+      'Password changed',
+      name: 'personalPassChanged',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` Repeat password`
+  String get personalRePass {
+    return Intl.message(
+      ' Repeat password',
+      name: 'personalRePass',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Animal*`
   String get prescriptionAnimal {
     return Intl.message(

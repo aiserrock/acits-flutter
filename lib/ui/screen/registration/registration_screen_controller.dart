@@ -137,7 +137,7 @@ class RegistrationScreenController {
     }
 
     if (privateState.value == false) {
-      _showSnack(StringRes.current.regNeedConfirmPolicy);
+      _showSnack(l10n.regNeedConfirmPolicy);
       return;
     }
 
@@ -167,9 +167,9 @@ class RegistrationScreenController {
           body: SafeArea(
             child: SuccessHolderWidget(
               onPressed: Navigator.of(context).pop,
-              title: StringRes.current.regTUPtitle,
-              message: StringRes.current.regTUPmsg,
-              button: StringRes.current.commonClose.toUpperCase(),
+              title: l10n.regTUPtitle,
+              message: l10n.regTUPmsg,
+              button: l10n.commonClose.toUpperCase(),
             ),
           ),
         ),
@@ -244,6 +244,6 @@ extension _MessagedExceptionX on MessagedException {
     if (msg != null) return msg;
     final errMsg = error;
     if (errMsg is String) return errMsg;
-    return StringRes.current.errorDefaultMsg;
+    return l10n.errorDefaultMsg;
   }
 }
