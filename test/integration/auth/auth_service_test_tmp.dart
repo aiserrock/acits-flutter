@@ -1,17 +1,16 @@
 // ignore_for_file: avoid_print, unused_local_variable
 
-import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../dev/di/di_container.dart';
+
 void main() {
   setUpAll(
-    () {
-      initDi();
+    () async {
+      await initDevDi();
     },
   );
-
-  testLogin();
 
   group('refresh token', () {
     setUp(
