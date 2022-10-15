@@ -136,7 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Неустойчивое соединение, попробуйте еще раз позже"),
         "loginAuthorizeError": MessageLookupByLibrary.simpleMessage("Неверный логин или пароль"),
         "loginDescribeMsg": MessageLookupByLibrary.simpleMessage(
-            "ACITS – Система контроля за животными\nвнутри приюта"),
+            "ACITS – Система контроля за животными\nвнутри организации"),
         "loginEntryBtn": MessageLookupByLibrary.simpleMessage("Войти"),
         "loginForgetPass": MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "loginLoginHint": MessageLookupByLibrary.simpleMessage("Введите почту или логин"),
@@ -151,25 +151,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "mainEmptyState": MessageLookupByLibrary.simpleMessage("На сегодня назначений нет"),
         "mainTitle": MessageLookupByLibrary.simpleMessage("Сегодня"),
         "onboardingDrugsMsg": MessageLookupByLibrary.simpleMessage(
-            "Мы заранее подготовили максимальное количество медицинских назначений для приютов"),
+            "Мы заранее подготовили максимальное количество медицинских назначений для организаций"),
         "onboardingDrugsTitle":
             MessageLookupByLibrary.simpleMessage("Гибкая система работы с назначениями"),
         "onboardingFreeMsg": MessageLookupByLibrary.simpleMessage(
             "Весь функционал будет доступен для Вас в полном объеме, без ограничений"),
         "onboardingFreeTitle": MessageLookupByLibrary.simpleMessage("Абсолютно бесплатно"),
         "onboardingNewsMsg": MessageLookupByLibrary.simpleMessage(
-            "Карта ведется на протяжении всей жизни животного и не зависит от приюта"),
+            "Карта ведется на протяжении всей жизни животного и не зависит от организации"),
         "onboardingNewsTitle": MessageLookupByLibrary.simpleMessage("Единая карта животного"),
         "onboardingPlanMsg": MessageLookupByLibrary.simpleMessage(
             "Позволяет четко планировать рабочее время и своевременно оказывать медицинскую помощь животным"),
         "onboardingPlanTitle":
             MessageLookupByLibrary.simpleMessage("Сводка назначений на текущий день"),
         "personChangePass": MessageLookupByLibrary.simpleMessage("Сменить пароль"),
-        "personChangeShelter": MessageLookupByLibrary.simpleMessage("Сменить приют"),
+        "personChangeShelter": MessageLookupByLibrary.simpleMessage("Сменить организацию"),
         "personFeedback": MessageLookupByLibrary.simpleMessage("Обратная связь"),
         "personLogout": MessageLookupByLibrary.simpleMessage("Выйти"),
         "personMyData": MessageLookupByLibrary.simpleMessage("Мои данные"),
-        "personMyShelters": MessageLookupByLibrary.simpleMessage("Мои приюты"),
+        "personMyShelters": MessageLookupByLibrary.simpleMessage("Мои организации"),
         "personalChangeErrorMsg":
             MessageLookupByLibrary.simpleMessage("Не удалось изменить пароль\n"),
         "personalChangePass": MessageLookupByLibrary.simpleMessage("Изменить пароль"),
@@ -216,7 +216,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "regNeedConfirmPolicy":
             MessageLookupByLibrary.simpleMessage("Необходимо дать согласие на обработку данных"),
         "regOrg": MessageLookupByLibrary.simpleMessage("ОРГАНИЗАЦИЯ"),
-        "regOrgName": MessageLookupByLibrary.simpleMessage("Название приюта/реб.центра *"),
+        "regOrgName": MessageLookupByLibrary.simpleMessage("Название организации/реаб.центра *"),
         "regPassSymbols": MessageLookupByLibrary.simpleMessage("Латинские буквы, цифры, символы"),
         "regPhoneMask": MessageLookupByLibrary.simpleMessage("+7(ххх)ххх-хх-хх"),
         "regRegion": MessageLookupByLibrary.simpleMessage("Область "),
@@ -233,6 +233,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "regWriteCity": MessageLookupByLibrary.simpleMessage("Укажите город"),
         "regWriteCountry": MessageLookupByLibrary.simpleMessage("Укажите страну"),
         "regWriteRegion": MessageLookupByLibrary.simpleMessage("Укажите область"),
-        "shelterSelectShelter": MessageLookupByLibrary.simpleMessage("Выберите приют")
+        "shelterSelectShelter": MessageLookupByLibrary.simpleMessage("Выберите организацию")
       };
 }
