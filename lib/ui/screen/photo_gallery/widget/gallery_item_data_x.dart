@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:acits_flutter/util/util.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/domain/gallery_item_data.dart';
@@ -7,7 +8,7 @@ import 'package:acits_flutter/domain/gallery_item_data.dart';
 extension GalleryIyemDataX on GalleryItemData {
   Widget get widget => network != null
       ? Image.network(
-          network?.image?.medium ?? '',
+          UrlCorsProxy.add(network?.image?.medium) ?? '',
           fit: BoxFit.cover,
         )
       : assetPath != null

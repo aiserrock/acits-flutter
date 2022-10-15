@@ -267,7 +267,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                             children: [
                               Positioned.fill(
                                 child: Image.network(
-                                  image.image?.medium ?? '',
+                                  UrlCorsProxy.add(image.image?.medium) ?? '',
                                   fit: BoxFit.cover,
                                 ),
                               ),
