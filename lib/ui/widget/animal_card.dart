@@ -225,7 +225,7 @@ class AnimalCardWidget extends StatelessWidget {
   }
 
   Widget _buildAvatar() {
-    final thumb = itemData?.thumb;
+    final thumb = UrlCorsProxy.add(itemData?.thumb);
     return Padding(
       padding: const EdgeInsets.only(
         left: 12.0,
