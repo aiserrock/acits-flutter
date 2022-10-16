@@ -62,3 +62,8 @@ export LANG=en_US.UTF-8
 fvm flutter build ios --flavor dev -t test/dev/main.dart --no-codesign --obfuscate --split-debug-info=./build/app/outputs/symbols/dev
 (cd ios && fastlane releaseDev)      
 ```
+
+### Autotests
+```bash
+fvm flutter drive --driver=test//integration_test/entry/integration_test_driver.dart --target=test/integration_test/gherkin_suite_test.dart --flavor dev   
+```

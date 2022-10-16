@@ -1,8 +1,12 @@
-# targets:
-#   $default:
-    # sources:
-    #   - lib/**
+targets:
+  $default:
+    sources:
+      - lib/**
     #   - doc/api/**
+      - pubspec.*
+      - $package$
+      # Allows the code generator to target files outside of the lib folder
+      - test/integration_test/**.dart
     # builders:
     #   swagger_dart_code_generator:
     #     options:

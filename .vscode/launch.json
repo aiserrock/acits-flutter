@@ -48,6 +48,18 @@
         "--flavor",
         "dev"
       ]
+    },
+    {
+      "name": "e2e",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "test/",
+      "program": "test/integration_test/entry/integration_test_driver.dart",
+      "args": [
+        "--flavor",
+        "dev",
+        "--target=integration_test/gherkin_suite_test.dart",
+      ]
     }
   ]
 }

@@ -12,7 +12,7 @@ import 'package:acits_flutter/ui/widget/loader.dart';
 
 /// Экран личного кабинета пользователя
 class PersonalScreen extends StatefulWidget {
-  const PersonalScreen({required this.isChangePass, super.key});
+  const PersonalScreen({required this.isChangePass, Key? key}) : super(key: key);
 
   final bool isChangePass;
 

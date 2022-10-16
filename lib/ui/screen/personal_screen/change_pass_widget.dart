@@ -10,7 +10,7 @@ import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/util/validator.dart';
 
 class ChangePassWidget extends StatefulWidget {
-  const ChangePassWidget({super.key});
+  const ChangePassWidget({Key? key}) : super(key: key);
 
   @override
   State<ChangePassWidget> createState() => _ChangePassWidgetState();
