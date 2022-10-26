@@ -48,6 +48,9 @@ platform :ios do
     bundle_id = options[:bundle_id]
     provision = options[:provision]
 
+    # https://github.com/fastlane/fastlane/issues/20741
+    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true'
+
     cert(
         development: false,
         api_key: get_app_store_connect_api_key,
@@ -78,24 +81,25 @@ platform :ios do
     )
 
     upload_to_testflight(
-        skip_submission: true,
         skip_waiting_for_build_processing: true,
+        # https://github.com/fastlane/fastlane/issues/20741
+        app_identifier: app_identifier,
         api_key: get_app_store_connect_api_key
     )
   end
 
 
   lane :get_app_store_connect_api_key do
-    ensure_env_vars(
-      env_vars: [
-        'APP_STORE_CONNECT_API_KEY'
-      ]
-    )
+    # ensure_env_vars(
+    #   env_vars: [
+    #     'APP_STORE_CONNECT_API_KEY'
+    #   ]
+    # )
     app_store_connect_api_key(
       key_id: "9H77DX9646",
       issuer_id: "3f2e356c-d427-4c6c-8653-3a348a52cf3b",
-      key_content: "#{ENV["APP_STORE_CONNECT_API_KEY"]}".gsub('\n', '\\n'),
-      # key_filepath: "",
+      # key_content: "#{ENV["APP_STORE_CONNECT_API_KEY"]}".gsub('\n', '\\n'),
+      key_filepath: "certs/AuthKey_9H77DX9646.p8",
       duration: 1200,
       in_house: false,
     )
