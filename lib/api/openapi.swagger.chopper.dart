@@ -135,13 +135,18 @@ class _$Openapi extends Openapi {
 
   @override
   Future<Response<String>> apiV1AnimalsIdPdfTypePdfGet(
-      {required int? id, required String? pdfType, String? xCurrentShelter}) {
+      {required int? id,
+      required String? pdfType,
+      required DateTime from,
+      required DateTime to,
+      String? xCurrentShelter}) {
     final $url = '/api/v1/animals/${id}/${pdfType}/pdf/';
+    final $params = <String, dynamic>{'from': from, 'to': to};
     final $headers = {
       if (xCurrentShelter != null) 'x-current-shelter': xCurrentShelter,
     };
 
-    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params, headers: $headers);
     return client.send<String, String>($request);
   }
 

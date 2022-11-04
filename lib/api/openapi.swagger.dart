@@ -120,6 +120,8 @@ abstract class Openapi extends ChopperService {
   Future<chopper.Response<String>> apiV1AnimalsIdPdfTypePdfGet(
       {@Path('id') required int? id,
       @Path('pdf_type') required String? pdfType,
+      @Query('from') required DateTime from,
+      @Query('to') required DateTime to,
       @Header('x-current-shelter') String? xCurrentShelter});
 
   ///
