@@ -1,7 +1,9 @@
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen_route.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
+import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -16,12 +18,15 @@ class AnimalCardWidget extends StatelessWidget {
     Key? key,
   })  : isEditable = getIt<AuthService>().shelterRole?.isUserCanEdit ?? false,
         isDeletable = getIt<AuthService>().shelterRole?.isUserCanDelete ?? false,
+        _animalService = getIt<AnimalService>(),
         super(key: key);
 
   final AnimalRead? itemData;
   final VoidCallback? onDelete;
   final bool isEditable;
   final bool isDeletable;
+
+  final AnimalService _animalService;
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +76,28 @@ class AnimalCardWidget extends StatelessWidget {
                   controller?.openEndActionPane();
                 },
               ),
-            CupertinoButton(
-              padding: const EdgeInsets.only(),
-              child: const Icon(
-                Icons.download,
-                color: ColorRes.accent,
-              ),
-              onPressed: () {},
-            ),
+            Builder(builder: (context) {
+              return CupertinoButton(
+                padding: const EdgeInsets.only(),
+                child: const Icon(
+                  Icons.download,
+                  color: ColorRes.accent,
+                ),
+                onPressed: () {
+                  final animalId = itemData?.id;
+                  if (animalId == null) return;
+                  Navigator.of(context).push(
+                    DocViewerScreenRoute(
+                      fetcher: (() async {
+                        final pdf = await _animalService.fetchPdfAnimalCard(animalId);
+                        return pdf;
+                      }),
+                      title: 'Animal 257',
+                    ),
+                  );
+                },
+              );
+            }),
           ],
         );
       }),

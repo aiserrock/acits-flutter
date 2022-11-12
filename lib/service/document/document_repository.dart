@@ -1,3 +1,4 @@
+import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/exception.dart';
@@ -6,7 +7,7 @@ import 'package:acits_flutter/export.dart';
 
 /// Репозиторий доступа к документам (pdf)
 @injectable
-class DocumentRepository {
+class DocumentRepository with PdfDocumentMixin {
   DocumentRepository(
     this._authService,
     this._client,

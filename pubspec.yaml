@@ -70,6 +70,12 @@ dependencies:
 
   app_links: 3.3.0
 
+  # pdf viewer
+  native_pdf_view: 6.0.0+1
+
+  # Поделиться контентом (ACTION_SEND)
+  share_plus: 4.5.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -118,13 +124,13 @@ flutter_gen:
   integrations:
     flutter_svg: true
   assets:
-    inputs: 
+    inputs:
       - assets/image/
       - assets/icon/
       - assets/onboarding/
       - assets/common/
       - assets/lottie/
-      - assets/gallery/  
+      - assets/gallery/
 
 flutter_intl:
   main_locale: en
