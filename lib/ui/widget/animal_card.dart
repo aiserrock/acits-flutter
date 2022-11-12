@@ -92,7 +92,7 @@ class AnimalCardWidget extends StatelessWidget {
                         final pdf = await _animalService.fetchPdfAnimalCard(animalId);
                         return pdf;
                       }),
-                      title: 'Animal 257',
+                      title: 'Animal $animalId',
                     ),
                   );
                 },

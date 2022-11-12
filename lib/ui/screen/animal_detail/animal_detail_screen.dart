@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
+import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_route.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
 import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_route.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
@@ -46,6 +47,12 @@ class AnimalDetailScreen extends StatefulWidget {
 }
 
 class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
+  _AnimalDetailScreenState()
+      : _animalService = getIt<AnimalService>(),
+        _prescriptionService = getIt<PrescriptionService>();
+
+  final AnimalService _animalService;
+  final PrescriptionService _prescriptionService;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _scrollController = ScrollController();
   final _imagePageController = PageController();
@@ -370,7 +377,17 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                 Icons.share_outlined,
                 color: ColorRes.accent,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  DocViewerScreenRoute(
+                    fetcher: (() async {
+                      final pdf = await _animalService.fetchPdfAnimalCard(widget.id);
+                      return pdf;
+                    }),
+                    title: 'Animal ${widget.id}',
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -486,7 +503,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
   Future<void> _loadAnimal() async {
     setState(() => _state = WidgetState()..loading());
-    await getIt<AnimalService>()
+    await _animalService
         .fetchAnimalDetail(id: widget.id)
         .then((value) => setState(() => _state = WidgetState()..content(value)))
         .catchError((e) => setState(() => _state = WidgetState()..error = e));
@@ -494,7 +511,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
   Future<void> _loadPrescriptions() async {
     setState(() => _statePrescriptions = WidgetState()..loading());
-    await getIt<PrescriptionService>()
+    await _prescriptionService
         .fetchPrescriptionListByAnimal(
           widget.id,
           isActual: _prescriptionSwichState.value == _PrescriptionState.active,
