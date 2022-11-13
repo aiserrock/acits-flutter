@@ -923,6 +923,16 @@ class StringRes {
     );
   }
 
+  /// `Share`
+  String get commonShare {
+    return Intl.message(
+      'Share',
+      name: 'commonShare',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Sort`
   String get commonSort {
     return Intl.message(

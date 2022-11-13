@@ -384,7 +384,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                       final pdf = await _animalService.fetchPdfAnimalCard(widget.id);
                       return pdf;
                     }),
-                    title: 'Animal ${widget.id}',
+                    title: '${StringRes.current.mainAnimal} ${widget.id}',
                   ),
                 );
               },

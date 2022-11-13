@@ -123,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonRepeat": MessageLookupByLibrary.simpleMessage("Повторить"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Перенести"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Поиск"),
+        "commonShare": MessageLookupByLibrary.simpleMessage("Поделиться"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Сортировка"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Сегодня"),
         "commonWarning": MessageLookupByLibrary.simpleMessage("Внимание"),

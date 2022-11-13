@@ -121,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonRepeat": MessageLookupByLibrary.simpleMessage("Repeat"),
         "commonReschedule": MessageLookupByLibrary.simpleMessage("Reschedule"),
         "commonSearch": MessageLookupByLibrary.simpleMessage("Search"),
+        "commonShare": MessageLookupByLibrary.simpleMessage("Share"),
         "commonSort": MessageLookupByLibrary.simpleMessage("Sort"),
         "commonToday": MessageLookupByLibrary.simpleMessage("Today"),
         "commonWarning": MessageLookupByLibrary.simpleMessage("Warning"),
