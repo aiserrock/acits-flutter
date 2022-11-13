@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/gallery_item_data.dart';
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/service/document/document_repository.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as image_util;
@@ -315,5 +317,14 @@ class AnimalService {
       },
     ).toList();
     return preparedfiles;
+  }
+
+  /// Скачать и сохранить во временной директории файл карточки животного
+  Future<File> fetchPdfAnimalCard(int animalId) async {
+    // TODO: extract to DI
+    final repo = getIt<DocumentRepository>();
+    final raw = await repo.fetchAnimalDoc(animalId);
+    final pdf = await repo.convertPdfStringToFile(raw, fileName: 'animal_$animalId.pdf');
+    return pdf;
   }
 }

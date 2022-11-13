@@ -18,13 +18,13 @@
       {
         "name": "🔨 gen",
         "color": "#ffffff",
-        "command": "fvm flutter pub run build_runner build",
+        "command": "fvm flutter pub run build_runner build --delete-conflicting-outputs",
         "singleInstance": true
       },
       {
         "name": "👁️ gen",
         "color": "#ffffff",
-        "command": "fvm flutter pub run build_runner watch",
+        "command": "fvm flutter pub run build_runner watch --delete-conflicting-outputs",
         "singleInstance": true
       },
       {

@@ -6,37 +6,38 @@
 
 import 'package:acits_flutter/domain/env.dart' as _i7;
 import 'package:acits_flutter/export.dart' as _i12;
-import 'package:acits_flutter/res/color.dart' as _i16;
-import 'package:acits_flutter/service/animal/animal_service.dart' as _i25;
+import 'package:acits_flutter/res/color.dart' as _i18;
+import 'package:acits_flutter/service/animal/animal_service.dart' as _i26;
 import 'package:acits_flutter/service/auth/auth_repository.dart' as _i15;
-import 'package:acits_flutter/service/auth/auth_service.dart' as _i20;
+import 'package:acits_flutter/service/auth/auth_service.dart' as _i17;
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart' as _i6;
-import 'package:acits_flutter/service/client/auth_client_register.dart' as _i32;
+import 'package:acits_flutter/service/client/auth_client_register.dart' as _i33;
 import 'package:acits_flutter/service/client/auth_interceptor.dart' as _i3;
-import 'package:acits_flutter/service/client/dio_register.dart' as _i26;
+import 'package:acits_flutter/service/client/dio_register.dart' as _i28;
 import 'package:acits_flutter/service/client/header_inteceptor.dart' as _i11;
-import 'package:acits_flutter/service/config/config_service.dart' as _i21;
-import 'package:acits_flutter/service/debug/debug_service.dart' as _i17;
-import 'package:acits_flutter/service/env/env_register.dart' as _i29;
+import 'package:acits_flutter/service/config/config_service.dart' as _i22;
+import 'package:acits_flutter/service/debug/debug_service.dart' as _i19;
+import 'package:acits_flutter/service/document/document_repository.dart' as _i16;
+import 'package:acits_flutter/service/env/env_register.dart' as _i30;
 import 'package:acits_flutter/service/file/file_repository.dart' as _i8;
 import 'package:acits_flutter/service/file/file_service.dart' as _i9;
-import 'package:acits_flutter/service/link_handler/deep_link_service.dart' as _i19;
-import 'package:acits_flutter/service/personal/personal_service.dart' as _i22;
-import 'package:acits_flutter/service/prescription/prescription_service.dart' as _i23;
-import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart' as _i30;
+import 'package:acits_flutter/service/link_handler/deep_link_service.dart' as _i21;
+import 'package:acits_flutter/service/personal/personal_service.dart' as _i23;
+import 'package:acits_flutter/service/prescription/prescription_service.dart' as _i24;
+import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart' as _i31;
 import 'package:acits_flutter/service/shared_pref/preference_storage.dart' as _i13;
-import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart' as _i33;
-import 'package:acits_flutter/service/staff/staff_service.dart' as _i24;
+import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart' as _i34;
+import 'package:acits_flutter/service/staff/staff_service.dart' as _i25;
 import 'package:dio/dio.dart' as _i5;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i10;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:shared_preferences/shared_preferences.dart' as _i14;
 
-import '../env/env_register.dart' as _i28;
-import '../service/client/client_register.dart' as _i31;
+import '../env/env_register.dart' as _i29;
+import '../service/client/client_register.dart' as _i32;
 import '../service/client/dio_register.dart' as _i27;
-import '../service/debug/debug_dev_service.dart' as _i18;
+import '../service/debug/debug_dev_service.dart' as _i20;
 import '../service/shared_pref/debug_preference_storage.dart' as _i4;
 
 const String _dev = 'dev';
@@ -47,8 +48,8 @@ const String _prod = 'prod';
 Future<_i1.GetIt> $initDevGetIt(_i1.GetIt get,
     {String? environment, _i2.EnvironmentFilter? environmentFilter}) async {
   final gh = _i2.GetItHelper(get, environment, environmentFilter);
-  final dioRegister = _$DioRegister();
   final dioRegisterDev = _$DioRegisterDev();
+  final dioRegister = _$DioRegister();
   final envDevRegistrer = _$EnvDevRegistrer();
   final envRegistrer = _$EnvRegistrer();
   final secureStorageRegister = _$SecureStorageRegister();
@@ -57,8 +58,8 @@ Future<_i1.GetIt> $initDevGetIt(_i1.GetIt get,
   final sharedPreferenceRegister = _$SharedPreferenceRegister();
   gh.factory<_i3.AuthInterceptor>(() => _i3.AuthInterceptor());
   gh.factory<_i4.DebugPreferenceStorage>(() => _i4.DebugPreferenceStorage(), registerFor: {_dev});
-  gh.factory<_i5.Dio>(() => dioRegister.createDioClient(), registerFor: {_prod});
   gh.factory<_i5.Dio>(() => dioRegisterDev.createDioClient(), registerFor: {_dev});
+  gh.factory<_i5.Dio>(() => dioRegister.createDioClient(), registerFor: {_prod});
   gh.factory<_i6.EmailConfirmRepository>(() => _i6.EmailConfirmRepository(get<_i5.Dio>()));
   gh.factory<_i7.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i7.Env>(() => envRegistrer.createEnv(), registerFor: {_prod});
@@ -84,40 +85,42 @@ Future<_i1.GetIt> $initDevGetIt(_i1.GetIt get,
   await gh.factoryAsync<_i14.SharedPreferences>(() => sharedPreferenceRegister.createSp(),
       preResolve: true);
   gh.factory<_i15.AuthRepository>(() => _i15.AuthRepository(get<_i10.FlutterSecureStorage>()));
-  gh.singleton<_i16.ColorRes>(_i16.ColorRes());
-  gh.singleton<_i17.DebugService>(_i18.DebugDevService(get<_i4.DebugPreferenceStorage>()),
+  gh.factory<_i16.DocumentRepository>(
+      () => _i16.DocumentRepository(get<_i17.AuthService>(), get<_i12.Openapi>()));
+  gh.singleton<_i18.ColorRes>(_i18.ColorRes());
+  gh.singleton<_i19.DebugService>(_i20.DebugDevService(get<_i4.DebugPreferenceStorage>()),
       registerFor: {_dev});
-  gh.singleton<_i17.DebugService>(_i17.DebugService(), registerFor: {_prod});
-  gh.singleton<_i19.DeepLinkService>(_i19.DeepLinkService());
-  gh.singleton<_i20.AuthService>(_i20.AuthService(
+  gh.singleton<_i19.DebugService>(_i19.DebugService(), registerFor: {_prod});
+  gh.singleton<_i21.DeepLinkService>(_i21.DeepLinkService());
+  gh.singleton<_i17.AuthService>(_i17.AuthService(
       get<_i12.Openapi>(),
       get<_i12.Openapi>(instanceName: 'guest'),
       get<_i15.AuthRepository>(),
       get<_i6.EmailConfirmRepository>()));
-  gh.singleton<_i21.ConfigService>(_i21.ConfigService(
-      get<_i12.Openapi>(), get<_i20.AuthService>(), get<_i13.PreferenceStorage>()));
-  gh.singleton<_i22.PersonalService>(
-      _i22.PersonalService(get<_i12.Openapi>(), get<_i20.AuthService>()));
-  gh.singleton<_i23.PrescriptionService>(_i23.PrescriptionService(
-      get<_i12.Openapi>(), get<_i20.AuthService>(), get<_i21.ConfigService>()));
-  gh.singleton<_i24.StaffService>(_i24.StaffService(get<_i20.AuthService>(), get<_i12.Openapi>()));
-  gh.singleton<_i25.AnimalService>(
-      _i25.AnimalService(get<_i20.AuthService>(), get<_i12.Openapi>()));
+  gh.singleton<_i22.ConfigService>(_i22.ConfigService(
+      get<_i12.Openapi>(), get<_i17.AuthService>(), get<_i13.PreferenceStorage>()));
+  gh.singleton<_i23.PersonalService>(
+      _i23.PersonalService(get<_i12.Openapi>(), get<_i17.AuthService>()));
+  gh.singleton<_i24.PrescriptionService>(_i24.PrescriptionService(
+      get<_i12.Openapi>(), get<_i17.AuthService>(), get<_i22.ConfigService>()));
+  gh.singleton<_i25.StaffService>(_i25.StaffService(get<_i17.AuthService>(), get<_i12.Openapi>()));
+  gh.singleton<_i26.AnimalService>(
+      _i26.AnimalService(get<_i17.AuthService>(), get<_i12.Openapi>()));
   return get;
 }
 
-class _$DioRegister extends _i26.DioRegister {}
-
 class _$DioRegisterDev extends _i27.DioRegisterDev {}
 
-class _$EnvDevRegistrer extends _i28.EnvDevRegistrer {}
+class _$DioRegister extends _i28.DioRegister {}
 
-class _$EnvRegistrer extends _i29.EnvRegistrer {}
+class _$EnvDevRegistrer extends _i29.EnvDevRegistrer {}
 
-class _$SecureStorageRegister extends _i30.SecureStorageRegister {}
+class _$EnvRegistrer extends _i30.EnvRegistrer {}
 
-class _$ClientRegisterDev extends _i31.ClientRegisterDev {}
+class _$SecureStorageRegister extends _i31.SecureStorageRegister {}
 
-class _$ClientRegister extends _i32.ClientRegister {}
+class _$ClientRegisterDev extends _i32.ClientRegisterDev {}
 
-class _$SharedPreferenceRegister extends _i33.SharedPreferenceRegister {}
+class _$ClientRegister extends _i33.ClientRegister {}
+
+class _$SharedPreferenceRegister extends _i34.SharedPreferenceRegister {}
