@@ -8,6 +8,7 @@ import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_ro
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/subjects.dart';
@@ -372,23 +373,25 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                 ),
               ),
             const Spacer(),
-            DefaultIconButton(
-              icon: const Icon(
-                Icons.share_outlined,
-                color: ColorRes.accent,
+            // TODO: impl for web
+            if (!kIsWeb)
+              DefaultIconButton(
+                icon: const Icon(
+                  Icons.share_outlined,
+                  color: ColorRes.accent,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    DocViewerScreenRoute(
+                      fetcher: (() async {
+                        final pdf = await _animalService.fetchPdfAnimalCard(widget.id);
+                        return pdf;
+                      }),
+                      title: '${StringRes.current.mainAnimal} ${widget.id}',
+                    ),
+                  );
+                },
               ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  DocViewerScreenRoute(
-                    fetcher: (() async {
-                      final pdf = await _animalService.fetchPdfAnimalCard(widget.id);
-                      return pdf;
-                    }),
-                    title: '${StringRes.current.mainAnimal} ${widget.id}',
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ),

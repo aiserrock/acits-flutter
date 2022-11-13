@@ -5,6 +5,7 @@ import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen_route
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -76,28 +77,30 @@ class AnimalCardWidget extends StatelessWidget {
                   controller?.openEndActionPane();
                 },
               ),
-            Builder(builder: (context) {
-              return CupertinoButton(
-                padding: const EdgeInsets.only(),
-                child: const Icon(
-                  Icons.download,
-                  color: ColorRes.accent,
-                ),
-                onPressed: () {
-                  final animalId = itemData?.id;
-                  if (animalId == null) return;
-                  Navigator.of(context).push(
-                    DocViewerScreenRoute(
-                      fetcher: (() async {
-                        final pdf = await _animalService.fetchPdfAnimalCard(animalId);
-                        return pdf;
-                      }),
-                      title: 'Animal $animalId',
-                    ),
-                  );
-                },
-              );
-            }),
+            // TODO: impl for web
+            if (!kIsWeb)
+              Builder(builder: (context) {
+                return CupertinoButton(
+                  padding: const EdgeInsets.only(),
+                  child: const Icon(
+                    Icons.download,
+                    color: ColorRes.accent,
+                  ),
+                  onPressed: () {
+                    final animalId = itemData?.id;
+                    if (animalId == null) return;
+                    Navigator.of(context).push(
+                      DocViewerScreenRoute(
+                        fetcher: (() async {
+                          final pdf = await _animalService.fetchPdfAnimalCard(animalId);
+                          return pdf;
+                        }),
+                        title: 'Animal $animalId',
+                      ),
+                    );
+                  },
+                );
+              }),
           ],
         );
       }),
