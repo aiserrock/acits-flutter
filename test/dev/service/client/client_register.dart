@@ -11,6 +11,7 @@ import 'package:acits_flutter/service/client/auth_interceptor.dart';
 import 'package:acits_flutter/service/client/header_inteceptor.dart';
 
 import '../shared_pref/debug_preference_storage.dart';
+import 'http_logger_interceptor.dart';
 
 @module
 abstract class ClientRegisterDev {
@@ -28,7 +29,7 @@ abstract class ClientRegisterDev {
       baseUrl: baseUrl ?? env.apiUrl,
       interceptors: [
         headerInterceptor,
-        HttpLoggingInterceptor(),
+        HttpLoggingInterceptorUtf8(),
       ],
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
@@ -50,7 +51,7 @@ abstract class ClientRegisterDev {
         client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
         baseUrl: baseUrl ?? env.apiUrl,
         converter: $JsonSerializableConverter(),
-        interceptors: [HttpLoggingInterceptor()]);
+        interceptors: [HttpLoggingInterceptorUtf8()]);
     final client = Openapi.create(chopper);
 
     return client;

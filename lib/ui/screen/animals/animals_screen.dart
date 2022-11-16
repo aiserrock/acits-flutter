@@ -84,11 +84,19 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
     return FloatingActionButton(
       heroTag: 'AnimalsFab',
       mini: _isSmallScreen,
-      onPressed: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const AnimalEditScreen(),
-        ),
-      ),
+      onPressed: () async {
+        Navigator.of(context)
+            .push<bool>(
+          MaterialPageRoute(
+            builder: (_) => const AnimalEditScreen(),
+          ),
+        )
+            .then(
+          (bool? isAdded) {
+            if (isAdded ?? false) _loadAnimalList(needResetOffset: true);
+          },
+        );
+      },
       child: const Icon(
         Icons.add,
         color: ColorRes.foreground,

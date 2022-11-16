@@ -42,7 +42,8 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   late final bool _isEdit;
   late final NavigatorState _navigator;
 
-  WidgetState<_AnimalEditScreenMode> _editState = WidgetState<_AnimalEditScreenMode>()..loading();
+  WidgetState<_AnimalEditScreenMode> _editState =
+      WidgetState<_AnimalEditScreenMode>(_AnimalEditScreenMode.form);
   final _pageController = PageController();
 
   bool _isLastPage = false;
@@ -112,25 +113,26 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   Widget _buildBody() {
     return KeyboardDismissOnTap(
       child: SafeArea(
-        child: _isEdit
-            ? StateBuilder<_AnimalEditScreenMode>(
-                state: _editState,
-                loader: (_) => const LoaderHolderWidget(),
-                errorBuilder: (_, e) => ErrorHolderWidget(error: e),
-                builder: (context, mode) {
-                  return mode == _AnimalEditScreenMode.form
-                      ? RefreshIndicator(
-                          child: _buildContent(context),
-                          onRefresh: _init,
-                        )
-                      : SuccessHolderWidget(
-                          onPressed: () => _navigator.pop(true),
-                          title: 'Готово!',
-                          message: 'Изменения сохранены.',
-                          button: 'Закрыть'.toUpperCase(),
-                        );
-                })
-            : _buildContent(context),
+        child: StateBuilder<_AnimalEditScreenMode>(
+          state: _editState,
+          loader: (_) => const LoaderHolderWidget(),
+          errorBuilder: (_, e) => ErrorHolderWidget(error: e),
+          builder: (context, mode) {
+            return mode == _AnimalEditScreenMode.form
+                ? _isEdit
+                    ? RefreshIndicator(
+                        child: _buildContent(context),
+                        onRefresh: _init,
+                      )
+                    : _buildContent(context)
+                : SuccessHolderWidget(
+                    onPressed: () => _navigator.pop(true),
+                    title: 'Готово!',
+                    message: 'Изменения сохранены.',
+                    button: 'Закрыть'.toUpperCase(),
+                  );
+          },
+        ),
       ),
     );
   }
@@ -248,7 +250,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   }
 
   Future<void> _init() async {
-    if (widget.id == null) return;
+    if (!_isEdit) return;
     setState(() => _editState = WidgetState<_AnimalEditScreenMode>()..loading());
     await _animalService.fetchAnimalDetail(id: widget.id!).then(
       (value) {
@@ -275,7 +277,11 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
             .updateAnimal(editedAnimal.id!, editedAnimal.write)
             .catchError((_) {});
       } else {
-        result = await _animalService.createAnimal(editedAnimal.write).catchError((_) {});
+        result = await _animalService.createAnimal(editedAnimal.write).catchError((e) {
+          setState(() {
+            _editState = WidgetState()..error = e;
+          });
+        });
       }
       if (result != null) {
         setState(() => _editState = WidgetState()..content(_AnimalEditScreenMode.success));
