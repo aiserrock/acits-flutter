@@ -283,22 +283,26 @@ Applicant _$ApplicantFromJson(Map<String, dynamic> json) => Applicant(
           [],
     );
 
-Map<String, dynamic> _$ApplicantToJson(Applicant instance) => <String, dynamic>{
-      'id': instance.id,
-      'url': instance.url,
-      'shelter': instance.shelter,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-      'email': instance.email,
-      'phone_number': instance.phoneNumber,
-      'contact_details': instance.contactDetails,
-      'created_by': instance.createdBy,
-      'updated_by': instance.updatedBy,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'updated_at': instance.updatedAt?.toIso8601String(),
-      'animal_id': instance.animalId,
-      'applicant_files': instance.applicantFiles?.map((e) => e.toJson()).toList(),
-    };
+Map<String, dynamic> _$ApplicantToJson(Applicant instance) {
+  final out = <String, dynamic>{
+    'id': instance.id,
+    'url': instance.url,
+    'shelter': instance.shelter,
+    'first_name': instance.firstName,
+    'last_name': instance.lastName,
+    'email': instance.email,
+    'phone_number': instance.phoneNumber,
+    'contact_details': instance.contactDetails,
+    'created_by': instance.createdBy,
+    'updated_by': instance.updatedBy,
+    'created_at': instance.createdAt?.toIso8601String(),
+    'updated_at': instance.updatedAt?.toIso8601String(),
+    'animal_id': instance.animalId,
+    'applicant_files': instance.applicantFiles?.map((e) => e.toJson()).toList(),
+  };
+  if (out['animal_id'] == null) out.remove('animal_id');
+  return out;
+}
 
 ApplicantFile _$ApplicantFileFromJson(Map<String, dynamic> json) => ApplicantFile(
       id: json['id'] as int?,
