@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -358,7 +360,9 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 +
         (int.tryParse(_ageMonthController.text) ?? 0);
     final _birth =
-        _currentAgeTab == 0 ? DateTime.now().subtract(Duration(days: months * 30)) : birthDate;
+        _currentAgeTab == 0
+        ? DateTime.now().subtract(Duration(days: max(months * 30, 1)))
+        : birthDate;
 
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
       birthDate: _birth,
