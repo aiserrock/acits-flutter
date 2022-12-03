@@ -359,8 +359,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     }
     final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 +
         (int.tryParse(_ageMonthController.text) ?? 0);
-    final _birth =
-        _currentAgeTab == 0
+    final _birth = _currentAgeTab == 0
         ? DateTime.now().subtract(Duration(days: max(months * 30, 1)))
         : birthDate;
 
