@@ -1,50 +1,17 @@
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:acits_flutter/ui/screen/onboarding/bloc/onboarding_bloc.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
+import 'package:acits_flutter/ui/screen/onboarding/model/onboarding_data.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-class _OnboardingData {
-  final SvgGenImage image;
-  final String title;
-  final String message;
-
-  _OnboardingData({
-    required this.image,
-    required this.title,
-    required this.message,
-  });
-}
-
-final _onboardingData = <_OnboardingData>[
-  _OnboardingData(
-    image: Assets.onboarding.news,
-    title: StringRes.current.onboardingNewsTitle,
-    message: StringRes.current.onboardingNewsMsg,
-  ),
-  _OnboardingData(
-    image: Assets.onboarding.plan,
-    title: StringRes.current.onboardingPlanTitle,
-    message: StringRes.current.onboardingPlanMsg,
-  ),
-  _OnboardingData(
-    image: Assets.onboarding.drugs,
-    title: StringRes.current.onboardingDrugsTitle,
-    message: StringRes.current.onboardingDrugsMsg,
-  ),
-  _OnboardingData(
-    image: Assets.onboarding.free,
-    title: StringRes.current.onboardingFreeTitle,
-    message: StringRes.current.onboardingFreeMsg,
-  ),
-];
 
 /// Экран онбординга при входе в приложение
 class OnboardingScreen extends StatefulWidget {
@@ -55,9 +22,9 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  _OnboardingScreenState() : _configService = getIt<ConfigService>();
+  _OnboardingScreenState();
 
-  final ConfigService _configService;
+  late List<OnboardingData> _onboardingData;
   late final PageController _controller;
   int _currentPage = 0;
 
@@ -69,9 +36,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    _onboardingData = context.read<OnboardingBloc>().onboardingData;
+    context.read<OnboardingBloc>().stream.listen((state) => _listenCloseState(context, state));
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
-    _controller.removeListener(_pageScrollListen);
-    _configService.setFirstLaunch();
+    _controller
+      ..removeListener(_pageScrollListen)
+      ..dispose();
     super.dispose();
   }
 
@@ -120,11 +95,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildBtn(BuildContext context) {
-    return PrimaryButton(
-      onPressed: () => _tapNext(context),
-      text: _currentPage == _onboardingData.length - 1
-          ? StringRes.current.commonBegin.toUpperCase()
-          : StringRes.current.commonNext.toUpperCase(),
+    return BlocBuilder<OnboardingBloc, OnboardingState>(
+      builder: (context, state) {
+        return PrimaryButton(
+          onPressed: () => _tapNext(context),
+          text: state.isLast
+              ? StringRes.current.commonBegin.toUpperCase()
+              : StringRes.current.commonNext.toUpperCase(),
+        );
+      },
     );
   }
 
@@ -177,30 +156,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _pageScrollListen() {
     final newPage = _controller.page?.round();
     if (newPage != null && _currentPage != newPage) {
+      context.read<OnboardingBloc>().add(OnboardingEventOnPosition(newPage));
       setState(() => _currentPage = newPage);
     }
   }
 
   void _tapNext(BuildContext context) {
+    context.read<OnboardingBloc>().add(OnboardingEventOnNext());
     if (_currentPage < _onboardingData.length - 1) {
       _controller.animateToPage(
         _currentPage + 1,
         duration: const Duration(milliseconds: 300),
         curve: Curves.linear,
       );
-    } else {
-      _closeScreen(context);
     }
   }
 
   void _scrollTo(int index) {
     if (index != _currentPage) {
+      context.read<OnboardingBloc>().add(OnboardingEventOnPosition(index));
       _controller.animateToPage(
         index,
         duration: const Duration(milliseconds: 300),
         curve: Curves.linear,
       );
     }
+  }
+
+  void _listenCloseState(BuildContext context, OnboardingState state) {
+    if (state is OnboardingStateNeedCloseRoute) _closeScreen(context);
   }
 
   void _closeScreen(BuildContext context) {
