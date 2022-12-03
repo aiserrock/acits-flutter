@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/service/debug/debug_service.dart';
-import 'package:acits_flutter/ui/screen/onboarding/onboarding_route.dart';
+import 'package:acits_flutter/ui/screen/onboarding/view/onboarding_route.dart';
 
 import '../../di/di_container.dart';
 import '../../ui/debug_screen/debug_screen.dart';

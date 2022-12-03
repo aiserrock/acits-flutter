@@ -1,14 +1,15 @@
-import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/ui/screen/auth/login_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'package:acits_flutter/service/config/config_service.dart';
+import 'package:acits_flutter/ui/screen/auth/login_screen.dart';
+import 'package:acits_flutter/ui/screen/onboarding/onboarding.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
-import 'package:acits_flutter/ui/screen/onboarding/onboarding_screen.dart';
 import 'package:acits_flutter/di/di_container.dart';
 
 Future<void> main() async {
@@ -54,7 +55,12 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: StringRes.delegate.supportedLocales,
-      home: _isFirstLaunch ? const OnboardingScreen() : const LoginScreen(),
+      home: _isFirstLaunch
+          ? BlocProvider(
+              create: (context) => OnboardingBloc(),
+              child: const OnboardingScreen(),
+            )
+          : const LoginScreen(),
       color: ColorRes.accent,
       navigatorKey: getIt<GlobalKey<NavigatorState>>(),
       scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
