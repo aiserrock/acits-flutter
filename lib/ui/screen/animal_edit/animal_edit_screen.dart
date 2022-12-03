@@ -94,16 +94,17 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
                     ),
                     centerTitle: true,
                   ),
-                  floatingActionButton: _editState.value != _AnimalEditScreenMode.success
-                      ? FloatingActionButton(
-                          child: Icon(
-                            _isLastPage ? Icons.done_all : Icons.arrow_forward_ios_rounded,
-                            color: Colors.white,
-                          ),
-                          onPressed: _onFabPressed,
-                          backgroundColor: ColorRes.accent,
-                        )
-                      : null,
+                  floatingActionButton:
+                      (_editState.value != _AnimalEditScreenMode.success && !_editState.hasError)
+                          ? FloatingActionButton(
+                              child: Icon(
+                                _isLastPage ? Icons.done_all : Icons.arrow_forward_ios_rounded,
+                                color: Colors.white,
+                              ),
+                              onPressed: _onFabPressed,
+                              backgroundColor: ColorRes.accent,
+                            )
+                          : null,
                   body: _buildBody(),
                 );
               });
@@ -116,7 +117,15 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
         child: StateBuilder<_AnimalEditScreenMode>(
           state: _editState,
           loader: (_) => const LoaderHolderWidget(),
-          errorBuilder: (_, e) => ErrorHolderWidget(error: e),
+          errorBuilder: (_, e) => ErrorHolderWidget(
+            error: e,
+            button: 'Вернуться'.toUpperCase(),
+            onPressed: () => setState(
+              () {
+                _editState = WidgetState<_AnimalEditScreenMode>(_AnimalEditScreenMode.form);
+              },
+            ),
+          ),
           builder: (context, mode) {
             return mode == _AnimalEditScreenMode.form
                 ? _isEdit

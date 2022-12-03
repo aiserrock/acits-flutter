@@ -113,8 +113,9 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
                 validator: Validator.emptyValidator,
               ),
               EditCardData(
-                label: StringRes.current.animalCuratorLastName,
+                label: StringRes.current.animalCuratorLastName + ' *',
                 controller: _lastNameController,
+                validator: Validator.emptyValidator,
               ),
               EditCardData(
                 label: StringRes.current.animalCuratorPhone + ' *',
