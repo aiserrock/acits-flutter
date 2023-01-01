@@ -1,10 +1,10 @@
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/service/auth/auth_repository.dart';
-import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
-import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/service/auth/auth_repository.dart';
+import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
+import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/export.dart';
 
@@ -107,7 +107,7 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
     getIt<GlobalKey<NavigatorState>>().currentState
       ?..popUntil((route) => false)
-      ..push(LoginScreenRoute());
+      ..push(LoginScreen.route());
   }
 
   /// Попробовать обновить авторизацию из прошлой сессии если срок
