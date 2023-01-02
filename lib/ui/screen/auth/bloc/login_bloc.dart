@@ -90,6 +90,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginSubmitted event,
     Emitter<LoginState> emitter,
   ) async {
+    final name = Name.dirty(state.name.value);
+    final pass = Password.dirty(state.password.value);
+    emitter(state.copyWith(
+      password: pass,
+      name: name,
+      status: Formz.validate([name, pass]),
+    ));
+
     if (state.status.isValidated) {
       emitter(state.copyWith(status: FormzStatus.submissionInProgress));
 
