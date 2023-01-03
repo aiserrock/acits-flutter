@@ -82,6 +82,8 @@ dependencies:
 
   equatable: 2.0.5
 
+  formz: 0.4.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

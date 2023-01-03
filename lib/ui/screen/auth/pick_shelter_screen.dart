@@ -22,6 +22,17 @@ class PickShelterScreen extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
+  static Route<ShelterShortSerializers> route({
+    PaginatedShelterShortSerializersList? shelterList,
+    bool autoSelectSingle = true,
+  }) =>
+      MaterialPageRoute<ShelterShortSerializers>(
+        builder: (_) => PickShelterScreen(
+          shelterList: shelterList,
+          autoSelectSingle: autoSelectSingle,
+        ),
+      );
+
   final PaginatedShelterShortSerializersList? shelterList;
   final bool autoSelectSingle;
 

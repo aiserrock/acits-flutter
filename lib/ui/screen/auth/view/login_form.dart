@@ -1,0 +1,267 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:shimmer/shimmer.dart';
+
+import 'package:acits_flutter/ui/screen/auth/login.dart';
+import 'package:acits_flutter/ui/screen/registration/registration_screen_route.dart';
+import 'package:acits_flutter/gen/assets.gen.dart';
+import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/res/color.dart';
+import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/ui/widget/button.dart';
+
+class LoginForm extends StatelessWidget {
+  LoginForm({
+    super.key,
+  });
+
+  final _passNode = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginBloc, LoginState>(
+      listenWhen: (previous, current) =>
+          previous.name != current.name ||
+          previous.password != current.password ||
+          previous.status != current.status,
+      listener: (_, state) {
+        if (state.status.isSubmissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(StringRes.current.loginAuthorizeError)),
+            );
+        }
+      },
+      child: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 40.0),
+          child: Column(
+            children: [
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildForm(),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const _SubmitButton(),
+              MaterialButton(
+                onPressed: () => _onRegistration(context),
+                child: Text(
+                  StringRes.current.loginToRegistration,
+                  style: const TextStyle(
+                    color: ColorRes.accent,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Spacer(),
+              Text(
+                StringRes.current.loginDescribeMsg,
+                textAlign: TextAlign.center,
+                style: StyleRes.content,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          children: [
+            AutofillGroup(
+              child: Column(
+                children: [
+                  _NameInput(passNode: _passNode),
+                  _PasswordInput(passNode: _passNode),
+                ],
+              ),
+            ),
+          ],
+        ),
+        Container(
+          transform: Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
+          child: MaterialButton(
+            padding: const EdgeInsets.all(16.0),
+            onPressed: () {},
+            child: Text(
+              StringRes.current.loginForgetPass,
+              style: const TextStyle(
+                color: ColorRes.textSecondary,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _onRegistration(BuildContext context) {
+    Navigator.of(context).push(RegistrationScreenRoute());
+  }
+}
+
+class _NameInput extends StatelessWidget {
+  const _NameInput({
+    Key? key,
+    this.passNode,
+  }) : super(key: key);
+
+  final FocusNode? passNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 72.0,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Focus(
+          onFocusChange: (value) {
+            if (value) _onFocusChanged(context);
+          },
+          child: BlocBuilder<LoginBloc, LoginState>(
+            buildWhen: (previous, current) =>
+                previous.name != current.name || previous.focusTarget != current.focusTarget,
+            builder: (_, state) {
+              return TextField(
+                key: const Key('loginFormNameInputTextField'),
+                autofillHints: const [AutofillHints.email],
+                decoration: InputDecoration(
+                  errorText: state.name.invalid ? '' : null,
+                  hintText: StringRes.current.loginLoginHint,
+                  labelText: StringRes.current.loginLoginLabel,
+                  floatingLabelStyle: TextStyle(
+                      color: state.focusTarget.isName ? ColorRes.accent : ColorRes.textSecondary),
+                  errorStyle: const TextStyle(fontSize: 0.0),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
+                  ),
+                ),
+                cursorColor: ColorRes.accent,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                onChanged: (value) => context.read<LoginBloc>().add(LoginNameChanged(value)),
+                onEditingComplete: () {
+                  TextInput.finishAutofillContext();
+                  FocusScope.of(context).requestFocus(passNode);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onFocusChanged(BuildContext context) =>
+      context.read<LoginBloc>().add(const LoginFocusTargetChanged(FocusTarget.name));
+}
+
+class _PasswordInput extends StatelessWidget {
+  const _PasswordInput({
+    Key? key,
+    this.passNode,
+  }) : super(key: key);
+
+  final FocusNode? passNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 72.0,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Focus(
+          onFocusChange: (value) {
+            if (value) _onFocusChanged(context);
+          },
+          child: BlocBuilder<LoginBloc, LoginState>(
+            buildWhen: (previous, current) =>
+                previous.password != current.password ||
+                previous.passObscured != current.passObscured ||
+                previous.focusTarget != current.focusTarget,
+            builder: (_, state) {
+              return TextField(
+                key: const Key('loginFormPassInputTextField'),
+                focusNode: passNode,
+                autofillHints: const [AutofillHints.password],
+                decoration: InputDecoration(
+                  labelText: StringRes.current.loginPassLabel,
+                  errorText: state.password.invalid ? '' : null,
+                  floatingLabelStyle: TextStyle(
+                      color:
+                          state.focusTarget.isPassword ? ColorRes.accent : ColorRes.textSecondary),
+                  errorStyle: const TextStyle(fontSize: 0.0),
+                  suffixIcon: CupertinoButton(
+                    onPressed: () => context.read<LoginBloc>().add(const LoginPassObscureChanged()),
+                    child: state.passObscured
+                        ? Assets.icon.visible.svg()
+                        : Assets.icon.visibleOff.svg(),
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
+                  ),
+                ),
+                obscureText: state.passObscured,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
+                onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChanged(value)),
+                onEditingComplete: () {
+                  TextInput.finishAutofillContext();
+                  context.read<LoginBloc>().add(const LoginSubmitted());
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onFocusChanged(BuildContext context) =>
+      context.read<LoginBloc>().add(const LoginFocusTargetChanged(FocusTarget.password));
+}
+
+class _SubmitButton extends StatelessWidget {
+  const _SubmitButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (_, state) {
+        return state.status != FormzStatus.submissionInProgress
+            ? _buildButton(context, state)
+            : Shimmer.fromColors(
+                baseColor: ColorRes.accent,
+                highlightColor: ColorRes.background,
+                child: _buildButton(context, state),
+              );
+      },
+    );
+  }
+
+  PrimaryButton _buildButton(
+    BuildContext context,
+    LoginState state,
+  ) {
+    return PrimaryButton(
+      onPressed: state.status.isValidated
+          ? () => context.read<LoginBloc>().add(const LoginSubmitted())
+          : () {},
+      onLongPress: () => context.read<LoginBloc>().add(const LoginOnDebug()),
+      text: StringRes.current.loginEntryBtn.toUpperCase(),
+    );
+  }
+}

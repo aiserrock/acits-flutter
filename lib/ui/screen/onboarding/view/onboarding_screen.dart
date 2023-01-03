@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/ui/screen/onboarding/bloc/onboarding_bloc.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
-import 'package:acits_flutter/ui/screen/auth/login_screen_route.dart';
 import 'package:acits_flutter/ui/screen/onboarding/model/onboarding_data.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
@@ -188,6 +188,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _closeScreen(BuildContext context) {
-    Navigator.of(context).pushReplacement(LoginScreenRoute());
+    Navigator.of(context).pushReplacement(LoginScreen.route());
   }
 }

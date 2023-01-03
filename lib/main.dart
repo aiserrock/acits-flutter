@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/ui/screen/auth/login_screen.dart';
+import 'package:acits_flutter/ui/screen/auth/view/login_screen.dart';
 import 'package:acits_flutter/ui/screen/onboarding/onboarding.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';

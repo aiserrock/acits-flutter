@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+
+import 'package:acits_flutter/ui/screen/auth/login.dart';
+import 'package:acits_flutter/gen/assets.gen.dart';
+import 'package:acits_flutter/res/color.dart';
+
+/// Экран входа по логину - паролю
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({
+    Key? key,
+  }) : super(key: key);
+
+  static Route<void> route() => MaterialPageRoute<void>(builder: (_) => const LoginScreen());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorRes.foreground,
+        shadowColor: Colors.transparent,
+        title: Assets.image.logoBar.svg(),
+        centerTitle: true,
+      ),
+      backgroundColor: ColorRes.background,
+      body: KeyboardDismissOnTap(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: BlocProvider(
+                create: (_) => LoginBloc(),
+                child: LoginForm(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
