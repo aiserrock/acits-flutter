@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
@@ -6,21 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 
-const _allowedFileAttachExtensions = [
-  'pdf',
-  'doc',
-  'docx',
-  'txt',
-  'xls',
-  'xlsx',
-];
+const _allowedFileAttachExtensions = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
 
 class CommentEditScreen extends StatefulWidget {
-  const CommentEditScreen({
-    required this.animalId,
-    this.comment,
-    Key? key,
-  }) : super(key: key);
+  const CommentEditScreen({required this.animalId, this.comment, super.key});
 
   final int animalId;
   final AnimalNote? comment;
@@ -34,7 +25,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
 
   final AnimalService _animalService;
   final _attachState = BehaviorSubject<PlatformFile?>();
-  final _submitState = BehaviorSubject<WidgetState<Object>>.seeded(WidgetState());
+  final _submitState = BehaviorSubject<ScreenDataState<Object>>.seeded(ScreenDataState());
 
   final _textController = TextEditingController();
 
@@ -47,27 +38,27 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<PlatformFile?>(
-        stream: _attachState.stream,
-        builder: (_, attachSnaphot) {
-          return Scaffold(
-            backgroundColor: ColorRes.background,
-            appBar: _buildAppBar(context, attachSnaphot),
-            floatingActionButton: _buildFab(context),
-            body: _buildBody(context),
-          );
-        });
+      stream: _attachState.stream,
+      builder: (_, attachSnaphot) {
+        return Scaffold(
+          backgroundColor: ColorRes.background,
+          appBar: _buildAppBar(context, attachSnaphot),
+          floatingActionButton: _buildFab(context),
+          body: _buildBody(context),
+        );
+      },
+    );
   }
 
   PreferredSizeWidget _buildAppBar(
-      BuildContext context, AsyncSnapshot<PlatformFile?> attachSnaphot) {
+    BuildContext context,
+    AsyncSnapshot<PlatformFile?> attachSnaphot,
+  ) {
     return AppBar(
       backgroundColor: ColorRes.foreground,
       shadowColor: Colors.transparent,
       leading: GestureDetector(
-        child: const Icon(
-          Icons.arrow_back_ios,
-          color: ColorRes.accent,
-        ),
+        child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
         onTap: () => Navigator.of(context).pop(),
       ),
       title: Text(
@@ -77,32 +68,27 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
       centerTitle: true,
       actions: [
         CupertinoButton(
-          child: const Icon(
-            Icons.attach_file_rounded,
-            color: ColorRes.accent,
-          ),
           onPressed: _pickFile,
-        )
+          child: const Icon(Icons.attach_file_rounded, color: ColorRes.accent),
+        ),
       ],
       bottom: _buildFileBar(attachSnaphot.data),
     );
   }
 
   Widget _buildFab(BuildContext context) {
-    return StreamBuilder<WidgetState<Object>>(
-        stream: _submitState,
-        builder: (_, isSubmit) {
-          return (isSubmit.data?.isLoading ?? true)
-              ? const SizedBox()
-              : FloatingActionButton(
-                  child: const Icon(
-                    Icons.send_rounded,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _onSubmit(context),
-                  backgroundColor: ColorRes.accent,
-                );
-        });
+    return StreamBuilder<ScreenDataState<Object>>(
+      stream: _submitState,
+      builder: (_, isSubmit) {
+        return (isSubmit.data?.isLoading ?? true)
+            ? const SizedBox()
+            : FloatingActionButton(
+                onPressed: () => _onSubmit(context),
+                backgroundColor: ColorRes.accent,
+                child: const Icon(Icons.send_rounded, color: Colors.white),
+              );
+      },
+    );
   }
 
   PreferredSizeWidget? _buildFileBar(PlatformFile? file) {
@@ -131,10 +117,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
             ),
             actions: [
               CupertinoButton(
-                child: const Icon(
-                  Icons.delete_forever_rounded,
-                  color: ColorRes.error,
-                ),
+                child: const Icon(Icons.delete_forever_rounded, color: ColorRes.error),
                 onPressed: () {
                   _attachState.add(null);
                 },
@@ -171,11 +154,8 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
               actions: const [
                 Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Icon(
-                    Icons.cloud_done,
-                    color: ColorRes.textSecondary,
-                  ),
-                )
+                  child: Icon(Icons.cloud_done, color: ColorRes.textSecondary),
+                ),
               ],
             ),
           Expanded(
@@ -183,10 +163,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
               autofocus: true,
               controller: _textController,
               decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 16.0,
-                ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 border: InputBorder.none,
               ),
               expands: true,
@@ -203,7 +180,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
   bool get _isEdit => widget.comment != null;
 
   void _onSubmit(BuildContext context) {
-    _submitState.add(WidgetState()..loading());
+    _submitState.add(ScreenDataState()..loading());
     final source = widget.comment;
     final file = _attachState.valueOrNull;
     if (source != null) {
@@ -228,23 +205,15 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
     }
   }
 
-  void _exit(
-    BuildContext context,
-    AnimalNote? comment,
-  ) {
+  void _exit(BuildContext context, AnimalNote? comment) {
     Navigator.of(context).pop(comment);
   }
 
-  void _onError(
-    BuildContext context,
-    Object error,
-  ) {
-    _submitState.add(WidgetState()..error = error);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(StringRes.current.commonErrorTryAgainMessage),
-      ),
-    );
+  void _onError(BuildContext context, Object error) {
+    _submitState.add(ScreenDataState()..error = error);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(StringRes.current.commonErrorTryAgainMessage)));
   }
 
   Future<void> _pickFile() async {

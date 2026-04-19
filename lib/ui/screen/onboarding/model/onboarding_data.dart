@@ -5,11 +5,7 @@ class OnboardingData {
   final String title;
   final String message;
 
-  OnboardingData({
-    required this.image,
-    required this.title,
-    required this.message,
-  });
+  OnboardingData({required this.image, required this.title, required this.message});
 }
 
 final onboardingData = <OnboardingData>[

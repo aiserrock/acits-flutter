@@ -12,7 +12,7 @@ import 'package:acits_flutter/ui/widget/loader.dart';
 
 /// Экран личного кабинета пользователя
 class PersonalScreen extends StatefulWidget {
-  const PersonalScreen({required this.isChangePass, Key? key}) : super(key: key);
+  const PersonalScreen({required this.isChangePass, super.key});
 
   final bool isChangePass;
 
@@ -31,7 +31,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
 
-  WidgetState<UserSerializers> _state = WidgetState()..loading();
+  ScreenDataState<UserSerializers> _state = ScreenDataState()..loading();
   bool _fabVisible = false;
 
   @override
@@ -48,16 +48,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          l10n.personMyData,
-          style: const TextStyle(color: ColorRes.textPrimary),
-        ),
+        title: Text(l10n.personMyData, style: const TextStyle(color: ColorRes.textPrimary)),
         centerTitle: true,
       ),
       floatingActionButton: (_state.isContent && _fabVisible) ? _buildFab() : null,
@@ -70,10 +64,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
       state: _state,
       builder: (_, user) => _buildContent(user),
       loader: (_) => const LoaderHolderWidget(),
-      errorBuilder: (_, e) => ErrorHolderWidget(
-        error: e,
-        onPressed: _init,
-      ),
+      errorBuilder: (_, e) => ErrorHolderWidget(error: e, onPressed: _init),
     );
   }
 
@@ -81,14 +72,11 @@ class _PersonalScreenState extends State<PersonalScreen> {
     return KeyboardDismissOnTap(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(
-            top: 16.0,
-            bottom: 64.0,
-          ),
+          padding: const EdgeInsets.only(top: 16.0, bottom: 64.0),
           child: Form(
-            child: Builder(builder: (context) {
-              return FormEditCard(
-                [
+            child: Builder(
+              builder: (context) {
+                return FormEditCard([
                   EditCardData(
                     label: l10n.loginLoginLabel,
                     enabled: false,
@@ -98,10 +86,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     label: l10n.loginPassLabel,
                     enabled: false,
                     initValue: '••••••••',
-                    suffix: const Icon(
-                      Icons.edit,
-                      color: ColorRes.accent,
-                    ),
+                    suffix: const Icon(Icons.edit, color: ColorRes.accent),
                     onPressed: () => _onPassChange(context),
                   ),
                   EditCardData(
@@ -129,9 +114,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     controller: _emailController,
                     onChanged: _onFieldChanged,
                   ),
-                ],
-              );
-            }),
+                ]);
+              },
+            ),
           ),
         ),
       ),
@@ -141,18 +126,16 @@ class _PersonalScreenState extends State<PersonalScreen> {
   Widget _buildFab() {
     return FloatingActionButton(
       onPressed: _submit,
-      child: const Icon(
-        Icons.done_all,
-        color: ColorRes.foreground,
-      ),
       backgroundColor: ColorRes.accent,
+      child: const Icon(Icons.done_all, color: ColorRes.foreground),
     );
   }
 
   void _onFieldChanged(String value) {
     final data = _state.value;
     if (data == null) return;
-    final changed = data.copyWith(
+    final changed =
+        data.copyWith(
           firstName: _firstNameController.text,
           lastName: _lastNameController.text,
           fathersName: _fatherNameController.text,
@@ -166,37 +149,34 @@ class _PersonalScreenState extends State<PersonalScreen> {
   }
 
   void _onPassChange(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (_) => const ChangePassWidget(),
-    );
+    showCupertinoDialog(context: context, builder: (_) => const ChangePassWidget());
   }
 
   void _init() {
-    setState(() => _state = WidgetState()..loading());
-    _personalService.fetchPersonal(force: true).catchError(
-      (e) {
-        setState(() => _state = WidgetState()..error = e);
-      },
-    ).then(
-      (user) {
-        setState(() => _state = WidgetState(user));
-        _firstNameController.text = user.firstName ?? '';
-        _lastNameController.text = user.lastName ?? '';
-        _fatherNameController.text = user.fathersName ?? '';
-        _phoneController.text = user.phoneNumber ?? '';
-        _emailController.text = user.email ?? '';
-        if (widget.isChangePass) {
-          _onPassChange(context);
-        }
-      },
-    );
+    setState(() => _state = ScreenDataState()..loading());
+    _personalService
+        .fetchPersonal(force: true)
+        .then((user) {
+          if (!mounted) return;
+          setState(() => _state = ScreenDataState(user));
+          _firstNameController.text = user.firstName ?? '';
+          _lastNameController.text = user.lastName ?? '';
+          _fatherNameController.text = user.fathersName ?? '';
+          _phoneController.text = user.phoneNumber ?? '';
+          _emailController.text = user.email ?? '';
+          if (widget.isChangePass) {
+            _onPassChange(context);
+          }
+        })
+        .catchError((e) {
+          setState(() => _state = ScreenDataState()..error = e);
+        });
   }
 
   void _submit() {
     final data = _state.value;
     if (data == null) return;
-    setState(() => _state = WidgetState()..loading());
+    setState(() => _state = ScreenDataState()..loading());
     final changed = data.copyWith(
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
@@ -206,11 +186,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
     );
     _personalService
         .changePersonal(changed)
-        .then((value) => setState(() => _state = WidgetState(value)))
-        .catchError(
-      (e) {
-        setState(() => _state = WidgetState()..error = e);
-      },
-    );
+        .then((value) => setState(() => _state = ScreenDataState(value)))
+        .catchError((e) {
+          setState(() => _state = ScreenDataState()..error = e);
+        });
   }
 }

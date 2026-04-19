@@ -5,7 +5,7 @@ class AnimalEditPagerHolder extends ChangeNotifier {
 
   int get value => _state;
 
-  set(int index) {
+  void set(int index) {
     _state = index;
     notifyListeners();
   }

@@ -5,15 +5,12 @@ import 'package:intl/intl.dart';
 
 /// Виджет карточки назначения животного в детальном представлении
 class AnimalPrescriptionCard extends StatefulWidget {
-  const AnimalPrescriptionCard({
-    required this.prescription,
-    Key? key,
-  }) : super(key: key);
+  const AnimalPrescriptionCard({required this.prescription, super.key});
 
   final Prescription prescription;
 
   @override
-  _AnimalPrescriptionCardState createState() => _AnimalPrescriptionCardState();
+  State<AnimalPrescriptionCard> createState() => _AnimalPrescriptionCardState();
 }
 
 class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
@@ -25,15 +22,11 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          color: ColorRes.foreground, borderRadius: BorderRadius.all(Radius.circular(8.0))),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 8.0,
+        color: ColorRes.foreground,
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12.0,
-        vertical: 16.0,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,10 +37,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
           ),
           const SizedBox(height: 4.0),
           if (widget.prescription.myType != null)
-            Text(
-              widget.prescription.myType!.typeString ?? '',
-              style: StyleRes.title,
-            ),
+            Text(widget.prescription.myType!.typeString ?? '', style: StyleRes.title),
           const SizedBox(height: 4.0),
           Row(
             children: [
@@ -64,10 +54,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
           ),
           if (_isExpanded) ...[
             const Divider(),
-            Text(
-              StringRes.current.animalPrescriptions,
-              style: StyleRes.caption,
-            ),
+            Text(StringRes.current.animalPrescriptions, style: StyleRes.caption),
             const SizedBox(height: 4.0),
             if (widget.prescription.drugs != null)
               ...widget.prescription.drugs!.map<Widget>(
@@ -85,7 +72,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
                   maxLines: 3,
                 ),
               ),
-          ]
+          ],
         ],
       ),
     );

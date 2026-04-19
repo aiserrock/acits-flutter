@@ -10,10 +10,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 /// Экран создания или редактирования куратора
 class ApplicantEditScreen extends StatefulWidget {
-  const ApplicantEditScreen({
-    this.applicantId,
-    Key? key,
-  }) : super(key: key);
+  const ApplicantEditScreen({this.applicantId, super.key});
 
   final int? applicantId;
 
@@ -35,7 +32,7 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
   final _phoneController = TextEditingController();
   final _socialController = TextEditingController();
 
-  WidgetState<Applicant?> _state = WidgetState<Applicant?>()..content(Applicant());
+  ScreenDataState<Applicant?> _state = ScreenDataState<Applicant?>()..content(Applicant());
 
   @override
   void initState() {
@@ -61,10 +58,7 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -75,12 +69,9 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
       ),
       floatingActionButton: _state.isContent
           ? FloatingActionButton(
-              child: const Icon(
-                Icons.done_all,
-                color: Colors.white,
-              ),
               onPressed: _onSubmit,
               backgroundColor: ColorRes.accent,
+              child: const Icon(Icons.done_all, color: Colors.white),
             )
           : null,
       body: _buildBody(),
@@ -94,7 +85,7 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
           state: _state,
           loader: (_) => const LoaderHolderWidget(),
           errorBuilder: (_, e) => ErrorHolderWidget(error: e),
-          builder: (_, __) => _buildApplicantCard(),
+          builder: (_, _) => _buildApplicantCard(),
         ),
       ),
     );
@@ -105,34 +96,29 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
       children: [
         Form(
           key: formKey,
-          child: FormEditCard(
-            [
-              EditCardData(
-                label: StringRes.current.animalCuratorName + ' *',
-                controller: _nameController,
-                validator: Validator.emptyValidator,
-              ),
-              EditCardData(
-                label: StringRes.current.animalCuratorLastName + ' *',
-                controller: _lastNameController,
-                validator: Validator.emptyValidator,
-              ),
-              EditCardData(
-                label: StringRes.current.animalCuratorPhone + ' *',
-                controller: _phoneController,
-                validator: Validator.emptyValidator,
-              ),
-              EditCardData(
-                label: StringRes.current.animalSocialLink,
-                controller: _socialController,
-              ),
-              EditCardData(
-                label: StringRes.current.animalCuratorEmail,
-                controller: _emailController,
-                validator: Validator.emailOrEmptyValidator,
-              ),
-            ],
-          ),
+          child: FormEditCard([
+            EditCardData(
+              label: '${StringRes.current.animalCuratorName} *',
+              controller: _nameController,
+              validator: Validator.emptyValidator,
+            ),
+            EditCardData(
+              label: '${StringRes.current.animalCuratorLastName} *',
+              controller: _lastNameController,
+              validator: Validator.emptyValidator,
+            ),
+            EditCardData(
+              label: '${StringRes.current.animalCuratorPhone} *',
+              controller: _phoneController,
+              validator: Validator.emptyValidator,
+            ),
+            EditCardData(label: StringRes.current.animalSocialLink, controller: _socialController),
+            EditCardData(
+              label: StringRes.current.animalCuratorEmail,
+              controller: _emailController,
+              validator: Validator.emailOrEmptyValidator,
+            ),
+          ]),
         ),
       ],
     );
@@ -140,13 +126,16 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
 
   Future<void> _init() async {
     if (!_isEdit) return;
-    _state = WidgetState<Applicant>()..loading();
-    await _service.fetchApplicantById(id: widget.applicantId!).then((value) {
-      _setControllers(value);
-      setState(() => _state = WidgetState()..content(value));
-    }).catchError((e) {
-      setState(() => _state = WidgetState().error = e);
-    });
+    _state = ScreenDataState<Applicant>()..loading();
+    await _service
+        .fetchApplicantById(id: widget.applicantId!)
+        .then((value) {
+          _setControllers(value);
+          setState(() => _state = ScreenDataState()..content(value));
+        })
+        .catchError((e) {
+          setState(() => _state = ScreenDataState().error = e);
+        });
   }
 
   void _setControllers(Applicant? applicant) {
@@ -167,29 +156,20 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
       contactDetails: _socialController.text,
       email: _emailController.text,
     );
-    setState(() => _state = WidgetState<Applicant>()..loading());
+    setState(() => _state = ScreenDataState<Applicant>()..loading());
     Applicant? result;
     if (_isEdit) {
       result = await _service
-          .updateApplicant(
-        id: widget.applicantId!,
-        applicant: applicant,
-      )
-          .catchError(
-        (e) {
-          setState(() => _state = WidgetState()..error = e);
-        },
-      );
+          .updateApplicant(id: widget.applicantId!, applicant: applicant)
+          .catchError((e) {
+            setState(() => _state = ScreenDataState()..error = e);
+            return null;
+          });
     } else {
-      result = await _service
-          .createApplicant(
-        applicant: applicant,
-      )
-          .catchError(
-        (e) {
-          setState(() => _state = WidgetState()..error = e);
-        },
-      );
+      result = await _service.createApplicant(applicant: applicant).catchError((e) {
+        setState(() => _state = ScreenDataState()..error = e);
+        return null;
+      });
     }
     if (result != null) _navigator.pop(result);
   }

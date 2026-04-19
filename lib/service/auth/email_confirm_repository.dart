@@ -20,23 +20,19 @@ class EmailConfirmRepository {
 
 class _EmailConfirmInterceptor extends Interceptor {
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     final response = err.response;
     if (response != null &&
         response.statusCode == HttpStatus.movedTemporarily &&
         (response.headers.value('location')?.contains('status=email_verified') ?? false)) {
-      return handler.resolve(
-        Response(
-          statusCode: 200,
-          requestOptions: response.requestOptions,
-        ),
-      );
+      return handler.resolve(Response(statusCode: 200, requestOptions: response.requestOptions));
     }
     if (response != null &&
         response.statusCode == HttpStatus.movedTemporarily &&
         (response.headers.value('location')?.contains('status=invalid_link') ?? false)) {
       return handler.reject(
-          DioError(requestOptions: response.requestOptions, error: EmailConfirmException()));
+        DioException(requestOptions: response.requestOptions, error: EmailConfirmException()),
+      );
     }
     super.onError(err, handler);
   }

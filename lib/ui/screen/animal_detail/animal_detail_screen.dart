@@ -36,21 +36,18 @@ const _expandedHeight = 408.0;
 const _collapsedHeight = 235.0;
 
 class AnimalDetailScreen extends StatefulWidget {
-  const AnimalDetailScreen({
-    required this.id,
-    Key? key,
-  }) : super(key: key);
+  const AnimalDetailScreen({required this.id, super.key});
 
   final int id;
 
   @override
-  _AnimalDetailScreenState createState() => _AnimalDetailScreenState();
+  State<AnimalDetailScreen> createState() => _AnimalDetailScreenState();
 }
 
 class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   _AnimalDetailScreenState()
-      : _animalService = getIt<AnimalService>(),
-        _prescriptionService = getIt<PrescriptionService>();
+    : _animalService = getIt<AnimalService>(),
+      _prescriptionService = getIt<PrescriptionService>();
 
   final AnimalService _animalService;
   final PrescriptionService _prescriptionService;
@@ -65,8 +62,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   int _currentTab = 0;
   double _titleOpacity = .0;
 
-  WidgetState<AnimalRead> _state = WidgetState()..loading();
-  WidgetState<List<Prescription?>?> _statePrescriptions = WidgetState()..loading();
+  ScreenDataState<AnimalRead> _state = ScreenDataState()..loading();
+  ScreenDataState<List<Prescription?>?> _statePrescriptions = ScreenDataState()..loading();
 
   @override
   void didChangeDependencies() {
@@ -106,12 +103,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     return (_currentTab == 1 || _currentTab == 4)
         ? FloatingActionButton(
             mini: _isSmallScreen,
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
             foregroundColor: ColorRes.accent,
             onPressed: () => _onFabPressed(context),
+            child: const Icon(Icons.add, color: Colors.white),
           )
         : null;
   }
@@ -122,13 +116,8 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     return StateBuilder<AnimalRead>(
       state: _state,
       builder: _buildContent,
-      errorBuilder: (_, error) => _AnimalDetailStub(
-        error: error,
-        onRefresh: _loadAnimal,
-      ),
-      loader: (_) => _AnimalDetailStub(
-        onRefresh: _loadAnimal,
-      ),
+      errorBuilder: (_, error) => _AnimalDetailStub(error: error, onRefresh: _loadAnimal),
+      loader: (_) => _AnimalDetailStub(onRefresh: _loadAnimal),
     );
   }
 
@@ -138,18 +127,12 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       child: CustomScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
-        slivers: [
-          _buildHeader(context, animal),
-          _buildPage((_currentTab + 1) * 5, animal),
-        ],
+        slivers: [_buildHeader(context, animal), _buildPage((_currentTab + 1) * 5, animal)],
       ),
     );
   }
 
-  SliverAppBar _buildHeader(
-    BuildContext context,
-    AnimalRead animal,
-  ) {
+  SliverAppBar _buildHeader(BuildContext context, AnimalRead animal) {
     return SliverAppBar(
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
@@ -170,10 +153,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     );
   }
 
-  Widget _buildHeaderTitle(
-    BuildContext context,
-    AnimalRead animal,
-  ) {
+  Widget _buildHeaderTitle(BuildContext context, AnimalRead animal) {
     final avatar = animal.thumb;
     return Column(
       children: [
@@ -216,7 +196,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                         style: StyleRes.titleLight.copyWith(fontSize: 16.0),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -236,19 +216,12 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         borderRadius: BorderRadius.circular(radius),
       ),
       child: const Center(
-        child: Icon(
-          Icons.add_a_photo_outlined,
-          color: ColorRes.accent,
-          size: 32.0,
-        ),
+        child: Icon(Icons.add_a_photo_outlined, color: ColorRes.accent, size: 32.0),
       ),
     );
   }
 
-  Widget _buildHeaderImagePager(
-    BuildContext context,
-    AnimalRead animal,
-  ) {
+  Widget _buildHeaderImagePager(BuildContext context, AnimalRead animal) {
     return Stack(
       children: [
         if (animal.images?.isEmpty ?? true)
@@ -269,29 +242,28 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
                 ),
                 child: PageView(
                   controller: _imagePageController,
-                  children: animal.images?.map<Widget>(
-                        (image) {
-                          return Stack(
-                            children: [
-                              Positioned.fill(
-                                child: Image.network(
-                                  UrlCorsProxy.add(image.image?.medium) ?? '',
-                                  fit: BoxFit.cover,
+                  children:
+                      animal.images?.map<Widget>((image) {
+                        return Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Image.network(
+                                UrlCorsProxy.add(image.image?.medium) ?? '',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  splashColor: ColorRes.accent.withValues(alpha: .4),
+                                  onTap: () => _onPhotoPressed(context, animal),
                                 ),
                               ),
-                              Positioned.fill(
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    splashColor: ColorRes.accent.withOpacity(.4),
-                                    onTap: () => _onPhotoPressed(context, animal),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ).toList() ??
+                            ),
+                          ],
+                        );
+                      }).toList() ??
                       [],
                 ),
               ),
@@ -315,14 +287,12 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             Container(
               padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
-                  color: ColorRes.textPrimary.withOpacity(.3),
-                  borderRadius: BorderRadius.circular(8.0)),
+                color: ColorRes.textPrimary.withValues(alpha: .3),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
               child: Text(
                 animal.name ?? '',
-                style: StyleRes.mainContent.copyWith(
-                  fontSize: 24.0,
-                  color: ColorRes.foreground,
-                ),
+                style: StyleRes.mainContent.copyWith(fontSize: 24.0, color: ColorRes.foreground),
                 maxLines: 3,
               ),
             ),
@@ -330,14 +300,12 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             Container(
               padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
-                  color: ColorRes.textPrimary.withOpacity(.3),
-                  borderRadius: BorderRadius.circular(8.0)),
+                color: ColorRes.textPrimary.withValues(alpha: .3),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
               child: Text(
                 animal.id.toString(),
-                style: StyleRes.titleLight.copyWith(
-                  fontSize: 16.0,
-                  color: ColorRes.foreground,
-                ),
+                style: StyleRes.titleLight.copyWith(fontSize: 16.0, color: ColorRes.foreground),
               ),
             ),
           ],
@@ -353,10 +321,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
         child: Row(
           children: [
             DefaultIconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: ColorRes.accent,
-              ),
+              icon: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
               onPressed: Navigator.of(context).pop,
             ),
             const Spacer(),
@@ -376,10 +341,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
             // TODO: impl for web
             if (!kIsWeb)
               DefaultIconButton(
-                icon: const Icon(
-                  Icons.share_outlined,
-                  color: ColorRes.accent,
-                ),
+                icon: const Icon(Icons.share_outlined, color: ColorRes.accent),
                 onPressed: () {
                   Navigator.of(context).push(
                     DocViewerScreenRoute(
@@ -423,10 +385,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
   Widget _buildTabBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 16.0,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: SizedBox(
         width: double.infinity,
         child: CupertinoSlidingSegmentedControl<int>(
@@ -488,11 +447,9 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   void _onPhotoPressed(BuildContext context, AnimalRead animal) {
     final id = animal.id;
     if (id != null) {
-      Navigator.of(context).push(PhotoGalleryScreenRoute(animalId: animal.id!)).then(
-        (value) {
-          if (value is bool && value) _loadAnimal();
-        },
-      );
+      Navigator.of(context).push(PhotoGalleryScreenRoute(animalId: animal.id!)).then((value) {
+        if (value is bool && value) _loadAnimal();
+      });
     }
   }
 
@@ -505,15 +462,15 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   }
 
   Future<void> _loadAnimal() async {
-    setState(() => _state = WidgetState()..loading());
+    setState(() => _state = ScreenDataState()..loading());
     await _animalService
         .fetchAnimalDetail(id: widget.id)
-        .then((value) => setState(() => _state = WidgetState()..content(value)))
-        .catchError((e) => setState(() => _state = WidgetState()..error = e));
+        .then((value) => setState(() => _state = ScreenDataState()..content(value)))
+        .catchError((e) => setState(() => _state = ScreenDataState()..error = e));
   }
 
   Future<void> _loadPrescriptions() async {
-    setState(() => _statePrescriptions = WidgetState()..loading());
+    setState(() => _statePrescriptions = ScreenDataState()..loading());
     await _prescriptionService
         .fetchPrescriptionListByAnimal(
           widget.id,
@@ -521,28 +478,26 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
           isOld: _prescriptionSwichState.value == _PrescriptionState.inactive,
         )
         .then(
-            (value) => setState(() => _statePrescriptions = WidgetState()..content(value?.results)))
-        .catchError((e) => setState(() => _state = WidgetState()..error = e));
+          (value) =>
+              setState(() => _statePrescriptions = ScreenDataState()..content(value?.results)),
+        )
+        .catchError((e) => setState(() => _state = ScreenDataState()..error = e));
   }
 
   void _onFabPressed(BuildContext context) {
     if (_currentTab == 4) {
-      Navigator.of(context).push(CommentEditScreenRoute(animalId: widget.id)).then(
-        (value) {
-          if (value != null) {
-            _onCreateCommentStream.add(value);
-          }
-        },
-      );
+      Navigator.of(context).push(CommentEditScreenRoute(animalId: widget.id)).then((value) {
+        if (value != null) {
+          _onCreateCommentStream.add(value);
+        }
+      });
     }
     if (_currentTab == 1) {
-      Navigator.of(context).push(PrescriptionEditScreenRoute(animal: _state.value)).then(
-        (value) {
-          if (value != null) {
-            _loadPrescriptions();
-          }
-        },
-      );
+      Navigator.of(context).push(PrescriptionEditScreenRoute(animal: _state.value)).then((value) {
+        if (value != null) {
+          _loadPrescriptions();
+        }
+      });
     }
   }
 }

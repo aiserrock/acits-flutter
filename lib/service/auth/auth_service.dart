@@ -47,8 +47,9 @@ class AuthService extends ChangeNotifier {
 
   String? get currentShelterId => _shelterRole?.currentShelter?.toString();
 
-  ShelterShortSerializers? get currentShelter => _shelterList?.results
-      ?.firstWhereOrNull((shelter) => shelter.id.toString() == currentShelterId);
+  ShelterShortSerializers? get currentShelter => _shelterList?.results?.firstWhereOrNull(
+    (shelter) => shelter.id.toString() == currentShelterId,
+  );
 
   Future<TokenRefresh?> refreshToken({String? refresh}) async {
     final request = TokenRefresh(access: _access, refresh: refresh ?? _refresh);
@@ -61,10 +62,7 @@ class AuthService extends ChangeNotifier {
     return null;
   }
 
-  Future<TokenObtainPair?> login(
-    String? login,
-    String? pass,
-  ) async {
+  Future<TokenObtainPair?> login(String? login, String? pass) async {
     final request = TokenObtainPair(username: login, password: pass);
     final result = await _acitsGuestClient.apiTokenPost(body: request);
     if (result.body != null) {
@@ -93,8 +91,9 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<UserCurrentShelterSerializers?> setCurrentShelter(int shelterId) async {
-    final result =
-        await _acitsClient.apiV1UsersMeSheltersCurrentGet(xCurrentShelter: shelterId.toString());
+    final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(
+      xCurrentShelter: shelterId.toString(),
+    );
     if (result.body != null) {
       _shelterRole = result.body;
       return _shelterRole;
@@ -116,9 +115,9 @@ class AuthService extends ChangeNotifier {
     if (_refresh != null) return false;
     final oldRefresh = await _authRepository.refresh;
     if (oldRefresh == null) return false;
-    return await refreshToken(refresh: oldRefresh)
-        .then((value) => value is TokenRefresh)
-        .catchError((e) => false);
+    return await refreshToken(
+      refresh: oldRefresh,
+    ).then((value) => value is TokenRefresh).catchError((e) => false);
   }
 
   /// Список всех доступных приютов
@@ -152,13 +151,10 @@ class AuthService extends ChangeNotifier {
 
   /// Зарегистрировать нового пользователя
   Future<UserShelterWorkerSerializers?> registrationCustomer(
-      UserShelterWorkerSerializers customer) async {
+    UserShelterWorkerSerializers customer,
+  ) async {
     final result = await _acitsGuestClient.apiV1UsersWorkerRegisterPost(
-      body: customer.copyWith(
-        role: roleEnumToJson(
-          customer.role as RoleEnum,
-        ),
-      ),
+      body: customer.copyWith(role: roleEnumToJson(customer.role as RoleEnum)),
     );
 
     if (result.body != null) {

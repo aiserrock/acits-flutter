@@ -22,13 +22,7 @@ extension DateTimeX on DateTime {
   String get toPatchApiDate => DateFormat('yyyy-MM-dd').format(this);
 
   /// Установить в текущей дате нужное время дня
-  DateTime mergeTime(TimeOfDay time) => DateTime(
-        year,
-        month,
-        day,
-        time.hour,
-        time.minute,
-      );
+  DateTime mergeTime(TimeOfDay time) => DateTime(year, month, day, time.hour, time.minute);
 }
 
 extension DateTimeStringX on String {

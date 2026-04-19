@@ -8,9 +8,8 @@ class PrimaryButton extends StatelessWidget {
     this.child,
     this.isFill = true,
     this.onLongPress,
-    Key? key,
-  })  : assert(text != null || child != null),
-        super(key: key);
+    super.key,
+  }) : assert(text != null || child != null);
 
   final VoidCallback onPressed;
   final String? text;
@@ -24,18 +23,14 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       onLongPress: onLongPress,
       style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
-        textStyle: MaterialStateProperty.all(
-          const TextStyle(fontSize: 16.0),
-        ),
-        padding: MaterialStateProperty.all(
+        textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 16.0)),
+        padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         ),
-        backgroundColor: MaterialStateProperty.all(ColorRes.primaryButton),
+        backgroundColor: WidgetStateProperty.all(ColorRes.primaryButton),
       ),
       child: _buildChild(),
     );
@@ -43,12 +38,7 @@ class PrimaryButton extends StatelessWidget {
 
   Widget _buildChild() {
     return isFill
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              child ?? Text(text!),
-            ],
-          )
+        ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [child ?? Text(text!)])
         : child ?? Text(text!);
   }
 }

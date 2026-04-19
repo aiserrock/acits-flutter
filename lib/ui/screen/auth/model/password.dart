@@ -1,9 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 
-enum PasswordValidationError {
-  empty,
-}
+enum PasswordValidationError { empty }
 
 @immutable
 class Password extends FormzInput<String, PasswordValidationError> {

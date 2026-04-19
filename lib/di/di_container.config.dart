@@ -1,97 +1,153 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
 // **************************************************************************
 
-import 'package:acits_flutter/domain/env.dart' as _i6;
-import 'package:acits_flutter/export.dart' as _i11;
-import 'package:acits_flutter/res/color.dart' as _i17;
-import 'package:acits_flutter/service/animal/animal_service.dart' as _i24;
-import 'package:acits_flutter/service/auth/auth_repository.dart' as _i14;
-import 'package:acits_flutter/service/auth/auth_service.dart' as _i16;
-import 'package:acits_flutter/service/auth/email_confirm_repository.dart' as _i5;
-import 'package:acits_flutter/service/client/auth_client_register.dart' as _i28;
-import 'package:acits_flutter/service/client/auth_interceptor.dart' as _i3;
-import 'package:acits_flutter/service/client/dio_register.dart' as _i25;
-import 'package:acits_flutter/service/client/header_inteceptor.dart' as _i10;
-import 'package:acits_flutter/service/config/config_service.dart' as _i20;
-import 'package:acits_flutter/service/debug/debug_service.dart' as _i18;
-import 'package:acits_flutter/service/document/document_repository.dart' as _i15;
-import 'package:acits_flutter/service/env/env_register.dart' as _i26;
-import 'package:acits_flutter/service/file/file_repository.dart' as _i7;
-import 'package:acits_flutter/service/file/file_service.dart' as _i8;
-import 'package:acits_flutter/service/link_handler/deep_link_service.dart' as _i19;
-import 'package:acits_flutter/service/personal/personal_service.dart' as _i21;
-import 'package:acits_flutter/service/prescription/prescription_service.dart' as _i22;
-import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart' as _i27;
-import 'package:acits_flutter/service/shared_pref/preference_storage.dart' as _i12;
-import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart' as _i29;
-import 'package:acits_flutter/service/staff/staff_service.dart' as _i23;
-import 'package:dio/dio.dart' as _i4;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i9;
-import 'package:get_it/get_it.dart' as _i1;
-import 'package:injectable/injectable.dart' as _i2;
-import 'package:shared_preferences/shared_preferences.dart' as _i13;
+// ignore_for_file: type=lint
+// coverage:ignore-file
+
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:acits_flutter/domain/env.dart' as _i531;
+import 'package:acits_flutter/export.dart' as _i965;
+import 'package:acits_flutter/res/color.dart' as _i430;
+import 'package:acits_flutter/service/animal/animal_service.dart' as _i876;
+import 'package:acits_flutter/service/auth/auth_repository.dart' as _i622;
+import 'package:acits_flutter/service/auth/auth_service.dart' as _i21;
+import 'package:acits_flutter/service/auth/email_confirm_repository.dart'
+    as _i422;
+import 'package:acits_flutter/service/client/auth_client_register.dart'
+    as _i363;
+import 'package:acits_flutter/service/client/auth_interceptor.dart' as _i492;
+import 'package:acits_flutter/service/client/dio_register.dart' as _i693;
+import 'package:acits_flutter/service/client/header_inteceptor.dart' as _i158;
+import 'package:acits_flutter/service/config/config_service.dart' as _i245;
+import 'package:acits_flutter/service/debug/debug_service.dart' as _i47;
+import 'package:acits_flutter/service/document/document_repository.dart'
+    as _i302;
+import 'package:acits_flutter/service/env/env_register.dart' as _i143;
+import 'package:acits_flutter/service/file/file_repository.dart' as _i830;
+import 'package:acits_flutter/service/file/file_service.dart' as _i499;
+import 'package:acits_flutter/service/link_handler/deep_link_service.dart'
+    as _i705;
+import 'package:acits_flutter/service/personal/personal_service.dart' as _i701;
+import 'package:acits_flutter/service/prescription/prescription_service.dart'
+    as _i212;
+import 'package:acits_flutter/service/secure_storage/secure_storage_register.dart'
+    as _i539;
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart'
+    as _i2;
+import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart'
+    as _i718;
+import 'package:acits_flutter/service/staff/staff_service.dart' as _i156;
+import 'package:dio/dio.dart' as _i361;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
+import 'package:get_it/get_it.dart' as _i174;
+import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 const String _prod = 'prod';
-// ignore_for_file: unnecessary_lambdas
-// ignore_for_file: lines_longer_than_80_chars
-/// initializes the registration of provided dependencies inside of [GetIt]
-Future<_i1.GetIt> $initGetIt(_i1.GetIt get,
-    {String? environment, _i2.EnvironmentFilter? environmentFilter}) async {
-  final gh = _i2.GetItHelper(get, environment, environmentFilter);
+
+// initializes the registration of main-scope dependencies inside of GetIt
+Future<_i174.GetIt> $initGetIt(
+  _i174.GetIt getIt, {
+  String? environment,
+  _i526.EnvironmentFilter? environmentFilter,
+}) async {
+  final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
+  final secureStorageRegister = _$SecureStorageRegister();
+  final sharedPreferenceRegister = _$SharedPreferenceRegister();
   final dioRegister = _$DioRegister();
   final envRegistrer = _$EnvRegistrer();
-  final secureStorageRegister = _$SecureStorageRegister();
   final clientRegister = _$ClientRegister();
-  final sharedPreferenceRegister = _$SharedPreferenceRegister();
-  gh.factory<_i3.AuthInterceptor>(() => _i3.AuthInterceptor());
-  gh.factory<_i4.Dio>(() => dioRegister.createDioClient(), registerFor: {_prod});
-  gh.factory<_i5.EmailConfirmRepository>(() => _i5.EmailConfirmRepository(get<_i4.Dio>()));
-  gh.factory<_i6.Env>(() => envRegistrer.createEnv(), registerFor: {_prod});
-  gh.factory<_i7.FileRepository>(() => _i7.FileRepository(get<_i4.Dio>()));
-  gh.factory<_i8.FileService>(() => _i8.FileService(get<_i7.FileRepository>()));
-  gh.factory<_i9.FlutterSecureStorage>(() => secureStorageRegister.createSp());
-  gh.factory<_i10.HeaderInterceptor>(() => _i10.HeaderInterceptor());
-  gh.factory<_i11.Openapi>(
-      () => clientRegister.createClient(
-          get<_i3.AuthInterceptor>(), get<_i10.HeaderInterceptor>(), get<_i6.Env>()),
-      registerFor: {_prod});
-  gh.factory<_i11.Openapi>(() => clientRegister.createGuestClient(get<_i6.Env>()),
-      instanceName: 'guest', registerFor: {_prod});
-  gh.factory<_i12.PreferenceStorage>(() => _i12.PreferenceStorage());
-  await gh.factoryAsync<_i13.SharedPreferences>(() => sharedPreferenceRegister.createSp(),
-      preResolve: true);
-  gh.factory<_i14.AuthRepository>(() => _i14.AuthRepository(get<_i9.FlutterSecureStorage>()));
-  gh.factory<_i15.DocumentRepository>(
-      () => _i15.DocumentRepository(get<_i16.AuthService>(), get<_i11.Openapi>()));
-  gh.singleton<_i17.ColorRes>(_i17.ColorRes());
-  gh.singleton<_i18.DebugService>(_i18.DebugService(), registerFor: {_prod});
-  gh.singleton<_i19.DeepLinkService>(_i19.DeepLinkService());
-  gh.singleton<_i16.AuthService>(_i16.AuthService(
-      get<_i11.Openapi>(),
-      get<_i11.Openapi>(instanceName: 'guest'),
-      get<_i14.AuthRepository>(),
-      get<_i5.EmailConfirmRepository>()));
-  gh.singleton<_i20.ConfigService>(_i20.ConfigService(
-      get<_i11.Openapi>(), get<_i16.AuthService>(), get<_i12.PreferenceStorage>()));
-  gh.singleton<_i21.PersonalService>(
-      _i21.PersonalService(get<_i11.Openapi>(), get<_i16.AuthService>()));
-  gh.singleton<_i22.PrescriptionService>(_i22.PrescriptionService(
-      get<_i11.Openapi>(), get<_i16.AuthService>(), get<_i20.ConfigService>()));
-  gh.singleton<_i23.StaffService>(_i23.StaffService(get<_i16.AuthService>(), get<_i11.Openapi>()));
-  gh.singleton<_i24.AnimalService>(
-      _i24.AnimalService(get<_i16.AuthService>(), get<_i11.Openapi>()));
-  return get;
+  gh.factory<_i492.AuthInterceptor>(() => _i492.AuthInterceptor());
+  gh.factory<_i158.HeaderInterceptor>(() => _i158.HeaderInterceptor());
+  gh.factory<_i558.FlutterSecureStorage>(
+    () => secureStorageRegister.createSp(),
+  );
+  gh.factory<_i2.PreferenceStorage>(() => _i2.PreferenceStorage());
+  await gh.factoryAsync<_i460.SharedPreferences>(
+    () => sharedPreferenceRegister.createSp(),
+    preResolve: true,
+  );
+  gh.singleton<_i430.ColorRes>(() => _i430.ColorRes());
+  gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
+  gh.factory<_i622.AuthRepository>(
+    () => _i622.AuthRepository(gh<_i558.FlutterSecureStorage>()),
+  );
+  gh.singleton<_i47.DebugService>(
+    () => _i47.DebugService(),
+    registerFor: {_prod},
+  );
+  gh.factory<_i361.Dio>(
+    () => dioRegister.createDioClient(),
+    registerFor: {_prod},
+  );
+  gh.factory<_i531.Env>(() => envRegistrer.createEnv(), registerFor: {_prod});
+  gh.factory<_i965.Openapi>(
+    () => clientRegister.createGuestClient(gh<_i531.Env>()),
+    instanceName: 'guest',
+    registerFor: {_prod},
+  );
+  gh.factory<_i965.Openapi>(
+    () => clientRegister.createClient(
+      gh<_i492.AuthInterceptor>(),
+      gh<_i158.HeaderInterceptor>(),
+      gh<_i531.Env>(),
+    ),
+    registerFor: {_prod},
+  );
+  gh.factory<_i422.EmailConfirmRepository>(
+    () => _i422.EmailConfirmRepository(gh<_i361.Dio>()),
+  );
+  gh.factory<_i830.FileRepository>(() => _i830.FileRepository(gh<_i361.Dio>()));
+  gh.factory<_i499.FileService>(
+    () => _i499.FileService(gh<_i830.FileRepository>()),
+  );
+  gh.singleton<_i21.AuthService>(
+    () => _i21.AuthService(
+      gh<_i965.Openapi>(),
+      gh<_i965.Openapi>(instanceName: 'guest'),
+      gh<_i622.AuthRepository>(),
+      gh<_i422.EmailConfirmRepository>(),
+    ),
+  );
+  gh.singleton<_i701.PersonalService>(
+    () => _i701.PersonalService(gh<_i965.Openapi>(), gh<_i21.AuthService>()),
+  );
+  gh.singleton<_i245.ConfigService>(
+    () => _i245.ConfigService(
+      gh<_i965.Openapi>(),
+      gh<_i21.AuthService>(),
+      gh<_i2.PreferenceStorage>(),
+    ),
+  );
+  gh.factory<_i302.DocumentRepository>(
+    () => _i302.DocumentRepository(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
+  );
+  gh.singleton<_i876.AnimalService>(
+    () => _i876.AnimalService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
+  );
+  gh.singleton<_i156.StaffService>(
+    () => _i156.StaffService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
+  );
+  gh.singleton<_i212.PrescriptionService>(
+    () => _i212.PrescriptionService(
+      gh<_i965.Openapi>(),
+      gh<_i21.AuthService>(),
+      gh<_i245.ConfigService>(),
+    ),
+  );
+  return getIt;
 }
 
-class _$DioRegister extends _i25.DioRegister {}
+class _$SecureStorageRegister extends _i539.SecureStorageRegister {}
 
-class _$EnvRegistrer extends _i26.EnvRegistrer {}
+class _$SharedPreferenceRegister extends _i718.SharedPreferenceRegister {}
 
-class _$SecureStorageRegister extends _i27.SecureStorageRegister {}
+class _$DioRegister extends _i693.DioRegister {}
 
-class _$ClientRegister extends _i28.ClientRegister {}
+class _$EnvRegistrer extends _i143.EnvRegistrer {}
 
-class _$SharedPreferenceRegister extends _i29.SharedPreferenceRegister {}
+class _$ClientRegister extends _i363.ClientRegister {}

@@ -14,16 +14,11 @@ const _receipeDateRange = Duration(days: 365);
 
 class AnimalEditStatusPage extends AnimalEditPage {
   const AnimalEditStatusPage({
-    required AnimalRead animal,
-    required bool isEdit,
-    required GlobalKey<FormState> formKey,
-    Key? key,
-  }) : super(
-          isEdit: isEdit,
-          animal: animal,
-          formKey: formKey,
-          key: key,
-        );
+    required super.animal,
+    required super.isEdit,
+    required GlobalKey<FormState> super.formKey,
+    super.key,
+  });
 
   @override
   State<AnimalEditStatusPage> createState() => _AnimalEditStatusPageState();
@@ -61,51 +56,41 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
-        SliverToBoxAdapter(
-          child: SubtitleWidget(title: StringRes.current.animalStatusAndJoin),
-        ),
-        SliverToBoxAdapter(
-          child: _buildStatusCard(),
-        ),
+        SliverToBoxAdapter(child: SubtitleWidget(title: StringRes.current.animalStatusAndJoin)),
+        SliverToBoxAdapter(child: _buildStatusCard()),
       ],
     );
   }
 
   Widget _buildStatusCard() {
-    return Builder(builder: (context) {
-      return Form(
-        key: widget.formKey,
-        child: FormEditCard(
-          [
+    return Builder(
+      builder: (context) {
+        return Form(
+          key: widget.formKey,
+          child: FormEditCard([
             EditCardData(
-              label: StringRes.current.animalDateAdmitt + ' *',
+              label: '${StringRes.current.animalDateAdmitt} *',
               controller: _dateReceiptController,
-              suffix: const Icon(
-                Icons.calendar_today_outlined,
-                color: ColorRes.accent,
-              ),
+              suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
               onPressed: () => _setDate(context),
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: StringRes.current.animalAnimalStatus + ' *',
+              label: '${StringRes.current.animalAnimalStatus} *',
               controller: _statusController,
-              suffix: const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: ColorRes.accent,
-              ),
+              suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
               onPressed: () => _setStatus(context),
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: StringRes.current.animalCatchPlace + ' *',
+              label: '${StringRes.current.animalCatchPlace} *',
               controller: _catchController,
               validator: Validator.emptyValidator,
             ),
-          ],
-        ),
-      );
-    });
+          ]),
+        );
+      },
+    );
   }
 
   Future<void> _setStatus(BuildContext context) async {
@@ -133,10 +118,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       clipBehavior: Clip.hardEdge,
-      builder: (ctx) => bsSelectorActions(
-        ctx,
-        actionsMap(ctx),
-      ),
+      builder: (ctx) => bsSelectorActions(ctx, actionsMap(ctx)),
     );
   }
 
@@ -155,8 +137,9 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
   }
 
   void _setControllers(AnimalRead value) {
-    _dateReceiptController.text =
-        value.dateJoined != null ? _dateFormatter.format(value.dateJoined!) : '';
+    _dateReceiptController.text = value.dateJoined != null
+        ? _dateFormatter.format(value.dateJoined!)
+        : '';
     _statusController.text = value.statusString ?? '';
     _catchController.text = value.placeOfCatch ?? '';
   }
@@ -164,10 +147,9 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
   @override
   void onChangePage() {
     if (page != 1) return;
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
-      dateJoined: date,
-      status: status,
-      placeOfCatch: _catchController.text,
-    );
+    Provider.of<AnimalEditHolder>(
+      context,
+      listen: false,
+    ).copyWith(dateJoined: date, status: status, placeOfCatch: _catchController.text);
   }
 }

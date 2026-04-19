@@ -9,9 +9,7 @@ import '../../ui/debug_screen/debug_screen.dart';
 import '../shared_pref/debug_preference_storage.dart';
 
 /// Сервис отладки приложения
-@Singleton(
-  as: DebugService,
-)
+@Singleton(as: DebugService)
 @dev
 class DebugDevService implements DebugService {
   DebugDevService(this._storage);

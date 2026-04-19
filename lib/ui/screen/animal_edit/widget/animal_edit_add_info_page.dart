@@ -23,16 +23,11 @@ const _birthDateRange = Duration(days: 365 * 200);
 
 class AnimalEditAddInfoPage extends AnimalEditPage {
   const AnimalEditAddInfoPage({
-    required AnimalRead animal,
-    required bool isEdit,
-    required GlobalKey<FormState> formKey,
-    Key? key,
-  }) : super(
-          isEdit: isEdit,
-          animal: animal,
-          formKey: formKey,
-          key: key,
-        );
+    required super.animal,
+    required super.isEdit,
+    required GlobalKey<FormState> super.formKey,
+    super.key,
+  });
 
   @override
   State<AnimalEditAddInfoPage> createState() => _AnimalEditAddInfoPageState();
@@ -83,12 +78,8 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
-        SliverToBoxAdapter(
-          child: SubtitleWidget(title: StringRes.current.animalAdditionalInfo),
-        ),
-        SliverToBoxAdapter(
-          child: _buildAddinionalCard(),
-        ),
+        SliverToBoxAdapter(child: SubtitleWidget(title: StringRes.current.animalAdditionalInfo)),
+        SliverToBoxAdapter(child: _buildAddinionalCard()),
       ],
     );
   }
@@ -96,81 +87,58 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
   Widget _buildAddinionalCard() {
     return Form(
       key: widget.formKey,
-      child: FormEditCard(
-        [
+      child: FormEditCard([
+        EditCardData(label: StringRes.current.animalAge, content: _buildAgeTabSelector()),
+        if (_currentAgeTab == 0) EditCardData(content: _buildAgeFields()),
+        if (_currentAgeTab == 1)
           EditCardData(
-            label: StringRes.current.animalAge,
-            content: _buildAgeTabSelector(),
+            label: StringRes.current.animalBirth,
+            controller: _birthController,
+            suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
+            onPressed: _setBirthDate,
           ),
-          if (_currentAgeTab == 0)
-            EditCardData(
-              content: _buildAgeFields(),
-            ),
-          if (_currentAgeTab == 1)
-            EditCardData(
-              label: StringRes.current.animalBirth,
-              controller: _birthController,
-              suffix: const Icon(
-                Icons.calendar_today_outlined,
-                color: ColorRes.accent,
-              ),
-              onPressed: _setBirthDate,
-            ),
-          EditCardData(
-            label: '${StringRes.current.animalSex}*',
-            controller: _sexController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
-            ),
-            validator: Validator.emptyValidator,
-            onPressed: () => _selectGender(context),
-          ),
-          EditCardData(
-            label: StringRes.current.aninmalSize,
-            controller: _heightController,
-            decimalOnly: true,
-          ),
-          EditCardData(
-            label: StringRes.current.animalWeight,
-            controller: _weightController,
-            decimalOnly: true,
-          ),
-          EditCardData(
-            label: StringRes.current.animalColor,
-            controller: _colorController,
-          ),
-          EditCardData(
-            label: StringRes.current.animalSpecSigns,
-            controller: _specController,
-          ),
-          EditCardData(
-            label: StringRes.current.animalChip,
-            controller: _chipController,
-            validator: (value) {
-              if (_dateChipController.text.isNotEmpty && (value == null || value.isEmpty)) {
-                return '';
-              }
-              return null;
-            },
-          ),
-          EditCardData(
-            label: StringRes.current.animalChipDate,
-            controller: _dateChipController,
-            suffix: const Icon(
-              Icons.calendar_today_outlined,
-              color: ColorRes.accent,
-            ),
-            validator: (value) {
-              if (_chipController.text.isNotEmpty && (value == null || value.isEmpty)) {
-                return '';
-              }
-              return null;
-            },
-            onPressed: _setChipDate,
-          ),
-        ],
-      ),
+        EditCardData(
+          label: '${StringRes.current.animalSex}*',
+          controller: _sexController,
+          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          validator: Validator.emptyValidator,
+          onPressed: () => _selectGender(context),
+        ),
+        EditCardData(
+          label: StringRes.current.aninmalSize,
+          controller: _heightController,
+          decimalOnly: true,
+        ),
+        EditCardData(
+          label: StringRes.current.animalWeight,
+          controller: _weightController,
+          decimalOnly: true,
+        ),
+        EditCardData(label: StringRes.current.animalColor, controller: _colorController),
+        EditCardData(label: StringRes.current.animalSpecSigns, controller: _specController),
+        EditCardData(
+          label: StringRes.current.animalChip,
+          controller: _chipController,
+          validator: (value) {
+            if (_dateChipController.text.isNotEmpty && (value == null || value.isEmpty)) {
+              return '';
+            }
+            return null;
+          },
+        ),
+        EditCardData(
+          label: StringRes.current.animalChipDate,
+          controller: _dateChipController,
+          suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
+          validator: (value) {
+            if (_chipController.text.isNotEmpty && (value == null || value.isEmpty)) {
+              return '';
+            }
+            return null;
+          },
+          onPressed: _setChipDate,
+        ),
+      ]),
     );
   }
 
@@ -215,9 +183,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
           Expanded(
             child: TextFormField(
               controller: _ageYearController,
-              decoration: InputDecoration(
-                labelText: StringRes.current.animalQtyYear,
-              ),
+              decoration: InputDecoration(labelText: StringRes.current.animalQtyYear),
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
@@ -230,9 +196,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
               },
               child: TextFormField(
                 controller: _ageMonthController,
-                decoration: InputDecoration(
-                  labelText: StringRes.current.animalQtyMonth,
-                ),
+                decoration: InputDecoration(labelText: StringRes.current.animalQtyMonth),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
@@ -245,7 +209,8 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
 
   void _checkAgeInput() {
     if (_currentAgeTab != 0) return;
-    final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 +
+    final months =
+        (int.tryParse(_ageYearController.text) ?? 0) * 12 +
         (int.tryParse(_ageMonthController.text) ?? 0);
     _ageYearController.text = (months ~/ 12).toString();
     _ageMonthController.text = (months % 12).toString();
@@ -254,10 +219,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
   void _selectGender(BuildContext ctx) {
     final actionList = AnimalGender.values.map<MapEntry<Widget, dynamic Function()>>(
       (gender) => MapEntry(
-        Text(
-          gender.value,
-          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
-        ),
+        Text(gender.value, style: StyleRes.mainContent.copyWith(color: ColorRes.accent)),
         () {
           _sexController.text = gender.value;
           this.gender = gender;
@@ -268,10 +230,9 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => bsSelectorActions(
-        ctx,
-        <Widget, dynamic Function()>{for (final action in actionList) action.key: action.value},
-      ),
+      builder: (ctx) => bsSelectorActions(ctx, <Widget, dynamic Function()>{
+        for (final action in actionList) action.key: action.value,
+      }),
     );
   }
 
@@ -313,8 +274,9 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     _colorController.text = value.colorString ?? '';
     _specController.text = value.specialSignsString ?? '';
     _chipController.text = value.chippingCode ?? '';
-    _dateChipController.text =
-        value.dateOfChipping != null ? _dateFormatter.format(value.dateOfChipping!) : '';
+    _dateChipController.text = value.dateOfChipping != null
+        ? _dateFormatter.format(value.dateOfChipping!)
+        : '';
   }
 
   @override
@@ -322,49 +284,59 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     if (page != 2) return;
     final attr = <AnimalAttributeValue>[];
     if (_sexController.text.isNotEmpty) {
-      final sexAttribute = (getIt<ConfigService>().animalAttributes ?? [])
-          .firstWhereOrNull((element) => element.name == 'sex');
+      final sexAttribute = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull(
+        (element) => element.name == 'sex',
+      );
       if (sexAttribute != null) {
-        attr.add(AnimalAttributeValue(
-          attrId: sexAttribute.id,
-          isRequired: sexAttribute.isRequired,
-          name: sexAttribute.name,
-          value: _sexController.text,
-        ));
+        attr.add(
+          AnimalAttributeValue(
+            attrId: sexAttribute.id,
+            isRequired: sexAttribute.isRequired,
+            name: sexAttribute.name,
+            value: _sexController.text,
+          ),
+        );
       }
     }
     if (_colorController.text.isNotEmpty) {
-      final colorAttribute = (getIt<ConfigService>().animalAttributes ?? [])
-          .firstWhereOrNull((element) => element.name == 'color');
+      final colorAttribute = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull(
+        (element) => element.name == 'color',
+      );
       if (colorAttribute != null) {
-        attr.add(AnimalAttributeValue(
-          attrId: colorAttribute.id,
-          isRequired: colorAttribute.isRequired,
-          name: colorAttribute.name,
-          value: _colorController.text,
-        ));
+        attr.add(
+          AnimalAttributeValue(
+            attrId: colorAttribute.id,
+            isRequired: colorAttribute.isRequired,
+            name: colorAttribute.name,
+            value: _colorController.text,
+          ),
+        );
       }
     }
     if (_specController.text.isNotEmpty) {
-      final signAttribute = (getIt<ConfigService>().animalAttributes ?? [])
-          .firstWhereOrNull((element) => element.name == 'special_signs');
+      final signAttribute = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull(
+        (element) => element.name == 'special_signs',
+      );
       if (signAttribute != null) {
-        attr.add(AnimalAttributeValue(
-          attrId: signAttribute.id,
-          isRequired: signAttribute.isRequired,
-          name: signAttribute.name,
-          value: _specController.text,
-        ));
+        attr.add(
+          AnimalAttributeValue(
+            attrId: signAttribute.id,
+            isRequired: signAttribute.isRequired,
+            name: signAttribute.name,
+            value: _specController.text,
+          ),
+        );
       }
     }
-    final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 +
+    final months =
+        (int.tryParse(_ageYearController.text) ?? 0) * 12 +
         (int.tryParse(_ageMonthController.text) ?? 0);
-    final _birth = _currentAgeTab == 0
+    final birth = _currentAgeTab == 0
         ? DateTime.now().subtract(Duration(days: max(months * 30, 1)))
         : birthDate;
 
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
-      birthDate: _birth,
+      birthDate: birth,
       animalAttributes: attr,
       height: _heightController.text,
       weight: _weightController.text,

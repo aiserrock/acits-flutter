@@ -8,19 +8,18 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 
 @injectable
-class HeaderInterceptor implements RequestInterceptor {
+class HeaderInterceptor implements Interceptor {
   @override
-  FutureOr<Request> onRequest(Request request) {
+  FutureOr<Response<BodyType>> intercept<BodyType>(Chain<BodyType> chain) async {
     final authService = getIt<AuthService>();
     final configService = getIt<ConfigService>();
-    return request.copyWith(
-      headers: request.headers
-        ..addAll(
-          {
-            'authorization': 'Bearer ${authService.access}',
-            'accept-language': configService.local,
-          },
-        ),
+    final request = chain.request.copyWith(
+      headers: {
+        ...chain.request.headers,
+        'authorization': 'Bearer ${authService.access}',
+        'accept-language': configService.local,
+      },
     );
+    return chain.proceed(request);
   }
 }

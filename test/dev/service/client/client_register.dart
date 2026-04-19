@@ -26,11 +26,8 @@ abstract class ClientRegisterDev {
 
     final chopper = ChopperClient(
       client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
-      baseUrl: baseUrl ?? env.apiUrl,
-      interceptors: [
-        headerInterceptor,
-        HttpLoggingInterceptorUtf8(),
-      ],
+      baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
+      interceptors: [headerInterceptor, HttpLoggingInterceptorUtf8()],
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
     );
@@ -41,17 +38,15 @@ abstract class ClientRegisterDev {
 
   @dev
   @Named('guest')
-  Openapi createGuestClient(
-    Env env,
-    DebugPreferenceStorage ps,
-  ) {
+  Openapi createGuestClient(Env env, DebugPreferenceStorage ps) {
     final baseUrl = ps.baseUrl;
 
     final chopper = ChopperClient(
-        client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
-        baseUrl: baseUrl ?? env.apiUrl,
-        converter: $JsonSerializableConverter(),
-        interceptors: [HttpLoggingInterceptorUtf8()]);
+      client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
+      baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
+      converter: $JsonSerializableConverter(),
+      interceptors: [HttpLoggingInterceptorUtf8()],
+    );
     final client = Openapi.create(chopper);
 
     return client;

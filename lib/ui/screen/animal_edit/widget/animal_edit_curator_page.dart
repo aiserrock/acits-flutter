@@ -11,15 +11,7 @@ import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart'
 import 'package:acits_flutter/ui/screen/curator/curator_edit_screen_route.dart';
 
 class AnimalEditCuratorPage extends AnimalEditPage {
-  const AnimalEditCuratorPage({
-    required AnimalRead animal,
-    required bool isEdit,
-    Key? key,
-  }) : super(
-          isEdit: isEdit,
-          animal: animal,
-          key: key,
-        );
+  const AnimalEditCuratorPage({required super.animal, required super.isEdit, super.key});
 
   @override
   State<AnimalEditCuratorPage> createState() => _AnimalEditCuratorPageState();
@@ -67,15 +59,8 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
                   padding: const EdgeInsets.only(right: 16.0),
                   child: CupertinoButton(
                     padding: const EdgeInsets.only(),
-                    child: const Icon(
-                      Icons.edit,
-                      color: ColorRes.accent,
-                      size: 40.0,
-                    ),
-                    onPressed: () => _addEditCurator(
-                      context,
-                      curatorId: _curator?.id,
-                    ),
+                    child: const Icon(Icons.edit, color: ColorRes.accent, size: 40.0),
+                    onPressed: () => _addEditCurator(context, curatorId: _curator?.id),
                   ),
                 ),
               CupertinoButton(
@@ -91,46 +76,39 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
             ],
           ),
         ),
-        SliverToBoxAdapter(
-          child: _buildCuratorCard(),
-        ),
+        SliverToBoxAdapter(child: _buildCuratorCard()),
       ],
     );
   }
 
   Widget _buildCuratorCard() {
     return Form(
-      child: FormEditCard(
-        [
+      child: FormEditCard([
+        EditCardData(
+          label: StringRes.current.animalPickCurator,
+          controller: _curatorController,
+          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          onPressed: _searchCurator,
+        ),
+        if (_curator != null)
           EditCardData(
-            label: StringRes.current.animalPickCurator,
-            controller: _curatorController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
-            ),
-            onPressed: _searchCurator,
+            label: StringRes.current.animalCuratorPhone,
+            enabled: false,
+            controller: _phoneController,
           ),
-          if (_curator != null)
-            EditCardData(
-              label: StringRes.current.animalCuratorPhone,
-              enabled: false,
-              controller: _phoneController,
-            ),
-          if (_curator != null)
-            EditCardData(
-              label: StringRes.current.animalCuratorEmail,
-              enabled: false,
-              controller: _emailController,
-            ),
-          if (_curator != null)
-            EditCardData(
-              label: StringRes.current.animalCuratorAddress,
-              enabled: false,
-              controller: _addressController,
-            ),
-        ],
-      ),
+        if (_curator != null)
+          EditCardData(
+            label: StringRes.current.animalCuratorEmail,
+            enabled: false,
+            controller: _emailController,
+          ),
+        if (_curator != null)
+          EditCardData(
+            label: StringRes.current.animalCuratorAddress,
+            enabled: false,
+            controller: _addressController,
+          ),
+      ]),
     );
   }
 
@@ -158,15 +136,10 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
     if (page != 3) return;
     final curator = _curator?.toJson();
     curator?['id'] = _curator?.id;
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
-      curator: curator,
-    );
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(curator: curator);
   }
 
-  Future<void> _addEditCurator(
-    BuildContext context, {
-    int? curatorId,
-  }) async {
+  Future<void> _addEditCurator(BuildContext context, {int? curatorId}) async {
     final result = await Navigator.of(context).push(CuratorEditScreenRoute(curatorId: curatorId));
     if (result != null) {
       setState(() => _curator = result);

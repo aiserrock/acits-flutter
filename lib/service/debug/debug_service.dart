@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 @prod
-
 /// Сервис отладки приложения
 class DebugService {
   /// открыть экран отладки

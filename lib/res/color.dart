@@ -8,33 +8,24 @@ import 'package:injectable/injectable.dart';
 class ColorRes {
   /// Важная кнопка
   static const Color primaryButton = _blue400,
-
-      /// Активный индикатор (страниц при пейджинге)
-      indicatorActive = _blue200,
-
-      /// Неактивный индикатор (страниц при пейджинге)
-      indicatorInactive = _grey100,
-
-      /// Акцент
-      accent = _blue400,
-
-      /// Неактивные иконки
-      inactiveIcon = _grey200,
-
-      /// Важный (title) текст
-      textPrimary = _black100,
-
-      /// Контент (body / message) текст
-      textSecondary = _grey200,
-
-      /// Error
-      error = Colors.red,
-
-      /// Foreground
-      foreground = Colors.white,
-
-      /// Background
-      background = _grey0;
+  /// Активный индикатор (страниц при пейджинге)
+  indicatorActive = _blue200,
+  /// Неактивный индикатор (страниц при пейджинге)
+  indicatorInactive = _grey100,
+  /// Акцент
+  accent = _blue400,
+  /// Неактивные иконки
+  inactiveIcon = _grey200,
+  /// Важный (title) текст
+  textPrimary = _black100,
+  /// Контент (body / message) текст
+  textSecondary = _grey200,
+  /// Error
+  error = Colors.red,
+  /// Foreground
+  foreground = Colors.white,
+  /// Background
+  background = _grey0;
 }
 
 /// Базовые цвета из UI Kit

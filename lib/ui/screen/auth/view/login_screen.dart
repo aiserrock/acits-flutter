@@ -8,9 +8,7 @@ import 'package:acits_flutter/res/color.dart';
 
 /// Экран входа по логину - паролю
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({
-    Key? key,
-  }) : super(key: key);
+  const LoginScreen({super.key});
 
   static Route<void> route() => MaterialPageRoute<void>(builder: (_) => const LoginScreen());
 
@@ -29,10 +27,7 @@ class LoginScreen extends StatelessWidget {
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
-              child: BlocProvider(
-                create: (_) => LoginBloc(),
-                child: LoginForm(),
-              ),
+              child: BlocProvider(create: (_) => LoginBloc(), child: LoginForm()),
             ),
           ],
         ),

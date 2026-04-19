@@ -20,8 +20,8 @@ class ErrorHolderWidget extends StatelessWidget {
     this.title,
     this.message,
     this.button,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String? assetPath;
   final String? title;
@@ -32,53 +32,51 @@ class ErrorHolderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, cons) {
-      final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Lottie.asset(
-                assetPath ?? LottieRes.crashBox,
-                height: size,
-                width: size,
-              ),
-              const SizedBox(height: 24.0),
-              Text(
-                title ?? error?.title ?? '',
-                style: StyleRes.title,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                message ?? error?.message ?? '',
-                style: StyleRes.content,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24.0),
-              PrimaryButton(
-                onPressed: () => onPressed?.call(),
-                text: button ?? StringRes.current.commonReloadBtn,
-              )
-            ],
+    return LayoutBuilder(
+      builder: (_, cons) {
+        final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(assetPath ?? LottieRes.crashBox, height: size, width: size),
+                const SizedBox(height: 24.0),
+                Text(
+                  title ?? error?.title ?? '',
+                  style: StyleRes.title,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  message ?? error?.message ?? '',
+                  style: StyleRes.content,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24.0),
+                PrimaryButton(
+                  onPressed: () => onPressed?.call(),
+                  text: button ?? StringRes.current.commonReloadBtn,
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
 extension _ErrorX on Object {
   String get title {
-    if (this is DioError) {
+    if (this is DioException) {
       return StringRes.current.errorInternetFail;
     }
     switch (runtimeType) {
-      case MessagedException:
+      case const (MessagedException):
         return StringRes.current.commonError;
-      case SocketException:
+      case const (SocketException):
         return StringRes.current.errorInternetFail;
       default:
         return StringRes.current.commonError;
@@ -86,13 +84,13 @@ extension _ErrorX on Object {
   }
 
   String get message {
-    if (this is DioError) {
+    if (this is DioException) {
       return StringRes.current.errorInternetFail;
     }
     switch (runtimeType) {
-      case MessagedException:
+      case const (MessagedException):
         return StringRes.current.errorDefaultMsg;
-      case SocketException:
+      case const (SocketException):
         return StringRes.current.errorInternetFailMsg;
       default:
         return StringRes.current.errorDefaultMsg;

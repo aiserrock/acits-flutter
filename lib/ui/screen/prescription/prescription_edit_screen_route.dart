@@ -9,10 +9,10 @@ class PrescriptionEditScreenRoute extends MaterialPageRoute<Prescription?> {
     Prescription? editPrescription,
     AnimalRead? animal,
   }) : super(
-          builder: (_) => PrescriptionEditScreen(
-            editPrescriptionId: editPrescriptionId,
-            editPrescription: editPrescription,
-            animal: animal,
-          ),
-        );
+         builder: (_) => PrescriptionEditScreen(
+           editPrescriptionId: editPrescriptionId,
+           editPrescription: editPrescription,
+           animal: animal,
+         ),
+       );
 }

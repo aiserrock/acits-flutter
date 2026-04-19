@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:chopper/chopper.dart';
+import 'package:http/http.dart' as http;
 
-class HttpLoggingInterceptorUtf8 extends HttpLoggingInterceptor {
+class HttpLoggingInterceptorUtf8 implements Interceptor {
   @override
-  FutureOr<Request> onRequest(Request request) async {
+  FutureOr<Response<BodyType>> intercept<BodyType>(Chain<BodyType> chain) async {
+    final request = chain.request;
     final base = await request.toBaseRequest();
+
     chopperLogger.info('\n-----------------> ${base.method} ${base.url}');
 
     final headersString = base.headers.entries.map((e) => '${e.key}: ${e.value}').join(';\n');
@@ -15,48 +17,49 @@ class HttpLoggingInterceptorUtf8 extends HttpLoggingInterceptor {
 
     var bytes = '';
     if (base is http.Request) {
-      final body = base.body;
+      final http.Request req = base as http.Request;
+      final body = req.body;
       if (body.isNotEmpty) {
         String? decoded;
         try {
-          decoded = decoded = utf8.decode(body.codeUnits);
+          decoded = utf8.decode(body.codeUnits);
         } catch (_) {
           decoded = body;
         }
         chopperLogger.info(decoded);
-        bytes = ' (${base.bodyBytes.length}-byte body)';
+        bytes = ' (${req.bodyBytes.length}-byte body)';
       }
     }
 
     chopperLogger.info('--> END ${base.method}$bytes \n');
-    return request;
-  }
 
-  @override
-  FutureOr<Response> onResponse(Response response) {
-    final base = response.base.request;
-    chopperLogger.info('\n<-- ${response.statusCode} ${base!.url}');
+    final response = await chain.proceed(request);
 
-    final headersString =
-        response.base.headers.entries.map((e) => '${e.key}: ${e.value}').join(';\n');
-    chopperLogger.info(headersString);
+    final baseResponseRequest = response.base.request;
+    chopperLogger.info('\n<-- ${response.statusCode} ${baseResponseRequest?.url}');
 
-    String? bytes;
+    final respHeadersString = response.base.headers.entries
+        .map((e) => '${e.key}: ${e.value}')
+        .join(';\n');
+    chopperLogger.info(respHeadersString);
+
+    String? respBytes;
     if (response.base is http.Response) {
       final resp = response.base as http.Response;
       if (resp.body.isNotEmpty) {
         String? decoded;
         try {
-          decoded = decoded = utf8.decode(resp.body.codeUnits);
+          decoded = utf8.decode(resp.body.codeUnits);
         } catch (_) {
           decoded = resp.body;
         }
         chopperLogger.info(decoded);
-        bytes = ' (${response.bodyBytes.length}-byte body)';
+        respBytes = ' (${response.bodyBytes.length}-byte body)';
       }
     }
 
-    chopperLogger.info('\n------------------> END ${base.method}$bytes ');
+    chopperLogger.info('\n------------------> END ${baseResponseRequest?.method}$respBytes ');
+
     return response;
   }
 }

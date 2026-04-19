@@ -1,11 +1,8 @@
 import 'dart:io';
 
 class SslHttpOverrides extends HttpOverrides {
-  SslHttpOverrides({
-    this.withTrustedRoots = false,
-    this.certFilePathes,
-    this.certBytes,
-  }) : assert(certFilePathes != null || certBytes != null);
+  SslHttpOverrides({this.withTrustedRoots = false, this.certFilePathes, this.certBytes})
+    : assert(certFilePathes != null || certBytes != null);
 
   final bool withTrustedRoots;
   final List<String>? certFilePathes;

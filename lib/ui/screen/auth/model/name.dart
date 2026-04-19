@@ -1,9 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 
-enum NameValidationError {
-  empty,
-}
+enum NameValidationError { empty }
 
 @immutable
 class Name extends FormzInput<String, NameValidationError> {

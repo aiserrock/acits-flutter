@@ -1,10 +1,7 @@
 part of 'onboarding_bloc.dart';
 
 class OnboardingState extends Equatable {
-  const OnboardingState({
-    required this.currentViewPage,
-    required this.isLast,
-  });
+  const OnboardingState({required this.currentViewPage, required this.isLast});
 
   factory OnboardingState.initial() => const OnboardingState(currentViewPage: 0, isLast: false);
 

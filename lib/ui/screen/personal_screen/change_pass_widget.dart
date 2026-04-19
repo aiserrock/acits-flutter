@@ -10,20 +10,20 @@ import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/util/validator.dart';
 
 class ChangePassWidget extends StatefulWidget {
-  const ChangePassWidget({Key? key}) : super(key: key);
+  const ChangePassWidget({super.key});
 
   @override
-  State<ChangePassWidget> createState() => _ChangePassWidgetState();
+  State<ChangePassWidget> createState() => _ChangePassScreenDataState();
 }
 
-class _ChangePassWidgetState extends State<ChangePassWidget> {
-  _ChangePassWidgetState() : _personalService = getIt<PersonalService>();
+class _ChangePassScreenDataState extends State<ChangePassWidget> {
+  _ChangePassScreenDataState() : _personalService = getIt<PersonalService>();
 
   final PersonalService _personalService;
   final _formKey = GlobalKey<FormState>();
   final _oldPassController = TextEditingController();
   final _newPassController = TextEditingController();
-  WidgetState<Object> _state = WidgetState(Object());
+  ScreenDataState<Object> _state = ScreenDataState(Object());
   bool _isObscure = true;
 
   @override
@@ -36,13 +36,9 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
           color: Colors.transparent,
           child: StateBuilder(
             state: _state,
-            builder: (_, __) => _buildForm(),
-            loader: (_) => Center(
-              child: Lottie.asset(
-                LottieRes.loading,
-              ),
-            ),
-            errorBuilder: (_, __) => Container(),
+            builder: (_, _) => _buildForm(),
+            loader: (_) => Center(child: Lottie.asset(LottieRes.loading)),
+            errorBuilder: (_, _) => Container(),
           ),
         ),
       ),
@@ -51,15 +47,11 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
           : [
               CupertinoDialogAction(
                 onPressed: Navigator.of(context).pop,
-                child: Text(
-                  l10n.commonCancel,
-                ),
+                child: Text(l10n.commonCancel),
               ),
               CupertinoDialogAction(
                 onPressed: () => _submit(context),
-                child: Text(
-                  l10n.commonEdit,
-                ),
+                child: Text(l10n.commonEdit),
               ),
             ],
     );
@@ -105,17 +97,26 @@ class _ChangePassWidgetState extends State<ChangePassWidget> {
       _showMessage(context, l10n.personalEmptyFieldErrorMsg);
       return;
     }
-    setState(() => _state = WidgetState()..loading());
-    _personalService.changePass(_oldPassController.text, _newPassController.text).then(
-      (_) {
-        _showMessage(context, l10n.personalPassChanged);
-        Navigator.of(context).pop();
-      },
-    ).catchError((e) {
-      final error = e is MessagedException ? e.error : null;
-      _showMessage(context, '${l10n.personalChangeErrorMsg}${error is String ? error : ''}');
-      setState(() => _state = WidgetState(Object()));
-    });
+    setState(() => _state = ScreenDataState()..loading());
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    _personalService
+        .changePass(_oldPassController.text, _newPassController.text)
+        .then((_) {
+          messenger.showSnackBar(SnackBar(content: Text(l10n.personalPassChanged)));
+          navigator.pop();
+        })
+        .catchError((e) {
+          final error = e is MessagedException ? e.error : null;
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(
+                '${l10n.personalChangeErrorMsg}${error is String ? error : ''}',
+              ),
+            ),
+          );
+          setState(() => _state = ScreenDataState(Object()));
+        });
   }
 
   void _showMessage(BuildContext context, String msg) {

@@ -15,16 +15,16 @@ import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   _MainScreenState()
-      : _prescriptionService = getIt.get<PrescriptionService>(),
-        _debugService = getIt.get<DebugService>();
+    : _prescriptionService = getIt.get<PrescriptionService>(),
+      _debugService = getIt.get<DebugService>();
 
   final PrescriptionService _prescriptionService;
   final DebugService _debugService;
@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   late bool _isSmallScreen;
   bool _isSearchActive = false;
 
-  WidgetState<PaginatedPrescriptionExecutionTodayList?> _state = WidgetState()..loading();
+  ScreenDataState<PaginatedPrescriptionExecutionTodayList?> _state = ScreenDataState()..loading();
 
   @override
   void didChangeDependencies() {
@@ -55,16 +55,15 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
-        leading: Builder(builder: (context) {
-          return GestureDetector(
-            child: const Icon(
-              Icons.menu,
-              color: ColorRes.accent,
-            ),
-            onTap: RootDrawerProvider.of(context)?.openDrawer,
-            onLongPress: () => _openDebug(context),
-          );
-        }),
+        leading: Builder(
+          builder: (context) {
+            return GestureDetector(
+              onTap: RootDrawerProvider.of(context)?.openDrawer,
+              onLongPress: () => _openDebug(context),
+              child: const Icon(Icons.menu, color: ColorRes.accent),
+            );
+          },
+        ),
         title: _buildTitle(),
         actions: _buildAppBarActions,
         centerTitle: true,
@@ -79,11 +78,8 @@ class _MainScreenState extends State<MainScreen> {
       heroTag: 'MainFab',
       mini: _isSmallScreen,
       onPressed: () => _onFabPressed(context),
-      child: const Icon(
-        Icons.add,
-        color: ColorRes.foreground,
-      ),
       backgroundColor: ColorRes.accent,
+      child: const Icon(Icons.add, color: ColorRes.foreground),
     );
   }
 
@@ -93,10 +89,7 @@ class _MainScreenState extends State<MainScreen> {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: GestureDetector(
-            child: const Icon(
-              Icons.search,
-              color: ColorRes.accent,
-            ),
+            child: const Icon(Icons.search, color: ColorRes.accent),
             onTap: () => setState(() => _isSearchActive = !_isSearchActive),
           ),
         ),
@@ -106,13 +99,8 @@ class _MainScreenState extends State<MainScreen> {
   Widget _buildBody() {
     return StateBuilder<PaginatedPrescriptionExecutionTodayList?>(
       state: _state,
-      loader: (_) => const ScreenLoader(
-        height: 104.0,
-      ),
-      builder: (_, data) => _MainScreenContent(
-        data,
-        pullToRefresh: _loadExecutions,
-      ),
+      loader: (_) => const ScreenLoader(height: 104.0),
+      builder: (_, data) => _MainScreenContent(data, pullToRefresh: _loadExecutions),
       errorBuilder: (_, error) => Column(),
     );
   }
@@ -132,25 +120,20 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   onTap: () => setState(() => _isSearchActive = !_isSearchActive),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
               style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
             ),
           )
-        : Text(
-            StringRes.current.mainTitle,
-            style: const TextStyle(color: ColorRes.textPrimary),
-          );
+        : Text(StringRes.current.mainTitle, style: const TextStyle(color: ColorRes.textPrimary));
   }
 
   Future<void> _loadExecutions() async {
-    setState(() => _state = WidgetState()..loading());
+    setState(() => _state = ScreenDataState()..loading());
     await _prescriptionService
         .fetchTodayPrescriptionList()
-        .then((value) => setState(() => _state = WidgetState()..content(value)))
-        .catchError((e) => _state = WidgetState()..error = e);
+        .then((value) => setState(() => _state = ScreenDataState()..content(value)))
+        .catchError((e) => _state = ScreenDataState()..error = e);
   }
 
   void _openDebug(BuildContext context) {
@@ -158,20 +141,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onFabPressed(BuildContext context) {
-    Navigator.of(context).push(PrescriptionEditScreenRoute()).then(
-      (value) {
-        if (value != null) _loadExecutions();
-      },
-    );
+    Navigator.of(context).push(PrescriptionEditScreenRoute()).then((value) {
+      if (value != null) _loadExecutions();
+    });
   }
 }
 
 class _MainScreenContent extends StatelessWidget {
-  const _MainScreenContent(
-    this.data, {
-    required this.pullToRefresh,
-    Key? key,
-  }) : super(key: key);
+  const _MainScreenContent(this.data, {required this.pullToRefresh});
 
   final PaginatedPrescriptionExecutionTodayList? data;
   final Future<void> Function() pullToRefresh;
@@ -195,46 +172,44 @@ class _MainScreenContent extends StatelessWidget {
           );
         },
         itemCount: data?.results?.length ?? 0,
-        separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+        separatorBuilder: (_, _) => const SizedBox(height: 16.0),
       ),
     );
   }
 
   Widget _buildEmptyState() {
-    return LayoutBuilder(builder: (_, cons) {
-      return RefreshIndicator(
-        onRefresh: pullToRefresh,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: SizedBox(
-            height: cons.maxHeight,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Assets.common.emptyState.svg()],
-                  ),
-                  Text(
-                    StringRes.current.mainEmptyState,
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      color: ColorRes.textSecondary,
+    return LayoutBuilder(
+      builder: (_, cons) {
+        return RefreshIndicator(
+          onRefresh: pullToRefresh,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: SizedBox(
+              height: cons.maxHeight,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Assets.common.emptyState.svg()],
                     ),
-                  ),
-                ],
+                    Text(
+                      StringRes.current.mainEmptyState,
+                      style: const TextStyle(fontSize: 16.0, color: ColorRes.textSecondary),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   void _onEditPrescriptionPressed(PrescriptionExecutionToday item) {
-    getIt<GlobalKey<NavigatorState>>()
-        .currentState
+    getIt<GlobalKey<NavigatorState>>().currentState
         ?.push(PrescriptionEditScreenRoute(editPrescriptionId: item.prescription?.id))
         .then((value) {});
   }

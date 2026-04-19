@@ -10,10 +10,7 @@ class NotAuthorizedException implements Exception {
 }
 
 class MessagedException implements Exception {
-  MessagedException({
-    this.message,
-    this.error,
-  });
+  MessagedException({this.message, this.error});
 
   final String? message;
   final Object? error;
@@ -25,10 +22,7 @@ class MessagedException implements Exception {
 }
 
 class EmailConfirmException implements Exception {
-  EmailConfirmException({
-    this.message,
-    this.error,
-  });
+  EmailConfirmException({this.message, this.error});
 
   final String? message;
   final Object? error;

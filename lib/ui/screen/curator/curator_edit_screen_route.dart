@@ -4,5 +4,5 @@ import 'package:flutter/material.dart';
 
 class CuratorEditScreenRoute extends MaterialPageRoute<Curator?> {
   CuratorEditScreenRoute({int? curatorId})
-      : super(builder: (_) => CuratorEditScreen(curatorId: curatorId));
+    : super(builder: (_) => CuratorEditScreen(curatorId: curatorId));
 }

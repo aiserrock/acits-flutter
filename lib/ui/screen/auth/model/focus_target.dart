@@ -1,8 +1,4 @@
-enum FocusTarget {
-  name,
-  password,
-  another,
-}
+enum FocusTarget { name, password, another }
 
 extension FocusTargetX on FocusTarget {
   bool get isPassword => this == FocusTarget.password;

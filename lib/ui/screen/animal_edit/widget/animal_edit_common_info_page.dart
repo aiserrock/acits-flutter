@@ -14,16 +14,11 @@ import 'package:acits_flutter/util/validator.dart';
 
 class AnimalEditCommonInfoPage extends AnimalEditPage {
   const AnimalEditCommonInfoPage({
-    required AnimalRead animal,
-    required bool isEdit,
-    required GlobalKey<FormState> formKey,
-    Key? key,
-  }) : super(
-          animal: animal,
-          isEdit: isEdit,
-          formKey: formKey,
-          key: key,
-        );
+    required super.animal,
+    required super.isEdit,
+    required GlobalKey<FormState> super.formKey,
+    super.key,
+  });
 
   @override
   State<AnimalEditCommonInfoPage> createState() => _AnimalEditCommonInfoPageState();
@@ -68,12 +63,8 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
         SliverToBoxAdapter(child: _buildImage()),
         const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
-        SliverToBoxAdapter(
-          child: SubtitleWidget(title: StringRes.current.animalCommonInfo),
-        ),
-        SliverToBoxAdapter(
-          child: _buildCommonCard(),
-        ),
+        SliverToBoxAdapter(child: SubtitleWidget(title: StringRes.current.animalCommonInfo)),
+        SliverToBoxAdapter(child: _buildCommonCard()),
       ],
     );
   }
@@ -104,19 +95,12 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
                     children: [
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
-                        child: const Icon(
-                          Icons.photo_camera,
-                          color: ColorRes.accent,
-                          size: 32.0,
-                        ),
+                        child: const Icon(Icons.photo_camera, color: ColorRes.accent, size: 32.0),
                         onPressed: () {},
                       ),
                       const SizedBox(
                         width: 32.0,
-                        child: Divider(
-                          thickness: 2.0,
-                          color: ColorRes.accent,
-                        ),
+                        child: Divider(thickness: 2.0, color: ColorRes.accent),
                       ),
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
@@ -141,44 +125,30 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
   Widget _buildCommonCard() {
     return Form(
       key: widget.formKey,
-      child: FormEditCard(
-        [
-          EditCardData(
-            label: StringRes.current.animalName,
-            controller: _nameController,
-          ),
-          EditCardData(
-            label: StringRes.current.animalCategory + ' *',
-            controller: _categoryController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
-            ),
-            onPressed: _searchCategory,
-            validator: Validator.emptyValidator,
-          ),
-          EditCardData(
-            label: StringRes.current.animalAnimalFamily + ' *',
-            controller: _familyController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
-            ),
-            onPressed: _searchFamily,
-            validator: Validator.emptyValidator,
-          ),
-          EditCardData(
-            label: StringRes.current.animalAnimalKind + ' *',
-            controller: _kindController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
-            ),
-            onPressed: _searchKind,
-            validator: Validator.emptyValidator,
-          ),
-        ],
-      ),
+      child: FormEditCard([
+        EditCardData(label: StringRes.current.animalName, controller: _nameController),
+        EditCardData(
+          label: '${StringRes.current.animalCategory} *',
+          controller: _categoryController,
+          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          onPressed: _searchCategory,
+          validator: Validator.emptyValidator,
+        ),
+        EditCardData(
+          label: '${StringRes.current.animalAnimalFamily} *',
+          controller: _familyController,
+          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          onPressed: _searchFamily,
+          validator: Validator.emptyValidator,
+        ),
+        EditCardData(
+          label: '${StringRes.current.animalAnimalKind} *',
+          controller: _kindController,
+          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          onPressed: _searchKind,
+          validator: Validator.emptyValidator,
+        ),
+      ]),
     );
   }
 
@@ -244,9 +214,9 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
       'name': _kindController.text,
       'id': _kindSpec?.id ?? widget.animal.idSpec,
     };
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
-      name: _nameController.text,
-      spec: spec,
-    );
+    Provider.of<AnimalEditHolder>(
+      context,
+      listen: false,
+    ).copyWith(name: _nameController.text, spec: spec);
   }
 }

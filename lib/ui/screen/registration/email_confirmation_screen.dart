@@ -12,10 +12,7 @@ import 'package:acits_flutter/ui/widget/success_holder.dart';
 const _switchDuration = Duration(milliseconds: 300);
 
 class EmailConfirmationScreen extends StatefulWidget {
-  const EmailConfirmationScreen({
-    required this.confirmLink,
-    Key? key,
-  }) : super(key: key);
+  const EmailConfirmationScreen({required this.confirmLink, super.key});
 
   final String confirmLink;
 
@@ -27,7 +24,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   _EmailConfirmationScreenState() : _authService = getIt<AuthService>();
 
   final AuthService _authService;
-  var _state = WidgetState<Object>()..loading();
+  var _state = ScreenDataState<Object>()..loading();
 
   @override
   void initState() {
@@ -43,10 +40,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -73,13 +67,13 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
             loader: (_) => const LoaderHolderWidget(),
             errorBuilder: (BuildContext context, Object? error) {
               return ErrorHolderWidget(
-                title: error is DioError && error.error is EmailConfirmException
+                title: error is DioException && error.error is EmailConfirmException
                     ? StringRes.current.regRegisterRejectTitle
                     : null,
-                message: error is DioError && error.error is EmailConfirmException
+                message: error is DioException && error.error is EmailConfirmException
                     ? StringRes.current.regRegisterRejectMsg
                     : null,
-                error: error is DioError && error.error is EmailConfirmException ? null : error,
+                error: error is DioException && error.error is EmailConfirmException ? null : error,
                 onPressed: _repeat,
                 button: StringRes.current.commonRepeat.toUpperCase(),
               );
@@ -91,16 +85,16 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   }
 
   void _repeat() {
-    setState(() => _state = WidgetState<Object>()..loading());
+    setState(() => _state = ScreenDataState<Object>()..loading());
     _confirmEmail();
   }
 
   void _onSuccess() {
-    setState(() => _state = WidgetState<Object>(Object()));
+    setState(() => _state = ScreenDataState<Object>(Object()));
   }
 
   void _onError(dynamic error) {
-    setState(() => _state = WidgetState<Object>()..error = error);
+    setState(() => _state = ScreenDataState<Object>()..error = error);
   }
 
   void _confirmEmail() {

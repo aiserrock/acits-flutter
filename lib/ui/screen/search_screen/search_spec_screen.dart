@@ -10,10 +10,7 @@ import 'package:flutter/material.dart';
 const _searchBouncePeriod = Duration(milliseconds: 1000);
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({
-    this.parentSearch,
-    Key? key,
-  }) : super(key: key);
+  const SearchScreen({this.parentSearch, super.key});
 
   final Species? parentSearch;
 
@@ -30,8 +27,8 @@ class _SearchScreenState extends State<SearchScreen> {
   late final NavigatorState _navigator;
 
   int _speciesListOffset = 0;
-  final _speciesState = WidgetState<List<Species>>()..loading();
-  final _listPagingState = WidgetState<Object>()..content(Object());
+  final _speciesState = ScreenDataState<List<Species>>()..loading();
+  final _listPagingState = ScreenDataState<Object>()..content(Object());
 
   @override
   void initState() {
@@ -63,10 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
         shadowColor: Colors.transparent,
         leading: CupertinoButton(
           onPressed: _navigator.pop,
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new, color: ColorRes.accent),
         ),
         title: _buildTitle(),
         centerTitle: true,
@@ -83,20 +77,15 @@ class _SearchScreenState extends State<SearchScreen> {
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(
-            left: 16.0,
-            right: 8.0,
-          ),
+          contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),
           suffix: GestureDetector(
+            onTap: _searchController.clear,
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: ColorRes.accent),
             ),
-            onTap: _searchController.clear,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
         ),
         style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
       ),
@@ -107,14 +96,12 @@ class _SearchScreenState extends State<SearchScreen> {
     return StateBuilder<List<Species>>(
       state: _speciesState,
       builder: _buildList,
-      loader: (_) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-      errorBuilder: (_, __) => ErrorStubWidget(onPressed: () => _loadData(resetOffset: true)),
+      loader: (_) => const Center(child: CircularProgressIndicator()),
+      errorBuilder: (_, _) => ErrorStubWidget(onPressed: () => _loadData(resetOffset: true)),
     );
   }
 
-  Widget _buildList(context, List<Species> list) {
+  Widget _buildList(BuildContext context, List<Species> list) {
     return list.isNotEmpty
         ? RefreshIndicator(
             onRefresh: () => _loadData(resetOffset: true),
@@ -125,20 +112,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (_, index) => Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 16.0,
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Builder(
+                        builder: (context) {
+                          return ListTile(
+                            title: Text(list[index].name ?? ''),
+                            onTap: () {
+                              _onItemPressed(context, list[index]);
+                            },
+                          );
+                        },
                       ),
-                      child: Builder(builder: (context) {
-                        return ListTile(
-                          title: Text(list[index].name ?? ''),
-                          onTap: () {
-                            _onItemPressed(
-                              context,
-                              list[index],
-                            );
-                          },
-                        );
-                      }),
                     ),
                     childCount: list.length,
                   ),
@@ -146,17 +130,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 SliverToBoxAdapter(
                   child: StateBuilder(
                     state: _listPagingState,
-                    builder: (_, __) => const SizedBox(height: 16.0),
+                    builder: (_, _) => const SizedBox(height: 16.0),
                     loader: (_) => const SizedBox(
                       height: 64.0,
                       child: Center(child: CircularProgressIndicator()),
                     ),
-                    errorBuilder: (_, __) => SizedBox(
+                    errorBuilder: (_, _) => SizedBox(
                       height: 64.0,
                       child: Center(child: Text(StringRes.current.commonError)),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           )
@@ -164,25 +148,15 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 120.0,
-                  width: 120.0,
-                  child: Assets.common.emptyState.svg(),
-                ),
+                SizedBox(height: 120.0, width: 120.0, child: Assets.common.emptyState.svg()),
                 const SizedBox(height: 32.0),
-                Text(
-                  StringRes.current.commonNotFound,
-                  style: StyleRes.title,
-                ),
+                Text(StringRes.current.commonNotFound, style: StyleRes.title),
               ],
             ),
           );
   }
 
-  void _onItemPressed(
-    BuildContext context,
-    Species item,
-  ) {
+  void _onItemPressed(BuildContext context, Species item) {
     _navigator.pop(item);
   }
 
@@ -193,10 +167,7 @@ class _SearchScreenState extends State<SearchScreen> {
       return;
     }
     _bounceTimer?.cancel();
-    _bounceTimer = Timer(
-      _searchBouncePeriod,
-      () => _loadData(resetOffset: true),
-    );
+    _bounceTimer = Timer(_searchBouncePeriod, () => _loadData(resetOffset: true));
   }
 
   void _onScroll() {
@@ -206,42 +177,35 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> _loadData({bool resetOffset = false}) async {
     if (resetOffset) {
-      setState(
-        () {
-          _speciesListOffset = 0;
-          _speciesState.loading();
-        },
-      );
+      setState(() {
+        _speciesListOffset = 0;
+        _speciesState.loading();
+      });
     }
     if (!_speciesState.isLoading) {
       setState(() => _listPagingState.loading());
     }
     _service
         .getAnimalSpecies(
-      level: _service.getLevel(int.tryParse(widget.parentSearch?.level.toString() ?? '0') ?? 0),
-      parentId: widget.parentSearch?.id,
-      offset: _speciesListOffset,
-      searchRequest: _searchController.text.isNotEmpty ? _searchController.text : null,
-    )
-        .then(
-      (value) {
-        setState(
-          () {
+          level: _service.getLevel(int.tryParse(widget.parentSearch?.level.toString() ?? '0') ?? 0),
+          parentId: widget.parentSearch?.id,
+          offset: _speciesListOffset,
+          searchRequest: _searchController.text.isNotEmpty ? _searchController.text : null,
+        )
+        .then((value) {
+          setState(() {
             _speciesListOffset += value.length;
             final list = (_speciesState.value ?? [])..addAll(value);
             _speciesState.content(list);
             _listPagingState.content(Object());
-          },
-        );
-      },
-    ).onError(
-      (error, stackTrace) {
-        if (_speciesState.isLoading) {
-          setState(() => _speciesState.error = error);
-        } else {
-          setState(() => _listPagingState.error = error);
-        }
-      },
-    );
+          });
+        })
+        .onError((error, stackTrace) {
+          if (_speciesState.isLoading) {
+            setState(() => _speciesState.error = error);
+          } else {
+            setState(() => _listPagingState.error = error);
+          }
+        });
   }
 }

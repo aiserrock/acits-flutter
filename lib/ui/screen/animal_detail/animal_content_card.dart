@@ -2,11 +2,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 class AnimalContentCard extends StatelessWidget {
-  const AnimalContentCard(
-    this.data, {
-    this.valueStyle,
-    Key? key,
-  }) : super(key: key);
+  const AnimalContentCard(this.data, {this.valueStyle, super.key});
 
   final List<CardData> data;
 
@@ -76,28 +72,19 @@ class AnimalContentCard extends StatelessWidget {
         )
         .toList();
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 16.0,
-        horizontal: 8.0,
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: ColorRes.foreground,
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 8.0,
-      ),
-      decoration:
-          BoxDecoration(color: ColorRes.foreground, borderRadius: BorderRadius.circular(8.0)),
       child: Column(children: rows),
     );
   }
 }
 
 class CardData {
-  CardData({
-    this.firstCaption,
-    this.secondCaption,
-    this.firstValue,
-    this.secondValue,
-  });
+  CardData({this.firstCaption, this.secondCaption, this.firstValue, this.secondValue});
 
   final String? firstCaption;
   final String? secondCaption;

@@ -6,7 +6,7 @@ class AnimalEditHolder extends ChangeNotifier {
 
   AnimalRead _state = AnimalRead();
 
-  init(AnimalRead animal) {
+  void init(AnimalRead animal) {
     _initState = _state = animal;
     notifyListeners();
   }

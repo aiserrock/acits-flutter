@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 extension AnimalX on AnimalRead {
   String? get statusString {
-    final _service = getIt<ConfigService>();
-    return _service.getStatus131Name(status);
+    final service = getIt<ConfigService>();
+    return service.getStatus131Name(status);
   }
 
   String? get sexString {
@@ -169,7 +169,7 @@ extension AnimalX on AnimalRead {
   }
 
   List<int> get _validImages {
-    return images?.map<int?>((e) => e.id).whereNotNull().toList() ?? [];
+    return images?.map<int?>((e) => e.id).nonNulls.toList() ?? [];
   }
 }
 
@@ -195,14 +195,12 @@ extension StatusX on Status131Enum {
         return ColorRes.textSecondary;
       case Status131Enum.euthanasia:
         return ColorRes.textSecondary;
-      default:
-        return ColorRes.textSecondary;
     }
   }
 
   String? get statusString {
-    final _service = getIt<ConfigService>();
-    return _service.getStatus131Name(this);
+    final service = getIt<ConfigService>();
+    return service.getStatus131Name(this);
   }
 }
 

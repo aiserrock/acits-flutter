@@ -5,10 +5,7 @@ const urlPattern =
 
 @immutable
 class TextUrlWrapper {
-  const TextUrlWrapper({
-    required this.value,
-    this.isUrl = false,
-  });
+  const TextUrlWrapper({required this.value, this.isUrl = false});
 
   final bool isUrl;
   final String value;
@@ -16,17 +13,9 @@ class TextUrlWrapper {
   static List<TextUrlWrapper> fromString(String text) {
     final result = <TextUrlWrapper>[];
     text.splitMapJoin(
-      RegExp(
-        urlPattern,
-        caseSensitive: false,
-      ),
+      RegExp(urlPattern, caseSensitive: false),
       onMatch: (match) {
-        result.add(
-          TextUrlWrapper(
-            isUrl: true,
-            value: match.group(0) ?? '',
-          ),
-        );
+        result.add(TextUrlWrapper(isUrl: true, value: match.group(0) ?? ''));
         return '';
       },
       onNonMatch: (noMatch) {

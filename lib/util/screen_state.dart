@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WidgetState<T> {
-  WidgetState([T? value]) : _value = value;
+class ScreenDataState<T> {
+  ScreenDataState([T? value]) : _value = value;
 
   T? _value;
   Object? _error;
@@ -41,10 +41,10 @@ class StateBuilder<T> extends StatelessWidget {
     required this.builder,
     required this.loader,
     required this.errorBuilder,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
-  final WidgetState<T> state;
+  final ScreenDataState<T> state;
 
   final WidgetBuilder loader;
   final Widget Function(BuildContext context, Object? error) errorBuilder;
@@ -53,9 +53,9 @@ class StateBuilder<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return state.isContent
-        ? builder(context, state._value!)
+        ? builder(context, state._value as T)
         : state.isLoading
-            ? loader(context)
-            : errorBuilder(context, state._error);
+        ? loader(context)
+        : errorBuilder(context, state._error);
   }
 }

@@ -7,11 +7,7 @@ import 'package:acits_flutter/export.dart';
 const _reschedulePeriod = Duration(days: 90);
 
 class PrescriptionCardWidget extends StatefulWidget {
-  const PrescriptionCardWidget(
-    this.itemData, {
-    this.onEditedPrescription,
-    Key? key,
-  }) : super(key: key);
+  const PrescriptionCardWidget(this.itemData, {this.onEditedPrescription, super.key});
 
   final PrescriptionExecutionToday? itemData;
   final VoidCallback? onEditedPrescription;
@@ -29,11 +25,10 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          color: ColorRes.foreground, borderRadius: BorderRadius.all(Radius.circular(8.0))),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12.0,
-        vertical: 16.0,
+        color: ColorRes.foreground,
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,12 +60,14 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
           TextSpan(
             children: [
               TextSpan(
-                  text: (widget.itemData?.prescription?.animal?.specParentName ?? ''),
-                  style: StyleRes.mainContent),
+                text: (widget.itemData?.prescription?.animal?.specParentName ?? ''),
+                style: StyleRes.mainContent,
+              ),
               const TextSpan(text: (', '), style: StyleRes.mainContent),
               TextSpan(
-                  text: widget.itemData?.prescription?.animal?.specName ?? '',
-                  style: StyleRes.mainContent),
+                text: widget.itemData?.prescription?.animal?.specName ?? '',
+                style: StyleRes.mainContent,
+              ),
             ],
           ),
           maxLines: 3,
@@ -121,12 +118,17 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             TextSpan(
               children: [
                 TextSpan(
-                    text: (widget.itemData?.prescription?.animal?.name ?? ''),
-                    style: StyleRes.content.copyWith(color: ColorRes.textPrimary)),
-                TextSpan(text: ' ', style: StyleRes.content.copyWith(color: ColorRes.textPrimary)),
+                  text: (widget.itemData?.prescription?.animal?.name ?? ''),
+                  style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+                ),
                 TextSpan(
-                    text: (widget.itemData?.prescription?.animal?.id ?? '').toString(),
-                    style: StyleRes.content),
+                  text: ' ',
+                  style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+                ),
+                TextSpan(
+                  text: (widget.itemData?.prescription?.animal?.id ?? '').toString(),
+                  style: StyleRes.content,
+                ),
               ],
             ),
             maxLines: 3,
@@ -164,11 +166,8 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         const Spacer(),
         InkWell(
           onTap: _openBsActions,
-          child: const Icon(
-            Icons.more_horiz,
-            color: ColorRes.accent,
-          ),
-        )
+          child: const Icon(Icons.more_horiz, color: ColorRes.accent),
+        ),
       ],
     );
   }
@@ -176,43 +175,40 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
   void _openBsActions() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => bsSelectorActions(
-        context,
-        <Widget, dynamic Function()>{
-          Text(
-            StringRes.current.commonDone,
-            style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
-          ): () {
-            Navigator.of(context).pop();
-          },
-          Text(
-            StringRes.current.commonReschedule,
-            style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
-          ): () {
-            Navigator.of(context).pop();
-            _reschedule();
-          },
-          Text(
-            StringRes.current.commonNotCompleted,
-            style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
-          ): () {
-            Navigator.of(context).pop();
-          },
-          Text(
-            StringRes.current.commonEdit,
-            style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
-          ): () {
-            Navigator.of(context).pop();
-            widget.onEditedPrescription?.call();
-          },
-          Text(
-            StringRes.current.commonDelete,
-            style: StyleRes.mainContent.copyWith(color: ColorRes.error),
-          ): () {
-            Navigator.of(context).pop();
-          },
+      builder: (context) => bsSelectorActions(context, <Widget, dynamic Function()>{
+        Text(
+          StringRes.current.commonDone,
+          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+        ): () {
+          Navigator.of(context).pop();
         },
-      ),
+        Text(
+          StringRes.current.commonReschedule,
+          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+        ): () {
+          Navigator.of(context).pop();
+          _reschedule();
+        },
+        Text(
+          StringRes.current.commonNotCompleted,
+          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+        ): () {
+          Navigator.of(context).pop();
+        },
+        Text(
+          StringRes.current.commonEdit,
+          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+        ): () {
+          Navigator.of(context).pop();
+          widget.onEditedPrescription?.call();
+        },
+        Text(
+          StringRes.current.commonDelete,
+          style: StyleRes.mainContent.copyWith(color: ColorRes.error),
+        ): () {
+          Navigator.of(context).pop();
+        },
+      }),
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
     );

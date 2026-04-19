@@ -2,10 +2,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 class DrugListItem extends StatelessWidget {
-  const DrugListItem({
-    required this.drug,
-    super.key,
-  });
+  const DrugListItem({required this.drug, super.key});
 
   final ShelterDrug drug;
 
@@ -18,15 +15,8 @@ class DrugListItem extends StatelessWidget {
       title: Text.rich(
         TextSpan(
           children: [
-            TextSpan(
-              text: drug.drug?.name ?? '',
-              style: StyleRes.subTitle,
-            ),
-            if (drugForm != null)
-              const TextSpan(
-                text: ', ',
-                style: StyleRes.subTitle,
-              ),
+            TextSpan(text: drug.drug?.name ?? '', style: StyleRes.subTitle),
+            if (drugForm != null) const TextSpan(text: ', ', style: StyleRes.subTitle),
             if (drugForm != null)
               TextSpan(
                 text: drugForm,

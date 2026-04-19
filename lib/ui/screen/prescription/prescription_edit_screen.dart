@@ -18,8 +18,8 @@ class PrescriptionEditScreen extends StatefulWidget {
     this.editPrescription,
     this.editPrescriptionId,
     this.animal,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int? editPrescriptionId;
   final Prescription? editPrescription;
@@ -63,25 +63,23 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<WidgetState<Prescription>?>(
-        stream: controller.screenState,
-        builder: (context, state) {
-          final isLoading = state.data?.isLoading ?? false;
-          final hasError = state.data?.hasError ?? false;
-          return controller.isEdit
-              ? isLoading
+    return StreamBuilder<ScreenDataState<Prescription>?>(
+      stream: controller.screenState,
+      builder: (context, state) {
+        final isLoading = state.data?.isLoading ?? false;
+        final hasError = state.data?.hasError ?? false;
+        return controller.isEdit
+            ? isLoading
                   ? const Scaffold(body: LoaderHolderWidget())
                   : hasError
-                      ? Scaffold(body: ErrorHolderWidget(onPressed: controller.setEditedState))
-                      : _buildForm(context, controller)
-              : _buildForm(context, controller);
-        });
+                  ? Scaffold(body: ErrorHolderWidget(onPressed: controller.setEditedState))
+                  : _buildForm(context, controller)
+            : _buildForm(context, controller);
+      },
+    );
   }
 
-  Widget _buildForm(
-    BuildContext context,
-    PrescriptionEditScreenController? controller,
-  ) {
+  Widget _buildForm(BuildContext context, PrescriptionEditScreenController? controller) {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: ColorRes.background,
@@ -89,10 +87,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: _buildTitle(),
@@ -104,13 +99,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
               .map<Widget>(
                 (tab) => SizedBox(
                   height: kTextTabBarHeight,
-                  child: Center(
-                    child: Text(
-                      tab,
-                      style: StyleRes.subTitle,
-                      maxLines: 2,
-                    ),
-                  ),
+                  child: Center(child: Text(tab, style: StyleRes.subTitle, maxLines: 2)),
                 ),
               )
               .toList(),
@@ -124,134 +113,131 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
   }
 
   Widget _buildFab() {
-    return Builder(builder: (context) {
-      return FloatingActionButton(
-        child: const Icon(
-          Icons.done_all,
-          color: Colors.white,
-        ),
-        onPressed: controller.onFabPressed,
-        backgroundColor: ColorRes.accent,
-      );
-    });
+    return Builder(
+      builder: (context) {
+        return FloatingActionButton(
+          onPressed: controller.onFabPressed,
+          backgroundColor: ColorRes.accent,
+          child: const Icon(Icons.done_all, color: Colors.white),
+        );
+      },
+    );
   }
 
   Widget _buildTitle() {
-    return Builder(builder: (context) {
-      final controller = PrescriptionEditScreenController.controller;
-      return Text(
-        controller.isEdit
-            ? StringRes.current.prescriptionTitleEdit
-            : StringRes.current.prescriptionTitleAdd,
-        style: const TextStyle(color: ColorRes.textPrimary),
-      );
-    });
+    return Builder(
+      builder: (context) {
+        final controller = PrescriptionEditScreenController.controller;
+        return Text(
+          controller.isEdit
+              ? StringRes.current.prescriptionTitleEdit
+              : StringRes.current.prescriptionTitleAdd,
+          style: const TextStyle(color: ColorRes.textPrimary),
+        );
+      },
+    );
   }
 
   Widget _buildBody() {
-    return Builder(builder: (context) {
-      final sw = MediaQuery.of(context).size.width;
-      return Column(
-        children: [
-          StreamBuilder<bool>(
-            stream: controller.loadingState,
-            builder: (_, state) {
-              return VisibleItem(
-                isVisible: state.data ?? false,
-                child: SizedBox(
-                  height: 64.0,
-                  child: Center(child: LottieBuilder.asset(LottieRes.dogLoading)),
-                ),
-              );
-            },
-          ),
-          _buildAnimalField(),
-          Expanded(
-            child: Stack(
-              children: [
-                GestureDetector(
-                  onHorizontalDragUpdate: (details) {
-                    final dx = -1 * (details.delta.dx / sw);
-                    final offset = controller.tabController.offset;
-                    final dBound = dx + controller.tabController.index;
-                    if (dBound < .0 || dBound > controller.tabController.length - 1) return;
-                    controller.tabController.offset = offset + dx;
-                  },
-                  onHorizontalDragEnd: (details) {
-                    final indexOffset = controller.tabController.offset.round();
-
-                    if (indexOffset != 0) {
-                      controller.tabController
-                          .animateTo(controller.tabController.index + indexOffset);
-                    } else {
-                      final offset = controller.tabController.offset;
-                      final animation = AnimationController(
-                        vsync: this,
-                        value: offset,
-                        lowerBound: -1.0,
-                        duration: kTabScrollDuration * offset.abs(),
-                        reverseDuration: kTabScrollDuration * offset.abs(),
-                      );
-
-                      void onAnimation() {
-                        controller.tabController.offset = animation.value;
-                      }
-
-                      animation.addListener(onAnimation);
-                      animation.addStatusListener((status) {
-                        if (status == AnimationStatus.completed) {
-                          animation.removeListener(onAnimation);
-                        }
-                      });
-                      animation.animateTo(.0, duration: kTabScrollDuration);
-                    }
-                  },
-                  child: const PrescriptionForm(),
-                ),
-              ],
+    return Builder(
+      builder: (context) {
+        final sw = MediaQuery.of(context).size.width;
+        return Column(
+          children: [
+            StreamBuilder<bool>(
+              stream: controller.loadingState,
+              builder: (_, state) {
+                return VisibleItem(
+                  isVisible: state.data ?? false,
+                  child: SizedBox(
+                    height: 64.0,
+                    child: Center(child: LottieBuilder.asset(LottieRes.dogLoading)),
+                  ),
+                );
+              },
             ),
-          ),
-        ],
-      );
-    });
+            _buildAnimalField(),
+            Expanded(
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    onHorizontalDragUpdate: (details) {
+                      final dx = -1 * (details.delta.dx / sw);
+                      final offset = controller.tabController.offset;
+                      final dBound = dx + controller.tabController.index;
+                      if (dBound < .0 || dBound > controller.tabController.length - 1) return;
+                      controller.tabController.offset = offset + dx;
+                    },
+                    onHorizontalDragEnd: (details) {
+                      final indexOffset = controller.tabController.offset.round();
+
+                      if (indexOffset != 0) {
+                        controller.tabController.animateTo(
+                          controller.tabController.index + indexOffset,
+                        );
+                      } else {
+                        final offset = controller.tabController.offset;
+                        final animation = AnimationController(
+                          vsync: this,
+                          value: offset,
+                          lowerBound: -1.0,
+                          duration: kTabScrollDuration * offset.abs(),
+                          reverseDuration: kTabScrollDuration * offset.abs(),
+                        );
+
+                        void onAnimation() {
+                          controller.tabController.offset = animation.value;
+                        }
+
+                        animation.addListener(onAnimation);
+                        animation.addStatusListener((status) {
+                          if (status == AnimationStatus.completed) {
+                            animation.removeListener(onAnimation);
+                          }
+                        });
+                        animation.animateTo(.0, duration: kTabScrollDuration);
+                      }
+                    },
+                    child: const PrescriptionForm(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildAnimalField() {
     return StreamBuilder<AnimalRead?>(
-        stream: controller.animalState,
-        builder: (_, data) {
-          final animal = data.data;
-          return CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: controller.onAnimalPressed,
-            child: FormEditCard(
-              [
-                EditCardData(
-                  label: StringRes.current.prescriptionAnimal,
-                  enabled: false,
-                  content: animal != null
-                      ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildAnimalTitle(animal),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Divider(height: 8.0, thickness: 1.0),
-                          ],
-                        )
-                      : null,
-                )
-              ],
+      stream: controller.animalState,
+      builder: (_, data) {
+        final animal = data.data;
+        return CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: controller.onAnimalPressed,
+          child: FormEditCard([
+            EditCardData(
+              label: StringRes.current.prescriptionAnimal,
+              enabled: false,
+              content: animal != null
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(children: [Expanded(child: _buildAnimalTitle(animal))]),
+                        ),
+                        const Divider(height: 8.0, thickness: 1.0),
+                      ],
+                    )
+                  : null,
             ),
-          );
-        });
+          ]),
+        );
+      },
+    );
   }
 
   Widget _buildAnimalTitle(AnimalRead animal) {
@@ -261,23 +247,14 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
         if (avatarUrl != null)
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(avatarUrl),
-              radius: 20.0,
-            ),
+            child: CircleAvatar(backgroundImage: NetworkImage(avatarUrl), radius: 20.0),
           ),
         Expanded(
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(
-                  text: animal.name,
-                  style: StyleRes.subTitle,
-                ),
-                const TextSpan(
-                  text: ', ',
-                  style: StyleRes.subTitle,
-                ),
+                TextSpan(text: animal.name, style: StyleRes.subTitle),
+                const TextSpan(text: ', ', style: StyleRes.subTitle),
                 TextSpan(
                   text: animal.id.toString(),
                   style: StyleRes.content.copyWith(color: ColorRes.textSecondary),

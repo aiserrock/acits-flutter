@@ -9,27 +9,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// [Curator], [AnimalRead], [Applicant]
 class Search<T> extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
-  Search({
-    required this.adapter,
-    this.tileBuilder,
-    Key? key,
-  }) : super(key: key);
+  Search({required this.adapter, this.tileBuilder, super.key});
 
   final PagingFetchAdapter adapter;
   final Widget Function(T item)? tileBuilder;
 
-  static Route<T> route<T>({
-    PagingFetchAdapter? adapter,
-    Widget Function(T item)? tileBuilder,
-  }) {
+  static Route<T> route<T>({PagingFetchAdapter? adapter, Widget Function(T item)? tileBuilder}) {
     final adapter = SearchAdapterTypeFactoryDelegate.adapter(T);
     final tileBuilder = SearchAdapterTypeFactoryDelegate.tileBuilder<T>();
 
     return MaterialPageRoute(
-        builder: (_) => Search<T>(
-              adapter: adapter,
-              tileBuilder: tileBuilder,
-            ));
+      builder: (_) => Search<T>(adapter: adapter, tileBuilder: tileBuilder),
+    );
   }
 
   @override

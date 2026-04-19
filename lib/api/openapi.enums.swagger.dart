@@ -8,13 +8,13 @@ enum DurationEnum {
   @JsonValue('EVERY_WEEK')
   everyWeek,
   @JsonValue('CUSTOM')
-  custom
+  custom,
 }
 
 const $DurationEnumMap = {
   DurationEnum.everyday: 'EVERYDAY',
   DurationEnum.everyWeek: 'EVERY_WEEK',
-  DurationEnum.custom: 'CUSTOM'
+  DurationEnum.custom: 'CUSTOM',
 };
 
 enum LevelEnum {
@@ -25,7 +25,7 @@ enum LevelEnum {
   @JsonValue('2')
   value_2,
   @JsonValue('3')
-  value_3
+  value_3,
 }
 
 const $LevelEnumMap = {LevelEnum.value_1: '1', LevelEnum.value_2: '2', LevelEnum.value_3: '3'};
@@ -44,7 +44,7 @@ enum MyTypeEnum {
   @JsonValue('WOUND_HEALING')
   woundHealing,
   @JsonValue('ANALYSIS')
-  analysis
+  analysis,
 }
 
 const $MyTypeEnumMap = {
@@ -53,7 +53,7 @@ const $MyTypeEnumMap = {
   MyTypeEnum.readmission: 'READMISSION',
   MyTypeEnum.removingStitches: 'REMOVING_STITCHES',
   MyTypeEnum.woundHealing: 'WOUND_HEALING',
-  MyTypeEnum.analysis: 'ANALYSIS'
+  MyTypeEnum.analysis: 'ANALYSIS',
 };
 
 enum PrescriptionExecutionStatusEnum {
@@ -66,14 +66,14 @@ enum PrescriptionExecutionStatusEnum {
   @JsonValue('EXPIRED')
   expired,
   @JsonValue('CANCELLED')
-  cancelled
+  cancelled,
 }
 
 const $PrescriptionExecutionStatusEnumMap = {
   PrescriptionExecutionStatusEnum.inProgress: 'IN_PROGRESS',
   PrescriptionExecutionStatusEnum.done: 'DONE',
   PrescriptionExecutionStatusEnum.expired: 'EXPIRED',
-  PrescriptionExecutionStatusEnum.cancelled: 'CANCELLED'
+  PrescriptionExecutionStatusEnum.cancelled: 'CANCELLED',
 };
 
 enum RoleEnum {
@@ -82,7 +82,7 @@ enum RoleEnum {
   @JsonValue('GUEST')
   guest,
   @JsonValue('WORKER')
-  worker
+  worker,
 }
 
 const $RoleEnumMap = {RoleEnum.guest: 'GUEST', RoleEnum.worker: 'WORKER'};
@@ -105,7 +105,7 @@ enum Status131Enum {
   @JsonValue('DEATH')
   death,
   @JsonValue('EUTHANASIA')
-  euthanasia
+  euthanasia,
 }
 
 const $Status131EnumMap = {
@@ -116,7 +116,7 @@ const $Status131EnumMap = {
   Status131Enum.preparingToRelease: 'PREPARING_TO_RELEASE',
   Status131Enum.released: 'RELEASED',
   Status131Enum.death: 'DEATH',
-  Status131Enum.euthanasia: 'EUTHANASIA'
+  Status131Enum.euthanasia: 'EUTHANASIA',
 };
 
 enum ApiSchemaGetFormat {
@@ -125,7 +125,7 @@ enum ApiSchemaGetFormat {
   @JsonValue('json')
   json,
   @JsonValue('yaml')
-  yaml
+  yaml,
 }
 
 const $ApiSchemaGetFormatMap = {ApiSchemaGetFormat.json: 'json', ApiSchemaGetFormat.yaml: 'yaml'};
@@ -136,7 +136,7 @@ enum ApiSchemaGetLang {
   @JsonValue('en')
   en,
   @JsonValue('ru')
-  ru
+  ru,
 }
 
 const $ApiSchemaGetLangMap = {ApiSchemaGetLang.en: 'en', ApiSchemaGetLang.ru: 'ru'};
@@ -153,7 +153,7 @@ enum ApiV1AnimalsIdHistoryGetCreatedAtRange {
   @JsonValue('year')
   year,
   @JsonValue('yesterday')
-  yesterday
+  yesterday,
 }
 
 const $ApiV1AnimalsIdHistoryGetCreatedAtRangeMap = {
@@ -161,7 +161,7 @@ const $ApiV1AnimalsIdHistoryGetCreatedAtRangeMap = {
   ApiV1AnimalsIdHistoryGetCreatedAtRange.today: 'today',
   ApiV1AnimalsIdHistoryGetCreatedAtRange.week: 'week',
   ApiV1AnimalsIdHistoryGetCreatedAtRange.year: 'year',
-  ApiV1AnimalsIdHistoryGetCreatedAtRange.yesterday: 'yesterday'
+  ApiV1AnimalsIdHistoryGetCreatedAtRange.yesterday: 'yesterday',
 };
 
 enum ApiV1AnimalsSpeciesGetLevel {
@@ -172,11 +172,11 @@ enum ApiV1AnimalsSpeciesGetLevel {
   @JsonValue('2')
   value_2,
   @JsonValue('3')
-  value_3
+  value_3,
 }
 
 const $ApiV1AnimalsSpeciesGetLevelMap = {
   ApiV1AnimalsSpeciesGetLevel.value_1: '1',
   ApiV1AnimalsSpeciesGetLevel.value_2: '2',
-  ApiV1AnimalsSpeciesGetLevel.value_3: '3'
+  ApiV1AnimalsSpeciesGetLevel.value_3: '3',
 };

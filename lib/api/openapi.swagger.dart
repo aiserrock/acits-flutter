@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:collection/collection.dart';
 
@@ -21,7 +23,10 @@ abstract class Openapi extends ChopperService {
     }
 
     final newClient = ChopperClient(
-        services: [_$Openapi()], converter: $JsonSerializableConverter(), baseUrl: 'https://');
+      services: [_$Openapi()],
+      converter: $JsonSerializableConverter(),
+      baseUrl: Uri.parse('https://'),
+    );
     return _$Openapi(newClient);
   }
 
@@ -29,12 +34,16 @@ abstract class Openapi extends ChopperService {
   ///@param format
   ///@param lang
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Object>> apiSchemaGet(
-      {enums.ApiSchemaGetFormat? format, enums.ApiSchemaGetLang? lang, String? xCurrentShelter}) {
+  Future<chopper.Response<Object>> apiSchemaGet({
+    enums.ApiSchemaGetFormat? format,
+    enums.ApiSchemaGetLang? lang,
+    String? xCurrentShelter,
+  }) {
     return _apiSchemaGet(
-        format: enums.$ApiSchemaGetFormatMap[format],
-        lang: enums.$ApiSchemaGetLangMap[lang],
-        xCurrentShelter: xCurrentShelter);
+      format: enums.$ApiSchemaGetFormatMap[format],
+      lang: enums.$ApiSchemaGetLangMap[lang],
+      xCurrentShelter: xCurrentShelter,
+    );
   }
 
   ///
@@ -42,23 +51,27 @@ abstract class Openapi extends ChopperService {
   ///@param lang
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/schema/')
-  Future<chopper.Response<Object>> _apiSchemaGet(
-      {@Query('format') String? format,
-      @Query('lang') String? lang,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Object>> _apiSchemaGet({
+    @Query('format') String? format,
+    @Query('lang') String? lang,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/token/')
-  Future<chopper.Response<TokenObtainPair>> apiTokenPost(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required TokenObtainPair? body});
+  Future<chopper.Response<TokenObtainPair>> apiTokenPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required TokenObtainPair? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/token/refresh/')
-  Future<chopper.Response<TokenRefresh>> apiTokenRefreshPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required TokenRefresh? body});
+  Future<chopper.Response<TokenRefresh>> apiTokenRefreshPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required TokenRefresh? body,
+  });
 
   ///
   ///@param limit Number of results to return per page.
@@ -67,69 +80,81 @@ abstract class Openapi extends ChopperService {
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/')
-  Future<chopper.Response<PaginatedAnimalReadList>> apiV1AnimalsGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('ordering') String? ordering,
-      @Query('search') String? search,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedAnimalReadList>> apiV1AnimalsGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('ordering') String? ordering,
+    @Query('search') String? search,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/animals/')
-  Future<chopper.Response<AnimalRead>> apiV1AnimalsPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required AnimalWrite? body});
+  Future<chopper.Response<AnimalRead>> apiV1AnimalsPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required AnimalWrite? body,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/{id}/')
-  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdGet(
-      {@Path('id') required String? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdGet({
+    @Path('id') required String? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/animals/{id}/')
-  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdPut(
-      {@Path('id') required String? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required AnimalWrite? body});
+  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdPut({
+    @Path('id') required String? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required AnimalWrite? body,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/animals/{id}/')
-  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdPatch(
-      {@Path('id') required String? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedAnimalWrite? body});
+  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdPatch({
+    @Path('id') required String? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedAnimalWrite? body,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Delete(path: '/api/v1/animals/{id}/')
-  Future<chopper.Response> apiV1AnimalsIdDelete(
-      {@Path('id') required String? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1AnimalsIdDelete({
+    @Path('id') required String? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id
   ///@param pdf_type One of ('history', 'history-editing', 'history-prescriptions')
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/{id}/{pdf_type}/pdf/')
-  Future<chopper.Response<String>> apiV1AnimalsIdPdfTypePdfGet(
-      {@Path('id') required int? id,
-      @Path('pdf_type') required String? pdfType,
-      @Query('from') required DateTime from,
-      @Query('to') required DateTime to,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<String>> apiV1AnimalsIdPdfTypePdfGet({
+    @Path('id') required int? id,
+    @Path('pdf_type') required String? pdfType,
+    @Query('from') required DateTime from,
+    @Query('to') required DateTime to,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this Applicant File.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/{id}/files/')
-  Future<chopper.Response<List<ApplicantFile>>> apiV1AnimalsIdFilesGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<List<ApplicantFile>>> apiV1AnimalsIdFilesGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param created_at_after Date range from - to
@@ -140,24 +165,26 @@ abstract class Openapi extends ChopperService {
   ///@param offset The initial index from which to return the results.
   ///@param ordering Which field to use when ordering the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>> apiV1AnimalsIdHistoryGet(
-      {String? createdAtAfter,
-      String? createdAtBefore,
-      enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? createdAtRange,
-      required int? id,
-      int? limit,
-      int? offset,
-      String? ordering,
-      String? xCurrentShelter}) {
+  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>> apiV1AnimalsIdHistoryGet({
+    String? createdAtAfter,
+    String? createdAtBefore,
+    enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? createdAtRange,
+    required int? id,
+    int? limit,
+    int? offset,
+    String? ordering,
+    String? xCurrentShelter,
+  }) {
     return _apiV1AnimalsIdHistoryGet(
-        createdAtAfter: createdAtAfter,
-        createdAtBefore: createdAtBefore,
-        createdAtRange: enums.$ApiV1AnimalsIdHistoryGetCreatedAtRangeMap[createdAtRange],
-        id: id,
-        limit: limit,
-        offset: offset,
-        ordering: ordering,
-        xCurrentShelter: xCurrentShelter);
+      createdAtAfter: createdAtAfter,
+      createdAtBefore: createdAtBefore,
+      createdAtRange: enums.$ApiV1AnimalsIdHistoryGetCreatedAtRangeMap[createdAtRange],
+      id: id,
+      limit: limit,
+      offset: offset,
+      ordering: ordering,
+      xCurrentShelter: xCurrentShelter,
+    );
   }
 
   ///
@@ -170,49 +197,56 @@ abstract class Openapi extends ChopperService {
   ///@param ordering Which field to use when ordering the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/{id}/history/')
-  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>> _apiV1AnimalsIdHistoryGet(
-      {@Query('created_at_after') String? createdAtAfter,
-      @Query('created_at_before') String? createdAtBefore,
-      @Query('created_at_range') String? createdAtRange,
-      @Path('id') required int? id,
-      @Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('ordering') String? ordering,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>> _apiV1AnimalsIdHistoryGet({
+    @Query('created_at_after') String? createdAtAfter,
+    @Query('created_at_before') String? createdAtBefore,
+    @Query('created_at_range') String? createdAtRange,
+    @Path('id') required int? id,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('ordering') String? ordering,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id
   ///@param image_pk
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/animals/{id}/primary_image/{image_pk}/', optionalBody: true)
-  Future<chopper.Response<Status>> apiV1AnimalsIdPrimaryImageImagePkPut(
-      {@Path('id') required String? id,
-      @Path('image_pk') required String? imagePk,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Status>> apiV1AnimalsIdPrimaryImageImagePkPut({
+    @Path('id') required String? id,
+    @Path('image_pk') required String? imagePk,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/animals/{id}/restore/', optionalBody: true)
-  Future<chopper.Response<Status>> apiV1AnimalsIdRestorePut(
-      {@Path('id') required String? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Status>> apiV1AnimalsIdRestorePut({
+    @Path('id') required String? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param is_required
   ///@param ordering Which field to use when ordering the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/attributes/')
-  Future<chopper.Response<List<AnimalAttribute>>> apiV1AnimalsAttributesGet(
-      {@Query('is_required') bool? isRequired,
-      @Query('ordering') String? ordering,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<List<AnimalAttribute>>> apiV1AnimalsAttributesGet({
+    @Query('is_required') bool? isRequired,
+    @Query('ordering') String? ordering,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this Animal Attribute.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/attributes/{id}/')
-  Future<chopper.Response<AnimalAttribute>> apiV1AnimalsAttributesIdGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<AnimalAttribute>> apiV1AnimalsAttributesIdGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param animal
@@ -221,50 +255,59 @@ abstract class Openapi extends ChopperService {
   ///@param ordering Which field to use when ordering the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/notes/')
-  Future<chopper.Response<PaginatedAnimalNoteList>> apiV1AnimalsNotesGet(
-      {@Query('animal') int? animal,
-      @Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('ordering') String? ordering,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedAnimalNoteList>> apiV1AnimalsNotesGet({
+    @Query('animal') int? animal,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('ordering') String? ordering,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/animals/notes/')
-  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required AnimalNote? body});
+  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required AnimalNote? body,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/notes/{id}/')
-  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/animals/notes/{id}/')
-  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdPut(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required AnimalNote? body});
+  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdPut({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required AnimalNote? body,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/animals/notes/{id}/')
-  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdPatch(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedAnimalNote? body});
+  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdPatch({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedAnimalNote? body,
+  });
 
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
   @Delete(path: '/api/v1/animals/notes/{id}/')
-  Future<chopper.Response> apiV1AnimalsNotesIdDelete(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1AnimalsNotesIdDelete({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param level Level of species
@@ -274,22 +317,24 @@ abstract class Openapi extends ChopperService {
   ///@param parent_id
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedSpeciesList>> apiV1AnimalsSpeciesGet(
-      {enums.ApiV1AnimalsSpeciesGetLevel? level,
-      int? limit,
-      int? offset,
-      String? ordering,
-      int? parentId,
-      String? search,
-      String? xCurrentShelter}) {
+  Future<chopper.Response<PaginatedSpeciesList>> apiV1AnimalsSpeciesGet({
+    enums.ApiV1AnimalsSpeciesGetLevel? level,
+    int? limit,
+    int? offset,
+    String? ordering,
+    int? parentId,
+    String? search,
+    String? xCurrentShelter,
+  }) {
     return _apiV1AnimalsSpeciesGet(
-        level: enums.$ApiV1AnimalsSpeciesGetLevelMap[level],
-        limit: limit,
-        offset: offset,
-        ordering: ordering,
-        parentId: parentId,
-        search: search,
-        xCurrentShelter: xCurrentShelter);
+      level: enums.$ApiV1AnimalsSpeciesGetLevelMap[level],
+      limit: limit,
+      offset: offset,
+      ordering: ordering,
+      parentId: parentId,
+      search: search,
+      xCurrentShelter: xCurrentShelter,
+    );
   }
 
   ///
@@ -301,27 +346,32 @@ abstract class Openapi extends ChopperService {
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/species/')
-  Future<chopper.Response<PaginatedSpeciesList>> _apiV1AnimalsSpeciesGet(
-      {@Query('level') String? level,
-      @Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('ordering') String? ordering,
-      @Query('parent_id') int? parentId,
-      @Query('search') String? search,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedSpeciesList>> _apiV1AnimalsSpeciesGet({
+    @Query('level') String? level,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('ordering') String? ordering,
+    @Query('parent_id') int? parentId,
+    @Query('search') String? search,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/animals/species/')
-  Future<chopper.Response<Species>> apiV1AnimalsSpeciesPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required Species? body});
+  Future<chopper.Response<Species>> apiV1AnimalsSpeciesPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Species? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Species.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/animals/species/{id}/')
-  Future<chopper.Response<Species>> apiV1AnimalsSpeciesIdGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Species>> apiV1AnimalsSpeciesIdGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param limit Number of results to return per page.
@@ -330,50 +380,59 @@ abstract class Openapi extends ChopperService {
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/applicants/')
-  Future<chopper.Response<PaginatedApplicantList>> apiV1ApplicantsGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('ordering') String? ordering,
-      @Query('search') String? search,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedApplicantList>> apiV1ApplicantsGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('ordering') String? ordering,
+    @Query('search') String? search,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/applicants/')
-  Future<chopper.Response<Applicant>> apiV1ApplicantsPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required Applicant? body});
+  Future<chopper.Response<Applicant>> apiV1ApplicantsPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Applicant? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Applicant.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/applicants/{id}/')
-  Future<chopper.Response<Applicant>> apiV1ApplicantsIdGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Applicant>> apiV1ApplicantsIdGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this Applicant.
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/applicants/{id}/')
-  Future<chopper.Response<Applicant>> apiV1ApplicantsIdPut(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required Applicant? body});
+  Future<chopper.Response<Applicant>> apiV1ApplicantsIdPut({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Applicant? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Applicant.
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/applicants/{id}/')
-  Future<chopper.Response<Applicant>> apiV1ApplicantsIdPatch(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedApplicant? body});
+  Future<chopper.Response<Applicant>> apiV1ApplicantsIdPatch({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedApplicant? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Applicant.
   ///@param x-current-shelter Set current shelter id
   @Delete(path: '/api/v1/applicants/{id}/')
-  Future<chopper.Response> apiV1ApplicantsIdDelete(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1ApplicantsIdDelete({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param limit Number of results to return per page.
@@ -381,11 +440,12 @@ abstract class Openapi extends ChopperService {
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/available-shelters/')
-  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1AvailableSheltersGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('search') String? search,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1AvailableSheltersGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('search') String? search,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param limit Number of results to return per page.
@@ -393,48 +453,57 @@ abstract class Openapi extends ChopperService {
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/curators/')
-  Future<chopper.Response<PaginatedCuratorList>> apiV1CuratorsGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('search') String? search,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedCuratorList>> apiV1CuratorsGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('search') String? search,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/curators/')
-  Future<chopper.Response<Curator>> apiV1CuratorsPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required Curator? body});
+  Future<chopper.Response<Curator>> apiV1CuratorsPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Curator? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Curator.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/curators/{id}/')
-  Future<chopper.Response<Curator>> apiV1CuratorsIdGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Curator>> apiV1CuratorsIdGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this Curator.
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/curators/{id}/')
-  Future<chopper.Response<Curator>> apiV1CuratorsIdPut(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required Curator? body});
+  Future<chopper.Response<Curator>> apiV1CuratorsIdPut({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Curator? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Curator.
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/curators/{id}/')
-  Future<chopper.Response<Curator>> apiV1CuratorsIdPatch(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedCurator? body});
+  Future<chopper.Response<Curator>> apiV1CuratorsIdPatch({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedCurator? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/feedback/')
-  Future<chopper.Response<Feedback>> apiV1FeedbackPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required Feedback? body});
+  Future<chopper.Response<Feedback>> apiV1FeedbackPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Feedback? body,
+  });
 
   ///
   ///@param animal
@@ -444,51 +513,60 @@ abstract class Openapi extends ChopperService {
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/prescriptions/')
-  Future<chopper.Response<PaginatedPrescriptionList>> apiV1PrescriptionsGet(
-      {@Query('animal') int? animal,
-      @Query('execute_at__gte') String? executeAtGte,
-      @Query('execute_at__lt') String? executeAtLt,
-      @Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedPrescriptionList>> apiV1PrescriptionsGet({
+    @Query('animal') int? animal,
+    @Query('execute_at__gte') String? executeAtGte,
+    @Query('execute_at__lt') String? executeAtLt,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/prescriptions/')
-  Future<chopper.Response<Prescription>> apiV1PrescriptionsPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required Prescription? body});
+  Future<chopper.Response<Prescription>> apiV1PrescriptionsPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Prescription? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Prescription.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/prescriptions/{id}/')
-  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this Prescription.
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/prescriptions/{id}/')
-  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdPut(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required Prescription? body});
+  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdPut({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Prescription? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Prescription.
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/prescriptions/{id}/')
-  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdPatch(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedPrescription? body});
+  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdPatch({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedPrescription? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this Prescription.
   ///@param x-current-shelter Set current shelter id
   @Delete(path: '/api/v1/prescriptions/{id}/')
-  Future<chopper.Response> apiV1PrescriptionsIdDelete(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1PrescriptionsIdDelete({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param from From datetime
@@ -499,14 +577,16 @@ abstract class Openapi extends ChopperService {
   ///@param to To datetime
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/prescriptions/executions/')
-  Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>> apiV1PrescriptionsExecutionsGet(
-      {@Path('from') required String? from,
-      @Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('ordering') String? ordering,
-      @Query('search') String? search,
-      @Path('to') required String? to,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>>
+  apiV1PrescriptionsExecutionsGet({
+    @Path('from') required String? from,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('ordering') String? ordering,
+    @Query('search') String? search,
+    @Path('to') required String? to,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param limit Number of results to return per page.
@@ -514,11 +594,12 @@ abstract class Openapi extends ChopperService {
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/shelter/drugs/')
-  Future<chopper.Response<PaginatedShelterDrugList>> apiV1ShelterDrugsGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('search') String? search,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedShelterDrugList>> apiV1ShelterDrugsGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('search') String? search,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param is_verified_by_admin Is verified by admin (true/false)
@@ -527,65 +608,77 @@ abstract class Openapi extends ChopperService {
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/shelter/workers/')
-  Future<chopper.Response<PaginatedUserSheltersAdminSerializersList>> apiV1ShelterWorkersGet(
-      {@Query('is_verified_by_admin') bool? isVerifiedByAdmin,
-      @Query('is_verified_by_admin__isnull') bool? isVerifiedByAdminIsnull,
-      @Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedUserSheltersAdminSerializersList>> apiV1ShelterWorkersGet({
+    @Query('is_verified_by_admin') bool? isVerifiedByAdmin,
+    @Query('is_verified_by_admin__isnull') bool? isVerifiedByAdminIsnull,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/shelter/workers/')
-  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersPost(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserSheltersAdminSerializers? body});
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserSheltersAdminSerializers? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/shelter/workers/{id}/')
-  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdGet(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdGet({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/shelter/workers/{id}/')
-  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdPut(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserSheltersAdminSerializers? body});
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdPut({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserSheltersAdminSerializers? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/shelter/workers/{id}/')
-  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdPatch(
-      {@Path('id') required int? id,
-      @Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedUserSheltersAdminSerializers? body});
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdPatch({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedUserSheltersAdminSerializers? body,
+  });
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @Delete(path: '/api/v1/shelter/workers/{id}/')
-  Future<chopper.Response> apiV1ShelterWorkersIdDelete(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1ShelterWorkersIdDelete({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/shelter/workers/{id}/approve/', optionalBody: true)
-  Future<chopper.Response<Approve>> apiV1ShelterWorkersIdApprovePut(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Approve>> apiV1ShelterWorkersIdApprovePut({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/shelter/workers/{id}/decline/', optionalBody: true)
-  Future<chopper.Response<Decline>> apiV1ShelterWorkersIdDeclinePut(
-      {@Path('id') required int? id, @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<Decline>> apiV1ShelterWorkersIdDeclinePut({
+    @Path('id') required int? id,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param limit Number of results to return per page.
@@ -593,108 +686,123 @@ abstract class Openapi extends ChopperService {
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/shelters/')
-  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1SheltersGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Query('search') String? search,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1SheltersGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Query('search') String? search,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/shelters/add/')
-  Future<chopper.Response<UserSheltersWorkerSerializers>> apiV1SheltersAddPost(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserSheltersWorkerSerializers? body});
+  Future<chopper.Response<UserSheltersWorkerSerializers>> apiV1SheltersAddPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserSheltersWorkerSerializers? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/users/admin-register/')
-  Future<chopper.Response<UserShelterAdminSerializers>> apiV1UsersAdminRegisterPost(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserShelterAdminSerializers? body});
+  Future<chopper.Response<UserShelterAdminSerializers>> apiV1UsersAdminRegisterPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserShelterAdminSerializers? body,
+  });
 
   ///
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/users/available-workers/')
-  Future<chopper.Response<PaginatedUserShortSerializersList>> apiV1UsersAvailableWorkersGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedUserShortSerializersList>> apiV1UsersAvailableWorkersGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/users/me/')
-  Future<chopper.Response<UserSerializers>> apiV1UsersMeGet(
-      {@Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<UserSerializers>> apiV1UsersMeGet({
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/users/me/')
-  Future<chopper.Response<UserSerializers>> apiV1UsersMePut(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserSerializers? body});
+  Future<chopper.Response<UserSerializers>> apiV1UsersMePut({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserSerializers? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/users/me/')
-  Future<chopper.Response<UserSerializers>> apiV1UsersMePatch(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedUserSerializers? body});
+  Future<chopper.Response<UserSerializers>> apiV1UsersMePatch({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedUserSerializers? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Put(path: '/api/v1/users/me/change_password/')
-  Future<chopper.Response<UserChangePasswordSerializers>> apiV1UsersMeChangePasswordPut(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserChangePasswordSerializers? body});
+  Future<chopper.Response<UserChangePasswordSerializers>> apiV1UsersMeChangePasswordPut({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserChangePasswordSerializers? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Patch(path: '/api/v1/users/me/change_password/')
-  Future<chopper.Response<UserChangePasswordSerializers>> apiV1UsersMeChangePasswordPatch(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required PatchedUserChangePasswordSerializers? body});
+  Future<chopper.Response<UserChangePasswordSerializers>> apiV1UsersMeChangePasswordPatch({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required PatchedUserChangePasswordSerializers? body,
+  });
 
   ///
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/users/me/shelters/')
-  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1UsersMeSheltersGet(
-      {@Query('limit') int? limit,
-      @Query('offset') int? offset,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1UsersMeSheltersGet({
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/users/me/shelters/current/')
-  Future<chopper.Response<UserCurrentShelterSerializers>> apiV1UsersMeSheltersCurrentGet(
-      {@Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<UserCurrentShelterSerializers>> apiV1UsersMeSheltersCurrentGet({
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/users/reset-password/')
-  Future<chopper.Response> apiV1UsersResetPasswordPost(
-      {@Header('x-current-shelter') String? xCurrentShelter, @Body() required Email? body});
+  Future<chopper.Response> apiV1UsersResetPasswordPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required Email? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/users/reset-password/complete/')
-  Future<chopper.Response> apiV1UsersResetPasswordCompletePost(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserResetPasswordComplete? body});
+  Future<chopper.Response> apiV1UsersResetPasswordCompletePost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserResetPasswordComplete? body,
+  });
 
   ///
   ///@param token
   ///@param uidb64
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/users/reset-password/confirm/{uidb64}/{token}/')
-  Future<chopper.Response> apiV1UsersResetPasswordConfirmUidb64TokenGet(
-      {@Path('token') required String? token,
-      @Path('uidb64') required String? uidb64,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1UsersResetPasswordConfirmUidb64TokenGet({
+    @Path('token') required String? token,
+    @Path('uidb64') required String? uidb64,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param sidb64
@@ -702,11 +810,12 @@ abstract class Openapi extends ChopperService {
   ///@param uidb64
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/users/verify-email/{uidb64}/{sidb64}/{token}/')
-  Future<chopper.Response> apiV1UsersVerifyEmailUidb64Sidb64TokenGet(
-      {@Path('sidb64') required String? sidb64,
-      @Path('token') required String? token,
-      @Path('uidb64') required String? uidb64,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1UsersVerifyEmailUidb64Sidb64TokenGet({
+    @Path('sidb64') required String? sidb64,
+    @Path('token') required String? token,
+    @Path('uidb64') required String? uidb64,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param sidb64
@@ -714,24 +823,27 @@ abstract class Openapi extends ChopperService {
   ///@param uidb64
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/users/verify-worker/{uidb64}/{sidb64}/{token}/')
-  Future<chopper.Response> apiV1UsersVerifyWorkerUidb64Sidb64TokenGet(
-      {@Path('sidb64') required String? sidb64,
-      @Path('token') required String? token,
-      @Path('uidb64') required String? uidb64,
-      @Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response> apiV1UsersVerifyWorkerUidb64Sidb64TokenGet({
+    @Path('sidb64') required String? sidb64,
+    @Path('token') required String? token,
+    @Path('uidb64') required String? uidb64,
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Post(path: '/api/v1/users/worker-register/')
-  Future<chopper.Response<UserShelterWorkerSerializers>> apiV1UsersWorkerRegisterPost(
-      {@Header('x-current-shelter') String? xCurrentShelter,
-      @Body() required UserShelterWorkerSerializers? body});
+  Future<chopper.Response<UserShelterWorkerSerializers>> apiV1UsersWorkerRegisterPost({
+    @Header('x-current-shelter') String? xCurrentShelter,
+    @Body() required UserShelterWorkerSerializers? body,
+  });
 
   ///
   ///@param x-current-shelter Set current shelter id
   @Get(path: '/api/v1/values-for-selection/')
-  Future<chopper.Response<ValuesForSelection>> apiV1ValuesForSelectionGet(
-      {@Header('x-current-shelter') String? xCurrentShelter});
+  Future<chopper.Response<ValuesForSelection>> apiV1ValuesForSelectionGet({
+    @Header('x-current-shelter') String? xCurrentShelter,
+  });
 }
 
 final Map<Type, Object Function(Map<String, dynamic>)> OpenapiJsonDecoderMappings = {
@@ -803,11 +915,7 @@ final Map<Type, Object Function(Map<String, dynamic>)> OpenapiJsonDecoderMapping
 
 @JsonSerializable(explicitToJson: true)
 class AnimalAttribute {
-  AnimalAttribute({
-    this.id,
-    this.name,
-    this.isRequired,
-  });
+  AnimalAttribute({this.id, this.name, this.isRequired});
 
   factory AnimalAttribute.fromJson(Map<String, dynamic> json) => _$AnimalAttributeFromJson(json);
 
@@ -843,18 +951,16 @@ class AnimalAttribute {
 extension $AnimalAttributeExtension on AnimalAttribute {
   AnimalAttribute copyWith({int? id, String? name, bool? isRequired}) {
     return AnimalAttribute(
-        id: id ?? this.id, name: name ?? this.name, isRequired: isRequired ?? this.isRequired);
+      id: id ?? this.id,
+      name: name ?? this.name,
+      isRequired: isRequired ?? this.isRequired,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class AnimalAttributeValue {
-  AnimalAttributeValue({
-    this.attrId,
-    this.name,
-    this.value,
-    this.isRequired,
-  });
+  AnimalAttributeValue({this.attrId, this.name, this.value, this.isRequired});
 
   factory AnimalAttributeValue.fromJson(Map<String, dynamic> json) =>
       _$AnimalAttributeValueFromJson(json);
@@ -897,10 +1003,11 @@ class AnimalAttributeValue {
 extension $AnimalAttributeValueExtension on AnimalAttributeValue {
   AnimalAttributeValue copyWith({int? attrId, String? name, String? value, bool? isRequired}) {
     return AnimalAttributeValue(
-        attrId: attrId ?? this.attrId,
-        name: name ?? this.name,
-        value: value ?? this.value,
-        isRequired: isRequired ?? this.isRequired);
+      attrId: attrId ?? this.attrId,
+      name: name ?? this.name,
+      value: value ?? this.value,
+      isRequired: isRequired ?? this.isRequired,
+    );
   }
 }
 
@@ -970,33 +1077,30 @@ class AnimalHistorySnapshot {
 }
 
 extension $AnimalHistorySnapshotExtension on AnimalHistorySnapshot {
-  AnimalHistorySnapshot copyWith(
-      {int? animal,
-      DateTime? createdAt,
-      enums.Status131Enum? status,
-      String? height,
-      String? weight,
-      String? shelterName,
-      String? editor}) {
+  AnimalHistorySnapshot copyWith({
+    int? animal,
+    DateTime? createdAt,
+    enums.Status131Enum? status,
+    String? height,
+    String? weight,
+    String? shelterName,
+    String? editor,
+  }) {
     return AnimalHistorySnapshot(
-        animal: animal ?? this.animal,
-        createdAt: createdAt ?? this.createdAt,
-        status: status ?? this.status,
-        height: height ?? this.height,
-        weight: weight ?? this.weight,
-        shelterName: shelterName ?? this.shelterName,
-        editor: editor ?? this.editor);
+      animal: animal ?? this.animal,
+      createdAt: createdAt ?? this.createdAt,
+      status: status ?? this.status,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      shelterName: shelterName ?? this.shelterName,
+      editor: editor ?? this.editor,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class AnimalImageRead {
-  AnimalImageRead({
-    this.id,
-    this.isPrimary,
-    this.filename,
-    this.image,
-  });
+  AnimalImageRead({this.id, this.isPrimary, this.filename, this.image});
 
   factory AnimalImageRead.fromJson(Map<String, dynamic> json) => _$AnimalImageReadFromJson(json);
 
@@ -1037,20 +1141,17 @@ class AnimalImageRead {
 extension $AnimalImageReadExtension on AnimalImageRead {
   AnimalImageRead copyWith({int? id, bool? isPrimary, String? filename, ImageThumbnails? image}) {
     return AnimalImageRead(
-        id: id ?? this.id,
-        isPrimary: isPrimary ?? this.isPrimary,
-        filename: filename ?? this.filename,
-        image: image ?? this.image);
+      id: id ?? this.id,
+      isPrimary: isPrimary ?? this.isPrimary,
+      filename: filename ?? this.filename,
+      image: image ?? this.image,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class AnimalImageWrite {
-  AnimalImageWrite({
-    this.isPrimary,
-    this.name,
-    this.image,
-  });
+  AnimalImageWrite({this.isPrimary, this.name, this.image});
 
   factory AnimalImageWrite.fromJson(Map<String, dynamic> json) => _$AnimalImageWriteFromJson(json);
 
@@ -1087,9 +1188,10 @@ class AnimalImageWrite {
 extension $AnimalImageWriteExtension on AnimalImageWrite {
   AnimalImageWrite copyWith({bool? isPrimary, String? name, String? image}) {
     return AnimalImageWrite(
-        isPrimary: isPrimary ?? this.isPrimary,
-        name: name ?? this.name,
-        image: image ?? this.image);
+      isPrimary: isPrimary ?? this.isPrimary,
+      name: name ?? this.name,
+      image: image ?? this.image,
+    );
   }
 }
 
@@ -1155,8 +1257,10 @@ class AnimalNote {
             (identical(other.updatedBy, updatedBy) ||
                 const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.isUserCanEditOrDelete, isUserCanEditOrDelete) ||
-                const DeepCollectionEquality()
-                    .equals(other.isUserCanEditOrDelete, isUserCanEditOrDelete)));
+                const DeepCollectionEquality().equals(
+                  other.isUserCanEditOrDelete,
+                  isUserCanEditOrDelete,
+                )));
   }
 
   @override
@@ -1175,40 +1279,36 @@ class AnimalNote {
 }
 
 extension $AnimalNoteExtension on AnimalNote {
-  AnimalNote copyWith(
-      {int? id,
-      String? url,
-      int? animal,
-      String? content,
-      List<AnimalNoteFile>? files,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? createdBy,
-      String? updatedBy,
-      bool? isUserCanEditOrDelete}) {
+  AnimalNote copyWith({
+    int? id,
+    String? url,
+    int? animal,
+    String? content,
+    List<AnimalNoteFile>? files,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? createdBy,
+    String? updatedBy,
+    bool? isUserCanEditOrDelete,
+  }) {
     return AnimalNote(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        animal: animal ?? this.animal,
-        content: content ?? this.content,
-        files: files ?? this.files,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        isUserCanEditOrDelete: isUserCanEditOrDelete ?? this.isUserCanEditOrDelete);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      animal: animal ?? this.animal,
+      content: content ?? this.content,
+      files: files ?? this.files,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      isUserCanEditOrDelete: isUserCanEditOrDelete ?? this.isUserCanEditOrDelete,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class AnimalNoteFile {
-  AnimalNoteFile({
-    this.id,
-    this.file,
-    this.name,
-    this.filename,
-    this.createdAt,
-  });
+  AnimalNoteFile({this.id, this.file, this.name, this.filename, this.createdAt});
 
   factory AnimalNoteFile.fromJson(Map<String, dynamic> json) => _$AnimalNoteFileFromJson(json);
 
@@ -1252,14 +1352,20 @@ class AnimalNoteFile {
 }
 
 extension $AnimalNoteFileExtension on AnimalNoteFile {
-  AnimalNoteFile copyWith(
-      {int? id, String? file, String? name, String? filename, DateTime? createdAt}) {
+  AnimalNoteFile copyWith({
+    int? id,
+    String? file,
+    String? name,
+    String? filename,
+    DateTime? createdAt,
+  }) {
     return AnimalNoteFile(
-        id: id ?? this.id,
-        file: file ?? this.file,
-        name: name ?? this.name,
-        filename: filename ?? this.filename,
-        createdAt: createdAt ?? this.createdAt);
+      id: id ?? this.id,
+      file: file ?? this.file,
+      name: name ?? this.name,
+      filename: filename ?? this.filename,
+      createdAt: createdAt ?? this.createdAt,
+    );
   }
 }
 
@@ -1422,54 +1528,56 @@ class AnimalRead {
 }
 
 extension $AnimalReadExtension on AnimalRead {
-  AnimalRead copyWith(
-      {int? id,
-      String? url,
-      String? name,
-      List<AnimalImageRead>? images,
-      dynamic? spec,
-      enums.Status131Enum? status,
-      DateTime? dateJoined,
-      DateTime? birthDate,
-      DateTime? deathDate,
-      String? deathReason,
-      int? defaultImageId,
-      String? placeOfCatch,
-      String? placeOfRelease,
-      DateTime? dateOfChipping,
-      String? chippingCode,
-      String? height,
-      String? weight,
-      bool? hasDocuments,
-      int? shelter,
-      dynamic? curator,
-      dynamic? applicant,
-      List<AnimalAttributeValue>? animalAttributes,
-      DateTime? deletedAt}) {
+  AnimalRead copyWith({
+    int? id,
+    String? url,
+    String? name,
+    List<AnimalImageRead>? images,
+    dynamic? spec,
+    enums.Status131Enum? status,
+    DateTime? dateJoined,
+    DateTime? birthDate,
+    DateTime? deathDate,
+    String? deathReason,
+    int? defaultImageId,
+    String? placeOfCatch,
+    String? placeOfRelease,
+    DateTime? dateOfChipping,
+    String? chippingCode,
+    String? height,
+    String? weight,
+    bool? hasDocuments,
+    int? shelter,
+    dynamic? curator,
+    dynamic? applicant,
+    List<AnimalAttributeValue>? animalAttributes,
+    DateTime? deletedAt,
+  }) {
     return AnimalRead(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        name: name ?? this.name,
-        images: images ?? this.images,
-        spec: spec ?? this.spec,
-        status: status ?? this.status,
-        dateJoined: dateJoined ?? this.dateJoined,
-        birthDate: birthDate ?? this.birthDate,
-        deathDate: deathDate ?? this.deathDate,
-        deathReason: deathReason ?? this.deathReason,
-        defaultImageId: defaultImageId ?? this.defaultImageId,
-        placeOfCatch: placeOfCatch ?? this.placeOfCatch,
-        placeOfRelease: placeOfRelease ?? this.placeOfRelease,
-        dateOfChipping: dateOfChipping ?? this.dateOfChipping,
-        chippingCode: chippingCode ?? this.chippingCode,
-        height: height ?? this.height,
-        weight: weight ?? this.weight,
-        hasDocuments: hasDocuments ?? this.hasDocuments,
-        shelter: shelter ?? this.shelter,
-        curator: curator ?? this.curator,
-        applicant: applicant ?? this.applicant,
-        animalAttributes: animalAttributes ?? this.animalAttributes,
-        deletedAt: deletedAt ?? this.deletedAt);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      name: name ?? this.name,
+      images: images ?? this.images,
+      spec: spec ?? this.spec,
+      status: status ?? this.status,
+      dateJoined: dateJoined ?? this.dateJoined,
+      birthDate: birthDate ?? this.birthDate,
+      deathDate: deathDate ?? this.deathDate,
+      deathReason: deathReason ?? this.deathReason,
+      defaultImageId: defaultImageId ?? this.defaultImageId,
+      placeOfCatch: placeOfCatch ?? this.placeOfCatch,
+      placeOfRelease: placeOfRelease ?? this.placeOfRelease,
+      dateOfChipping: dateOfChipping ?? this.dateOfChipping,
+      chippingCode: chippingCode ?? this.chippingCode,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      hasDocuments: hasDocuments ?? this.hasDocuments,
+      shelter: shelter ?? this.shelter,
+      curator: curator ?? this.curator,
+      applicant: applicant ?? this.applicant,
+      animalAttributes: animalAttributes ?? this.animalAttributes,
+      deletedAt: deletedAt ?? this.deletedAt,
+    );
   }
 }
 
@@ -1531,20 +1639,22 @@ class AnimalShort {
 }
 
 extension $AnimalShortExtension on AnimalShort {
-  AnimalShort copyWith(
-      {int? id,
-      String? name,
-      String? specName,
-      String? specParentName,
-      String? avatar,
-      int? defaultImageId}) {
+  AnimalShort copyWith({
+    int? id,
+    String? name,
+    String? specName,
+    String? specParentName,
+    String? avatar,
+    int? defaultImageId,
+  }) {
     return AnimalShort(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        specName: specName ?? this.specName,
-        specParentName: specParentName ?? this.specParentName,
-        avatar: avatar ?? this.avatar,
-        defaultImageId: defaultImageId ?? this.defaultImageId);
+      id: id ?? this.id,
+      name: name ?? this.name,
+      specName: specName ?? this.specName,
+      specParentName: specParentName ?? this.specParentName,
+      avatar: avatar ?? this.avatar,
+      defaultImageId: defaultImageId ?? this.defaultImageId,
+    );
   }
 }
 
@@ -1691,48 +1801,50 @@ class AnimalWrite {
 }
 
 extension $AnimalWriteExtension on AnimalWrite {
-  AnimalWrite copyWith(
-      {String? name,
-      List<AnimalImageWrite>? images,
-      List<int>? validImages,
-      int? specId,
-      enums.Status131Enum? status,
-      DateTime? dateJoined,
-      DateTime? birthDate,
-      DateTime? deathDate,
-      String? deathReason,
-      int? defaultImageId,
-      String? placeOfCatch,
-      String? placeOfRelease,
-      DateTime? dateOfChipping,
-      String? chippingCode,
-      String? height,
-      String? weight,
-      int? shelter,
-      int? curatorId,
-      int? applicantId,
-      List<AnimalAttributeValue>? animalAttributes}) {
+  AnimalWrite copyWith({
+    String? name,
+    List<AnimalImageWrite>? images,
+    List<int>? validImages,
+    int? specId,
+    enums.Status131Enum? status,
+    DateTime? dateJoined,
+    DateTime? birthDate,
+    DateTime? deathDate,
+    String? deathReason,
+    int? defaultImageId,
+    String? placeOfCatch,
+    String? placeOfRelease,
+    DateTime? dateOfChipping,
+    String? chippingCode,
+    String? height,
+    String? weight,
+    int? shelter,
+    int? curatorId,
+    int? applicantId,
+    List<AnimalAttributeValue>? animalAttributes,
+  }) {
     return AnimalWrite(
-        name: name ?? this.name,
-        images: images ?? this.images,
-        validImages: validImages ?? this.validImages,
-        specId: specId ?? this.specId,
-        status: status ?? this.status,
-        dateJoined: dateJoined ?? this.dateJoined,
-        birthDate: birthDate ?? this.birthDate,
-        deathDate: deathDate ?? this.deathDate,
-        deathReason: deathReason ?? this.deathReason,
-        defaultImageId: defaultImageId ?? this.defaultImageId,
-        placeOfCatch: placeOfCatch ?? this.placeOfCatch,
-        placeOfRelease: placeOfRelease ?? this.placeOfRelease,
-        dateOfChipping: dateOfChipping ?? this.dateOfChipping,
-        chippingCode: chippingCode ?? this.chippingCode,
-        height: height ?? this.height,
-        weight: weight ?? this.weight,
-        shelter: shelter ?? this.shelter,
-        curatorId: curatorId ?? this.curatorId,
-        applicantId: applicantId ?? this.applicantId,
-        animalAttributes: animalAttributes ?? this.animalAttributes);
+      name: name ?? this.name,
+      images: images ?? this.images,
+      validImages: validImages ?? this.validImages,
+      specId: specId ?? this.specId,
+      status: status ?? this.status,
+      dateJoined: dateJoined ?? this.dateJoined,
+      birthDate: birthDate ?? this.birthDate,
+      deathDate: deathDate ?? this.deathDate,
+      deathReason: deathReason ?? this.deathReason,
+      defaultImageId: defaultImageId ?? this.defaultImageId,
+      placeOfCatch: placeOfCatch ?? this.placeOfCatch,
+      placeOfRelease: placeOfRelease ?? this.placeOfRelease,
+      dateOfChipping: dateOfChipping ?? this.dateOfChipping,
+      chippingCode: chippingCode ?? this.chippingCode,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      shelter: shelter ?? this.shelter,
+      curatorId: curatorId ?? this.curatorId,
+      applicantId: applicantId ?? this.applicantId,
+      animalAttributes: animalAttributes ?? this.animalAttributes,
+    );
   }
 }
 
@@ -1841,48 +1953,44 @@ class Applicant {
 }
 
 extension $ApplicantExtension on Applicant {
-  Applicant copyWith(
-      {int? id,
-      String? url,
-      int? shelter,
-      String? firstName,
-      String? lastName,
-      String? email,
-      String? phoneNumber,
-      String? contactDetails,
-      String? createdBy,
-      String? updatedBy,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      int? animalId,
-      List<ApplicantFile>? applicantFiles}) {
+  Applicant copyWith({
+    int? id,
+    String? url,
+    int? shelter,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    String? contactDetails,
+    String? createdBy,
+    String? updatedBy,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? animalId,
+    List<ApplicantFile>? applicantFiles,
+  }) {
     return Applicant(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        shelter: shelter ?? this.shelter,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        contactDetails: contactDetails ?? this.contactDetails,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        animalId: animalId ?? this.animalId,
-        applicantFiles: applicantFiles ?? this.applicantFiles);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      shelter: shelter ?? this.shelter,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      contactDetails: contactDetails ?? this.contactDetails,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      animalId: animalId ?? this.animalId,
+      applicantFiles: applicantFiles ?? this.applicantFiles,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class ApplicantFile {
-  ApplicantFile({
-    this.id,
-    this.file,
-    this.name,
-    this.filename,
-    this.createdAt,
-  });
+  ApplicantFile({this.id, this.file, this.name, this.filename, this.createdAt});
 
   factory ApplicantFile.fromJson(Map<String, dynamic> json) => _$ApplicantFileFromJson(json);
 
@@ -1926,22 +2034,26 @@ class ApplicantFile {
 }
 
 extension $ApplicantFileExtension on ApplicantFile {
-  ApplicantFile copyWith(
-      {int? id, String? file, String? name, String? filename, DateTime? createdAt}) {
+  ApplicantFile copyWith({
+    int? id,
+    String? file,
+    String? name,
+    String? filename,
+    DateTime? createdAt,
+  }) {
     return ApplicantFile(
-        id: id ?? this.id,
-        file: file ?? this.file,
-        name: name ?? this.name,
-        filename: filename ?? this.filename,
-        createdAt: createdAt ?? this.createdAt);
+      id: id ?? this.id,
+      file: file ?? this.file,
+      name: name ?? this.name,
+      filename: filename ?? this.filename,
+      createdAt: createdAt ?? this.createdAt,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class Approve {
-  Approve({
-    this.status,
-  });
+  Approve({this.status});
 
   factory Approve.fromJson(Map<String, dynamic> json) => _$ApproveFromJson(json);
 
@@ -2062,40 +2174,40 @@ class Curator {
 }
 
 extension $CuratorExtension on Curator {
-  Curator copyWith(
-      {int? id,
-      String? url,
-      String? shelter,
-      String? firstName,
-      String? lastName,
-      String? email,
-      String? phoneNumber,
-      String? address,
-      String? createdBy,
-      String? updatedBy,
-      DateTime? createdAt,
-      DateTime? updatedAt}) {
+  Curator copyWith({
+    int? id,
+    String? url,
+    String? shelter,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    String? address,
+    String? createdBy,
+    String? updatedBy,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
     return Curator(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        shelter: shelter ?? this.shelter,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        address: address ?? this.address,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      shelter: shelter ?? this.shelter,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class Decline {
-  Decline({
-    this.status,
-  });
+  Decline({this.status});
 
   factory Decline.fromJson(Map<String, dynamic> json) => _$DeclineFromJson(json);
 
@@ -2125,13 +2237,7 @@ extension $DeclineExtension on Decline {
 
 @JsonSerializable(explicitToJson: true)
 class Drug {
-  Drug({
-    this.id,
-    this.name,
-    this.usageInstruction,
-    this.formOfDrug,
-    this.formOfDrugName,
-  });
+  Drug({this.id, this.name, this.usageInstruction, this.formOfDrug, this.formOfDrugName});
 
   factory Drug.fromJson(Map<String, dynamic> json) => _$DrugFromJson(json);
 
@@ -2175,22 +2281,26 @@ class Drug {
 }
 
 extension $DrugExtension on Drug {
-  Drug copyWith(
-      {int? id, String? name, String? usageInstruction, int? formOfDrug, String? formOfDrugName}) {
+  Drug copyWith({
+    int? id,
+    String? name,
+    String? usageInstruction,
+    int? formOfDrug,
+    String? formOfDrugName,
+  }) {
     return Drug(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        usageInstruction: usageInstruction ?? this.usageInstruction,
-        formOfDrug: formOfDrug ?? this.formOfDrug,
-        formOfDrugName: formOfDrugName ?? this.formOfDrugName);
+      id: id ?? this.id,
+      name: name ?? this.name,
+      usageInstruction: usageInstruction ?? this.usageInstruction,
+      formOfDrug: formOfDrug ?? this.formOfDrug,
+      formOfDrugName: formOfDrugName ?? this.formOfDrugName,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class Email {
-  Email({
-    this.email,
-  });
+  Email({this.email});
 
   factory Email.fromJson(Map<String, dynamic> json) => _$EmailFromJson(json);
 
@@ -2220,14 +2330,7 @@ extension $EmailExtension on Email {
 
 @JsonSerializable(explicitToJson: true)
 class Feedback {
-  Feedback({
-    this.shelterId,
-    this.shelterName,
-    this.date,
-    this.action,
-    this.email,
-    this.message,
-  });
+  Feedback({this.shelterId, this.shelterName, this.date, this.action, this.email, this.message});
 
   factory Feedback.fromJson(Map<String, dynamic> json) => _$FeedbackFromJson(json);
 
@@ -2277,30 +2380,28 @@ class Feedback {
 }
 
 extension $FeedbackExtension on Feedback {
-  Feedback copyWith(
-      {int? shelterId,
-      String? shelterName,
-      DateTime? date,
-      String? action,
-      String? email,
-      String? message}) {
+  Feedback copyWith({
+    int? shelterId,
+    String? shelterName,
+    DateTime? date,
+    String? action,
+    String? email,
+    String? message,
+  }) {
     return Feedback(
-        shelterId: shelterId ?? this.shelterId,
-        shelterName: shelterName ?? this.shelterName,
-        date: date ?? this.date,
-        action: action ?? this.action,
-        email: email ?? this.email,
-        message: message ?? this.message);
+      shelterId: shelterId ?? this.shelterId,
+      shelterName: shelterName ?? this.shelterName,
+      date: date ?? this.date,
+      action: action ?? this.action,
+      email: email ?? this.email,
+      message: message ?? this.message,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class ImageThumbnails {
-  ImageThumbnails({
-    this.large,
-    this.medium,
-    this.small,
-  });
+  ImageThumbnails({this.large, this.medium, this.small});
 
   factory ImageThumbnails.fromJson(Map<String, dynamic> json) => _$ImageThumbnailsFromJson(json);
 
@@ -2337,18 +2438,16 @@ class ImageThumbnails {
 extension $ImageThumbnailsExtension on ImageThumbnails {
   ImageThumbnails copyWith({String? large, String? medium, String? small}) {
     return ImageThumbnails(
-        large: large ?? this.large, medium: medium ?? this.medium, small: small ?? this.small);
+      large: large ?? this.large,
+      medium: medium ?? this.medium,
+      small: small ?? this.small,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAnimalHistorySnapshotList {
-  PaginatedAnimalHistorySnapshotList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedAnimalHistorySnapshotList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedAnimalHistorySnapshotList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedAnimalHistorySnapshotListFromJson(json);
@@ -2389,24 +2488,24 @@ class PaginatedAnimalHistorySnapshotList {
 }
 
 extension $PaginatedAnimalHistorySnapshotListExtension on PaginatedAnimalHistorySnapshotList {
-  PaginatedAnimalHistorySnapshotList copyWith(
-      {int? count, String? next, String? previous, List<AnimalHistorySnapshot>? results}) {
+  PaginatedAnimalHistorySnapshotList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<AnimalHistorySnapshot>? results,
+  }) {
     return PaginatedAnimalHistorySnapshotList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAnimalNoteList {
-  PaginatedAnimalNoteList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedAnimalNoteList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedAnimalNoteList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedAnimalNoteListFromJson(json);
@@ -2447,24 +2546,24 @@ class PaginatedAnimalNoteList {
 }
 
 extension $PaginatedAnimalNoteListExtension on PaginatedAnimalNoteList {
-  PaginatedAnimalNoteList copyWith(
-      {int? count, String? next, String? previous, List<AnimalNote>? results}) {
+  PaginatedAnimalNoteList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<AnimalNote>? results,
+  }) {
     return PaginatedAnimalNoteList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAnimalReadList {
-  PaginatedAnimalReadList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedAnimalReadList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedAnimalReadList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedAnimalReadListFromJson(json);
@@ -2505,24 +2604,24 @@ class PaginatedAnimalReadList {
 }
 
 extension $PaginatedAnimalReadListExtension on PaginatedAnimalReadList {
-  PaginatedAnimalReadList copyWith(
-      {int? count, String? next, String? previous, List<AnimalRead>? results}) {
+  PaginatedAnimalReadList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<AnimalRead>? results,
+  }) {
     return PaginatedAnimalReadList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedApplicantList {
-  PaginatedApplicantList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedApplicantList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedApplicantList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedApplicantListFromJson(json);
@@ -2563,24 +2662,24 @@ class PaginatedApplicantList {
 }
 
 extension $PaginatedApplicantListExtension on PaginatedApplicantList {
-  PaginatedApplicantList copyWith(
-      {int? count, String? next, String? previous, List<Applicant>? results}) {
+  PaginatedApplicantList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<Applicant>? results,
+  }) {
     return PaginatedApplicantList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedCuratorList {
-  PaginatedCuratorList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedCuratorList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedCuratorList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedCuratorListFromJson(json);
@@ -2621,24 +2720,24 @@ class PaginatedCuratorList {
 }
 
 extension $PaginatedCuratorListExtension on PaginatedCuratorList {
-  PaginatedCuratorList copyWith(
-      {int? count, String? next, String? previous, List<Curator>? results}) {
+  PaginatedCuratorList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<Curator>? results,
+  }) {
     return PaginatedCuratorList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedPrescriptionExecutionTodayList {
-  PaginatedPrescriptionExecutionTodayList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedPrescriptionExecutionTodayList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedPrescriptionExecutionTodayList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedPrescriptionExecutionTodayListFromJson(json);
@@ -2680,24 +2779,24 @@ class PaginatedPrescriptionExecutionTodayList {
 
 extension $PaginatedPrescriptionExecutionTodayListExtension
     on PaginatedPrescriptionExecutionTodayList {
-  PaginatedPrescriptionExecutionTodayList copyWith(
-      {int? count, String? next, String? previous, List<PrescriptionExecutionToday>? results}) {
+  PaginatedPrescriptionExecutionTodayList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<PrescriptionExecutionToday>? results,
+  }) {
     return PaginatedPrescriptionExecutionTodayList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedPrescriptionList {
-  PaginatedPrescriptionList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedPrescriptionList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedPrescriptionList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedPrescriptionListFromJson(json);
@@ -2738,24 +2837,24 @@ class PaginatedPrescriptionList {
 }
 
 extension $PaginatedPrescriptionListExtension on PaginatedPrescriptionList {
-  PaginatedPrescriptionList copyWith(
-      {int? count, String? next, String? previous, List<Prescription>? results}) {
+  PaginatedPrescriptionList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<Prescription>? results,
+  }) {
     return PaginatedPrescriptionList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedShelterDrugList {
-  PaginatedShelterDrugList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedShelterDrugList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedShelterDrugList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedShelterDrugListFromJson(json);
@@ -2796,24 +2895,24 @@ class PaginatedShelterDrugList {
 }
 
 extension $PaginatedShelterDrugListExtension on PaginatedShelterDrugList {
-  PaginatedShelterDrugList copyWith(
-      {int? count, String? next, String? previous, List<ShelterDrug>? results}) {
+  PaginatedShelterDrugList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<ShelterDrug>? results,
+  }) {
     return PaginatedShelterDrugList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedShelterShortSerializersList {
-  PaginatedShelterShortSerializersList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedShelterShortSerializersList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedShelterShortSerializersList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedShelterShortSerializersListFromJson(json);
@@ -2854,24 +2953,24 @@ class PaginatedShelterShortSerializersList {
 }
 
 extension $PaginatedShelterShortSerializersListExtension on PaginatedShelterShortSerializersList {
-  PaginatedShelterShortSerializersList copyWith(
-      {int? count, String? next, String? previous, List<ShelterShortSerializers>? results}) {
+  PaginatedShelterShortSerializersList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<ShelterShortSerializers>? results,
+  }) {
     return PaginatedShelterShortSerializersList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedSpeciesList {
-  PaginatedSpeciesList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedSpeciesList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedSpeciesList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedSpeciesListFromJson(json);
@@ -2912,24 +3011,24 @@ class PaginatedSpeciesList {
 }
 
 extension $PaginatedSpeciesListExtension on PaginatedSpeciesList {
-  PaginatedSpeciesList copyWith(
-      {int? count, String? next, String? previous, List<Species>? results}) {
+  PaginatedSpeciesList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<Species>? results,
+  }) {
     return PaginatedSpeciesList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedUserSheltersAdminSerializersList {
-  PaginatedUserSheltersAdminSerializersList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedUserSheltersAdminSerializersList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedUserSheltersAdminSerializersList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedUserSheltersAdminSerializersListFromJson(json);
@@ -2971,24 +3070,24 @@ class PaginatedUserSheltersAdminSerializersList {
 
 extension $PaginatedUserSheltersAdminSerializersListExtension
     on PaginatedUserSheltersAdminSerializersList {
-  PaginatedUserSheltersAdminSerializersList copyWith(
-      {int? count, String? next, String? previous, List<UserSheltersAdminSerializers>? results}) {
+  PaginatedUserSheltersAdminSerializersList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<UserSheltersAdminSerializers>? results,
+  }) {
     return PaginatedUserSheltersAdminSerializersList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedUserShortSerializersList {
-  PaginatedUserShortSerializersList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  PaginatedUserShortSerializersList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedUserShortSerializersList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedUserShortSerializersListFromJson(json);
@@ -3029,13 +3128,18 @@ class PaginatedUserShortSerializersList {
 }
 
 extension $PaginatedUserShortSerializersListExtension on PaginatedUserShortSerializersList {
-  PaginatedUserShortSerializersList copyWith(
-      {int? count, String? next, String? previous, List<UserShortSerializers>? results}) {
+  PaginatedUserShortSerializersList copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<UserShortSerializers>? results,
+  }) {
     return PaginatedUserShortSerializersList(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
   }
 }
 
@@ -3102,8 +3206,10 @@ class PatchedAnimalNote {
             (identical(other.updatedBy, updatedBy) ||
                 const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.isUserCanEditOrDelete, isUserCanEditOrDelete) ||
-                const DeepCollectionEquality()
-                    .equals(other.isUserCanEditOrDelete, isUserCanEditOrDelete)));
+                const DeepCollectionEquality().equals(
+                  other.isUserCanEditOrDelete,
+                  isUserCanEditOrDelete,
+                )));
   }
 
   @override
@@ -3122,28 +3228,30 @@ class PatchedAnimalNote {
 }
 
 extension $PatchedAnimalNoteExtension on PatchedAnimalNote {
-  PatchedAnimalNote copyWith(
-      {int? id,
-      String? url,
-      int? animal,
-      String? content,
-      List<AnimalNoteFile>? files,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? createdBy,
-      String? updatedBy,
-      bool? isUserCanEditOrDelete}) {
+  PatchedAnimalNote copyWith({
+    int? id,
+    String? url,
+    int? animal,
+    String? content,
+    List<AnimalNoteFile>? files,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? createdBy,
+    String? updatedBy,
+    bool? isUserCanEditOrDelete,
+  }) {
     return PatchedAnimalNote(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        animal: animal ?? this.animal,
-        content: content ?? this.content,
-        files: files ?? this.files,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        isUserCanEditOrDelete: isUserCanEditOrDelete ?? this.isUserCanEditOrDelete);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      animal: animal ?? this.animal,
+      content: content ?? this.content,
+      files: files ?? this.files,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      isUserCanEditOrDelete: isUserCanEditOrDelete ?? this.isUserCanEditOrDelete,
+    );
   }
 }
 
@@ -3291,48 +3399,50 @@ class PatchedAnimalWrite {
 }
 
 extension $PatchedAnimalWriteExtension on PatchedAnimalWrite {
-  PatchedAnimalWrite copyWith(
-      {String? name,
-      List<AnimalImageWrite>? images,
-      List<int>? validImages,
-      int? specId,
-      enums.Status131Enum? status,
-      DateTime? dateJoined,
-      DateTime? birthDate,
-      DateTime? deathDate,
-      String? deathReason,
-      int? defaultImageId,
-      String? placeOfCatch,
-      String? placeOfRelease,
-      DateTime? dateOfChipping,
-      String? chippingCode,
-      String? height,
-      String? weight,
-      int? shelter,
-      int? curatorId,
-      int? applicantId,
-      List<AnimalAttributeValue>? animalAttributes}) {
+  PatchedAnimalWrite copyWith({
+    String? name,
+    List<AnimalImageWrite>? images,
+    List<int>? validImages,
+    int? specId,
+    enums.Status131Enum? status,
+    DateTime? dateJoined,
+    DateTime? birthDate,
+    DateTime? deathDate,
+    String? deathReason,
+    int? defaultImageId,
+    String? placeOfCatch,
+    String? placeOfRelease,
+    DateTime? dateOfChipping,
+    String? chippingCode,
+    String? height,
+    String? weight,
+    int? shelter,
+    int? curatorId,
+    int? applicantId,
+    List<AnimalAttributeValue>? animalAttributes,
+  }) {
     return PatchedAnimalWrite(
-        name: name ?? this.name,
-        images: images ?? this.images,
-        validImages: validImages ?? this.validImages,
-        specId: specId ?? this.specId,
-        status: status ?? this.status,
-        dateJoined: dateJoined ?? this.dateJoined,
-        birthDate: birthDate ?? this.birthDate,
-        deathDate: deathDate ?? this.deathDate,
-        deathReason: deathReason ?? this.deathReason,
-        defaultImageId: defaultImageId ?? this.defaultImageId,
-        placeOfCatch: placeOfCatch ?? this.placeOfCatch,
-        placeOfRelease: placeOfRelease ?? this.placeOfRelease,
-        dateOfChipping: dateOfChipping ?? this.dateOfChipping,
-        chippingCode: chippingCode ?? this.chippingCode,
-        height: height ?? this.height,
-        weight: weight ?? this.weight,
-        shelter: shelter ?? this.shelter,
-        curatorId: curatorId ?? this.curatorId,
-        applicantId: applicantId ?? this.applicantId,
-        animalAttributes: animalAttributes ?? this.animalAttributes);
+      name: name ?? this.name,
+      images: images ?? this.images,
+      validImages: validImages ?? this.validImages,
+      specId: specId ?? this.specId,
+      status: status ?? this.status,
+      dateJoined: dateJoined ?? this.dateJoined,
+      birthDate: birthDate ?? this.birthDate,
+      deathDate: deathDate ?? this.deathDate,
+      deathReason: deathReason ?? this.deathReason,
+      defaultImageId: defaultImageId ?? this.defaultImageId,
+      placeOfCatch: placeOfCatch ?? this.placeOfCatch,
+      placeOfRelease: placeOfRelease ?? this.placeOfRelease,
+      dateOfChipping: dateOfChipping ?? this.dateOfChipping,
+      chippingCode: chippingCode ?? this.chippingCode,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      shelter: shelter ?? this.shelter,
+      curatorId: curatorId ?? this.curatorId,
+      applicantId: applicantId ?? this.applicantId,
+      animalAttributes: animalAttributes ?? this.animalAttributes,
+    );
   }
 }
 
@@ -3441,36 +3551,38 @@ class PatchedApplicant {
 }
 
 extension $PatchedApplicantExtension on PatchedApplicant {
-  PatchedApplicant copyWith(
-      {int? id,
-      String? url,
-      int? shelter,
-      String? firstName,
-      String? lastName,
-      String? email,
-      String? phoneNumber,
-      String? contactDetails,
-      String? createdBy,
-      String? updatedBy,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      int? animalId,
-      List<ApplicantFile>? applicantFiles}) {
+  PatchedApplicant copyWith({
+    int? id,
+    String? url,
+    int? shelter,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    String? contactDetails,
+    String? createdBy,
+    String? updatedBy,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? animalId,
+    List<ApplicantFile>? applicantFiles,
+  }) {
     return PatchedApplicant(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        shelter: shelter ?? this.shelter,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        contactDetails: contactDetails ?? this.contactDetails,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        animalId: animalId ?? this.animalId,
-        applicantFiles: applicantFiles ?? this.applicantFiles);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      shelter: shelter ?? this.shelter,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      contactDetails: contactDetails ?? this.contactDetails,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      animalId: animalId ?? this.animalId,
+      applicantFiles: applicantFiles ?? this.applicantFiles,
+    );
   }
 }
 
@@ -3567,32 +3679,34 @@ class PatchedCurator {
 }
 
 extension $PatchedCuratorExtension on PatchedCurator {
-  PatchedCurator copyWith(
-      {int? id,
-      String? url,
-      String? shelter,
-      String? firstName,
-      String? lastName,
-      String? email,
-      String? phoneNumber,
-      String? address,
-      String? createdBy,
-      String? updatedBy,
-      DateTime? createdAt,
-      DateTime? updatedAt}) {
+  PatchedCurator copyWith({
+    int? id,
+    String? url,
+    String? shelter,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    String? address,
+    String? createdBy,
+    String? updatedBy,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
     return PatchedCurator(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        shelter: shelter ?? this.shelter,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        address: address ?? this.address,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      shelter: shelter ?? this.shelter,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
   }
 }
 
@@ -3684,41 +3798,38 @@ class PatchedPrescription {
 }
 
 extension $PatchedPrescriptionExtension on PatchedPrescription {
-  PatchedPrescription copyWith(
-      {int? id,
-      String? url,
-      int? animal,
-      dynamic? myType,
-      enums.DurationEnum? duration,
-      String? description,
-      String? createdBy,
-      String? updatedBy,
-      List<PrescriptionDrug>? drugs,
-      List<PrescriptionExecution>? executions,
-      List<PrescriptionFile>? files}) {
+  PatchedPrescription copyWith({
+    int? id,
+    String? url,
+    int? animal,
+    dynamic? myType,
+    enums.DurationEnum? duration,
+    String? description,
+    String? createdBy,
+    String? updatedBy,
+    List<PrescriptionDrug>? drugs,
+    List<PrescriptionExecution>? executions,
+    List<PrescriptionFile>? files,
+  }) {
     return PatchedPrescription(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        animal: animal ?? this.animal,
-        myType: myType ?? this.myType,
-        duration: duration ?? this.duration,
-        description: description ?? this.description,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        drugs: drugs ?? this.drugs,
-        executions: executions ?? this.executions,
-        files: files ?? this.files);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      animal: animal ?? this.animal,
+      myType: myType ?? this.myType,
+      duration: duration ?? this.duration,
+      description: description ?? this.description,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      drugs: drugs ?? this.drugs,
+      executions: executions ?? this.executions,
+      files: files ?? this.files,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PatchedUserChangePasswordSerializers {
-  PatchedUserChangePasswordSerializers({
-    this.id,
-    this.password,
-    this.rePassword,
-    this.oldPassword,
-  });
+  PatchedUserChangePasswordSerializers({this.id, this.password, this.rePassword, this.oldPassword});
 
   factory PatchedUserChangePasswordSerializers.fromJson(Map<String, dynamic> json) =>
       _$PatchedUserChangePasswordSerializersFromJson(json);
@@ -3758,13 +3869,18 @@ class PatchedUserChangePasswordSerializers {
 }
 
 extension $PatchedUserChangePasswordSerializersExtension on PatchedUserChangePasswordSerializers {
-  PatchedUserChangePasswordSerializers copyWith(
-      {int? id, String? password, String? rePassword, String? oldPassword}) {
+  PatchedUserChangePasswordSerializers copyWith({
+    int? id,
+    String? password,
+    String? rePassword,
+    String? oldPassword,
+  }) {
     return PatchedUserChangePasswordSerializers(
-        id: id ?? this.id,
-        password: password ?? this.password,
-        rePassword: rePassword ?? this.rePassword,
-        oldPassword: oldPassword ?? this.oldPassword);
+      id: id ?? this.id,
+      password: password ?? this.password,
+      rePassword: rePassword ?? this.rePassword,
+      oldPassword: oldPassword ?? this.oldPassword,
+    );
   }
 }
 
@@ -3857,30 +3973,32 @@ class PatchedUserSerializers {
 }
 
 extension $PatchedUserSerializersExtension on PatchedUserSerializers {
-  PatchedUserSerializers copyWith(
-      {int? id,
-      String? username,
-      String? firstName,
-      String? lastName,
-      String? fathersName,
-      String? fullName,
-      String? email,
-      String? phoneNumber,
-      String? address,
-      DateTime? dateJoined,
-      bool? isVerified}) {
+  PatchedUserSerializers copyWith({
+    int? id,
+    String? username,
+    String? firstName,
+    String? lastName,
+    String? fathersName,
+    String? fullName,
+    String? email,
+    String? phoneNumber,
+    String? address,
+    DateTime? dateJoined,
+    bool? isVerified,
+  }) {
     return PatchedUserSerializers(
-        id: id ?? this.id,
-        username: username ?? this.username,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        fathersName: fathersName ?? this.fathersName,
-        fullName: fullName ?? this.fullName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        address: address ?? this.address,
-        dateJoined: dateJoined ?? this.dateJoined,
-        isVerified: isVerified ?? this.isVerified);
+      id: id ?? this.id,
+      username: username ?? this.username,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      fathersName: fathersName ?? this.fathersName,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      dateJoined: dateJoined ?? this.dateJoined,
+      isVerified: isVerified ?? this.isVerified,
+    );
   }
 }
 
@@ -3937,14 +4055,20 @@ class PatchedUserSheltersAdminSerializers {
 }
 
 extension $PatchedUserSheltersAdminSerializersExtension on PatchedUserSheltersAdminSerializers {
-  PatchedUserSheltersAdminSerializers copyWith(
-      {int? id, dynamic? user, int? userId, enums.RoleEnum? role, bool? isVerifiedByAdmin}) {
+  PatchedUserSheltersAdminSerializers copyWith({
+    int? id,
+    dynamic? user,
+    int? userId,
+    enums.RoleEnum? role,
+    bool? isVerifiedByAdmin,
+  }) {
     return PatchedUserSheltersAdminSerializers(
-        id: id ?? this.id,
-        user: user ?? this.user,
-        userId: userId ?? this.userId,
-        role: role ?? this.role,
-        isVerifiedByAdmin: isVerifiedByAdmin ?? this.isVerifiedByAdmin);
+      id: id ?? this.id,
+      user: user ?? this.user,
+      userId: userId ?? this.userId,
+      role: role ?? this.role,
+      isVerifiedByAdmin: isVerifiedByAdmin ?? this.isVerifiedByAdmin,
+    );
   }
 }
 
@@ -4035,30 +4159,32 @@ class Prescription {
 }
 
 extension $PrescriptionExtension on Prescription {
-  Prescription copyWith(
-      {int? id,
-      String? url,
-      int? animal,
-      dynamic? myType,
-      enums.DurationEnum? duration,
-      String? description,
-      String? createdBy,
-      String? updatedBy,
-      List<PrescriptionDrug>? drugs,
-      List<PrescriptionExecution>? executions,
-      List<PrescriptionFile>? files}) {
+  Prescription copyWith({
+    int? id,
+    String? url,
+    int? animal,
+    dynamic? myType,
+    enums.DurationEnum? duration,
+    String? description,
+    String? createdBy,
+    String? updatedBy,
+    List<PrescriptionDrug>? drugs,
+    List<PrescriptionExecution>? executions,
+    List<PrescriptionFile>? files,
+  }) {
     return Prescription(
-        id: id ?? this.id,
-        url: url ?? this.url,
-        animal: animal ?? this.animal,
-        myType: myType ?? this.myType,
-        duration: duration ?? this.duration,
-        description: description ?? this.description,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy,
-        drugs: drugs ?? this.drugs,
-        executions: executions ?? this.executions,
-        files: files ?? this.files);
+      id: id ?? this.id,
+      url: url ?? this.url,
+      animal: animal ?? this.animal,
+      myType: myType ?? this.myType,
+      duration: duration ?? this.duration,
+      description: description ?? this.description,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+      drugs: drugs ?? this.drugs,
+      executions: executions ?? this.executions,
+      files: files ?? this.files,
+    );
   }
 }
 
@@ -4115,28 +4241,26 @@ class PrescriptionDrug {
 }
 
 extension $PrescriptionDrugExtension on PrescriptionDrug {
-  PrescriptionDrug copyWith(
-      {int? drugId,
-      String? drugName,
-      String? usageInstruction,
-      String? formOfDrug,
-      double? drugDosage}) {
+  PrescriptionDrug copyWith({
+    int? drugId,
+    String? drugName,
+    String? usageInstruction,
+    String? formOfDrug,
+    double? drugDosage,
+  }) {
     return PrescriptionDrug(
-        drugId: drugId ?? this.drugId,
-        drugName: drugName ?? this.drugName,
-        usageInstruction: usageInstruction ?? this.usageInstruction,
-        formOfDrug: formOfDrug ?? this.formOfDrug,
-        drugDosage: drugDosage ?? this.drugDosage);
+      drugId: drugId ?? this.drugId,
+      drugName: drugName ?? this.drugName,
+      usageInstruction: usageInstruction ?? this.usageInstruction,
+      formOfDrug: formOfDrug ?? this.formOfDrug,
+      drugDosage: drugDosage ?? this.drugDosage,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PrescriptionExecution {
-  PrescriptionExecution({
-    this.id,
-    this.executeAt,
-    this.status,
-  });
+  PrescriptionExecution({this.id, this.executeAt, this.status});
 
   factory PrescriptionExecution.fromJson(Map<String, dynamic> json) =>
       _$PrescriptionExecutionFromJson(json);
@@ -4173,17 +4297,16 @@ class PrescriptionExecution {
 extension $PrescriptionExecutionExtension on PrescriptionExecution {
   PrescriptionExecution copyWith({int? id, DateTime? executeAt, dynamic? status}) {
     return PrescriptionExecution(
-        id: id ?? this.id, executeAt: executeAt ?? this.executeAt, status: status ?? this.status);
+      id: id ?? this.id,
+      executeAt: executeAt ?? this.executeAt,
+      status: status ?? this.status,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PrescriptionExecutionToday {
-  PrescriptionExecutionToday({
-    this.id,
-    this.prescription,
-    this.executeAt,
-  });
+  PrescriptionExecutionToday({this.id, this.prescription, this.executeAt});
 
   factory PrescriptionExecutionToday.fromJson(Map<String, dynamic> json) =>
       _$PrescriptionExecutionTodayFromJson(json);
@@ -4218,24 +4341,22 @@ class PrescriptionExecutionToday {
 }
 
 extension $PrescriptionExecutionTodayExtension on PrescriptionExecutionToday {
-  PrescriptionExecutionToday copyWith(
-      {int? id, PrescriptionShort? prescription, DateTime? executeAt}) {
+  PrescriptionExecutionToday copyWith({
+    int? id,
+    PrescriptionShort? prescription,
+    DateTime? executeAt,
+  }) {
     return PrescriptionExecutionToday(
-        id: id ?? this.id,
-        prescription: prescription ?? this.prescription,
-        executeAt: executeAt ?? this.executeAt);
+      id: id ?? this.id,
+      prescription: prescription ?? this.prescription,
+      executeAt: executeAt ?? this.executeAt,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PrescriptionFile {
-  PrescriptionFile({
-    this.id,
-    this.file,
-    this.name,
-    this.filename,
-    this.createdAt,
-  });
+  PrescriptionFile({this.id, this.file, this.name, this.filename, this.createdAt});
 
   factory PrescriptionFile.fromJson(Map<String, dynamic> json) => _$PrescriptionFileFromJson(json);
 
@@ -4279,14 +4400,20 @@ class PrescriptionFile {
 }
 
 extension $PrescriptionFileExtension on PrescriptionFile {
-  PrescriptionFile copyWith(
-      {int? id, String? file, String? name, String? filename, DateTime? createdAt}) {
+  PrescriptionFile copyWith({
+    int? id,
+    String? file,
+    String? name,
+    String? filename,
+    DateTime? createdAt,
+  }) {
     return PrescriptionFile(
-        id: id ?? this.id,
-        file: file ?? this.file,
-        name: name ?? this.name,
-        filename: filename ?? this.filename,
-        createdAt: createdAt ?? this.createdAt);
+      id: id ?? this.id,
+      file: file ?? this.file,
+      name: name ?? this.name,
+      filename: filename ?? this.filename,
+      createdAt: createdAt ?? this.createdAt,
+    );
   }
 }
 
@@ -4355,31 +4482,30 @@ class PrescriptionShort {
 }
 
 extension $PrescriptionShortExtension on PrescriptionShort {
-  PrescriptionShort copyWith(
-      {int? id,
-      dynamic? myType,
-      String? description,
-      AnimalShort? animal,
-      List<PrescriptionDrug>? drugs,
-      String? createdBy,
-      String? updatedBy}) {
+  PrescriptionShort copyWith({
+    int? id,
+    dynamic? myType,
+    String? description,
+    AnimalShort? animal,
+    List<PrescriptionDrug>? drugs,
+    String? createdBy,
+    String? updatedBy,
+  }) {
     return PrescriptionShort(
-        id: id ?? this.id,
-        myType: myType ?? this.myType,
-        description: description ?? this.description,
-        animal: animal ?? this.animal,
-        drugs: drugs ?? this.drugs,
-        createdBy: createdBy ?? this.createdBy,
-        updatedBy: updatedBy ?? this.updatedBy);
+      id: id ?? this.id,
+      myType: myType ?? this.myType,
+      description: description ?? this.description,
+      animal: animal ?? this.animal,
+      drugs: drugs ?? this.drugs,
+      createdBy: createdBy ?? this.createdBy,
+      updatedBy: updatedBy ?? this.updatedBy,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class ShelterDrug {
-  ShelterDrug({
-    this.drug,
-    this.drugResiduesCount,
-  });
+  ShelterDrug({this.drug, this.drugResiduesCount});
 
   factory ShelterDrug.fromJson(Map<String, dynamic> json) => _$ShelterDrugFromJson(json);
 
@@ -4411,7 +4537,9 @@ class ShelterDrug {
 extension $ShelterDrugExtension on ShelterDrug {
   ShelterDrug copyWith({Drug? drug, int? drugResiduesCount}) {
     return ShelterDrug(
-        drug: drug ?? this.drug, drugResiduesCount: drugResiduesCount ?? this.drugResiduesCount);
+      drug: drug ?? this.drug,
+      drugResiduesCount: drugResiduesCount ?? this.drugResiduesCount,
+    );
   }
 }
 
@@ -4487,33 +4615,32 @@ class ShelterSerializers {
 }
 
 extension $ShelterSerializersExtension on ShelterSerializers {
-  ShelterSerializers copyWith(
-      {String? name,
-      String? country,
-      String? city,
-      String? state,
-      String? region,
-      String? street,
-      String? house,
-      String? apartment}) {
+  ShelterSerializers copyWith({
+    String? name,
+    String? country,
+    String? city,
+    String? state,
+    String? region,
+    String? street,
+    String? house,
+    String? apartment,
+  }) {
     return ShelterSerializers(
-        name: name ?? this.name,
-        country: country ?? this.country,
-        city: city ?? this.city,
-        state: state ?? this.state,
-        region: region ?? this.region,
-        street: street ?? this.street,
-        house: house ?? this.house,
-        apartment: apartment ?? this.apartment);
+      name: name ?? this.name,
+      country: country ?? this.country,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      region: region ?? this.region,
+      street: street ?? this.street,
+      house: house ?? this.house,
+      apartment: apartment ?? this.apartment,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class ShelterShortSerializers {
-  ShelterShortSerializers({
-    this.id,
-    this.name,
-  });
+  ShelterShortSerializers({this.id, this.name});
 
   factory ShelterShortSerializers.fromJson(Map<String, dynamic> json) =>
       _$ShelterShortSerializersFromJson(json);
@@ -4550,14 +4677,7 @@ extension $ShelterShortSerializersExtension on ShelterShortSerializers {
 
 @JsonSerializable(explicitToJson: true)
 class Species {
-  Species({
-    this.id,
-    this.name,
-    this.level,
-    this.parentId,
-    this.parentName,
-    this.categoryName,
-  });
+  Species({this.id, this.name, this.level, this.parentId, this.parentName, this.categoryName});
 
   factory Species.fromJson(Map<String, dynamic> json) => _$SpeciesFromJson(json);
 
@@ -4606,28 +4726,28 @@ class Species {
 }
 
 extension $SpeciesExtension on Species {
-  Species copyWith(
-      {int? id,
-      String? name,
-      dynamic? level,
-      int? parentId,
-      String? parentName,
-      String? categoryName}) {
+  Species copyWith({
+    int? id,
+    String? name,
+    dynamic? level,
+    int? parentId,
+    String? parentName,
+    String? categoryName,
+  }) {
     return Species(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        level: level ?? this.level,
-        parentId: parentId ?? this.parentId,
-        parentName: parentName ?? this.parentName,
-        categoryName: categoryName ?? this.categoryName);
+      id: id ?? this.id,
+      name: name ?? this.name,
+      level: level ?? this.level,
+      parentId: parentId ?? this.parentId,
+      parentName: parentName ?? this.parentName,
+      categoryName: categoryName ?? this.categoryName,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class Status {
-  Status({
-    this.status,
-  });
+  Status({this.status});
 
   factory Status.fromJson(Map<String, dynamic> json) => _$StatusFromJson(json);
 
@@ -4657,12 +4777,7 @@ extension $StatusExtension on Status {
 
 @JsonSerializable(explicitToJson: true)
 class TokenObtainPair {
-  TokenObtainPair({
-    this.username,
-    this.password,
-    this.access,
-    this.refresh,
-  });
+  TokenObtainPair({this.username, this.password, this.access, this.refresh});
 
   factory TokenObtainPair.fromJson(Map<String, dynamic> json) => _$TokenObtainPairFromJson(json);
 
@@ -4704,19 +4819,17 @@ class TokenObtainPair {
 extension $TokenObtainPairExtension on TokenObtainPair {
   TokenObtainPair copyWith({String? username, String? password, String? access, String? refresh}) {
     return TokenObtainPair(
-        username: username ?? this.username,
-        password: password ?? this.password,
-        access: access ?? this.access,
-        refresh: refresh ?? this.refresh);
+      username: username ?? this.username,
+      password: password ?? this.password,
+      access: access ?? this.access,
+      refresh: refresh ?? this.refresh,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class TokenRefresh {
-  TokenRefresh({
-    this.access,
-    this.refresh,
-  });
+  TokenRefresh({this.access, this.refresh});
 
   factory TokenRefresh.fromJson(Map<String, dynamic> json) => _$TokenRefreshFromJson(json);
 
@@ -4753,12 +4866,7 @@ extension $TokenRefreshExtension on TokenRefresh {
 
 @JsonSerializable(explicitToJson: true)
 class UserChangePasswordSerializers {
-  UserChangePasswordSerializers({
-    this.id,
-    this.password,
-    this.rePassword,
-    this.oldPassword,
-  });
+  UserChangePasswordSerializers({this.id, this.password, this.rePassword, this.oldPassword});
 
   factory UserChangePasswordSerializers.fromJson(Map<String, dynamic> json) =>
       _$UserChangePasswordSerializersFromJson(json);
@@ -4798,13 +4906,18 @@ class UserChangePasswordSerializers {
 }
 
 extension $UserChangePasswordSerializersExtension on UserChangePasswordSerializers {
-  UserChangePasswordSerializers copyWith(
-      {int? id, String? password, String? rePassword, String? oldPassword}) {
+  UserChangePasswordSerializers copyWith({
+    int? id,
+    String? password,
+    String? rePassword,
+    String? oldPassword,
+  }) {
     return UserChangePasswordSerializers(
-        id: id ?? this.id,
-        password: password ?? this.password,
-        rePassword: rePassword ?? this.rePassword,
-        oldPassword: oldPassword ?? this.oldPassword);
+      id: id ?? this.id,
+      password: password ?? this.password,
+      rePassword: rePassword ?? this.rePassword,
+      oldPassword: oldPassword ?? this.oldPassword,
+    );
   }
 }
 
@@ -4839,8 +4952,10 @@ class UserCurrentShelterSerializers {
             (identical(other.currentShelter, currentShelter) ||
                 const DeepCollectionEquality().equals(other.currentShelter, currentShelter)) &&
             (identical(other.currentShelterUserRole, currentShelterUserRole) ||
-                const DeepCollectionEquality()
-                    .equals(other.currentShelterUserRole, currentShelterUserRole)) &&
+                const DeepCollectionEquality().equals(
+                  other.currentShelterUserRole,
+                  currentShelterUserRole,
+                )) &&
             (identical(other.isUserCanEdit, isUserCanEdit) ||
                 const DeepCollectionEquality().equals(other.isUserCanEdit, isUserCanEdit)) &&
             (identical(other.isUserCanDelete, isUserCanDelete) ||
@@ -4857,26 +4972,24 @@ class UserCurrentShelterSerializers {
 }
 
 extension $UserCurrentShelterSerializersExtension on UserCurrentShelterSerializers {
-  UserCurrentShelterSerializers copyWith(
-      {int? currentShelter,
-      String? currentShelterUserRole,
-      bool? isUserCanEdit,
-      bool? isUserCanDelete}) {
+  UserCurrentShelterSerializers copyWith({
+    int? currentShelter,
+    String? currentShelterUserRole,
+    bool? isUserCanEdit,
+    bool? isUserCanDelete,
+  }) {
     return UserCurrentShelterSerializers(
-        currentShelter: currentShelter ?? this.currentShelter,
-        currentShelterUserRole: currentShelterUserRole ?? this.currentShelterUserRole,
-        isUserCanEdit: isUserCanEdit ?? this.isUserCanEdit,
-        isUserCanDelete: isUserCanDelete ?? this.isUserCanDelete);
+      currentShelter: currentShelter ?? this.currentShelter,
+      currentShelterUserRole: currentShelterUserRole ?? this.currentShelterUserRole,
+      isUserCanEdit: isUserCanEdit ?? this.isUserCanEdit,
+      isUserCanDelete: isUserCanDelete ?? this.isUserCanDelete,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class UserResetPasswordComplete {
-  UserResetPasswordComplete({
-    this.uidb64,
-    this.token,
-    this.newPassword,
-  });
+  UserResetPasswordComplete({this.uidb64, this.token, this.newPassword});
 
   factory UserResetPasswordComplete.fromJson(Map<String, dynamic> json) =>
       _$UserResetPasswordCompleteFromJson(json);
@@ -4914,9 +5027,10 @@ class UserResetPasswordComplete {
 extension $UserResetPasswordCompleteExtension on UserResetPasswordComplete {
   UserResetPasswordComplete copyWith({String? uidb64, String? token, String? newPassword}) {
     return UserResetPasswordComplete(
-        uidb64: uidb64 ?? this.uidb64,
-        token: token ?? this.token,
-        newPassword: newPassword ?? this.newPassword);
+      uidb64: uidb64 ?? this.uidb64,
+      token: token ?? this.token,
+      newPassword: newPassword ?? this.newPassword,
+    );
   }
 }
 
@@ -5008,30 +5122,32 @@ class UserSerializers {
 }
 
 extension $UserSerializersExtension on UserSerializers {
-  UserSerializers copyWith(
-      {int? id,
-      String? username,
-      String? firstName,
-      String? lastName,
-      String? fathersName,
-      String? fullName,
-      String? email,
-      String? phoneNumber,
-      String? address,
-      DateTime? dateJoined,
-      bool? isVerified}) {
+  UserSerializers copyWith({
+    int? id,
+    String? username,
+    String? firstName,
+    String? lastName,
+    String? fathersName,
+    String? fullName,
+    String? email,
+    String? phoneNumber,
+    String? address,
+    DateTime? dateJoined,
+    bool? isVerified,
+  }) {
     return UserSerializers(
-        id: id ?? this.id,
-        username: username ?? this.username,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        fathersName: fathersName ?? this.fathersName,
-        fullName: fullName ?? this.fullName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        address: address ?? this.address,
-        dateJoined: dateJoined ?? this.dateJoined,
-        isVerified: isVerified ?? this.isVerified);
+      id: id ?? this.id,
+      username: username ?? this.username,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      fathersName: fathersName ?? this.fathersName,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      dateJoined: dateJoined ?? this.dateJoined,
+      isVerified: isVerified ?? this.isVerified,
+    );
   }
 }
 
@@ -5118,28 +5234,30 @@ class UserShelterAdminSerializers {
 }
 
 extension $UserShelterAdminSerializersExtension on UserShelterAdminSerializers {
-  UserShelterAdminSerializers copyWith(
-      {int? id,
-      String? firstName,
-      String? lastName,
-      String? fathersName,
-      String? email,
-      String? phoneNumber,
-      String? address,
-      String? password,
-      String? rePassword,
-      dynamic? shelter}) {
+  UserShelterAdminSerializers copyWith({
+    int? id,
+    String? firstName,
+    String? lastName,
+    String? fathersName,
+    String? email,
+    String? phoneNumber,
+    String? address,
+    String? password,
+    String? rePassword,
+    dynamic? shelter,
+  }) {
     return UserShelterAdminSerializers(
-        id: id ?? this.id,
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        fathersName: fathersName ?? this.fathersName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        address: address ?? this.address,
-        password: password ?? this.password,
-        rePassword: rePassword ?? this.rePassword,
-        shelter: shelter ?? this.shelter);
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      fathersName: fathersName ?? this.fathersName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      password: password ?? this.password,
+      rePassword: rePassword ?? this.rePassword,
+      shelter: shelter ?? this.shelter,
+    );
   }
 }
 
@@ -5227,28 +5345,30 @@ class UserShelterWorkerSerializers {
 }
 
 extension $UserShelterWorkerSerializersExtension on UserShelterWorkerSerializers {
-  UserShelterWorkerSerializers copyWith(
-      {String? firstName,
-      String? lastName,
-      String? fathersName,
-      String? email,
-      String? phoneNumber,
-      String? address,
-      String? password,
-      String? rePassword,
-      int? shelter,
-      dynamic? role}) {
+  UserShelterWorkerSerializers copyWith({
+    String? firstName,
+    String? lastName,
+    String? fathersName,
+    String? email,
+    String? phoneNumber,
+    String? address,
+    String? password,
+    String? rePassword,
+    int? shelter,
+    dynamic? role,
+  }) {
     return UserShelterWorkerSerializers(
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        fathersName: fathersName ?? this.fathersName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        address: address ?? this.address,
-        password: password ?? this.password,
-        rePassword: rePassword ?? this.rePassword,
-        shelter: shelter ?? this.shelter,
-        role: role ?? this.role);
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      fathersName: fathersName ?? this.fathersName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      password: password ?? this.password,
+      rePassword: rePassword ?? this.rePassword,
+      shelter: shelter ?? this.shelter,
+      role: role ?? this.role,
+    );
   }
 }
 
@@ -5305,23 +5425,26 @@ class UserSheltersAdminSerializers {
 }
 
 extension $UserSheltersAdminSerializersExtension on UserSheltersAdminSerializers {
-  UserSheltersAdminSerializers copyWith(
-      {int? id, dynamic? user, int? userId, enums.RoleEnum? role, bool? isVerifiedByAdmin}) {
+  UserSheltersAdminSerializers copyWith({
+    int? id,
+    dynamic? user,
+    int? userId,
+    enums.RoleEnum? role,
+    bool? isVerifiedByAdmin,
+  }) {
     return UserSheltersAdminSerializers(
-        id: id ?? this.id,
-        user: user ?? this.user,
-        userId: userId ?? this.userId,
-        role: role ?? this.role,
-        isVerifiedByAdmin: isVerifiedByAdmin ?? this.isVerifiedByAdmin);
+      id: id ?? this.id,
+      user: user ?? this.user,
+      userId: userId ?? this.userId,
+      role: role ?? this.role,
+      isVerifiedByAdmin: isVerifiedByAdmin ?? this.isVerifiedByAdmin,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class UserSheltersWorkerSerializers {
-  UserSheltersWorkerSerializers({
-    this.shelter,
-    this.role,
-  });
+  UserSheltersWorkerSerializers({this.shelter, this.role});
 
   factory UserSheltersWorkerSerializers.fromJson(Map<String, dynamic> json) =>
       _$UserSheltersWorkerSerializersFromJson(json);
@@ -5359,13 +5482,7 @@ extension $UserSheltersWorkerSerializersExtension on UserSheltersWorkerSerialize
 
 @JsonSerializable(explicitToJson: true)
 class UserShortSerializers {
-  UserShortSerializers({
-    this.id,
-    this.fullName,
-    this.email,
-    this.phoneNumber,
-    this.address,
-  });
+  UserShortSerializers({this.id, this.fullName, this.email, this.phoneNumber, this.address});
 
   factory UserShortSerializers.fromJson(Map<String, dynamic> json) =>
       _$UserShortSerializersFromJson(json);
@@ -5410,22 +5527,26 @@ class UserShortSerializers {
 }
 
 extension $UserShortSerializersExtension on UserShortSerializers {
-  UserShortSerializers copyWith(
-      {int? id, String? fullName, String? email, String? phoneNumber, String? address}) {
+  UserShortSerializers copyWith({
+    int? id,
+    String? fullName,
+    String? email,
+    String? phoneNumber,
+    String? address,
+  }) {
     return UserShortSerializers(
-        id: id ?? this.id,
-        fullName: fullName ?? this.fullName,
-        email: email ?? this.email,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        address: address ?? this.address);
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+    );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class ValuesForSelection {
-  ValuesForSelection({
-    this.choicesName,
-  });
+  ValuesForSelection({this.choicesName});
 
   factory ValuesForSelection.fromJson(Map<String, dynamic> json) =>
       _$ValuesForSelectionFromJson(json);
@@ -5456,10 +5577,7 @@ extension $ValuesForSelectionExtension on ValuesForSelection {
 
 @JsonSerializable(explicitToJson: true)
 class ValuesForSelectionItem {
-  ValuesForSelectionItem({
-    this.displayName,
-    this.value,
-  });
+  ValuesForSelectionItem({this.displayName, this.value});
 
   factory ValuesForSelectionItem.fromJson(Map<String, dynamic> json) =>
       _$ValuesForSelectionItemFromJson(json);
@@ -5492,7 +5610,9 @@ class ValuesForSelectionItem {
 extension $ValuesForSelectionItemExtension on ValuesForSelectionItem {
   ValuesForSelectionItem copyWith({String? displayName, String? value}) {
     return ValuesForSelectionItem(
-        displayName: displayName ?? this.displayName, value: value ?? this.value);
+      displayName: displayName ?? this.displayName,
+      value: value ?? this.value,
+    );
   }
 }
 
@@ -5506,8 +5626,10 @@ enums.ApiSchemaGetFormat apiSchemaGetFormatFromJson(String? apiSchemaGetFormat) 
   }
 
   return enums.$ApiSchemaGetFormatMap.entries
-      .firstWhere((element) => element.value.toLowerCase() == apiSchemaGetFormat.toLowerCase(),
-          orElse: () => const MapEntry(enums.ApiSchemaGetFormat.swaggerGeneratedUnknown, ''))
+      .firstWhere(
+        (element) => element.value.toLowerCase() == apiSchemaGetFormat.toLowerCase(),
+        orElse: () => const MapEntry(enums.ApiSchemaGetFormat.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
@@ -5537,8 +5659,10 @@ enums.ApiSchemaGetLang apiSchemaGetLangFromJson(String? apiSchemaGetLang) {
   }
 
   return enums.$ApiSchemaGetLangMap.entries
-      .firstWhere((element) => element.value.toLowerCase() == apiSchemaGetLang.toLowerCase(),
-          orElse: () => const MapEntry(enums.ApiSchemaGetLang.swaggerGeneratedUnknown, ''))
+      .firstWhere(
+        (element) => element.value.toLowerCase() == apiSchemaGetLang.toLowerCase(),
+        orElse: () => const MapEntry(enums.ApiSchemaGetLang.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
@@ -5559,27 +5683,33 @@ List<enums.ApiSchemaGetLang> apiSchemaGetLangListFromJson(List? apiSchemaGetLang
 }
 
 String? apiV1AnimalsIdHistoryGetCreatedAtRangeToJson(
-    enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? apiV1AnimalsIdHistoryGetCreatedAtRange) {
+  enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? apiV1AnimalsIdHistoryGetCreatedAtRange,
+) {
   return enums.$ApiV1AnimalsIdHistoryGetCreatedAtRangeMap[apiV1AnimalsIdHistoryGetCreatedAtRange];
 }
 
 enums.ApiV1AnimalsIdHistoryGetCreatedAtRange apiV1AnimalsIdHistoryGetCreatedAtRangeFromJson(
-    String? apiV1AnimalsIdHistoryGetCreatedAtRange) {
+  String? apiV1AnimalsIdHistoryGetCreatedAtRange,
+) {
   if (apiV1AnimalsIdHistoryGetCreatedAtRange == null) {
     return enums.ApiV1AnimalsIdHistoryGetCreatedAtRange.swaggerGeneratedUnknown;
   }
 
   return enums.$ApiV1AnimalsIdHistoryGetCreatedAtRangeMap.entries
       .firstWhere(
-          (element) =>
-              element.value.toLowerCase() == apiV1AnimalsIdHistoryGetCreatedAtRange.toLowerCase(),
-          orElse: () => const MapEntry(
-              enums.ApiV1AnimalsIdHistoryGetCreatedAtRange.swaggerGeneratedUnknown, ''))
+        (element) =>
+            element.value.toLowerCase() == apiV1AnimalsIdHistoryGetCreatedAtRange.toLowerCase(),
+        orElse: () => const MapEntry(
+          enums.ApiV1AnimalsIdHistoryGetCreatedAtRange.swaggerGeneratedUnknown,
+          '',
+        ),
+      )
       .key;
 }
 
 List<String> apiV1AnimalsIdHistoryGetCreatedAtRangeListToJson(
-    List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>? apiV1AnimalsIdHistoryGetCreatedAtRange) {
+  List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>? apiV1AnimalsIdHistoryGetCreatedAtRange,
+) {
   if (apiV1AnimalsIdHistoryGetCreatedAtRange == null) {
     return [];
   }
@@ -5590,8 +5720,7 @@ List<String> apiV1AnimalsIdHistoryGetCreatedAtRangeListToJson(
 }
 
 List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>
-    apiV1AnimalsIdHistoryGetCreatedAtRangeListFromJson(
-        List? apiV1AnimalsIdHistoryGetCreatedAtRange) {
+apiV1AnimalsIdHistoryGetCreatedAtRangeListFromJson(List? apiV1AnimalsIdHistoryGetCreatedAtRange) {
   if (apiV1AnimalsIdHistoryGetCreatedAtRange == null) {
     return [];
   }
@@ -5602,26 +5731,29 @@ List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>
 }
 
 String? apiV1AnimalsSpeciesGetLevelToJson(
-    enums.ApiV1AnimalsSpeciesGetLevel? apiV1AnimalsSpeciesGetLevel) {
+  enums.ApiV1AnimalsSpeciesGetLevel? apiV1AnimalsSpeciesGetLevel,
+) {
   return enums.$ApiV1AnimalsSpeciesGetLevelMap[apiV1AnimalsSpeciesGetLevel];
 }
 
 enums.ApiV1AnimalsSpeciesGetLevel apiV1AnimalsSpeciesGetLevelFromJson(
-    String? apiV1AnimalsSpeciesGetLevel) {
+  String? apiV1AnimalsSpeciesGetLevel,
+) {
   if (apiV1AnimalsSpeciesGetLevel == null) {
     return enums.ApiV1AnimalsSpeciesGetLevel.swaggerGeneratedUnknown;
   }
 
   return enums.$ApiV1AnimalsSpeciesGetLevelMap.entries
       .firstWhere(
-          (element) => element.value.toLowerCase() == apiV1AnimalsSpeciesGetLevel.toLowerCase(),
-          orElse: () =>
-              const MapEntry(enums.ApiV1AnimalsSpeciesGetLevel.swaggerGeneratedUnknown, ''))
+        (element) => element.value.toLowerCase() == apiV1AnimalsSpeciesGetLevel.toLowerCase(),
+        orElse: () => const MapEntry(enums.ApiV1AnimalsSpeciesGetLevel.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
 List<String> apiV1AnimalsSpeciesGetLevelListToJson(
-    List<enums.ApiV1AnimalsSpeciesGetLevel>? apiV1AnimalsSpeciesGetLevel) {
+  List<enums.ApiV1AnimalsSpeciesGetLevel>? apiV1AnimalsSpeciesGetLevel,
+) {
   if (apiV1AnimalsSpeciesGetLevel == null) {
     return [];
   }
@@ -5630,7 +5762,8 @@ List<String> apiV1AnimalsSpeciesGetLevelListToJson(
 }
 
 List<enums.ApiV1AnimalsSpeciesGetLevel> apiV1AnimalsSpeciesGetLevelListFromJson(
-    List? apiV1AnimalsSpeciesGetLevel) {
+  List? apiV1AnimalsSpeciesGetLevel,
+) {
   if (apiV1AnimalsSpeciesGetLevel == null) {
     return [];
   }
@@ -5650,8 +5783,10 @@ enums.DurationEnum durationEnumFromJson(String? durationEnum) {
   }
 
   return enums.$DurationEnumMap.entries
-      .firstWhere((element) => element.value.toLowerCase() == durationEnum.toLowerCase(),
-          orElse: () => const MapEntry(enums.DurationEnum.swaggerGeneratedUnknown, ''))
+      .firstWhere(
+        (element) => element.value.toLowerCase() == durationEnum.toLowerCase(),
+        orElse: () => const MapEntry(enums.DurationEnum.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
@@ -5681,8 +5816,10 @@ enums.LevelEnum levelEnumFromJson(String? levelEnum) {
   }
 
   return enums.$LevelEnumMap.entries
-      .firstWhere((element) => element.value.toLowerCase() == levelEnum.toLowerCase(),
-          orElse: () => const MapEntry(enums.LevelEnum.swaggerGeneratedUnknown, ''))
+      .firstWhere(
+        (element) => element.value.toLowerCase() == levelEnum.toLowerCase(),
+        orElse: () => const MapEntry(enums.LevelEnum.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
@@ -5712,8 +5849,10 @@ enums.MyTypeEnum myTypeEnumFromJson(String? myTypeEnum) {
   }
 
   return enums.$MyTypeEnumMap.entries
-      .firstWhere((element) => element.value.toLowerCase() == myTypeEnum.toLowerCase(),
-          orElse: () => const MapEntry(enums.MyTypeEnum.swaggerGeneratedUnknown, ''))
+      .firstWhere(
+        (element) => element.value.toLowerCase() == myTypeEnum.toLowerCase(),
+        orElse: () => const MapEntry(enums.MyTypeEnum.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
@@ -5734,26 +5873,30 @@ List<enums.MyTypeEnum> myTypeEnumListFromJson(List? myTypeEnum) {
 }
 
 String? prescriptionExecutionStatusEnumToJson(
-    enums.PrescriptionExecutionStatusEnum? prescriptionExecutionStatusEnum) {
+  enums.PrescriptionExecutionStatusEnum? prescriptionExecutionStatusEnum,
+) {
   return enums.$PrescriptionExecutionStatusEnumMap[prescriptionExecutionStatusEnum];
 }
 
 enums.PrescriptionExecutionStatusEnum prescriptionExecutionStatusEnumFromJson(
-    String? prescriptionExecutionStatusEnum) {
+  String? prescriptionExecutionStatusEnum,
+) {
   if (prescriptionExecutionStatusEnum == null) {
     return enums.PrescriptionExecutionStatusEnum.swaggerGeneratedUnknown;
   }
 
   return enums.$PrescriptionExecutionStatusEnumMap.entries
       .firstWhere(
-          (element) => element.value.toLowerCase() == prescriptionExecutionStatusEnum.toLowerCase(),
-          orElse: () =>
-              const MapEntry(enums.PrescriptionExecutionStatusEnum.swaggerGeneratedUnknown, ''))
+        (element) => element.value.toLowerCase() == prescriptionExecutionStatusEnum.toLowerCase(),
+        orElse: () =>
+            const MapEntry(enums.PrescriptionExecutionStatusEnum.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
 List<String> prescriptionExecutionStatusEnumListToJson(
-    List<enums.PrescriptionExecutionStatusEnum>? prescriptionExecutionStatusEnum) {
+  List<enums.PrescriptionExecutionStatusEnum>? prescriptionExecutionStatusEnum,
+) {
   if (prescriptionExecutionStatusEnum == null) {
     return [];
   }
@@ -5764,7 +5907,8 @@ List<String> prescriptionExecutionStatusEnumListToJson(
 }
 
 List<enums.PrescriptionExecutionStatusEnum> prescriptionExecutionStatusEnumListFromJson(
-    List? prescriptionExecutionStatusEnum) {
+  List? prescriptionExecutionStatusEnum,
+) {
   if (prescriptionExecutionStatusEnum == null) {
     return [];
   }
@@ -5784,8 +5928,10 @@ enums.RoleEnum roleEnumFromJson(String? roleEnum) {
   }
 
   return enums.$RoleEnumMap.entries
-      .firstWhere((element) => element.value.toLowerCase() == roleEnum.toLowerCase(),
-          orElse: () => const MapEntry(enums.RoleEnum.swaggerGeneratedUnknown, ''))
+      .firstWhere(
+        (element) => element.value.toLowerCase() == roleEnum.toLowerCase(),
+        orElse: () => const MapEntry(enums.RoleEnum.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
@@ -5815,8 +5961,10 @@ enums.Status131Enum status131EnumFromJson(String? status131Enum) {
   }
 
   return enums.$Status131EnumMap.entries
-      .firstWhere((element) => element.value.toLowerCase() == status131Enum.toLowerCase(),
-          orElse: () => const MapEntry(enums.Status131Enum.swaggerGeneratedUnknown, ''))
+      .firstWhere(
+        (element) => element.value.toLowerCase() == status131Enum.toLowerCase(),
+        orElse: () => const MapEntry(enums.Status131Enum.swaggerGeneratedUnknown, ''),
+      )
       .key;
 }
 
@@ -5874,16 +6022,19 @@ class $CustomJsonDecoder {
 
 class $JsonSerializableConverter extends chopper.JsonConverter {
   @override
-  chopper.Response<ResultType> convertResponse<ResultType, Item>(chopper.Response response) {
+  FutureOr<chopper.Response<ResultType>> convertResponse<ResultType, Item>(
+    chopper.Response response,
+  ) async {
     if (response.bodyString.isEmpty) {
       // In rare cases, when let's say 204 (no content) is returned -
       // we cannot decode the missing json with the result type specified
       return chopper.Response(response.base, null, error: response.error);
     }
 
-    final jsonRes = super.convertResponse(response);
+    final jsonRes = await super.convertResponse(response);
     return jsonRes.copyWith<ResultType>(
-        body: $jsonDecoder.decode<Item>(jsonRes.body) as ResultType);
+      body: $jsonDecoder.decode<Item>(jsonRes.body) as ResultType,
+    );
   }
 }
 

@@ -1,21 +1,13 @@
 part of 'animal_detail_screen.dart';
 
 SliverList _buildCommonInfoPage(AnimalRead animal) {
-  return SliverList(
-    delegate: SliverChildListDelegate(
-      _buildCommonInfoContent(animal),
-    ),
-  );
+  return SliverList(delegate: SliverChildListDelegate(_buildCommonInfoContent(animal)));
 }
 
 List<Widget> _buildCommonInfoContent(AnimalRead animal) {
   return [
     Padding(
-      padding: const EdgeInsets.only(
-        top: 24.0,
-        left: 16.0,
-        bottom: 8.0,
-      ),
+      padding: const EdgeInsets.only(top: 24.0, left: 16.0, bottom: 8.0),
       child: Text(
         StringRes.current.animalCommonInfo,
         style: StyleRes.title.copyWith(fontSize: 22.0),
@@ -48,42 +40,29 @@ List<Widget> _buildCommonInfoContent(AnimalRead animal) {
       ),
     ]),
     AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalFamily,
-        firstValue: animal.specFamily ?? '',
-      ),
-      CardData(
-        firstCaption: StringRes.current.animalKind,
-        firstValue: animal.specKind ?? '',
-      ),
+      CardData(firstCaption: StringRes.current.animalFamily, firstValue: animal.specFamily ?? ''),
+      CardData(firstCaption: StringRes.current.animalKind, firstValue: animal.specKind ?? ''),
       CardData(
         firstCaption: StringRes.current.animalCategory,
         firstValue: animal.specCategory ?? '',
       ),
     ]),
     AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalColor,
-        firstValue: animal.colorString ?? '',
-      ),
+      CardData(firstCaption: StringRes.current.animalColor, firstValue: animal.colorString ?? ''),
       CardData(
         firstCaption: StringRes.current.animalSpecSigns,
         firstValue: animal.specialSignsString ?? '',
       ),
     ]),
     AnimalContentCard([
-      CardData(
-        firstCaption: StringRes.current.animalChip,
-        firstValue: animal.chippingCode ?? '',
-      ),
+      CardData(firstCaption: StringRes.current.animalChip, firstValue: animal.chippingCode ?? ''),
       CardData(
         firstCaption: StringRes.current.animalChipDate,
-        firstValue:
-            animal.dateOfChipping != null ? _dateFormatter.format(animal.dateOfChipping!) : '',
+        firstValue: animal.dateOfChipping != null
+            ? _dateFormatter.format(animal.dateOfChipping!)
+            : '',
       ),
     ]),
-    const SizedBox(
-      height: 12.0,
-    )
+    const SizedBox(height: 12.0),
   ];
 }

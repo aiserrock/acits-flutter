@@ -11,8 +11,8 @@ class FormEditCard extends StatelessWidget {
     this.background,
     this.padding,
     this.margin,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<EditCardData> data;
   final GlobalKey<FormState>? formKey;
@@ -33,9 +33,9 @@ class FormEditCard extends StatelessWidget {
                       children: [
                         _buildField(item),
                         if (item.onPressed != null)
-                          Positioned.fill(child: InkWell(onTap: item.onPressed))
+                          Positioned.fill(child: InkWell(onTap: item.onPressed)),
                       ],
-                    )
+                    ),
                   ]
                 : [
                     if (item.label != null)
@@ -51,16 +51,8 @@ class FormEditCard extends StatelessWidget {
         )
         .toList();
     return Container(
-      padding: padding ??
-          const EdgeInsets.symmetric(
-            vertical: 16.0,
-            horizontal: 8.0,
-          ),
-      margin: margin ??
-          const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 8.0,
-          ),
+      padding: padding ?? const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+      margin: margin ?? const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: background ?? ColorRes.foreground,
         borderRadius: BorderRadius.circular(8.0),
@@ -69,15 +61,12 @@ class FormEditCard extends StatelessWidget {
     );
   }
 
-  Widget _buildField(
-    EditCardData item, {
-    bool enabled = true,
-  }) {
+  Widget _buildField(EditCardData item, {bool enabled = true}) {
     final keyboardType = item.digitsOnly
         ? TextInputType.number
         : item.decimalOnly
-            ? const TextInputType.numberWithOptions(decimal: true)
-            : null;
+        ? const TextInputType.numberWithOptions(decimal: true)
+        : null;
     return TextFormField(
       key: formKey,
       enabled: item.enabled && enabled,
@@ -85,10 +74,11 @@ class FormEditCard extends StatelessWidget {
       controller: item.controller,
       initialValue: item.initValue,
       decoration: InputDecoration(
-          labelText: item.label,
-          suffixIcon: item.suffix,
-          errorStyle: const TextStyle(fontSize: .0),
-          fillColor: Colors.transparent),
+        labelText: item.label,
+        suffixIcon: item.suffix,
+        errorStyle: const TextStyle(fontSize: .0),
+        fillColor: Colors.transparent,
+      ),
       maxLength: item.maxLength,
       style: item.enabled ? null : const TextStyle().copyWith(color: ColorRes.textSecondary),
       maxLines: item.isObscure ? 1 : 8,

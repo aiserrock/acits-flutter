@@ -30,10 +30,7 @@ final _galleryImageSet = [
 ];
 
 class PhotoGalleryScreen extends StatefulWidget {
-  const PhotoGalleryScreen({
-    required this.animalId,
-    Key? key,
-  }) : super(key: key);
+  const PhotoGalleryScreen({required this.animalId, super.key});
 
   final int animalId;
 
@@ -46,8 +43,8 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
 
   final int _animalId;
   final AnimalService _animalService;
-  final _screenState = BehaviorSubject<WidgetState<List<GalleryItemData>>>()
-    ..add(WidgetState()..loading());
+  final _screenState = BehaviorSubject<ScreenDataState<List<GalleryItemData>>>()
+    ..add(ScreenDataState()..loading());
   final _isSelectorChanged = BehaviorSubject<bool>.seeded(false);
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -75,36 +72,28 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          'Choose the photos',
-          style: TextStyle(color: ColorRes.textPrimary),
-        ),
+        title: const Text('Choose the photos', style: TextStyle(color: ColorRes.textPrimary)),
         centerTitle: true,
       ),
       floatingActionButton: StreamBuilder<bool>(
-          stream: _isSelectorChanged,
-          builder: (_, state) => (state.data ?? false)
-              ? FloatingActionButton(
-                  child: const Icon(
-                    Icons.done_all,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _submit(context),
-                  backgroundColor: ColorRes.accent,
-                )
-              : const SizedBox()),
+        stream: _isSelectorChanged,
+        builder: (_, state) => (state.data ?? false)
+            ? FloatingActionButton(
+                onPressed: () => _submit(context),
+                backgroundColor: ColorRes.accent,
+                child: const Icon(Icons.done_all, color: Colors.white),
+              )
+            : const SizedBox(),
+      ),
       body: _buildBody(),
     );
   }
 
   Widget _buildBody() {
-    return StreamBuilder<WidgetState<List<GalleryItemData>>>(
+    return StreamBuilder<ScreenDataState<List<GalleryItemData>>>(
       stream: _screenState.stream,
       builder: (_, v) {
         if (v.data?.hasError ?? false) return ErrorHolderWidget(onPressed: _init);
@@ -121,45 +110,36 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       children: [
         _GalleryItemWidget(
-          const Icon(
-            Icons.add_a_photo_outlined,
-            size: 48.0,
-            color: ColorRes.accent,
-          ),
+          const Icon(Icons.add_a_photo_outlined, size: 48.0, color: ColorRes.accent),
           onPressed: () => _addPhoto(ImageSource.camera),
         ),
         _GalleryItemWidget(
-          const Icon(
-            Icons.photo_library_outlined,
-            size: 48.0,
-            color: ColorRes.accent,
-          ),
+          const Icon(Icons.photo_library_outlined, size: 48.0, color: ColorRes.accent),
           onPressed: () => _addPhoto(ImageSource.gallery),
         ),
         ...list.map<Widget>(
-          (e) => _GalleryItemWidget(
-            e.widget,
-            onPressed: () => _chooseItem(e),
-            isChoosed: e.isChoosed,
-          ),
+          (e) =>
+              _GalleryItemWidget(e.widget, onPressed: () => _chooseItem(e), isChoosed: e.isChoosed),
         ),
       ],
     );
   }
 
   Future<void> _init() async {
-    _screenState.add(WidgetState()..loading());
-    await _animalService.fetchAnimalDetail(id: _animalId).then((animal) {
-      final items = <GalleryItemData>[
-        ...(animal.images?.map<GalleryItemData>((e) => GalleryItemData.fromAnimalImage(e)) ?? []),
-        ..._galleryImageSet.map<GalleryItemData>((e) => GalleryItemData(assetPath: e.path))
-      ];
-      _screenState.add(
-        WidgetState(items.toList()),
-      );
-    }).catchError((e, _) {
-      _screenState.add(WidgetState()..error = e);
-    });
+    _screenState.add(ScreenDataState()..loading());
+    await _animalService
+        .fetchAnimalDetail(id: _animalId)
+        .then((animal) {
+          final items = <GalleryItemData>[
+            ...(animal.images?.map<GalleryItemData>((e) => GalleryItemData.fromAnimalImage(e)) ??
+                []),
+            ..._galleryImageSet.map<GalleryItemData>((e) => GalleryItemData(assetPath: e.path)),
+          ];
+          _screenState.add(ScreenDataState(items.toList()));
+        })
+        .catchError((e, _) {
+          _screenState.add(ScreenDataState()..error = e);
+        });
   }
 
   void _chooseItem(GalleryItemData item) {
@@ -168,7 +148,7 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
     final index = currentList?.indexOf(item);
     if (index == null || index < 0) return;
     currentList?.replaceRange(index, index + 1, [item.copyWith(isChoosed: !item.isChoosed)]);
-    _screenState.add(WidgetState(currentList));
+    _screenState.add(ScreenDataState(currentList));
     _isSelectorChanged.add(true);
   }
 
@@ -177,15 +157,9 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
     ImagePicker().pickImage(source: source).then((xFile) {
       if (xFile == null) return;
       _screenState.add(
-        WidgetState(
+        ScreenDataState(
           _screenState.value.value
-            ?..insert(
-              0,
-              GalleryItemData(
-                filePath: xFile.path,
-                isChoosed: true,
-              ),
-            ),
+            ?..insert(0, GalleryItemData(filePath: xFile.path, isChoosed: true)),
         ),
       );
       _isSelectorChanged.add(true);
@@ -198,23 +172,17 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
     if (list.countChoosedItems > 6) {
       final ctx = _scaffoldKey.currentContext ?? context;
       ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(
-          content: Text('${StringRes.current.animalMaxImagesCountIs} $_maxCountImages'),
-        ),
+        SnackBar(content: Text('${StringRes.current.animalMaxImagesCountIs} $_maxCountImages')),
       );
       return;
     }
-    _screenState.add(WidgetState()..loading());
+    _screenState.add(ScreenDataState()..loading());
+    final navigator = Navigator.of(context);
     _animalService
-        .changeAnimalPhotos(
-          _animalId,
-          list,
-        )
-        .then((_) => Navigator.of(context).pop(true))
-        .catchError(
-      (e, _) {
-        _screenState.add(WidgetState()..error = e);
-      },
-    );
+        .changeAnimalPhotos(_animalId, list)
+        .then((_) => navigator.pop(true))
+        .catchError((e, _) {
+          _screenState.add(ScreenDataState()..error = e);
+        });
   }
 }

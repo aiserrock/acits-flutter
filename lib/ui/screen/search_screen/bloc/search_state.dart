@@ -1,10 +1,6 @@
 part of 'search_bloc.dart';
 
-enum SearchStatus {
-  loading,
-  success,
-  failure,
-}
+enum SearchStatus { loading, success, failure }
 
 class SearchState<T> extends Equatable {
   const SearchState({
@@ -17,12 +13,12 @@ class SearchState<T> extends Equatable {
 
   // ignore: prefer_const_constructors
   factory SearchState.initial() => SearchState(
-        // ignore: prefer_const_literals_to_create_immutables
-        items: <T>[],
-        status: SearchStatus.success,
-        isReachedMax: false,
-        searchRequest: '',
-      );
+    // ignore: prefer_const_literals_to_create_immutables
+    items: <T>[],
+    status: SearchStatus.success,
+    isReachedMax: false,
+    searchRequest: '',
+  );
 
   final Object? error;
   final List<T> items;
@@ -47,12 +43,7 @@ class SearchState<T> extends Equatable {
   }
 
   @override
-  List<Object> get props => [
-        items,
-        status,
-        isReachedMax,
-        searchRequest,
-      ];
+  List<Object> get props => [items, status, isReachedMax, searchRequest];
 
   bool get isInitFailure => status == SearchStatus.failure && items.isEmpty;
   bool get isInitLoading => status == SearchStatus.loading && items.isEmpty;

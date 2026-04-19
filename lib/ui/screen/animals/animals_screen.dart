@@ -18,7 +18,7 @@ const _animalPageLength = 25;
 const _scrollTopPadding = 16.0;
 
 class AnimalsScreen extends StatefulWidget {
-  const AnimalsScreen({Key? key}) : super(key: key);
+  const AnimalsScreen({super.key});
 
   @override
   State<AnimalsScreen> createState() => _AnimalsScreenState();
@@ -34,8 +34,8 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
   bool _isSearchActive = false;
   int _currentListOffset = 0;
 
-  WidgetState<List<AnimalRead>?> _state = WidgetState()..loading();
-  WidgetState<Object> _statePageLoading = WidgetState()..content(Object());
+  ScreenDataState<List<AnimalRead>?> _state = ScreenDataState()..loading();
+  ScreenDataState<Object> _statePageLoading = ScreenDataState()..content(Object());
 
   @override
   void didChangeDependencies() {
@@ -65,11 +65,8 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.menu,
-            color: ColorRes.accent,
-          ),
           onTap: RootDrawerProvider.of(context)?.openDrawer,
+          child: const Icon(Icons.menu, color: ColorRes.accent),
         ),
         title: _buildTitle(),
         actions: _buildAppBarActions,
@@ -86,22 +83,13 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
       mini: _isSmallScreen,
       onPressed: () async {
         Navigator.of(context)
-            .push<bool>(
-          MaterialPageRoute(
-            builder: (_) => const AnimalEditScreen(),
-          ),
-        )
-            .then(
-          (bool? isAdded) {
-            if (isAdded ?? false) _loadAnimalList(needResetOffset: true);
-          },
-        );
+            .push<bool>(MaterialPageRoute(builder: (_) => const AnimalEditScreen()))
+            .then((bool? isAdded) {
+              if (isAdded ?? false) _loadAnimalList(needResetOffset: true);
+            });
       },
-      child: const Icon(
-        Icons.add,
-        color: ColorRes.foreground,
-      ),
       backgroundColor: ColorRes.accent,
+      child: const Icon(Icons.add, color: ColorRes.foreground),
     );
   }
 
@@ -111,10 +99,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: GestureDetector(
-            child: const Icon(
-              Icons.search,
-              color: ColorRes.accent,
-            ),
+            child: const Icon(Icons.search, color: ColorRes.accent),
             onTap: () => setState(() => _isSearchActive = !_isSearchActive),
           ),
         ),
@@ -124,10 +109,8 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
   Widget _buildBody() {
     return StateBuilder<List<AnimalRead>?>(
       state: _state,
-      loader: (_) => ScreenLoader(
-        height: 160.0,
-        pullToRefresh: () => _loadAnimalList(needResetOffset: true),
-      ),
+      loader: (_) =>
+          ScreenLoader(height: 160.0, pullToRefresh: () => _loadAnimalList(needResetOffset: true)),
       builder: (_, data) => _buildScreenContent(),
       errorBuilder: (_, error) => Column(),
     );
@@ -148,9 +131,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                   ),
                   onTap: () => setState(() => _isSearchActive = !_isSearchActive),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
               style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
             ),
@@ -175,41 +156,29 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
           slivers: [
             const SliverToBoxAdapter(child: SizedBox(height: _scrollTopPadding)),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (_, index) {
-                  final animal = _state.value?[index];
-                  final isDeleted = animal?.deletedAt != null;
-                  return isDeleted
-                      ? const SizedBox()
-                      : Padding(
-                          padding: const EdgeInsets.only(
-                            left: 16.0,
-                            right: 16.0,
-                            bottom: 16.0,
-                          ),
-                          child: AnimalCardWidget(
-                            animal,
-                            onDelete: () => _onDelete(context, animal),
-                          ),
-                        );
-                },
-                childCount: _state.value?.length ?? 0,
-              ),
+              delegate: SliverChildBuilderDelegate((_, index) {
+                final animal = _state.value?[index];
+                final isDeleted = animal?.deletedAt != null;
+                return isDeleted
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                        child: AnimalCardWidget(animal, onDelete: () => _onDelete(context, animal)),
+                      );
+              }, childCount: _state.value?.length ?? 0),
             ),
             SliverToBoxAdapter(
               child: StateBuilder(
                 state: _statePageLoading,
-                builder: (_, __) => const SizedBox(height: 16.0),
-                loader: (_) => const SizedBox(
-                  height: 48.0,
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-                errorBuilder: (_, __) => SizedBox(
+                builder: (_, _) => const SizedBox(height: 16.0),
+                loader: (_) =>
+                    const SizedBox(height: 48.0, child: Center(child: CircularProgressIndicator())),
+                errorBuilder: (_, _) => SizedBox(
                   height: 64.0,
                   child: Center(child: Text(StringRes.current.commonError)),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -231,10 +200,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
               ),
               Text(
                 StringRes.current.mainEmptyState,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  color: ColorRes.textSecondary,
-                ),
+                style: const TextStyle(fontSize: 16.0, color: ColorRes.textSecondary),
               ),
             ],
           ),
@@ -250,59 +216,45 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
 
   void _loadNextPage() {
     if (_statePageLoading.isLoading) return;
-    setState(() => _statePageLoading = WidgetState()..loading());
+    setState(() => _statePageLoading = ScreenDataState()..loading());
     _loadAnimalList();
   }
 
   Future<List<AnimalRead>?> _loadAnimalList({bool needResetOffset = false}) async {
     if (needResetOffset) {
       _currentListOffset = 0;
-      setState(() => _state = WidgetState()..loading());
+      setState(() => _state = ScreenDataState()..loading());
     }
     await _animalService
-        .fetchAnimalList(
-      offset: _currentListOffset,
-      limit: _animalPageLength,
-    )
-        .then(
-      (value) {
-        final newList = <AnimalRead>[
-          ...?_state.value,
-          ...?value?.results,
-        ];
-        setState(() => _state = WidgetState()..content(newList));
-        _currentListOffset += value?.results?.length ?? 0;
-        setState(() => _statePageLoading = WidgetState()..content(Object()));
-      },
-    ).catchError(
-      (e) {
-        if (needResetOffset) {
-          setState(() => _state = WidgetState()..error = e);
-        } else {
-          setState(() => _statePageLoading = WidgetState()..error = e);
-        }
-      },
-    );
+        .fetchAnimalList(offset: _currentListOffset, limit: _animalPageLength)
+        .then((value) {
+          final newList = <AnimalRead>[...?_state.value, ...?value?.results];
+          setState(() => _state = ScreenDataState()..content(newList));
+          _currentListOffset += value?.results?.length ?? 0;
+          setState(() => _statePageLoading = ScreenDataState()..content(Object()));
+        })
+        .catchError((e) {
+          if (needResetOffset) {
+            setState(() => _state = ScreenDataState()..error = e);
+          } else {
+            setState(() => _statePageLoading = ScreenDataState()..error = e);
+          }
+        });
     return null;
   }
 
-  void _onDelete(
-    BuildContext context,
-    AnimalRead? item,
-  ) {
+  void _onDelete(BuildContext context, AnimalRead? item) {
     if (item == null) return;
     final index = _state.value?.indexOf(item) ?? 0;
     setState(() {
-      _state = WidgetState()..content(_state.value?..remove(item));
+      _state = ScreenDataState()..content(_state.value?..remove(item));
     });
-    _animalService.deleteAnimal(item.id.toString()).catchError(
-      (e) {
-        setState(() {
-          _state = WidgetState()..content(_state.value?..insert(index, item));
-        });
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(StringRes.current.errorDefaultMsg)));
-      },
-    );
+    final messenger = ScaffoldMessenger.of(context);
+    _animalService.deleteAnimal(item.id.toString()).catchError((e) {
+      setState(() {
+        _state = ScreenDataState()..content(_state.value?..insert(index, item));
+      });
+      messenger.showSnackBar(SnackBar(content: Text(StringRes.current.errorDefaultMsg)));
+    });
   }
 }

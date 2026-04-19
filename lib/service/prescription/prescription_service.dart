@@ -9,11 +9,7 @@ import 'package:acits_flutter/service/config/config_service.dart';
 /// Сервис назначений
 @singleton
 class PrescriptionService {
-  PrescriptionService(
-    this._acitsClient,
-    this._authService,
-    this._configService,
-  );
+  PrescriptionService(this._acitsClient, this._authService, this._configService);
 
   final Openapi _acitsClient;
   final AuthService _authService;
@@ -73,11 +69,7 @@ class PrescriptionService {
     );
 
     if (result.body != null) {
-      return result.body?.copyWith(
-        executions: _toLocal(
-          result.body?.executions ?? [],
-        ),
-      );
+      return result.body?.copyWith(executions: _toLocal(result.body?.executions ?? []));
     } else {
       throw MessagedException(error: result.error ?? result.bodyString);
     }
@@ -88,9 +80,7 @@ class PrescriptionService {
     final result = await _acitsClient.apiV1PrescriptionsPost(
       body: prescription.copyWith(
         files: prescription.files ?? [],
-        executions: _toUtc(
-          prescription.executions ?? [],
-        ),
+        executions: _toUtc(prescription.executions ?? []),
       ),
       xCurrentShelter: _authService.currentShelterId,
     );
@@ -129,9 +119,7 @@ class PrescriptionService {
       id: prescription.id,
       body: prescription.copyWith(
         files: prescription.files ?? [],
-        executions: _toUtc(
-          prescription.executions ?? [],
-        ),
+        executions: _toUtc(prescription.executions ?? []),
       ),
       xCurrentShelter: _authService.currentShelterId,
     );
@@ -155,18 +143,21 @@ class PrescriptionService {
     if (utc == null) return null;
 
     return utc.copyWith(
-        results: utc.results
-            ?.map((item) => item.copyWith(executions: _toLocal(item.executions ?? [])))
-            .toList());
+      results: utc.results
+          ?.map((item) => item.copyWith(executions: _toLocal(item.executions ?? [])))
+          .toList(),
+    );
   }
 
   PaginatedPrescriptionExecutionTodayList? _toLocalExecutionsList(
-      PaginatedPrescriptionExecutionTodayList? utc) {
+    PaginatedPrescriptionExecutionTodayList? utc,
+  ) {
     if (utc == null) return null;
 
     return utc.copyWith(
-        results: utc.results
-            ?.map((item) => item.copyWith(executeAt: item.executeAt?.toLocal()))
-            .toList());
+      results: utc.results
+          ?.map((item) => item.copyWith(executeAt: item.executeAt?.toLocal()))
+          .toList(),
+    );
   }
 }

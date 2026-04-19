@@ -8,20 +8,13 @@ import 'package:acits_flutter/export.dart';
 /// Репозиторий доступа к документам (pdf)
 @injectable
 class DocumentRepository with PdfDocumentMixin {
-  DocumentRepository(
-    this._authService,
-    this._client,
-  );
+  DocumentRepository(this._authService, this._client);
 
   final AuthService _authService;
   final Openapi _client;
 
   /// История редактирования информации о животном
-  Future<String> fetchAnimalEditingHistory(
-    int animalId,
-    DateTime from,
-    DateTime to,
-  ) async {
+  Future<String> fetchAnimalEditingHistory(int animalId, DateTime from, DateTime to) async {
     final result = await _client.apiV1AnimalsIdPdfTypePdfGet(
       id: animalId,
       pdfType: 'history-editing',

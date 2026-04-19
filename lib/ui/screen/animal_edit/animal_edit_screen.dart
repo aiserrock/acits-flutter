@@ -23,15 +23,12 @@ const _onPageChangedBackDuration = Duration(milliseconds: 500);
 
 /// Экран создания или редактирования существующих животных
 class AnimalEditScreen extends StatefulWidget {
-  const AnimalEditScreen({
-    this.id,
-    Key? key,
-  }) : super(key: key);
+  const AnimalEditScreen({this.id, super.key});
 
   final int? id;
 
   @override
-  _AnimalEditScreenState createState() => _AnimalEditScreenState();
+  State<AnimalEditScreen> createState() => _AnimalEditScreenState();
 }
 
 class _AnimalEditScreenState extends State<AnimalEditScreen> {
@@ -42,8 +39,9 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   late final bool _isEdit;
   late final NavigatorState _navigator;
 
-  WidgetState<_AnimalEditScreenMode> _editState =
-      WidgetState<_AnimalEditScreenMode>(_AnimalEditScreenMode.form);
+  ScreenDataState<_AnimalEditScreenMode> _editState = ScreenDataState<_AnimalEditScreenMode>(
+    _AnimalEditScreenMode.form,
+  );
   final _pageController = PageController();
 
   bool _isLastPage = false;
@@ -67,48 +65,45 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AnimalEditPagerHolder>(
-        create: (_) => AnimalEditPagerHolder(),
-        builder: (context, snapshot) {
-          return ChangeNotifierProvider<AnimalEditHolder>(
-              create: (_) => AnimalEditHolder(),
-              builder: (_, __) {
-                return Scaffold(
-                  key: scaffoldKey,
-                  drawer: const Drawer(),
-                  backgroundColor: ColorRes.background,
-                  appBar: AppBar(
-                    backgroundColor: ColorRes.foreground,
-                    shadowColor: Colors.transparent,
-                    leading: GestureDetector(
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        color: ColorRes.accent,
+      create: (_) => AnimalEditPagerHolder(),
+      builder: (context, snapshot) {
+        return ChangeNotifierProvider<AnimalEditHolder>(
+          create: (_) => AnimalEditHolder(),
+          builder: (_, _) {
+            return Scaffold(
+              key: scaffoldKey,
+              drawer: const Drawer(),
+              backgroundColor: ColorRes.background,
+              appBar: AppBar(
+                backgroundColor: ColorRes.foreground,
+                shadowColor: Colors.transparent,
+                leading: GestureDetector(
+                  child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+                  onTap: () => Navigator.of(context).pop(),
+                ),
+                title: Text(
+                  widget.id == null ? StringRes.current.animalAdd : StringRes.current.animalEdit,
+                  style: const TextStyle(color: ColorRes.textPrimary),
+                ),
+                centerTitle: true,
+              ),
+              floatingActionButton:
+                  (_editState.value != _AnimalEditScreenMode.success && !_editState.hasError)
+                  ? FloatingActionButton(
+                      onPressed: _onFabPressed,
+                      backgroundColor: ColorRes.accent,
+                      child: Icon(
+                        _isLastPage ? Icons.done_all : Icons.arrow_forward_ios_rounded,
+                        color: Colors.white,
                       ),
-                      onTap: () => Navigator.of(context).pop(),
-                    ),
-                    title: Text(
-                      widget.id == null
-                          ? StringRes.current.animalAdd
-                          : StringRes.current.animalEdit,
-                      style: const TextStyle(color: ColorRes.textPrimary),
-                    ),
-                    centerTitle: true,
-                  ),
-                  floatingActionButton:
-                      (_editState.value != _AnimalEditScreenMode.success && !_editState.hasError)
-                          ? FloatingActionButton(
-                              child: Icon(
-                                _isLastPage ? Icons.done_all : Icons.arrow_forward_ios_rounded,
-                                color: Colors.white,
-                              ),
-                              onPressed: _onFabPressed,
-                              backgroundColor: ColorRes.accent,
-                            )
-                          : null,
-                  body: _buildBody(),
-                );
-              });
-        });
+                    )
+                  : null,
+              body: _buildBody(),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildBody() {
@@ -120,20 +115,15 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
           errorBuilder: (_, e) => ErrorHolderWidget(
             error: e,
             button: 'Вернуться'.toUpperCase(),
-            onPressed: () => setState(
-              () {
-                _editState = WidgetState<_AnimalEditScreenMode>(_AnimalEditScreenMode.form);
-              },
-            ),
+            onPressed: () => setState(() {
+              _editState = ScreenDataState<_AnimalEditScreenMode>(_AnimalEditScreenMode.form);
+            }),
           ),
           builder: (context, mode) {
             return mode == _AnimalEditScreenMode.form
                 ? _isEdit
-                    ? RefreshIndicator(
-                        child: _buildContent(context),
-                        onRefresh: _init,
-                      )
-                    : _buildContent(context)
+                      ? RefreshIndicator(onRefresh: _init, child: _buildContent(context))
+                      : _buildContent(context)
                 : SuccessHolderWidget(
                     onPressed: () => _navigator.pop(true),
                     title: 'Готово!',
@@ -166,38 +156,24 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   Widget _buildContent(BuildContext context) {
     final pages = <Widget>[
       Consumer<AnimalEditHolder>(
-        builder: (context, holder, __) => AnimalEditCommonInfoPage(
-          animal: holder.state,
-          isEdit: _isEdit,
-          formKey: formKeys[0],
-        ),
+        builder: (context, holder, _) =>
+            AnimalEditCommonInfoPage(animal: holder.state, isEdit: _isEdit, formKey: formKeys[0]),
       ),
       Consumer<AnimalEditHolder>(
-        builder: (context, holder, __) => AnimalEditStatusPage(
-          animal: holder.state,
-          isEdit: _isEdit,
-          formKey: formKeys[1],
-        ),
+        builder: (context, holder, _) =>
+            AnimalEditStatusPage(animal: holder.state, isEdit: _isEdit, formKey: formKeys[1]),
       ),
       Consumer<AnimalEditHolder>(
-        builder: (context, holder, __) => AnimalEditAddInfoPage(
-          animal: holder.state,
-          isEdit: _isEdit,
-          formKey: formKeys[2],
-        ),
+        builder: (context, holder, _) =>
+            AnimalEditAddInfoPage(animal: holder.state, isEdit: _isEdit, formKey: formKeys[2]),
       ),
       Consumer<AnimalEditHolder>(
-        builder: (context, holder, __) => AnimalEditCuratorPage(
-          animal: holder.state,
-          isEdit: _isEdit,
-        ),
+        builder: (context, holder, _) =>
+            AnimalEditCuratorPage(animal: holder.state, isEdit: _isEdit),
       ),
       Consumer<AnimalEditHolder>(
-        builder: (context, holder, __) => AnimalEditApplicantPage(
-          animal: holder.state,
-          isEdit: _isEdit,
-          formKey: formKeys[4],
-        ),
+        builder: (context, holder, _) =>
+            AnimalEditApplicantPage(animal: holder.state, isEdit: _isEdit, formKey: formKeys[4]),
       ),
     ];
     return Column(
@@ -205,12 +181,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
         if (_isUploadProgress)
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: 48.0,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
+            child: SizedBox(height: 48.0, child: Center(child: CircularProgressIndicator())),
           ),
         const SizedBox(height: 16.0),
         _buildIndicator(),
@@ -232,10 +203,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
     final isValid = formKeys[page].currentState?.validate() ?? true;
     if (isValid) {
       _getProvider<AnimalEditPagerHolder>()?.set(max(0, page));
-      _pageController.nextPage(
-        duration: kTabScrollDuration,
-        curve: Curves.linear,
-      );
+      _pageController.nextPage(duration: kTabScrollDuration, curve: Curves.linear);
       if (_isLastPage && !_isUploadProgress && _editState.value != _AnimalEditScreenMode.success) {
         _onSubmit();
       }
@@ -248,10 +216,7 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
     if (!isValid) {
       Future.delayed(
         _onPageChangedBackDuration,
-        () => _pageController.previousPage(
-          duration: kTabScrollDuration,
-          curve: Curves.linear,
-        ),
+        () => _pageController.previousPage(duration: kTabScrollDuration, curve: Curves.linear),
       );
     } else {
       _getProvider<AnimalEditPagerHolder>()?.set(max(0, index - 1));
@@ -260,19 +225,18 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
 
   Future<void> _init() async {
     if (!_isEdit) return;
-    setState(() => _editState = WidgetState<_AnimalEditScreenMode>()..loading());
-    await _animalService.fetchAnimalDetail(id: widget.id!).then(
-      (value) {
-        _getProvider<AnimalEditHolder>()?.init(value);
-        setState(
-          () {
-            _editState = WidgetState()..content(_AnimalEditScreenMode.form);
-          },
-        );
-      },
-    ).catchError((e) {
-      setState(() => _editState = WidgetState()..error = e);
-    });
+    setState(() => _editState = ScreenDataState<_AnimalEditScreenMode>()..loading());
+    await _animalService
+        .fetchAnimalDetail(id: widget.id!)
+        .then((value) {
+          _getProvider<AnimalEditHolder>()?.init(value);
+          setState(() {
+            _editState = ScreenDataState()..content(_AnimalEditScreenMode.form);
+          });
+        })
+        .catchError((e) {
+          setState(() => _editState = ScreenDataState()..error = e);
+        });
   }
 
   Future<void> _onSubmit() async {
@@ -284,16 +248,17 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
       if (isEdit) {
         result = await _animalService
             .updateAnimal(editedAnimal.id!, editedAnimal.write)
-            .catchError((_) {});
+            .catchError((_) => null);
       } else {
         result = await _animalService.createAnimal(editedAnimal.write).catchError((e) {
           setState(() {
-            _editState = WidgetState()..error = e;
+            _editState = ScreenDataState()..error = e;
           });
+          return null;
         });
       }
       if (result != null) {
-        setState(() => _editState = WidgetState()..content(_AnimalEditScreenMode.success));
+        setState(() => _editState = ScreenDataState()..content(_AnimalEditScreenMode.success));
       }
     }
     setState(() => _isUploadProgress = false);
@@ -308,7 +273,4 @@ class _AnimalEditScreenState extends State<AnimalEditScreen> {
   }
 }
 
-enum _AnimalEditScreenMode {
-  form,
-  success,
-}
+enum _AnimalEditScreenMode { form, success }

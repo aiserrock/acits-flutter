@@ -14,9 +14,7 @@ import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 
 class LoginForm extends StatelessWidget {
-  LoginForm({
-    super.key,
-  });
+  LoginForm({super.key});
 
   final _passNode = FocusNode();
 
@@ -28,12 +26,10 @@ class LoginForm extends StatelessWidget {
           previous.password != current.password ||
           previous.status != current.status,
       listener: (_, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text(StringRes.current.loginAuthorizeError)),
-            );
+            ..showSnackBar(SnackBar(content: Text(StringRes.current.loginAuthorizeError)));
         }
       },
       child: SizedBox(
@@ -42,10 +38,7 @@ class LoginForm extends StatelessWidget {
           child: Column(
             children: [
               Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _buildForm(),
-                ),
+                child: Padding(padding: const EdgeInsets.all(16.0), child: _buildForm()),
               ),
               const SizedBox(height: 16.0),
               const _SubmitButton(),
@@ -53,9 +46,7 @@ class LoginForm extends StatelessWidget {
                 onPressed: () => _onRegistration(context),
                 child: Text(
                   StringRes.current.loginToRegistration,
-                  style: const TextStyle(
-                    color: ColorRes.accent,
-                  ),
+                  style: const TextStyle(color: ColorRes.accent),
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -95,9 +86,7 @@ class LoginForm extends StatelessWidget {
             onPressed: () {},
             child: Text(
               StringRes.current.loginForgetPass,
-              style: const TextStyle(
-                color: ColorRes.textSecondary,
-              ),
+              style: const TextStyle(color: ColorRes.textSecondary),
             ),
           ),
         ),
@@ -111,10 +100,7 @@ class LoginForm extends StatelessWidget {
 }
 
 class _NameInput extends StatelessWidget {
-  const _NameInput({
-    Key? key,
-    this.passNode,
-  }) : super(key: key);
+  const _NameInput({this.passNode});
 
   final FocusNode? passNode;
 
@@ -136,11 +122,12 @@ class _NameInput extends StatelessWidget {
                 key: const Key('loginFormNameInputTextField'),
                 autofillHints: const [AutofillHints.email],
                 decoration: InputDecoration(
-                  errorText: state.name.invalid ? '' : null,
+                  errorText: state.name.isNotValid ? '' : null,
                   hintText: StringRes.current.loginLoginHint,
                   labelText: StringRes.current.loginLoginLabel,
                   floatingLabelStyle: TextStyle(
-                      color: state.focusTarget.isName ? ColorRes.accent : ColorRes.textSecondary),
+                    color: state.focusTarget.isName ? ColorRes.accent : ColorRes.textSecondary,
+                  ),
                   errorStyle: const TextStyle(fontSize: 0.0),
                   focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
@@ -167,10 +154,7 @@ class _NameInput extends StatelessWidget {
 }
 
 class _PasswordInput extends StatelessWidget {
-  const _PasswordInput({
-    Key? key,
-    this.passNode,
-  }) : super(key: key);
+  const _PasswordInput({this.passNode});
 
   final FocusNode? passNode;
 
@@ -196,10 +180,10 @@ class _PasswordInput extends StatelessWidget {
                 autofillHints: const [AutofillHints.password],
                 decoration: InputDecoration(
                   labelText: StringRes.current.loginPassLabel,
-                  errorText: state.password.invalid ? '' : null,
+                  errorText: state.password.isNotValid ? '' : null,
                   floatingLabelStyle: TextStyle(
-                      color:
-                          state.focusTarget.isPassword ? ColorRes.accent : ColorRes.textSecondary),
+                    color: state.focusTarget.isPassword ? ColorRes.accent : ColorRes.textSecondary,
+                  ),
                   errorStyle: const TextStyle(fontSize: 0.0),
                   suffixIcon: CupertinoButton(
                     onPressed: () => context.read<LoginBloc>().add(const LoginPassObscureChanged()),
@@ -232,16 +216,14 @@ class _PasswordInput extends StatelessWidget {
 }
 
 class _SubmitButton extends StatelessWidget {
-  const _SubmitButton({
-    Key? key,
-  }) : super(key: key);
+  const _SubmitButton();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (_, state) {
-        return state.status != FormzStatus.submissionInProgress
+        return state.status != FormzSubmissionStatus.inProgress
             ? _buildButton(context, state)
             : Shimmer.fromColors(
                 baseColor: ColorRes.accent,
@@ -252,14 +234,9 @@ class _SubmitButton extends StatelessWidget {
     );
   }
 
-  PrimaryButton _buildButton(
-    BuildContext context,
-    LoginState state,
-  ) {
+  PrimaryButton _buildButton(BuildContext context, LoginState state) {
     return PrimaryButton(
-      onPressed: state.status.isValidated
-          ? () => context.read<LoginBloc>().add(const LoginSubmitted())
-          : () {},
+      onPressed: () => context.read<LoginBloc>().add(const LoginSubmitted()),
       onLongPress: () => context.read<LoginBloc>().add(const LoginOnDebug()),
       text: StringRes.current.loginEntryBtn.toUpperCase(),
     );

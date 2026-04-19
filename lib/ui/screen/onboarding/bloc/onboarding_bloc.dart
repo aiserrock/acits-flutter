@@ -9,9 +9,7 @@ part 'onboarding_event.dart';
 part 'onboarding_state.dart';
 
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
-  OnboardingBloc()
-      : _configService = getIt<ConfigService>(),
-        super(OnboardingState.initial()) {
+  OnboardingBloc() : _configService = getIt<ConfigService>(), super(OnboardingState.initial()) {
     on<OnboardingEventOnNext>(_onOnNextEvent);
     on<OnboardingEventOnPosition>(_onOnPosition);
   }
@@ -38,7 +36,11 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   }
 
   void _onOnPosition(OnboardingEventOnPosition event, Emitter<OnboardingState> emit) {
-    emit(OnboardingState(
-        currentViewPage: event.position, isLast: event.position == onboardingData.length - 1));
+    emit(
+      OnboardingState(
+        currentViewPage: event.position,
+        isLast: event.position == onboardingData.length - 1,
+      ),
+    );
   }
 }

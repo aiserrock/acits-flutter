@@ -5,15 +5,15 @@ import 'package:acits_flutter/service/config/config_service.dart';
 
 extension PrescriptionShortX on PrescriptionShort {
   String? get typeString {
-    final _service = getIt<ConfigService>();
-    return _service.getMyTypeName(myType);
+    final service = getIt<ConfigService>();
+    return service.getMyTypeName(myType);
   }
 }
 
 extension MyTypeEnumX on MyTypeEnum {
   String? get typeString {
-    final _service = getIt<ConfigService>();
-    return _service.getMyTypeName(this);
+    final service = getIt<ConfigService>();
+    return service.getMyTypeName(this);
   }
 
   String get startDateLabel {

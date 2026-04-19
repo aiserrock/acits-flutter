@@ -1,10 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 
@@ -23,29 +26,30 @@ class CommentListWidget extends StatefulWidget {
     this.animalId, {
     this.scrollController,
     this.onCreateCommentStream,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int animalId;
   final ScrollController? scrollController;
   final StreamController<AnimalNote>? onCreateCommentStream;
 
   @override
-  State<CommentListWidget> createState() => _CommentListWidgetState(animalId);
+  State<CommentListWidget> createState() => _CommentListScreenDataState(animalId);
 }
 
-class _CommentListWidgetState extends State<CommentListWidget> {
-  _CommentListWidgetState(this._animalId)
-      : _animalService = getIt<AnimalService>(),
-        _fileService = getIt<FileService>();
+class _CommentListScreenDataState extends State<CommentListWidget> {
+  _CommentListScreenDataState(this._animalId)
+    : _animalService = getIt<AnimalService>(),
+      _fileService = getIt<FileService>();
 
   final int _animalId;
   final AnimalService _animalService;
   final FileService _fileService;
 
-  final _widgetState =
-      BehaviorSubject<WidgetState<List<AnimalNote>>>.seeded(WidgetState()..loading());
-  final _pagingState = BehaviorSubject<WidgetState<Object>>.seeded(WidgetState(Object()));
+  final _widgetState = BehaviorSubject<ScreenDataState<List<AnimalNote>>>.seeded(
+    ScreenDataState()..loading(),
+  );
+  final _pagingState = BehaviorSubject<ScreenDataState<Object>>.seeded(ScreenDataState(Object()));
 
   late final ScrollController _scrollController;
 
@@ -74,42 +78,33 @@ class _CommentListWidgetState extends State<CommentListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<WidgetState<List<AnimalNote>>>(
-        stream: _widgetState,
-        builder: (_, snapshot) {
-          final comments = snapshot.data?.value;
-          return SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                if (snapshot.data?.isLoading ?? false)
-                  const SizedBox(
-                    height: 240.0,
-                    child: LoaderHolderWidget(),
-                  ),
-                if (snapshot.data?.hasError ?? false)
-                  SizedBox(
-                    height: 240.0,
-                    child: ErrorHolderWidget(
-                      onPressed: _init,
+    return StreamBuilder<ScreenDataState<List<AnimalNote>>>(
+      stream: _widgetState,
+      builder: (_, snapshot) {
+        final comments = snapshot.data?.value;
+        return SliverList(
+          delegate: SliverChildListDelegate([
+            if (snapshot.data?.isLoading ?? false)
+              const SizedBox(height: 240.0, child: LoaderHolderWidget()),
+            if (snapshot.data?.hasError ?? false)
+              SizedBox(height: 240.0, child: ErrorHolderWidget(onPressed: _init)),
+            if (comments != null && comments.isNotEmpty)
+              ...(comments..sort(
+                    (first, second) => (second.createdAt ?? DateTime.now()).compareTo(
+                      first.createdAt ?? DateTime.now(),
                     ),
-                  ),
-                if (comments != null && comments.isNotEmpty)
-                  ...(comments
-                        ..sort((first, second) => (second.createdAt ?? DateTime.now())
-                            .compareTo(first.createdAt ?? DateTime.now())))
-                      .map<Widget>(
-                    (comment) => _buildCommentItem(comment),
-                  ),
-                _buildPagingLoader(),
-                const SizedBox(height: 64.0),
-              ],
-            ),
-          );
-        });
+                  ))
+                  .map<Widget>((comment) => _buildCommentItem(comment)),
+            _buildPagingLoader(),
+            const SizedBox(height: 64.0),
+          ]),
+        );
+      },
+    );
   }
 
   Widget _buildPagingLoader() {
-    return StreamBuilder<WidgetState<Object>>(
+    return StreamBuilder<ScreenDataState<Object>>(
       stream: _pagingState,
       builder: (_, partLoadingState) {
         if (partLoadingState.data?.hasError ?? false) {
@@ -125,7 +120,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
                       onPressed: _loadNextPage,
                       child: Text(StringRes.current.commonReloadBtn),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -148,10 +143,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
       children: [
         Flexible(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-              horizontal: 16.0,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Container(
               padding: const EdgeInsets.all(8.0),
               decoration: const BoxDecoration(
@@ -161,12 +153,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
                   topRight: Radius.circular(8.0),
                   bottomLeft: Radius.circular(8.0),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black38,
-                    blurRadius: 4.0,
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 4.0)],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -187,15 +174,14 @@ class _CommentListWidgetState extends State<CommentListWidget> {
 
   Widget _buildFileList(AnimalNote comment) {
     return Column(
-      children: comment.files
+      children:
+          comment.files
               ?.map<Widget>(
                 (file) => CupertinoButton(
                   padding: const EdgeInsets.only(top: 8.0),
-                  onPressed: () => _onFilePressed(context, file).catchError(
-                    (e) {
-                      _onError(context, StringRes.current.commonErrorStubMsg);
-                    },
-                  ),
+                  onPressed: () => _onFilePressed(context, file).catchError((e) {
+                    _onError(context, StringRes.current.commonErrorStubMsg);
+                  }),
                   child: Text(
                     file.filename ?? '',
                     style: StyleRes.content.copyWith(
@@ -238,20 +224,19 @@ class _CommentListWidgetState extends State<CommentListWidget> {
           ),
         ),
         if (comment.isUserCanEditOrDelete ?? false)
-          Builder(builder: (context) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: CupertinoButton(
-                onPressed: () => _onMorePressed(context, comment),
-                padding: EdgeInsets.zero,
-                minSize: .0,
-                child: const Icon(
-                  Icons.more_vert,
-                  color: ColorRes.accent,
+          Builder(
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: CupertinoButton(
+                  onPressed: () => _onMorePressed(context, comment),
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  child: const Icon(Icons.more_vert, color: ColorRes.accent),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
       ],
     );
   }
@@ -260,52 +245,34 @@ class _CommentListWidgetState extends State<CommentListWidget> {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-            text: comment.updatedAt?.toDateTimeHuman ?? '',
-            style: StyleRes.caption,
-          ),
-          const TextSpan(
-            text: ',  ',
-            style: StyleRes.caption,
-          ),
-          TextSpan(
-            text: comment.updatedBy ?? '',
-            style: StyleRes.caption,
-          ),
+          TextSpan(text: comment.updatedAt?.toDateTimeHuman ?? '', style: StyleRes.caption),
+          const TextSpan(text: ',  ', style: StyleRes.caption),
+          TextSpan(text: comment.updatedBy ?? '', style: StyleRes.caption),
         ],
       ),
     );
   }
 
-  void _onMorePressed(
-    BuildContext context,
-    AnimalNote comment,
-  ) {
-    final actions = bsSelectorActions(
-      context,
-      <Widget, dynamic Function()>{
-        Text(
-          StringRes.current.commonEdit,
-          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
-        ): () async {
-          final result = await Navigator.of(context).push(
-            CommentEditScreenRoute(
-              animalId: widget.animalId,
-              comment: comment,
-            ),
-          );
-          if (result != null) _onCommentEdited(result);
-          Navigator.of(context).pop();
-        },
-        Text(
-          StringRes.current.commonDelete,
-          style: StyleRes.mainContent.copyWith(color: ColorRes.error),
-        ): () {
-          _deleteComment(context, comment);
-          Navigator.of(context).pop();
-        },
+  void _onMorePressed(BuildContext context, AnimalNote comment) {
+    final actions = bsSelectorActions(context, <Widget, dynamic Function()>{
+      Text(
+        StringRes.current.commonEdit,
+        style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+      ): () async {
+        final result = await Navigator.of(
+          context,
+        ).push(CommentEditScreenRoute(animalId: widget.animalId, comment: comment));
+        if (result != null) _onCommentEdited(result);
+        Navigator.of(context).pop();
       },
-    );
+      Text(
+        StringRes.current.commonDelete,
+        style: StyleRes.mainContent.copyWith(color: ColorRes.error),
+      ): () {
+        _deleteComment(context, comment);
+        Navigator.of(context).pop();
+      },
+    });
 
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -314,23 +281,18 @@ class _CommentListWidgetState extends State<CommentListWidget> {
     );
   }
 
-  Future<void> _deleteComment(
-    BuildContext context,
-    AnimalNote comment,
-  ) async {
+  Future<void> _deleteComment(BuildContext context, AnimalNote comment) async {
     _animalService
         .deleteAnimalNote(id: comment.id!)
         .then((_) => _onCommentDeleted(comment))
-        .catchError(
-      (e) {
-        _onError(context, StringRes.current.commentDeletingFail);
-      },
-    );
+        .catchError((e) {
+          _onError(context, StringRes.current.commentDeletingFail);
+        });
   }
 
   void _onCommentDeleted(AnimalNote comment) {
     if (!_widgetState.value.isContent) return;
-    _widgetState.add(WidgetState(_widgetState.value.value?..remove(comment)));
+    _widgetState.add(ScreenDataState(_widgetState.value.value?..remove(comment)));
   }
 
   void _onCommentEdited(AnimalNote editedComment) {
@@ -339,54 +301,57 @@ class _CommentListWidgetState extends State<CommentListWidget> {
     final index = commentList?.indexWhere((comment) => comment.id == editedComment.id);
     if (index == null || index < 0) return;
     commentList?.replaceRange(index, index + 1, [editedComment]);
-    _widgetState.add(WidgetState(_widgetState.value.value));
+    _widgetState.add(ScreenDataState(_widgetState.value.value));
   }
 
   void _onScroll() {
     if (_scrollController.hasClients &&
         _scrollController.position.pixels >= _scrollController.position.maxScrollExtent &&
-        !_pagingState.value.isLoading) _loadNextPage();
+        !_pagingState.value.isLoading) {
+      _loadNextPage();
+    }
   }
 
   void _init() {
-    _widgetState.add(WidgetState()..loading());
+    _widgetState.add(ScreenDataState()..loading());
     _animalService
         .fetchAnimalNotes(_animalId)
-        .then((value) => _widgetState.add(WidgetState(value?.results ?? [])))
+        .then((value) => _widgetState.add(ScreenDataState(value?.results ?? [])))
         .catchError((e) {
-      _widgetState.add(WidgetState()..error = e);
-    });
+          _widgetState.add(ScreenDataState()..error = e);
+        });
   }
 
   void _loadNextPage() {
     if (!_widgetState.value.isContent) return;
-    _pagingState.add(WidgetState<Object>()..loading());
+    _pagingState.add(ScreenDataState<Object>()..loading());
     _animalService
-        .fetchAnimalNotes(
-      _animalId,
-      offset: _widgetState.value.value?.length,
-    )
+        .fetchAnimalNotes(_animalId, offset: _widgetState.value.value?.length)
         .then((value) {
-      _widgetState.add(WidgetState(_widgetState.value.value?..addAll(value?.results ?? [])));
-      _pagingState.add(WidgetState());
-    }).catchError((e) {
-      _pagingState.add(WidgetState()..error = e);
-    });
+          _widgetState.add(
+            ScreenDataState(_widgetState.value.value?..addAll(value?.results ?? [])),
+          );
+          _pagingState.add(ScreenDataState());
+        })
+        .catchError((e) {
+          _pagingState.add(ScreenDataState()..error = e);
+        });
   }
 
-  Future<void> _onFilePressed(
-    BuildContext context,
-    AnimalNoteFile file,
-  ) async {
+  Future<void> _onFilePressed(BuildContext context, AnimalNoteFile file) async {
     final url = file.file;
     final fileName = file.filename;
 
     if (url == null || fileName == null) return;
-    final localFile = await _fileService.loadFile(url, fileName).catchError((_) {
+    final File localFile;
+    try {
+      localFile = await _fileService.loadFile(url, fileName);
+    } catch (_) {
       _onError(context, StringRes.current.commentDeletingFail);
-    });
+      return;
+    }
 
-    final openResult = await OpenFile.open(localFile.absolute.path);
+    final openResult = await OpenFilex.open(localFile.absolute.path);
     String errorMsg = '';
     switch (openResult.type) {
       case ResultType.noAppToOpen:
@@ -406,7 +371,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
 
   void _onCreateComment(AnimalNote comment) {
     if (!_widgetState.value.isContent) return;
-    _widgetState.add(WidgetState(_widgetState.value.value?..add(comment)));
+    _widgetState.add(ScreenDataState(_widgetState.value.value?..add(comment)));
   }
 
   void _onError(BuildContext context, String? msg) {

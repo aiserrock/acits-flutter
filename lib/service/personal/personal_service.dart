@@ -5,10 +5,7 @@ import 'package:injectable/injectable.dart';
 
 @singleton
 class PersonalService {
-  PersonalService(
-    this._acitsClient,
-    this._authService,
-  ) {
+  PersonalService(this._acitsClient, this._authService) {
     _authService.addListener(_onLogout);
   }
 
@@ -56,10 +53,7 @@ class PersonalService {
   }
 
   /// Сменить пароль пользователя
-  Future<void> changePass(
-    String oldPass,
-    String newPass,
-  ) async {
+  Future<void> changePass(String oldPass, String newPass) async {
     final result = await _acitsClient.apiV1UsersMeChangePasswordPut(
       body: UserChangePasswordSerializers(
         oldPassword: oldPass,

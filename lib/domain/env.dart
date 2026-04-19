@@ -1,8 +1,5 @@
 class Env {
-  Env(
-    this.apiUrl, {
-    this.proxy,
-  });
+  Env(this.apiUrl, {this.proxy});
 
   final String apiUrl;
 

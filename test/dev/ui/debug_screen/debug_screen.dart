@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/ui/screen/registration/email_confirmation_screen_route.dart';
@@ -10,7 +12,7 @@ import '../../di/di_container.dart';
 import '../../service/debug/debug_dev_service.dart';
 
 class DebugScreen extends StatelessWidget {
-  const DebugScreen({Key? key}) : super(key: key);
+  const DebugScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +23,7 @@ class DebugScreen extends StatelessWidget {
         shadowColor: Colors.transparent,
         leading: CupertinoButton(
           onPressed: Navigator.of(context).pop,
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new, color: ColorRes.accent),
         ),
         title: _buildTitle(),
         centerTitle: true,
@@ -34,20 +33,11 @@ class DebugScreen extends StatelessWidget {
   }
 
   Widget _buildTitle() {
-    return const Text(
-      'Debug screen',
-      style: TextStyle(color: ColorRes.textPrimary),
-    );
+    return const Text('Debug screen', style: TextStyle(color: ColorRes.textPrimary));
   }
 
   Widget _buildBody(BuildContext context) {
-    return ListView(
-      children: const [
-        _SearchSpeciesCard(),
-        _ConnectionCard(),
-        _UIKitCard(),
-      ],
-    );
+    return ListView(children: const [_SearchSpeciesCard(), _ConnectionCard(), _UIKitCard()]);
   }
 }
 
@@ -64,18 +54,18 @@ class _UIKitCard extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              const Text(
-                'UIKit',
-                style: StyleRes.subTitle,
-              ),
+              const Text('UIKit', style: StyleRes.subTitle),
               const SizedBox(height: 8.0),
               PrimaryButton(
                 onPressed: () {
-                  Navigator.of(context).push(EmailConfirmationScreenRoute(
-                      'https://dev.acits.ru/api/v1/users/verify-email/MTYz/Mg/bcnwgl-1628091c27480b1975f3998b4a2565e6/'));
+                  Navigator.of(context).push(
+                    EmailConfirmationScreenRoute(
+                      'https://dev.acits.ru/api/v1/users/verify-email/MTYz/Mg/bcnwgl-1628091c27480b1975f3998b4a2565e6/',
+                    ),
+                  );
                 },
                 child: Text('Email confirm'.toUpperCase()),
-              )
+              ),
             ],
           ),
         ),
@@ -84,16 +74,10 @@ class _UIKitCard extends StatelessWidget {
   }
 }
 
-const _domainUrlList = [
-  'https://app.acits.ru',
-  'https://dev.acits.ru',
-  'https://test.acits.ru',
-];
+const _domainUrlList = ['https://app.acits.ru', 'https://dev.acits.ru', 'https://test.acits.ru'];
 
 class _ConnectionCard extends StatefulWidget {
-  const _ConnectionCard({
-    Key? key,
-  }) : super(key: key);
+  const _ConnectionCard();
 
   @override
   State<_ConnectionCard> createState() => _ConnectionCardState();
@@ -126,22 +110,14 @@ class _ConnectionCardState extends State<_ConnectionCard> {
             child: Column(
               children: [
                 const SizedBox(height: 8.0),
-                const Text(
-                  'Proxy',
-                  style: StyleRes.subTitle,
-                ),
+                const Text('Proxy', style: StyleRes.subTitle),
                 TextField(
                   key: _formKey,
                   controller: _proxyController,
-                  decoration: const InputDecoration(
-                    hintText: '192.168.0.102:9000',
-                  ),
+                  decoration: const InputDecoration(hintText: '192.168.0.102:9000'),
                 ),
                 const SizedBox(height: 24.0),
-                const Text(
-                  'Domain',
-                  style: StyleRes.subTitle,
-                ),
+                const Text('Domain', style: StyleRes.subTitle),
                 RadioListTile<int>(
                   value: 0,
                   groupValue: _domainIndex,
@@ -161,15 +137,9 @@ class _ConnectionCardState extends State<_ConnectionCard> {
                   title: Text(_domainUrlList[2]),
                 ),
                 const SizedBox(height: 16.0),
-                PrimaryButton(
-                  text: 'Применить',
-                  onPressed: () => _accept(context),
-                ),
+                PrimaryButton(text: 'Применить', onPressed: () => _accept(context)),
                 const SizedBox(height: 16.0),
-                PrimaryButton(
-                  text: 'Сбросить',
-                  onPressed: () => _reset(context),
-                ),
+                PrimaryButton(text: 'Сбросить', onPressed: () => _reset(context)),
               ],
             ),
           ),
@@ -205,7 +175,7 @@ class _ConnectionCardState extends State<_ConnectionCard> {
 }
 
 class _SearchSpeciesCard extends StatefulWidget {
-  const _SearchSpeciesCard({Key? key}) : super(key: key);
+  const _SearchSpeciesCard();
 
   @override
   _SearchSpeciesCardState createState() => _SearchSpeciesCardState();
@@ -225,10 +195,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
         child: Column(
           children: [
             const SizedBox(height: 8.0),
-            const Text(
-              'AnimalTypeSelector',
-              style: StyleRes.subTitle,
-            ),
+            const Text('AnimalTypeSelector', style: StyleRes.subTitle),
             const SizedBox(height: 8.0),
             ListTile(
               title: Text(_category?.name ?? '* tap to select'),
@@ -249,8 +216,9 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('family'),
               onTap: () async {
                 if (_category != null) {
-                  final result = await Navigator.of(context)
-                      .push<Species>(SearchScreenRoute(parentSearch: _category));
+                  final result = await Navigator.of(
+                    context,
+                  ).push<Species>(SearchScreenRoute(parentSearch: _category));
                   if (result != null) {
                     setState(() {
                       _family = result;
@@ -265,8 +233,9 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('kind'),
               onTap: () async {
                 if (_family != null) {
-                  final result =
-                      await Navigator.of(context).push(SearchScreenRoute(parentSearch: _family));
+                  final result = await Navigator.of(
+                    context,
+                  ).push(SearchScreenRoute(parentSearch: _family));
                   if (result != null) {
                     setState(() {
                       _kind = result;

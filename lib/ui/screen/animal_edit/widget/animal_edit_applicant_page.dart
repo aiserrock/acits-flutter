@@ -13,16 +13,11 @@ import 'package:acits_flutter/util/validator.dart';
 
 class AnimalEditApplicantPage extends AnimalEditPage {
   const AnimalEditApplicantPage({
-    required AnimalRead animal,
-    required bool isEdit,
-    required GlobalKey<FormState> formKey,
-    Key? key,
-  }) : super(
-          isEdit: isEdit,
-          animal: animal,
-          key: key,
-          formKey: formKey,
-        );
+    required super.animal,
+    required super.isEdit,
+    required GlobalKey<FormState> super.formKey,
+    super.key,
+  });
 
   @override
   State<AnimalEditApplicantPage> createState() => _AnimalEditApplicantPageState();
@@ -71,15 +66,8 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
                   padding: const EdgeInsets.only(right: 16.0),
                   child: CupertinoButton(
                     padding: const EdgeInsets.only(),
-                    child: const Icon(
-                      Icons.edit,
-                      color: ColorRes.accent,
-                      size: 40.0,
-                    ),
-                    onPressed: () => _addEditApplicant(
-                      context,
-                      applicantId: _applicant?.id,
-                    ),
+                    child: const Icon(Icons.edit, color: ColorRes.accent, size: 40.0),
+                    onPressed: () => _addEditApplicant(context, applicantId: _applicant?.id),
                   ),
                 ),
               CupertinoButton(
@@ -95,9 +83,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
             ],
           ),
         ),
-        SliverToBoxAdapter(
-          child: _buildApplicantCard(),
-        ),
+        SliverToBoxAdapter(child: _buildApplicantCard()),
       ],
     );
   }
@@ -105,45 +91,40 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
   Widget _buildApplicantCard() {
     return Form(
       key: widget.formKey,
-      child: FormEditCard(
-        [
+      child: FormEditCard([
+        EditCardData(
+          label: StringRes.current.animalCuratorName,
+          controller: _applicantNameController,
+          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          onPressed: _searchApplicant,
+        ),
+        if (_applicant != null)
           EditCardData(
-            label: StringRes.current.animalCuratorName,
-            controller: _applicantNameController,
-            suffix: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: ColorRes.accent,
-            ),
-            onPressed: _searchApplicant,
+            label: '${StringRes.current.animalCuratorLastName} *',
+            controller: _applicantLastNameController,
+            validator: Validator.emptyValidator,
+            enabled: false,
           ),
-          if (_applicant != null)
-            EditCardData(
-              label: StringRes.current.animalCuratorLastName + ' *',
-              controller: _applicantLastNameController,
-              validator: Validator.emptyValidator,
-              enabled: false,
-            ),
-          if (_applicant != null)
-            EditCardData(
-              label: StringRes.current.animalCuratorPhone + ' *',
-              controller: _applicantPhoneController,
-              validator: Validator.emptyValidator,
-              enabled: false,
-            ),
-          if (_applicant != null)
-            EditCardData(
-              label: StringRes.current.animalSocialLink,
-              controller: _applicantSocialController,
-              enabled: false,
-            ),
-          if (_applicant != null)
-            EditCardData(
-              label: StringRes.current.animalCuratorEmail,
-              controller: _applicantEmailController,
-              enabled: false,
-            ),
-        ],
-      ),
+        if (_applicant != null)
+          EditCardData(
+            label: '${StringRes.current.animalCuratorPhone} *',
+            controller: _applicantPhoneController,
+            validator: Validator.emptyValidator,
+            enabled: false,
+          ),
+        if (_applicant != null)
+          EditCardData(
+            label: StringRes.current.animalSocialLink,
+            controller: _applicantSocialController,
+            enabled: false,
+          ),
+        if (_applicant != null)
+          EditCardData(
+            label: StringRes.current.animalCuratorEmail,
+            controller: _applicantEmailController,
+            enabled: false,
+          ),
+      ]),
     );
   }
 
@@ -167,10 +148,10 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
       email: _applicantEmailController.text,
       id: _applicant?.id,
     );
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
-      applicant: applicant.toJson(),
-      applicantId: _applicant?.id,
-    );
+    Provider.of<AnimalEditHolder>(
+      context,
+      listen: false,
+    ).copyWith(applicant: applicant.toJson(), applicantId: _applicant?.id);
   }
 
   Future<void> _searchApplicant() async {
@@ -185,12 +166,10 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
     }
   }
 
-  Future<void> _addEditApplicant(
-    BuildContext context, {
-    int? applicantId,
-  }) async {
-    final result =
-        await Navigator.of(context).push(ApplicantEditScreenRoute(applicantId: applicantId));
+  Future<void> _addEditApplicant(BuildContext context, {int? applicantId}) async {
+    final result = await Navigator.of(
+      context,
+    ).push(ApplicantEditScreenRoute(applicantId: applicantId));
     if (result != null) {
       setState(() => _applicant = result);
       _applicantNameController.text = result.firstName ?? '';

@@ -4,33 +4,23 @@ import 'package:acits_flutter/res/style.dart';
 import 'package:flutter/material.dart';
 
 /// BottomSheet c действиями и кнопкой отмены
-Widget bsSelectorActions(
-  BuildContext context,
-  Map<Widget, Function()> actions,
-) {
+Widget bsSelectorActions(BuildContext context, Map<Widget, Function()> actions) {
   return _buildIosStyle(context, actions);
 }
 
 Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
-  Widget buildAction(
-    Widget title,
-    VoidCallback onPressed, {
-    bool islast = false,
-  }) {
+  Widget buildAction(Widget title, VoidCallback onPressed, {bool islast = false}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Material(
           color: ColorRes.foreground,
           child: InkWell(
+            onTap: onPressed,
             child: SizedBox(
               height: kToolbarHeight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [title],
-              ),
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [title]),
             ),
-            onTap: onPressed,
           ),
         ),
         if (!islast) const Divider(thickness: 1.0, height: 1.0),
@@ -40,11 +30,7 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
 
   final actionTiles = actions.entries
       .map<Widget>(
-        (action) => buildAction(
-          action.key,
-          action.value,
-          islast: action == actions.entries.last,
-        ),
+        (action) => buildAction(action.key, action.value, islast: action == actions.entries.last),
       )
       .toList();
 
@@ -59,9 +45,7 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
             borderRadius: BorderRadius.circular(8.0),
             child: Container(
               color: ColorRes.foreground,
-              child: Column(
-                children: actionTiles,
-              ),
+              child: Column(children: actionTiles),
             ),
           ),
           const SizedBox(height: 8.0),
@@ -80,7 +64,7 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
                         Text(
                           StringRes.current.commonCancel,
                           style: StyleRes.subTitle.copyWith(color: ColorRes.accent),
-                        )
+                        ),
                       ],
                     ),
                   ),

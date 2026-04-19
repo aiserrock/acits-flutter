@@ -16,8 +16,8 @@ class SuccessHolderWidget extends StatelessWidget {
     this.button,
     this.secondButton,
     this.onSecondPressed,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String? assetPath;
   final String? title;
@@ -29,33 +29,35 @@ class SuccessHolderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, cons) {
-      final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(child: _buildCaption(size)),
-            if (onPressed != null && button != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: PrimaryButton(
-                  onPressed: () => onPressed?.call(),
-                  text: button ?? 'Повторить',
+    return LayoutBuilder(
+      builder: (_, cons) {
+        final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Expanded(child: _buildCaption(size)),
+              if (onPressed != null && button != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: PrimaryButton(
+                    onPressed: () => onPressed?.call(),
+                    text: button ?? 'Повторить',
+                  ),
                 ),
-              ),
-            if (onSecondPressed != null && secondButton != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: PrimaryButton(
-                  onPressed: () => onSecondPressed?.call(),
-                  text: secondButton,
+              if (onSecondPressed != null && secondButton != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: PrimaryButton(
+                    onPressed: () => onSecondPressed?.call(),
+                    text: secondButton,
+                  ),
                 ),
-              ),
-          ],
-        ),
-      );
-    });
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildCaption(double size) {
@@ -63,23 +65,11 @@ class SuccessHolderWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.asset(
-            assetPath ?? LottieRes.success,
-            height: size,
-            width: size,
-          ),
+          Lottie.asset(assetPath ?? LottieRes.success, height: size, width: size),
           const SizedBox(height: 24.0),
-          Text(
-            title ?? '',
-            style: StyleRes.title,
-            textAlign: TextAlign.center,
-          ),
+          Text(title ?? '', style: StyleRes.title, textAlign: TextAlign.center),
           const SizedBox(height: 16.0),
-          Text(
-            message ?? '',
-            style: StyleRes.content,
-            textAlign: TextAlign.center,
-          ),
+          Text(message ?? '', style: StyleRes.content, textAlign: TextAlign.center),
         ],
       ),
     );

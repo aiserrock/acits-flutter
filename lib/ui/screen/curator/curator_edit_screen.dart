@@ -9,10 +9,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 /// Экран создания или редактирования куратора
 class CuratorEditScreen extends StatefulWidget {
-  const CuratorEditScreen({
-    this.curatorId,
-    Key? key,
-  }) : super(key: key);
+  const CuratorEditScreen({this.curatorId, super.key});
 
   final int? curatorId;
 
@@ -34,7 +31,7 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
 
-  WidgetState<Curator?> _state = WidgetState<Curator?>()..content(Curator());
+  ScreenDataState<Curator?> _state = ScreenDataState<Curator?>()..content(Curator());
 
   @override
   void initState() {
@@ -60,10 +57,7 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
         backgroundColor: ColorRes.foreground,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -74,12 +68,9 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
       ),
       floatingActionButton: _state.isContent
           ? FloatingActionButton(
-              child: const Icon(
-                Icons.done_all,
-                color: Colors.white,
-              ),
               onPressed: _onSubmit,
               backgroundColor: ColorRes.accent,
+              child: const Icon(Icons.done_all, color: Colors.white),
             )
           : null,
       body: _buildBody(),
@@ -92,8 +83,8 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
         child: StateBuilder<Curator?>(
           state: _state,
           loader: (_) => const LoaderHolderWidget(),
-          errorBuilder: (_, __) => Container(),
-          builder: (_, __) => _buildApplicantCard(),
+          errorBuilder: (_, _) => Container(),
+          builder: (_, _) => _buildApplicantCard(),
         ),
       ),
     );
@@ -104,32 +95,27 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
       children: [
         Form(
           key: formKey,
-          child: FormEditCard(
-            [
-              EditCardData(
-                label: StringRes.current.animalCuratorName + ' *',
-                controller: _nameController,
-                validator: Validator.emptyValidator,
-              ),
-              EditCardData(
-                label: StringRes.current.animalCuratorLastName,
-                controller: _lastNameController,
-              ),
-              EditCardData(
-                label: StringRes.current.animalCuratorPhone + ' *',
-                controller: _phoneController,
-                validator: Validator.emptyValidator,
-              ),
-              EditCardData(
-                label: StringRes.current.animalCuratorEmail,
-                controller: _emailController,
-              ),
-              EditCardData(
-                label: StringRes.current.animalCuratorAddress,
-                controller: _addressController,
-              ),
-            ],
-          ),
+          child: FormEditCard([
+            EditCardData(
+              label: '${StringRes.current.animalCuratorName} *',
+              controller: _nameController,
+              validator: Validator.emptyValidator,
+            ),
+            EditCardData(
+              label: StringRes.current.animalCuratorLastName,
+              controller: _lastNameController,
+            ),
+            EditCardData(
+              label: '${StringRes.current.animalCuratorPhone} *',
+              controller: _phoneController,
+              validator: Validator.emptyValidator,
+            ),
+            EditCardData(label: StringRes.current.animalCuratorEmail, controller: _emailController),
+            EditCardData(
+              label: StringRes.current.animalCuratorAddress,
+              controller: _addressController,
+            ),
+          ]),
         ),
       ],
     );
@@ -137,13 +123,16 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
 
   Future<void> _init() async {
     if (!_isEdit) return;
-    _state = WidgetState<Curator>()..loading();
-    await _service.fetchCuratorById(id: widget.curatorId!).then((value) {
-      _setControllers(value);
-      setState(() => _state = WidgetState()..content(value));
-    }).catchError((e) {
-      setState(() => _state = WidgetState().error = e);
-    });
+    _state = ScreenDataState<Curator>()..loading();
+    await _service
+        .fetchCuratorById(id: widget.curatorId!)
+        .then((value) {
+          _setControllers(value);
+          setState(() => _state = ScreenDataState()..content(value));
+        })
+        .catchError((e) {
+          setState(() => _state = ScreenDataState().error = e);
+        });
   }
 
   void _setControllers(Curator? curator) {
@@ -164,29 +153,20 @@ class _CuratorEditScreenState extends State<CuratorEditScreen> {
       address: _addressController.text,
       email: _emailController.text,
     );
-    setState(() => _state = WidgetState<Curator>()..loading());
+    setState(() => _state = ScreenDataState<Curator>()..loading());
     Curator? result;
     if (_isEdit) {
-      result = await _service
-          .updateCurator(
-        id: widget.curatorId!,
-        curator: curator,
-      )
-          .catchError(
-        (e) {
-          setState(() => _state = WidgetState().error = e);
-        },
-      );
+      result = await _service.updateCurator(id: widget.curatorId!, curator: curator).catchError((
+        e,
+      ) {
+        setState(() => _state = ScreenDataState().error = e);
+        return null;
+      });
     } else {
-      result = await _service
-          .createCurator(
-        curator: curator,
-      )
-          .catchError(
-        (e) {
-          setState(() => _state = WidgetState().error = e);
-        },
-      );
+      result = await _service.createCurator(curator: curator).catchError((e) {
+        setState(() => _state = ScreenDataState().error = e);
+        return null;
+      });
     }
     if (result != null) _navigator.pop(result);
   }

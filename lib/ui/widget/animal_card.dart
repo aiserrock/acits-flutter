@@ -13,14 +13,10 @@ import 'package:acits_flutter/export.dart';
 
 /// Карточка животного в списке
 class AnimalCardWidget extends StatelessWidget {
-  AnimalCardWidget(
-    this.itemData, {
-    this.onDelete,
-    Key? key,
-  })  : isEditable = getIt<AuthService>().shelterRole?.isUserCanEdit ?? false,
-        isDeletable = getIt<AuthService>().shelterRole?.isUserCanDelete ?? false,
-        _animalService = getIt<AnimalService>(),
-        super(key: key);
+  AnimalCardWidget(this.itemData, {this.onDelete, super.key})
+    : isEditable = getIt<AuthService>().shelterRole?.isUserCanEdit ?? false,
+      isDeletable = getIt<AuthService>().shelterRole?.isUserCanDelete ?? false,
+      _animalService = getIt<AnimalService>();
 
   final AnimalRead? itemData;
   final VoidCallback? onDelete;
@@ -44,11 +40,7 @@ class AnimalCardWidget extends StatelessWidget {
                 decoration: const BoxDecoration(color: ColorRes.foreground),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildAvatar(),
-                    const SizedBox(width: 8.0),
-                    _buildContent(),
-                  ],
+                  children: [_buildAvatar(), const SizedBox(width: 8.0), _buildContent()],
                 ),
               ),
             ),
@@ -62,48 +54,46 @@ class AnimalCardWidget extends StatelessWidget {
   Widget _buildActions() {
     return Align(
       alignment: Alignment.topRight,
-      child: Builder(builder: (context) {
-        return Column(
-          children: [
-            if (_hasActions)
-              CupertinoButton(
-                padding: const EdgeInsets.only(),
-                child: const Icon(
-                  Icons.more_vert,
-                  color: ColorRes.accent,
-                ),
-                onPressed: () {
-                  SlidableController? controller = Slidable.of(context);
-                  controller?.openEndActionPane();
-                },
-              ),
-            // TODO: impl for web
-            if (!kIsWeb)
-              Builder(builder: (context) {
-                return CupertinoButton(
+      child: Builder(
+        builder: (context) {
+          return Column(
+            children: [
+              if (_hasActions)
+                CupertinoButton(
                   padding: const EdgeInsets.only(),
-                  child: const Icon(
-                    Icons.download,
-                    color: ColorRes.accent,
-                  ),
+                  child: const Icon(Icons.more_vert, color: ColorRes.accent),
                   onPressed: () {
-                    final animalId = itemData?.id;
-                    if (animalId == null) return;
-                    Navigator.of(context).push(
-                      DocViewerScreenRoute(
-                        fetcher: (() async {
-                          final pdf = await _animalService.fetchPdfAnimalCard(animalId);
-                          return pdf;
-                        }),
-                        title: 'Animal $animalId',
-                      ),
+                    SlidableController? controller = Slidable.of(context);
+                    controller?.openEndActionPane();
+                  },
+                ),
+              // TODO: impl for web
+              if (!kIsWeb)
+                Builder(
+                  builder: (context) {
+                    return CupertinoButton(
+                      padding: const EdgeInsets.only(),
+                      child: const Icon(Icons.download, color: ColorRes.accent),
+                      onPressed: () {
+                        final animalId = itemData?.id;
+                        if (animalId == null) return;
+                        Navigator.of(context).push(
+                          DocViewerScreenRoute(
+                            fetcher: (() async {
+                              final pdf = await _animalService.fetchPdfAnimalCard(animalId);
+                              return pdf;
+                            }),
+                            title: 'Animal $animalId',
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              }),
-          ],
-        );
-      }),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -124,14 +114,11 @@ class AnimalCardWidget extends StatelessWidget {
         //   icon: IconRes.comment,
         //   foregroundColor: ColorRes.accent,
         // ),
-
         if (isEditable)
           SlidableAction(
-            onPressed: (_) => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => AnimalEditScreen(id: itemData?.id),
-              ),
-            ),
+            onPressed: (_) => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => AnimalEditScreen(id: itemData?.id))),
             backgroundColor: ColorRes.background,
             icon: Icons.edit_outlined,
             foregroundColor: ColorRes.accent,
@@ -151,10 +138,7 @@ class AnimalCardWidget extends StatelessWidget {
             final msg = '${StringRes.current.animalDeleteAcceptMsg} ${itemData?.name ?? ""}?';
             return CupertinoAlertDialog(
               title: Text(StringRes.current.commonWarning),
-              content: Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text(msg),
-              ),
+              content: Padding(padding: const EdgeInsets.only(top: 16.0), child: Text(msg)),
               actions: [
                 CupertinoButton(
                   child: Text(
@@ -167,13 +151,11 @@ class AnimalCardWidget extends StatelessWidget {
                   },
                 ),
                 CupertinoButton(
-                  child: Text(
-                    StringRes.current.commonCancel,
-                  ),
+                  child: Text(StringRes.current.commonCancel),
                   onPressed: () {
                     Navigator.of(dialogCtx).pop();
                   },
-                )
+                ),
               ],
             );
           },
@@ -208,10 +190,7 @@ class AnimalCardWidget extends StatelessWidget {
               maxLines: 1,
             ),
             const SizedBox(height: 4.0),
-            Padding(
-              padding: const EdgeInsets.only(right: 28.0),
-              child: _buildSpec(),
-            ),
+            Padding(padding: const EdgeInsets.only(right: 28.0), child: _buildSpec()),
             const SizedBox(height: 8.0),
             _buildStatus(),
             const SizedBox(height: 4.0),
@@ -237,11 +216,9 @@ class AnimalCardWidget extends StatelessWidget {
         Expanded(
           child: Text(
             itemData?.statusString ?? '',
-            style: StyleRes.content.copyWith(
-              color: ColorRes.textPrimary,
-            ),
+            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
           ),
-        )
+        ),
       ],
     );
   }
@@ -249,11 +226,7 @@ class AnimalCardWidget extends StatelessWidget {
   Widget _buildAvatar() {
     final thumb = UrlCorsProxy.add(itemData?.thumb);
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 12.0,
-        top: 16.0,
-        bottom: 16.0,
-      ),
+      padding: const EdgeInsets.only(left: 12.0, top: 16.0, bottom: 16.0),
       child: SizedBox(
         height: 80.0,
         width: 80.0,
@@ -276,9 +249,7 @@ class AnimalCardWidget extends StatelessWidget {
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
             text: itemData?.dateJoined?.toDateShortOnly ?? '',
-            style: StyleRes.content.copyWith(
-              color: ColorRes.textPrimary,
-            ),
+            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
           ),
         ],
       ),
@@ -292,16 +263,12 @@ class AnimalCardWidget extends StatelessWidget {
         children: [
           TextSpan(
             text: (itemData?.spec?['parent_name'] ?? ''),
-            style: StyleRes.content.copyWith(
-              color: ColorRes.textPrimary,
-            ),
+            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
           ),
           const TextSpan(text: (', '), style: StyleRes.mainContent),
           TextSpan(
             text: itemData?.spec?['name'] ?? '',
-            style: StyleRes.content.copyWith(
-              color: ColorRes.textPrimary,
-            ),
+            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
           ),
         ],
       ),

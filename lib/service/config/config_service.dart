@@ -11,11 +11,7 @@ import 'package:intl/intl.dart';
 /// Сервис конфигурации
 @singleton
 class ConfigService {
-  ConfigService(
-    this._acitsClient,
-    this._authService,
-    this._preferenceStorage,
-  );
+  ConfigService(this._acitsClient, this._authService, this._preferenceStorage);
 
   final Openapi _acitsClient;
   final AuthService _authService;
@@ -33,12 +29,10 @@ class ConfigService {
   List<AnimalAttribute>? get animalAttributes => _animalAttributes;
 
   Future<void> initConfig({int? currentShelterId}) async {
-    await Future.wait(
-      [
-        getTypeValues(currentShelterId: currentShelterId?.toString()),
-        getAnimalAttr(currentShelterId: currentShelterId?.toString()),
-      ],
-    );
+    await Future.wait([
+      getTypeValues(currentShelterId: currentShelterId?.toString()),
+      getAnimalAttr(currentShelterId: currentShelterId?.toString()),
+    ]);
   }
 
   Future<ValuesForSelection?> getTypeValues({String? currentShelterId}) async {
@@ -72,8 +66,8 @@ class ConfigService {
     if (type == null) return null;
     if (!(type is String || type is MyTypeEnum)) return null;
     if (_prescriptionTypeNames.isEmpty) _parsePrescriptionTypes();
-    final _type = (type is MyTypeEnum) ? type : myTypeEnumFromJson(type as String);
-    return _prescriptionTypeNames[_type];
+    final resolvedType = (type is MyTypeEnum) ? type : myTypeEnumFromJson(type as String);
+    return _prescriptionTypeNames[resolvedType];
   }
 
   String? getStatus131Name(Status131Enum? type) {
@@ -88,8 +82,9 @@ class ConfigService {
       for (final item in raw) {
         if (item is Map) {
           final key = item['value'];
-          final type =
-              $Status131EnumMap.entries.firstWhereOrNull((element) => element.value == key)?.key;
+          final type = $Status131EnumMap.entries
+              .firstWhereOrNull((element) => element.value == key)
+              ?.key;
           if (type != null) _animalStatusNames[type] = item['display_name'];
         }
       }
@@ -102,8 +97,9 @@ class ConfigService {
       for (final item in raw) {
         if (item is Map) {
           final key = item['value'];
-          final type =
-              $MyTypeEnumMap.entries.firstWhereOrNull((element) => element.value == key)?.key;
+          final type = $MyTypeEnumMap.entries
+              .firstWhereOrNull((element) => element.value == key)
+              ?.key;
           if (type != null) _prescriptionTypeNames[type] = item['display_name'];
         }
       }

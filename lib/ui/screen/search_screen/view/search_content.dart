@@ -8,10 +8,7 @@ import 'package:acits_flutter/ui/widget/error_stub.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchContent<T> extends StatefulWidget {
-  const SearchContent({
-    this.tileBuilder,
-    super.key,
-  });
+  const SearchContent({this.tileBuilder, super.key});
 
   final Widget Function(T item)? tileBuilder;
 
@@ -51,10 +48,7 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
         shadowColor: Colors.transparent,
         leading: CupertinoButton(
           onPressed: () => Navigator.pop(context),
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new, color: ColorRes.accent),
         ),
         title: _buildTitle(),
         centerTitle: true,
@@ -71,24 +65,15 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(
-            left: 16.0,
-            right: 8.0,
-          ),
+          contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),
           suffix: GestureDetector(
+            onTap: _searchController.clear,
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: Assets.icon.close.svg(
-                height: 16.0,
-                width: 16.0,
-                color: ColorRes.accent,
-              ),
+              child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: ColorRes.accent),
             ),
-            onTap: _searchController.clear,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
         ),
         style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
       ),
@@ -105,13 +90,13 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
                 ),
               )
             : state.isInitLoading
-                ? const LoaderHolderWidget()
-                : _buildList(context);
+            ? const LoaderHolderWidget()
+            : _buildList(context);
       },
     );
   }
 
-  Widget _buildList(context) {
+  Widget _buildList(BuildContext context) {
     return BlocBuilder<SearchBloc<T>, SearchState<T>>(
       builder: (context, state) {
         return state.items.isNotEmpty
@@ -123,32 +108,25 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
                   controller: _scrollController,
                   slivers: [
                     SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (_, index) {
-                          final item = state.items[index];
-                          final tileBuilder = widget.tileBuilder;
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 16.0,
-                            ),
-                            child: tileBuilder != null
-                                ? CupertinoButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () => Navigator.of(context).pop(item),
-                                    child: tileBuilder.call(item),
-                                  )
-                                : ListTile(
-                                    title: Text(item.toString()),
-                                    onTap: () => Navigator.of(context).pop(item),
-                                  ),
-                          );
-                        },
-                        childCount: state.items.length,
-                      ),
+                      delegate: SliverChildBuilderDelegate((_, index) {
+                        final item = state.items[index];
+                        final tileBuilder = widget.tileBuilder;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: tileBuilder != null
+                              ? CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () => Navigator.of(context).pop(item),
+                                  child: tileBuilder.call(item),
+                                )
+                              : ListTile(
+                                  title: Text(item.toString()),
+                                  onTap: () => Navigator.of(context).pop(item),
+                                ),
+                        );
+                      }, childCount: state.items.length),
                     ),
-                    SliverToBoxAdapter(
-                      child: _ListEnding<T>(),
-                    )
+                    SliverToBoxAdapter(child: _ListEnding<T>()),
                   ],
                 ),
               )
@@ -170,9 +148,7 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
 }
 
 class _EmptyStub extends StatelessWidget {
-  const _EmptyStub({
-    Key? key,
-  }) : super(key: key);
+  const _EmptyStub();
 
   @override
   Widget build(BuildContext context) {
@@ -180,16 +156,9 @@ class _EmptyStub extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            height: 120.0,
-            width: 120.0,
-            child: Assets.common.emptyState.svg(),
-          ),
+          SizedBox(height: 120.0, width: 120.0, child: Assets.common.emptyState.svg()),
           const SizedBox(height: 32.0),
-          Text(
-            StringRes.current.commonNotFound,
-            style: StyleRes.title,
-          ),
+          Text(StringRes.current.commonNotFound, style: StyleRes.title),
         ],
       ),
     );
@@ -197,25 +166,17 @@ class _EmptyStub extends StatelessWidget {
 }
 
 class _ListEnding<T> extends StatelessWidget {
-  const _ListEnding({
-    Key? key,
-  }) : super(key: key);
+  const _ListEnding({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc<T>, SearchState<T>>(
       builder: (_, state) {
         return state.isLoading
-            ? const SizedBox(
-                height: 64.0,
-                child: Center(child: CircularProgressIndicator()),
-              )
+            ? const SizedBox(height: 64.0, child: Center(child: CircularProgressIndicator()))
             : state.hasError
-                ? SizedBox(
-                    height: 64.0,
-                    child: Center(child: Text(StringRes.current.commonError)),
-                  )
-                : const SizedBox(height: 16.0);
+            ? SizedBox(height: 64.0, child: Center(child: Text(StringRes.current.commonError)))
+            : const SizedBox(height: 16.0);
       },
     );
   }

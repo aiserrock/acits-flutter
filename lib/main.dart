@@ -20,32 +20,26 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: StringConst.commonAppName,
       theme: ThemeData(
+        useMaterial3: false,
         colorScheme: const ColorScheme.light(
           primary: ColorRes.accent,
           secondary: ColorRes.indicatorActive,
-          background: ColorRes.background,
+          surface: ColorRes.background,
         ),
         buttonTheme: const ButtonThemeData(
           buttonColor: ColorRes.primaryButton,
           textTheme: ButtonTextTheme.primary,
-          padding: EdgeInsets.symmetric(
-            vertical: 10.0,
-            horizontal: 16.0,
-          ),
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
         ),
-        textTheme: const TextTheme(
-          button: StyleRes.button,
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          iconColor: ColorRes.accent,
-        ),
+        textTheme: const TextTheme(labelLarge: StyleRes.button),
+        inputDecorationTheme: const InputDecorationTheme(iconColor: ColorRes.accent),
         textSelectionTheme: const TextSelectionThemeData(cursorColor: ColorRes.accent),
       ),
       localizationsDelegates: const [
@@ -56,10 +50,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: StringRes.delegate.supportedLocales,
       home: _isFirstLaunch
-          ? BlocProvider(
-              create: (context) => OnboardingBloc(),
-              child: const OnboardingScreen(),
-            )
+          ? BlocProvider(create: (context) => OnboardingBloc(), child: const OnboardingScreen())
           : const LoginScreen(),
       color: ColorRes.accent,
       navigatorKey: getIt<GlobalKey<NavigatorState>>(),

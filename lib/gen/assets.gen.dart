@@ -2,6 +2,7 @@
 /// *****************************************************
 ///  FlutterGen
 /// *****************************************************
+library;
 
 // ignore_for_file: directives_ordering,unnecessary_import
 
@@ -176,7 +177,7 @@ class Assets {
 }
 
 class AssetGenImage extends AssetImage {
-  const AssetGenImage(String assetName) : super(assetName);
+  const AssetGenImage(super.assetName);
 
   Image image({
     Key? key,

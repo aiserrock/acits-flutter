@@ -8,10 +8,7 @@ void main() {
 }
 
 void stubExample() {
-  return test(
-    'stubExample',
-    (() {
-      expect(true, true, reason: 'Test failed!');
-    }),
-  );
+  return test('stubExample', (() {
+    expect(true, true, reason: 'Test failed!');
+  }));
 }

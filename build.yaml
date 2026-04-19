@@ -1,16 +1,24 @@
+global_options:
+  swagger_dart_code_generator:
+    options:
+      input_folder: "doc/api/"
+      output_folder: "lib/api/"
+
 targets:
   $default:
     sources:
-      - lib/**
-      - test/**
-    #   - doc/api/**
-      - pubspec.*
-      - $package$
-      # Allows the code generator to target files outside of the lib folder
-      - test/integration_test/**.dart
-    # builders:
-    #   swagger_dart_code_generator:
-    #     options:
-    #       input_folder: "doc/api/"
-    #       output_folder: "lib/api/"
-    #       url: "https://dev.acits.ru/api"
+      include:
+        - lib/**
+        - test/**
+        - pubspec.*
+        - $package$
+      exclude:
+        # flutter_gherkin временно отключён — не запускаем генераторы для его
+        # исходников, чтобы не падать на нерезолвящихся @GherkinTestSuite.
+        - test/integration_test/**
+    builders:
+      # Swagger генератор отключён: входной OpenAPI-спеки в репозитории нет,
+      # файлы lib/api/*.swagger.dart уже закоммичены. Включить при необходимости,
+      # добавив doc/api/*.json и поменяв enabled на true.
+      swagger_dart_code_generator:
+        enabled: false

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -15,10 +17,10 @@ import 'package:acits_flutter/ui/widget/debug_drawer.dart';
 
 /// Экран онбординга при входе в приложение
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
-  _OnboardingScreenState createState() => _OnboardingScreenState();
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
@@ -26,6 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   late List<OnboardingData> _onboardingData;
   late final PageController _controller;
+  StreamSubscription<OnboardingState>? _blocSub;
   int _currentPage = 0;
 
   @override
@@ -38,12 +41,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void didChangeDependencies() {
     _onboardingData = context.read<OnboardingBloc>().onboardingData;
-    context.read<OnboardingBloc>().stream.listen((state) => _listenCloseState(context, state));
+    _blocSub ??= context.read<OnboardingBloc>().stream.listen(_listenCloseState);
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
+    _blocSub?.cancel();
     _controller
       ..removeListener(_pageScrollListen)
       ..dispose();
@@ -120,22 +124,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           return Column(
             children: [
               Expanded(
-                child: SizedBox.expand(
-                  child: data.image.svg(fit: BoxFit.fitWidth),
-                ),
+                child: SizedBox.expand(child: data.image.svg(fit: BoxFit.fitWidth)),
               ),
               SizedBox(height: isSmallScreen ? 16.0 : 24.0),
-              Text(
-                data.title,
-                style: StyleRes.title,
-                textAlign: TextAlign.center,
-              ),
+              Text(data.title, style: StyleRes.title, textAlign: TextAlign.center),
               SizedBox(height: isSmallScreen ? 16.0 : 24.0),
-              Text(
-                data.message,
-                style: StyleRes.content,
-                textAlign: TextAlign.center,
-              ),
+              Text(data.message, style: StyleRes.content, textAlign: TextAlign.center),
             ],
           );
         },
@@ -183,7 +177,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void _listenCloseState(BuildContext context, OnboardingState state) {
+  void _listenCloseState(OnboardingState state) {
+    if (!mounted) return;
     if (state is OnboardingStateNeedCloseRoute) _closeScreen(context);
   }
 

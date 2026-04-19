@@ -5,10 +5,7 @@ import 'package:flutter/services.dart';
 
 /// BS выбора дозировки лекарства
 class BsDosage extends StatelessWidget {
-  BsDosage({
-    Key? key,
-    required this.drug,
-  }) : super(key: key);
+  BsDosage({super.key, required this.drug});
 
   final ShelterDrug drug;
   final TextEditingController controller = TextEditingController();
@@ -27,26 +24,18 @@ class BsDosage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              Text(
-                '${drug.drug?.name}, ${drug.drug?.formOfDrugName}',
-                style: StyleRes.subTitle,
-              ),
+              Text('${drug.drug?.name}, ${drug.drug?.formOfDrugName}', style: StyleRes.subTitle),
               const SizedBox(height: 16.0),
               TextField(
                 controller: controller,
                 autofocus: true,
                 decoration: const InputDecoration(labelText: 'Dosage*'),
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onEditingComplete: () => onSubmit(context),
               ),
               const SizedBox(height: 24.0),
-              PrimaryButton(
-                text: 'Принять',
-                onPressed: () => onSubmit(context),
-              )
+              PrimaryButton(text: 'Принять', onPressed: () => onSubmit(context)),
             ],
           ),
         ),

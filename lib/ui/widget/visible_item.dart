@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 // @immutable
 class VisibleItem extends StatelessWidget {
-  const VisibleItem({
-    required this.isVisible,
-    required this.child,
-    Key? key,
-  }) : super(key: key);
+  const VisibleItem({required this.isVisible, required this.child, super.key});
 
   final bool isVisible;
   final Widget child;

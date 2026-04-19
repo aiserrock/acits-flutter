@@ -3,11 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:acits_flutter/export.dart';
 
 class DefaultIconButton extends StatelessWidget {
-  const DefaultIconButton({
-    required this.icon,
-    required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  const DefaultIconButton({required this.icon, required this.onPressed, super.key});
 
   final Widget icon;
   final VoidCallback onPressed;
@@ -19,7 +15,7 @@ class DefaultIconButton extends StatelessWidget {
       onPressed: onPressed,
       child: Container(
         decoration: BoxDecoration(
-          color: ColorRes.foreground.withOpacity(.55),
+          color: ColorRes.foreground.withValues(alpha: .55),
           borderRadius: BorderRadius.circular(40.0),
         ),
         padding: const EdgeInsets.all(14.0),

@@ -13,12 +13,10 @@ import 'package:acits_flutter/export.dart';
 
 /// Экран регистрации
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({
-    Key? key,
-  }) : super(key: key);
+  const RegistrationScreen({super.key});
 
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> with TickerProviderStateMixin {
@@ -35,9 +33,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
       scopeName: l10n.regTitle,
       init: (getIt) {
         getIt.registerSingleton<RegistrationScreenController>(
-          RegistrationScreenController(
-            vsync: this,
-          ),
+          RegistrationScreenController(vsync: this),
         );
       },
     );
@@ -64,10 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
         title: Assets.image.logoBar.svg(),
         centerTitle: true,
         leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: ColorRes.accent,
-          ),
+          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
         bottom: _buildTabs(),
@@ -77,17 +70,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: StreamBuilder<int>(
-              stream: controller.tabState,
-              builder: (_, data) {
-                final current =
-                    (data.data ?? 0) == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond;
-                return AnimatedCrossFade(
-                  firstChild: const RegistrationOrgForm(),
-                  secondChild: const RegistrationCustomerForm(),
-                  crossFadeState: current,
-                  duration: kTabScrollDuration,
-                );
-              }),
+            stream: controller.tabState,
+            builder: (_, data) {
+              final current = (data.data ?? 0) == 0
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond;
+              return AnimatedCrossFade(
+                firstChild: const RegistrationOrgForm(),
+                secondChild: const RegistrationCustomerForm(),
+                crossFadeState: current,
+                duration: kTabScrollDuration,
+              );
+            },
+          ),
         ),
       ),
     );
@@ -100,22 +95,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
       tabs: [l10n.regOrg, l10n.regUser]
           .mapIndexed<Widget>(
             (index, tab) => StreamBuilder<int>(
-                stream: controller.tabState,
-                builder: (_, data) {
-                  final current = data.data;
-                  return SizedBox(
-                    height: kTextTabBarHeight,
-                    child: Center(
-                      child: Text(
-                        tab,
-                        style: StyleRes.content.copyWith(
-                          color: current == index ? ColorRes.accent : ColorRes.textSecondary,
-                        ),
-                        maxLines: 2,
+              stream: controller.tabState,
+              builder: (_, data) {
+                final current = data.data;
+                return SizedBox(
+                  height: kTextTabBarHeight,
+                  child: Center(
+                    child: Text(
+                      tab,
+                      style: StyleRes.content.copyWith(
+                        color: current == index ? ColorRes.accent : ColorRes.textSecondary,
                       ),
+                      maxLines: 2,
                     ),
-                  );
-                }),
+                  ),
+                );
+              },
+            ),
           )
           .toList(),
       controller: controller.tabController,
@@ -125,11 +121,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
 
 /// Кнопка Зарегистрироваться
 class RegistrationSubmitBtn extends StatelessWidget {
-  const RegistrationSubmitBtn({Key? key}) : super(key: key);
+  const RegistrationSubmitBtn({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<WidgetState>(
+    return StreamBuilder<ScreenDataState>(
       stream: controller.screenState,
       builder: (_, state) {
         final isLoading = state.data?.isLoading ?? false;
@@ -155,27 +151,22 @@ class RegistrationSubmitBtn extends StatelessWidget {
 
 /// Кнопка Войти
 class RegistrationLoginBtn extends StatelessWidget {
-  const RegistrationLoginBtn({Key? key}) : super(key: key);
+  const RegistrationLoginBtn({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          l10n.regHaveAccount,
+        Text(l10n.regHaveAccount),
+        Builder(
+          builder: (context) {
+            return MaterialButton(
+              onPressed: () => controller.onLoginPressed(context),
+              child: const Text('Войти', style: TextStyle(color: ColorRes.accent)),
+            );
+          },
         ),
-        Builder(builder: (context) {
-          return MaterialButton(
-            onPressed: () => controller.onLoginPressed(context),
-            child: const Text(
-              'Войти',
-              style: TextStyle(
-                color: ColorRes.accent,
-              ),
-            ),
-          );
-        }),
       ],
     );
   }
@@ -185,39 +176,42 @@ class RegistrationLoginBtn extends StatelessWidget {
 
 /// переключатель персональных данных
 class RegistrationPersonalData extends StatelessWidget {
-  const RegistrationPersonalData({Key? key}) : super(key: key);
+  const RegistrationPersonalData({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         StreamBuilder<bool>(
-            stream: controller.privateState,
-            builder: (_, state) {
-              return CupertinoButton(
-                padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-                onPressed: controller.togglePersonData,
-                child: AnimatedCrossFade(
-                  firstChild: Assets.icon.checkOn.svg(),
-                  secondChild: Assets.icon.checkOff.svg(),
-                  crossFadeState:
-                      state.data ?? false ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                  duration: kTabScrollDuration,
-                ),
-              );
-            }),
+          stream: controller.privateState,
+          builder: (_, state) {
+            return CupertinoButton(
+              padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+              onPressed: controller.togglePersonData,
+              child: AnimatedCrossFade(
+                firstChild: Assets.icon.checkOn.svg(),
+                secondChild: Assets.icon.checkOff.svg(),
+                crossFadeState: state.data ?? false
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+                duration: kTabScrollDuration,
+              ),
+            );
+          },
+        ),
         Expanded(
           child: Text.rich(
             TextSpan(
               children: [
                 TextSpan(text: l10n.regAgreePersonalDataPart0),
                 TextSpan(
-                    text: l10n.regAgreePersonalDataPart1,
-                    style: StyleRes.content.copyWith(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()..onTap = controller.onPrivateTermsPressed),
+                  text: l10n.regAgreePersonalDataPart1,
+                  style: StyleRes.content.copyWith(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()..onTap = controller.onPrivateTermsPressed,
+                ),
               ],
             ),
           ),
@@ -231,7 +225,7 @@ class RegistrationPersonalData extends StatelessWidget {
 
 /// Форма ввода данных при регистрации организации
 class RegistrationOrgForm extends StatelessWidget {
-  const RegistrationOrgForm({Key? key}) : super(key: key);
+  const RegistrationOrgForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -242,32 +236,20 @@ class RegistrationOrgForm extends StatelessWidget {
           const SizedBox(height: 8.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              l10n.regAboutYou,
-              style: StyleRes.title,
-            ),
+            child: Text(l10n.regAboutYou, style: StyleRes.title),
           ),
           const SizedBox(height: 16.0),
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _buildUserForm(),
-            ),
+            child: Padding(padding: const EdgeInsets.all(16.0), child: _buildUserForm()),
           ),
           const SizedBox(height: 24.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              l10n.regAboutOrg,
-              style: StyleRes.title,
-            ),
+            child: Text(l10n.regAboutOrg, style: StyleRes.title),
           ),
           const SizedBox(height: 16.0),
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _buildOrgForm(),
-            ),
+            child: Padding(padding: const EdgeInsets.all(16.0), child: _buildOrgForm()),
           ),
           const SizedBox(height: 16.0),
           const RegistrationPersonalData(),
@@ -276,10 +258,7 @@ class RegistrationOrgForm extends StatelessWidget {
           const SizedBox(height: 16.0),
           const RegistrationLoginBtn(),
           const SizedBox(height: 16.0),
-          Text(
-            l10n.loginDescribeMsg,
-            textAlign: TextAlign.center,
-          ),
+          Text(l10n.loginDescribeMsg, textAlign: TextAlign.center),
         ],
       ),
     );
@@ -291,10 +270,7 @@ class RegistrationOrgForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l10n.regAdminRegMsg,
-            style: StyleRes.content,
-          ),
+          Text(l10n.regAdminRegMsg, style: StyleRes.content),
           TextFormField(
             controller: controller.orgLoginController,
             decoration: InputDecoration(
@@ -305,9 +281,7 @@ class RegistrationOrgForm extends StatelessWidget {
           ),
           TextFormField(
             controller: controller.orgPassController,
-            decoration: InputDecoration(
-              labelText: '${l10n.loginPassLabel} *',
-            ),
+            decoration: InputDecoration(labelText: '${l10n.loginPassLabel} *'),
             validator: Validator.emptyValidatorMsg(l10n.regLeast8Symbols),
           ),
           TextFormField(
@@ -338,18 +312,12 @@ class RegistrationOrgForm extends StatelessWidget {
           ),
           TextFormField(
             controller: controller.orgNameController,
-            decoration: InputDecoration(
-              labelText: '${l10n.animalCuratorName} *',
-              hintText: 'Иван',
-            ),
+            decoration: InputDecoration(labelText: '${l10n.animalCuratorName} *', hintText: 'Иван'),
             validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgMNameController,
-            decoration: InputDecoration(
-              labelText: l10n.regFathersName,
-              hintText: 'Иванович',
-            ),
+            decoration: InputDecoration(labelText: l10n.regFathersName, hintText: 'Иванович'),
           ),
         ],
       ),
@@ -364,32 +332,21 @@ class RegistrationOrgForm extends StatelessWidget {
         children: [
           TextFormField(
             controller: controller.orgLoginController,
-            decoration: InputDecoration(
-              labelText: l10n.regOrgName,
-            ),
+            decoration: InputDecoration(labelText: l10n.regOrgName),
             validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgCountryNameController,
-            decoration: InputDecoration(
-              labelText: l10n.regCountry,
-              hintText: l10n.regWriteCountry,
-            ),
+            decoration: InputDecoration(labelText: l10n.regCountry, hintText: l10n.regWriteCountry),
             validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
             controller: controller.orgRegionNameController,
-            decoration: InputDecoration(
-              labelText: l10n.regRegion,
-              hintText: l10n.regWriteRegion,
-            ),
+            decoration: InputDecoration(labelText: l10n.regRegion, hintText: l10n.regWriteRegion),
           ),
           TextFormField(
             controller: controller.orgCityNameController,
-            decoration: InputDecoration(
-              labelText: l10n.regCity,
-              hintText: l10n.regWriteCity,
-            ),
+            decoration: InputDecoration(labelText: l10n.regCity, hintText: l10n.regWriteCity),
             validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
         ],
@@ -402,7 +359,7 @@ class RegistrationOrgForm extends StatelessWidget {
 
 /// Форма ввода данных при регистрации организации
 class RegistrationCustomerForm extends StatelessWidget {
-  const RegistrationCustomerForm({Key? key}) : super(key: key);
+  const RegistrationCustomerForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -413,25 +370,16 @@ class RegistrationCustomerForm extends StatelessWidget {
           const SizedBox(height: 8.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              l10n.regAboutYou,
-              style: StyleRes.title,
-            ),
+            child: Text(l10n.regAboutYou, style: StyleRes.title),
           ),
           const SizedBox(height: 16.0),
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _buildCustomerForm(),
-            ),
+            child: Padding(padding: const EdgeInsets.all(16.0), child: _buildCustomerForm()),
           ),
           const SizedBox(height: 24.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              l10n.regAboutOrg,
-              style: StyleRes.title,
-            ),
+            child: Text(l10n.regAboutOrg, style: StyleRes.title),
           ),
           const SizedBox(height: 16.0),
           _buildCustomerRoleForm(),
@@ -442,10 +390,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           const SizedBox(height: 16.0),
           const RegistrationLoginBtn(),
           const SizedBox(height: 16.0),
-          Text(
-            l10n.loginDescribeMsg,
-            textAlign: TextAlign.center,
-          ),
+          Text(l10n.loginDescribeMsg, textAlign: TextAlign.center),
         ],
       ),
     );
@@ -468,9 +413,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           ),
           TextFormField(
             controller: controller.customerPassController,
-            decoration: InputDecoration(
-              labelText: '${l10n.loginPassLabel} *',
-            ),
+            decoration: InputDecoration(labelText: '${l10n.loginPassLabel} *'),
             validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
           TextFormField(
@@ -483,10 +426,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           ),
           TextFormField(
             controller: controller.customerNameController,
-            decoration: InputDecoration(
-              labelText: '${l10n.animalCuratorName} *',
-              hintText: 'Иван',
-            ),
+            decoration: InputDecoration(labelText: '${l10n.animalCuratorName} *', hintText: 'Иван'),
             validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
           ),
         ],
@@ -497,8 +437,9 @@ class RegistrationCustomerForm extends StatelessWidget {
   Widget _buildCustomerRoleForm() {
     return Form(
       key: controller.customerRoleForm,
-      child: Builder(builder: (context) {
-        return StreamBuilder<ShelterShortSerializers>(
+      child: Builder(
+        builder: (context) {
+          return StreamBuilder<ShelterShortSerializers>(
             stream: controller.shelterState,
             builder: (_, shelter) {
               return FormEditCard(
@@ -510,29 +451,27 @@ class RegistrationCustomerForm extends StatelessWidget {
                       child: SizedBox(
                         width: double.infinity,
                         child: StreamBuilder<CustomerRole>(
-                            stream: controller.customerRoleState,
-                            builder: (_, data) {
-                              final role = data.data ?? CustomerRole.employer;
-                              return CupertinoSlidingSegmentedControl(
-                                groupValue: role,
-                                children: <CustomerRole, Widget>{
-                                  CustomerRole.employer: Text(CustomerRole.employer.value),
-                                  CustomerRole.guest: Text(CustomerRole.guest.value),
-                                },
-                                onValueChanged: controller.onCustomerRoleChanged,
-                                backgroundColor: ColorRes.indicatorActive,
-                              );
-                            }),
+                          stream: controller.customerRoleState,
+                          builder: (_, data) {
+                            final role = data.data ?? CustomerRole.employer;
+                            return CupertinoSlidingSegmentedControl(
+                              groupValue: role,
+                              children: <CustomerRole, Widget>{
+                                CustomerRole.employer: Text(CustomerRole.employer.value),
+                                CustomerRole.guest: Text(CustomerRole.guest.value),
+                              },
+                              onValueChanged: controller.onCustomerRoleChanged,
+                              backgroundColor: ColorRes.indicatorActive,
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                   EditCardData(
                     label: l10n.shelterSelectShelter,
                     initValue: shelter.data?.name,
-                    suffix: const Icon(
-                      Icons.menu_open_rounded,
-                      color: ColorRes.accent,
-                    ),
+                    suffix: const Icon(Icons.menu_open_rounded, color: ColorRes.accent),
                     onPressed: () => controller.pickShelter(context),
                     validator: Validator.emptyValidatorMsg(l10n.regFieldEmptyError),
                   ),
@@ -541,8 +480,10 @@ class RegistrationCustomerForm extends StatelessWidget {
                 padding: const EdgeInsets.only(),
                 margin: const EdgeInsets.all(16.0),
               );
-            });
-      }),
+            },
+          );
+        },
+      ),
     );
   }
 

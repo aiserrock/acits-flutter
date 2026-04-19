@@ -2,10 +2,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 class ApplicantListItem extends StatelessWidget {
-  const ApplicantListItem({
-    required this.applicant,
-    super.key,
-  });
+  const ApplicantListItem({required this.applicant, super.key});
 
   final Applicant applicant;
 
@@ -13,8 +10,6 @@ class ApplicantListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(applicant.fullName ?? ''),
-    );
+    return ListTile(title: Text(applicant.fullName ?? ''));
   }
 }

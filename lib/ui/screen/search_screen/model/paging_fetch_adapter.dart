@@ -15,15 +15,15 @@ import 'package:acits_flutter/ui/screen/search_screen/view/widget/curator_item.d
 class SearchAdapterTypeFactoryDelegate {
   static PagingFetchAdapter adapter(Type type) {
     switch (type) {
-      case AnimalRead:
+      case const (AnimalRead):
         return AnimalReadFetchAdapter();
-      case Applicant:
+      case const (Applicant):
         return ApplicantFetchAdapter();
-      case Curator:
+      case const (Curator):
         return CuratorFetchAdapter();
-      case ShelterDrug:
+      case const (ShelterDrug):
         return DrugFetchAdapter();
-      case ShelterShortSerializers:
+      case const (ShelterShortSerializers):
         return ShelterFetchAdapter();
       default:
         throw UnimplementedError();
@@ -32,15 +32,15 @@ class SearchAdapterTypeFactoryDelegate {
 
   static Widget Function(T) tileBuilder<T>() {
     switch (T) {
-      case AnimalRead:
+      case const (AnimalRead):
         return AnimalListItem.builder as Widget Function(T);
-      case Applicant:
+      case const (Applicant):
         return ApplicantListItem.builder as Widget Function(T);
-      case Curator:
+      case const (Curator):
         return CuratorListItem.builder as Widget Function(T);
-      case ShelterDrug:
+      case const (ShelterDrug):
         return DrugListItem.builder as Widget Function(T);
-      case ShelterShortSerializers:
+      case const (ShelterShortSerializers):
         return ShelterListItem.builder as Widget Function(T);
       default:
         throw UnimplementedError();
@@ -49,37 +49,20 @@ class SearchAdapterTypeFactoryDelegate {
 }
 
 abstract class PagingFetchAdapter<R> {
-  @mustCallSuper
   PagingFetchAdapter(this.fetcher);
 
-  final Future Function({
-    int limit,
-    int offset,
-    String? searchRequest,
-  }) fetcher;
+  final Future Function({int limit, int offset, String? searchRequest}) fetcher;
 
-  Future<List<R>> fetch({
-    required int limit,
-    int offset = 0,
-    String? search,
-  });
+  Future<List<R>> fetch({required int limit, int offset = 0, String? search});
 }
 
 class AnimalReadFetchAdapter extends PagingFetchAdapter<AnimalRead> {
   AnimalReadFetchAdapter() : super(getIt<AnimalService>().fetchAnimalList);
 
   @override
-  Future<List<AnimalRead>> fetch({
-    required int limit,
-    int offset = 0,
-    String? search,
-  }) async {
+  Future<List<AnimalRead>> fetch({required int limit, int offset = 0, String? search}) async {
     return fetcher
-        .call(
-          limit: limit,
-          offset: offset,
-          searchRequest: search,
-        )
+        .call(limit: limit, offset: offset, searchRequest: search)
         .then((value) => value?.results ?? <AnimalRead>[]);
   }
 }
@@ -88,17 +71,9 @@ class ApplicantFetchAdapter extends PagingFetchAdapter<Applicant> {
   ApplicantFetchAdapter() : super(getIt<StaffService>().fetchApplicants);
 
   @override
-  Future<List<Applicant>> fetch({
-    required int limit,
-    int offset = 0,
-    String? search,
-  }) async {
+  Future<List<Applicant>> fetch({required int limit, int offset = 0, String? search}) async {
     return fetcher
-        .call(
-          limit: limit,
-          offset: offset,
-          searchRequest: search,
-        )
+        .call(limit: limit, offset: offset, searchRequest: search)
         .then((value) => value ?? <Applicant>[]);
   }
 }
@@ -107,17 +82,9 @@ class CuratorFetchAdapter extends PagingFetchAdapter<Curator> {
   CuratorFetchAdapter() : super(getIt<StaffService>().fetchCurators);
 
   @override
-  Future<List<Curator>> fetch({
-    required int limit,
-    int offset = 0,
-    String? search,
-  }) async {
+  Future<List<Curator>> fetch({required int limit, int offset = 0, String? search}) async {
     return fetcher
-        .call(
-          limit: limit,
-          offset: offset,
-          searchRequest: search,
-        )
+        .call(limit: limit, offset: offset, searchRequest: search)
         .then((value) => value ?? <Curator>[]);
   }
 }
@@ -126,17 +93,9 @@ class DrugFetchAdapter extends PagingFetchAdapter<ShelterDrug> {
   DrugFetchAdapter() : super(getIt<PrescriptionService>().fetchDrugList);
 
   @override
-  Future<List<ShelterDrug>> fetch({
-    required int limit,
-    int offset = 0,
-    String? search,
-  }) async {
+  Future<List<ShelterDrug>> fetch({required int limit, int offset = 0, String? search}) async {
     return fetcher
-        .call(
-          limit: limit,
-          offset: offset,
-          searchRequest: search,
-        )
+        .call(limit: limit, offset: offset, searchRequest: search)
         .then((value) => value?.results ?? <ShelterDrug>[]);
   }
 }
@@ -151,11 +110,7 @@ class ShelterFetchAdapter extends PagingFetchAdapter<ShelterShortSerializers> {
     String? search,
   }) async {
     return fetcher
-        .call(
-          limit: limit,
-          offset: offset,
-          searchRequest: search,
-        )
+        .call(limit: limit, offset: offset, searchRequest: search)
         .then((value) => value?.results ?? <ShelterShortSerializers>[]);
   }
 }

@@ -6,9 +6,9 @@ abstract class DioRegisterDev {
   @dev
   Dio createDioClient() {
     final options = BaseOptions(
-      connectTimeout: 30000,
-      receiveTimeout: 30000,
-      sendTimeout: 30000,
+      connectTimeout: const Duration(milliseconds: 30000),
+      receiveTimeout: const Duration(milliseconds: 30000),
+      sendTimeout: const Duration(milliseconds: 30000),
     );
     return Dio(options)..interceptors.add(LogInterceptor());
   }

@@ -14,14 +14,9 @@ const _termsUrl = 'https://app.acits.ru/privacy-policy';
 
 /// Контроллер флоу регистрации
 class RegistrationScreenController {
-  RegistrationScreenController({
-    required TickerProvider vsync,
-  })  : tabController = TabController(
-          initialIndex: 0,
-          length: 2,
-          vsync: vsync,
-        ),
-        _authService = getIt<AuthService>() {
+  RegistrationScreenController({required TickerProvider vsync})
+    : tabController = TabController(initialIndex: 0, length: 2, vsync: vsync),
+      _authService = getIt<AuthService>() {
     tabController.addListener(_onTabChanged);
   }
 
@@ -97,7 +92,7 @@ class RegistrationScreenController {
   final privateState = BehaviorSubject<bool>.seeded(false);
 
   /// Состояние загрузки
-  final screenState = BehaviorSubject<WidgetState<Object>>.seeded(WidgetState(Object()));
+  final screenState = BehaviorSubject<ScreenDataState<Object>>.seeded(ScreenDataState(Object()));
 
   /// Состояние роль пользователя
   final customerRoleState = BehaviorSubject<CustomerRole>.seeded(CustomerRole.employer);
@@ -131,10 +126,14 @@ class RegistrationScreenController {
 
     if (tabState.value == 0) {
       if (!(orgUserForm.currentState?.validate() ?? false) ||
-          !(orgForm.currentState?.validate() ?? false)) return;
+          !(orgForm.currentState?.validate() ?? false)) {
+        return;
+      }
     } else {
       if (!(customerForm.currentState?.validate() ?? false) ||
-          !(customerRoleForm.currentState?.validate() ?? false)) return;
+          !(customerRoleForm.currentState?.validate() ?? false)) {
+        return;
+      }
     }
 
     if (privateState.value == false) {
@@ -142,32 +141,35 @@ class RegistrationScreenController {
       return;
     }
 
-    screenState.add(WidgetState()..loading());
+    screenState.add(ScreenDataState()..loading());
 
+    final navigator = Navigator.of(context);
     if (tabState.value == 0) {
       final admin = _buildAdmin();
       final result = await _authService.registrationAdmin(admin).catchError((e) {
         _showSnack(e is MessagedException ? e.errorMessage() : e.toString());
+        return null;
       });
-      if (result is UserShelterAdminSerializers) _onSuccess(context);
+      if (result is UserShelterAdminSerializers) _onSuccess(navigator);
     } else {
       final customer = _buildCustomer();
       final result = await _authService.registrationCustomer(customer).catchError((e) {
         _showSnack(e is MessagedException ? e.errorMessage() : e.toString());
+        return null;
       });
-      if (result is UserShelterWorkerSerializers) _onSuccess(context);
+      if (result is UserShelterWorkerSerializers) _onSuccess(navigator);
     }
 
-    await Future.delayed(const Duration(seconds: 3), () => screenState.add(WidgetState()));
+    await Future.delayed(const Duration(seconds: 3), () => screenState.add(ScreenDataState()));
   }
 
-  void _onSuccess(BuildContext context) {
-    Navigator.of(context).pushReplacement(
+  void _onSuccess(NavigatorState navigator) {
+    navigator.pushReplacement(
       MaterialPageRoute(
         builder: (_) => Scaffold(
           body: SafeArea(
             child: SuccessHolderWidget(
-              onPressed: Navigator.of(context).pop,
+              onPressed: navigator.pop,
               title: l10n.regTUPtitle,
               message: l10n.regTUPmsg,
               button: l10n.commonClose.toUpperCase(),
@@ -193,9 +195,7 @@ class RegistrationScreenController {
   void _showSnack(String msg) {
     final ctx = scaffoldKey.currentContext;
     if (ctx != null) {
-      ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(
-        SnackBar(content: Text(msg)),
-      );
+      ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
@@ -234,10 +234,7 @@ class RegistrationScreenController {
   }
 }
 
-enum CustomerRole {
-  guest,
-  employer,
-}
+enum CustomerRole { guest, employer }
 
 extension _MessagedExceptionX on MessagedException {
   String errorMessage() {

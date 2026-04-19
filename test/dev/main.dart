@@ -29,11 +29,7 @@ void _setupLogging() {
 
 Future<void> _addDebugHttpCerts() async {
   final certs = await Future.wait(
-    [
-      CertRes.nikitaAir13,
-      CertRes.nikitaMac2013,
-      CertRes.nikitaMacPro13,
-    ].map(rootBundle.load),
+    [CertRes.nikitaAir13, CertRes.nikitaMac2013, CertRes.nikitaMacPro13].map(rootBundle.load),
   );
 
   HttpOverrides.global = SslHttpOverrides(

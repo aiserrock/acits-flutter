@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -22,17 +24,17 @@ class PrescriptionEditScreenController {
     this.editPrescriptionId,
     this.editPrescription,
     AnimalRead? initAnimal,
-  })  : tabController = TabController(
-          initialIndex: editPrescription?.myType is MyTypeEnum
-              ? max(MyTypeEnum.values.indexOf(editPrescription!.myType!), 0)
-              : 0,
-          length: MyTypeEnum.values.length - 1,
-          vsync: tickerProvider,
-        ),
-        _animalService = getIt<AnimalService>(),
-        _configService = getIt<ConfigService>(),
-        _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
-        _prescriptionService = getIt<PrescriptionService>() {
+  }) : tabController = TabController(
+         initialIndex: editPrescription?.myType is MyTypeEnum
+             ? max(MyTypeEnum.values.indexOf(editPrescription!.myType!), 0)
+             : 0,
+         length: MyTypeEnum.values.length - 1,
+         vsync: tickerProvider,
+       ),
+       _animalService = getIt<AnimalService>(),
+       _configService = getIt<ConfigService>(),
+       _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
+       _prescriptionService = getIt<PrescriptionService>() {
     if (isEdit) setEditedState();
     tabController.addListener(_onTabChanged);
     typeState.add(getTypes()[tabController.index]);
@@ -61,7 +63,7 @@ class PrescriptionEditScreenController {
   final loadingState = BehaviorSubject<bool>.seeded(false);
 
   /// Состояние данных назначения
-  final screenState = BehaviorSubject<WidgetState<Prescription>?>();
+  final screenState = BehaviorSubject<ScreenDataState<Prescription>?>();
 
   /// Выбранное животное
   final animalState = BehaviorSubject<AnimalRead?>();
@@ -110,14 +112,15 @@ class PrescriptionEditScreenController {
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return;
     if (typeState.value.hasDrugs && !(drugFormKey.currentState?.validate() ?? false)) return;
 
-    screenState.add(WidgetState()..loading());
+    screenState.add(ScreenDataState()..loading());
     final data = Prescription(
       id: editPrescription?.id ?? editPrescriptionId,
       animal: animalId,
       myType: typeState.value,
       description: commentContoroller.text,
       drugs: drugsState.valueOrNull,
-      duration: typeState.valueOrNull == MyTypeEnum.courseOfTreatment &&
+      duration:
+          typeState.valueOrNull == MyTypeEnum.courseOfTreatment &&
               treatmentPeriodState.valueOrNull == TreatmentPeriod.weekly
           ? DurationEnum.everyWeek
           : DurationEnum.custom,
@@ -125,31 +128,35 @@ class PrescriptionEditScreenController {
         ...daysListState.value
             .map<Iterable<PrescriptionExecution>>(
               (day) => atTimeListState.value.map(
-                (time) => PrescriptionExecution(
-                  executeAt: day.mergeTime(time),
-                ),
+                (time) => PrescriptionExecution(executeAt: day.mergeTime(time)),
               ),
             )
-            .expand((list) => list)
+            .expand((list) => list),
       ],
     );
 
     final ctx = _context;
     if (ctx == null) return;
 
-    screenState.add(WidgetState()..loading());
+    screenState.add(ScreenDataState()..loading());
     if (isEdit) {
-      _prescriptionService.updatePrescription(data).then((result) {
-        Navigator.of(ctx).pop(result);
-      }).catchError((e) {
-        screenState.add(WidgetState()..error = e);
-      });
+      _prescriptionService
+          .updatePrescription(data)
+          .then((result) {
+            Navigator.of(ctx).pop(result);
+          })
+          .catchError((e) {
+            screenState.add(ScreenDataState()..error = e);
+          });
     } else {
-      _prescriptionService.createPrescription(data).then((result) {
-        Navigator.of(ctx).pop(result);
-      }).catchError((e) {
-        screenState.add(WidgetState()..error = e);
-      });
+      _prescriptionService
+          .createPrescription(data)
+          .then((result) {
+            Navigator.of(ctx).pop(result);
+          })
+          .catchError((e) {
+            screenState.add(ScreenDataState()..error = e);
+          });
     }
   }
 
@@ -180,23 +187,25 @@ class PrescriptionEditScreenController {
     if (editPrescription != null) {
       prescription = editPrescription;
     } else if (id != null) {
-      prescription = await _prescriptionService.fetchPrescriptionById(id).catchError(
-        (e) {
-          screenState.add(WidgetState()..error = e);
-        },
-      );
+      try {
+        prescription = await _prescriptionService.fetchPrescriptionById(id);
+      } catch (e) {
+        screenState.add(ScreenDataState()..error = e);
+      }
     }
 
     if (prescription != null) {
       final animalId = prescription.animal;
       if (animalId == null) return;
-      final animal = await _animalService.fetchAnimalDetail(id: animalId).catchError(
-        (e) {
-          screenState.add(WidgetState()..error = e);
-        },
-      );
+      final AnimalRead animal;
+      try {
+        animal = await _animalService.fetchAnimalDetail(id: animalId);
+      } catch (e) {
+        screenState.add(ScreenDataState()..error = e);
+        return;
+      }
 
-      screenState.add(WidgetState(prescription));
+      screenState.add(ScreenDataState(prescription));
       final type = prescription.myType;
       final tabIndex = type != null ? MyTypeEnum.values.indexOf(type) : -1;
       if (tabIndex >= 0) tabController.animateTo(tabIndex - 1);
@@ -209,22 +218,19 @@ class PrescriptionEditScreenController {
 
       final executuons = prescription.executions;
       if (executuons != null) {
-        final days = <DateTime>{}..addAll(
-            executuons.map((item) => item.executeAt).whereNotNull().map(
-                  (date) => DateTime(
-                    date.year,
-                    date.month,
-                    date.day,
-                  ),
-                ),
+        final days = <DateTime>{}
+          ..addAll(
+            executuons
+                .map((item) => item.executeAt)
+                .nonNulls
+                .map((date) => DateTime(date.year, date.month, date.day)),
           );
-        final times = <TimeOfDay>{}..addAll(
-            executuons.map((item) => item.executeAt).whereNotNull().map(
-                  (time) => TimeOfDay(
-                    hour: time.hour,
-                    minute: time.minute,
-                  ),
-                ),
+        final times = <TimeOfDay>{}
+          ..addAll(
+            executuons
+                .map((item) => item.executeAt)
+                .nonNulls
+                .map((time) => TimeOfDay(hour: time.hour, minute: time.minute)),
           );
 
         if (days.isNotEmpty && times.isNotEmpty) {
@@ -252,13 +258,11 @@ class PrescriptionEditScreenController {
     }
     final ctx = _context;
     if (ctx == null) return;
-    Navigator.of(ctx).push(Search.route<AnimalRead>()).then(
-      (animal) {
-        if (animal != null) {
-          animalState.add(animal);
-        }
-      },
-    );
+    Navigator.of(ctx).push(Search.route<AnimalRead>()).then((animal) {
+      if (animal != null) {
+        animalState.add(animal);
+      }
+    });
   }
 
   void onTreatmentPeriodChanged(TreatmentPeriod? period) {
@@ -279,9 +283,11 @@ class PrescriptionEditScreenController {
       lastDate: now.add(_shiftLastStartDate),
     );
     if (result != null) {
-      daysListState.add(daysListState.value
-        ..add(result)
-        ..sort());
+      daysListState.add(
+        daysListState.value
+          ..add(result)
+          ..sort(),
+      );
     }
   }
 
@@ -289,14 +295,8 @@ class PrescriptionEditScreenController {
     daysListState.add(daysListState.value..removeAt(index));
   }
 
-  void pickAtTime(
-    BuildContext context,
-    int index,
-  ) async {
-    final result = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+  void pickAtTime(BuildContext context, int index) async {
+    final result = await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
       atTimeListState.add(
         atTimeListState.value
@@ -329,15 +329,14 @@ class PrescriptionEditScreenController {
     if (dosage == null) return;
 
     drugsState.add(
-      drugsState.value
-        ..add(
-          PrescriptionDrug(
-            drugId: drug.drug?.id,
-            drugDosage: dosage,
-            drugName: drug.drug?.name,
-            formOfDrug: drug.drug?.formOfDrugName,
-          ),
+      drugsState.value..add(
+        PrescriptionDrug(
+          drugId: drug.drug?.id,
+          drugDosage: dosage,
+          drugName: drug.drug?.name,
+          formOfDrug: drug.drug?.formOfDrugName,
         ),
+      ),
     );
   }
 
@@ -358,26 +357,26 @@ class PrescriptionEditScreenController {
   void _showError(String msg) {
     _scaffoldMessengerKey.currentState
       ?..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(
+      ..showSnackBar(
+        SnackBar(
           content: Row(
-        children: [
-          SizedBox(
-            height: 40.0,
-            width: 40.0,
-            child: LottieBuilder.asset(LottieRes.crashScratch),
+            children: [
+              SizedBox(
+                height: 40.0,
+                width: 40.0,
+                child: LottieBuilder.asset(LottieRes.crashScratch),
+              ),
+              Expanded(child: Text(msg)),
+            ],
           ),
-          Expanded(child: Text(msg)),
-        ],
-      )));
+        ),
+      );
   }
 
   BuildContext? get _context => scaffoldKey.currentContext;
 }
 
-enum TreatmentPeriod {
-  daily,
-  weekly,
-}
+enum TreatmentPeriod { daily, weekly }
 
 extension MyTypeEnumX on MyTypeEnum? {
   /// Нужны ли лекарства для данного типа назначения

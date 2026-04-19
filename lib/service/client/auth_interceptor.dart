@@ -10,21 +10,24 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 @injectable
 class AuthInterceptor implements Authenticator {
   @override
-  FutureOr<Request?> authenticate(
-    Request request,
-    Response response, [
-    Request? _,
-  ]) async {
+  FutureOr<Request?> authenticate(Request request, Response response, [Request? _]) async {
     if (response.statusCode == HttpStatus.unauthorized) {
       final authService = getIt<AuthService>();
       final token = await authService.refreshToken().then((value) => value?.access);
       if (token != null) {
         return request.copyWith(
-            headers: request.headers..addAll({'authorization': 'Bearer $token'}));
+          headers: request.headers..addAll({'authorization': 'Bearer $token'}),
+        );
       }
     } else {
       return null;
     }
     return null;
   }
+
+  @override
+  AuthenticationCallback? get onAuthenticationSuccessful => null;
+
+  @override
+  AuthenticationCallback? get onAuthenticationFailed => null;
 }

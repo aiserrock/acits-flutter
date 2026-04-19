@@ -15,10 +15,7 @@ final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   ignoreUnregisteredTypes: [DebugService],
 )
 Future<void> initDi() async {
-  await $initGetIt(
-    getIt,
-    environmentFilter: NoEnvOrContains(Environment.prod),
-  );
+  await $initGetIt(getIt, environmentFilter: NoEnvOrContains(Environment.prod));
   getIt.registerSingleton(_navigatorKey);
   getIt.registerSingleton(_scaffoldMessengerKey);
 }

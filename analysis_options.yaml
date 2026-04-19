@@ -11,11 +11,14 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-      # ignore generated files 
+      # ignore generated files
     - "lib/api/*.g.dart"
     - "lib/api/*.chopper.dart"
     - "lib/api/*.swagger.dart"
     - "lib/di/*.config.dart"
+    - "lib/gen/**"
+    - "lib/generated/**"
+    - "test/integration_test/**"
     - "build.yaml"
 
 linter:

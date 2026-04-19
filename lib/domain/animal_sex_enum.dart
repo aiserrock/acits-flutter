@@ -1,12 +1,6 @@
 import 'package:acits_flutter/generated/l10n.dart';
 
-enum AnimalGender {
-  male,
-  female,
-  middle,
-  genderless,
-  undefined,
-}
+enum AnimalGender { male, female, middle, genderless, undefined }
 
 extension AnimalGenderX on AnimalGender {
   String get value {

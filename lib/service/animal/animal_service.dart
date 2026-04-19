@@ -19,10 +19,7 @@ const _notesListLimit = 25;
 
 @singleton
 class AnimalService {
-  AnimalService(
-    this._authService,
-    this._client,
-  );
+  AnimalService(this._authService, this._client);
 
   final AuthService _authService;
   final Openapi _client;
@@ -106,10 +103,7 @@ class AnimalService {
     }
   }
 
-  Future<AnimalRead?> updateAnimal(
-    int id,
-    AnimalWrite animal,
-  ) async {
+  Future<AnimalRead?> updateAnimal(int id, AnimalWrite animal) async {
     animal = animal.copyWith(
       shelter: _authService.shelterRole?.currentShelter,
       placeOfRelease: animal.placeOfRelease ?? '',
@@ -136,10 +130,7 @@ class AnimalService {
     return ApiV1AnimalsSpeciesGetLevel.values[value + 1];
   }
 
-  Future<AnimalRead> changeAnimalPhotos(
-    int animalId,
-    List<GalleryItemData> images,
-  ) async {
+  Future<AnimalRead> changeAnimalPhotos(int animalId, List<GalleryItemData> images) async {
     final animal = await _client.apiV1AnimalsIdGet(
       id: animalId.toString(),
       xCurrentShelter: _authService.currentShelterId,
@@ -157,12 +148,15 @@ class AnimalService {
         assets.map((e) async {
           final fileBytes = (await rootBundle.load(e.assetPath!));
           final buffer = fileBytes.buffer;
-          additional.add(AnimalImageWrite(
-            isPrimary: false,
-            name: e.assetPath,
-            image:
-                base64Encode(buffer.asUint8List(fileBytes.offsetInBytes, fileBytes.lengthInBytes)),
-          ));
+          additional.add(
+            AnimalImageWrite(
+              isPrimary: false,
+              name: e.assetPath,
+              image: base64Encode(
+                buffer.asUint8List(fileBytes.offsetInBytes, fileBytes.lengthInBytes),
+              ),
+            ),
+          );
         }),
       );
     }
@@ -179,20 +173,19 @@ class AnimalService {
         );
       }
 
-      additional.add(AnimalImageWrite(
-        isPrimary: false,
-        name: e.filePath,
-        image: base64Encode(image_util.encodePng(image)),
-      ));
+      additional.add(
+        AnimalImageWrite(
+          isPrimary: false,
+          name: e.filePath,
+          image: base64Encode(image_util.encodePng(image)),
+        ),
+      );
     });
 
     final result = await _client.apiV1AnimalsIdPut(
       xCurrentShelter: _authService.currentShelterId,
       id: animalId.toString(),
-      body: animal.body?.write.copyWith(
-        images: additional,
-        validImages: retainImages,
-      ),
+      body: animal.body?.write.copyWith(images: additional, validImages: retainImages),
     );
 
     final data = result.body;
@@ -282,11 +275,7 @@ class AnimalService {
     required String text,
     List<PlatformFile>? files,
   }) async {
-    final content = AnimalNote(
-      animal: animalId,
-      content: text,
-      files: _prepareNoteFiles(files),
-    );
+    final content = AnimalNote(animal: animalId, content: text, files: _prepareNoteFiles(files));
 
     final result = await _client.apiV1AnimalsNotesPost(
       body: content,
@@ -303,19 +292,15 @@ class AnimalService {
   }
 
   List<AnimalNoteFile>? _prepareNoteFiles(List<PlatformFile>? files) {
-    final preparedfiles = files?.where((file) => file.path != null).map<AnimalNoteFile>(
-      (file) {
-        int indexOfExtSplit = file.name.lastIndexOf('.');
-        if (indexOfExtSplit < 0) indexOfExtSplit = file.name.length;
-        return AnimalNoteFile(
-          name: file.name.substring(0, indexOfExtSplit),
-          file: 'data:application/${file.extension};base64,' +
-              base64Encode(
-                File(file.path!).readAsBytesSync(),
-              ),
-        );
-      },
-    ).toList();
+    final preparedfiles = files?.where((file) => file.path != null).map<AnimalNoteFile>((file) {
+      int indexOfExtSplit = file.name.lastIndexOf('.');
+      if (indexOfExtSplit < 0) indexOfExtSplit = file.name.length;
+      return AnimalNoteFile(
+        name: file.name.substring(0, indexOfExtSplit),
+        file:
+            'data:application/${file.extension};base64,${base64Encode(File(file.path!).readAsBytesSync())}',
+      );
+    }).toList();
     return preparedfiles;
   }
 

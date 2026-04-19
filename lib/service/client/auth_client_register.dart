@@ -15,11 +15,8 @@ abstract class ClientRegister {
     Env env,
   ) {
     final chopper = ChopperClient(
-      baseUrl: env.apiUrl,
-      interceptors: [
-        headerInterceptor,
-        HttpLoggingInterceptor(),
-      ],
+      baseUrl: Uri.parse(env.apiUrl),
+      interceptors: [headerInterceptor, HttpLoggingInterceptor()],
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
     );
@@ -29,13 +26,12 @@ abstract class ClientRegister {
 
   @prod
   @Named('guest')
-  Openapi createGuestClient(
-    Env env,
-  ) {
+  Openapi createGuestClient(Env env) {
     final chopper = ChopperClient(
-        baseUrl: env.apiUrl,
-        converter: $JsonSerializableConverter(),
-        interceptors: [HttpLoggingInterceptor()]);
+      baseUrl: Uri.parse(env.apiUrl),
+      converter: $JsonSerializableConverter(),
+      interceptors: [HttpLoggingInterceptor()],
+    );
     final client = Openapi.create(chopper);
     return client;
   }

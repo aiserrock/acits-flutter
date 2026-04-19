@@ -7,13 +7,12 @@ import 'package:acits_flutter/export.dart';
 class Skeleton extends StatelessWidget {
   const Skeleton({
     this.isLoading = true,
-    Key? key,
+    super.key,
     this.child,
     this.height,
     this.width = double.infinity,
     this.radius = 8.0,
-  })  : assert(child != null || height != null),
-        super(key: key);
+  }) : assert(child != null || height != null);
 
   final bool isLoading;
   final Widget? child;
@@ -25,7 +24,10 @@ class Skeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       enabled: isLoading,
-      child: child ??
+      baseColor: ColorRes.inactiveIcon.withValues(alpha: .3),
+      highlightColor: ColorRes.background,
+      child:
+          child ??
           Container(
             height: height,
             width: width,
@@ -34,8 +36,6 @@ class Skeleton extends StatelessWidget {
               borderRadius: radius != null ? BorderRadius.all(Radius.circular(radius!)) : null,
             ),
           ),
-      baseColor: ColorRes.inactiveIcon.withOpacity(.3),
-      highlightColor: ColorRes.background,
     );
   }
 }

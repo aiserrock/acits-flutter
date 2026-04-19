@@ -29,10 +29,12 @@ class DeepLinkService implements Disposable {
   }
 
   /// Линк, с которым было запущено приложение
-  Future<String?> getInitialLink() => _instance.getInitialAppLinkString();
+  Future<String?> getInitialLink() => _instance.getInitialLinkString();
 
   /// Последний полученный приложением линк
-  Future<String?> getLatestLink() => _instance.getLatestAppLinkString();
+  // TODO(migration): app_links 7.x убрал getLatestAppLinkString.
+  //  Для получения последующих линков используйте подписку на [stringLinkStream].
+  Future<String?> getLatestLink() => _instance.getInitialLinkString();
 
   /// Однократно получить и сбросить линк, с которым было запущено приложение
   String? getResetInitLink() {

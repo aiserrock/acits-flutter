@@ -4,5 +4,5 @@ import 'package:flutter/material.dart';
 
 class SearchScreenRoute extends MaterialPageRoute<Species> {
   SearchScreenRoute({Species? parentSearch})
-      : super(builder: (_) => SearchScreen(parentSearch: parentSearch));
+    : super(builder: (_) => SearchScreen(parentSearch: parentSearch));
 }

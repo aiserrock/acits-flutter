@@ -5,12 +5,7 @@ import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/material.dart';
 
 class ErrorStubWidget extends StatelessWidget {
-  const ErrorStubWidget({
-    required this.onPressed,
-    this.showImage = true,
-    this.height,
-    Key? key,
-  }) : super(key: key);
+  const ErrorStubWidget({required this.onPressed, this.showImage = true, this.height, super.key});
 
   final double? height;
   final VoidCallback onPressed;
@@ -21,9 +16,7 @@ class ErrorStubWidget extends StatelessWidget {
     return height != null
         ? SizedBox(
             height: height,
-            child: Center(
-              child: _buildContent(),
-            ),
+            child: Center(child: _buildContent()),
           )
         : _buildContent();
   }
@@ -36,10 +29,7 @@ class ErrorStubWidget extends StatelessWidget {
         children: [
           if (showImage) Assets.image.errorStub.svg(),
           if (showImage) const SizedBox(height: 32.0),
-          Text(
-            StringRes.current.commonErrorStubTitle,
-            style: StyleRes.title,
-          ),
+          Text(StringRes.current.commonErrorStubTitle, style: StyleRes.title),
           const SizedBox(height: 12.0),
           Text(
             StringRes.current.commonErrorStubMsg,
@@ -47,10 +37,7 @@ class ErrorStubWidget extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16.0),
-          PrimaryButton(
-            onPressed: onPressed,
-            text: StringRes.current.commonReloadBtn,
-          ),
+          PrimaryButton(onPressed: onPressed, text: StringRes.current.commonReloadBtn),
         ],
       ),
     );

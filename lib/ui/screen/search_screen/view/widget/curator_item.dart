@@ -2,10 +2,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 class CuratorListItem extends StatelessWidget {
-  const CuratorListItem({
-    required this.curator,
-    super.key,
-  });
+  const CuratorListItem({required this.curator, super.key});
 
   final Curator curator;
 
@@ -13,8 +10,6 @@ class CuratorListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(curator.fullName ?? ''),
-    );
+    return ListTile(title: Text(curator.fullName ?? ''));
   }
 }

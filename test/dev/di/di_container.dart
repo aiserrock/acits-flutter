@@ -11,20 +11,14 @@ final _navigatorKey = GlobalKey<NavigatorState>();
 final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 @InjectableInit(
-  generateForDir: [
-    'lib',
-    'test',
-  ],
+  generateForDir: ['lib', 'test'],
   initializerName: r'$initDevGetIt',
   preferRelativeImports: true,
   asExtension: false,
   ignoreUnregisteredTypes: [DebugService],
 )
 Future<void> initDevDi() async {
-  await $initDevGetIt(
-    getIt,
-    environmentFilter: NoEnvOrContains(Environment.dev),
-  );
+  await $initDevGetIt(getIt, environmentFilter: NoEnvOrContains(Environment.dev));
   getIt.registerSingleton(_navigatorKey);
   getIt.registerSingleton(_scaffoldMessengerKey);
 }
