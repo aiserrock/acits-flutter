@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/screen/prescription/dosage_bs.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_animal_screen_route.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_drug_screen_route.dart';
 
 const _shiftFirtsStartDate = Duration(days: 30);
 const _shiftLastStartDate = Duration(days: 120);
@@ -253,7 +252,7 @@ class PrescriptionEditScreenController {
     }
     final ctx = _context;
     if (ctx == null) return;
-    Navigator.of(ctx).push(SearchAnimalScreenRoute()).then(
+    Navigator.of(ctx).push(Search.route<AnimalRead>()).then(
       (animal) {
         if (animal != null) {
           animalState.add(animal);
@@ -315,7 +314,7 @@ class PrescriptionEditScreenController {
     final ctx = _context;
     if (ctx == null) return;
 
-    final drug = await Navigator.of(ctx).push(SearchDrugScreenRoute());
+    final drug = await Navigator.of(ctx).push(Search.route<ShelterDrug>());
 
     if (drug == null) return;
 

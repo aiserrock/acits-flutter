@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
+import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/screen/curator/curator_edit_screen_route.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_curator_screen_route.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AnimalEditCuratorPage extends AnimalEditPage {
   const AnimalEditCuratorPage({
@@ -134,7 +135,7 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
   }
 
   Future<void> _searchCurator() async {
-    final result = await Navigator.push(context, SearchCuratorScreenRoute());
+    final result = await Navigator.push(context, Search.route<Curator>());
     if (result != null) {
       setState(() => _curator = result);
       _curatorController.text = result.fullName ?? '';

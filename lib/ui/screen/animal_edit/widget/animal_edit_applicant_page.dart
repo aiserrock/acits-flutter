@@ -1,14 +1,15 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
+import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/screen/applicant/applicant_edit_screen_route.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_applicant_screen_route.dart';
 import 'package:acits_flutter/util/validator.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AnimalEditApplicantPage extends AnimalEditPage {
   const AnimalEditApplicantPage({
@@ -173,7 +174,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
   }
 
   Future<void> _searchApplicant() async {
-    final result = await Navigator.push(context, SearchApplicantScreenRoute());
+    final result = await Navigator.push(context, Search.route<Applicant>());
     if (result != null) {
       setState(() => _applicant = result);
       _applicantNameController.text = result.firstName ?? '';

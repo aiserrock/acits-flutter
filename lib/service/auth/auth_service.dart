@@ -123,14 +123,14 @@ class AuthService extends ChangeNotifier {
 
   /// Список всех доступных приютов
   Future<PaginatedShelterShortSerializersList?> getAllShelterList({
-    int? limit = _shelterListDefaultLenght,
-    int? offset = 0,
-    String? search,
+    int limit = _shelterListDefaultLenght,
+    int offset = 0,
+    String? searchRequest,
   }) async {
     final result = await _acitsGuestClient.apiV1SheltersGet(
       limit: limit,
       offset: offset,
-      search: search,
+      search: searchRequest,
     );
 
     if (result.body != null) {

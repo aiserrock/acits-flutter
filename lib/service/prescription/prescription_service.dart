@@ -106,13 +106,13 @@ class PrescriptionService {
 
   /// Получить список лекарств
   Future<PaginatedShelterDrugList?> fetchDrugList({
-    String? search,
-    int? limit,
+    String? searchRequest,
+    int limit = 25,
     int offset = 0,
   }) async {
     final result = await _acitsClient.apiV1ShelterDrugsGet(
       xCurrentShelter: _authService.currentShelterId,
-      search: search,
+      search: searchRequest,
       limit: limit,
       offset: offset,
     );
