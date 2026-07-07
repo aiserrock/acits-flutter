@@ -1,12 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
-import 'package:acits_flutter/ui/screen/registration/email_confirmation_screen_route.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen_route.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../di/di_container.dart';
 import '../../service/debug/debug_dev_service.dart';
@@ -58,11 +58,9 @@ class _UIKitCard extends StatelessWidget {
               const SizedBox(height: 8.0),
               PrimaryButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    EmailConfirmationScreenRoute(
-                      'https://dev.acits.ru/api/v1/users/verify-email/MTYz/Mg/bcnwgl-1628091c27480b1975f3998b4a2565e6/',
-                    ),
-                  );
+                  const link =
+                      'https://dev.acits.ru/api/v1/users/verify-email/MTYz/Mg/bcnwgl-1628091c27480b1975f3998b4a2565e6/';
+                  context.push('${AppRoutes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
                 },
                 child: Text('Email confirm'.toUpperCase()),
               ),
@@ -201,7 +199,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               title: Text(_category?.name ?? '* tap to select'),
               subtitle: const Text('category'),
               onTap: () async {
-                final result = await Navigator.of(context).push(SearchScreenRoute());
+                final result = await context.push<Species>(AppRoutes.searchSpec);
                 if (result != null) {
                   setState(() {
                     _category = result;
@@ -216,9 +214,10 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('family'),
               onTap: () async {
                 if (_category != null) {
-                  final result = await Navigator.of(
-                    context,
-                  ).push<Species>(SearchScreenRoute(parentSearch: _category));
+                  final result = await context.push<Species>(
+                    AppRoutes.searchSpec,
+                    extra: _category,
+                  );
                   if (result != null) {
                     setState(() {
                       _family = result;
@@ -233,9 +232,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('kind'),
               onTap: () async {
                 if (_family != null) {
-                  final result = await Navigator.of(
-                    context,
-                  ).push(SearchScreenRoute(parentSearch: _family));
+                  final result = await context.push<Species>(AppRoutes.searchSpec, extra: _family);
                   if (result != null) {
                     setState(() {
                       _kind = result;

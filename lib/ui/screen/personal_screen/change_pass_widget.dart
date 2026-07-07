@@ -110,9 +110,7 @@ class _ChangePassScreenDataState extends State<ChangePassWidget> {
           final error = e is MessagedException ? e.error : null;
           messenger.showSnackBar(
             SnackBar(
-              content: Text(
-                '${l10n.personalChangeErrorMsg}${error is String ? error : ''}',
-              ),
+              content: Text('${l10n.personalChangeErrorMsg}${error is String ? error : ''}'),
             ),
           );
           setState(() => _state = ScreenDataState(Object()));

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/widget/animal_card.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
@@ -82,11 +83,9 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
       heroTag: 'AnimalsFab',
       mini: _isSmallScreen,
       onPressed: () async {
-        Navigator.of(context)
-            .push<bool>(MaterialPageRoute(builder: (_) => const AnimalEditScreen()))
-            .then((bool? isAdded) {
-              if (isAdded ?? false) _loadAnimalList(needResetOffset: true);
-            });
+        context.push<bool>(AppRoutes.animalEdit).then((bool? isAdded) {
+          if (isAdded ?? false) _loadAnimalList(needResetOffset: true);
+        });
       },
       backgroundColor: ColorRes.accent,
       child: const Icon(Icons.add, color: ColorRes.foreground),

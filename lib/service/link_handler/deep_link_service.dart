@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:acits_flutter/ui/screen/registration/email_confirmation_screen_route.dart';
 import 'package:app_links/app_links.dart';
-import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 
 @singleton
 class DeepLinkService implements Disposable {
@@ -46,7 +46,7 @@ class DeepLinkService implements Disposable {
   /// Обработчик линков, приходящих в процессе работы приложения
   void onLinkHandle(String link) {
     if (link.contains('api/v1/users/verify-email')) {
-      getIt<GlobalKey<NavigatorState>>().currentState?.push(EmailConfirmationScreenRoute(link));
+      getIt<GoRouter>().push('${AppRoutes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
     }
   }
 }

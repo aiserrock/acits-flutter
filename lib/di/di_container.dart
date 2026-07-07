@@ -1,4 +1,5 @@
 import 'package:acits_flutter/di/di_container.config.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -18,4 +19,5 @@ Future<void> initDi() async {
   await $initGetIt(getIt, environmentFilter: NoEnvOrContains(Environment.prod));
   getIt.registerSingleton(_navigatorKey);
   getIt.registerSingleton(_scaffoldMessengerKey);
+  getIt.registerSingleton(createAppRouter());
 }

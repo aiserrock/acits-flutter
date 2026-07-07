@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_route.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
@@ -141,7 +142,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onFabPressed(BuildContext context) {
-    Navigator.of(context).push(PrescriptionEditScreenRoute()).then((value) {
+    context.push<Prescription>(AppRoutes.prescriptionEdit).then((value) {
       if (value != null) _loadExecutions();
     });
   }
@@ -209,8 +210,6 @@ class _MainScreenContent extends StatelessWidget {
   }
 
   void _onEditPrescriptionPressed(PrescriptionExecutionToday item) {
-    getIt<GlobalKey<NavigatorState>>().currentState
-        ?.push(PrescriptionEditScreenRoute(editPrescriptionId: item.prescription?.id))
-        .then((value) {});
+    getIt<GoRouter>().push("${AppRoutes.prescriptionEdit}?id=${item.prescription?.id}");
   }
 }

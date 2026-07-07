@@ -9,8 +9,9 @@ import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen_route.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/util/validator.dart';
+import 'package:go_router/go_router.dart';
 
 class AnimalEditCommonInfoPage extends AnimalEditPage {
   const AnimalEditCommonInfoPage({
@@ -26,8 +27,6 @@ class AnimalEditCommonInfoPage extends AnimalEditPage {
 
 class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
     with AnimalPageHolderListener {
-  late final NavigatorState _navigator;
-
   final _nameController = TextEditingController();
   final _categoryController = TextEditingController();
   final _familyController = TextEditingController();
@@ -45,7 +44,6 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _navigator = Navigator.of(context);
     addPageListener(context);
   }
 
@@ -153,7 +151,8 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
   }
 
   Future<void> _searchCategory() async {
-    final result = await _navigator.push(SearchScreenRoute());
+    final result = await context.push<Species>(AppRoutes.searchSpec);
+    if (!mounted) return;
     if (result != null) {
       setState(() {
         _categorySpec = result;
@@ -171,8 +170,10 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
       await _searchCategory();
       if (_categorySpec == null) return;
     }
+    if (!mounted) return;
 
-    final result = await _navigator.push(SearchScreenRoute(parentSearch: _categorySpec));
+    final result = await context.push<Species>(AppRoutes.searchSpec, extra: _categorySpec);
+    if (!mounted) return;
     if (result != null) {
       setState(() {
         _familySpec = result;
@@ -188,8 +189,10 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
       await _searchFamily();
       if (_familySpec == null) return;
     }
+    if (!mounted) return;
 
-    final result = await _navigator.push(SearchScreenRoute(parentSearch: _familySpec));
+    final result = await context.push<Species>(AppRoutes.searchSpec, extra: _familySpec);
+    if (!mounted) return;
     if (result != null) {
       setState(() {
         _kindSpec = result;

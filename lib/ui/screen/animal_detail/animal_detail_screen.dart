@@ -1,20 +1,18 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
-import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_route.dart';
-import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_route.dart';
-import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_route.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
@@ -343,14 +341,15 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
               DefaultIconButton(
                 icon: const Icon(Icons.share_outlined, color: ColorRes.accent),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    DocViewerScreenRoute(
-                      fetcher: (() async {
+                  context.push(
+                    AppRoutes.docViewer,
+                    extra: <String, Object?>{
+                      'fetcher': (() async {
                         final pdf = await _animalService.fetchPdfAnimalCard(widget.id);
                         return pdf;
                       }),
-                      title: '${StringRes.current.mainAnimal} ${widget.id}',
-                    ),
+                      'title': '${StringRes.current.mainAnimal} ${widget.id}',
+                    },
                   );
                 },
               ),
@@ -447,7 +446,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   void _onPhotoPressed(BuildContext context, AnimalRead animal) {
     final id = animal.id;
     if (id != null) {
-      Navigator.of(context).push(PhotoGalleryScreenRoute(animalId: animal.id!)).then((value) {
+      context.push(AppRoutes.photoGalleryPath(animal.id!)).then((value) {
         if (value is bool && value) _loadAnimal();
       });
     }
@@ -486,18 +485,23 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
 
   void _onFabPressed(BuildContext context) {
     if (_currentTab == 4) {
-      Navigator.of(context).push(CommentEditScreenRoute(animalId: widget.id)).then((value) {
+      context.push<AnimalNote>(AppRoutes.commentEditPath(widget.id)).then((value) {
         if (value != null) {
           _onCreateCommentStream.add(value);
         }
       });
     }
     if (_currentTab == 1) {
-      Navigator.of(context).push(PrescriptionEditScreenRoute(animal: _state.value)).then((value) {
-        if (value != null) {
-          _loadPrescriptions();
-        }
-      });
+      context
+          .push<Prescription>(
+            AppRoutes.prescriptionEdit,
+            extra: <String, Object?>{'prescription': null, 'animal': _state.value},
+          )
+          .then((value) {
+            if (value != null) {
+              _loadPrescriptions();
+            }
+          });
     }
   }
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
-import 'package:acits_flutter/ui/screen/curator/curator_edit_screen_route.dart';
 
 class AnimalEditCuratorPage extends AnimalEditPage {
   const AnimalEditCuratorPage({required super.animal, required super.isEdit, super.key});
@@ -113,7 +114,7 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
   }
 
   Future<void> _searchCurator() async {
-    final result = await Navigator.push(context, Search.route<Curator>());
+    final result = await context.push<Curator>(AppRoutes.searchPath(SearchTypeKey.curator));
     if (result != null) {
       setState(() => _curator = result);
       _curatorController.text = result.fullName ?? '';
@@ -140,7 +141,9 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
   }
 
   Future<void> _addEditCurator(BuildContext context, {int? curatorId}) async {
-    final result = await Navigator.of(context).push(CuratorEditScreenRoute(curatorId: curatorId));
+    final result = await context.push<Curator>(
+      curatorId == null ? AppRoutes.curatorEdit : '${AppRoutes.curatorEdit}?curatorId=$curatorId',
+    );
     if (result != null) {
       setState(() => _curator = result);
       _curatorController.text = result.fullName ?? '';

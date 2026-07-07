@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rxdart/subjects.dart';
 
-import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/personal_screen_route.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/personal/personal_service.dart';
@@ -67,9 +67,10 @@ class _PersonalDrawerScreenDataState extends State<PersonalDrawerWidget> {
               ListTile(
                 title: Text(StringRes.current.personChangeShelter, style: StyleRes.title),
                 onTap: () async {
-                  final shelter = await Navigator.of(
-                    context,
-                  ).push(PickShelterScreen.route(autoSelectSingle: false));
+                  final shelter = await context.push<ShelterShortSerializers>(
+                    AppRoutes.pickShelter,
+                    extra: <String, Object?>{'autoSelectSingle': false, 'shelterList': null},
+                  );
                   if (shelter == null) return;
                 },
               ),
@@ -145,11 +146,11 @@ class _PersonalDrawerScreenDataState extends State<PersonalDrawerWidget> {
 
   void _openPersonalScreen({bool isChangePass = false}) async {
     final scaffold = Scaffold.maybeOf(context);
-    final navigator = Navigator.of(context);
     if (scaffold?.isDrawerOpen ?? false) {
       scaffold?.closeDrawer();
       await Future.delayed(_kBaseSettleDuration);
     }
-    navigator.push(PersonalScreenRoute(changePass: isChangePass));
+    if (!mounted) return;
+    context.push('${AppRoutes.personal}?changePass=$isChangePass');
   }
 }

@@ -14,13 +14,40 @@ class Search<T> extends StatelessWidget {
   final PagingFetchAdapter adapter;
   final Widget Function(T item)? tileBuilder;
 
-  static Route<T> route<T>({PagingFetchAdapter? adapter, Widget Function(T item)? tileBuilder}) {
-    final adapter = SearchAdapterTypeFactoryDelegate.adapter(T);
-    final tileBuilder = SearchAdapterTypeFactoryDelegate.tileBuilder<T>();
-
-    return MaterialPageRoute(
-      builder: (_) => Search<T>(adapter: adapter, tileBuilder: tileBuilder),
-    );
+  /// Собрать [Search] по строковому ключу типа (для go_router `?type=`).
+  /// См. [SearchTypeKey]. Возвращаемое значение — объект соответствующего типа
+  /// ([AnimalRead], [Applicant], [Curator], [ShelterDrug],
+  /// [ShelterShortSerializers]); вызывающая сторона кастует результат push.
+  static Widget byTypeKey(String typeKey) {
+    switch (typeKey) {
+      case SearchTypeKey.animal:
+        return Search<AnimalRead>(
+          adapter: AnimalReadFetchAdapter(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<AnimalRead>(),
+        );
+      case SearchTypeKey.applicant:
+        return Search<Applicant>(
+          adapter: ApplicantFetchAdapter(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<Applicant>(),
+        );
+      case SearchTypeKey.curator:
+        return Search<Curator>(
+          adapter: CuratorFetchAdapter(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<Curator>(),
+        );
+      case SearchTypeKey.drug:
+        return Search<ShelterDrug>(
+          adapter: DrugFetchAdapter(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<ShelterDrug>(),
+        );
+      case SearchTypeKey.shelter:
+        return Search<ShelterShortSerializers>(
+          adapter: ShelterFetchAdapter(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<ShelterShortSerializers>(),
+        );
+      default:
+        throw ArgumentError('Unknown search type key: $typeKey');
+    }
   }
 
   @override

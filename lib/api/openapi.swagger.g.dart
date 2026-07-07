@@ -1066,7 +1066,7 @@ Prescription _$PrescriptionFromJson(Map<String, dynamic> json) => Prescription(
   id: (json['id'] as num?)?.toInt(),
   url: json['url'] as String?,
   animal: (json['animal'] as num?)?.toInt(),
-  myType: $enumDecodeNullable(_$MyTypeEnumEnumMap, json['my_type']),
+  myType: myTypeEnumFromJson(json['my_type'] as String?),
   duration: durationEnumFromJson(json['duration'] as String?),
   description: json['description'] as String?,
   createdBy: json['created_by'] as String?,
@@ -1104,16 +1104,6 @@ Map<String, dynamic> _$PrescriptionToJson(Prescription instance) =>
       'executions': instance.executions?.map((e) => e.toJson()).toList(),
       'files': instance.files?.map((e) => e.toJson()).toList(),
     };
-
-const _$MyTypeEnumEnumMap = {
-  MyTypeEnum.swaggerGeneratedUnknown: 'swaggerGeneratedUnknown',
-  MyTypeEnum.courseOfTreatment: 'COURSE_OF_TREATMENT',
-  MyTypeEnum.appointment: 'APPOINTMENT',
-  MyTypeEnum.readmission: 'READMISSION',
-  MyTypeEnum.removingStitches: 'REMOVING_STITCHES',
-  MyTypeEnum.woundHealing: 'WOUND_HEALING',
-  MyTypeEnum.analysis: 'ANALYSIS',
-};
 
 PrescriptionDrug _$PrescriptionDrugFromJson(Map<String, dynamic> json) =>
     PrescriptionDrug(

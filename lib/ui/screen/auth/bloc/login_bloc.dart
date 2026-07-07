@@ -1,12 +1,12 @@
-import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/service/link_handler/deep_link_service.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/auth/login.dart';
 
@@ -18,7 +18,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     : _authService = getIt<AuthService>(),
       _deepLinkService = getIt<DeepLinkService>(),
       _debugService = getIt<DebugService>(),
-      _navigator = getIt<GlobalKey<NavigatorState>>().currentState,
       super(const LoginState()) {
     on<LoginNameChanged>(_onNameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
@@ -37,7 +36,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthService _authService;
   final DebugService _debugService;
   final DeepLinkService _deepLinkService;
-  final NavigatorState? _navigator;
 
   void _handleDeeplink(String initLink) {
     Future.delayed(const Duration(milliseconds: 32), () => _deepLinkService.onLinkHandle(initLink));
@@ -112,7 +110,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       return null;
     });
     if (list != null) {
-      _navigator?.push(PickShelterScreen.route(shelterList: list));
+      getIt<GoRouter>().push(
+        AppRoutes.pickShelter,
+        extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true},
+      );
     }
   }
 }

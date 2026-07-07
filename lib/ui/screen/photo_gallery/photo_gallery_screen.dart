@@ -178,11 +178,11 @@ class _PhotoGalleryScreenState extends State<PhotoGalleryScreen> {
     }
     _screenState.add(ScreenDataState()..loading());
     final navigator = Navigator.of(context);
-    _animalService
-        .changeAnimalPhotos(_animalId, list)
-        .then((_) => navigator.pop(true))
-        .catchError((e, _) {
-          _screenState.add(ScreenDataState()..error = e);
-        });
+    _animalService.changeAnimalPhotos(_animalId, list).then((_) => navigator.pop(true)).catchError((
+      e,
+      _,
+    ) {
+      _screenState.add(ScreenDataState()..error = e);
+    });
   }
 }

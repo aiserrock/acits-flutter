@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/util/util.dart';
@@ -17,13 +19,6 @@ import 'package:acits_flutter/api/openapi.swagger.dart';
 
 class PickShelterScreen extends StatefulWidget {
   const PickShelterScreen({required this.autoSelectSingle, this.shelterList, super.key});
-
-  static Route<ShelterShortSerializers> route({
-    PaginatedShelterShortSerializersList? shelterList,
-    bool autoSelectSingle = true,
-  }) => MaterialPageRoute<ShelterShortSerializers>(
-    builder: (_) => PickShelterScreen(shelterList: shelterList, autoSelectSingle: autoSelectSingle),
-  );
 
   final PaginatedShelterShortSerializersList? shelterList;
   final bool autoSelectSingle;
@@ -126,16 +121,13 @@ class _PickShelterScreenState extends State<PickShelterScreen> {
   Future<void> _pickShelter(int index) async {
     _state.add(ScreenDataState()..loading());
     final shelter = (_shelterList?.results ?? [])[index];
-    final navigator = Navigator.of(context);
     await Future.wait([_getConfig(shelter), _authService.setCurrentShelter(shelter.id!)])
         .catchError((e) {
           _state.add(ScreenDataState()..error = e);
           return <void>[];
         })
         .then((_) {
-          navigator
-            ..popUntil((route) => false)
-            ..push(MaterialPageRoute(builder: (_) => const RootScreen()));
+          if (mounted) context.go(AppRoutes.root);
         });
   }
 

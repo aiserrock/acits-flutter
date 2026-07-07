@@ -1,13 +1,12 @@
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen_route.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
-import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/export.dart';
 
@@ -77,14 +76,12 @@ class AnimalCardWidget extends StatelessWidget {
                       onPressed: () {
                         final animalId = itemData?.id;
                         if (animalId == null) return;
-                        Navigator.of(context).push(
-                          DocViewerScreenRoute(
-                            fetcher: (() async {
-                              final pdf = await _animalService.fetchPdfAnimalCard(animalId);
-                              return pdf;
-                            }),
-                            title: 'Animal $animalId',
-                          ),
+                        context.push(
+                          AppRoutes.docViewer,
+                          extra: <String, Object?>{
+                            'fetcher': () => _animalService.fetchPdfAnimalCard(animalId),
+                            'title': 'Animal $animalId',
+                          },
                         );
                       },
                     );
@@ -116,9 +113,11 @@ class AnimalCardWidget extends StatelessWidget {
         // ),
         if (isEditable)
           SlidableAction(
-            onPressed: (_) => Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => AnimalEditScreen(id: itemData?.id))),
+            onPressed: (_) => context.push(
+              itemData?.id == null
+                  ? AppRoutes.animalEdit
+                  : '${AppRoutes.animalEdit}?id=${itemData!.id}',
+            ),
             backgroundColor: ColorRes.background,
             icon: Icons.edit_outlined,
             foregroundColor: ColorRes.accent,
@@ -278,7 +277,7 @@ class AnimalCardWidget extends StatelessWidget {
 
   void _navigateDetail(BuildContext context) {
     if (itemData?.id == null) return;
-    Navigator.of(context, rootNavigator: true).push(AnimalDetailScreenRoute(id: itemData!.id!));
+    context.push(AppRoutes.animalDetailPath(itemData!.id!));
   }
 
   bool get _hasActions => isEditable || isDeletable;

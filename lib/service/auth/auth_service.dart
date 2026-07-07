@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
-import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/export.dart';
 
@@ -104,9 +105,7 @@ class AuthService extends ChangeNotifier {
   void logout() {
     _access = _refresh = _shelterList = _shelterRole = null;
     notifyListeners();
-    getIt<GlobalKey<NavigatorState>>().currentState
-      ?..popUntil((route) => false)
-      ..push(LoginScreen.route());
+    getIt<GoRouter>().go(AppRoutes.login);
   }
 
   /// Попробовать обновить авторизацию из прошлой сессии если срок

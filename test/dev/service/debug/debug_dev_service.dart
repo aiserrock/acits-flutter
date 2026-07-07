@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
-import 'package:acits_flutter/ui/screen/onboarding/view/onboarding_route.dart';
 
 import '../../di/di_container.dart';
 import '../../ui/debug_screen/debug_screen.dart';
@@ -36,11 +37,8 @@ class DebugDevService implements DebugService {
   String? get domainUrl => _storage.baseUrl;
 
   Future<void> reloadApp() async {
-    final navigator = getIt<GlobalKey<NavigatorState>>();
     await getIt.reset();
-    navigator.currentState
-      ?..popUntil((route) => false)
-      ..push(OnboardingRoute());
     await initDevDi();
+    getIt<GoRouter>().go(AppRoutes.onboarding);
   }
 }

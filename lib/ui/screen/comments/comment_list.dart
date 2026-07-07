@@ -10,9 +10,10 @@ import 'package:lottie/lottie.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/file/file_service.dart';
-import 'package:acits_flutter/ui/screen/comments/comment_edit_screen_route.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -259,9 +260,10 @@ class _CommentListScreenDataState extends State<CommentListWidget> {
         StringRes.current.commonEdit,
         style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
       ): () async {
-        final result = await Navigator.of(
-          context,
-        ).push(CommentEditScreenRoute(animalId: widget.animalId, comment: comment));
+        final result = await context.push<AnimalNote>(
+          AppRoutes.commentEditPath(widget.animalId),
+          extra: comment,
+        );
         if (result != null) _onCommentEdited(result);
         Navigator.of(context).pop();
       },

@@ -12,6 +12,16 @@ import 'package:acits_flutter/ui/screen/search_screen/view/widget/animal_item.da
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/applicant_item.dart';
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/curator_item.dart';
 
+/// Строковые ключи для generic-поиска [Search] в go_router (поле `?type=`).
+/// Нужны, т.к. Dart-тип `T` нельзя передать через URL-роут.
+abstract final class SearchTypeKey {
+  static const animal = 'animal';
+  static const applicant = 'applicant';
+  static const curator = 'curator';
+  static const drug = 'drug';
+  static const shelter = 'shelter';
+}
+
 class SearchAdapterTypeFactoryDelegate {
   static PagingFetchAdapter adapter(Type type) {
     switch (type) {

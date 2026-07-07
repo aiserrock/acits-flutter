@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/widget/success_holder.dart';
@@ -181,7 +183,9 @@ class RegistrationScreenController {
   }
 
   Future<void> pickShelter(BuildContext context) async {
-    final shelter = await Navigator.of(context).push(Search.route<ShelterShortSerializers>());
+    final shelter = await context.push<ShelterShortSerializers>(
+      AppRoutes.searchPath(SearchTypeKey.shelter),
+    );
     if (shelter != null) {
       shelterState.add(shelter);
     }

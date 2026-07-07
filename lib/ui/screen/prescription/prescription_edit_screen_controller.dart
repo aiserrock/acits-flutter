@@ -3,9 +3,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/screen/prescription/dosage_bs.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -258,7 +260,7 @@ class PrescriptionEditScreenController {
     }
     final ctx = _context;
     if (ctx == null) return;
-    Navigator.of(ctx).push(Search.route<AnimalRead>()).then((animal) {
+    ctx.push<AnimalRead>(AppRoutes.searchPath(SearchTypeKey.animal)).then((animal) {
       if (animal != null) {
         animalState.add(animal);
       }
@@ -314,7 +316,7 @@ class PrescriptionEditScreenController {
     final ctx = _context;
     if (ctx == null) return;
 
-    final drug = await Navigator.of(ctx).push(Search.route<ShelterDrug>());
+    final drug = await ctx.push<ShelterDrug>(AppRoutes.searchPath(SearchTypeKey.drug));
 
     if (drug == null) return;
 

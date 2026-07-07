@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/auth/login.dart';
-import 'package:acits_flutter/ui/screen/registration/registration_screen_route.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
@@ -95,7 +96,7 @@ class LoginForm extends StatelessWidget {
   }
 
   void _onRegistration(BuildContext context) {
-    Navigator.of(context).push(RegistrationScreenRoute());
+    context.push(AppRoutes.registration);
   }
 }
 

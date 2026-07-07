@@ -1,11 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/ui/screen/auth/view/login_screen.dart';
-import 'package:acits_flutter/ui/screen/onboarding/onboarding.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
@@ -24,7 +21,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: StringConst.commonAppName,
       theme: ThemeData(
         useMaterial3: false,
@@ -49,14 +46,9 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: StringRes.delegate.supportedLocales,
-      home: _isFirstLaunch
-          ? BlocProvider(create: (context) => OnboardingBloc(), child: const OnboardingScreen())
-          : const LoginScreen(),
       color: ColorRes.accent,
-      navigatorKey: getIt<GlobalKey<NavigatorState>>(),
       scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
+      routerConfig: getIt<GoRouter>(),
     );
   }
-
-  bool get _isFirstLaunch => getIt<ConfigService>().isFirstLaunch;
 }

@@ -4096,7 +4096,7 @@ class Prescription {
   final String? url;
   @JsonKey(name: 'animal')
   final int? animal;
-  @JsonKey(name: 'my_type', toJson: myTypeEnumToJson)
+  @JsonKey(name: 'my_type', toJson: myTypeEnumToJson, fromJson: myTypeEnumFromJson)
   final enums.MyTypeEnum? myType;
   @JsonKey(name: 'duration', toJson: durationEnumToJson, fromJson: durationEnumFromJson)
   final enums.DurationEnum? duration;

@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
-import 'package:acits_flutter/ui/screen/applicant/applicant_edit_screen_route.dart';
 import 'package:acits_flutter/util/validator.dart';
 
 class AnimalEditApplicantPage extends AnimalEditPage {
@@ -155,7 +156,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
   }
 
   Future<void> _searchApplicant() async {
-    final result = await Navigator.push(context, Search.route<Applicant>());
+    final result = await context.push<Applicant>(AppRoutes.searchPath(SearchTypeKey.applicant));
     if (result != null) {
       setState(() => _applicant = result);
       _applicantNameController.text = result.firstName ?? '';
@@ -167,9 +168,11 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
   }
 
   Future<void> _addEditApplicant(BuildContext context, {int? applicantId}) async {
-    final result = await Navigator.of(
-      context,
-    ).push(ApplicantEditScreenRoute(applicantId: applicantId));
+    final result = await context.push<Applicant>(
+      applicantId == null
+          ? AppRoutes.applicantEdit
+          : '${AppRoutes.applicantEdit}?applicantId=$applicantId',
+    );
     if (result != null) {
       setState(() => _applicant = result);
       _applicantNameController.text = result.firstName ?? '';
