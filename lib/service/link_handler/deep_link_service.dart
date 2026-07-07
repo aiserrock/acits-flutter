@@ -43,10 +43,20 @@ class DeepLinkService implements Disposable {
     return out;
   }
 
-  /// Обработчик линков, приходящих в процессе работы приложения
+  /// Обработчик линков, приходящих в процессе работы приложения.
+  ///
+  /// Ссылка приходит извне, поэтому проверяем её структурой URL (схема, хост,
+  /// путь), а не подстрокой — иначе `contains` матчит и `https://evil.test/?x=api/v1/users/verify-email`.
+  /// Окончательная проверка доверенного хоста — в [EmailConfirmRepository].
   void onLinkHandle(String link) {
-    if (link.contains('api/v1/users/verify-email')) {
+    if (_isEmailVerifyLink(link)) {
       getIt<GoRouter>().push('${AppRoutes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
     }
+  }
+
+  bool _isEmailVerifyLink(String link) {
+    final uri = Uri.tryParse(link);
+    if (uri == null || !uri.hasAuthority) return false;
+    return uri.path.contains('/api/v1/users/verify-email');
   }
 }

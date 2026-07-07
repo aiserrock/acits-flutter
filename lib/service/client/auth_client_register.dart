@@ -8,6 +8,10 @@ import 'package:acits_flutter/service/client/header_inteceptor.dart';
 
 @module
 abstract class ClientRegister {
+  // ВНИМАНИЕ: не добавлять сюда HttpLoggingInterceptor — в prod он пишет
+  // заголовки (в т.ч. `Authorization: Bearer <token>`) и тела запросов в
+  // системный лог устройства. Логирование запросов — только в dev-клиенте
+  // (см. test/dev/service/client/).
   @prod
   Openapi createClient(
     AuthInterceptor authInterceptor,
@@ -16,7 +20,7 @@ abstract class ClientRegister {
   ) {
     final chopper = ChopperClient(
       baseUrl: Uri.parse(env.apiUrl),
-      interceptors: [headerInterceptor, HttpLoggingInterceptor()],
+      interceptors: [headerInterceptor],
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
     );
@@ -30,7 +34,6 @@ abstract class ClientRegister {
     final chopper = ChopperClient(
       baseUrl: Uri.parse(env.apiUrl),
       converter: $JsonSerializableConverter(),
-      interceptors: [HttpLoggingInterceptor()],
     );
     final client = Openapi.create(chopper);
     return client;

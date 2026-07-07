@@ -114,8 +114,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get animalKind => 'Вид';
 
   @override
-  String get animalMaxImagesCountIs =>
-      'Максимальное число фото не должно превышать ';
+  String get animalMaxImagesCountIs => 'Максимальное число фото не должно превышать ';
 
   @override
   String get animalName => 'Кличка';
@@ -220,15 +219,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get commonError => 'Ошибка';
 
   @override
-  String get commonErrorStubMsg =>
-      'Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз.';
+  String get commonErrorStubMsg => 'Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз.';
 
   @override
   String get commonErrorStubTitle => 'Ой, что-то пошло не так...';
 
   @override
-  String get commonErrorTryAgainMessage =>
-      'Произошла ошибка. Попробуйте позже.';
+  String get commonErrorTryAgainMessage => 'Произошла ошибка. Попробуйте позже.';
 
   @override
   String get commonLoading => 'Загрузка';
@@ -282,8 +279,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get commonNext => 'Далее';
 
   @override
-  String get commonNoAppToOpenFileMsg =>
-      'Нет подходящего приложения для открытия этого файла :(';
+  String get commonNoAppToOpenFileMsg => 'Нет подходящего приложения для открытия этого файла :(';
 
   @override
   String get commonNotCompleted => 'Не выполнено';
@@ -331,15 +327,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errorInternetFail => 'Нет интернета :(';
 
   @override
-  String get errorInternetFailMsg =>
-      'Неустойчивое соединение, попробуйте еще раз позже';
+  String get errorInternetFailMsg => 'Неустойчивое соединение, попробуйте еще раз позже';
 
   @override
   String get loginAuthorizeError => 'Неверный логин или пароль';
 
   @override
-  String get loginDescribeMsg =>
-      'ACITS – Система контроля за животными\nвнутри организации';
+  String get loginDescribeMsg => 'ACITS – Система контроля за животными\nвнутри организации';
 
   @override
   String get loginEntryBtn => 'Войти';
@@ -541,8 +535,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get regLeast8Symbols => 'Минимум 8 символов';
 
   @override
-  String get regNeedConfirmPolicy =>
-      'Необходимо дать согласие на обработку данных';
+  String get regNeedConfirmPolicy => 'Необходимо дать согласие на обработку данных';
 
   @override
   String get regOrg => 'ОРГАНИЗАЦИЯ';
@@ -564,8 +557,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Пожалуйста, заполните все поля регистрации честно и мы вновь рассмотрим вашу заявку.';
 
   @override
-  String get regRegisterRejectTitle =>
-      'К сожалению, вам отказано в регистрации :(';
+  String get regRegisterRejectTitle => 'К сожалению, вам отказано в регистрации :(';
 
   @override
   String get regTUPmsg => 'Вы будете перенаправлены\nна страницу входа.';

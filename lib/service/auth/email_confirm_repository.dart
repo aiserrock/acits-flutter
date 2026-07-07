@@ -10,11 +10,32 @@ class EmailConfirmRepository {
 
   final Dio _client;
 
-  Future<void> confirmEmail(String email) async {
+  /// Разрешённый суффикс хоста для ссылок подтверждения e-mail.
+  /// Ссылка приходит из внешнего deep-link, поэтому перед выполнением
+  /// сетевого запроса проверяем, что она ведёт на доверенный домен и путь —
+  /// иначе устройство можно заставить сделать произвольный GET (SSRF).
+  static const _allowedHostSuffix = '.acits.ru';
+  static const _requiredPathSegment = '/api/v1/users/verify-email/';
+
+  Future<void> confirmEmail(String confirmLink) async {
+    final uri = Uri.tryParse(confirmLink);
+    if (!_isTrustedConfirmLink(uri)) {
+      throw EmailConfirmException();
+    }
+
     _client.options = _client.options.copyWith(followRedirects: false);
     _client.interceptors.add(_EmailConfirmInterceptor());
 
-    await _client.get(email);
+    await _client.getUri(uri!);
+  }
+
+  /// Ссылка должна быть HTTPS, вести на `*.acits.ru` (или сам `acits.ru`) и
+  /// содержать путь подтверждения e-mail.
+  bool _isTrustedConfirmLink(Uri? uri) {
+    if (uri == null || uri.scheme != 'https' || !uri.hasAuthority) return false;
+    final host = uri.host.toLowerCase();
+    final hostOk = host == 'acits.ru' || host.endsWith(_allowedHostSuffix);
+    return hostOk && uri.path.contains(_requiredPathSegment);
   }
 }
 

@@ -13,10 +13,13 @@ class HeaderInterceptor implements Interceptor {
   FutureOr<Response<BodyType>> intercept<BodyType>(Chain<BodyType> chain) async {
     final authService = getIt<AuthService>();
     final configService = getIt<ConfigService>();
+    final access = authService.access;
     final request = chain.request.copyWith(
       headers: {
         ...chain.request.headers,
-        'authorization': 'Bearer ${authService.access}',
+        // Не отправляем заголовок вовсе, если токена нет — иначе на сервер
+        // уходит буквальный `Bearer null`.
+        if (access != null) 'authorization': 'Bearer $access',
         'accept-language': configService.local,
       },
     );

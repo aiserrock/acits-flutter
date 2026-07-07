@@ -11,18 +11,21 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 class AuthInterceptor implements Authenticator {
   @override
   FutureOr<Request?> authenticate(Request request, Response response, [Request? _]) async {
-    if (response.statusCode == HttpStatus.unauthorized) {
-      final authService = getIt<AuthService>();
-      final token = await authService.refreshToken().then((value) => value?.access);
-      if (token != null) {
-        return request.copyWith(
-          headers: request.headers..addAll({'authorization': 'Bearer $token'}),
-        );
-      }
-    } else {
+    if (response.statusCode != HttpStatus.unauthorized) return null;
+
+    final authService = getIt<AuthService>();
+    String? token;
+    try {
+      token = await authService.refreshToken().then((value) => value?.access);
+    } catch (_) {
+      // Обновление токена не удалось (сеть/невалидный refresh) — не зацикливаем
+      // повторную авторизацию, выходим из сессии.
+      authService.logout();
       return null;
     }
-    return null;
+    if (token == null) return null;
+
+    return request.copyWith(headers: {...request.headers, 'authorization': 'Bearer $token'});
   }
 
   @override
