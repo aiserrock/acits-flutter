@@ -28,7 +28,9 @@ class StringRes {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<StringRes> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -59,7 +61,12 @@ class StringRes {
 
   /// `Additional info`
   String get animalAdditionalInfo {
-    return Intl.message('Additional info', name: 'animalAdditionalInfo', desc: '', args: []);
+    return Intl.message(
+      'Additional info',
+      name: 'animalAdditionalInfo',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Admitted`
@@ -74,7 +81,12 @@ class StringRes {
 
   /// `Approximate`
   String get animalAgeAppox {
-    return Intl.message('Approximate', name: 'animalAgeAppox', desc: '', args: []);
+    return Intl.message(
+      'Approximate',
+      name: 'animalAgeAppox',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Exact`
@@ -84,22 +96,42 @@ class StringRes {
 
   /// `Animal family`
   String get animalAnimalFamily {
-    return Intl.message('Animal family', name: 'animalAnimalFamily', desc: '', args: []);
+    return Intl.message(
+      'Animal family',
+      name: 'animalAnimalFamily',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Animal kind`
   String get animalAnimalKind {
-    return Intl.message('Animal kind', name: 'animalAnimalKind', desc: '', args: []);
+    return Intl.message(
+      'Animal kind',
+      name: 'animalAnimalKind',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Animal status`
   String get animalAnimalStatus {
-    return Intl.message('Animal status', name: 'animalAnimalStatus', desc: '', args: []);
+    return Intl.message(
+      'Animal status',
+      name: 'animalAnimalStatus',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Applicant`
   String get animalApplicant {
-    return Intl.message('Applicant', name: 'animalApplicant', desc: '', args: []);
+    return Intl.message(
+      'Applicant',
+      name: 'animalApplicant',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Birth date`
@@ -109,12 +141,22 @@ class StringRes {
 
   /// `Animal card`
   String get animalCardTitle {
-    return Intl.message('Animal card', name: 'animalCardTitle', desc: '', args: []);
+    return Intl.message(
+      'Animal card',
+      name: 'animalCardTitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Catch place`
   String get animalCatchPlace {
-    return Intl.message('Catch place', name: 'animalCatchPlace', desc: '', args: []);
+    return Intl.message(
+      'Catch place',
+      name: 'animalCatchPlace',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Category`
@@ -129,7 +171,12 @@ class StringRes {
 
   /// `Chipping date`
   String get animalChipDate {
-    return Intl.message('Chipping date', name: 'animalChipDate', desc: '', args: []);
+    return Intl.message(
+      'Chipping date',
+      name: 'animalChipDate',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Color`
@@ -144,7 +191,12 @@ class StringRes {
 
   /// `Common info`
   String get animalCommonInfo {
-    return Intl.message('Common info', name: 'animalCommonInfo', desc: '', args: []);
+    return Intl.message(
+      'Common info',
+      name: 'animalCommonInfo',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Curator`
@@ -154,17 +206,32 @@ class StringRes {
 
   /// `Address`
   String get animalCuratorAddress {
-    return Intl.message('Address', name: 'animalCuratorAddress', desc: '', args: []);
+    return Intl.message(
+      'Address',
+      name: 'animalCuratorAddress',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `E-mail`
   String get animalCuratorEmail {
-    return Intl.message('E-mail', name: 'animalCuratorEmail', desc: '', args: []);
+    return Intl.message(
+      'E-mail',
+      name: 'animalCuratorEmail',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Last name`
   String get animalCuratorLastName {
-    return Intl.message('Last name', name: 'animalCuratorLastName', desc: '', args: []);
+    return Intl.message(
+      'Last name',
+      name: 'animalCuratorLastName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Name`
@@ -174,17 +241,32 @@ class StringRes {
 
   /// `Phone`
   String get animalCuratorPhone {
-    return Intl.message('Phone', name: 'animalCuratorPhone', desc: '', args: []);
+    return Intl.message(
+      'Phone',
+      name: 'animalCuratorPhone',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Admitt date`
   String get animalDateAdmitt {
-    return Intl.message('Admitt date', name: 'animalDateAdmitt', desc: '', args: []);
+    return Intl.message(
+      'Admitt date',
+      name: 'animalDateAdmitt',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Do you sure to delete`
   String get animalDeleteAcceptMsg {
-    return Intl.message('Do you sure to delete', name: 'animalDeleteAcceptMsg', desc: '', args: []);
+    return Intl.message(
+      'Do you sure to delete',
+      name: 'animalDeleteAcceptMsg',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Edit animal`
@@ -199,12 +281,22 @@ class StringRes {
 
   /// `Female`
   String get animalGenderFemale {
-    return Intl.message('Female', name: 'animalGenderFemale', desc: '', args: []);
+    return Intl.message(
+      'Female',
+      name: 'animalGenderFemale',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Gengerless`
   String get animalGenderLess {
-    return Intl.message('Gengerless', name: 'animalGenderLess', desc: '', args: []);
+    return Intl.message(
+      'Gengerless',
+      name: 'animalGenderLess',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Male`
@@ -214,12 +306,22 @@ class StringRes {
 
   /// `Middle`
   String get animalGenderMiddle {
-    return Intl.message('Middle', name: 'animalGenderMiddle', desc: '', args: []);
+    return Intl.message(
+      'Middle',
+      name: 'animalGenderMiddle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Unknown`
   String get animalGenderUndefined {
-    return Intl.message('Unknown', name: 'animalGenderUndefined', desc: '', args: []);
+    return Intl.message(
+      'Unknown',
+      name: 'animalGenderUndefined',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Kind`
@@ -244,17 +346,32 @@ class StringRes {
 
   /// `Pick curator`
   String get animalPickCurator {
-    return Intl.message('Pick curator', name: 'animalPickCurator', desc: '', args: []);
+    return Intl.message(
+      'Pick curator',
+      name: 'animalPickCurator',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Prescriptions`
   String get animalPrescriptions {
-    return Intl.message('Prescriptions', name: 'animalPrescriptions', desc: '', args: []);
+    return Intl.message(
+      'Prescriptions',
+      name: 'animalPrescriptions',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Qty month`
   String get animalQtyMonth {
-    return Intl.message('Qty month', name: 'animalQtyMonth', desc: '', args: []);
+    return Intl.message(
+      'Qty month',
+      name: 'animalQtyMonth',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Year qty`
@@ -264,7 +381,12 @@ class StringRes {
 
   /// `Receipt date`
   String get animalReceiptDate {
-    return Intl.message('Receipt date', name: 'animalReceiptDate', desc: '', args: []);
+    return Intl.message(
+      'Receipt date',
+      name: 'animalReceiptDate',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Sex`
@@ -274,12 +396,22 @@ class StringRes {
 
   /// `Social link`
   String get animalSocialLink {
-    return Intl.message('Social link', name: 'animalSocialLink', desc: '', args: []);
+    return Intl.message(
+      'Social link',
+      name: 'animalSocialLink',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Special signs`
   String get animalSpecSigns {
-    return Intl.message('Special signs', name: 'animalSpecSigns', desc: '', args: []);
+    return Intl.message(
+      'Special signs',
+      name: 'animalSpecSigns',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Status`
@@ -289,17 +421,32 @@ class StringRes {
 
   /// `Status and join`
   String get animalStatusAndJoin {
-    return Intl.message('Status and join', name: 'animalStatusAndJoin', desc: '', args: []);
+    return Intl.message(
+      'Status and join',
+      name: 'animalStatusAndJoin',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Transfer act`
   String get animalTransferAct {
-    return Intl.message('Transfer act', name: 'animalTransferAct', desc: '', args: []);
+    return Intl.message(
+      'Transfer act',
+      name: 'animalTransferAct',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Upload transfer act`
   String get animalUploadAct {
-    return Intl.message('Upload transfer act', name: 'animalUploadAct', desc: '', args: []);
+    return Intl.message(
+      'Upload transfer act',
+      name: 'animalUploadAct',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Weight, kg`
@@ -314,27 +461,52 @@ class StringRes {
 
   /// `New applicant`
   String get applicantAdd {
-    return Intl.message('New applicant', name: 'applicantAdd', desc: '', args: []);
+    return Intl.message(
+      'New applicant',
+      name: 'applicantAdd',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Edit applicant`
   String get applicantEdit {
-    return Intl.message('Edit applicant', name: 'applicantEdit', desc: '', args: []);
+    return Intl.message(
+      'Edit applicant',
+      name: 'applicantEdit',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Comment deletion failed`
   String get commentDeletingFail {
-    return Intl.message('Comment deletion failed', name: 'commentDeletingFail', desc: '', args: []);
+    return Intl.message(
+      'Comment deletion failed',
+      name: 'commentDeletingFail',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Edit comment`
   String get commentTitleEdit {
-    return Intl.message('Edit comment', name: 'commentTitleEdit', desc: '', args: []);
+    return Intl.message(
+      'Edit comment',
+      name: 'commentTitleEdit',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `New comment`
   String get commentTitleNew {
-    return Intl.message('New comment', name: 'commentTitleNew', desc: '', args: []);
+    return Intl.message(
+      'New comment',
+      name: 'commentTitleNew',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `common`
@@ -384,7 +556,12 @@ class StringRes {
 
   /// `Did not implemented yet :(`
   String get commonDidNotImpl {
-    return Intl.message('Did not implemented yet :(', name: 'commonDidNotImpl', desc: '', args: []);
+    return Intl.message(
+      'Did not implemented yet :(',
+      name: 'commonDidNotImpl',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Done`
@@ -509,12 +686,22 @@ class StringRes {
 
   /// `Not completed`
   String get commonNotCompleted {
-    return Intl.message('Not completed', name: 'commonNotCompleted', desc: '', args: []);
+    return Intl.message(
+      'Not completed',
+      name: 'commonNotCompleted',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Nothing was found :(`
   String get commonNotFound {
-    return Intl.message('Nothing was found :(', name: 'commonNotFound', desc: '', args: []);
+    return Intl.message(
+      'Nothing was found :(',
+      name: 'commonNotFound',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Reload`
@@ -529,7 +716,12 @@ class StringRes {
 
   /// `Reschedule`
   String get commonReschedule {
-    return Intl.message('Reschedule', name: 'commonReschedule', desc: '', args: []);
+    return Intl.message(
+      'Reschedule',
+      name: 'commonReschedule',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Search`
@@ -569,7 +761,12 @@ class StringRes {
 
   /// `Edit curator`
   String get curatorEdit {
-    return Intl.message('Edit curator', name: 'curatorEdit', desc: '', args: []);
+    return Intl.message(
+      'Edit curator',
+      name: 'curatorEdit',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Something went wrong. Try again later.`
@@ -584,17 +781,32 @@ class StringRes {
 
   /// `No internet :(`
   String get errorInternetFail {
-    return Intl.message('No internet :(', name: 'errorInternetFail', desc: '', args: []);
+    return Intl.message(
+      'No internet :(',
+      name: 'errorInternetFail',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Try again later`
   String get errorInternetFailMsg {
-    return Intl.message('Try again later', name: 'errorInternetFailMsg', desc: '', args: []);
+    return Intl.message(
+      'Try again later',
+      name: 'errorInternetFailMsg',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Wrong login or password`
   String get loginAuthorizeError {
-    return Intl.message('Wrong login or password', name: 'loginAuthorizeError', desc: '', args: []);
+    return Intl.message(
+      'Wrong login or password',
+      name: 'loginAuthorizeError',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `ACITS - Animal control\nin the shelter`
@@ -614,12 +826,22 @@ class StringRes {
 
   /// `Forgot your password?`
   String get loginForgetPass {
-    return Intl.message('Forgot your password?', name: 'loginForgetPass', desc: '', args: []);
+    return Intl.message(
+      'Forgot your password?',
+      name: 'loginForgetPass',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Enter your email or login`
   String get loginLoginHint {
-    return Intl.message('Enter your email or login', name: 'loginLoginHint', desc: '', args: []);
+    return Intl.message(
+      'Enter your email or login',
+      name: 'loginLoginHint',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Login`
@@ -634,12 +856,22 @@ class StringRes {
 
   /// `Register now`
   String get loginToRegistration {
-    return Intl.message('Register now', name: 'loginToRegistration', desc: '', args: []);
+    return Intl.message(
+      'Register now',
+      name: 'loginToRegistration',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Add appointments`
   String get mainAddAppointments {
-    return Intl.message('Add appointments', name: 'mainAddAppointments', desc: '', args: []);
+    return Intl.message(
+      'Add appointments',
+      name: 'mainAddAppointments',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Animal`
@@ -649,17 +881,32 @@ class StringRes {
 
   /// `Appoinment`
   String get mainAppoinment {
-    return Intl.message('Appoinment', name: 'mainAppoinment', desc: '', args: []);
+    return Intl.message(
+      'Appoinment',
+      name: 'mainAppoinment',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Appoinment author`
   String get mainAppoinmentAuthor {
-    return Intl.message('Appoinment author', name: 'mainAppoinmentAuthor', desc: '', args: []);
+    return Intl.message(
+      'Appoinment author',
+      name: 'mainAppoinmentAuthor',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Appointments`
   String get mainAppointments {
-    return Intl.message('Appointments', name: 'mainAppointments', desc: '', args: []);
+    return Intl.message(
+      'Appointments',
+      name: 'mainAppointments',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `There are no appointments for today`
@@ -709,7 +956,12 @@ class StringRes {
 
   /// `Absolutely free`
   String get onboardingFreeTitle {
-    return Intl.message('Absolutely free', name: 'onboardingFreeTitle', desc: '', args: []);
+    return Intl.message(
+      'Absolutely free',
+      name: 'onboardingFreeTitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `The map is maintained throughout the life of the animal and does not depend on the shelter`
@@ -754,12 +1006,22 @@ class StringRes {
 
   /// `Change pass`
   String get personChangePass {
-    return Intl.message('Change pass', name: 'personChangePass', desc: '', args: []);
+    return Intl.message(
+      'Change pass',
+      name: 'personChangePass',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Change shelter`
   String get personChangeShelter {
-    return Intl.message('Change shelter', name: 'personChangeShelter', desc: '', args: []);
+    return Intl.message(
+      'Change shelter',
+      name: 'personChangeShelter',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Feedback`
@@ -779,7 +1041,12 @@ class StringRes {
 
   /// `My shelters`
   String get personMyShelters {
-    return Intl.message('My shelters', name: 'personMyShelters', desc: '', args: []);
+    return Intl.message(
+      'My shelters',
+      name: 'personMyShelters',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Password did not changed`
@@ -794,37 +1061,72 @@ class StringRes {
 
   /// `Change pass`
   String get personalChangePass {
-    return Intl.message('Change pass', name: 'personalChangePass', desc: '', args: []);
+    return Intl.message(
+      'Change pass',
+      name: 'personalChangePass',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Fill field`
   String get personalEmptyFieldErrorMsg {
-    return Intl.message('Fill field', name: 'personalEmptyFieldErrorMsg', desc: '', args: []);
+    return Intl.message(
+      'Fill field',
+      name: 'personalEmptyFieldErrorMsg',
+      desc: '',
+      args: [],
+    );
   }
 
   /// ` New password`
   String get personalNewPass {
-    return Intl.message(' New password', name: 'personalNewPass', desc: '', args: []);
+    return Intl.message(
+      ' New password',
+      name: 'personalNewPass',
+      desc: '',
+      args: [],
+    );
   }
 
   /// ` Old password`
   String get personalOldPass {
-    return Intl.message(' Old password', name: 'personalOldPass', desc: '', args: []);
+    return Intl.message(
+      ' Old password',
+      name: 'personalOldPass',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Password changed`
   String get personalPassChanged {
-    return Intl.message('Password changed', name: 'personalPassChanged', desc: '', args: []);
+    return Intl.message(
+      'Password changed',
+      name: 'personalPassChanged',
+      desc: '',
+      args: [],
+    );
   }
 
   /// ` Repeat password`
   String get personalRePass {
-    return Intl.message(' Repeat password', name: 'personalRePass', desc: '', args: []);
+    return Intl.message(
+      ' Repeat password',
+      name: 'personalRePass',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Animal*`
   String get prescriptionAnimal {
-    return Intl.message('Animal*', name: 'prescriptionAnimal', desc: '', args: []);
+    return Intl.message(
+      'Animal*',
+      name: 'prescriptionAnimal',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Can\'t change animal when editing prescription`
@@ -839,12 +1141,22 @@ class StringRes {
 
   /// `Comment`
   String get prescriptionComment {
-    return Intl.message('Comment', name: 'prescriptionComment', desc: '', args: []);
+    return Intl.message(
+      'Comment',
+      name: 'prescriptionComment',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Current`
   String get prescriptionCurrent {
-    return Intl.message('Current', name: 'prescriptionCurrent', desc: '', args: []);
+    return Intl.message(
+      'Current',
+      name: 'prescriptionCurrent',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Daily`
@@ -879,17 +1191,32 @@ class StringRes {
 
   /// `At time`
   String get prescriptionTime {
-    return Intl.message('At time', name: 'prescriptionTime', desc: '', args: []);
+    return Intl.message(
+      'At time',
+      name: 'prescriptionTime',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Add prescription`
   String get prescriptionTitleAdd {
-    return Intl.message('Add prescription', name: 'prescriptionTitleAdd', desc: '', args: []);
+    return Intl.message(
+      'Add prescription',
+      name: 'prescriptionTitleAdd',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Edit prescription`
   String get prescriptionTitleEdit {
-    return Intl.message('Edit prescription', name: 'prescriptionTitleEdit', desc: '', args: []);
+    return Intl.message(
+      'Edit prescription',
+      name: 'prescriptionTitleEdit',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Wait when loading is done please`
@@ -904,12 +1231,22 @@ class StringRes {
 
   /// `Weekly`
   String get prescriptionWeekly {
-    return Intl.message('Weekly', name: 'prescriptionWeekly', desc: '', args: []);
+    return Intl.message(
+      'Weekly',
+      name: 'prescriptionWeekly',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `About organization`
   String get regAboutOrg {
-    return Intl.message('About organization', name: 'regAboutOrg', desc: '', args: []);
+    return Intl.message(
+      'About organization',
+      name: 'regAboutOrg',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `About you`
@@ -959,7 +1296,12 @@ class StringRes {
 
   /// `Email confirmation`
   String get regEmaiConfirmation {
-    return Intl.message('Email confirmation', name: 'regEmaiConfirmation', desc: '', args: []);
+    return Intl.message(
+      'Email confirmation',
+      name: 'regEmaiConfirmation',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `If are you an admin of organization, then you can login. Else you need wait for admin confirmation your request.`
@@ -974,7 +1316,12 @@ class StringRes {
 
   /// `Email confirmed`
   String get regEmailConfirmed {
-    return Intl.message('Email confirmed', name: 'regEmailConfirmed', desc: '', args: []);
+    return Intl.message(
+      'Email confirmed',
+      name: 'regEmailConfirmed',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Employee`
@@ -984,12 +1331,22 @@ class StringRes {
 
   /// `Fathers name`
   String get regFathersName {
-    return Intl.message('Fathers name', name: 'regFathersName', desc: '', args: []);
+    return Intl.message(
+      'Fathers name',
+      name: 'regFathersName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Need fill the field`
   String get regFieldEmptyError {
-    return Intl.message('Need fill the field', name: 'regFieldEmptyError', desc: '', args: []);
+    return Intl.message(
+      'Need fill the field',
+      name: 'regFieldEmptyError',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Guest`
@@ -999,12 +1356,22 @@ class StringRes {
 
   /// `Do you have account?`
   String get regHaveAccount {
-    return Intl.message('Do you have account?', name: 'regHaveAccount', desc: '', args: []);
+    return Intl.message(
+      'Do you have account?',
+      name: 'regHaveAccount',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Min 8 symbols`
   String get regLeast8Symbols {
-    return Intl.message('Min 8 symbols', name: 'regLeast8Symbols', desc: '', args: []);
+    return Intl.message(
+      'Min 8 symbols',
+      name: 'regLeast8Symbols',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Require agree with terms of personal data processing`
@@ -1039,7 +1406,12 @@ class StringRes {
 
   /// `+7(ххх)ххх-хх-хх`
   String get regPhoneMask {
-    return Intl.message('+7(ххх)ххх-хх-хх', name: 'regPhoneMask', desc: '', args: []);
+    return Intl.message(
+      '+7(ххх)ххх-хх-хх',
+      name: 'regPhoneMask',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Region `
@@ -1069,12 +1441,22 @@ class StringRes {
 
   /// `You'll redirect\nto login page.`
   String get regTUPmsg {
-    return Intl.message('You\'ll redirect\nto login page.', name: 'regTUPmsg', desc: '', args: []);
+    return Intl.message(
+      'You\'ll redirect\nto login page.',
+      name: 'regTUPmsg',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Thanks, we recorded everything!`
   String get regTUPtitle {
-    return Intl.message('Thanks, we recorded everything!', name: 'regTUPtitle', desc: '', args: []);
+    return Intl.message(
+      'Thanks, we recorded everything!',
+      name: 'regTUPtitle',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Registration`
@@ -1094,22 +1476,42 @@ class StringRes {
 
   /// `Write the city`
   String get regWriteCity {
-    return Intl.message('Write the city', name: 'regWriteCity', desc: '', args: []);
+    return Intl.message(
+      'Write the city',
+      name: 'regWriteCity',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Write the country`
   String get regWriteCountry {
-    return Intl.message('Write the country', name: 'regWriteCountry', desc: '', args: []);
+    return Intl.message(
+      'Write the country',
+      name: 'regWriteCountry',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Write the region`
   String get regWriteRegion {
-    return Intl.message('Write the region', name: 'regWriteRegion', desc: '', args: []);
+    return Intl.message(
+      'Write the region',
+      name: 'regWriteRegion',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Pick the shelter`
   String get shelterSelectShelter {
-    return Intl.message('Pick the shelter', name: 'shelterSelectShelter', desc: '', args: []);
+    return Intl.message(
+      'Pick the shelter',
+      name: 'shelterSelectShelter',
+      desc: '',
+      args: [],
+    );
   }
 }
 
