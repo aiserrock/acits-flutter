@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+# NOTE ON FVM: locally this project pins Flutter via FVM (see CLAUDE.md).
+# In CI we intentionally deviate: FVM inside CI runners is fragile (it manages
+# its own SDK cache and adds an extra install/version-resolution step that
+# breaks caching and setup-action integration). Instead we pin the exact same
+# Flutter version (3.44.0, channel stable) directly through
+# subosito/flutter-action@v2, which gives a deterministic, cache-friendly SDK.
+env:
+  FLUTTER_VERSION: "3.44.0"
+  FLUTTER_CHANNEL: "stable"
+  JAVA_VERSION: "17"
+
+jobs:
+  analyze-and-test:
+    name: Analyze & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java (Temurin 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      # Firebase configs and other secrets are gitignored and NOT in the repo
+      # (see secrets policy in project docs). Codegen, analyze and build all
+      # expect these files to exist, so we materialize them from the committed
+      # *.example templates. The placeholders are enough for static analysis,
+      # build_runner and a non-signed --release apk build to proceed.
+      - name: Provision secret placeholders from *.example templates
+        run: |
+          cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
+          cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
+          cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run code generation (build_runner)
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      # Line length is 100 in this project (not the Dart default of 80).
+      - name: Verify formatting
+        run: flutter format --output=none --set-exit-if-changed -l 100 .
+
+      - name: Analyze
+        run: flutter analyze .
+
+      - name: Run tests
+        run: flutter test
+
+  build-dev-apk:
+    name: Build dev APK
+    needs: analyze-and-test
+    # Only build the artifact on pushes to develop, not on PRs.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java (Temurin 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      # Same rationale as in analyze-and-test: gitignored Firebase configs are
+      # recreated from the committed *.example templates so the build can run.
+      - name: Provision secret placeholders from *.example templates
+        run: |
+          cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
+          cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
+          cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run code generation (build_runner)
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Build dev APK
+        run: flutter build apk -t test/dev/main.dart --flavor dev --release
+
+      - name: Upload dev APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: acits-dev-apk
+          path: build/app/outputs/flutter-apk/app-dev-release.apk
+          if-no-files-found: error
+          retention-days: 14

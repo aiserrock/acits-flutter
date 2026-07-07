@@ -1,0 +1,15 @@
+# Release signing credentials for the Android app.
+# Copy this file to `key.properties` (same directory) and fill in real values.
+# `key.properties` is gitignored — never commit it or the .jks keystore.
+#
+# Generate a keystore with:
+#   keytool -genkey -v -keystore release.jks -keyalg RSA -keysize 2048 \
+#           -validity 10000 -alias upload
+#
+# Alternatively, provide these as environment variables
+# (storePassword, keyPassword, keyAlias, storeFile) — see keystoreConfig.gradle.
+
+storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=../keystore/release.jks

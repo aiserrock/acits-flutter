@@ -65,3 +65,38 @@ ios/certs/*
 
 # Firebase hosting
 .firebase/*
+
+# ==============================================================================
+# Secrets & local config — NEVER commit these.
+# Copy the corresponding *.example file and fill in your own values / assets.
+# ==============================================================================
+
+# Firebase app configs (contain project-specific API keys; provide your own)
+android/app/google-services.json
+android/app/src/dev/google-services.json
+android/app/src/prod/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
+
+# Android signing (release keystore + credentials)
+android/keystore/*.jks
+android/keystore/*.keystore
+android/keystore/key.properties
+**/*.jks
+**/*.keystore
+
+# Charles / mitmproxy debug SSL certificates (developer-local, do not ship)
+assets/cert/*.pem
+
+# Env files
+*.env
+.env*
+!.env.example
+ios/Flutter/ephemeral/
+
+# Claude Code — local per-developer settings (keep shared agents/skills tracked)
+.claude/settings.local.json
+
+# Internal backend handoff notes — not for the public repo (kept locally)
+doc/backend-handoff.md
+doc/backend-integration-checklist.md

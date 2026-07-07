@@ -1,0 +1,77 @@
+name: "Bug Report"
+description: "Report a bug to help us improve the app"
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report! Please fill out the fields below as completely as possible so we can reproduce and fix the issue quickly.
+  - type: dropdown
+    id: flavor
+    attributes:
+      label: Flavor
+      description: Which build flavor were you running?
+      options:
+        - dev
+        - prod
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      description: The app version where the bug occurred (e.g. 1.2.3+45).
+      placeholder: "1.0.0+1"
+    validations:
+      required: false
+  - type: input
+    id: flutter-version
+    attributes:
+      label: Flutter version
+      description: Output of `fvm flutter --version`. The project is pinned to Flutter 3.44.0 / Dart 3.12.0 via FVM.
+      placeholder: "Flutter 3.44.0 / Dart 3.12.0"
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: A clear and concise description of the bug.
+      placeholder: Tell us what you saw...
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Step-by-step instructions to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Tap on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: false
+  - type: input
+    id: device-os
+    attributes:
+      label: Device / OS
+      description: Device model and OS version (e.g. Pixel 7, Android 14 / iPhone 14, iOS 17.2).
+      placeholder: "iPhone 14, iOS 17.2"
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste any relevant log output. This will be automatically formatted as code.
+      render: shell
+    validations:
+      required: false
