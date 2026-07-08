@@ -1,181 +1,304 @@
+**English** · [Русский](docs/ru/CONTRIBUTING.md)
+
 # Contributing to acits_flutter
 
-Thank you for your interest in contributing to **acits_flutter** — the Flutter mobile client for [acits.ru](https://acits.ru/), free software for tracking animals inside an animal shelter (*бесплатное ПО для контроля за животными внутри приюта*).
+Thank you for your interest in contributing to **acits_flutter** — the Flutter mobile client for [acits.ru](https://acits.ru), free and open-source software for tracking animals inside an animal shelter.
 
-This document describes how to set up your environment, the conventions we follow, and the process for submitting changes. Contributions of all kinds are welcome: bug reports, feature requests, documentation, and code.
+This project is licensed under the **MIT License**. By contributing, you agree that your contributions will be licensed under the same terms.
 
-## Code of Conduct
+Repository: [github.com/aiserrock/acits-flutter](https://github.com/aiserrock/acits-flutter)
 
-This project and everyone participating in it is governed by our [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold it. Please report unacceptable behavior to the maintainers.
+---
+
+## Table of contents
+
+- [Prerequisites](#prerequisites)
+- [Project setup](#project-setup)
+- [Branching model](#branching-model)
+- [Commit messages](#commit-messages)
+- [Coding standards](#coding-standards)
+- [Localisation](#localisation)
+- [Testing](#testing)
+- [Pre-PR checklist](#pre-pr-checklist)
+- [Opening a pull request](#opening-a-pull-request)
+- [Reporting bugs](#reporting-bugs)
+
+---
 
 ## Prerequisites
 
-- **[FVM](https://fvm.app/)** (Flutter Version Management) — the project pins its toolchain via FVM.
-- **Flutter 3.44.0 / Dart 3.12.0** — install through FVM so the pinned SDK is used:
-  ```bash
-  fvm install
-  fvm use
-  ```
-- A working Android and/or iOS toolchain (Android Studio / Xcode) for building and running the app.
+The toolchain is pinned via **FVM** (Flutter Version Management) through the `.fvmrc` file at the repository root.
 
-> **Always prefix Flutter/Dart commands with `fvm`** so the pinned SDK is used, e.g. `fvm flutter <cmd>` / `fvm dart <cmd>`.
+| Tool | Version |
+| --- | --- |
+| Flutter | 3.44.0 |
+| Dart | 3.12.0 |
+| FVM | latest stable |
 
-## Local setup
+Install FVM and the pinned SDK:
 
-1. **Fork** the repository on GitHub: [github.com/aiserrock/acits-flutter](https://github.com/aiserrock/acits-flutter).
+```bash
+dart pub global activate fvm
+fvm install
+```
 
-2. **Clone** your fork and add the upstream remote:
+Always prefix Flutter and Dart commands with `fvm` so the pinned SDK is used:
+
+```bash
+fvm flutter <command>
+fvm dart <command>
+```
+
+A working Android and/or iOS toolchain (Android Studio / Xcode) is also required to build and run the app.
+
+---
+
+## Project setup
+
+1. **Fork** the repository on GitHub and **clone** your fork:
+
    ```bash
    git clone git@github.com:<your-username>/acits-flutter.git
    cd acits-flutter
+   ```
+
+2. **Add the upstream remote** so you can keep your fork in sync:
+
+   ```bash
    git remote add upstream git@github.com:aiserrock/acits-flutter.git
    ```
 
-3. **Install dependencies:**
+3. **Fetch dependencies:**
+
    ```bash
    fvm flutter pub get
    ```
 
-4. **Copy the secret / config templates.** Firebase configs, the release keystore, `key.properties`, and Charles debug `.pem` certificates are gitignored and **not** in the repo. Copy the provided `*.example` templates and supply your own values:
-   ```bash
-   # copy every provided template next to its real filename, then fill it in
-   find . -name '*.example' -exec sh -c 'cp "$1" "${1%.example}"' _ {} \;
-   ```
-   You are responsible for supplying your own:
-   - Firebase configs — `android/app/google-services.json`, `ios/Runner/GoogleService-Info.plist`
-   - Release signing — `android/key.properties` and the release keystore
-   - Charles debug certificates — the `.pem` files (only needed for HTTPS debugging)
+4. **Copy the example configuration templates.** Firebase configuration files are gitignored; copy the `*.example` templates and fill in your own credentials:
 
-   The Android debug keystore (`android/keystore/test.keystore`) is also gitignored — generate your own if needed for local debug builds.
-
-5. **Generate code** (Injectable DI, JsonSerializable, Chopper, flutter_gen, Swagger OpenAPI):
    ```bash
-   fvm flutter pub run build_runner build --delete-conflicting-outputs
+   # Android — per-flavour, one file per flavour:
+   cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
+   cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
+   # iOS
+   cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
    ```
 
-6. **Generate localizations** (source: `lib/l10n/intl_ru.arb`, generated class `StringRes`):
+   > The `key.properties.example` under `android/keystore/` follows the same pattern if you need signing configured locally.
+
+5. **Generate code.** The project uses code generation for DI (injectable), JSON serialisation, and Chopper:
+
    ```bash
-   fvm flutter pub run intl_utils:generate
+   fvm dart run build_runner build --delete-conflicting-outputs
    ```
 
-7. **Run the app.** The project ships two flavors with distinct entry points:
+6. **Run the app.** Two flavours exist, each with its own entry point:
+
    ```bash
-   # dev flavor
+   # dev flavour
    fvm flutter run -t test/dev/main.dart --flavor dev
 
-   # prod flavor
+   # prod flavour
    fvm flutter run -t lib/main.dart --flavor prod
    ```
 
+---
+
 ## Branching model
 
-We follow **git-flow**:
+We follow a **git-flow** style branching model:
 
-- **`main`** — stable / release branch. Always deployable. Do not target this branch directly with PRs.
-- **`develop`** — the integration branch. **All contributions target `develop`.**
-- **Feature branches** — branch off `develop`, named one of:
-  - `feature/<short-desc>` — e.g. `feature/animal-photo-gallery`
-  - `<ticket>-<desc>` — e.g. `ACITS-123-fix-login-crash`
+| Branch | Purpose |
+| --- | --- |
+| `main` | Stable, release-ready code. Always deployable. Never target it directly with PRs. |
+| `develop` | Integration branch where feature work lands. All contributions target `develop`. |
+| `feature/*` | Individual features and fixes, branched off `develop`. |
 
-Keep your branch up to date with upstream:
+Create your branch off `develop`:
+
 ```bash
 git fetch upstream
 git checkout develop
 git merge upstream/develop
-git checkout -b feature/<short-desc>
+git checkout -b feature/short-descriptive-name
 ```
 
-## Commit message convention
+Pull requests are always opened **against `develop`**, never against `main`.
 
-We use **[Conventional Commits](https://www.conventionalcommits.org/)**. Prefix each commit with a type:
+---
 
-| Type | Use for |
+## Commit messages
+
+We use [**Conventional Commits**](https://www.conventionalcommits.org/). Each commit message has the form:
+
+```
+<type>(<optional scope>): <description>
+```
+
+Common types:
+
+| Type | Meaning |
 | --- | --- |
-| `feat` | A new feature |
-| `fix` | A bug fix |
-| `chore` | Build process, tooling, dependency, or maintenance changes |
-| `docs` | Documentation only |
-| `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `test` | Adding or correcting tests |
-
-Format:
-```
-<type>(<optional scope>): <short summary>
-
-<optional body>
-
-<optional footer, e.g. "Closes #123">
-```
+| `feat` | A new feature. |
+| `fix` | A bug fix. |
+| `refactor` | A code change that neither fixes a bug nor adds a feature. |
+| `docs` | Documentation only. |
+| `test` | Adding or correcting tests. |
+| `chore` | Build process, tooling, or dependency changes. |
+| `style` | Formatting changes with no code impact. |
 
 Examples:
-```
+
+```text
 feat(animals): add photo gallery to animal detail screen
 fix(auth): handle expired token on cold start
-docs: document FVM setup in CONTRIBUTING
+docs: update contributing guide for FVM 3.44
 ```
 
-## Pre-PR checklist (mandatory)
-
-Before opening a pull request, **all** of the following must pass locally:
-
-1. **Regenerate code if annotations changed** (any `@injectable`, `@JsonSerializable`, Chopper-annotated class, or `doc/api/` swagger change):
-   ```bash
-   fvm flutter pub run build_runner build --delete-conflicting-outputs
-   ```
-   If you edited `lib/l10n/intl_*.arb`, also run:
-   ```bash
-   fvm flutter pub run intl_utils:generate
-   ```
-
-2. **Format** (line length is **100**, not the Dart default 80):
-   ```bash
-   fvm flutter format -l 100 .
-   ```
-
-3. **Analyze** — must be **clean** (no warnings or errors):
-   ```bash
-   fvm flutter analyze .
-   ```
-
-4. **Test** — must be **green**:
-   ```bash
-   fvm flutter test
-   ```
-
-Commit any regenerated files — the generated files committed to the repo are the source of truth for the analyzer.
+---
 
 ## Coding standards
 
-- **Line length is 100.** Run `fvm flutter format -l 100 .` before committing. `flutter_gen` and `flutter_intl` are also configured to 100.
-- **No hardcoded user-facing strings in UI.** Add the string to `lib/l10n/intl_ru.arb`, regenerate with `intl_utils:generate`, and access it via `StringRes.of(context).<key>`.
-- **Sealed BLoC events and states** are attached to the bloc file via `part` / `part of`. Use `flutter_bloc + formz + equatable`. **Never use `freezed`** for BLoC events/states.
-- **DTOs use `@JsonSerializable`** (with `part '<name>.g.dart';`). **Never use `freezed`** for DTOs. Generated networking (Chopper + Dio from OpenAPI in `doc/api/` → `lib/api/`) is not hand-edited.
-- **BLoCs pull dependencies from `getIt`** in the constructor body and are provided via `BlocProvider` at the screen widget. Do not register BLoCs in DI.
-- **Storage goes through the wrappers** in `service/secure_storage/` and `service/shared_pref/` — don't call `SharedPreferences.getInstance()` or `flutter_secure_storage` directly from features.
-- **Prefer `package:acits_flutter/...` absolute imports** over relative ones, and use the per-feature **barrel files** (`<feature>.dart` re-exporting `bloc` / `view` / `model`) and the project-wide `export.dart` barrel.
-- **Doc-comments in Russian**, to match the existing codebase.
-- Follow the existing `lib/` layout: `api/` (generated), `di/`, `domain/` (plain Dart models), `service/`, `ui/screen/<feature>/` (`bloc/` + `view/` + `model/` + barrel), `ui/widget/`, `res/` (design tokens), `util/`.
+- **Line length is 100** (not the Dart default of 80). Format every change:
 
-## Pull request process
+  ```bash
+  fvm dart format -l 100 lib test
+  ```
 
-1. Push your feature branch to your fork.
-2. Open a pull request **against `develop`** (never against `main`).
-3. Fill out the **PR template** completely.
-4. **Link the related issue** (e.g. `Closes #123`) so it is tracked and auto-closed on merge.
-5. Ensure the entire [pre-PR checklist](#pre-pr-checklist-mandatory) passes and CI is green.
-6. Address review feedback by pushing additional commits to the same branch.
+- **State management uses `flutter_bloc` Cubits** together with a sealed `DataState<T>` (`lib/util/data_state.dart`) rendered through `DataStateBuilder`. Cubits emit via `safeEmit` (`lib/util/bloc_ext.dart`) to avoid emitting after close. Form inputs use `formz`; models use `equatable`.
 
-A maintainer will review your PR. Keep PRs focused and reasonably small — smaller PRs are reviewed and merged faster.
+- **Events and states are sealed classes.** Where a full BLoC is used, define its events and states as sealed classes attached to the bloc file. Prefer a Cubit with `DataState<T>` for straightforward request/response screens.
 
-## Reporting bugs and requesting features
+- **Navigation uses `go_router`** (`lib/navigation/app_router.dart`). Routes are declared as constants in `AppRoutes`; complex objects are passed through `extra` and encoded via `AppExtraCodec`. Do not use imperative `Navigator` calls or named routes.
 
-Please use our [issue templates](https://github.com/aiserrock/acits-flutter/issues/new/choose):
+- **Dependency injection uses `get_it` + `injectable` 3.** `initDi()` is called in `main` before `runApp`. Re-run `build_runner` after touching any `@injectable` annotation. **Do not register Cubits/BLoCs in DI** — provide them via `BlocProvider` at the screen widget and pull their dependencies from `getIt` in the constructor.
 
-- **Bug report** — include steps to reproduce, expected vs. actual behavior, device/OS, flavor (dev/prod), and logs or screenshots where relevant.
-- **Feature request** — describe the problem you're trying to solve and the proposed solution.
+- **Networking uses Chopper + Dio,** generated from the OpenAPI spec under `doc/api/` into `lib/api/`. Never hand-edit generated files (`*.g.dart`, `*.chopper.dart`, `*.swagger.dart`). For hand-written DTOs use `@JsonSerializable` with `part '<name>.g.dart';`.
 
-Before opening a new issue, please search [existing issues](https://github.com/aiserrock/acits-flutter/issues) to avoid duplicates. For security-sensitive reports, contact the maintainers privately rather than filing a public issue.
+- **Storage** goes through the wrappers in `lib/service/` around `flutter_secure_storage` and `shared_preferences`. Do not call `SharedPreferences.getInstance()` directly from features.
 
-## License
+- **Prefer `package:` imports** (`package:acits_flutter/...`) over relative imports. Each screen folder ships a `<feature>.dart` barrel; the project-wide `export.dart` barrel re-exports shared pieces.
 
-By contributing, you agree that your contributions will be licensed under the project's [MIT License](./LICENSE) (© 2026 aiserrock).
+- **Doc-comments are written in Russian** to match the existing codebase.
+
+### Project layout
+
+```text
+lib/
+├── api/           # Chopper/OpenAPI generated HTTP layer (do not edit)
+├── di/            # get_it + injectable container
+├── domain/        # plain Dart domain models
+├── generated/     # generated LocaleKeys (do not edit)
+├── navigation/    # go_router configuration (app_router.dart, AppRoutes)
+├── res/           # design tokens (colour, style, icons)
+├── service/       # injectable services grouped by concern
+├── ui/
+│   ├── screen/<feature>/   # bloc-or-cubit / view / model per screen
+│   └── widget/             # app-wide shared widgets
+├── util/          # helpers, DataState, bloc_ext
+└── export.dart    # project-wide barrel
+```
+
+---
+
+## Localisation
+
+Localisation uses **easy_localization**. Translations live in `assets/translations/en.json` and `assets/translations/ru.json`, and keys are generated into `LocaleKeys` (`lib/generated/locale_keys.g.dart`). Both English and Russian are complete; the fallback locale is `ru`.
+
+**No hardcoded user-facing strings** are allowed in the UI.
+
+To add a string:
+
+1. Add the **same key** to **both** `assets/translations/en.json` **and** `assets/translations/ru.json`.
+2. Regenerate the keys:
+
+   ```bash
+   fvm dart run easy_localization:generate \
+     -S assets/translations -O lib/generated -o locale_keys.g.dart -f keys
+   ```
+
+3. Use it in code:
+
+   ```dart
+   Text(LocaleKeys.someKey.tr())
+   ```
+
+---
+
+## Testing
+
+- **Unit and BLoC/Cubit tests** live in `test/unit/` and use `mocktail` + `bloc_test`:
+
+  ```bash
+  fvm flutter test
+  ```
+
+  Run a single file or match by name:
+
+  ```bash
+  fvm flutter test test/unit/path/to/foo_test.dart
+  fvm flutter test --name "description substring"
+  ```
+
+- **End-to-end tests** use **Patrol** (`integration_test/`, configured in the `patrol:` block of `pubspec.yaml`):
+
+  ```bash
+  patrol test --flavor dev
+  ```
+
+New features should ship with tests. Bug fixes should include a regression test where practical.
+
+---
+
+## Pre-PR checklist
+
+Before opening a pull request, confirm every item below:
+
+- [ ] Code is formatted: `fvm dart format -l 100 lib test`.
+- [ ] Static analysis is clean: `fvm flutter analyze`.
+- [ ] All tests pass: `fvm flutter test`.
+- [ ] Generated code is regenerated if any `@injectable` / `@JsonSerializable` / Chopper annotation changed: `fvm dart run build_runner build --delete-conflicting-outputs`.
+- [ ] New localisation keys were added to **both** `en.json` and `ru.json`, and `LocaleKeys` was regenerated.
+- [ ] No hardcoded user-facing strings remain in the UI.
+- [ ] Commits follow Conventional Commits.
+- [ ] The branch is based on `develop`.
+
+Commit any regenerated files — the generated files committed to the repository are the source of truth for the analyser.
+
+---
+
+## Opening a pull request
+
+1. Push your feature branch to your fork:
+
+   ```bash
+   git push -u origin feature/short-descriptive-name
+   ```
+
+2. Open a pull request **against `develop`** on the upstream repository.
+
+3. Fill in the PR description: what changed, why, and how it was tested. **Link the related issue** (e.g. `Closes #123`) so it is tracked and auto-closed on merge.
+
+4. Ensure **CI is green.** The workflow at `.github/workflows/ci.yml` runs analyse + test, an Android dev APK build, and an unsigned iOS build.
+
+5. Address review feedback by pushing additional commits to the same branch.
+
+Keep PRs focused and reasonably small — smaller PRs are reviewed and merged faster.
+
+---
+
+## Reporting bugs
+
+Please open an issue on GitHub using the provided **issue templates**. A good bug report includes:
+
+- A clear, descriptive title.
+- Steps to reproduce.
+- Expected versus actual behaviour.
+- The flavour (`dev` / `prod`), device, and OS version.
+- Logs, screenshots, or a screen recording where relevant.
+
+Search existing issues first to avoid duplicates. For security-sensitive reports, contact the maintainers privately rather than filing a public issue.
+
+---
+
+Thank you for helping improve acits_flutter and supporting animal shelters.
