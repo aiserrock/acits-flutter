@@ -1111,6 +1111,26 @@ class StringRes {
   String get shelterSelectShelter {
     return Intl.message('Pick the shelter', name: 'shelterSelectShelter', desc: '', args: []);
   }
+
+  /// `Back`
+  String get commonBack {
+    return Intl.message('Back', name: 'commonBack', desc: '', args: []);
+  }
+
+  /// `Done!`
+  String get animalEditSuccessTitle {
+    return Intl.message('Done!', name: 'animalEditSuccessTitle', desc: '', args: []);
+  }
+
+  /// `Changes saved.`
+  String get animalEditSuccessMessage {
+    return Intl.message('Changes saved.', name: 'animalEditSuccessMessage', desc: '', args: []);
+  }
+
+  /// `Accept`
+  String get commonAccept {
+    return Intl.message('Accept', name: 'commonAccept', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<StringRes> {

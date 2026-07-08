@@ -1,6 +1,6 @@
 part of 'onboarding_bloc.dart';
 
-abstract class OnboardingEvent extends Equatable {
+sealed class OnboardingEvent extends Equatable {
   const OnboardingEvent();
 
   @override

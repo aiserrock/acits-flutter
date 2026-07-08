@@ -42,7 +42,7 @@ class SuccessHolderWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: PrimaryButton(
                     onPressed: () => onPressed?.call(),
-                    text: button ?? 'Повторить',
+                    text: button ?? StringRes.current.commonRepeat,
                   ),
                 ),
               if (onSecondPressed != null && secondButton != null)

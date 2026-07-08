@@ -49,7 +49,10 @@ class _BsDosageState extends State<BsDosage> {
                 onEditingComplete: () => _onSubmit(context),
               ),
               const SizedBox(height: 24.0),
-              PrimaryButton(text: 'Принять', onPressed: () => _onSubmit(context)),
+              PrimaryButton(
+                text: StringRes.current.commonAccept,
+                onPressed: () => _onSubmit(context),
+              ),
             ],
           ),
         ),

@@ -199,5 +199,9 @@
   "regWriteCity": "Укажите город",
   "regWriteCountry": "Укажите страну",
   "regWriteRegion": "Укажите область",
-  "shelterSelectShelter": "Выберите организацию"
+  "shelterSelectShelter": "Выберите организацию",
+  "commonBack": "Вернуться",
+  "animalEditSuccessTitle": "Готово!",
+  "animalEditSuccessMessage": "Изменения сохранены.",
+  "commonAccept": "Принять"
 }

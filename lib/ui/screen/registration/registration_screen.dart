@@ -377,7 +377,7 @@ class RegistrationLoginBtn extends StatelessWidget {
           builder: (context) {
             return MaterialButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Войти', style: TextStyle(color: ColorRes.accent)),
+              child: Text(l10n.loginEntryBtn, style: const TextStyle(color: ColorRes.accent)),
             );
           },
         ),

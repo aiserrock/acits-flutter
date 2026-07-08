@@ -199,5 +199,9 @@
   "regWriteCity": "Write the city",
   "regWriteCountry": "Write the country",
   "regWriteRegion": "Write the region",
-  "shelterSelectShelter": "Pick the shelter"
+  "shelterSelectShelter": "Pick the shelter",
+  "commonBack": "Back",
+  "animalEditSuccessTitle": "Done!",
+  "animalEditSuccessMessage": "Changes saved.",
+  "commonAccept": "Accept"
 }
