@@ -2,48 +2,32 @@ name: CI
 
 on:
   push:
-    branches: [develop, main]
+    branches: [main, develop]
   pull_request:
-    branches: [develop, main]
+    branches: [main, develop]
 
-# NOTE ON FVM: locally this project pins Flutter via FVM (see CLAUDE.md).
-# In CI we intentionally deviate: FVM inside CI runners is fragile (it manages
-# its own SDK cache and adds an extra install/version-resolution step that
-# breaks caching and setup-action integration). Instead we pin the exact same
-# Flutter version (3.44.0, channel stable) directly through
-# subosito/flutter-action@v2, which gives a deterministic, cache-friendly SDK.
+# Flutter version matches the FVM pin in .fvmrc (Dart 3.12, Flutter 3.44.x).
+# In CI we pin the SDK directly via subosito/flutter-action (FVM adds a fragile
+# install/resolution step and breaks the action's caching).
 env:
   FLUTTER_VERSION: "3.44.0"
-  FLUTTER_CHANNEL: "stable"
-  JAVA_VERSION: "17"
 
 jobs:
-  analyze-and-test:
-    name: Analyze & Test
+  analyze:
+    name: Analyse & Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Java (Temurin 17)
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: ${{ env.FLUTTER_CHANNEL }}
+          channel: stable
           cache: true
 
-      # Firebase configs and other secrets are gitignored and NOT in the repo
-      # (see secrets policy in project docs). Codegen, analyze and build all
-      # expect these files to exist, so we materialize them from the committed
-      # *.example templates. The placeholders are enough for static analysis,
-      # build_runner and a non-signed --release apk build to proceed.
-      - name: Provision secret placeholders from *.example templates
+      # Firebase configs are gitignored; materialise them from the committed
+      # *.example templates so codegen and analysis can run.
+      - name: Provision Firebase placeholders
         run: |
           cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
           cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
@@ -52,63 +36,128 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run code generation (build_runner)
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
 
-      # Line length is 100 in this project (not the Dart default of 80).
+      # Format only hand-written code (lib, test); line length 100.
       - name: Verify formatting
-        run: flutter format --output=none --set-exit-if-changed -l 100 .
+        run: dart format --output=none --set-exit-if-changed -l 100 lib test
 
-      - name: Analyze
-        run: flutter analyze .
+      - name: Analyse
+        run: flutter analyze
 
       - name: Run tests
         run: flutter test
 
-  build-dev-apk:
-    name: Build dev APK
-    needs: analyze-and-test
-    # Only build the artifact on pushes to develop, not on PRs.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+  build-android:
+    name: Build Android (dev APK)
+    needs: analyze
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Java (Temurin 17)
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: "17"
 
-      - name: Set up Flutter ${{ env.FLUTTER_VERSION }}
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: ${{ env.FLUTTER_CHANNEL }}
+          channel: stable
           cache: true
 
-      # Same rationale as in analyze-and-test: gitignored Firebase configs are
-      # recreated from the committed *.example templates so the build can run.
-      - name: Provision secret placeholders from *.example templates
+      # Prefer real Firebase configs from secrets; fall back to the *.example
+      # placeholders so the build still succeeds without secrets configured.
+      - name: Provision Firebase config
+        env:
+          GOOGLE_SERVICES_DEV: ${{ secrets.GOOGLE_SERVICES_JSON_DEV }}
+          GOOGLE_SERVICES_PROD: ${{ secrets.GOOGLE_SERVICES_JSON_PROD }}
         run: |
-          cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
-          cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
-          cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
+          mkdir -p android/app/src/dev android/app/src/prod
+          if [ -n "$GOOGLE_SERVICES_DEV" ]; then
+            echo "$GOOGLE_SERVICES_DEV" | base64 --decode > android/app/src/dev/google-services.json
+          else
+            cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
+          fi
+          if [ -n "$GOOGLE_SERVICES_PROD" ]; then
+            echo "$GOOGLE_SERVICES_PROD" | base64 --decode > android/app/src/prod/google-services.json
+          else
+            cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
+          fi
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run code generation (build_runner)
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
 
+      # Debug build so it is signed with the debug keystore (no release
+      # signing secrets needed in CI).
       - name: Build dev APK
-        run: flutter build apk -t test/dev/main.dart --flavor dev --release
+        run: flutter build apk --debug --flavor dev --target test/dev/main.dart
 
-      - name: Upload dev APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: acits-dev-apk
-          path: build/app/outputs/flutter-apk/app-dev-release.apk
+          name: app-dev-debug-apk
+          path: build/app/outputs/flutter-apk/app-dev-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  build-ios:
+    name: Build iOS (unsigned)
+    needs: analyze
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      # Cache Swift Package Manager artifacts (SPM is default in Flutter 3.44).
+      - name: Cache SwiftPM
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('ios/**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Provision Firebase config
+        env:
+          GOOGLE_SERVICE_INFO: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }}
+        run: |
+          mkdir -p ios/Runner
+          if [ -n "$GOOGLE_SERVICE_INFO" ]; then
+            echo "$GOOGLE_SERVICE_INFO" | base64 --decode > ios/Runner/GoogleService-Info.plist
+          else
+            cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
+          fi
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build iOS (no codesign, dev flavor)
+        run: flutter build ios --debug --no-codesign --flavor dev --target test/dev/main.dart
+
+      - name: Package .app
+        run: |
+          APP_PATH=$(find build/ios -name '*.app' -type d | head -1)
+          test -n "$APP_PATH"
+          cd "$(dirname "$APP_PATH")"
+          zip -ry "$GITHUB_WORKSPACE/Runner-dev-debug.app.zip" "$(basename "$APP_PATH")"
+
+      - name: Upload iOS app (unsigned)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-dev-debug-ios
+          path: Runner-dev-debug.app.zip
           if-no-files-found: error
           retention-days: 14
