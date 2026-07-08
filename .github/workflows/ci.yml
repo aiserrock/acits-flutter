@@ -1,8 +1,10 @@
 name: CI
 
+# Runs on a PR (quality gate before merge) and on a release tag (build +
+# publish). A plain push/merge to main or develop — no tag — runs nothing;
+# the PR that landed it already went through the full pipeline.
 on:
   push:
-    branches: [main, develop]
     tags: ["v*"]
   pull_request:
     branches: [main, develop]
@@ -441,8 +443,11 @@ jobs:
           # not the stale +N suffix committed in pubspec.yaml.
           version_name=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *([0-9.]+)\+.*/\1/')
           version="${version_name}+${GITHUB_RUN_NUMBER}"
-          branch="${GITHUB_REF#refs/heads/}"
-          branch="${branch#refs/tags/}"
+          # notify only fires on non-PR events: a v* tag push, or a manual
+          # workflow_dispatch (GITHUB_REF is then whatever ref was picked in
+          # the UI, branch or tag) — strip either prefix.
+          ref="${GITHUB_REF#refs/tags/}"
+          ref="${ref#refs/heads/}"
           short_sha="${GITHUB_SHA:0:8}"
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           # Plain text on purpose: commit subjects are arbitrary user text and
@@ -452,10 +457,11 @@ jobs:
           # avoids that failure mode entirely.
           changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
 
-          # build-android/build-ios/build-web/release only run on a PR or a
-          # v* tag push (see each job's `if:`); on a plain branch push their
-          # result is "skipped", which is expected and not a failure — only
-          # "failure"/"cancelled" should flip the notification to red.
+          # notify only runs on non-PR events (a v* tag push, since plain
+          # branch pushes no longer trigger this workflow at all — see the
+          # top-level `on:`). Guard with is_bad anyway: a job's result can
+          # still show "skipped" if an earlier required job failed and this
+          # one never ran, which isn't itself a fresh failure.
           is_bad() { [ "$1" = "failure" ] || [ "$1" = "cancelled" ]; }
           if [ "$RESULT_PREPARE" = "success" ] && [ "$RESULT_LINT" = "success" ] && \
              [ "$RESULT_ANALYSE" = "success" ] && [ "$RESULT_TEST" = "success" ] && \
@@ -466,8 +472,8 @@ jobs:
             status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB, release: $RESULT_RELEASE)"
           fi
 
-          text=$(printf '%s\nacits_flutter v%s\nBranch: %s\nCommit: %s\nRun: %s\n\nChangelog:\n%s' \
-            "$status_line" "$version" "$branch" "$short_sha" "$run_url" "$changelog")
+          text=$(printf '%s\nacits_flutter v%s\nRef: %s\nCommit: %s\nRun: %s\n\nChangelog:\n%s' \
+            "$status_line" "$version" "$ref" "$short_sha" "$run_url" "$changelog")
 
           response=$(curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \

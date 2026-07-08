@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+### Changed
+
+- CI no longer runs on a plain push to `main`/`develop`; it now runs only on pull requests and on a `v*` release tag
+- README now links directly to the deployed PWA
+
 ## [0.5.1+17] - 2026-07-08
 
 ### Added

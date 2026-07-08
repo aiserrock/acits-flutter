@@ -13,7 +13,7 @@
     <a href="../ru/README.md">🇷🇺 Русский</a>
   </p>
 
-  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
   [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
@@ -44,7 +44,11 @@ Les fichiers de configuration Firebase sont exclus de git — copiez d'abord les
 
 ## Builds
 
-Chaque push sur `main`/`develop` déclenche le pipeline complet (lint, analyse, test, build) et publie une notification de build — statut, version, changelog et un lien vers l'exécution — sur le **[canal de notifications de build](https://t.me/acitsFlutterBuildNotifications)** sur Telegram. Les artefacts APK/IPA signés d'une exécution donnée sont joints à la page [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) de cette exécution (lien fourni dans chaque notification).
+La CI s'exécute sur les pull requests (lint, analyse, test, build) — un simple merge vers `main`/`develop` ne déclenche rien, car la PR qui l'a apporté a déjà traversé le pipeline complet.
+
+Pousser un tag `v*` (par exemple `v0.5.1`) construit Android/iOS/web, publie une [GitHub Release](https://github.com/aiserrock/acits-flutter/releases) avec l'APK dev joint, déploie le build web `prod` sur **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)**, et publie une notification de build sur le **[canal de notifications de build](https://t.me/acitsFlutterBuildNotifications)** sur Telegram.
+
+**[PWA en ligne](https://aiserrock.github.io/acits-flutter/)** — le build web `prod`, installable comme Progressive Web App.
 
 ## Documentation
 
