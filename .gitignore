@@ -94,8 +94,9 @@ assets/cert/*.pem
 !.env.example
 ios/Flutter/ephemeral/
 
-# Claude Code — local per-developer settings (keep shared agents/skills tracked)
-.claude/settings.local.json
+# Claude Code — agent tooling & instructions, not part of the project
+CLAUDE.md
+.claude/
 
 # Internal backend handoff notes — not for the public repo (kept locally)
 doc/backend-handoff.md
