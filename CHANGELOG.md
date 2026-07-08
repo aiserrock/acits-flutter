@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+### Added
+
+- GitHub Release is now published automatically when a `v*` tag is pushed: builds the dev APK, extracts that version's bullet points from `CHANGELOG.md` as release notes, attaches the APK, deploys web to GitHub Pages
+
+### Changed
+
+- Android/iOS builds now run only on pull requests and on a release tag, not on every push to `main`/`develop`
+- Web favicon and PWA icons replaced with the app's actual logo (were the default Flutter icon)
+
+### Fixed
+
+- Two favicon `<link>` tags used a root-absolute path (`/favicon-32x32.png`), which 404'd once the site moved under a GitHub Pages subpath (`/acits-flutter/`); switched to relative paths
+
 ## [0.5.0+17] - 2026-07-08
 
 ### Added
