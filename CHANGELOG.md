@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [0.5.1+17] - 2026-07-08
+
 ### Added
 
 - GitHub Release is now published automatically when a `v*` tag is pushed: builds the dev APK, extracts that version's bullet points from `CHANGELOG.md` as release notes, attaches the APK, deploys web to GitHub Pages
