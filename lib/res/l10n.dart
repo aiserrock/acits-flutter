@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 /// Конфигурация локализации приложения (easy_localization).
 ///
 /// Переводы лежат в `assets/translations/<locale>.json`, ключи —
-/// в `lib/generated/locale_keys.g.dart` (`LocaleKeys`), доступ через `.tr()`.
+/// в `lib/gen/l10n/locale_keys.g.dart` (`LocaleKeys`), доступ через `.tr()`.
 abstract final class L10n {
   const L10n._();
 

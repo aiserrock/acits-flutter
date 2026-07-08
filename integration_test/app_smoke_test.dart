@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
-import 'package:acits_flutter/generated/locale_keys.g.dart';
-import 'package:acits_flutter/l10n/l10n.dart';
+import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
+import 'package:acits_flutter/res/l10n.dart';
 
 /// Дымовой e2e-тест (Patrol): проверяет, что связка Flutter + easy_localization
 /// поднимается на устройстве и переводы доступны.

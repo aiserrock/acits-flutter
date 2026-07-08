@@ -1,4 +1,4 @@
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:equatable/equatable.dart';
 
