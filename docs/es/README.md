@@ -13,7 +13,7 @@
     <a href="../ru/README.md">🇷🇺 Русский</a>
   </p>
 
-  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
   [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
@@ -44,7 +44,11 @@ Los archivos de configuración de Firebase están excluidos del repositorio (git
 
 ## Compilaciones
 
-Cada push a `main`/`develop` ejecuta el pipeline completo (lint, análisis, tests, build) y publica una notificación de compilación — estado, versión, changelog y un enlace a la ejecución — en el **[canal de notificaciones de compilación](https://t.me/acitsFlutterBuildNotifications)** de Telegram. Los artefactos APK/IPA firmados de cada ejecución se adjuntan en la página de [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) correspondiente (enlazada desde cada notificación).
+El CI se ejecuta en los pull requests (lint, análisis, tests, build) — un simple merge a `main`/`develop` no dispara nada, porque el PR que lo trajo ya pasó por el pipeline completo.
+
+Al hacer push de una etiqueta `v*` (por ejemplo `v0.5.1`) se compilan Android/iOS/web, se publica una [GitHub Release](https://github.com/aiserrock/acits-flutter/releases) con el APK de dev adjunto, se despliega la compilación web `prod` a **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)** y se publica una notificación de compilación en el **[canal de notificaciones de compilación](https://t.me/acitsFlutterBuildNotifications)** de Telegram.
+
+**[PWA en vivo](https://aiserrock.github.io/acits-flutter/)** — la compilación web `prod`, instalable como Progressive Web App.
 
 ## Documentación
 

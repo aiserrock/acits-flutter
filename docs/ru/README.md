@@ -13,7 +13,7 @@
     <a href="../../README.md">🇬🇧 English</a>
   </p>
 
-  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
   [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
@@ -44,7 +44,11 @@ fvm flutter run -t test/dev/main.dart --flavor dev
 
 ## Сборки
 
-Каждый push в `main`/`develop` запускает полный пайплайн (lint, analyse, test, build) и публикует уведомление о сборке — статус, версию, changelog и ссылку на запуск — в **[канал уведомлений о сборках](https://t.me/acitsFlutterBuildNotifications)** в Telegram. Подписанные APK/IPA-артефакты конкретного запуска прикреплены к странице [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) этого запуска (ссылка есть в каждом уведомлении).
+CI запускается на пул-реквестах (lint, analyse, test, build) — обычный мёрдж в `main`/`develop` ничего не запускает, потому что PR, из которого он пришёл, уже прошёл весь пайплайн.
+
+Push тега `v*` (например, `v0.5.1`) собирает Android/iOS/web, публикует [GitHub Release](https://github.com/aiserrock/acits-flutter/releases) с прикреплённым dev APK, деплоит `prod` веб-сборку на **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)** и публикует уведомление о сборке в **[канал уведомлений о сборках](https://t.me/acitsFlutterBuildNotifications)** в Telegram.
+
+**[Живой PWA](https://aiserrock.github.io/acits-flutter/)** — `prod`-сборка веб-версии, устанавливается как Progressive Web App.
 
 ## Документация
 
