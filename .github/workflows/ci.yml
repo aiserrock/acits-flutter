@@ -409,12 +409,12 @@ jobs:
             --notes "$NOTES"
 
   ##### notify #####
-  # Runs on every non-PR trigger, i.e. only a v* tag push (or a manual
-  # workflow_dispatch) — PRs don't post to Telegram.
+  # Runs on every trigger — PR, tag push, and manual workflow_dispatch — so
+  # every pipeline run gets a Telegram notification.
   notify:
     name: Notify Telegram
     needs: [prepare, lint, analyse, test, build-android, build-ios, build-web, release]
-    if: always() && github.event_name != 'pull_request'
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -425,6 +425,10 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
           RESULT_PREPARE: ${{ needs.prepare.result }}
           RESULT_LINT: ${{ needs.lint.result }}
           RESULT_ANALYSE: ${{ needs.analyse.result }}
@@ -444,10 +448,14 @@ jobs:
           # not the stale +N suffix committed in pubspec.yaml.
           version_name=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *([0-9.]+)\+.*/\1/')
           version="${version_name}+${GITHUB_RUN_NUMBER}"
-          # Strip whichever ref prefix applies (tag push, or a manual
-          # workflow_dispatch off a branch).
-          ref="${GITHUB_REF#refs/tags/}"
-          ref="${ref#refs/heads/}"
+          # GITHUB_REF is refs/pull/<n>/merge on a PR — not useful as a label
+          # — so build the ref line from event context instead.
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            ref="PR #$PR_NUMBER ($HEAD_REF -> $BASE_REF)"
+          else
+            ref="${GITHUB_REF#refs/tags/}"
+            ref="${ref#refs/heads/}"
+          fi
           short_sha="${GITHUB_SHA:0:8}"
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           # Plain text on purpose: commit subjects are arbitrary user text and
