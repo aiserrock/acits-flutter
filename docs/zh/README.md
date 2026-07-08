@@ -13,7 +13,7 @@
     <a href="../ru/README.md">🇷🇺 Русский</a>
   </p>
 
-  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
   [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
@@ -44,7 +44,11 @@ Firebase 配置文件已被 gitignore——请先复制 `*.example` 模板（详
 
 ## 构建
 
-每次向 `main`/`develop` 推送都会运行完整流水线（lint、静态分析、测试、构建），并将构建通知——状态、版本号、更新日志以及运行链接——发送到 Telegram 上的 **[构建通知频道](https://t.me/acitsFlutterBuildNotifications)**。每次运行对应的已签名 APK/IPA 构建产物会附加在该次运行的 [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) 页面上（可从每条通知链接进入）。
+CI 在 pull request 上运行（lint、静态分析、测试、构建）——直接合并到 `main`/`develop` 不会触发任何流程，因为对应的 PR 早已跑完整个流水线。
+
+推送 `v*` 标签（例如 `v0.5.1`）会构建 Android/iOS/web，发布带有 dev APK 附件的 [GitHub Release](https://github.com/aiserrock/acits-flutter/releases)，将 `prod` web 构建部署到 **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)**，并将构建通知发送到 Telegram 上的 **[构建通知频道](https://t.me/acitsFlutterBuildNotifications)**。
+
+**[在线 PWA](https://aiserrock.github.io/acits-flutter/)** —— `prod` web 构建，可作为 Progressive Web App 安装。
 
 ## 文档
 

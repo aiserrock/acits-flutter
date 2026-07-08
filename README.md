@@ -13,7 +13,7 @@
     <a href="docs/ru/README.md">🇷🇺 Русский</a>
   </p>
 
-  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
   [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -44,9 +44,11 @@ Firebase config files are gitignored — copy the `*.example` templates first (s
 
 ## Builds
 
-Every push to `main`/`develop` runs the full pipeline (lint, analyse, test, build) and posts a build notification — status, version, changelog, and a link to the run — to the **[build notifications channel](https://t.me/acitsFlutterBuildNotifications)** on Telegram. Signed APK/IPA artifacts for a given run are attached to that run's [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) page (linked from each notification).
+CI runs on pull requests (lint, analyse, test, build) — a plain merge to `main`/`develop` triggers nothing on its own, since the PR that landed it already went through the full pipeline.
 
-Pushing a `v*` tag (e.g. `v0.4.0`) additionally builds the `prod` web target and deploys it to **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)** — no separate server needed.
+Pushing a `v*` tag (e.g. `v0.5.1`) builds Android/iOS/web, publishes a [GitHub Release](https://github.com/aiserrock/acits-flutter/releases) with the dev APK attached, deploys the `prod` web build to **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)**, and posts a build notification to the **[build notifications channel](https://t.me/acitsFlutterBuildNotifications)** on Telegram.
+
+**[Live PWA](https://aiserrock.github.io/acits-flutter/)** — the `prod` web build, installable as a Progressive Web App.
 
 ## Documentation
 

@@ -13,7 +13,7 @@
     <a href="../ru/README.md">🇷🇺 Русский</a>
   </p>
 
-  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
   [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
@@ -44,7 +44,11 @@ fvm flutter run -t test/dev/main.dart --flavor dev
 
 ## البنى (Builds)
 
-كل دفعة (push) إلى `main`/`develop` تُشغّل خط الأنابيب الكامل (lint، analyse، test، build) وتنشر إشعار بناء — الحالة، الإصدار، سجل التغييرات، ورابط للتشغيل — إلى **[قناة إشعارات البناء](https://t.me/acitsFlutterBuildNotifications)** على Telegram. تُرفق حزم APK/IPA الموقّعة لكل تشغيل بصفحة [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) الخاصة بذلك التشغيل (مرتبطة من كل إشعار).
+يعمل CI عند فتح pull request (lint، analyse، test، build) — الدمج المباشر في `main`/`develop` لا يُشغّل شيئًا، لأن الـ PR الذي أدخله مرّ بالفعل بخط الأنابيب الكامل.
+
+عند دفع وسم (tag) بصيغة `v*` (مثل `v0.5.1`) يتم بناء Android/iOS/web، ونشر [GitHub Release](https://github.com/aiserrock/acits-flutter/releases) مع إرفاق APK الخاص بـ dev، ونشر بناء الويب `prod` على **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)**، ونشر إشعار بناء إلى **[قناة إشعارات البناء](https://t.me/acitsFlutterBuildNotifications)** على Telegram.
+
+**[PWA المباشر](https://aiserrock.github.io/acits-flutter/)** — بناء الويب `prod`، قابل للتثبيت كتطبيق ويب تقدمي (PWA).
 
 ## التوثيق
 
