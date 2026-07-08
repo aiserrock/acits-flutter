@@ -1,4 +1,4 @@
-[English](../../CONTRIBUTING.md) · **Русский**
+[English](../../CONTRIBUTING.md) · [中文](../zh/CONTRIBUTING.md) · [हिन्दी](../hi/CONTRIBUTING.md) · [Español](../es/CONTRIBUTING.md) · [Français](../fr/CONTRIBUTING.md) · [العربية](../ar/CONTRIBUTING.md) · **Русский**
 
 # Участие в разработке acits_flutter
 
