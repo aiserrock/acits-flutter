@@ -27,8 +27,8 @@ apply from: "../keystore/signingConfigs.gradle"
 
 android {
     namespace "io.github.andx2.acits"
-    compileSdk 36
-    ndkVersion "28.2.13676358"
+    compileSdk flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -50,7 +50,7 @@ android {
     defaultConfig {
         applicationId "io.github.andx2.acits"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 36
+        targetSdkVersion flutter.targetSdkVersion
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
