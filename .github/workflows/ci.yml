@@ -1,8 +1,11 @@
 name: CI
 
-# Runs on a PR (quality gate before merge) and on a release tag (build +
-# publish). A plain push/merge to main or develop — no tag — runs nothing;
-# the PR that landed it already went through the full pipeline.
+# Two triggers, two purposes:
+#   pull_request -> quality gate (lint/analyse/test/build) before merge.
+#   push tags "v*" -> release: build everything, publish the GitHub Release,
+#     deploy the web PWA.
+# A plain push to main/develop (no tag) runs nothing — merging already means
+# the PR build passed.
 on:
   push:
     tags: ["v*"]
@@ -10,15 +13,15 @@ on:
     branches: [main, develop]
   workflow_dispatch:
 
-# Flutter version matches the FVM pin in .fvmrc (Dart 3.12, Flutter 3.44.x).
-# In CI we pin the SDK directly via subosito/flutter-action (FVM adds a fragile
-# install/resolution step and breaks the action's caching).
+# Matches the FVM pin in .fvmrc (Dart 3.12, Flutter 3.44.x). CI pins the SDK
+# directly via subosito/flutter-action — FVM's install step is fragile here
+# and breaks the action's caching.
 env:
   FLUTTER_VERSION: "3.44.0"
 
-# Stages mirror our GitLab pipelines (prepare -> lint -> analyse -> test ->
-# build -> notify) as separate jobs, so a failure is immediately visible as
-# a single named check instead of being buried in one big job's step list.
+# One job per pipeline stage (prepare -> lint/analyse/test -> build ->
+# release -> notify) so a failure shows up as its own named check instead of
+# being buried in a single job's step list.
 jobs:
   ##### prepare #####
   prepare:
@@ -47,14 +50,11 @@ jobs:
       - name: Generate code (build_runner)
         run: dart run build_runner build --delete-conflicting-outputs
 
-      # Share the exact post-codegen output with every downstream job, so
-      # lint/analyse/test/build all see identical generated code instead of
-      # each re-running build_runner (generator patch versions can drift and
-      # produce slightly different output over time). Only lib/, test/ and
-      # pubspec.lock actually change from codegen — archiving the whole
-      # working tree pulled in multi-GB build_runner/.dart_tool cache
-      # directories full of files that mutate while tar reads them, which
-      # tar treats as a hard error ("file changed as we read it").
+      # Share the exact post-codegen output with every downstream job instead
+      # of each re-running build_runner (generator patch versions can drift).
+      # Only lib/, test/ and pubspec.lock actually change from codegen —
+      # archiving the whole tree would pull in multi-GB caches full of files
+      # that mutate mid-read and make tar fail.
       - name: Archive workspace
         run: tar -czf workspace.tar.gz lib test pubspec.lock
 
@@ -292,9 +292,8 @@ jobs:
           retention-days: 14
 
   ##### build web (tags only) #####
-  # Only runs when a `v*` tag is pushed — every other push (branches, PRs)
-  # skips it entirely. Deploys to GitHub Pages so tagged releases get a
-  # browsable web build without needing a separate server.
+  # Deploys the prod web build to GitHub Pages so every release gets a
+  # browsable PWA without needing a separate server.
   build-web:
     name: Build & deploy web (GitHub Pages)
     needs: [lint, analyse, test]
@@ -356,9 +355,9 @@ jobs:
         uses: actions/deploy-pages@v4
 
   ##### release (tags only) #####
-  # Only runs on a `v*` tag push. Publishes the GitHub Release: attaches the
-  # dev APK built above and writes the release notes from CHANGELOG.md, so
-  # "cut a release" is just "push a tag" — no manual release-page editing.
+  # Publishes the GitHub Release: attaches the dev APK built above and writes
+  # release notes from CHANGELOG.md. Pushing a tag is the whole release
+  # process — no manual release-page editing.
   release:
     name: Publish GitHub Release
     needs: [build-android]
@@ -410,6 +409,8 @@ jobs:
             --notes "$NOTES"
 
   ##### notify #####
+  # Runs on every non-PR trigger, i.e. only a v* tag push (or a manual
+  # workflow_dispatch) — PRs don't post to Telegram.
   notify:
     name: Notify Telegram
     needs: [prepare, lint, analyse, test, build-android, build-ios, build-web, release]
@@ -443,9 +444,8 @@ jobs:
           # not the stale +N suffix committed in pubspec.yaml.
           version_name=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *([0-9.]+)\+.*/\1/')
           version="${version_name}+${GITHUB_RUN_NUMBER}"
-          # notify only fires on non-PR events: a v* tag push, or a manual
-          # workflow_dispatch (GITHUB_REF is then whatever ref was picked in
-          # the UI, branch or tag) — strip either prefix.
+          # Strip whichever ref prefix applies (tag push, or a manual
+          # workflow_dispatch off a branch).
           ref="${GITHUB_REF#refs/tags/}"
           ref="${ref#refs/heads/}"
           short_sha="${GITHUB_SHA:0:8}"
@@ -457,11 +457,9 @@ jobs:
           # avoids that failure mode entirely.
           changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
 
-          # notify only runs on non-PR events (a v* tag push, since plain
-          # branch pushes no longer trigger this workflow at all — see the
-          # top-level `on:`). Guard with is_bad anyway: a job's result can
-          # still show "skipped" if an earlier required job failed and this
-          # one never ran, which isn't itself a fresh failure.
+          # build-android/build-ios/build-web/release are gated to PR/tag
+          # (see each job's `if:`); "skipped" is their expected result here,
+          # not a failure — only "failure"/"cancelled" should turn this red.
           is_bad() { [ "$1" = "failure" ] || [ "$1" = "cancelled" ]; }
           if [ "$RESULT_PREPARE" = "success" ] && [ "$RESULT_LINT" = "success" ] && \
              [ "$RESULT_ANALYSE" = "success" ] && [ "$RESULT_TEST" = "success" ] && \
