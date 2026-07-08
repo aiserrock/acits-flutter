@@ -1,34 +1,39 @@
-import 'dart:async';
-
-import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
+import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_cubit.dart';
+import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_state.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
+import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-const _searchBouncePeriod = Duration(milliseconds: 1000);
-
-class SearchScreen extends StatefulWidget {
+/// Экран поиска вида животного. Возвращает выбранный [Species] через `pop`.
+class SearchScreen extends StatelessWidget {
   const SearchScreen({this.parentSearch, super.key});
 
   final Species? parentSearch;
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchSpecCubit(parentSearch: parentSearch),
+      child: const _SearchView(),
+    );
+  }
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchView extends StatefulWidget {
+  const _SearchView();
+
+  @override
+  State<_SearchView> createState() => _SearchViewState();
+}
+
+class _SearchViewState extends State<_SearchView> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _service = getIt<AnimalService>();
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
-  Timer? _bounceTimer;
   late final NavigatorState _navigator;
-
-  int _speciesListOffset = 0;
-  final _speciesState = ScreenDataState<List<Species>>()..loading();
-  final _listPagingState = ScreenDataState<Object>()..content(Object());
 
   @override
   void initState() {
@@ -46,7 +51,9 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _searchController.removeListener(_onSearchChange);
+    _searchController.dispose();
     _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -93,18 +100,30 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildBody() {
-    return StateBuilder<List<Species>>(
-      state: _speciesState,
-      builder: _buildList,
-      loader: (_) => const Center(child: CircularProgressIndicator()),
-      errorBuilder: (_, _) => ErrorStubWidget(onPressed: () => _loadData(resetOffset: true)),
+    return BlocBuilder<SearchSpecCubit, SearchSpecState>(
+      builder: (context, state) {
+        return DataStateBuilder<List<Species>>(
+          state: state.data,
+          builder: (context, list) => _buildList(context, list, state),
+          loader: (_) => const Center(child: CircularProgressIndicator()),
+          errorBuilder: (_, _) => ErrorStubWidget(
+            onPressed: () => context.read<SearchSpecCubit>().loadData(
+              searchRequest: _searchQuery,
+              resetOffset: true,
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildList(BuildContext context, List<Species> list) {
+  Widget _buildList(BuildContext context, List<Species> list, SearchSpecState state) {
     return list.isNotEmpty
         ? RefreshIndicator(
-            onRefresh: () => _loadData(resetOffset: true),
+            onRefresh: () => context.read<SearchSpecCubit>().loadData(
+              searchRequest: _searchQuery,
+              resetOffset: true,
+            ),
             child: CustomScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               controller: _scrollController,
@@ -118,7 +137,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           return ListTile(
                             title: Text(list[index].name ?? ''),
                             onTap: () {
-                              _onItemPressed(context, list[index]);
+                              _onItemPressed(list[index]);
                             },
                           );
                         },
@@ -127,20 +146,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     childCount: list.length,
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: StateBuilder(
-                    state: _listPagingState,
-                    builder: (_, _) => const SizedBox(height: 16.0),
-                    loader: (_) => const SizedBox(
-                      height: 64.0,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                    errorBuilder: (_, _) => SizedBox(
-                      height: 64.0,
-                      child: Center(child: Text(StringRes.current.commonError)),
-                    ),
-                  ),
-                ),
+                SliverToBoxAdapter(child: _buildPagingFooter(state)),
               ],
             ),
           )
@@ -156,56 +162,30 @@ class _SearchScreenState extends State<SearchScreen> {
           );
   }
 
-  void _onItemPressed(BuildContext context, Species item) {
+  Widget _buildPagingFooter(SearchSpecState state) {
+    if (state.isPaging) {
+      return const SizedBox(height: 64.0, child: Center(child: CircularProgressIndicator()));
+    }
+    if (state.pagingError != null) {
+      return SizedBox(height: 64.0, child: Center(child: Text(StringRes.current.commonError)));
+    }
+    return const SizedBox(height: 16.0);
+  }
+
+  String? get _searchQuery => _searchController.text.isNotEmpty ? _searchController.text : null;
+
+  void _onItemPressed(Species item) {
     _navigator.pop(item);
   }
 
   void _onSearchChange() {
-    if (_searchController.text.isEmpty) {
-      _bounceTimer?.cancel();
-      _loadData();
-      return;
-    }
-    _bounceTimer?.cancel();
-    _bounceTimer = Timer(_searchBouncePeriod, () => _loadData(resetOffset: true));
+    context.read<SearchSpecCubit>().onSearchChanged(_searchController.text);
   }
 
   void _onScroll() {
     final positions = _scrollController.position;
-    if (positions.pixels >= positions.maxScrollExtent && !_listPagingState.isLoading) _loadData();
-  }
-
-  Future<void> _loadData({bool resetOffset = false}) async {
-    if (resetOffset) {
-      setState(() {
-        _speciesListOffset = 0;
-        _speciesState.loading();
-      });
+    if (positions.pixels >= positions.maxScrollExtent) {
+      context.read<SearchSpecCubit>().loadMore(_searchController.text);
     }
-    if (!_speciesState.isLoading) {
-      setState(() => _listPagingState.loading());
-    }
-    _service
-        .getAnimalSpecies(
-          level: _service.getLevel(int.tryParse(widget.parentSearch?.level.toString() ?? '0') ?? 0),
-          parentId: widget.parentSearch?.id,
-          offset: _speciesListOffset,
-          searchRequest: _searchController.text.isNotEmpty ? _searchController.text : null,
-        )
-        .then((value) {
-          setState(() {
-            _speciesListOffset += value.length;
-            final list = (_speciesState.value ?? [])..addAll(value);
-            _speciesState.content(list);
-            _listPagingState.content(Object());
-          });
-        })
-        .onError((error, stackTrace) {
-          if (_speciesState.isLoading) {
-            setState(() => _speciesState.error = error);
-          } else {
-            setState(() => _listPagingState.error = error);
-          }
-        });
   }
 }

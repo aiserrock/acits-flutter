@@ -4,14 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// BS выбора дозировки лекарства
-class BsDosage extends StatelessWidget {
-  BsDosage({super.key, required this.drug});
+class BsDosage extends StatefulWidget {
+  const BsDosage({super.key, required this.drug});
 
   final ShelterDrug drug;
-  final TextEditingController controller = TextEditingController();
+
+  @override
+  State<BsDosage> createState() => _BsDosageState();
+}
+
+class _BsDosageState extends State<BsDosage> {
+  /// Контроллер ввода дозировки. Владеет и утилизирует его сам State.
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final drug = widget.drug;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -27,15 +41,15 @@ class BsDosage extends StatelessWidget {
               Text('${drug.drug?.name}, ${drug.drug?.formOfDrugName}', style: StyleRes.subTitle),
               const SizedBox(height: 16.0),
               TextField(
-                controller: controller,
+                controller: _controller,
                 autofocus: true,
                 decoration: const InputDecoration(labelText: 'Dosage*'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                onEditingComplete: () => onSubmit(context),
+                onEditingComplete: () => _onSubmit(context),
               ),
               const SizedBox(height: 24.0),
-              PrimaryButton(text: 'Принять', onPressed: () => onSubmit(context)),
+              PrimaryButton(text: 'Принять', onPressed: () => _onSubmit(context)),
             ],
           ),
         ),
@@ -43,11 +57,10 @@ class BsDosage extends StatelessWidget {
     );
   }
 
-  void onSubmit(BuildContext context) {
-    final parsed = double.tryParse(controller.text);
-    if (parsed == null) {
-      return;
-    } else {}
+  /// Парсит введённую дозировку и возвращает её через [Navigator.pop].
+  void _onSubmit(BuildContext context) {
+    final parsed = double.tryParse(_controller.text);
+    if (parsed == null) return;
     Navigator.of(context).pop(parsed);
   }
 }

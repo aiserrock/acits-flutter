@@ -1,40 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/ui/screen/main/cubit/main_cubit.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/ui/widget/prescription_card.dart';
-import 'package:acits_flutter/util/screen_state.dart';
+import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/generated/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(create: (_) => MainCubit(), child: const _MainView());
+  }
 }
 
-class _MainScreenState extends State<MainScreen> {
-  _MainScreenState()
-    : _prescriptionService = getIt.get<PrescriptionService>(),
-      _debugService = getIt.get<DebugService>();
+class _MainView extends StatefulWidget {
+  const _MainView();
 
-  final PrescriptionService _prescriptionService;
+  @override
+  State<_MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<_MainView> {
+  _MainViewState() : _debugService = getIt.get<DebugService>();
+
   final DebugService _debugService;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _searchController = TextEditingController();
   late bool _isSmallScreen;
   bool _isSearchActive = false;
-
-  ScreenDataState<PaginatedPrescriptionExecutionTodayList?> _state = ScreenDataState()..loading();
 
   @override
   void didChangeDependencies() {
@@ -43,9 +49,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _loadExecutions();
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,11 +104,16 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildBody() {
-    return StateBuilder<PaginatedPrescriptionExecutionTodayList?>(
-      state: _state,
-      loader: (_) => const ScreenLoader(height: 104.0),
-      builder: (_, data) => _MainScreenContent(data, pullToRefresh: _loadExecutions),
-      errorBuilder: (_, error) => Column(),
+    return BlocBuilder<MainCubit, DataState<PaginatedPrescriptionExecutionTodayList?>>(
+      builder: (context, state) {
+        return DataStateBuilder<PaginatedPrescriptionExecutionTodayList?>(
+          state: state,
+          loader: (_) => const ScreenLoader(height: 104.0),
+          builder: (_, data) =>
+              _MainScreenContent(data, pullToRefresh: context.read<MainCubit>().loadExecutions),
+          errorBuilder: (_, _) => Column(),
+        );
+      },
     );
   }
 
@@ -112,6 +123,7 @@ class _MainScreenState extends State<MainScreen> {
             height: 40.0,
             child: TextField(
               autofocus: true,
+              controller: _searchController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),
                 suffix: GestureDetector(
@@ -129,21 +141,14 @@ class _MainScreenState extends State<MainScreen> {
         : Text(StringRes.current.mainTitle, style: const TextStyle(color: ColorRes.textPrimary));
   }
 
-  Future<void> _loadExecutions() async {
-    setState(() => _state = ScreenDataState()..loading());
-    await _prescriptionService
-        .fetchTodayPrescriptionList()
-        .then((value) => setState(() => _state = ScreenDataState()..content(value)))
-        .catchError((e) => _state = ScreenDataState()..error = e);
-  }
-
   void _openDebug(BuildContext context) {
     _debugService.openDebugScreen();
   }
 
   void _onFabPressed(BuildContext context) {
+    final cubit = context.read<MainCubit>();
     context.push<Prescription>(AppRoutes.prescriptionEdit).then((value) {
-      if (value != null) _loadExecutions();
+      if (value != null) cubit.loadExecutions();
     });
   }
 }

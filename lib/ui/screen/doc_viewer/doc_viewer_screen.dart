@@ -2,15 +2,18 @@ import 'dart:io';
 
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
+import 'package:acits_flutter/ui/screen/doc_viewer/cubit/doc_viewer_cubit.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:acits_flutter/util/util.dart';
+import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:share_plus/share_plus.dart';
 
-class DocViewerScreen extends StatefulWidget {
+/// Экран просмотра PDF-документа с кнопкой «Поделиться».
+class DocViewerScreen extends StatelessWidget {
   const DocViewerScreen(this.fetcher, {this.title, super.key});
 
   final PdfDocFetcher fetcher;
@@ -18,20 +21,28 @@ class DocViewerScreen extends StatefulWidget {
   final String? title;
 
   @override
-  State<DocViewerScreen> createState() => _DocViewerScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => DocViewerCubit(fetcher),
+      child: _DocViewerView(title: title),
+    );
+  }
 }
 
-class _DocViewerScreenState extends State<DocViewerScreen> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-  var _state = ScreenDataState<File>()..loading();
-  PdfController? _controller;
+class _DocViewerView extends StatefulWidget {
+  const _DocViewerView({this.title});
+
+  final String? title;
 
   @override
-  void initState() {
-    super.initState();
+  State<_DocViewerView> createState() => _DocViewerViewState();
+}
 
-    _fetchData();
-  }
+class _DocViewerViewState extends State<_DocViewerView> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  PdfController? _controller;
+  String? _controllerPath;
 
   @override
   void dispose() {
@@ -56,48 +67,44 @@ class _DocViewerScreenState extends State<DocViewerScreen> {
         ),
         centerTitle: true,
       ),
-      body: StateBuilder<File>(
-        state: _state,
-        builder: (_, file) {
-          final controller = PdfController(document: PdfDocument.openFile(file.absolute.path));
-          _controller = controller;
-          return Column(
-            children: [
-              Expanded(child: PdfView(controller: controller)),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: PrimaryButton(
-                    child: const Text('Share'),
-                    onPressed: () => Share.shareXFiles([XFile(file.absolute.path)]),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-        loader: (_) => const LoaderHolderWidget(),
-        errorBuilder: (_, e) {
-          return ErrorHolderWidget(error: e, onPressed: _fetchData);
-        },
+      body: BlocBuilder<DocViewerCubit, DataState<File>>(
+        builder: (context, state) => DataStateBuilder<File>(
+          state: state,
+          loader: (_) => const LoaderHolderWidget(),
+          errorBuilder: (_, e) =>
+              ErrorHolderWidget(error: e, onPressed: context.read<DocViewerCubit>().fetchData),
+          builder: (_, file) => _buildContent(file),
+        ),
       ),
     );
   }
 
-  void _fetchData() {
-    setState(() {
-      _state = ScreenDataState()..loading();
-    });
+  Widget _buildContent(File file) {
+    final controller = _controllerFor(file);
+    return Column(
+      children: [
+        Expanded(child: PdfView(controller: controller)),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: PrimaryButton(
+              child: const Text('Share'),
+              onPressed: () => Share.shareXFiles([XFile(file.absolute.path)]),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-    widget.fetcher
-        .call()
-        .then(
-          (file) => setState(() {
-            _state = ScreenDataState(file);
-          }),
-        )
-        .catchError((e) {
-          setState(() => _state = ScreenDataState()..error = e);
-        });
+  /// Создаёт `PdfController` один раз на файл; при смене файла старый диспозится.
+  PdfController _controllerFor(File file) {
+    final path = file.absolute.path;
+    if (_controller == null || _controllerPath != path) {
+      _controller?.dispose();
+      _controller = PdfController(document: PdfDocument.openFile(path));
+      _controllerPath = path;
+    }
+    return _controller!;
   }
 }
