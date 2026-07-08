@@ -1,107 +1,90 @@
+**English** · [Русский](docs/ru/README.md)
+
 # acits_flutter
 
-> Мобильный клиент Flutter для [Acits](https://acits.ru/) — бесплатного ПО для контроля за животными внутри приюта.
+[![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Flutter mobile client for [acits.ru](https://acits.ru/) — free software for tracking and managing animals inside an animal shelter.
-
-![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)
-![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Style: flutter_lints](https://img.shields.io/badge/style-flutter__lints-40c4ff.svg)
+Flutter mobile client for [acits.ru](https://acits.ru/) — free and open-source software for tracking animals inside an animal shelter.
 
 ## About
 
-**acits_flutter** is the mobile client for the Acits platform — free, open-source software that helps animal shelters keep track of the animals in their care. The app lets shelter staff and curators manage an animal registry, record prescriptions and drug executions, coordinate applicants and adoptions, browse documents and photos, and stay on top of scheduled tasks through a built-in calendar.
-
-The project is a single-package Flutter application built with **flutter_bloc** for state management, a **Chopper + Dio** networking layer generated from an OpenAPI specification, and **get_it + injectable** for dependency injection. The toolchain is pinned via **FVM** to Flutter 3.44.0 / Dart 3.12.0.
+`acits_flutter` is the mobile front-end of the ACITS platform. It helps shelter staff and curators keep a live registry of the animals in their care: medical prescriptions, schedules, adoption applicants, supporting documents and photos. The app is built for both `dev` and `prod` environments and talks to the ACITS backend over a generated OpenAPI client.
 
 ## Features
 
-- **Animals registry** — browse, search, view, create, and edit animal records.
-- **Prescriptions** — manage medical prescriptions per animal.
-- **Calendar & executions** — track scheduled drug executions and tasks over time.
-- **Drugs catalog** — reference and assign medications.
-- **Applicants** — handle adoption applicants and their requests.
-- **Curators** — manage curator profiles tied to animals.
-- **Document viewer** — open and read attached documents in-app.
-- **Photo gallery** — view animal photos in a dedicated gallery.
-- **Comments** — collaborate through per-record comments.
+- **Animals registry** — browse, search, create and edit animal records.
+- **Prescriptions** — track medical prescriptions and drugs per animal.
+- **Calendar** — schedule and view upcoming care events.
+- **Applicants** — manage adoption applicants.
+- **Curators** — assign and manage the people responsible for each animal.
+- **Documents** — attach and view supporting documents.
+- **Photo gallery** — per-animal photo galleries.
 - **Onboarding** — first-launch introduction flow.
-- **Authentication** — login and registration with secure token storage.
-- **Personal screen** — manage the current user's account and settings.
+- **Authentication** — secure sign-in with token storage.
 
 ## Tech Stack
 
 | Concern | Choice |
 | --- | --- |
-| Framework | Flutter 3.44.0 |
-| Language | Dart 3.12.0 |
-| SDK manager | FVM (pinned toolchain) |
-| State management | `flutter_bloc` + `formz` + `equatable` |
-| Networking | `chopper` + `dio` (generated from OpenAPI) |
-| Serialization | `json_serializable` (`@JsonSerializable` DTOs) |
-| Dependency injection | `get_it` + `injectable` |
-| Secure storage | `flutter_secure_storage` |
-| Key-value storage | `shared_preferences` (wrapped) |
-| Backend services | Firebase Core |
-| Localization | `intl` / `intl_utils` (ARB source) |
-| Assets codegen | `flutter_gen` |
-| Linting | `flutter_lints` |
+| Toolchain | Flutter 3.44.0 / Dart 3.12.0, pinned via [FVM](https://fvm.app) (`.fvmrc`) |
+| State management | `flutter_bloc` **Cubit** with a sealed `DataState<T>` + `DataStateBuilder`, `safeEmit`, `formz`, `equatable` |
+| Navigation | [`go_router`](https://pub.dev/packages/go_router) — `AppRoutes` constants, objects passed via `extra` + `AppExtraCodec` |
+| Localization | [`easy_localization`](https://pub.dev/packages/easy_localization) — JSON translations, generated `LocaleKeys` |
+| Dependency injection | `get_it` + `injectable` 3 |
+| Networking | Chopper + Dio, generated from OpenAPI (`doc/api/`) into `lib/api/` |
+| Storage | `flutter_secure_storage` + `shared_preferences` (wrapped in `lib/service/`) |
+| Firebase | `firebase_core` (config files are gitignored — copy the `*.example` templates) |
+| Testing | Unit/bloc: `mocktail` + `bloc_test`; e2e: [Patrol](https://patrol.leancode.co) |
+| CI | GitHub Actions (`.github/workflows/ci.yml`) — analyse + test, build Android (dev APK), build iOS (unsigned) |
 
 ## Getting Started
 
 ### Prerequisites
 
-- [FVM](https://fvm.app/) (Flutter Version Management)
-- Flutter **3.44.0** / Dart **3.12.0** (installed and used through FVM)
+- [FVM](https://fvm.app) (Flutter Version Management)
 
-> All Flutter and Dart commands **must** be prefixed with `fvm` so the pinned SDK is used.
-
-### Install
+Clone the repository, install the pinned Flutter version and fetch dependencies:
 
 ```bash
-# Clone the repository
 git clone https://github.com/aiserrock/acits-flutter.git
 cd acits-flutter
 
-# Install the pinned Flutter SDK
 fvm install
-
-# Fetch dependencies
 fvm flutter pub get
-
-# Run code generation (DI, JSON, Chopper, assets, OpenAPI)
-fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
-### Secrets setup
+### Firebase configuration
 
-Sensitive files are **gitignored** and are not part of the repository. Before building, copy the provided `*.example` templates and supply your own values:
-
-- **Firebase** — provide your own `google-services.json` (Android) and `GoogleService-Info.plist` (iOS).
-- **Release signing** — provide your own release keystore and `key.properties`.
-- **Debug keystore** — `android/keystore/test.keystore` is gitignored; supply your own debug keystore.
-- **Charles debug certificates** — provide your own `.pem` certificates if you need proxy debugging.
-
-Copy each `*.example` file to its real name and fill in the required values, then adjust the paths to match the templates present in your checkout:
+Firebase config files are gitignored. Copy the provided templates and fill in your own values:
 
 ```bash
-cp android/app/google-services.json.example android/app/google-services.json
-cp android/key.properties.example android/key.properties
+cp android/app/src/dev/google-services.json.example  android/app/src/dev/google-services.json
+cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
+cp ios/Runner/GoogleService-Info.plist.example       ios/Runner/GoogleService-Info.plist
+cp android/keystore/key.properties.example           android/keystore/key.properties
 ```
+
+### Code generation
+
+Generate DI, JSON serialisation, the OpenAPI client and other build outputs:
+
+```bash
+fvm dart run build_runner build --delete-conflicting-outputs
+```
+
+Rerun this after changing any `@injectable`, JSON-serialisable or Chopper-annotated class, or after touching the OpenAPI spec in `doc/api/`.
 
 ## Running
 
-The project defines two flavors, each with its own entry point:
-
-- **dev** — entry `test/dev/main.dart`
-- **prod** — entry `lib/main.dart`
+Two flavors exist, each with its own entry point.
 
 ```bash
-# Run the dev flavor
+# dev
 fvm flutter run -t test/dev/main.dart --flavor dev
 
-# Run the prod flavor
+# prod
 fvm flutter run -t lib/main.dart --flavor prod
 ```
 
@@ -109,94 +92,82 @@ fvm flutter run -t lib/main.dart --flavor prod
 
 ```text
 lib/
-├── api/          # Swagger/OpenAPI-generated HTTP layer (Chopper) — generated, do not edit
-├── di/           # get_it + injectable container (initDi())
-├── domain/       # Plain Dart domain models & enums
-├── service/      # Injectable services (auth, animal, client, config, ...)
+├── api/           # Chopper/Dio OpenAPI-generated HTTP layer (generated — do not edit)
+├── di/            # get_it + injectable container (initDi())
+├── domain/        # plain Dart domain models & enums
+├── generated/     # easy_localization LocaleKeys (generated)
+├── l10n/          # localization helpers
+├── navigation/    # go_router: app_router.dart (AppRoutes), extra_codec.dart
+├── res/           # design tokens: color, style, icon, lottie, strings
+├── service/       # injectable services (auth, animal, document, storage, …)
 ├── ui/
-│   ├── screen/   # One folder per feature: bloc/ + view/ + model/ + barrel
-│   └── widget/   # App-wide shared widgets
-├── res/          # Design tokens (color, style, icon, lottie, strings)
-├── gen/          # flutter_gen output (assets, fonts) — generated
-├── generated/    # intl output (StringRes) — generated
-├── l10n/         # Source .arb files (intl_ru.arb is the template)
-├── util/         # Generic helpers
-├── export.dart   # Project-wide barrel
-└── main.dart     # Prod entry point (dev entry: test/dev/main.dart)
+│   ├── screen/    # one folder per feature (cubit/bloc · view · model)
+│   └── widget/    # app-wide shared widgets
+├── util/          # data_state.dart, bloc_ext.dart, validators, helpers
+├── export.dart    # project-wide barrel
+└── main.dart      # prod entry point (dev entry: test/dev/main.dart)
 ```
-
-Each screen under `ui/screen/<feature>/` follows the same convention:
-
-```text
-ui/screen/<feature>/
-├── bloc/         # <name>_bloc.dart with part '<name>_event.dart' / '<name>_state.dart'
-├── view/         # Screen widgets (often with a view.dart barrel)
-├── model/        # Screen-local models (often with a model.dart barrel)
-└── <feature>.dart  # Barrel re-exporting bloc / view / model
-```
-
-## Code Generation
-
-Run the build runner after changing any `@injectable`, `@JsonSerializable`, or Chopper-annotated class, or after editing the OpenAPI spec in `doc/api/`:
-
-```bash
-fvm flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-The generated files committed to the repo are the source of truth for the analyzer.
 
 ## Localization
 
-Source strings live in `lib/l10n/intl_*.arb` (with `intl_ru.arb` as the template). After editing them, regenerate the `StringRes` class:
+The app uses `easy_localization`. Translations live in `assets/translations/en.json` and `assets/translations/ru.json` (both are full); keys are generated as `LocaleKeys`. There are **no hardcoded UI strings** — every user-facing string goes through a key.
 
-```bash
-fvm flutter pub run intl_utils:generate
-fvm flutter format -l 100 .
-```
+To add a string:
 
-Access translations via `StringRes.of(context)` / `S.of(context)`.
+1. Add the key to **both** `assets/translations/en.json` and `assets/translations/ru.json`.
+2. Regenerate the keys:
 
-> **No hardcoded user-facing strings** — add them to `lib/l10n/intl_ru.arb`, regenerate, and read them through `StringRes`.
+   ```bash
+   fvm dart run easy_localization:generate \
+     -S assets/translations -O lib/generated -o locale_keys.g.dart -f keys
+   ```
+
+3. Use it in the UI:
+
+   ```dart
+   Text(LocaleKeys.someKey.tr())
+   ```
 
 ## Testing
 
+Unit and bloc tests (`mocktail` + `bloc_test`) live in `test/unit/`:
+
 ```bash
-# Run all unit / widget tests
 fvm flutter test
-
-# Run a single test file
-fvm flutter test test/path/to/foo_test.dart
-
-# Run tests matching a description
-fvm flutter test --name "description substring"
 ```
 
-### Formatting & analysis
-
-The project uses a **100-character** line length (not the Dart default 80):
+End-to-end tests use [Patrol](https://patrol.leancode.co) and live in `integration_test/` (configured in the `patrol:` block of `pubspec.yaml`):
 
 ```bash
-fvm flutter format -l 100 .
-fvm flutter analyze .
+patrol test --flavor dev
 ```
 
 ## Building
 
-Two flavors exist, `dev` and `prod`, with distinct entry points.
-
 ```bash
-# Dev — APK
+# dev — Android APK
 fvm flutter build apk -t test/dev/main.dart --flavor dev --release
 
-# Prod — App Bundle (obfuscated, with split debug info)
-fvm flutter build appbundle -t lib/main.dart --flavor prod --release \
-  --obfuscate --split-debug-info=./build/app/outputs/symbols/prod
+# prod — Android App Bundle
+fvm flutter build appbundle -t lib/main.dart --flavor prod --release
+
+# prod — iOS
+fvm flutter build ios -t lib/main.dart --flavor prod --release
+```
+
+### Formatting & analysis
+
+Line length is **100** (not the Dart default of 80):
+
+```bash
+fvm dart format -l 100 lib test
+fvm flutter analyze
 ```
 
 ## Contributing
 
-Contributions are welcome. This repository follows a git-flow branching model: `develop` is the integration branch and `main` holds released code. Branch off `develop`, and open your pull request against `develop`.
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE) — © 2026 aiserrock.
+Released under the [MIT License](LICENSE).
