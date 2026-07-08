@@ -5,6 +5,7 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  workflow_dispatch:
 
 # Flutter version matches the FVM pin in .fvmrc (Dart 3.12, Flutter 3.44.x).
 # In CI we pin the SDK directly via subosito/flutter-action (FVM adds a fragile
