@@ -13,7 +13,7 @@
     <a href="../ru/README.md">🇷🇺 Русский</a>
   </p>
 
-  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
   [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
@@ -44,7 +44,11 @@ Firebase कॉन्फ़िग फ़ाइलें gitignored हैं —
 
 ## बिल्ड्स
 
-`main`/`develop` में हर पुश पर पूरी पाइपलाइन (lint, analyse, test, build) चलती है और **[बिल्ड नोटिफिकेशन चैनल](https://t.me/acitsFlutterBuildNotifications)** पर Telegram पर एक बिल्ड नोटिफिकेशन पोस्ट होता है — स्टेटस, वर्ज़न, चेंजलॉग, और रन का लिंक। किसी दिए गए रन के लिए साइन किए गए APK/IPA आर्टिफ़ैक्ट्स उस रन के [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) पेज पर अटैच होते हैं (प्रत्येक नोटिफिकेशन से लिंक किया गया)।
+CI पुल रिक्वेस्ट पर चलता है (lint, analyse, test, build) — `main`/`develop` में सीधा मर्ज कुछ भी ट्रिगर नहीं करता, क्योंकि उसे लाने वाला PR पहले ही पूरी पाइपलाइन से गुज़र चुका होता है।
+
+`v*` टैग पुश करने पर (जैसे `v0.5.1`) Android/iOS/web बिल्ड होते हैं, dev APK के साथ एक [GitHub Release](https://github.com/aiserrock/acits-flutter/releases) पब्लिश होता है, `prod` वेब बिल्ड **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)** पर डिप्लॉय होता है, और **[बिल्ड नोटिफिकेशन चैनल](https://t.me/acitsFlutterBuildNotifications)** पर Telegram पर एक बिल्ड नोटिफिकेशन पोस्ट होता है।
+
+**[लाइव PWA](https://aiserrock.github.io/acits-flutter/)** — `prod` वेब बिल्ड, जिसे Progressive Web App के रूप में इंस्टॉल किया जा सकता है।
 
 ## दस्तावेज़ीकरण
 
