@@ -78,12 +78,17 @@ android/app/src/prod/google-services.json
 ios/Runner/GoogleService-Info.plist
 macos/Runner/GoogleService-Info.plist
 
-# Android signing (release keystore + credentials)
+# Android signing (release keystore + credentials). test.keystore is the
+# public debug keystore (password "123456", Android/Flutter's own default) —
+# it is not a secret and is committed on purpose; the debug build config and
+# CI both need it.
 android/keystore/*.jks
 android/keystore/*.keystore
+!android/keystore/test.keystore
 android/keystore/key.properties
 **/*.jks
 **/*.keystore
+!**/test.keystore
 
 # Charles / mitmproxy debug SSL certificates (developer-local, do not ship)
 assets/cert/*.pem
