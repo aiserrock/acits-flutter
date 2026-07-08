@@ -9,10 +9,11 @@ import 'package:shimmer/shimmer.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LoginForm extends StatelessWidget {
   LoginForm({super.key});
@@ -30,7 +31,7 @@ class LoginForm extends StatelessWidget {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(StringRes.current.loginAuthorizeError)));
+            ..showSnackBar(SnackBar(content: Text(LocaleKeys.loginAuthorizeError.tr())));
         }
       },
       child: SizedBox(
@@ -46,14 +47,14 @@ class LoginForm extends StatelessWidget {
               MaterialButton(
                 onPressed: () => _onRegistration(context),
                 child: Text(
-                  StringRes.current.loginToRegistration,
+                  LocaleKeys.loginToRegistration.tr(),
                   style: const TextStyle(color: ColorRes.accent),
                 ),
               ),
               const SizedBox(height: 16.0),
               const Spacer(),
               Text(
-                StringRes.current.loginDescribeMsg,
+                LocaleKeys.loginDescribeMsg.tr(),
                 textAlign: TextAlign.center,
                 style: StyleRes.content,
               ),
@@ -86,7 +87,7 @@ class LoginForm extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             onPressed: () {},
             child: Text(
-              StringRes.current.loginForgetPass,
+              LocaleKeys.loginForgetPass.tr(),
               style: const TextStyle(color: ColorRes.textSecondary),
             ),
           ),
@@ -124,8 +125,8 @@ class _NameInput extends StatelessWidget {
                 autofillHints: const [AutofillHints.email],
                 decoration: InputDecoration(
                   errorText: state.name.isNotValid ? '' : null,
-                  hintText: StringRes.current.loginLoginHint,
-                  labelText: StringRes.current.loginLoginLabel,
+                  hintText: LocaleKeys.loginLoginHint.tr(),
+                  labelText: LocaleKeys.loginLoginLabel.tr(),
                   floatingLabelStyle: TextStyle(
                     color: state.focusTarget.isName ? ColorRes.accent : ColorRes.textSecondary,
                   ),
@@ -180,7 +181,7 @@ class _PasswordInput extends StatelessWidget {
                 focusNode: passNode,
                 autofillHints: const [AutofillHints.password],
                 decoration: InputDecoration(
-                  labelText: StringRes.current.loginPassLabel,
+                  labelText: LocaleKeys.loginPassLabel.tr(),
                   errorText: state.password.isNotValid ? '' : null,
                   floatingLabelStyle: TextStyle(
                     color: state.focusTarget.isPassword ? ColorRes.accent : ColorRes.textSecondary,
@@ -239,7 +240,7 @@ class _SubmitButton extends StatelessWidget {
     return PrimaryButton(
       onPressed: () => context.read<LoginBloc>().add(const LoginSubmitted()),
       onLongPress: () => context.read<LoginBloc>().add(const LoginOnDebug()),
-      text: StringRes.current.loginEntryBtn.toUpperCase(),
+      text: LocaleKeys.loginEntryBtn.tr().toUpperCase(),
     );
   }
 }

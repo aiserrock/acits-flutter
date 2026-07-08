@@ -6,7 +6,6 @@ import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart'
 import 'package:acits_flutter/ui/widget/action_bs.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
@@ -56,7 +55,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
-        SliverToBoxAdapter(child: SubtitleWidget(title: StringRes.current.animalStatusAndJoin)),
+        SliverToBoxAdapter(child: SubtitleWidget(title: LocaleKeys.animalStatusAndJoin.tr())),
         SliverToBoxAdapter(child: _buildStatusCard()),
       ],
     );
@@ -69,21 +68,21 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
           key: widget.formKey,
           child: FormEditCard([
             EditCardData(
-              label: '${StringRes.current.animalDateAdmitt} *',
+              label: '${LocaleKeys.animalDateAdmitt.tr()} *',
               controller: _dateReceiptController,
               suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
               onPressed: () => _setDate(context),
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: '${StringRes.current.animalAnimalStatus} *',
+              label: '${LocaleKeys.animalAnimalStatus.tr()} *',
               controller: _statusController,
               suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
               onPressed: () => _setStatus(context),
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: '${StringRes.current.animalCatchPlace} *',
+              label: '${LocaleKeys.animalCatchPlace.tr()} *',
               controller: _catchController,
               validator: Validator.emptyValidator,
             ),

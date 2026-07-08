@@ -11,22 +11,22 @@ class OnboardingData {
 final onboardingData = <OnboardingData>[
   OnboardingData(
     image: Assets.onboarding.news,
-    title: StringRes.current.onboardingNewsTitle,
-    message: StringRes.current.onboardingNewsMsg,
+    title: LocaleKeys.onboardingNewsTitle.tr(),
+    message: LocaleKeys.onboardingNewsMsg.tr(),
   ),
   OnboardingData(
     image: Assets.onboarding.plan,
-    title: StringRes.current.onboardingPlanTitle,
-    message: StringRes.current.onboardingPlanMsg,
+    title: LocaleKeys.onboardingPlanTitle.tr(),
+    message: LocaleKeys.onboardingPlanMsg.tr(),
   ),
   OnboardingData(
     image: Assets.onboarding.drugs,
-    title: StringRes.current.onboardingDrugsTitle,
-    message: StringRes.current.onboardingDrugsMsg,
+    title: LocaleKeys.onboardingDrugsTitle.tr(),
+    message: LocaleKeys.onboardingDrugsMsg.tr(),
   ),
   OnboardingData(
     image: Assets.onboarding.free,
-    title: StringRes.current.onboardingFreeTitle,
-    message: StringRes.current.onboardingFreeMsg,
+    title: LocaleKeys.onboardingFreeTitle.tr(),
+    message: LocaleKeys.onboardingFreeMsg.tr(),
   ),
 ];

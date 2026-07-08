@@ -35,7 +35,7 @@ class PrescriptionForm extends StatelessWidget {
               FormEditCard([
                 EditCardData(
                   controller: commentContoroller,
-                  label: StringRes.current.prescriptionComment,
+                  label: LocaleKeys.prescriptionComment.tr(),
                   maxLength: _maxCommentLength,
                 ),
               ]),
@@ -62,7 +62,7 @@ class PrescriptionForm extends StatelessWidget {
               ),
             ),
             EditCardData(
-              label: '${StringRes.current.prescriptionDrug}${drugList.isNotEmpty ? '+' : '*'}',
+              label: '${LocaleKeys.prescriptionDrug.tr()}${drugList.isNotEmpty ? '+' : '*'}',
               suffix: const Icon(Icons.menu_open_rounded, color: ColorRes.accent),
               onPressed: () => cubit.pickDrug(context),
               validator: (_) => drugList.isEmpty ? '' : null,
@@ -94,7 +94,7 @@ class PrescriptionForm extends StatelessWidget {
             ),
             if (cubit.allowMultiDate || daysData.isEmpty)
               EditCardData(
-                label: '${StringRes.current.prescriptionDate}${daysData.isNotEmpty ? '+' : '*'}',
+                label: '${LocaleKeys.prescriptionDate.tr()}${daysData.isNotEmpty ? '+' : '*'}',
                 suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
                 onPressed: () => cubit.pickStartDate(context),
                 validator: (_) => daysData.isEmpty ? '' : null,
@@ -108,7 +108,7 @@ class PrescriptionForm extends StatelessWidget {
             ),
             if (cubit.allowMultiTime || timesData.isEmpty)
               EditCardData(
-                label: '${StringRes.current.prescriptionTime}${timesData.isNotEmpty ? '+' : '*'}',
+                label: '${LocaleKeys.prescriptionTime.tr()}${timesData.isNotEmpty ? '+' : '*'}',
                 onPressed: () => cubit.pickAtTime(context, 0),
                 validator: (_) => timesData.isEmpty ? '' : null,
                 suffix: const Icon(Icons.watch_later_outlined, color: ColorRes.accent),
@@ -130,8 +130,8 @@ class PrescriptionForm extends StatelessWidget {
             child: CupertinoSlidingSegmentedControl(
               groupValue: period,
               children: <TreatmentPeriod, Widget>{
-                TreatmentPeriod.daily: Text(StringRes.current.prescriptionDaily),
-                TreatmentPeriod.weekly: Text(StringRes.current.prescriptionWeekly),
+                TreatmentPeriod.daily: Text(LocaleKeys.prescriptionDaily.tr()),
+                TreatmentPeriod.weekly: Text(LocaleKeys.prescriptionWeekly.tr()),
               },
               onValueChanged: cubit.onTreatmentPeriodChanged,
             ),

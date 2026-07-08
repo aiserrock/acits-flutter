@@ -50,7 +50,7 @@ class _BsDosageState extends State<BsDosage> {
               ),
               const SizedBox(height: 24.0),
               PrimaryButton(
-                text: StringRes.current.commonAccept,
+                text: LocaleKeys.commonAccept.tr(),
                 onPressed: () => _onSubmit(context),
               ),
             ],

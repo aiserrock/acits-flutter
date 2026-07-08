@@ -133,7 +133,7 @@ class _CommentListViewState extends State<_CommentListView> {
               Expanded(
                 child: PrimaryButton(
                   onPressed: () => context.read<CommentListCubit>().loadNextPage(),
-                  child: Text(StringRes.current.commonReloadBtn),
+                  child: Text(LocaleKeys.commonReloadBtn.tr()),
                 ),
               ),
             ],
@@ -187,7 +187,7 @@ class _CommentListViewState extends State<_CommentListView> {
                 (file) => CupertinoButton(
                   padding: const EdgeInsets.only(top: 8.0),
                   onPressed: () => _onFilePressed(context, file).catchError((e) {
-                    _onError(context, StringRes.current.commonErrorStubMsg);
+                    _onError(context, LocaleKeys.commonErrorStubMsg.tr());
                   }),
                   child: Text(
                     file.filename ?? '',
@@ -264,7 +264,7 @@ class _CommentListViewState extends State<_CommentListView> {
     final cubit = context.read<CommentListCubit>();
     final actions = bsSelectorActions(context, <Widget, dynamic Function()>{
       Text(
-        StringRes.current.commonEdit,
+        LocaleKeys.commonEdit.tr(),
         style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
       ): () async {
         final result = await context.push<AnimalNote>(
@@ -275,7 +275,7 @@ class _CommentListViewState extends State<_CommentListView> {
         Navigator.of(context).pop();
       },
       Text(
-        StringRes.current.commonDelete,
+        LocaleKeys.commonDelete.tr(),
         style: StyleRes.mainContent.copyWith(color: ColorRes.error),
       ): () {
         _deleteComment(context, comment);
@@ -294,7 +294,7 @@ class _CommentListViewState extends State<_CommentListView> {
     final messenger = ScaffoldMessenger.of(context);
     final success = await context.read<CommentListCubit>().deleteComment(comment);
     if (!success) {
-      messenger.showSnackBar(SnackBar(content: Text(StringRes.current.commentDeletingFail)));
+      messenger.showSnackBar(SnackBar(content: Text(LocaleKeys.commentDeletingFail.tr())));
     }
   }
 
@@ -314,7 +314,7 @@ class _CommentListViewState extends State<_CommentListView> {
     try {
       localFile = await _fileService.loadFile(url, fileName);
     } catch (_) {
-      _onError(context, StringRes.current.commentDeletingFail);
+      _onError(context, LocaleKeys.commentDeletingFail.tr());
       return;
     }
 
@@ -322,10 +322,10 @@ class _CommentListViewState extends State<_CommentListView> {
     String errorMsg = '';
     switch (openResult.type) {
       case ResultType.noAppToOpen:
-        errorMsg = StringRes.current.commonNoAppToOpenFileMsg;
+        errorMsg = LocaleKeys.commonNoAppToOpenFileMsg.tr();
         break;
       case ResultType.error:
-        errorMsg = StringRes.current.commonErrorTryAgainMessage;
+        errorMsg = LocaleKeys.commonErrorTryAgainMessage.tr();
         break;
       default:
     }

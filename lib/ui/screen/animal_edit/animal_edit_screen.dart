@@ -100,7 +100,7 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
               onTap: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              cubit.isEdit ? StringRes.current.animalEdit : StringRes.current.animalAdd,
+              cubit.isEdit ? LocaleKeys.animalEdit.tr() : LocaleKeys.animalAdd.tr(),
               style: const TextStyle(color: ColorRes.textPrimary),
             ),
             centerTitle: true,
@@ -129,7 +129,7 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
           loader: (_) => const LoaderHolderWidget(),
           errorBuilder: (_, e) => ErrorHolderWidget(
             error: e,
-            button: StringRes.current.commonBack.toUpperCase(),
+            button: LocaleKeys.commonBack.tr().toUpperCase(),
             onPressed: () => context.read<AnimalEditCubit>().resetToForm(),
           ),
           builder: (context, content) {
@@ -143,9 +143,9 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
                       : _buildContent(context, isEdit)
                 : SuccessHolderWidget(
                     onPressed: () => _navigator.pop(true),
-                    title: StringRes.current.animalEditSuccessTitle,
-                    message: StringRes.current.animalEditSuccessMessage,
-                    button: StringRes.current.commonClose.toUpperCase(),
+                    title: LocaleKeys.animalEditSuccessTitle.tr(),
+                    message: LocaleKeys.animalEditSuccessMessage.tr(),
+                    button: LocaleKeys.commonClose.tr().toUpperCase(),
                   );
           },
         ),

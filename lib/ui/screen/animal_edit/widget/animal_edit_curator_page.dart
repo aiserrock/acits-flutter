@@ -53,7 +53,7 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
         SliverToBoxAdapter(
           child: SubtitleWidget(
-            title: StringRes.current.animalCurator,
+            title: LocaleKeys.animalCurator.tr(),
             actions: [
               if (_curator != null)
                 Padding(
@@ -86,26 +86,26 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
     return Form(
       child: FormEditCard([
         EditCardData(
-          label: StringRes.current.animalPickCurator,
+          label: LocaleKeys.animalPickCurator.tr(),
           controller: _curatorController,
           suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
           onPressed: _searchCurator,
         ),
         if (_curator != null)
           EditCardData(
-            label: StringRes.current.animalCuratorPhone,
+            label: LocaleKeys.animalCuratorPhone.tr(),
             enabled: false,
             controller: _phoneController,
           ),
         if (_curator != null)
           EditCardData(
-            label: StringRes.current.animalCuratorEmail,
+            label: LocaleKeys.animalCuratorEmail.tr(),
             enabled: false,
             controller: _emailController,
           ),
         if (_curator != null)
           EditCardData(
-            label: StringRes.current.animalCuratorAddress,
+            label: LocaleKeys.animalCuratorAddress.tr(),
             enabled: false,
             controller: _addressController,
           ),

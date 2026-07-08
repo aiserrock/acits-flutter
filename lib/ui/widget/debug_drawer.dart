@@ -1,5 +1,5 @@
-import 'package:acits_flutter/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DebugDrawerContent extends StatelessWidget {
   const DebugDrawerContent({super.key});
@@ -14,7 +14,7 @@ class DebugDrawerContent extends StatelessWidget {
         ListTile(
           title: const Text('Locale RU'),
           onTap: () {
-            StringRes.delegate.load(const Locale('ru'));
+            context.setLocale(const Locale('ru'));
 
             if (Scaffold.of(context).isEndDrawerOpen) {
               Navigator.of(context).pop();
@@ -24,7 +24,7 @@ class DebugDrawerContent extends StatelessWidget {
         ListTile(
           title: const Text('Locale EN'),
           onTap: () {
-            StringRes.delegate.load(const Locale('en'));
+            context.setLocale(const Locale('en'));
 
             if (Scaffold.of(context).isEndDrawerOpen) {
               Navigator.of(context).pop();

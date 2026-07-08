@@ -60,7 +60,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
         SliverToBoxAdapter(
           child: SubtitleWidget(
-            title: StringRes.current.animalApplicant,
+            title: LocaleKeys.animalApplicant.tr(),
             actions: [
               if (_applicant != null)
                 Padding(
@@ -94,34 +94,34 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
       key: widget.formKey,
       child: FormEditCard([
         EditCardData(
-          label: StringRes.current.animalCuratorName,
+          label: LocaleKeys.animalCuratorName.tr(),
           controller: _applicantNameController,
           suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
           onPressed: _searchApplicant,
         ),
         if (_applicant != null)
           EditCardData(
-            label: '${StringRes.current.animalCuratorLastName} *',
+            label: '${LocaleKeys.animalCuratorLastName.tr()} *',
             controller: _applicantLastNameController,
             validator: Validator.emptyValidator,
             enabled: false,
           ),
         if (_applicant != null)
           EditCardData(
-            label: '${StringRes.current.animalCuratorPhone} *',
+            label: '${LocaleKeys.animalCuratorPhone.tr()} *',
             controller: _applicantPhoneController,
             validator: Validator.emptyValidator,
             enabled: false,
           ),
         if (_applicant != null)
           EditCardData(
-            label: StringRes.current.animalSocialLink,
+            label: LocaleKeys.animalSocialLink.tr(),
             controller: _applicantSocialController,
             enabled: false,
           ),
         if (_applicant != null)
           EditCardData(
-            label: StringRes.current.animalCuratorEmail,
+            label: LocaleKeys.animalCuratorEmail.tr(),
             controller: _applicantEmailController,
             enabled: false,
           ),

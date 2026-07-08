@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/l10n/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
@@ -11,9 +11,27 @@ import 'package:acits_flutter/di/di_container.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initDi();
-  runApp(const MyApp());
+  runApp(const AcitsApp());
+}
+
+/// Корневой виджет приложения. Оборачивает [MyApp] в [EasyLocalization],
+/// который должен стоять выше [MaterialApp] в дереве.
+class AcitsApp extends StatelessWidget {
+  const AcitsApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return EasyLocalization(
+      supportedLocales: L10n.supportedLocales,
+      path: L10n.translationsPath,
+      fallbackLocale: L10n.fallbackLocale,
+      startLocale: L10n.fallbackLocale,
+      child: const MyApp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -39,13 +57,9 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: const InputDecorationTheme(iconColor: ColorRes.accent),
         textSelectionTheme: const TextSelectionThemeData(cursorColor: ColorRes.accent),
       ),
-      localizationsDelegates: const [
-        StringRes.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: StringRes.delegate.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       color: ColorRes.accent,
       scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
       routerConfig: getIt<GoRouter>(),

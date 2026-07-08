@@ -134,14 +134,14 @@ class AnimalCardWidget extends StatelessWidget {
         showDialog(
           context: ctx,
           builder: (dialogCtx) {
-            final msg = '${StringRes.current.animalDeleteAcceptMsg} ${itemData?.name ?? ""}?';
+            final msg = '${LocaleKeys.animalDeleteAcceptMsg.tr()} ${itemData?.name ?? ""}?';
             return CupertinoAlertDialog(
-              title: Text(StringRes.current.commonWarning),
+              title: Text(LocaleKeys.commonWarning.tr()),
               content: Padding(padding: const EdgeInsets.only(top: 16.0), child: Text(msg)),
               actions: [
                 CupertinoButton(
                   child: Text(
-                    StringRes.current.commonDelete,
+                    LocaleKeys.commonDelete.tr(),
                     style: const TextStyle(color: ColorRes.error),
                   ),
                   onPressed: () {
@@ -150,7 +150,7 @@ class AnimalCardWidget extends StatelessWidget {
                   },
                 ),
                 CupertinoButton(
-                  child: Text(StringRes.current.commonCancel),
+                  child: Text(LocaleKeys.commonCancel.tr()),
                   onPressed: () {
                     Navigator.of(dialogCtx).pop();
                   },
@@ -244,7 +244,7 @@ class AnimalCardWidget extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: StringRes.current.animalAdmitted, style: StyleRes.content),
+          TextSpan(text: LocaleKeys.animalAdmitted.tr(), style: StyleRes.content),
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
             text: itemData?.dateJoined?.toDateShortOnly ?? '',

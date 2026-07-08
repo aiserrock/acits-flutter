@@ -30,7 +30,7 @@ class _AnimalDetailStub extends StatelessWidget {
                             height: 80.0,
                             child: Align(
                               alignment: Alignment.center,
-                              child: Text(StringRes.current.animalCardTitle, style: StyleRes.title),
+                              child: Text(LocaleKeys.animalCardTitle.tr(), style: StyleRes.title),
                             ),
                           ),
                         ),

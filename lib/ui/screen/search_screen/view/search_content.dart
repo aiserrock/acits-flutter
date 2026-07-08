@@ -158,7 +158,7 @@ class _EmptyStub extends StatelessWidget {
         children: [
           SizedBox(height: 120.0, width: 120.0, child: Assets.common.emptyState.svg()),
           const SizedBox(height: 32.0),
-          Text(StringRes.current.commonNotFound, style: StyleRes.title),
+          Text(LocaleKeys.commonNotFound.tr(), style: StyleRes.title),
         ],
       ),
     );
@@ -175,7 +175,7 @@ class _ListEnding<T> extends StatelessWidget {
         return state.isLoading
             ? const SizedBox(height: 64.0, child: Center(child: CircularProgressIndicator()))
             : state.hasError
-            ? SizedBox(height: 64.0, child: Center(child: Text(StringRes.current.commonError)))
+            ? SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr())))
             : const SizedBox(height: 16.0);
       },
     );

@@ -2,13 +2,14 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/res/lottie.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 const _sizePart = .75;
 
@@ -57,7 +58,7 @@ class ErrorHolderWidget extends StatelessWidget {
                 const SizedBox(height: 24.0),
                 PrimaryButton(
                   onPressed: () => onPressed?.call(),
-                  text: button ?? StringRes.current.commonReloadBtn,
+                  text: button ?? LocaleKeys.commonReloadBtn.tr(),
                 ),
               ],
             ),
@@ -71,29 +72,29 @@ class ErrorHolderWidget extends StatelessWidget {
 extension _ErrorX on Object {
   String get title {
     if (this is DioException) {
-      return StringRes.current.errorInternetFail;
+      return LocaleKeys.errorInternetFail.tr();
     }
     switch (runtimeType) {
       case const (MessagedException):
-        return StringRes.current.commonError;
+        return LocaleKeys.commonError.tr();
       case const (SocketException):
-        return StringRes.current.errorInternetFail;
+        return LocaleKeys.errorInternetFail.tr();
       default:
-        return StringRes.current.commonError;
+        return LocaleKeys.commonError.tr();
     }
   }
 
   String get message {
     if (this is DioException) {
-      return StringRes.current.errorInternetFail;
+      return LocaleKeys.errorInternetFail.tr();
     }
     switch (runtimeType) {
       case const (MessagedException):
-        return StringRes.current.errorDefaultMsg;
+        return LocaleKeys.errorDefaultMsg.tr();
       case const (SocketException):
-        return StringRes.current.errorInternetFailMsg;
+        return LocaleKeys.errorInternetFailMsg.tr();
       default:
-        return StringRes.current.errorDefaultMsg;
+        return LocaleKeys.errorDefaultMsg.tr();
     }
   }
 }

@@ -76,7 +76,7 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
               onTap: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              cubit.isEdit ? StringRes.current.applicantEdit : StringRes.current.applicantAdd,
+              cubit.isEdit ? LocaleKeys.applicantEdit.tr() : LocaleKeys.applicantAdd.tr(),
               style: const TextStyle(color: ColorRes.textPrimary),
             ),
             centerTitle: true,
@@ -114,23 +114,23 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
           key: formKey,
           child: FormEditCard([
             EditCardData(
-              label: '${StringRes.current.animalCuratorName} *',
+              label: '${LocaleKeys.animalCuratorName.tr()} *',
               controller: _nameController,
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: '${StringRes.current.animalCuratorLastName} *',
+              label: '${LocaleKeys.animalCuratorLastName.tr()} *',
               controller: _lastNameController,
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: '${StringRes.current.animalCuratorPhone} *',
+              label: '${LocaleKeys.animalCuratorPhone.tr()} *',
               controller: _phoneController,
               validator: Validator.emptyValidator,
             ),
-            EditCardData(label: StringRes.current.animalSocialLink, controller: _socialController),
+            EditCardData(label: LocaleKeys.animalSocialLink.tr(), controller: _socialController),
             EditCardData(
-              label: StringRes.current.animalCuratorEmail,
+              label: LocaleKeys.animalCuratorEmail.tr(),
               controller: _emailController,
               validator: Validator.emailOrEmptyValidator,
             ),

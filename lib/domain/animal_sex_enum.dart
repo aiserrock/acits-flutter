@@ -1,4 +1,5 @@
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 enum AnimalGender { male, female, middle, genderless, undefined }
 
@@ -6,15 +7,15 @@ extension AnimalGenderX on AnimalGender {
   String get value {
     switch (this) {
       case AnimalGender.male:
-        return StringRes.current.animalGenderMale;
+        return LocaleKeys.animalGenderMale.tr();
       case AnimalGender.female:
-        return StringRes.current.animalGenderFemale;
+        return LocaleKeys.animalGenderFemale.tr();
       case AnimalGender.middle:
-        return StringRes.current.animalGenderMiddle;
+        return LocaleKeys.animalGenderMiddle.tr();
       case AnimalGender.genderless:
-        return StringRes.current.animalGenderLess;
+        return LocaleKeys.animalGenderLess.tr();
       case AnimalGender.undefined:
-        return StringRes.current.animalGenderUndefined;
+        return LocaleKeys.animalGenderUndefined.tr();
     }
   }
 }

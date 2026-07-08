@@ -122,7 +122,7 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
     if (cubit.choosedCount > _maxCountImages) {
       final ctx = _scaffoldKey.currentContext ?? context;
       ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(content: Text('${StringRes.current.animalMaxImagesCountIs} $_maxCountImages')),
+        SnackBar(content: Text('${LocaleKeys.animalMaxImagesCountIs.tr()} $_maxCountImages')),
       );
       return;
     }

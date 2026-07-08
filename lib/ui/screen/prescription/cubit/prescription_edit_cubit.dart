@@ -78,7 +78,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
     final animalId = state.animal?.id;
     if (animalId == null) {
-      _showError(StringRes.current.prescriptionPickAnimalMsg);
+      _showError(LocaleKeys.prescriptionPickAnimalMsg.tr());
       return null;
     }
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return null;
@@ -135,7 +135,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   bool get _checkIsLoading {
     if (state.loading) {
-      _showError(StringRes.current.prescriptionWaitLoadingMsg);
+      _showError(LocaleKeys.prescriptionWaitLoadingMsg.tr());
     }
     return state.loading;
   }
@@ -219,7 +219,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   void onAnimalPressed(BuildContext context) {
     if (isEdit) {
-      _showError(StringRes.current.prescriptionCantChangeAnimalMsg);
+      _showError(LocaleKeys.prescriptionCantChangeAnimalMsg.tr());
       return;
     }
     context.push<AnimalRead>(AppRoutes.searchPath(SearchTypeKey.animal)).then((animal) {

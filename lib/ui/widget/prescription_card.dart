@@ -1,6 +1,5 @@
 import 'package:acits_flutter/ui/widget/action_bs.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:acits_flutter/export.dart';
 
@@ -54,7 +53,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       children: [
         _buildExpandHeader(),
         const Divider(height: 24.0),
-        Text(StringRes.current.mainAnimal, style: StyleRes.content),
+        Text(LocaleKeys.mainAnimal.tr(), style: StyleRes.content),
         const SizedBox(height: 4.0),
         Text.rich(
           TextSpan(
@@ -73,7 +72,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
           maxLines: 3,
         ),
         const Divider(height: 24.0),
-        Text(StringRes.current.mainAppoinmentAuthor, style: StyleRes.content),
+        Text(LocaleKeys.mainAppoinmentAuthor.tr(), style: StyleRes.content),
         const SizedBox(height: 4.0),
         Text(
           widget.itemData?.prescription?.createdBy ?? ' ',
@@ -81,7 +80,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
           maxLines: 3,
         ),
         const Divider(height: 24.0),
-        Text(StringRes.current.mainAppoinment, style: StyleRes.content),
+        Text(LocaleKeys.mainAppoinment.tr(), style: StyleRes.content),
         const SizedBox(height: 4.0),
         if (widget.itemData?.prescription?.drugs != null)
           ...widget.itemData!.prescription!.drugs!.map<Widget>(
@@ -100,7 +99,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             ),
           ),
         const Divider(height: 24.0),
-        Text(StringRes.current.animalComments, style: StyleRes.content),
+        Text(LocaleKeys.animalComments.tr(), style: StyleRes.content),
         const SizedBox(height: 4.0),
         Text(
           widget.itemData?.prescription?.description ?? '',
@@ -177,33 +176,33 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       context: context,
       builder: (context) => bsSelectorActions(context, <Widget, dynamic Function()>{
         Text(
-          StringRes.current.commonDone,
+          LocaleKeys.commonDone.tr(),
           style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
-          StringRes.current.commonReschedule,
+          LocaleKeys.commonReschedule.tr(),
           style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
         ): () {
           Navigator.of(context).pop();
           _reschedule();
         },
         Text(
-          StringRes.current.commonNotCompleted,
+          LocaleKeys.commonNotCompleted.tr(),
           style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
-          StringRes.current.commonEdit,
+          LocaleKeys.commonEdit.tr(),
           style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
         ): () {
           Navigator.of(context).pop();
           widget.onEditedPrescription?.call();
         },
         Text(
-          StringRes.current.commonDelete,
+          LocaleKeys.commonDelete.tr(),
           style: StyleRes.mainContent.copyWith(color: ColorRes.error),
         ): () {
           Navigator.of(context).pop();

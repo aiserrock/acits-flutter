@@ -15,14 +15,14 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
                 children: [
                   Expanded(
                     child: Text(
-                      StringRes.current.animalPrescriptions,
+                      LocaleKeys.animalPrescriptions.tr(),
                       style: StyleRes.title.copyWith(fontSize: 22.0),
                     ),
                   ),
                   Text(
                     state.prescriptionActive
-                        ? StringRes.current.prescriptionCurrent
-                        : StringRes.current.prescriptionPast,
+                        ? LocaleKeys.prescriptionCurrent.tr()
+                        : LocaleKeys.prescriptionPast.tr(),
                   ),
                   Switch(
                     value: state.prescriptionActive,

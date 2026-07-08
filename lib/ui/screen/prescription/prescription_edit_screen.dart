@@ -174,9 +174,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
 
   Widget _buildTitle() {
     return Text(
-      _cubit.isEdit
-          ? StringRes.current.prescriptionTitleEdit
-          : StringRes.current.prescriptionTitleAdd,
+      _cubit.isEdit ? LocaleKeys.prescriptionTitleEdit.tr() : LocaleKeys.prescriptionTitleAdd.tr(),
       style: const TextStyle(color: ColorRes.textPrimary),
     );
   }
@@ -259,7 +257,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
           onPressed: () => _cubit.onAnimalPressed(context),
           child: FormEditCard([
             EditCardData(
-              label: StringRes.current.prescriptionAnimal,
+              label: LocaleKeys.prescriptionAnimal.tr(),
               enabled: false,
               content: animal != null
                   ? Column(

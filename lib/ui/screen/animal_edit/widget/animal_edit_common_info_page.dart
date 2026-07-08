@@ -61,7 +61,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
         SliverToBoxAdapter(child: _buildImage()),
         const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
-        SliverToBoxAdapter(child: SubtitleWidget(title: StringRes.current.animalCommonInfo)),
+        SliverToBoxAdapter(child: SubtitleWidget(title: LocaleKeys.animalCommonInfo.tr())),
         SliverToBoxAdapter(child: _buildCommonCard()),
       ],
     );
@@ -124,23 +124,23 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
     return Form(
       key: widget.formKey,
       child: FormEditCard([
-        EditCardData(label: StringRes.current.animalName, controller: _nameController),
+        EditCardData(label: LocaleKeys.animalName.tr(), controller: _nameController),
         EditCardData(
-          label: '${StringRes.current.animalCategory} *',
+          label: '${LocaleKeys.animalCategory.tr()} *',
           controller: _categoryController,
           suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
           onPressed: _searchCategory,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
-          label: '${StringRes.current.animalAnimalFamily} *',
+          label: '${LocaleKeys.animalAnimalFamily.tr()} *',
           controller: _familyController,
           suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
           onPressed: _searchFamily,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
-          label: '${StringRes.current.animalAnimalKind} *',
+          label: '${LocaleKeys.animalAnimalKind.tr()} *',
           controller: _kindController,
           suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
           onPressed: _searchKind,

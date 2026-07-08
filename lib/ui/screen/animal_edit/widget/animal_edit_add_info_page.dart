@@ -4,7 +4,6 @@ import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
@@ -78,7 +77,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         const SliverToBoxAdapter(child: SizedBox(height: 20.0)),
-        SliverToBoxAdapter(child: SubtitleWidget(title: StringRes.current.animalAdditionalInfo)),
+        SliverToBoxAdapter(child: SubtitleWidget(title: LocaleKeys.animalAdditionalInfo.tr())),
         SliverToBoxAdapter(child: _buildAddinionalCard()),
       ],
     );
@@ -88,36 +87,36 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     return Form(
       key: widget.formKey,
       child: FormEditCard([
-        EditCardData(label: StringRes.current.animalAge, content: _buildAgeTabSelector()),
+        EditCardData(label: LocaleKeys.animalAge.tr(), content: _buildAgeTabSelector()),
         if (_currentAgeTab == 0) EditCardData(content: _buildAgeFields()),
         if (_currentAgeTab == 1)
           EditCardData(
-            label: StringRes.current.animalBirth,
+            label: LocaleKeys.animalBirth.tr(),
             controller: _birthController,
             suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
             onPressed: _setBirthDate,
           ),
         EditCardData(
-          label: '${StringRes.current.animalSex}*',
+          label: '${LocaleKeys.animalSex.tr()}*',
           controller: _sexController,
           suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
           validator: Validator.emptyValidator,
           onPressed: () => _selectGender(context),
         ),
         EditCardData(
-          label: StringRes.current.aninmalSize,
+          label: LocaleKeys.aninmalSize.tr(),
           controller: _heightController,
           decimalOnly: true,
         ),
         EditCardData(
-          label: StringRes.current.animalWeight,
+          label: LocaleKeys.animalWeight.tr(),
           controller: _weightController,
           decimalOnly: true,
         ),
-        EditCardData(label: StringRes.current.animalColor, controller: _colorController),
-        EditCardData(label: StringRes.current.animalSpecSigns, controller: _specController),
+        EditCardData(label: LocaleKeys.animalColor.tr(), controller: _colorController),
+        EditCardData(label: LocaleKeys.animalSpecSigns.tr(), controller: _specController),
         EditCardData(
-          label: StringRes.current.animalChip,
+          label: LocaleKeys.animalChip.tr(),
           controller: _chipController,
           validator: (value) {
             if (_dateChipController.text.isNotEmpty && (value == null || value.isEmpty)) {
@@ -127,7 +126,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
           },
         ),
         EditCardData(
-          label: StringRes.current.animalChipDate,
+          label: LocaleKeys.animalChipDate.tr(),
           controller: _dateChipController,
           suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
           validator: (value) {
@@ -153,14 +152,14 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
             0: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
-                StringRes.current.animalAgeAppox,
+                LocaleKeys.animalAgeAppox.tr(),
                 style: StyleRes.button.copyWith(
                   color: _currentAgeTab == 0 ? ColorRes.textPrimary : Colors.white,
                 ),
               ),
             ),
             1: Text(
-              StringRes.current.animalAgeExact,
+              LocaleKeys.animalAgeExact.tr(),
               style: StyleRes.button.copyWith(
                 color: _currentAgeTab == 1 ? ColorRes.textPrimary : Colors.white,
               ),
@@ -183,7 +182,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
           Expanded(
             child: TextFormField(
               controller: _ageYearController,
-              decoration: InputDecoration(labelText: StringRes.current.animalQtyYear),
+              decoration: InputDecoration(labelText: LocaleKeys.animalQtyYear.tr()),
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
@@ -196,7 +195,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
               },
               child: TextFormField(
                 controller: _ageMonthController,
-                decoration: InputDecoration(labelText: StringRes.current.animalQtyMonth),
+                decoration: InputDecoration(labelText: LocaleKeys.animalQtyMonth.tr()),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),

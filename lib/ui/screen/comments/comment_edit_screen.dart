@@ -71,7 +71,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
         onTap: () => Navigator.of(context).pop(),
       ),
       title: Text(
-        cubit.isEdit ? StringRes.current.commentTitleEdit : StringRes.current.commentTitleNew,
+        cubit.isEdit ? LocaleKeys.commentTitleEdit.tr() : LocaleKeys.commentTitleNew.tr(),
         style: const TextStyle(color: ColorRes.textPrimary),
       ),
       centerTitle: true,
@@ -191,7 +191,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(StringRes.current.commonErrorTryAgainMessage)));
+      ).showSnackBar(SnackBar(content: Text(LocaleKeys.commonErrorTryAgainMessage.tr())));
     }
   }
 

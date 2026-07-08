@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_cubit.dart';
@@ -14,6 +14,7 @@ import 'package:acits_flutter/ui/widget/debug_drawer.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/util/data_state.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран выбора приюта.
 class PickShelterScreen extends StatelessWidget {
@@ -68,7 +69,7 @@ class _PickShelterViewState extends State<_PickShelterView> {
         shadowColor: Colors.transparent,
         leading: Assets.image.logoLeadingBar.svg(),
         title: Text(
-          StringRes.current.shelterSelectShelter,
+          LocaleKeys.shelterSelectShelter.tr(),
           style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
@@ -88,7 +89,7 @@ class _PickShelterViewState extends State<_PickShelterView> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 40.0),
-            child: Text(StringRes.current.loginDescribeMsg, textAlign: TextAlign.center),
+            child: Text(LocaleKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
           ),
         ],
       ),

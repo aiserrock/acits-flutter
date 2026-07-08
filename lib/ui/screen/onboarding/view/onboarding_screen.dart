@@ -9,12 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/onboarding/bloc/onboarding_bloc.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/screen/onboarding/model/onboarding_data.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Экран онбординга при входе в приложение
 class OnboardingScreen extends StatefulWidget {
@@ -105,8 +106,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return PrimaryButton(
           onPressed: () => _tapNext(context),
           text: state.isLast
-              ? StringRes.current.commonBegin.toUpperCase()
-              : StringRes.current.commonNext.toUpperCase(),
+              ? LocaleKeys.commonBegin.tr().toUpperCase()
+              : LocaleKeys.commonNext.tr().toUpperCase(),
         );
       },
     );

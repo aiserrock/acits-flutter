@@ -6,7 +6,6 @@ import 'package:injectable/injectable.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:intl/intl.dart';
 
 /// Сервис конфигурации
 @singleton

@@ -1,5 +1,5 @@
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/ui/screen/animals/animals_screen.dart';
 import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';
@@ -7,27 +7,28 @@ import 'package:acits_flutter/ui/screen/drugs/drugs_screen.dart';
 import 'package:acits_flutter/ui/screen/main/main_screen.dart';
 import 'package:acits_flutter/ui/widget/personal_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 final _bottomNavItems = <BottomNavigationBarItem>[
   BottomNavigationBarItem(
     icon: Assets.icon.today.svg(color: ColorRes.inactiveIcon),
     activeIcon: Assets.icon.today.svg(color: ColorRes.accent),
-    label: StringRes.current.commonToday,
+    label: LocaleKeys.commonToday.tr(),
   ),
   BottomNavigationBarItem(
     icon: Assets.icon.paw.svg(color: ColorRes.inactiveIcon),
     activeIcon: Assets.icon.paw.svg(color: ColorRes.accent),
-    label: StringRes.current.commonAnimals,
+    label: LocaleKeys.commonAnimals.tr(),
   ),
   BottomNavigationBarItem(
     icon: Assets.icon.calendar.svg(color: ColorRes.inactiveIcon.withValues(alpha: .5)),
     activeIcon: Assets.icon.calendar.svg(color: ColorRes.accent),
-    label: StringRes.current.commonCalendar,
+    label: LocaleKeys.commonCalendar.tr(),
   ),
   BottomNavigationBarItem(
     icon: Assets.icon.drugs.svg(color: ColorRes.inactiveIcon.withValues(alpha: .5)),
     activeIcon: Assets.icon.drugs.svg(color: ColorRes.accent),
-    label: StringRes.current.commonDrugs,
+    label: LocaleKeys.commonDrugs.tr(),
   ),
 ];
 
@@ -57,7 +58,7 @@ class _RootScreenState extends State<RootScreen> {
                 ..clearSnackBars()
                 ..showSnackBar(
                   SnackBar(
-                    content: Text(StringRes.current.commonDidNotImpl),
+                    content: Text(LocaleKeys.commonDidNotImpl.tr()),
                     duration: const Duration(seconds: 2),
                   ),
                 );

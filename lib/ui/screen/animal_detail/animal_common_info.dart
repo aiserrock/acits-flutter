@@ -8,56 +8,50 @@ List<Widget> _buildCommonInfoContent(AnimalRead animal) {
   return [
     Padding(
       padding: const EdgeInsets.only(top: 24.0, left: 16.0, bottom: 8.0),
-      child: Text(
-        StringRes.current.animalCommonInfo,
-        style: StyleRes.title.copyWith(fontSize: 22.0),
-      ),
+      child: Text(LocaleKeys.animalCommonInfo.tr(), style: StyleRes.title.copyWith(fontSize: 22.0)),
     ),
     AnimalContentCard([
       CardData(
-        firstCaption: StringRes.current.animalSex,
+        firstCaption: LocaleKeys.animalSex.tr(),
         firstValue: animal.sexString ?? '',
-        secondCaption: StringRes.current.animalAge,
+        secondCaption: LocaleKeys.animalAge.tr(),
         secondValue: animal.ageString ?? '',
       ),
       CardData(
-        firstCaption: StringRes.current.aninmalSize,
+        firstCaption: LocaleKeys.aninmalSize.tr(),
         firstValue: animal.height ?? '',
-        secondCaption: StringRes.current.animalWeight,
+        secondCaption: LocaleKeys.animalWeight.tr(),
         secondValue: animal.weight ?? '',
       ),
     ]),
     AnimalContentCard([
       CardData(
-        firstCaption: StringRes.current.animalReceiptDate,
+        firstCaption: LocaleKeys.animalReceiptDate.tr(),
         firstValue: animal.dateJoined != null ? _dateFormatter.format(animal.dateJoined!) : '',
-        secondCaption: StringRes.current.animalStatus,
+        secondCaption: LocaleKeys.animalStatus.tr(),
         secondValue: animal.statusString ?? '',
       ),
       CardData(
-        firstCaption: StringRes.current.animalCatchPlace,
+        firstCaption: LocaleKeys.animalCatchPlace.tr(),
         firstValue: animal.placeOfCatch ?? '',
       ),
     ]),
     AnimalContentCard([
-      CardData(firstCaption: StringRes.current.animalFamily, firstValue: animal.specFamily ?? ''),
-      CardData(firstCaption: StringRes.current.animalKind, firstValue: animal.specKind ?? ''),
-      CardData(
-        firstCaption: StringRes.current.animalCategory,
-        firstValue: animal.specCategory ?? '',
-      ),
+      CardData(firstCaption: LocaleKeys.animalFamily.tr(), firstValue: animal.specFamily ?? ''),
+      CardData(firstCaption: LocaleKeys.animalKind.tr(), firstValue: animal.specKind ?? ''),
+      CardData(firstCaption: LocaleKeys.animalCategory.tr(), firstValue: animal.specCategory ?? ''),
     ]),
     AnimalContentCard([
-      CardData(firstCaption: StringRes.current.animalColor, firstValue: animal.colorString ?? ''),
+      CardData(firstCaption: LocaleKeys.animalColor.tr(), firstValue: animal.colorString ?? ''),
       CardData(
-        firstCaption: StringRes.current.animalSpecSigns,
+        firstCaption: LocaleKeys.animalSpecSigns.tr(),
         firstValue: animal.specialSignsString ?? '',
       ),
     ]),
     AnimalContentCard([
-      CardData(firstCaption: StringRes.current.animalChip, firstValue: animal.chippingCode ?? ''),
+      CardData(firstCaption: LocaleKeys.animalChip.tr(), firstValue: animal.chippingCode ?? ''),
       CardData(
-        firstCaption: StringRes.current.animalChipDate,
+        firstCaption: LocaleKeys.animalChipDate.tr(),
         firstValue: animal.dateOfChipping != null
             ? _dateFormatter.format(animal.dateOfChipping!)
             : '',

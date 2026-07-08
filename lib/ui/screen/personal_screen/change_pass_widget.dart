@@ -43,7 +43,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
     return BlocBuilder<ChangePassCubit, DataState<void>>(
       builder: (context, state) {
         return CupertinoAlertDialog(
-          title: Text(l10n.personalChangePass),
+          title: Text(LocaleKeys.personalChangePass.tr()),
           content: SizedBox(
             width: double.infinity,
             child: Material(
@@ -61,9 +61,12 @@ class _ChangePassViewState extends State<_ChangePassView> {
               : [
                   CupertinoDialogAction(
                     onPressed: Navigator.of(context).pop,
-                    child: Text(l10n.commonCancel),
+                    child: Text(LocaleKeys.commonCancel.tr()),
                   ),
-                  CupertinoDialogAction(onPressed: _submit, child: Text(l10n.commonEdit)),
+                  CupertinoDialogAction(
+                    onPressed: _submit,
+                    child: Text(LocaleKeys.commonEdit.tr()),
+                  ),
                 ],
         );
       },
@@ -76,13 +79,13 @@ class _ChangePassViewState extends State<_ChangePassView> {
       child: FormEditCard(
         [
           EditCardData(
-            label: l10n.personalOldPass,
+            label: LocaleKeys.personalOldPass.tr(),
             controller: _oldPassController,
             isObscure: true,
             validator: Validator.emptyValidator,
           ),
           EditCardData(
-            label: l10n.personalNewPass,
+            label: LocaleKeys.personalNewPass.tr(),
             controller: _newPassController,
             suffix: CupertinoButton(
               onPressed: () => setState(() => _isObscure = !_isObscure),
@@ -93,7 +96,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
           ),
           if (_isObscure)
             EditCardData(
-              label: l10n.personalRePass,
+              label: LocaleKeys.personalRePass.tr(),
               isObscure: _isObscure,
               validator: (value) => _newPassController.text != value ? '' : null,
             ),
@@ -107,7 +110,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
 
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
-      _showMessage(l10n.personalEmptyFieldErrorMsg);
+      _showMessage(LocaleKeys.personalEmptyFieldErrorMsg.tr());
       return;
     }
 
@@ -119,7 +122,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
     if (!mounted) return;
 
     if (success) {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.personalPassChanged)));
+      messenger.showSnackBar(SnackBar(content: Text(LocaleKeys.personalPassChanged.tr())));
       navigator.pop();
       return;
     }
@@ -128,7 +131,9 @@ class _ChangePassViewState extends State<_ChangePassView> {
     final rawError = state is DataError<void> ? state.error : null;
     final error = rawError is MessagedException ? rawError.error : null;
     messenger.showSnackBar(
-      SnackBar(content: Text('${l10n.personalChangeErrorMsg}${error is String ? error : ''}')),
+      SnackBar(
+        content: Text('${LocaleKeys.personalChangeErrorMsg.tr()}${error is String ? error : ''}'),
+      ),
     );
   }
 

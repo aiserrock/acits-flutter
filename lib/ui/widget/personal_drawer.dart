@@ -49,18 +49,18 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               if (!hasError) _buildDataTileWidget(isLoading),
               ListTile(
                 title: Text(
-                  StringRes.current.personMyShelters,
+                  LocaleKeys.personMyShelters.tr(),
                   style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
                 ),
                 // onTap: () {},
               ),
               _buildDivider(),
               ListTile(
-                title: Text(StringRes.current.personChangePass, style: StyleRes.title),
+                title: Text(LocaleKeys.personChangePass.tr(), style: StyleRes.title),
                 onTap: () => _openPersonalScreen(isChangePass: true),
               ),
               ListTile(
-                title: Text(StringRes.current.personChangeShelter, style: StyleRes.title),
+                title: Text(LocaleKeys.personChangeShelter.tr(), style: StyleRes.title),
                 onTap: () async {
                   final shelter = await context.push<ShelterShortSerializers>(
                     AppRoutes.pickShelter,
@@ -71,13 +71,13 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               ),
               ListTile(
                 title: Text(
-                  StringRes.current.personFeedback,
+                  LocaleKeys.personFeedback.tr(),
                   style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
                 ),
                 // onTap: () {},
               ),
               ListTile(
-                title: Text(StringRes.current.personLogout, style: StyleRes.title),
+                title: Text(LocaleKeys.personLogout.tr(), style: StyleRes.title),
                 onTap: _authService.logout,
               ),
             ],
@@ -91,7 +91,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
     return ListTile(
       title: isLoading
           ? _buildSkeleton(156.0)
-          : Text(StringRes.current.personMyData, style: StyleRes.title),
+          : Text(LocaleKeys.personMyData.tr(), style: StyleRes.title),
       onTap: _openPersonalScreen,
     );
   }

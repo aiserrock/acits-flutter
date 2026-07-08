@@ -12,9 +12,10 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/ui/widget/prescription_card.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -138,7 +139,7 @@ class _MainViewState extends State<_MainView> {
               style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
             ),
           )
-        : Text(StringRes.current.mainTitle, style: const TextStyle(color: ColorRes.textPrimary));
+        : Text(LocaleKeys.mainTitle.tr(), style: const TextStyle(color: ColorRes.textPrimary));
   }
 
   void _openDebug(BuildContext context) {
@@ -201,7 +202,7 @@ class _MainScreenContent extends StatelessWidget {
                       children: [Assets.common.emptyState.svg()],
                     ),
                     Text(
-                      StringRes.current.mainEmptyState,
+                      LocaleKeys.mainEmptyState.tr(),
                       style: const TextStyle(fontSize: 16.0, color: ColorRes.textSecondary),
                     ),
                   ],

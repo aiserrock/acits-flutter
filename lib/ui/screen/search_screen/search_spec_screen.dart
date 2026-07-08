@@ -155,7 +155,7 @@ class _SearchViewState extends State<_SearchView> {
               children: [
                 SizedBox(height: 120.0, width: 120.0, child: Assets.common.emptyState.svg()),
                 const SizedBox(height: 32.0),
-                Text(StringRes.current.commonNotFound, style: StyleRes.title),
+                Text(LocaleKeys.commonNotFound.tr(), style: StyleRes.title),
               ],
             ),
           );
@@ -166,7 +166,7 @@ class _SearchViewState extends State<_SearchView> {
       return const SizedBox(height: 64.0, child: Center(child: CircularProgressIndicator()));
     }
     if (state.pagingError != null) {
-      return SizedBox(height: 64.0, child: Center(child: Text(StringRes.current.commonError)));
+      return SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr())));
     }
     return const SizedBox(height: 16.0);
   }

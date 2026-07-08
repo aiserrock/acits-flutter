@@ -41,7 +41,7 @@ class _EmailConfirmationView extends StatelessWidget {
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          StringRes.current.regEmaiConfirmation,
+          LocaleKeys.regEmaiConfirmation.tr(),
           style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
@@ -57,19 +57,19 @@ class _EmailConfirmationView extends StatelessWidget {
                 state: state,
                 loader: (_) => const LoaderHolderWidget(),
                 builder: (context, _) => SuccessHolderWidget(
-                  title: StringRes.current.regEmailConfirmed,
-                  message: StringRes.current.regEmailConfirmSentMsg,
-                  button: StringRes.current.commonClose.toUpperCase(),
+                  title: LocaleKeys.regEmailConfirmed.tr(),
+                  message: LocaleKeys.regEmailConfirmSentMsg.tr(),
+                  button: LocaleKeys.commonClose.tr().toUpperCase(),
                   onPressed: Navigator.of(context).pop,
                 ),
                 errorBuilder: (context, error) {
                   final isReject = error is DioException && error.error is EmailConfirmException;
                   return ErrorHolderWidget(
-                    title: isReject ? StringRes.current.regRegisterRejectTitle : null,
-                    message: isReject ? StringRes.current.regRegisterRejectMsg : null,
+                    title: isReject ? LocaleKeys.regRegisterRejectTitle.tr() : null,
+                    message: isReject ? LocaleKeys.regRegisterRejectMsg.tr() : null,
                     error: isReject ? null : error,
                     onPressed: context.read<EmailConfirmCubit>().retry,
-                    button: StringRes.current.commonRepeat.toUpperCase(),
+                    button: LocaleKeys.commonRepeat.tr().toUpperCase(),
                   );
                 },
               ),

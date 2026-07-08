@@ -1,26 +1,4 @@
 {
-  "@@locale": "en",
-  "@commonNDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@commonNMonth": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@commonNYears": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "animalAdd": "New animal",
   "animalAdditionalInfo": "Additional info",
   "animalAdmitted": "Admitted",
@@ -49,6 +27,8 @@
   "animalDateAdmitt": "Admitt date",
   "animalDeleteAcceptMsg": "Do you sure to delete",
   "animalEdit": "Edit animal",
+  "animalEditSuccessMessage": "Changes saved.",
+  "animalEditSuccessTitle": "Done!",
   "animalFamily": "Family",
   "animalGenderFemale": "Female",
   "animalGenderLess": "Gengerless",
@@ -78,8 +58,10 @@
   "commentTitleEdit": "Edit comment",
   "commentTitleNew": "New comment",
   "common": "common",
+  "commonAccept": "Accept",
   "commonAdd": "Add",
   "commonAnimals": "Animals",
+  "commonBack": "Back",
   "commonBegin": "Begin",
   "commonCalendar": "Calendar",
   "commonCancel": "Cancel",
@@ -96,9 +78,21 @@
   "commonErrorTryAgainMessage": "Something went wrong. Try again later.",
   "commonLoading": "Loading",
   "commonMonth": "month",
-  "commonNDays": "{count,plural, =0{no {day}s} =1{{count} {day}} =2{{count} {day}s} few{{count} {day}s} other{{count} {day}s}}",
-  "commonNMonth": "{count,plural, =0{no {month}s} =1{{count} {month}} =2{{count} {month}s} few{{count} {month}s} other{{count} {month}s}}",
-  "commonNYears": "{count,plural, =0{no {year}s} =1{{count} {year}} =2{{count} {year}s} few{{count} {year}s} other{{count} {year}s}}",
+  "commonNDays": {
+    "one": "{} day",
+    "other": "{} days",
+    "zero": "no days"
+  },
+  "commonNMonth": {
+    "one": "{} month",
+    "other": "{} months",
+    "zero": "no months"
+  },
+  "commonNYears": {
+    "one": "{} year",
+    "other": "{} years",
+    "zero": "no years"
+  },
   "commonNext": "Next",
   "commonNoAppToOpenFileMsg": "No app to open this file :(",
   "commonNotCompleted": "Not completed",
@@ -106,8 +100,8 @@
   "commonReloadBtn": "Reload",
   "commonRepeat": "Repeat",
   "commonReschedule": "Reschedule",
-  "commonSearch": "Search", 
-  "commonShare": "Share", 
+  "commonSearch": "Search",
+  "commonShare": "Share",
   "commonSort": "Sort",
   "commonToday": "Today",
   "commonWarning": "Warning",
@@ -199,9 +193,5 @@
   "regWriteCity": "Write the city",
   "regWriteCountry": "Write the country",
   "regWriteRegion": "Write the region",
-  "shelterSelectShelter": "Pick the shelter",
-  "commonBack": "Back",
-  "animalEditSuccessTitle": "Done!",
-  "animalEditSuccessMessage": "Changes saved.",
-  "commonAccept": "Accept"
+  "shelterSelectShelter": "Pick the shelter"
 }

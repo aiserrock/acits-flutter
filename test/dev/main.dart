@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,11 +13,12 @@ import 'ssl/http_overrides.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   _setupLogging();
   if (!kIsWeb) await _addDebugHttpCerts();
   await initDevDi();
-  runApp(const MyApp());
+  runApp(const AcitsApp());
 }
 
 void _setupLogging() {

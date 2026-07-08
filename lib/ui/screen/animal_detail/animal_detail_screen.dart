@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
@@ -169,7 +168,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     return Column(
       children: [
         DefaultAppBar(
-          titleString: StringRes.current.animalCardTitle,
+          titleString: LocaleKeys.animalCardTitle.tr(),
           onBackPressure: Navigator.of(context).pop,
           elevation: .0,
         ),
@@ -361,7 +360,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                         final pdf = await _animalService.fetchPdfAnimalCard(widget.id);
                         return pdf;
                       }),
-                      'title': '${StringRes.current.mainAnimal} ${widget.id}',
+                      'title': '${LocaleKeys.mainAnimal.tr()} ${widget.id}',
                     },
                   );
                 },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
-import 'package:intl/intl.dart';
 
 /// Виджет карточки назначения животного в детальном представлении
 class AnimalPrescriptionCard extends StatefulWidget {
@@ -54,7 +53,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
           ),
           if (_isExpanded) ...[
             const Divider(),
-            Text(StringRes.current.animalPrescriptions, style: StyleRes.caption),
+            Text(LocaleKeys.animalPrescriptions.tr(), style: StyleRes.caption),
             const SizedBox(height: 4.0),
             if (widget.prescription.drugs != null)
               ...widget.prescription.drugs!.map<Widget>(

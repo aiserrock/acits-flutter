@@ -1,33 +1,11 @@
 {
-  "@@locale": "ru",
-  "@commonNDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@commonNMonth": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@commonNYears": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "animalAdd": "Новое животное ",
   "animalAdditionalInfo": "Дополнительная информация",
   "animalAdmitted": "Поступил",
   "animalAge": "Возраст",
   "animalAgeAppox": "Примерный",
   "animalAgeExact": "Точный",
-  "animalAnimalFamily": "Семейство животного", 
+  "animalAnimalFamily": "Семейство животного",
   "animalAnimalKind": "Вид животного",
   "animalAnimalStatus": "Статус животного",
   "animalApplicant": "Заявитель",
@@ -49,6 +27,8 @@
   "animalDateAdmitt": "Дата поступления",
   "animalDeleteAcceptMsg": "Вы уверены, что хотите удалить",
   "animalEdit": "Редактировать",
+  "animalEditSuccessMessage": "Изменения сохранены.",
+  "animalEditSuccessTitle": "Готово!",
   "animalFamily": "Семейство",
   "animalGenderFemale": "Женский",
   "animalGenderLess": "Без пола",
@@ -78,8 +58,10 @@
   "commentTitleEdit": "Редактирование",
   "commentTitleNew": "Новый комментарий",
   "common": "общий",
+  "commonAccept": "Принять",
   "commonAdd": "Добавить",
   "commonAnimals": "Животные",
+  "commonBack": "Вернуться",
   "commonBegin": "Начать",
   "commonCalendar": "Календарь",
   "commonCancel": "Отмена",
@@ -96,9 +78,27 @@
   "commonErrorTryAgainMessage": "Произошла ошибка. Попробуйте позже.",
   "commonLoading": "Загрузка",
   "commonMonth": "месяц",
-  "commonNDays": "{count,plural, =0{0 дней} =1{{count} {day}} =2{{count} дня} few{{count} дней} other{{count} дней}}",
-  "commonNMonth": "{count,plural, =0{0 месяцев} =1{{count} {month}} =2{{count} {month}а} few{{count} месяцев} other{{count} месяцев}}",
-  "commonNYears": "{count,plural, =0{0 лет} =1{{count} {year}} =2{{count} {year}а} few{{count} лет} other{{count} лет}}",
+  "commonNDays": {
+    "few": "{} дня",
+    "many": "{} дней",
+    "one": "{} день",
+    "other": "{} дней",
+    "zero": "0 дней"
+  },
+  "commonNMonth": {
+    "few": "{} месяца",
+    "many": "{} месяцев",
+    "one": "{} месяц",
+    "other": "{} месяцев",
+    "zero": "0 месяцев"
+  },
+  "commonNYears": {
+    "few": "{} года",
+    "many": "{} лет",
+    "one": "{} год",
+    "other": "{} лет",
+    "zero": "0 лет"
+  },
   "commonNext": "Далее",
   "commonNoAppToOpenFileMsg": "Нет подходящего приложения для открытия этого файла :(",
   "commonNotCompleted": "Не выполнено",
@@ -106,8 +106,8 @@
   "commonReloadBtn": "Обновить",
   "commonRepeat": "Повторить",
   "commonReschedule": "Перенести",
-  "commonSearch": "Поиск", 
-  "commonShare": "Поделиться", 
+  "commonSearch": "Поиск",
+  "commonShare": "Поделиться",
   "commonSort": "Сортировка",
   "commonToday": "Сегодня",
   "commonWarning": "Внимание",
@@ -199,9 +199,5 @@
   "regWriteCity": "Укажите город",
   "regWriteCountry": "Укажите страну",
   "regWriteRegion": "Укажите область",
-  "shelterSelectShelter": "Выберите организацию",
-  "commonBack": "Вернуться",
-  "animalEditSuccessTitle": "Готово!",
-  "animalEditSuccessMessage": "Изменения сохранены.",
-  "commonAccept": "Принять"
+  "shelterSelectShelter": "Выберите организацию"
 }

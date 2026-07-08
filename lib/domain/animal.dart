@@ -28,12 +28,12 @@ extension AnimalX on AnimalRead {
     if (birthDate == null) return null;
     final days = DateTime.now().difference(birthDate!).inDays;
     if (days < 30) {
-      return StringRes.current.commonNDays(days, StringRes.current.commonDay);
+      return LocaleKeys.commonNDays.plural(days);
     }
     if (days < 365) {
-      return StringRes.current.commonNMonth((days / 30).floor(), StringRes.current.commonMonth);
+      return LocaleKeys.commonNMonth.plural((days / 30).floor());
     }
-    return StringRes.current.commonNYears((days / 365).floor(), StringRes.current.commonYear);
+    return LocaleKeys.commonNYears.plural((days / 365).floor());
   }
 
   String? get specFamily {

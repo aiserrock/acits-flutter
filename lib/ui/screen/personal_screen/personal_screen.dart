@@ -69,7 +69,10 @@ class _PersonalViewState extends State<_PersonalView> {
           child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text(l10n.personMyData, style: const TextStyle(color: ColorRes.textPrimary)),
+        title: Text(
+          LocaleKeys.personMyData.tr(),
+          style: const TextStyle(color: ColorRes.textPrimary),
+        ),
         centerTitle: true,
       ),
       floatingActionButton: BlocBuilder<PersonalCubit, PersonalState>(
@@ -97,39 +100,39 @@ class _PersonalViewState extends State<_PersonalView> {
               builder: (context) {
                 return FormEditCard([
                   EditCardData(
-                    label: l10n.loginLoginLabel,
+                    label: LocaleKeys.loginLoginLabel.tr(),
                     enabled: false,
                     initValue: user.username,
                   ),
                   EditCardData(
-                    label: l10n.loginPassLabel,
+                    label: LocaleKeys.loginPassLabel.tr(),
                     enabled: false,
                     initValue: '••••••••',
                     suffix: const Icon(Icons.edit, color: ColorRes.accent),
                     onPressed: () => _onPassChange(context),
                   ),
                   EditCardData(
-                    label: l10n.animalCuratorName,
+                    label: LocaleKeys.animalCuratorName.tr(),
                     controller: _firstNameController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: l10n.animalCuratorLastName,
+                    label: LocaleKeys.animalCuratorLastName.tr(),
                     controller: _lastNameController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: l10n.regFathersName,
+                    label: LocaleKeys.regFathersName.tr(),
                     controller: _fatherNameController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: l10n.animalCuratorPhone,
+                    label: LocaleKeys.animalCuratorPhone.tr(),
                     controller: _phoneController,
                     onChanged: _onFieldChanged,
                   ),
                   EditCardData(
-                    label: l10n.animalCuratorEmail,
+                    label: LocaleKeys.animalCuratorEmail.tr(),
                     controller: _emailController,
                     onChanged: _onFieldChanged,
                   ),

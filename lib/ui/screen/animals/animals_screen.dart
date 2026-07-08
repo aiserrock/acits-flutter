@@ -4,7 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
@@ -15,6 +15,7 @@ import 'package:acits_flutter/ui/widget/animal_card.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 const _scrollTopPadding = 16.0;
 
@@ -143,10 +144,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
               style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
             ),
           )
-        : Text(
-            StringRes.current.commonAnimals,
-            style: const TextStyle(color: ColorRes.textPrimary),
-          );
+        : Text(LocaleKeys.commonAnimals.tr(), style: const TextStyle(color: ColorRes.textPrimary));
   }
 
   Widget _buildScreenContent(AnimalsState state, List<AnimalRead> data) {
@@ -188,7 +186,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
       loader: (_) =>
           const SizedBox(height: 48.0, child: Center(child: CircularProgressIndicator())),
       errorBuilder: (_, _) =>
-          SizedBox(height: 64.0, child: Center(child: Text(StringRes.current.commonError))),
+          SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr()))),
     );
   }
 
@@ -206,7 +204,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
                 children: [Assets.common.emptyState.svg()],
               ),
               Text(
-                StringRes.current.mainEmptyState,
+                LocaleKeys.mainEmptyState.tr(),
                 style: const TextStyle(fontSize: 16.0, color: ColorRes.textSecondary),
               ),
             ],
@@ -228,7 +226,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
     final messenger = ScaffoldMessenger.of(context);
     final success = await context.read<AnimalsCubit>().deleteAnimal(item);
     if (!success) {
-      messenger.showSnackBar(SnackBar(content: Text(StringRes.current.errorDefaultMsg)));
+      messenger.showSnackBar(SnackBar(content: Text(LocaleKeys.errorDefaultMsg.tr())));
     }
   }
 }

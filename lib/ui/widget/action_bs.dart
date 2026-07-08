@@ -1,7 +1,8 @@
-import 'package:acits_flutter/generated/l10n.dart';
+import 'package:acits_flutter/generated/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// BottomSheet c действиями и кнопкой отмены
 Widget bsSelectorActions(BuildContext context, Map<Widget, Function()> actions) {
@@ -62,7 +63,7 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          StringRes.current.commonCancel,
+                          LocaleKeys.commonCancel.tr(),
                           style: StyleRes.subTitle.copyWith(color: ColorRes.accent),
                         ),
                       ],

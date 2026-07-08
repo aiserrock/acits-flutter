@@ -67,7 +67,7 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          cubit.isEdit ? StringRes.current.curatorEdit : StringRes.current.curatorAdd,
+          cubit.isEdit ? LocaleKeys.curatorEdit.tr() : LocaleKeys.curatorAdd.tr(),
           style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
@@ -110,22 +110,22 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
           key: formKey,
           child: FormEditCard([
             EditCardData(
-              label: '${StringRes.current.animalCuratorName} *',
+              label: '${LocaleKeys.animalCuratorName.tr()} *',
               controller: _nameController,
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: StringRes.current.animalCuratorLastName,
+              label: LocaleKeys.animalCuratorLastName.tr(),
               controller: _lastNameController,
             ),
             EditCardData(
-              label: '${StringRes.current.animalCuratorPhone} *',
+              label: '${LocaleKeys.animalCuratorPhone.tr()} *',
               controller: _phoneController,
               validator: Validator.emptyValidator,
             ),
-            EditCardData(label: StringRes.current.animalCuratorEmail, controller: _emailController),
+            EditCardData(label: LocaleKeys.animalCuratorEmail.tr(), controller: _emailController),
             EditCardData(
-              label: StringRes.current.animalCuratorAddress,
+              label: LocaleKeys.animalCuratorAddress.tr(),
               controller: _addressController,
             ),
           ]),
