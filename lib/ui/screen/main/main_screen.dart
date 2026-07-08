@@ -214,7 +214,10 @@ class _MainScreenContent extends StatelessWidget {
     );
   }
 
-  void _onEditPrescriptionPressed(PrescriptionExecutionToday item) {
-    getIt<GoRouter>().push("${AppRoutes.prescriptionEdit}?id=${item.prescription?.id}");
+  Future<void> _onEditPrescriptionPressed(PrescriptionExecutionToday item) async {
+    final result = await getIt<GoRouter>().push<Prescription>(
+      "${AppRoutes.prescriptionEdit}?id=${item.prescription?.id}",
+    );
+    if (result != null) await pullToRefresh();
   }
 }

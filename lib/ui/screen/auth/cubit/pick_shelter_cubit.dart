@@ -5,6 +5,7 @@ import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 /// Cubit экрана выбора приюта.
 ///
@@ -49,21 +50,19 @@ class PickShelterCubit extends Cubit<PickShelterState> {
     final results = state.results;
     if (index < 0 || index >= results.length) return false;
     final shelter = results[index];
-    emit(state.copyWith(status: const DataState.loading()));
+    safeEmit(state.copyWith(status: const DataState.loading()));
     try {
-      await Future.wait([
-        _configService.initConfig(currentShelterId: shelter.id),
-        _authService.setCurrentShelter(shelter.id!),
-      ]);
+      await _authService.setCurrentShelter(shelter.id!);
+      await _configService.initConfig(currentShelterId: shelter.id);
       return true;
     } catch (e) {
-      emit(state.copyWith(status: DataState.error(e)));
+      safeEmit(state.copyWith(status: DataState.error(e)));
       return false;
     }
   }
 
   /// Сбросить ошибку выбора и вернуть экран к отрисовке списка.
   void retry() {
-    emit(state.copyWith(status: const PickShelterState().status));
+    safeEmit(state.copyWith(status: const PickShelterState().status));
   }
 }

@@ -13,12 +13,12 @@ class PersonalDrawerCubit extends Cubit<DataState<UserSerializers>> {
   final PersonalService _personalService;
 
   Future<void> _load() async {
-    emit(const DataLoading());
+    safeEmit(const DataLoading());
     try {
       final user = await _personalService.fetchPersonal();
-      emit(DataContent(user));
+      safeEmit(DataContent(user));
     } catch (e) {
-      emit(DataError(e));
+      safeEmit(DataError(e));
     }
   }
 }

@@ -30,34 +30,34 @@ class AnimalDetailCubit extends Cubit<AnimalDetailState> {
 
   /// Загрузить (или перезагрузить) карточку животного.
   Future<void> loadAnimal() async {
-    emit(state.copyWith(animal: const DataState.loading()));
+    safeEmit(state.copyWith(animal: const DataState.loading()));
     try {
       final value = await _animalService.fetchAnimalDetail(id: id);
-      emit(state.copyWith(animal: DataState.content(value)));
+      safeEmit(state.copyWith(animal: DataState.content(value)));
     } catch (e) {
-      emit(state.copyWith(animal: DataState.error(e)));
+      safeEmit(state.copyWith(animal: DataState.error(e)));
     }
   }
 
   /// Переключить фильтр назначений (актуальные / прошлые) и перезагрузить их.
   void togglePrescriptionActive(bool isActive) {
     if (state.prescriptionActive == isActive) return;
-    emit(state.copyWith(prescriptionActive: isActive));
+    safeEmit(state.copyWith(prescriptionActive: isActive));
     reloadPrescriptions();
   }
 
   /// Загрузить список назначений с учётом текущего фильтра.
   Future<void> reloadPrescriptions() async {
-    emit(state.copyWith(prescriptions: const DataState.loading()));
+    safeEmit(state.copyWith(prescriptions: const DataState.loading()));
     try {
       final value = await _prescriptionService.fetchPrescriptionListByAnimal(
         id,
         isActual: state.prescriptionActive,
         isOld: !state.prescriptionActive,
       );
-      emit(state.copyWith(prescriptions: DataState.content(value?.results)));
+      safeEmit(state.copyWith(prescriptions: DataState.content(value?.results)));
     } catch (e) {
-      emit(state.copyWith(prescriptions: DataState.error(e)));
+      safeEmit(state.copyWith(prescriptions: DataState.error(e)));
     }
   }
 }

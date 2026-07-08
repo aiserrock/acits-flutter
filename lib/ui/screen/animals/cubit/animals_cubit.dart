@@ -4,6 +4,7 @@ import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animals/cubit/animals_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 const _animalPageLength = 25;
 
@@ -21,9 +22,12 @@ class AnimalsCubit extends Cubit<AnimalsState> {
 
   int _currentListOffset = 0;
 
+  /// Достигнут ли конец списка (последняя страница вернула меньше [_animalPageLength]).
+  bool _reachedEnd = false;
+
   /// Переключить режим поиска в шапке экрана.
   void toggleSearch() {
-    emit(state.copyWith(isSearchActive: !state.isSearchActive));
+    safeEmit(state.copyWith(isSearchActive: !state.isSearchActive));
   }
 
   /// Идёт ли сейчас догрузка следующей страницы.
@@ -31,8 +35,8 @@ class AnimalsCubit extends Cubit<AnimalsState> {
 
   /// Запросить догрузку следующей страницы (для infinite scroll).
   void loadNextPage() {
-    if (_isPageLoading) return;
-    emit(state.copyWith(page: const DataState.loading()));
+    if (_isPageLoading || _reachedEnd) return;
+    safeEmit(state.copyWith(page: const DataState.loading()));
     loadAnimalList();
   }
 
@@ -43,16 +47,19 @@ class AnimalsCubit extends Cubit<AnimalsState> {
   Future<void> loadAnimalList({bool needResetOffset = false}) async {
     if (needResetOffset) {
       _currentListOffset = 0;
-      emit(state.copyWith(data: const DataState.loading()));
+      _reachedEnd = false;
+      safeEmit(state.copyWith(data: const DataState.loading()));
     }
     try {
       final value = await _animalService.fetchAnimalList(
         offset: _currentListOffset,
         limit: _animalPageLength,
       );
-      final newList = <AnimalRead>[...?state.data.valueOrNull, ...?value?.results];
-      _currentListOffset += value?.results?.length ?? 0;
-      emit(
+      final fetched = value?.results ?? const [];
+      final newList = <AnimalRead>[...?state.data.valueOrNull, ...fetched];
+      _currentListOffset += fetched.length;
+      if (fetched.length < _animalPageLength) _reachedEnd = true;
+      safeEmit(
         state.copyWith(
           data: DataState.content(newList),
           page: DataState.content(_currentListOffset),
@@ -60,9 +67,9 @@ class AnimalsCubit extends Cubit<AnimalsState> {
       );
     } catch (e) {
       if (needResetOffset) {
-        emit(state.copyWith(data: DataState.error(e)));
+        safeEmit(state.copyWith(data: DataState.error(e)));
       } else {
-        emit(state.copyWith(page: DataState.error(e)));
+        safeEmit(state.copyWith(page: DataState.error(e)));
       }
     }
   }
@@ -76,14 +83,14 @@ class AnimalsCubit extends Cubit<AnimalsState> {
     if (current == null) return false;
     final index = current.indexOf(item);
     final optimistic = List<AnimalRead>.from(current)..remove(item);
-    emit(state.copyWith(data: DataState.content(optimistic)));
+    safeEmit(state.copyWith(data: DataState.content(optimistic)));
     try {
       await _animalService.deleteAnimal(item.id.toString());
       return true;
     } catch (_) {
       final restored = List<AnimalRead>.from(state.data.valueOrNull ?? const [])
         ..insert(index < 0 ? 0 : index, item);
-      emit(state.copyWith(data: DataState.content(restored)));
+      safeEmit(state.copyWith(data: DataState.content(restored)));
       return false;
     }
   }

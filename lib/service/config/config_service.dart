@@ -22,6 +22,7 @@ class ConfigService {
   final _prescriptionTypeNames = <MyTypeEnum, String?>{};
   final _animalStatusNames = <Status131Enum, String?>{};
   List<AnimalAttribute>? _animalAttributes;
+  String? _animalAttributesShelterId;
 
   Map<String, dynamic>? get typeValues =>
       _typeValues != null ? Map<String, dynamic>.from(_typeValues!) : null;
@@ -48,12 +49,14 @@ class ConfigService {
   }
 
   Future<List<AnimalAttribute>> getAnimalAttr({String? currentShelterId}) async {
-    if (_animalAttributes != null) return _animalAttributes!;
-    final result = await _acitsClient.apiV1AnimalsAttributesGet(
-      xCurrentShelter: currentShelterId ?? _authService.currentShelterId,
-    );
+    final shelterId = currentShelterId ?? _authService.currentShelterId;
+    if (_animalAttributes != null && _animalAttributesShelterId == shelterId) {
+      return _animalAttributes!;
+    }
+    final result = await _acitsClient.apiV1AnimalsAttributesGet(xCurrentShelter: shelterId);
     if (result.body != null) {
       _animalAttributes = result.body!;
+      _animalAttributesShelterId = shelterId;
       return _animalAttributes!;
     } else {
       throw MessagedException(error: result.error);

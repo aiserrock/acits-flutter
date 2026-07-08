@@ -2,6 +2,7 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 /// Cubit экрана подтверждения электронной почты при регистрации.
 ///
@@ -23,12 +24,12 @@ class EmailConfirmCubit extends Cubit<DataState<void>> {
 
   /// Подтвердить электронную почту по ссылке [confirmLink].
   Future<void> _confirmEmail() async {
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       await _authService.confirmEmail(confirmLink);
-      emit(const DataState.content(null));
+      safeEmit(const DataState.content(null));
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
     }
   }
 }

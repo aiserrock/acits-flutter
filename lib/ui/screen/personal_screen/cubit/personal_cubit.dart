@@ -17,13 +17,13 @@ class PersonalCubit extends Cubit<PersonalState> {
   /// Загрузить данные пользователя. Возвращает загруженного пользователя,
   /// чтобы виджет мог проинициализировать контроллеры полей.
   Future<UserSerializers?> load() async {
-    emit(state.copyWith(data: const DataState.loading(), fabVisible: false));
+    safeEmit(state.copyWith(data: const DataState.loading(), fabVisible: false));
     try {
       final user = await _personalService.fetchPersonal(force: true);
-      emit(PersonalState(data: DataState.content(user)));
+      safeEmit(PersonalState(data: DataState.content(user)));
       return user;
     } catch (e) {
-      emit(state.copyWith(data: DataState.error(e)));
+      safeEmit(state.copyWith(data: DataState.error(e)));
       return null;
     }
   }
@@ -48,7 +48,7 @@ class PersonalCubit extends Cubit<PersonalState> {
         ) !=
         data;
     if (changed != state.fabVisible) {
-      emit(state.copyWith(fabVisible: changed));
+      safeEmit(state.copyWith(fabVisible: changed));
     }
   }
 
@@ -62,7 +62,7 @@ class PersonalCubit extends Cubit<PersonalState> {
   }) async {
     final data = state.data.valueOrNull;
     if (data == null) return;
-    emit(state.copyWith(data: const DataState.loading(), fabVisible: false));
+    safeEmit(state.copyWith(data: const DataState.loading(), fabVisible: false));
     final changed = data.copyWith(
       firstName: firstName,
       lastName: lastName,
@@ -72,9 +72,9 @@ class PersonalCubit extends Cubit<PersonalState> {
     );
     try {
       final user = await _personalService.changePersonal(changed);
-      emit(PersonalState(data: DataState.content(user)));
+      safeEmit(PersonalState(data: DataState.content(user)));
     } catch (e) {
-      emit(state.copyWith(data: DataState.error(e)));
+      safeEmit(state.copyWith(data: DataState.error(e)));
     }
   }
 }

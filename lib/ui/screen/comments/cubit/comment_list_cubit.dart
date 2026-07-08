@@ -6,6 +6,7 @@ import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 /// Cubit экрана списка комментариев к животному.
 ///
@@ -34,12 +35,12 @@ class CommentListCubit extends Cubit<CommentListState> {
   Future<void> init() => _init();
 
   Future<void> _init() async {
-    emit(state.copyWith(data: const DataState.loading()));
+    safeEmit(state.copyWith(data: const DataState.loading()));
     try {
       final value = await _animalService.fetchAnimalNotes(animalId);
-      emit(state.copyWith(data: DataState.content(value?.results ?? [])));
+      safeEmit(state.copyWith(data: DataState.content(value?.results ?? [])));
     } catch (e) {
-      emit(state.copyWith(data: DataState.error(e)));
+      safeEmit(state.copyWith(data: DataState.error(e)));
     }
   }
 
@@ -47,13 +48,15 @@ class CommentListCubit extends Cubit<CommentListState> {
   Future<void> loadNextPage() async {
     final current = state.data.valueOrNull;
     if (current == null || state.page.isLoading) return;
-    emit(state.copyWith(page: const DataState.loading()));
+    safeEmit(state.copyWith(page: const DataState.loading()));
     try {
       final value = await _animalService.fetchAnimalNotes(animalId, offset: current.length);
       final newList = <AnimalNote>[...current, ...?value?.results];
-      emit(state.copyWith(data: DataState.content(newList), page: const DataState.content(null)));
+      safeEmit(
+        state.copyWith(data: DataState.content(newList), page: const DataState.content(null)),
+      );
     } catch (e) {
-      emit(state.copyWith(page: DataState.error(e)));
+      safeEmit(state.copyWith(page: DataState.error(e)));
     }
   }
 
@@ -67,7 +70,7 @@ class CommentListCubit extends Cubit<CommentListState> {
       final current = state.data.valueOrNull;
       if (current != null) {
         final newList = List<AnimalNote>.from(current)..remove(comment);
-        emit(state.copyWith(data: DataState.content(newList)));
+        safeEmit(state.copyWith(data: DataState.content(newList)));
       }
       return true;
     } catch (_) {
@@ -82,13 +85,13 @@ class CommentListCubit extends Cubit<CommentListState> {
     final index = current.indexWhere((comment) => comment.id == editedComment.id);
     if (index < 0) return;
     final newList = List<AnimalNote>.from(current)..replaceRange(index, index + 1, [editedComment]);
-    emit(state.copyWith(data: DataState.content(newList)));
+    safeEmit(state.copyWith(data: DataState.content(newList)));
   }
 
   void _onCreateComment(AnimalNote comment) {
     final current = state.data.valueOrNull;
     if (current == null) return;
-    emit(state.copyWith(data: DataState.content(<AnimalNote>[...current, comment])));
+    safeEmit(state.copyWith(data: DataState.content(<AnimalNote>[...current, comment])));
   }
 
   @override

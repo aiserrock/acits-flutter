@@ -37,16 +37,16 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
 
   /// Загружает изображения животного и добавляет пресетные аватарки.
   Future<void> _init() async {
-    emit(state.copyWith(data: const DataState.loading()));
+    safeEmit(state.copyWith(data: const DataState.loading()));
     try {
       final animal = await _animalService.fetchAnimalDetail(id: animalId);
       final items = <GalleryItemData>[
         ...(animal.images?.map<GalleryItemData>((e) => GalleryItemData.fromAnimalImage(e)) ?? []),
         ..._galleryImageSet.map<GalleryItemData>((e) => GalleryItemData(assetPath: e.path)),
       ];
-      emit(state.copyWith(data: DataState.content(items)));
+      safeEmit(state.copyWith(data: DataState.content(items)));
     } catch (e) {
-      emit(state.copyWith(data: DataState.error(e)));
+      safeEmit(state.copyWith(data: DataState.error(e)));
     }
   }
 
@@ -61,7 +61,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
     if (index < 0) return;
     final updated = List<GalleryItemData>.of(currentList);
     updated[index] = item.copyWith(isChoosed: !item.isChoosed);
-    emit(state.copyWith(data: DataState.content(updated), isSelectorChanged: true));
+    safeEmit(state.copyWith(data: DataState.content(updated), isSelectorChanged: true));
   }
 
   /// Добавляет новое фото с камеры или из галереи и помечает его выбранным.
@@ -72,7 +72,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
     if (xFile == null) return;
     final updated = List<GalleryItemData>.of(currentList)
       ..insert(0, GalleryItemData(filePath: xFile.path, isChoosed: true));
-    emit(state.copyWith(data: DataState.content(updated), isSelectorChanged: true));
+    safeEmit(state.copyWith(data: DataState.content(updated), isSelectorChanged: true));
   }
 
   /// Количество выбранных изображений в текущем состоянии.
@@ -85,12 +85,12 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
   Future<bool> submit() async {
     final list = state.data.valueOrNull;
     if (list == null) return false;
-    emit(state.copyWith(data: const DataState.loading()));
+    safeEmit(state.copyWith(data: const DataState.loading()));
     try {
       await _animalService.changeAnimalPhotos(animalId, list);
       return true;
     } catch (e) {
-      emit(state.copyWith(data: DataState.error(e)));
+      safeEmit(state.copyWith(data: DataState.error(e)));
       return false;
     }
   }

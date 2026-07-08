@@ -54,9 +54,9 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
   /// иначе — догрузка следующей страницы к уже загруженным элементам.
   Future<void> loadData({required String? searchRequest, bool resetOffset = false}) async {
     if (resetOffset) {
-      emit(state.copyWith(offset: 0, data: const DataState.loading(), isPaging: false));
+      safeEmit(state.copyWith(offset: 0, data: const DataState.loading(), isPaging: false));
     } else if (!state.data.isLoading) {
-      emit(state.copyWith(isPaging: true, pagingError: () => null));
+      safeEmit(state.copyWith(isPaging: true, pagingError: () => null));
     }
 
     try {
@@ -68,7 +68,7 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
         searchRequest: searchRequest,
       );
       final list = [...(state.data.valueOrNull ?? <Species>[]), ...value];
-      emit(
+      safeEmit(
         state.copyWith(
           offset: state.offset + value.length,
           data: DataState.content(list),
@@ -78,9 +78,9 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
       );
     } catch (error) {
       if (state.data.isLoading) {
-        emit(state.copyWith(data: DataState.error(error), isPaging: false));
+        safeEmit(state.copyWith(data: DataState.error(error), isPaging: false));
       } else {
-        emit(state.copyWith(isPaging: false, pagingError: () => error));
+        safeEmit(state.copyWith(isPaging: false, pagingError: () => error));
       }
     }
   }

@@ -27,12 +27,12 @@ class CommentEditCubit extends Cubit<CommentEditState> {
 
   /// Прикрепить выбранный пользователем файл.
   void attachFile(PlatformFile file) {
-    emit(state.copyWith(attachedFile: () => file));
+    safeEmit(state.copyWith(attachedFile: () => file));
   }
 
   /// Сбросить прикреплённый файл.
   void clearAttachedFile() {
-    emit(state.copyWith(attachedFile: () => null));
+    safeEmit(state.copyWith(attachedFile: () => null));
   }
 
   /// Отправить комментарий на сервер.
@@ -40,7 +40,7 @@ class CommentEditCubit extends Cubit<CommentEditState> {
   /// Возвращает созданный/обновлённый [AnimalNote] при успехе, либо
   /// пробрасывает исключение. По завершении сбрасывает флаг отправки.
   Future<AnimalNote?> submit(String text) async {
-    emit(state.copyWith(isSubmitting: true));
+    safeEmit(state.copyWith(isSubmitting: true));
     final file = state.attachedFile;
     final files = file != null ? [file] : <PlatformFile>[];
     final source = comment;
@@ -55,7 +55,7 @@ class CommentEditCubit extends Cubit<CommentEditState> {
           : await _animalService.createAnimalNote(animalId: animalId, text: text, files: files);
       return result;
     } catch (_) {
-      emit(state.copyWith(isSubmitting: false));
+      safeEmit(state.copyWith(isSubmitting: false));
       rethrow;
     }
   }

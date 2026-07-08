@@ -5,6 +5,7 @@ import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/cubit/animal_edit_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 /// Cubit экрана создания/редактирования животного.
 ///
@@ -33,18 +34,18 @@ class AnimalEditCubit extends Cubit<DataState<AnimalEditContent>> {
 
   Future<void> _init() async {
     if (!isEdit) return;
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       final animal = await _animalService.fetchAnimalDetail(id: id!);
-      emit(DataState.content(AnimalEditContent(animal: animal)));
+      safeEmit(DataState.content(AnimalEditContent(animal: animal)));
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
     }
   }
 
   /// Сбрасывает экран из состояния ошибки обратно к форме.
   void resetToForm() {
-    emit(const DataState.content(AnimalEditContent()));
+    safeEmit(const DataState.content(AnimalEditContent()));
   }
 
   /// Отправляет форму: создаёт или обновляет животное.
@@ -54,18 +55,16 @@ class AnimalEditCubit extends Cubit<DataState<AnimalEditContent>> {
   Future<bool> submit(AnimalRead editedAnimal) async {
     final isEditRequest = isEdit && editedAnimal.id != null;
     AnimalRead? result;
-    if (isEditRequest) {
-      result = await _animalService
-          .updateAnimal(editedAnimal.id!, editedAnimal.write)
-          .catchError((Object _) => null);
-    } else {
-      result = await _animalService.createAnimal(editedAnimal.write).catchError((Object e) {
-        emit(DataState.error(e));
-        return null;
-      });
+    try {
+      result = isEditRequest
+          ? await _animalService.updateAnimal(editedAnimal.id!, editedAnimal.write)
+          : await _animalService.createAnimal(editedAnimal.write);
+    } catch (e) {
+      safeEmit(DataState.error(e));
+      return false;
     }
     if (result != null) {
-      emit(const DataState.content(AnimalEditContent(mode: AnimalEditScreenMode.success)));
+      safeEmit(const DataState.content(AnimalEditContent(mode: AnimalEditScreenMode.success)));
       return true;
     }
     return false;

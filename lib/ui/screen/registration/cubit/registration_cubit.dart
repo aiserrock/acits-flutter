@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -19,23 +20,23 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   /// Сменить активный таб (сбрасывает согласие на перс. данные).
   void onTabChanged(int index) {
     if (state.tabIndex == index) return;
-    emit(state.copyWith(tabIndex: index, agreedToPolicy: false));
+    safeEmit(state.copyWith(tabIndex: index, agreedToPolicy: false));
   }
 
   /// Переключить согласие на обработку персональных данных.
   void togglePersonData() {
-    emit(state.copyWith(agreedToPolicy: !state.agreedToPolicy));
+    safeEmit(state.copyWith(agreedToPolicy: !state.agreedToPolicy));
   }
 
   /// Сменить роль кастомера.
   void onCustomerRoleChanged(CustomerRole? role) {
     if (role == null || state.role == role) return;
-    emit(state.copyWith(role: role));
+    safeEmit(state.copyWith(role: role));
   }
 
   /// Сохранить выбранный пользователем приют.
   void setShelter(ShelterShortSerializers shelter) {
-    emit(state.copyWith(shelter: shelter));
+    safeEmit(state.copyWith(shelter: shelter));
   }
 
   /// Зарегистрировать администратора приюта.
@@ -44,12 +45,12 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   /// snackbar). Бросает исключение наружу для показа сообщения.
   Future<bool> submitAdmin(UserShelterAdminSerializers admin) async {
     if (state.submitting) return false;
-    emit(state.copyWith(submitting: true));
+    safeEmit(state.copyWith(submitting: true));
     try {
       final result = await _authService.registrationAdmin(admin);
       return result is UserShelterAdminSerializers;
     } finally {
-      emit(state.copyWith(submitting: false));
+      safeEmit(state.copyWith(submitting: false));
     }
   }
 
@@ -59,12 +60,12 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   /// snackbar). Бросает исключение наружу для показа сообщения.
   Future<bool> submitCustomer(UserShelterWorkerSerializers customer) async {
     if (state.submitting) return false;
-    emit(state.copyWith(submitting: true));
+    safeEmit(state.copyWith(submitting: true));
     try {
       final result = await _authService.registrationCustomer(customer);
       return result is UserShelterWorkerSerializers;
     } finally {
-      emit(state.copyWith(submitting: false));
+      safeEmit(state.copyWith(submitting: false));
     }
   }
 }

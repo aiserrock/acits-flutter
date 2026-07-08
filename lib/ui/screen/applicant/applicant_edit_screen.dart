@@ -160,6 +160,6 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
       email: _emailController.text,
     );
     final result = await cubit.submit(applicant);
-    if (result != null) _navigator.pop(result);
+    if (result != null && mounted) _navigator.pop(result);
   }
 }

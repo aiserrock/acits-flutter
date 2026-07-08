@@ -23,10 +23,14 @@ class EmailConfirmRepository {
       throw EmailConfirmException();
     }
 
-    _client.options = _client.options.copyWith(followRedirects: false);
-    _client.interceptors.add(_EmailConfirmInterceptor());
+    // Не мутируем общий Dio: следование редиректам отключаем через Options
+    // конкретного запроса, а интерцептор регистрируем один раз, чтобы дубликаты
+    // не накапливались при повторных вызовах.
+    if (!_client.interceptors.any((i) => i is _EmailConfirmInterceptor)) {
+      _client.interceptors.add(_EmailConfirmInterceptor());
+    }
 
-    await _client.getUri(uri!);
+    await _client.getUri(uri!, options: Options(followRedirects: false));
   }
 
   /// Ссылка должна быть HTTPS, вести на `*.acits.ru` (или сам `acits.ru`) и

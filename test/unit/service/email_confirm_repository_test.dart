@@ -23,7 +23,7 @@ void main() {
     when(() => dio.interceptors).thenReturn(interceptors);
     // getUri успешно завершается для доверенной ссылки.
     when(
-      () => dio.getUri<dynamic>(any()),
+      () => dio.getUri<dynamic>(any(), options: any(named: 'options')),
     ).thenAnswer((_) async => Response<dynamic>(requestOptions: RequestOptions(path: '')));
     repository = EmailConfirmRepository(dio);
   });
@@ -34,13 +34,13 @@ void main() {
     test('trusted https .acits.ru link with verify-email path calls getUri once', () async {
       await repository.confirmEmail(trustedLink);
 
-      verify(() => dio.getUri<dynamic>(any())).called(1);
+      verify(() => dio.getUri<dynamic>(any(), options: any(named: 'options'))).called(1);
     });
 
     test('trusted apex host acits.ru is allowed', () async {
       await repository.confirmEmail('https://acits.ru/api/v1/users/verify-email/token');
 
-      verify(() => dio.getUri<dynamic>(any())).called(1);
+      verify(() => dio.getUri<dynamic>(any(), options: any(named: 'options'))).called(1);
     });
 
     test('untrusted host throws and never calls dio', () async {

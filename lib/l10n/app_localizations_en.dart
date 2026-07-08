@@ -225,8 +225,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonErrorStubTitle => 'Oh, something went wrong...';
 
   @override
-  String get commonErrorTryAgainMessage =>
-      'Something went wrong. Try again later.';
+  String get commonErrorTryAgainMessage => 'Something went wrong. Try again later.';
 
   @override
   String get commonLoading => 'Loading';
@@ -380,8 +379,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'We have prepared in advance the maximum number of medical appointments for shelters';
 
   @override
-  String get onboardingDrugsTitle =>
-      'Flexible system of work with appointments';
+  String get onboardingDrugsTitle => 'Flexible system of work with appointments';
 
   @override
   String get onboardingFreeMsg =>
@@ -402,8 +400,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Allows you to clearly plan working hours and provide timely medical assistance to animals';
 
   @override
-  String get onboardingPlanTitle =>
-      'Summary of appointments for the current day';
+  String get onboardingPlanTitle => 'Summary of appointments for the current day';
 
   @override
   String get personChangePass => 'Change pass';
@@ -448,8 +445,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prescriptionAnimal => 'Animal*';
 
   @override
-  String get prescriptionCantChangeAnimalMsg =>
-      'Can\\\'t change animal when editing prescription';
+  String get prescriptionCantChangeAnimalMsg => 'Can\\\'t change animal when editing prescription';
 
   @override
   String get prescriptionComment => 'Comment';
@@ -494,8 +490,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get regAboutYou => 'About you';
 
   @override
-  String get regAdminRegMsg =>
-      'Person, whose data was write, will become an admin';
+  String get regAdminRegMsg => 'Person, whose data was write, will become an admin';
 
   @override
   String get regAgreePersonalDataPart0 => 'I agree with terms of ';
@@ -538,8 +533,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get regLeast8Symbols => 'Min 8 symbols';
 
   @override
-  String get regNeedConfirmPolicy =>
-      'Require agree with terms of personal data processing';
+  String get regNeedConfirmPolicy => 'Require agree with terms of personal data processing';
 
   @override
   String get regOrg => 'ORGANIZATION';
@@ -557,8 +551,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get regRegion => 'Region ';
 
   @override
-  String get regRegisterRejectMsg =>
-      'Please, fill the form correctly, then try it again.';
+  String get regRegisterRejectMsg => 'Please, fill the form correctly, then try it again.';
 
   @override
   String get regRegisterRejectTitle => 'Your registration request rejected';

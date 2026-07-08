@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 import 'package:acits_flutter/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -25,12 +26,12 @@ class MainCubit extends Cubit<DataState<PaginatedPrescriptionExecutionTodayList?
   /// [DataState.error] (баг из аудита: старая реализация мутировала состояние
   /// без обновления UI — лоадер крутился вечно).
   Future<void> loadExecutions() async {
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       final value = await _prescriptionService.fetchTodayPrescriptionList();
-      emit(DataState.content(value));
+      safeEmit(DataState.content(value));
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
     }
   }
 }

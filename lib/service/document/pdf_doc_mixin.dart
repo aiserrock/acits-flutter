@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -9,12 +10,17 @@ typedef PdfDocFetcher = Future<File> Function();
 mixin PdfDocumentMixin {
   /// Конвертировать строку Base64 в файл и сохранить его в ФС
   Future<File> convertPdfStringToFile(String raw, {required String fileName}) async {
+    // Оставляем только имя файла, отсекая любые разделители пути и обход директорий
+    fileName = fileName.split(RegExp(r'[/\\]')).last.replaceAll('..', '');
+    if (fileName.isEmpty) fileName = 'document';
     if (!(fileName.contains('.'))) fileName = '$fileName$_pdfExtension';
     final dir = (await getTemporaryDirectory()).absolute.path;
-    fileName = '$dir/$fileName';
+    final path = '$dir/$fileName';
 
-    final file = File(fileName);
-    final bytes = raw.codeUnits;
+    final file = File(path);
+    // Тело PDF приходит строкой (Response<String>). Пытаемся декодировать как base64,
+    // иначе трактуем строку как latin1 (round-trip байт 1:1).
+    final bytes = _decodePdfBytes(raw);
     await file.writeAsBytes(bytes);
     return file;
 
@@ -26,5 +32,14 @@ mixin PdfDocumentMixin {
     // final file = File(path);
     // await file.writeAsBytes(bytes);
     // return FileEntity.file(file, fileName: fileName);
+  }
+
+  /// Декодировать тело PDF: сначала пробуем base64, иначе latin1 (round-trip байт 1:1).
+  List<int> _decodePdfBytes(String raw) {
+    try {
+      return base64Decode(raw);
+    } on FormatException {
+      return latin1.encode(raw);
+    }
   }
 }

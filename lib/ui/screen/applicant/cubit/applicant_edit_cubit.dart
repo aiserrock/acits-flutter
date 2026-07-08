@@ -24,12 +24,12 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
   /// Загружает заявителя по id в режиме редактирования.
   Future<void> _init() async {
     if (!isEdit) return;
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       final applicant = await _service.fetchApplicantById(id: applicantId!);
-      emit(DataState.content(applicant ?? Applicant()));
+      safeEmit(DataState.content(applicant ?? Applicant()));
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
     }
   }
 
@@ -39,7 +39,7 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
   Future<Applicant?> submit(Applicant draft) async {
     if (state.isLoading) return null;
     final previous = state.valueOrNull ?? Applicant();
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       final Applicant? result;
       if (isEdit) {
@@ -47,10 +47,10 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
       } else {
         result = await _service.createApplicant(applicant: draft);
       }
-      emit(DataState.content(result ?? previous));
+      safeEmit(DataState.content(result ?? previous));
       return result;
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
       return null;
     }
   }

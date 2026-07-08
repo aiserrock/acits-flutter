@@ -23,12 +23,12 @@ class CuratorEditCubit extends Cubit<DataState<Curator>> {
   /// Загружает куратора по id в режиме редактирования.
   Future<void> _init() async {
     if (!isEdit) return;
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       final curator = await _service.fetchCuratorById(id: curatorId!);
-      emit(DataState.content(curator ?? Curator()));
+      safeEmit(DataState.content(curator ?? Curator()));
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
     }
   }
 
@@ -37,15 +37,15 @@ class CuratorEditCubit extends Cubit<DataState<Curator>> {
   /// Возвращает сохранённого [Curator] при успехе или null при ошибке.
   Future<Curator?> submit(Curator draft) async {
     if (state.isLoading) return null;
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       final result = isEdit
           ? await _service.updateCurator(id: curatorId!, curator: draft)
           : await _service.createCurator(curator: draft);
-      emit(DataState.content(result ?? draft));
+      safeEmit(DataState.content(result ?? draft));
       return result;
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
       return null;
     }
   }

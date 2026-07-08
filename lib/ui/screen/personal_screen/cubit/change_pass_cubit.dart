@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/personal/personal_service.dart';
@@ -20,13 +21,13 @@ class ChangePassCubit extends Cubit<DataState<void>> {
   /// В случае ошибки пробрасывает её через состояние [DataState.error], чтобы
   /// виджет мог показать сообщение и вернуть форму в редактируемый вид.
   Future<bool> submit(String oldPass, String newPass) async {
-    emit(const DataState.loading());
+    safeEmit(const DataState.loading());
     try {
       await _personalService.changePass(oldPass, newPass);
-      emit(const DataState.content(null));
+      safeEmit(const DataState.content(null));
       return true;
     } catch (e) {
-      emit(DataState.error(e));
+      safeEmit(DataState.error(e));
       return false;
     }
   }

@@ -36,16 +36,23 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       super(
         PrescriptionEditState(
           animal: initAnimal,
-          type: MyTypeEnum.values
-              .where((type) => type != MyTypeEnum.swaggerGeneratedUnknown)
-              .toList()[_initialTabIndex(editPrescription)],
+          type: _filteredTypes[_initialTabIndex(editPrescription)],
         ),
       );
 
+  /// Типы без служебного `swaggerGeneratedUnknown` — в том же порядке, что и
+  /// табы на экране (см. [getTypes]).
+  static final List<MyTypeEnum> _filteredTypes = MyTypeEnum.values
+      .where((type) => type != MyTypeEnum.swaggerGeneratedUnknown)
+      .toList();
+
+  /// Индекс начального типа в ОТФИЛЬТРОВАННОМ списке [_filteredTypes]
+  /// (совпадает с индексом таба). Раньше ошибочно использовался индекс в
+  /// нефильтрованном `MyTypeEnum.values`, из-за чего тип съезжал на один.
   static int _initialTabIndex(Prescription? editPrescription) {
-    return editPrescription?.myType is MyTypeEnum
-        ? max(MyTypeEnum.values.indexOf(editPrescription!.myType!), 0)
-        : 0;
+    final myType = editPrescription?.myType;
+    if (myType is! MyTypeEnum) return 0;
+    return max(_filteredTypes.indexOf(myType), 0);
   }
 
   final int? editPrescriptionId;
@@ -99,15 +106,15 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       ],
     );
 
-    emit(state.copyWith(screen: const DataState.loading()));
+    safeEmit(state.copyWith(screen: const DataState.loading()));
     try {
       final result = isEdit
           ? await _prescriptionService.updatePrescription(data)
           : await _prescriptionService.createPrescription(data);
-      emit(state.copyWith(screen: DataState.content(result)));
+      safeEmit(state.copyWith(screen: DataState.content(result)));
       return result;
     } catch (e) {
-      emit(state.copyWith(screen: DataState.error(e)));
+      safeEmit(state.copyWith(screen: DataState.error(e)));
       return null;
     }
   }
@@ -147,7 +154,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       try {
         prescription = await _prescriptionService.fetchPrescriptionById(id);
       } catch (e) {
-        emit(state.copyWith(screen: DataState.error(e)));
+        safeEmit(state.copyWith(screen: DataState.error(e)));
       }
     }
 
@@ -159,7 +166,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     try {
       animal = await _animalService.fetchAnimalDetail(id: animalId);
     } catch (e) {
-      emit(state.copyWith(screen: DataState.error(e)));
+      safeEmit(state.copyWith(screen: DataState.error(e)));
       return null;
     }
 
@@ -203,11 +210,11 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       next = next.copyWith(treatmentPeriod: TreatmentPeriod.weekly);
     }
 
-    emit(next);
+    safeEmit(next);
 
     final type = prescription.myType;
-    final tabIndex = type != null ? MyTypeEnum.values.indexOf(type) : -1;
-    return tabIndex >= 0 ? tabIndex - 1 : null;
+    final tabIndex = type != null ? _filteredTypes.indexOf(type) : -1;
+    return tabIndex >= 0 ? tabIndex : null;
   }
 
   void onAnimalPressed(BuildContext context) {
@@ -217,14 +224,14 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     }
     context.push<AnimalRead>(AppRoutes.searchPath(SearchTypeKey.animal)).then((animal) {
       if (animal != null) {
-        emit(state.copyWith(animal: animal));
+        safeEmit(state.copyWith(animal: animal));
       }
     });
   }
 
   void onTreatmentPeriodChanged(TreatmentPeriod? period) {
     if (period == null) return;
-    emit(state.copyWith(treatmentPeriod: period));
+    safeEmit(state.copyWith(treatmentPeriod: period));
   }
 
   Future<void> pickStartDate(BuildContext context) async {
@@ -240,7 +247,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       lastDate: now.add(_shiftLastStartDate),
     );
     if (result != null) {
-      emit(
+      safeEmit(
         state.copyWith(
           daysList: List<DateTime>.from(state.daysList)
             ..add(result)
@@ -251,13 +258,13 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   }
 
   void removeDate(int index) {
-    emit(state.copyWith(daysList: List<DateTime>.from(state.daysList)..removeAt(index)));
+    safeEmit(state.copyWith(daysList: List<DateTime>.from(state.daysList)..removeAt(index)));
   }
 
   Future<void> pickAtTime(BuildContext context, int index) async {
     final result = await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
-      emit(
+      safeEmit(
         state.copyWith(
           atTimeList: List<TimeOfDay>.from(state.atTimeList)
             ..add(result)
@@ -268,7 +275,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   }
 
   void removeTime(int index) {
-    emit(state.copyWith(atTimeList: List<TimeOfDay>.from(state.atTimeList)..removeAt(index)));
+    safeEmit(state.copyWith(atTimeList: List<TimeOfDay>.from(state.atTimeList)..removeAt(index)));
   }
 
   Future<void> pickDrug(BuildContext context) async {
@@ -285,7 +292,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
     if (dosage == null) return;
 
-    emit(
+    safeEmit(
       state.copyWith(
         drugs: List<PrescriptionDrug>.from(state.drugs)
           ..add(
@@ -301,7 +308,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   }
 
   void removeDrug(int index) {
-    emit(state.copyWith(drugs: List<PrescriptionDrug>.from(state.drugs)..removeAt(index)));
+    safeEmit(state.copyWith(drugs: List<PrescriptionDrug>.from(state.drugs)..removeAt(index)));
   }
 
   /// Обрабатывает смену вкладки: обновляет тип и обрезает лишние даты/времена
@@ -315,7 +322,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     if (!type.allowMultiTime && next.atTimeList.length > 1) {
       next = next.copyWith(atTimeList: next.atTimeList.take(1).toList());
     }
-    emit(next);
+    safeEmit(next);
   }
 
   void _showError(String msg) {
