@@ -200,18 +200,24 @@ jobs:
           branch="${GITHUB_REF#refs/heads/}"
           short_sha="${GITHUB_SHA:0:8}"
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          # Plain text on purpose: commit subjects are arbitrary user text and
+          # can contain unpaired *"/`_` characters, which breaks Telegram's
+          # Markdown entity parser and silently drops the whole message
+          # (sendMessage replies 400 "can't parse entities"). No parse_mode
+          # avoids that failure mode entirely.
           changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
 
           if [ "$RESULT_ANALYZE" = "success" ] && [ "$RESULT_ANDROID" = "success" ] && [ "$RESULT_IOS" = "success" ]; then
-            status_line="✅ *Build succeeded*"
+            status_line="✅ Build succeeded"
           else
-            status_line="❌ *Build failed* (analyse: $RESULT_ANALYZE, android: $RESULT_ANDROID, ios: $RESULT_IOS)"
+            status_line="❌ Build failed (analyse: $RESULT_ANALYZE, android: $RESULT_ANDROID, ios: $RESULT_IOS)"
           fi
 
-          text=$(printf '%s\n*acits_flutter* v%s\nBranch: `%s`\nCommit: `%s`\nRun: %s\n\nChangelog:\n%s' \
+          text=$(printf '%s\nacits_flutter v%s\nBranch: %s\nCommit: %s\nRun: %s\n\nChangelog:\n%s' \
             "$status_line" "$version" "$branch" "$short_sha" "$run_url" "$changelog")
 
-          curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          response=$(curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=${text}" \
-            --data-urlencode "parse_mode=Markdown"
+            --data-urlencode "text=${text}")
+          echo "$response"
+          echo "$response" | grep -q '"ok":true' || { echo "Telegram API call failed"; exit 1; }
