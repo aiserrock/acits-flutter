@@ -172,3 +172,4 @@ jobs:
           path: Runner-dev-debug.app.zip
           if-no-files-found: error
           retention-days: 14
+# trigger workflow indexing on the recreated repo
