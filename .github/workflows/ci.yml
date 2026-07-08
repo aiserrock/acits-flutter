@@ -18,7 +18,7 @@ jobs:
     name: Analyse & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: subosito/flutter-action@v2
         with:
@@ -66,9 +66,9 @@ jobs:
     needs: analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
@@ -110,7 +110,7 @@ jobs:
         run: flutter build apk --debug --flavor dev --target test/dev/main.dart
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: app-dev-debug-apk
           path: build/app/outputs/flutter-apk/app-dev-debug.apk
@@ -122,7 +122,7 @@ jobs:
     needs: analyze
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: subosito/flutter-action@v2
         with:
@@ -132,7 +132,7 @@ jobs:
 
       # Cache Swift Package Manager artifacts (SPM is default in Flutter 3.44).
       - name: Cache SwiftPM
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/Library/Caches/org.swift.swiftpm
           key: ${{ runner.os }}-spm-${{ hashFiles('ios/**/Package.resolved') }}
@@ -166,10 +166,52 @@ jobs:
           cd "$(dirname "$APP_PATH")"
           zip -ry "$GITHUB_WORKSPACE/Runner-dev-debug.app.zip" "$(basename "$APP_PATH")"
 
-      - name: Upload iOS app (unsigned)
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: app-dev-debug-ios
           path: Runner-dev-debug.app.zip
           if-no-files-found: error
           retention-days: 14
+
+  notify:
+    name: Notify Telegram
+    needs: [analyze, build-android, build-ios]
+    if: always() && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 8
+
+      - name: Send Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RESULT_ANALYZE: ${{ needs.analyze.result }}
+          RESULT_ANDROID: ${{ needs.build-android.result }}
+          RESULT_IOS: ${{ needs.build-ios.result }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "Telegram secrets are not configured — skipping notification."
+            exit 0
+          fi
+
+          version=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *//')
+          branch="${GITHUB_REF#refs/heads/}"
+          short_sha="${GITHUB_SHA:0:8}"
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
+
+          if [ "$RESULT_ANALYZE" = "success" ] && [ "$RESULT_ANDROID" = "success" ] && [ "$RESULT_IOS" = "success" ]; then
+            status_line="✅ *Build succeeded*"
+          else
+            status_line="❌ *Build failed* (analyse: $RESULT_ANALYZE, android: $RESULT_ANDROID, ios: $RESULT_IOS)"
+          fi
+
+          text=$(printf '%s\n*acits_flutter* v%s\nBranch: `%s`\nCommit: `%s`\nRun: %s\n\nChangelog:\n%s' \
+            "$status_line" "$version" "$branch" "$short_sha" "$run_url" "$changelog")
+
+          curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=${text}" \
+            --data-urlencode "parse_mode=Markdown"
