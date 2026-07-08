@@ -196,7 +196,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
   }
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: _allowedFileAttachExtensions,
     );

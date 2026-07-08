@@ -89,7 +89,8 @@ class _DocViewerViewState extends State<_DocViewerView> {
             padding: const EdgeInsets.all(16.0),
             child: PrimaryButton(
               child: const Text('Share'),
-              onPressed: () => Share.shareXFiles([XFile(file.absolute.path)]),
+              onPressed: () =>
+                  SharePlus.instance.share(ShareParams(files: [XFile(file.absolute.path)])),
             ),
           ),
         ),
