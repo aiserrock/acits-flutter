@@ -11,13 +11,11 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-      # ignore generated files
-    - "lib/api/*.g.dart"
-    - "lib/api/*.chopper.dart"
-    - "lib/api/*.swagger.dart"
+      # ignore generated files — all code generators output under lib/gen/,
+      # except injectable's di_container.config.dart, which the generator
+      # hardcodes next to its @InjectableInit source (lib/di/).
     - "lib/di/*.config.dart"
     - "lib/gen/**"
-    - "lib/generated/**"
     - "test/integration_test/**"
     - "build.yaml"
 

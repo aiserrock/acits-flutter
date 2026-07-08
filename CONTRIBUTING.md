@@ -173,7 +173,7 @@ docs: update contributing guide for FVM 3.44
 
 - **Dependency injection uses `get_it` + `injectable` 3.** `initDi()` is called in `main` before `runApp`. Re-run `build_runner` after touching any `@injectable` annotation. **Do not register Cubits/BLoCs in DI** — provide them via `BlocProvider` at the screen widget and pull their dependencies from `getIt` in the constructor.
 
-- **Networking uses Chopper + Dio,** generated from the OpenAPI spec under `doc/api/` into `lib/api/`. Never hand-edit generated files (`*.g.dart`, `*.chopper.dart`, `*.swagger.dart`). For hand-written DTOs use `@JsonSerializable` with `part '<name>.g.dart';`.
+- **Networking uses Chopper + Dio,** generated from the OpenAPI spec under `doc/api/` into `lib/gen/api/`. Never hand-edit generated files (`*.g.dart`, `*.chopper.dart`, `*.swagger.dart`). For hand-written DTOs use `@JsonSerializable` with `part '<name>.g.dart';`.
 
 - **Storage** goes through the wrappers in `lib/service/` around `flutter_secure_storage` and `shared_preferences`. Do not call `SharedPreferences.getInstance()` directly from features.
 
@@ -185,12 +185,15 @@ docs: update contributing guide for FVM 3.44
 
 ```text
 lib/
-├── api/           # Chopper/OpenAPI generated HTTP layer (do not edit)
-├── di/            # get_it + injectable container
+├── di/            # get_it + injectable container (di_container.config.dart is
+│                  #   generated here too — injectable hardcodes it next to
+│                  #   its @InjectableInit source, it cannot live in lib/gen/)
 ├── domain/        # plain Dart domain models
-├── generated/     # generated LocaleKeys (do not edit)
+├── gen/           # ALL other generated code (do not edit) — Chopper/OpenAPI
+│                  #   client (gen/api/), LocaleKeys (gen/l10n/), flutter_gen
+│                  #   assets/fonts accessors
 ├── navigation/    # go_router configuration (app_router.dart, AppRoutes)
-├── res/           # design tokens (colour, style, icons)
+├── res/           # design tokens (colour, style, icons, l10n config)
 ├── service/       # injectable services grouped by concern
 ├── ui/
 │   ├── screen/<feature>/   # bloc-or-cubit / view / model per screen
@@ -203,7 +206,7 @@ lib/
 
 ## Localisation
 
-Localisation uses **easy_localization**. Translations live in `assets/translations/en.json` and `assets/translations/ru.json`, and keys are generated into `LocaleKeys` (`lib/generated/locale_keys.g.dart`). Both English and Russian are complete; the fallback locale is `ru`.
+Localisation uses **easy_localization**. Translations live in `assets/translations/en.json` and `assets/translations/ru.json`, and keys are generated into `LocaleKeys` (`lib/gen/l10n/locale_keys.g.dart`). Both English and Russian are complete; the fallback locale is `ru`.
 
 **No hardcoded user-facing strings** are allowed in the UI.
 
@@ -214,7 +217,7 @@ To add a string:
 
    ```bash
    fvm dart run easy_localization:generate \
-     -S assets/translations -O lib/generated -o locale_keys.g.dart -f keys
+     -S assets/translations -O lib/gen/l10n -o locale_keys.g.dart -f keys
    ```
 
 3. Use it in code:

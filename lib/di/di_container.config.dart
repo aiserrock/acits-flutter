@@ -113,9 +113,6 @@ Future<_i174.GetIt> $initGetIt(
       gh<_i422.EmailConfirmRepository>(),
     ),
   );
-  gh.singleton<_i701.PersonalService>(
-    () => _i701.PersonalService(gh<_i965.Openapi>(), gh<_i21.AuthService>()),
-  );
   gh.singleton<_i245.ConfigService>(
     () => _i245.ConfigService(
       gh<_i965.Openapi>(),
@@ -123,14 +120,17 @@ Future<_i174.GetIt> $initGetIt(
       gh<_i2.PreferenceStorage>(),
     ),
   );
-  gh.factory<_i302.DocumentRepository>(
-    () => _i302.DocumentRepository(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
-  );
   gh.singleton<_i876.AnimalService>(
     () => _i876.AnimalService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
   );
   gh.singleton<_i156.StaffService>(
     () => _i156.StaffService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
+  );
+  gh.factory<_i302.DocumentRepository>(
+    () => _i302.DocumentRepository(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
+  );
+  gh.singleton<_i701.PersonalService>(
+    () => _i701.PersonalService(gh<_i965.Openapi>(), gh<_i21.AuthService>()),
   );
   gh.singleton<_i212.PrescriptionService>(
     () => _i212.PrescriptionService(

@@ -1,4 +1,4 @@
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:equatable/equatable.dart';
 
 /// Роль пользователя при регистрации кастомера

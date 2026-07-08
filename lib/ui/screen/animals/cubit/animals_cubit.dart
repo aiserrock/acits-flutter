@@ -1,5 +1,5 @@
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animals/cubit/animals_state.dart';
 import 'package:acits_flutter/util/data_state.dart';

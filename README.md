@@ -46,6 +46,8 @@ Firebase config files are gitignored — copy the `*.example` templates first (s
 
 Every push to `main`/`develop` runs the full pipeline (lint, analyse, test, build) and posts a build notification — status, version, changelog, and a link to the run — to the **[build notifications channel](https://t.me/acitsFlutterBuildNotifications)** on Telegram. Signed APK/IPA artifacts for a given run are attached to that run's [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) page (linked from each notification).
 
+Pushing a `v*` tag (e.g. `v0.4.0`) additionally builds the `prod` web target and deploys it to **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)** — no separate server needed.
+
 ## Documentation
 
 - [Contributing guide](CONTRIBUTING.md) — setup, project structure, localization, testing, build and PR workflow.

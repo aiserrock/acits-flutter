@@ -170,7 +170,7 @@ docs: update contributing guide for FVM 3.44
 
 - **Внедрение зависимостей — `get_it` + `injectable` 3.** `initDi()` вызывается в `main` перед `runApp`. Перезапускайте `build_runner` после изменения любой аннотации `@injectable`. **Не регистрируйте Cubit/BLoC в DI** — предоставляйте их через `BlocProvider` на уровне виджета экрана, а зависимости берите из `getIt` в конструкторе.
 
-- **Сеть — Chopper + Dio,** сгенерированные из OpenAPI-спецификации в `doc/api/` в каталог `lib/api/`. Никогда не редактируйте сгенерированные файлы вручную (`*.g.dart`, `*.chopper.dart`, `*.swagger.dart`). Для рукописных DTO используйте `@JsonSerializable` с `part '<name>.g.dart';`.
+- **Сеть — Chopper + Dio,** сгенерированные из OpenAPI-спецификации в `doc/api/` в каталог `lib/gen/api/`. Никогда не редактируйте сгенерированные файлы вручную (`*.g.dart`, `*.chopper.dart`, `*.swagger.dart`). Для рукописных DTO используйте `@JsonSerializable` с `part '<name>.g.dart';`.
 
 - **Хранилище** используется через обёртки в `lib/service/` вокруг `flutter_secure_storage` и `shared_preferences`. Не вызывайте `SharedPreferences.getInstance()` напрямую из фич.
 
@@ -182,12 +182,16 @@ docs: update contributing guide for FVM 3.44
 
 ```text
 lib/
-├── api/           # сгенерированный HTTP-слой Chopper/OpenAPI (не редактировать)
-├── di/            # контейнер get_it + injectable
+├── di/            # контейнер get_it + injectable (di_container.config.dart
+│                  #   генерируется тоже здесь — injectable жёстко кладёт его
+│                  #   рядом со своим @InjectableInit-источником, вынести
+│                  #   в lib/gen/ нельзя)
 ├── domain/        # доменные модели на чистом Dart
-├── generated/     # сгенерированные LocaleKeys (не редактировать)
+├── gen/           # ВЕСЬ остальной сгенерированный код (не редактировать) —
+│                  #   Chopper/OpenAPI-клиент (gen/api/), LocaleKeys (gen/l10n/),
+│                  #   аксессоры flutter_gen для ассетов/шрифтов
 ├── navigation/    # конфигурация go_router (app_router.dart, AppRoutes)
-├── res/           # дизайн-токены (цвета, стили, иконки)
+├── res/           # дизайн-токены (цвета, стили, иконки, конфиг l10n)
 ├── service/       # injectable-сервисы, сгруппированные по назначению
 ├── ui/
 │   ├── screen/<feature>/   # bloc-или-cubit / view / model для каждого экрана
@@ -200,7 +204,7 @@ lib/
 
 ## Локализация
 
-Локализация использует **easy_localization**. Переводы находятся в `assets/translations/en.json` и `assets/translations/ru.json`, а ключи генерируются в `LocaleKeys` (`lib/generated/locale_keys.g.dart`). Английский и русский заполнены полностью; локаль по умолчанию (fallback) — `ru`.
+Локализация использует **easy_localization**. Переводы находятся в `assets/translations/en.json` и `assets/translations/ru.json`, а ключи генерируются в `LocaleKeys` (`lib/gen/l10n/locale_keys.g.dart`). Английский и русский заполнены полностью; локаль по умолчанию (fallback) — `ru`.
 
 **Хардкод пользовательских строк** в UI недопустим.
 
@@ -211,7 +215,7 @@ lib/
 
    ```bash
    fvm dart run easy_localization:generate \
-     -S assets/translations -O lib/generated -o locale_keys.g.dart -f keys
+     -S assets/translations -O lib/gen/l10n -o locale_keys.g.dart -f keys
    ```
 
 3. Используйте в коде:

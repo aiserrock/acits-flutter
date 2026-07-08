@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/generated/locale_keys.g.dart';
+import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/lottie.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';

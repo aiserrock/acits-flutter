@@ -2,7 +2,7 @@ global_options:
   swagger_dart_code_generator:
     options:
       input_folder: "doc/api/"
-      output_folder: "lib/api/"
+      output_folder: "lib/gen/api/"
 
 targets:
   $default:
@@ -18,7 +18,7 @@ targets:
         - test/integration_test/**
     builders:
       # Swagger генератор отключён: входной OpenAPI-спеки в репозитории нет,
-      # файлы lib/api/*.swagger.dart уже закоммичены. Включить при необходимости,
+      # файлы lib/gen/api/*.swagger.dart уже закоммичены. Включить при необходимости,
       # добавив doc/api/*.json и поменяв enabled на true.
       swagger_dart_code_generator:
         enabled: false
