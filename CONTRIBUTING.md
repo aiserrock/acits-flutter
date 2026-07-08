@@ -1,4 +1,4 @@
-**English** · [Русский](docs/ru/CONTRIBUTING.md)
+**English** · [中文](docs/zh/CONTRIBUTING.md) · [हिन्दी](docs/hi/CONTRIBUTING.md) · [Español](docs/es/CONTRIBUTING.md) · [Français](docs/fr/CONTRIBUTING.md) · [العربية](docs/ar/CONTRIBUTING.md) · [Русский](docs/ru/CONTRIBUTING.md)
 
 # Contributing to acits_flutter
 
