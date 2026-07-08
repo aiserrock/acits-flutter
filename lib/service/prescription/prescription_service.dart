@@ -51,7 +51,10 @@ class PrescriptionService {
       xCurrentShelter: _authService.currentShelterId,
       limit: limit,
       offset: offset,
-      executeAtGte: isActual ? DateTime.now().toUtc().toPatchApiDate : null,
+      // Дата-фильтр «актуальных» — по локальному дню пользователя.
+      // `toPatchApiDate` берёт только yyyy-MM-dd, поэтому переводить в UTC
+      // нельзя: вечером это сдвинуло бы границу на соседний день.
+      executeAtGte: isActual ? DateTime.now().toPatchApiDate : null,
       executeAtLt: isOld ? DateTime.now().toUtc().toIso8601String() : null,
     );
     if (result.body != null) {
