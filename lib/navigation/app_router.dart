@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
 import 'package:acits_flutter/service/config/config_service.dart';

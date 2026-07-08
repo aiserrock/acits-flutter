@@ -1,5 +1,5 @@
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/locale_keys.g.dart';
+import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/ui/screen/animals/animals_screen.dart';
 import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';

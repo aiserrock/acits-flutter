@@ -4,7 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/locale_keys.g.dart';
+import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
@@ -14,7 +14,7 @@ import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/widget/animal_card.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/util/data_state.dart';
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 const _scrollTopPadding = 16.0;

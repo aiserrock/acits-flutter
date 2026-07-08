@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main, develop]
+    tags: ["v*"]
   pull_request:
     branches: [main, develop]
   workflow_dispatch:
@@ -282,10 +283,74 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  ##### build web (tags only) #####
+  # Only runs when a `v*` tag is pushed — every other push (branches, PRs)
+  # skips it entirely. Deploys to GitHub Pages so tagged releases get a
+  # browsable web build without needing a separate server.
+  build-web:
+    name: Build & deploy web (GitHub Pages)
+    needs: [lint, analyse, test]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Full checkout for web/ (index.html, manifest.json, icons).
+      - uses: actions/checkout@v7
+
+      # Overlay prepare's generated lib/, test/ and resolved pubspec.lock so
+      # this build uses the exact same generated code as lint/analyse/test.
+      - uses: actions/download-artifact@v8
+        with:
+          name: workspace
+
+      - run: tar -xzf workspace.tar.gz
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Firebase config is gitignored; materialise it from the committed
+      # *.example template, then override with the real secret if configured.
+      - name: Provision Firebase config
+        env:
+          GOOGLE_SERVICES_PROD: ${{ secrets.GOOGLE_SERVICES_JSON_PROD }}
+        run: |
+          cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
+          if [ -n "$GOOGLE_SERVICES_PROD" ]; then
+            echo "$GOOGLE_SERVICES_PROD" | base64 --decode > android/app/src/prod/google-services.json
+          fi
+
+      # prod flavor (lib/main.dart) — the same entry point used for release
+      # Android/iOS builds. --base-href matches the Pages project path
+      # (https://<owner>.github.io/<repo>/) so asset/router URLs resolve
+      # correctly when served from a subpath instead of the domain root.
+      - name: Build web (prod)
+        run: |
+          flutter build web -t lib/main.dart --release \
+            --base-href "/${GITHUB_REPOSITORY#*/}/"
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: build/web
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
   ##### notify #####
   notify:
     name: Notify Telegram
-    needs: [prepare, lint, analyse, test, build-android, build-ios]
+    needs: [prepare, lint, analyse, test, build-android, build-ios, build-web]
     if: always() && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -303,6 +368,7 @@ jobs:
           RESULT_TEST: ${{ needs.test.result }}
           RESULT_ANDROID: ${{ needs.build-android.result }}
           RESULT_IOS: ${{ needs.build-ios.result }}
+          RESULT_WEB: ${{ needs.build-web.result }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
             echo "Telegram secrets are not configured — skipping notification."
@@ -315,6 +381,7 @@ jobs:
           version_name=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *([0-9.]+)\+.*/\1/')
           version="${version_name}+${GITHUB_RUN_NUMBER}"
           branch="${GITHUB_REF#refs/heads/}"
+          branch="${branch#refs/tags/}"
           short_sha="${GITHUB_SHA:0:8}"
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           # Plain text on purpose: commit subjects are arbitrary user text and
@@ -324,12 +391,15 @@ jobs:
           # avoids that failure mode entirely.
           changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
 
+          # build-web only runs on tag pushes (see its `if:`); on branch pushes
+          # its result is "skipped", which is expected and not a failure.
           if [ "$RESULT_PREPARE" = "success" ] && [ "$RESULT_LINT" = "success" ] && \
              [ "$RESULT_ANALYSE" = "success" ] && [ "$RESULT_TEST" = "success" ] && \
-             [ "$RESULT_ANDROID" = "success" ] && [ "$RESULT_IOS" = "success" ]; then
+             [ "$RESULT_ANDROID" = "success" ] && [ "$RESULT_IOS" = "success" ] && \
+             [ "$RESULT_WEB" != "failure" ] && [ "$RESULT_WEB" != "cancelled" ]; then
             status_line="✅ Build succeeded"
           else
-            status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS)"
+            status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB)"
           fi
 
           text=$(printf '%s\nacits_flutter v%s\nBranch: %s\nCommit: %s\nRun: %s\n\nChangelog:\n%s' \

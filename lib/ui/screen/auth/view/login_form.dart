@@ -9,7 +9,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/locale_keys.g.dart';
+import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';

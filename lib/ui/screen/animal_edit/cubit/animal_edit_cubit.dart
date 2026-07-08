@@ -1,4 +1,4 @@
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/animal.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';

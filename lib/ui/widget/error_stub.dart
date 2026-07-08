@@ -1,5 +1,5 @@
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/locale_keys.g.dart';
+import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/material.dart';

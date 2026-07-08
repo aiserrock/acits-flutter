@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/generated/locale_keys.g.dart';
+import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_cubit.dart';
