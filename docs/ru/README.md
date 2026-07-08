@@ -1,10 +1,26 @@
-[English](../../README.md) · **Русский**
+<div align="center">
+  <a href="https://acits.ru/">
+    <img src="../../assets/image/logo_native.png" alt="ACITS" width="360">
+  </a>
+
+  <p><strong>Читать на других языках</strong></p>
+  <p>
+    <a href="../zh/README.md">中文</a> ·
+    <a href="../hi/README.md">हिन्दी</a> ·
+    <a href="../es/README.md">Español</a> ·
+    <a href="../fr/README.md">Français</a> ·
+    <a href="../ar/README.md">العربية</a> ·
+    <a href="../../README.md">English</a>
+  </p>
+
+  [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
+  [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+  [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
+  [![Telegram](https://img.shields.io/badge/Telegram-build_notifications-26A5E4?logo=telegram&logoColor=white)](https://t.me/acitsFlutterBuildNotifications)
+</div>
 
 # acits_flutter
-
-[![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
 
 Мобильный Flutter-клиент для [acits.ru](https://acits.ru/) — бесплатное ПО с открытым исходным кодом для учёта животных внутри приюта.
 
@@ -26,10 +42,25 @@ fvm flutter run -t test/dev/main.dart --flavor dev
 
 Файлы конфигурации Firebase не хранятся в репозитории — сначала скопируйте шаблоны `*.example` (см. [CONTRIBUTING.md](CONTRIBUTING.md#project-setup)).
 
+## Сборки
+
+Каждый push в `main`/`develop` запускает полный пайплайн (lint, analyse, test, build) и публикует уведомление о сборке — статус, версию, changelog и ссылку на запуск — в **[канал уведомлений о сборках](https://t.me/acitsFlutterBuildNotifications)** в Telegram. Подписанные APK/IPA-артефакты конкретного запуска прикреплены к странице [GitHub Actions](https://github.com/aiserrock/acits-flutter/actions) этого запуска (ссылка есть в каждом уведомлении).
+
 ## Документация
 
 - [Руководство контрибьютора](CONTRIBUTING.md) — установка, структура проекта, локализация, тесты, сборка и процесс PR.
+- [Wiki](https://github.com/aiserrock/acits-flutter/wiki) — заметки об архитектуре, флейворах и деталях CI-пайплайна.
+- [Политика безопасности](../../SECURITY.md) — поддерживаемые версии и как сообщить об уязвимости.
+- [Кодекс поведения](../../CODE_OF_CONDUCT.md)
 - [English documentation](../../README.md)
+
+## Сообщество
+
+- [Discussions](https://github.com/aiserrock/acits-flutter/discussions) — вопросы, идеи и обсуждения.
+- [Issues](https://github.com/aiserrock/acits-flutter/issues) — баг-репорты и предложения фич.
+- [Уведомления о сборках](https://t.me/acitsFlutterBuildNotifications) в Telegram.
+
+Контрибьюции приветствуются — ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md) перед открытием pull request.
 
 ## Лицензия
 
