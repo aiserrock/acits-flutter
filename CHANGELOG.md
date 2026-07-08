@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [0.5.0+17] - 2026-07-08
+
+### Added
+
+- CI job that builds the `prod` web target and deploys it to [GitHub Pages](https://aiserrock.github.io/acits-flutter/) whenever a `v*` tag is pushed
+
+### Changed
+
+- Consolidated all generated code under `lib/gen/` (was scattered across `lib/api/`, `lib/generated/`)
+- Retired the `lib/l10n/` folder name (the project uses `easy_localization`, not the `intl_utils`/`.arb` pattern that name implied); the hand-written `L10n` config class moved to `lib/res/`
+
+### Fixed
+
+- `Dockerfile` pinned an unmaintained base image (`cirrusci/flutter:3.3.1`) predating the project's SDK requirement and used a removed `--web-renderer` flag; replaced with `ghcr.io/cirruslabs/flutter:3.44.0`, dropped the obsolete flag, bumped `nginx` off its EOL 1.20.0
+- Added a missing `.dockerignore` — `docker build .` was sending the whole repo (`build/`, `.dart_tool/`, `.git/`, ...) into the build context, multiple gigabytes for nothing the image needs
+
+### Removed
+
+- Dead code found in a project-wide audit: obsolete Charles debug-cert pinning (`test/dev/res/cert_res.dart`, `test/dev/ssl/http_overrides.dart`), unused `lib/domain/curator.dart`, `lib/api/client_index.dart`/`client_mapping.dart`, `script/version.sh`, `doc/tmp/*` scratch files
+
 ## [0.4.0+17] - 2026-07-08
 
 ### Added
