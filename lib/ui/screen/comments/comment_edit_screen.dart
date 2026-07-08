@@ -1,59 +1,68 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
+import 'package:acits_flutter/ui/screen/comments/cubit/comment_edit_cubit.dart';
+import 'package:acits_flutter/ui/screen/comments/cubit/comment_edit_state.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/subjects.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 const _allowedFileAttachExtensions = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
 
-class CommentEditScreen extends StatefulWidget {
+class CommentEditScreen extends StatelessWidget {
   const CommentEditScreen({required this.animalId, this.comment, super.key});
 
   final int animalId;
   final AnimalNote? comment;
 
   @override
-  State<CommentEditScreen> createState() => _CommentEditScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CommentEditCubit(animalId: animalId, comment: comment),
+      child: const _CommentEditView(),
+    );
+  }
 }
 
-class _CommentEditScreenState extends State<CommentEditScreen> {
-  _CommentEditScreenState() : _animalService = getIt<AnimalService>();
+class _CommentEditView extends StatefulWidget {
+  const _CommentEditView();
 
-  final AnimalService _animalService;
-  final _attachState = BehaviorSubject<PlatformFile?>();
-  final _submitState = BehaviorSubject<ScreenDataState<Object>>.seeded(ScreenDataState());
+  @override
+  State<_CommentEditView> createState() => _CommentEditViewState();
+}
 
+class _CommentEditViewState extends State<_CommentEditView> {
   final _textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _textController.text = widget.comment?.content ?? '';
+    _textController.text = context.read<CommentEditCubit>().comment?.content ?? '';
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<PlatformFile?>(
-      stream: _attachState.stream,
-      builder: (_, attachSnaphot) {
+    return BlocBuilder<CommentEditCubit, CommentEditState>(
+      builder: (context, state) {
         return Scaffold(
           backgroundColor: ColorRes.background,
-          appBar: _buildAppBar(context, attachSnaphot),
-          floatingActionButton: _buildFab(context),
+          appBar: _buildAppBar(context, state.attachedFile),
+          floatingActionButton: _buildFab(context, state),
           body: _buildBody(context),
         );
       },
     );
   }
 
-  PreferredSizeWidget _buildAppBar(
-    BuildContext context,
-    AsyncSnapshot<PlatformFile?> attachSnaphot,
-  ) {
+  PreferredSizeWidget _buildAppBar(BuildContext context, PlatformFile? attachedFile) {
+    final cubit = context.read<CommentEditCubit>();
     return AppBar(
       backgroundColor: ColorRes.foreground,
       shadowColor: Colors.transparent,
@@ -62,7 +71,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
         onTap: () => Navigator.of(context).pop(),
       ),
       title: Text(
-        _isEdit ? StringRes.current.commentTitleEdit : StringRes.current.commentTitleNew,
+        cubit.isEdit ? StringRes.current.commentTitleEdit : StringRes.current.commentTitleNew,
         style: const TextStyle(color: ColorRes.textPrimary),
       ),
       centerTitle: true,
@@ -72,26 +81,21 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
           child: const Icon(Icons.attach_file_rounded, color: ColorRes.accent),
         ),
       ],
-      bottom: _buildFileBar(attachSnaphot.data),
+      bottom: _buildFileBar(context, attachedFile),
     );
   }
 
-  Widget _buildFab(BuildContext context) {
-    return StreamBuilder<ScreenDataState<Object>>(
-      stream: _submitState,
-      builder: (_, isSubmit) {
-        return (isSubmit.data?.isLoading ?? true)
-            ? const SizedBox()
-            : FloatingActionButton(
-                onPressed: () => _onSubmit(context),
-                backgroundColor: ColorRes.accent,
-                child: const Icon(Icons.send_rounded, color: Colors.white),
-              );
-      },
-    );
+  Widget _buildFab(BuildContext context, CommentEditState state) {
+    return state.isSubmitting
+        ? const SizedBox()
+        : FloatingActionButton(
+            onPressed: () => _onSubmit(context),
+            backgroundColor: ColorRes.accent,
+            child: const Icon(Icons.send_rounded, color: Colors.white),
+          );
   }
 
-  PreferredSizeWidget? _buildFileBar(PlatformFile? file) {
+  PreferredSizeWidget? _buildFileBar(BuildContext context, PlatformFile? file) {
     final fileName = file?.name;
     return fileName == null
         ? null
@@ -119,7 +123,7 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
               CupertinoButton(
                 child: const Icon(Icons.delete_forever_rounded, color: ColorRes.error),
                 onPressed: () {
-                  _attachState.add(null);
+                  context.read<CommentEditCubit>().clearAttachedFile();
                 },
               ),
             ],
@@ -177,43 +181,18 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
     );
   }
 
-  bool get _isEdit => widget.comment != null;
-
-  void _onSubmit(BuildContext context) {
-    _submitState.add(ScreenDataState()..loading());
-    final source = widget.comment;
-    final file = _attachState.valueOrNull;
-    if (source != null) {
-      _animalService
-          .patchAnimalNote(
-            id: source.id!,
-            animalId: source.animal!,
-            text: _textController.text,
-            files: file != null ? [file] : [],
-          )
-          .then((comment) => _exit(context, comment))
-          .catchError((e) => _onError(context, e));
-    } else {
-      _animalService
-          .createAnimalNote(
-            animalId: widget.animalId,
-            text: _textController.text,
-            files: file != null ? [file] : [],
-          )
-          .then((comment) => _exit(context, comment))
-          .catchError((e) => _onError(context, e));
+  Future<void> _onSubmit(BuildContext context) async {
+    final cubit = context.read<CommentEditCubit>();
+    try {
+      final comment = await cubit.submit(_textController.text);
+      if (!mounted) return;
+      Navigator.of(context).pop(comment);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(StringRes.current.commonErrorTryAgainMessage)));
     }
-  }
-
-  void _exit(BuildContext context, AnimalNote? comment) {
-    Navigator.of(context).pop(comment);
-  }
-
-  void _onError(BuildContext context, Object error) {
-    _submitState.add(ScreenDataState()..error = error);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(StringRes.current.commonErrorTryAgainMessage)));
   }
 
   Future<void> _pickFile() async {
@@ -222,9 +201,11 @@ class _CommentEditScreenState extends State<CommentEditScreen> {
       allowedExtensions: _allowedFileAttachExtensions,
     );
     if (result != null) {
-      _attachState.add(result.files[0]);
+      if (!mounted) return;
+      context.read<CommentEditCubit>().attachFile(result.files[0]);
     }
   }
 
-  String? get _sourceFileName => widget.comment?.files?.firstOrNull?.filename;
+  String? get _sourceFileName =>
+      context.read<CommentEditCubit>().comment?.files?.firstOrNull?.filename;
 }

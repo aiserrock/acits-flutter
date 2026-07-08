@@ -1,0 +1,58 @@
+import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/service/staff/staff_service.dart';
+import 'package:acits_flutter/util/data_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+/// Cubit экрана создания/редактирования заявителя.
+///
+/// Владеет состоянием загрузки [DataState] и бизнес-логикой (загрузка по id,
+/// создание, обновление). UI-контроллеры ([TextEditingController]) остаются
+/// во [StatefulWidget] экрана.
+class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
+  ApplicantEditCubit({this.applicantId})
+    : _service = getIt<StaffService>(),
+      super(DataState.content(Applicant())) {
+    _init();
+  }
+
+  final StaffService _service;
+  final int? applicantId;
+
+  /// Режим редактирования (id задан) против создания.
+  bool get isEdit => applicantId != null;
+
+  /// Загружает заявителя по id в режиме редактирования.
+  Future<void> _init() async {
+    if (!isEdit) return;
+    emit(const DataState.loading());
+    try {
+      final applicant = await _service.fetchApplicantById(id: applicantId!);
+      emit(DataState.content(applicant ?? Applicant()));
+    } catch (e) {
+      emit(DataState.error(e));
+    }
+  }
+
+  /// Отправляет форму: создаёт или обновляет заявителя.
+  ///
+  /// Возвращает сохранённого [Applicant] при успехе, либо `null` при ошибке.
+  Future<Applicant?> submit(Applicant draft) async {
+    if (state.isLoading) return null;
+    final previous = state.valueOrNull ?? Applicant();
+    emit(const DataState.loading());
+    try {
+      final Applicant? result;
+      if (isEdit) {
+        result = await _service.updateApplicant(id: applicantId!, applicant: draft);
+      } else {
+        result = await _service.createApplicant(applicant: draft);
+      }
+      emit(DataState.content(result ?? previous));
+      return result;
+    } catch (e) {
+      emit(DataState.error(e));
+      return null;
+    }
+  }
+}

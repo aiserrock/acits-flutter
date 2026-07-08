@@ -1,28 +1,38 @@
-import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/staff/staff_service.dart';
+import 'package:acits_flutter/ui/screen/applicant/cubit/applicant_edit_cubit.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
+import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 /// Экран создания или редактирования куратора
-class ApplicantEditScreen extends StatefulWidget {
+class ApplicantEditScreen extends StatelessWidget {
   const ApplicantEditScreen({this.applicantId, super.key});
 
   final int? applicantId;
 
   @override
-  State<ApplicantEditScreen> createState() => _ApplicantEditScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => ApplicantEditCubit(applicantId: applicantId),
+      child: const _ApplicantEditView(),
+    );
+  }
 }
 
-class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
-  late final StaffService _service;
-  late final NavigatorState _navigator;
+class _ApplicantEditView extends StatefulWidget {
+  const _ApplicantEditView();
 
-  late bool _isEdit;
+  @override
+  State<_ApplicantEditView> createState() => _ApplicantEditViewState();
+}
+
+class _ApplicantEditViewState extends State<_ApplicantEditView> {
+  late final NavigatorState _navigator;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
@@ -32,16 +42,6 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
   final _phoneController = TextEditingController();
   final _socialController = TextEditingController();
 
-  ScreenDataState<Applicant?> _state = ScreenDataState<Applicant?>()..content(Applicant());
-
-  @override
-  void initState() {
-    super.initState();
-    _service = getIt<StaffService>();
-    _isEdit = widget.applicantId != null;
-    _init();
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -49,40 +49,57 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _socialController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: const Drawer(),
-      backgroundColor: ColorRes.background,
-      appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
-        shadowColor: Colors.transparent,
-        leading: GestureDetector(
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
-          onTap: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          _isEdit ? StringRes.current.applicantEdit : StringRes.current.applicantAdd,
-          style: const TextStyle(color: ColorRes.textPrimary),
-        ),
-        centerTitle: true,
-      ),
-      floatingActionButton: _state.isContent
-          ? FloatingActionButton(
-              onPressed: _onSubmit,
-              backgroundColor: ColorRes.accent,
-              child: const Icon(Icons.done_all, color: Colors.white),
-            )
-          : null,
-      body: _buildBody(),
+    final cubit = context.read<ApplicantEditCubit>();
+    return BlocConsumer<ApplicantEditCubit, DataState<Applicant>>(
+      listenWhen: (prev, next) => !prev.isContent && next.isContent,
+      listener: (_, state) => _setControllers(state.valueOrNull),
+      builder: (context, state) {
+        return Scaffold(
+          key: scaffoldKey,
+          drawer: const Drawer(),
+          backgroundColor: ColorRes.background,
+          appBar: AppBar(
+            backgroundColor: ColorRes.foreground,
+            shadowColor: Colors.transparent,
+            leading: GestureDetector(
+              child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+              onTap: () => Navigator.of(context).pop(),
+            ),
+            title: Text(
+              cubit.isEdit ? StringRes.current.applicantEdit : StringRes.current.applicantAdd,
+              style: const TextStyle(color: ColorRes.textPrimary),
+            ),
+            centerTitle: true,
+          ),
+          floatingActionButton: state.isContent
+              ? FloatingActionButton(
+                  onPressed: _onSubmit,
+                  backgroundColor: ColorRes.accent,
+                  child: const Icon(Icons.done_all, color: Colors.white),
+                )
+              : null,
+          body: _buildBody(state),
+        );
+      },
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(DataState<Applicant> state) {
     return KeyboardDismissOnTap(
       child: SafeArea(
-        child: StateBuilder<Applicant?>(
-          state: _state,
+        child: DataStateBuilder<Applicant>(
+          state: state,
           loader: (_) => const LoaderHolderWidget(),
           errorBuilder: (_, e) => ErrorHolderWidget(error: e),
           builder: (_, _) => _buildApplicantCard(),
@@ -124,20 +141,6 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
     );
   }
 
-  Future<void> _init() async {
-    if (!_isEdit) return;
-    _state = ScreenDataState<Applicant>()..loading();
-    await _service
-        .fetchApplicantById(id: widget.applicantId!)
-        .then((value) {
-          _setControllers(value);
-          setState(() => _state = ScreenDataState()..content(value));
-        })
-        .catchError((e) {
-          setState(() => _state = ScreenDataState().error = e);
-        });
-  }
-
   void _setControllers(Applicant? applicant) {
     _nameController.text = applicant?.firstName ?? '';
     _lastNameController.text = applicant?.lastName ?? '';
@@ -147,30 +150,17 @@ class _ApplicantEditScreenState extends State<ApplicantEditScreen> {
   }
 
   Future<void> _onSubmit() async {
-    if (_state.isLoading) return;
+    final cubit = context.read<ApplicantEditCubit>();
+    if (cubit.state.isLoading) return;
     if (!(formKey.currentState?.validate() ?? false)) return;
-    final applicant = (_state.value ?? Applicant()).copyWith(
+    final applicant = (cubit.state.valueOrNull ?? Applicant()).copyWith(
       firstName: _nameController.text,
       lastName: _lastNameController.text,
       phoneNumber: _phoneController.text,
       contactDetails: _socialController.text,
       email: _emailController.text,
     );
-    setState(() => _state = ScreenDataState<Applicant>()..loading());
-    Applicant? result;
-    if (_isEdit) {
-      result = await _service
-          .updateApplicant(id: widget.applicantId!, applicant: applicant)
-          .catchError((e) {
-            setState(() => _state = ScreenDataState()..error = e);
-            return null;
-          });
-    } else {
-      result = await _service.createApplicant(applicant: applicant).catchError((e) {
-        setState(() => _state = ScreenDataState()..error = e);
-        return null;
-      });
-    }
+    final result = await cubit.submit(applicant);
     if (result != null) _navigator.pop(result);
   }
 }
