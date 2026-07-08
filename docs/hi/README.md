@@ -5,12 +5,12 @@
 
   <p><strong>इसे अन्य भाषाओं में पढ़ें</strong></p>
   <p>
-    <a href="../zh/README.md">中文</a> ·
-    <a href="../../README.md">English</a> ·
-    <a href="../es/README.md">Español</a> ·
-    <a href="../fr/README.md">Français</a> ·
-    <a href="../ar/README.md">العربية</a> ·
-    <a href="../ru/README.md">Русский</a>
+    <a href="../zh/README.md">🇨🇳 中文</a> ·
+    <a href="../../README.md">🇬🇧 English</a> ·
+    <a href="../es/README.md">🇪🇸 Español</a> ·
+    <a href="../fr/README.md">🇫🇷 Français</a> ·
+    <a href="../ar/README.md">🇸🇦 العربية</a> ·
+    <a href="../ru/README.md">🇷🇺 Русский</a>
   </p>
 
   [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
