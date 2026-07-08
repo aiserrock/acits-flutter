@@ -23,7 +23,6 @@ import 'package:acits_flutter/ui/widget/default_app_bar.dart';
 import 'package:acits_flutter/ui/widget/default_icon_button.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
-import 'package:acits_flutter/util/data_state.dart';
 
 part 'animal_common_info.dart';
 part 'animal_prescriptions.dart';

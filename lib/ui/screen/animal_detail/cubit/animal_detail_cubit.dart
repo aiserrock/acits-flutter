@@ -3,7 +3,6 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_detail_state.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Cubit экрана карточки животного.

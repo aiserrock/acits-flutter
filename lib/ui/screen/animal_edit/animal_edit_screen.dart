@@ -18,7 +18,6 @@ import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_applicant
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_common_info_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_curator_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_status_page.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/export.dart';
 
 const _onPageChangedBackDuration = Duration(milliseconds: 500);

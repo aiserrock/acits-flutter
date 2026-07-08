@@ -1,5 +1,4 @@
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:equatable/equatable.dart';
 
 /// Состояние экрана поиска вида животного.

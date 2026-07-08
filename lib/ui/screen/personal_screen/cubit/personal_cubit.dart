@@ -4,7 +4,6 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/personal/personal_service.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_state.dart';
-import 'package:acits_flutter/util/data_state.dart';
 
 /// Cubit экрана личного кабинета. Загружает данные пользователя и сохраняет
 /// изменённые поля. UI-контроллеры (TextEditingController) живут в виджете.

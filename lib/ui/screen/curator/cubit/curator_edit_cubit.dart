@@ -1,7 +1,6 @@
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/staff/staff_service.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Cubit экрана создания/редактирования куратора.

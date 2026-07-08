@@ -2,7 +2,6 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_cubit.dart';
 import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_state.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

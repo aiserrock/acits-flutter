@@ -1,19 +1,22 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:acits_flutter/ui/screen/prescription/prescription_form.dart';
+import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
+import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
 import 'package:acits_flutter/ui/widget/visible_item.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_controller.dart';
 
 /// Экран создания и редактирования назначений
-class PrescriptionEditScreen extends StatefulWidget {
+class PrescriptionEditScreen extends StatelessWidget {
   const PrescriptionEditScreen({
     this.editPrescription,
     this.editPrescriptionId,
@@ -26,60 +29,103 @@ class PrescriptionEditScreen extends StatefulWidget {
   final AnimalRead? animal;
 
   @override
-  State<PrescriptionEditScreen> createState() => _PrescriptionEditScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => PrescriptionEditCubit(
+        editPrescriptionId: editPrescriptionId,
+        editPrescription: editPrescription,
+        initAnimal: animal,
+      ),
+      child: _PrescriptionEditView(editPrescription: editPrescription),
+    );
+  }
 }
 
-class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
+class _PrescriptionEditView extends StatefulWidget {
+  const _PrescriptionEditView({this.editPrescription});
+
+  final Prescription? editPrescription;
+
+  @override
+  State<_PrescriptionEditView> createState() => _PrescriptionEditViewState();
+}
+
+class _PrescriptionEditViewState extends State<_PrescriptionEditView>
     with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  PrescriptionEditScreenController get controller => PrescriptionEditScreenController.controller;
+  late final NavigatorState _navigator;
+
+  /// Контроллер вкладок типов назначения. Владеет и утилизирует его сам State.
+  late final TabController tabController;
+
+  /// Контроллер поля комментария. Владеет и утилизирует его сам State
+  /// (устранена утечка старого `commentContoroller`, который никогда не
+  /// закрывался).
+  final commentContoroller = TextEditingController();
+
+  PrescriptionEditCubit get _cubit => context.read<PrescriptionEditCubit>();
 
   @override
   void initState() {
-    getIt.pushNewScope(
-      scopeName: 'PrescriptionEdit',
-      init: (getIt) {
-        getIt.registerSingleton<PrescriptionEditScreenController>(
-          PrescriptionEditScreenController(
-            scaffoldKey: scaffoldKey,
-            tickerProvider: this,
-            editPrescriptionId: widget.editPrescriptionId,
-            editPrescription: widget.editPrescription,
-            initAnimal: widget.animal,
-          ),
-        );
-      },
-    );
     super.initState();
+    final editPrescription = widget.editPrescription;
+    tabController = TabController(
+      initialIndex: editPrescription?.myType is MyTypeEnum
+          ? max(MyTypeEnum.values.indexOf(editPrescription!.myType!), 0)
+          : 0,
+      length: MyTypeEnum.values.length - 1,
+      vsync: this,
+    );
+    tabController.addListener(_onTabChanged);
+    // Синхронизируем комментарий с загруженным назначением (режим правки).
+    if (_cubit.isEdit) {
+      _cubit.setEditedState(onComment: (comment) => commentContoroller.text = comment).then((
+        tabIndex,
+      ) {
+        if (tabIndex != null && mounted) tabController.animateTo(tabIndex);
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _navigator = Navigator.of(context);
   }
 
   @override
   void dispose() {
-    getIt.popScope();
-    controller.dispose();
+    tabController
+      ..removeListener(_onTabChanged)
+      ..dispose();
+    commentContoroller.dispose();
     super.dispose();
+  }
+
+  void _onTabChanged() {
+    _cubit.onTabChanged(tabController.index);
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ScreenDataState<Prescription>?>(
-      stream: controller.screenState,
+    return BlocBuilder<PrescriptionEditCubit, PrescriptionEditState>(
+      buildWhen: (prev, next) => prev.screen != next.screen,
       builder: (context, state) {
-        final isLoading = state.data?.isLoading ?? false;
-        final hasError = state.data?.hasError ?? false;
-        return controller.isEdit
+        final isLoading = state.screen.isLoading;
+        final hasError = state.screen.hasError;
+        return _cubit.isEdit
             ? isLoading
                   ? const Scaffold(body: LoaderHolderWidget())
                   : hasError
-                  ? Scaffold(body: ErrorHolderWidget(onPressed: controller.setEditedState))
-                  : _buildForm(context, controller)
-            : _buildForm(context, controller);
+                  ? Scaffold(body: ErrorHolderWidget(onPressed: () => _cubit.setEditedState()))
+                  : _buildForm(context)
+            : _buildForm(context);
       },
     );
   }
 
-  Widget _buildForm(BuildContext context, PrescriptionEditScreenController? controller) {
+  Widget _buildForm(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: ColorRes.background,
@@ -95,7 +141,8 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
         bottom: TabBar(
           indicatorColor: ColorRes.accent,
           indicatorWeight: 4.0,
-          tabs: (controller?.getTabs() ?? [])
+          tabs: _cubit
+              .getTabs()
               .map<Widget>(
                 (tab) => SizedBox(
                   height: kTextTabBarHeight,
@@ -103,7 +150,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
                 ),
               )
               .toList(),
-          controller: controller?.tabController,
+          controller: tabController,
           isScrollable: true,
         ),
       ),
@@ -113,28 +160,24 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
   }
 
   Widget _buildFab() {
-    return Builder(
-      builder: (context) {
-        return FloatingActionButton(
-          onPressed: controller.onFabPressed,
-          backgroundColor: ColorRes.accent,
-          child: const Icon(Icons.done_all, color: Colors.white),
-        );
-      },
+    return FloatingActionButton(
+      onPressed: _onFabPressed,
+      backgroundColor: ColorRes.accent,
+      child: const Icon(Icons.done_all, color: Colors.white),
     );
   }
 
+  Future<void> _onFabPressed() async {
+    final result = await _cubit.submit(description: commentContoroller.text, context: context);
+    if (result != null) _navigator.pop(result);
+  }
+
   Widget _buildTitle() {
-    return Builder(
-      builder: (context) {
-        final controller = PrescriptionEditScreenController.controller;
-        return Text(
-          controller.isEdit
-              ? StringRes.current.prescriptionTitleEdit
-              : StringRes.current.prescriptionTitleAdd,
-          style: const TextStyle(color: ColorRes.textPrimary),
-        );
-      },
+    return Text(
+      _cubit.isEdit
+          ? StringRes.current.prescriptionTitleEdit
+          : StringRes.current.prescriptionTitleAdd,
+      style: const TextStyle(color: ColorRes.textPrimary),
     );
   }
 
@@ -144,11 +187,11 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
         final sw = MediaQuery.of(context).size.width;
         return Column(
           children: [
-            StreamBuilder<bool>(
-              stream: controller.loadingState,
-              builder: (_, state) {
+            BlocSelector<PrescriptionEditCubit, PrescriptionEditState, bool>(
+              selector: (state) => state.loading,
+              builder: (_, loading) {
                 return VisibleItem(
-                  isVisible: state.data ?? false,
+                  isVisible: loading,
                   child: SizedBox(
                     height: 64.0,
                     child: Center(child: LottieBuilder.asset(LottieRes.dogLoading)),
@@ -163,20 +206,18 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
                   GestureDetector(
                     onHorizontalDragUpdate: (details) {
                       final dx = -1 * (details.delta.dx / sw);
-                      final offset = controller.tabController.offset;
-                      final dBound = dx + controller.tabController.index;
-                      if (dBound < .0 || dBound > controller.tabController.length - 1) return;
-                      controller.tabController.offset = offset + dx;
+                      final offset = tabController.offset;
+                      final dBound = dx + tabController.index;
+                      if (dBound < .0 || dBound > tabController.length - 1) return;
+                      tabController.offset = offset + dx;
                     },
                     onHorizontalDragEnd: (details) {
-                      final indexOffset = controller.tabController.offset.round();
+                      final indexOffset = tabController.offset.round();
 
                       if (indexOffset != 0) {
-                        controller.tabController.animateTo(
-                          controller.tabController.index + indexOffset,
-                        );
+                        tabController.animateTo(tabController.index + indexOffset);
                       } else {
-                        final offset = controller.tabController.offset;
+                        final offset = tabController.offset;
                         final animation = AnimationController(
                           vsync: this,
                           value: offset,
@@ -186,7 +227,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
                         );
 
                         void onAnimation() {
-                          controller.tabController.offset = animation.value;
+                          tabController.offset = animation.value;
                         }
 
                         animation.addListener(onAnimation);
@@ -198,7 +239,7 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
                         animation.animateTo(.0, duration: kTabScrollDuration);
                       }
                     },
-                    child: const PrescriptionForm(),
+                    child: PrescriptionForm(commentContoroller: commentContoroller),
                   ),
                 ],
               ),
@@ -210,13 +251,12 @@ class _PrescriptionEditScreenState extends State<PrescriptionEditScreen>
   }
 
   Widget _buildAnimalField() {
-    return StreamBuilder<AnimalRead?>(
-      stream: controller.animalState,
-      builder: (_, data) {
-        final animal = data.data;
+    return BlocSelector<PrescriptionEditCubit, PrescriptionEditState, AnimalRead?>(
+      selector: (state) => state.animal,
+      builder: (_, animal) {
         return CupertinoButton(
           padding: EdgeInsets.zero,
-          onPressed: controller.onAnimalPressed,
+          onPressed: () => _cubit.onAnimalPressed(context),
           child: FormEditCard([
             EditCardData(
               label: StringRes.current.prescriptionAnimal,

@@ -1,43 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
-import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen_controller.dart';
+import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
+import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
 
 const _maxCommentLength = 1024;
 
 /// Виджет ввода данных назначения
 class PrescriptionForm extends StatelessWidget {
-  const PrescriptionForm({super.key});
+  const PrescriptionForm({required this.commentContoroller, super.key});
 
-  PrescriptionEditScreenController get controller => PrescriptionEditScreenController.controller;
+  /// Контроллер поля комментария (владелец — State экрана).
+  final TextEditingController commentContoroller;
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<PrescriptionEditCubit>();
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: StreamBuilder<MyTypeEnum>(
-        stream: controller.typeState,
-        builder: (_, typeSnapshot) {
-          final type = typeSnapshot.data;
+      child: BlocSelector<PrescriptionEditCubit, PrescriptionEditState, MyTypeEnum?>(
+        selector: (state) => state.type,
+        builder: (_, type) {
           return Column(
             children: [
-              if (type == MyTypeEnum.courseOfTreatment) _buildPeriodSelector(),
-              StreamBuilder<TreatmentPeriod>(
-                stream: controller.treatmentPeriodState,
-                builder: (_, data) {
-                  final periodData = data.data;
-                  return _periodForm(context, periodData);
-                },
+              if (type == MyTypeEnum.courseOfTreatment) _buildPeriodSelector(cubit),
+              BlocSelector<PrescriptionEditCubit, PrescriptionEditState, TreatmentPeriod>(
+                selector: (state) => state.treatmentPeriod,
+                builder: (_, periodData) => _periodForm(context, cubit, periodData),
               ),
-              StreamBuilder<MyTypeEnum>(
-                stream: controller.typeState,
-                builder: (_, type) => type.data.hasDrugs ? _buildDrugList() : const SizedBox(),
-              ),
+              type.hasDrugs ? _buildDrugList(context, cubit) : const SizedBox(),
               FormEditCard([
                 EditCardData(
-                  controller: controller.commentContoroller,
+                  controller: commentContoroller,
                   label: StringRes.current.prescriptionComment,
                   maxLength: _maxCommentLength,
                 ),
@@ -50,27 +47,25 @@ class PrescriptionForm extends StatelessWidget {
     );
   }
 
-  Widget _buildDrugList() {
-    return StreamBuilder<List<PrescriptionDrug>>(
-      initialData: const [],
-      stream: controller.drugsState,
-      builder: (_, drugList) {
+  Widget _buildDrugList(BuildContext context, PrescriptionEditCubit cubit) {
+    return BlocSelector<PrescriptionEditCubit, PrescriptionEditState, List<PrescriptionDrug>>(
+      selector: (state) => state.drugs,
+      builder: (context, drugList) {
         return Form(
-          key: controller.drugFormKey,
+          key: cubit.drugFormKey,
           child: FormEditCard([
-            ...(drugList.data ?? []).mapIndexed<EditCardData>(
+            ...drugList.mapIndexed<EditCardData>(
               (index, drug) => EditCardData(
                 initValue: '${drug.drugName}, ${drug.formOfDrug}, ${drug.drugDosage}',
                 suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
-                onPressed: () => controller.removeDrug(index),
+                onPressed: () => cubit.removeDrug(index),
               ),
             ),
             EditCardData(
-              label:
-                  '${StringRes.current.prescriptionDrug}${drugList.data?.isNotEmpty ?? false ? '+' : '*'}',
+              label: '${StringRes.current.prescriptionDrug}${drugList.isNotEmpty ? '+' : '*'}',
               suffix: const Icon(Icons.menu_open_rounded, color: ColorRes.accent),
-              onPressed: () => controller.pickDrug(),
-              validator: (_) => drugList.data?.isEmpty ?? true ? '' : null,
+              onPressed: () => cubit.pickDrug(context),
+              validator: (_) => drugList.isEmpty ? '' : null,
             ),
           ], key: UniqueKey()),
         );
@@ -78,71 +73,67 @@ class PrescriptionForm extends StatelessWidget {
     );
   }
 
-  Widget _periodForm(BuildContext context, TreatmentPeriod? data) {
-    return StreamBuilder<List<DateTime>>(
-      initialData: const [],
-      stream: controller.daysListState,
-      builder: (_, daysData) {
-        return StreamBuilder<List<TimeOfDay>>(
-          initialData: const [],
-          stream: controller.atTimeListState,
-          builder: (_, timesData) {
-            return Form(
-              key: controller.dateTimeFormKey,
-              child: FormEditCard([
-                ...(daysData.data ?? []).mapIndexed<EditCardData>(
-                  (index, date) => EditCardData(
-                    initValue: date.toDateShortWeekDay,
-                    suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
-                    onPressed: () => controller.removeDate(index),
-                  ),
-                ),
-                if (controller.allowMultiDate || (daysData.data ?? []).isEmpty)
-                  EditCardData(
-                    label:
-                        '${StringRes.current.prescriptionDate}${daysData.data?.isNotEmpty ?? false ? '+' : '*'}',
-                    suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
-                    onPressed: () => controller.pickStartDate(context),
-                    validator: (_) => daysData.data?.isEmpty ?? true ? '' : null,
-                  ),
-                ...(timesData.data ?? []).mapIndexed<EditCardData>(
-                  (index, time) => EditCardData(
-                    initValue: time.format(context),
-                    suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
-                    onPressed: () => controller.removeTime(index),
-                  ),
-                ),
-                if (controller.allowMultiTime || (timesData.data ?? []).isEmpty)
-                  EditCardData(
-                    label:
-                        '${StringRes.current.prescriptionTime}${timesData.data?.isNotEmpty ?? false ? '+' : '*'}',
-                    onPressed: () => controller.pickAtTime(context, 0),
-                    validator: (_) => timesData.data?.isEmpty ?? true ? '' : null,
-                    suffix: const Icon(Icons.watch_later_outlined, color: ColorRes.accent),
-                  ),
-              ], key: UniqueKey()),
-            );
-          },
+  Widget _periodForm(BuildContext context, PrescriptionEditCubit cubit, TreatmentPeriod? data) {
+    return BlocBuilder<PrescriptionEditCubit, PrescriptionEditState>(
+      buildWhen: (prev, next) =>
+          prev.daysList != next.daysList ||
+          prev.atTimeList != next.atTimeList ||
+          prev.type != next.type,
+      builder: (_, state) {
+        final daysData = state.daysList;
+        final timesData = state.atTimeList;
+        return Form(
+          key: cubit.dateTimeFormKey,
+          child: FormEditCard([
+            ...daysData.mapIndexed<EditCardData>(
+              (index, date) => EditCardData(
+                initValue: date.toDateShortWeekDay,
+                suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
+                onPressed: () => cubit.removeDate(index),
+              ),
+            ),
+            if (cubit.allowMultiDate || daysData.isEmpty)
+              EditCardData(
+                label: '${StringRes.current.prescriptionDate}${daysData.isNotEmpty ? '+' : '*'}',
+                suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
+                onPressed: () => cubit.pickStartDate(context),
+                validator: (_) => daysData.isEmpty ? '' : null,
+              ),
+            ...timesData.mapIndexed<EditCardData>(
+              (index, time) => EditCardData(
+                initValue: time.format(context),
+                suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
+                onPressed: () => cubit.removeTime(index),
+              ),
+            ),
+            if (cubit.allowMultiTime || timesData.isEmpty)
+              EditCardData(
+                label: '${StringRes.current.prescriptionTime}${timesData.isNotEmpty ? '+' : '*'}',
+                onPressed: () => cubit.pickAtTime(context, 0),
+                validator: (_) => timesData.isEmpty ? '' : null,
+                suffix: const Icon(Icons.watch_later_outlined, color: ColorRes.accent),
+              ),
+          ], key: UniqueKey()),
         );
       },
     );
   }
 
-  Widget _buildPeriodSelector() {
-    return StreamBuilder<TreatmentPeriod>(
-      stream: controller.treatmentPeriodState,
-      builder: (_, data) {
+  Widget _buildPeriodSelector(PrescriptionEditCubit cubit) {
+    return BlocSelector<PrescriptionEditCubit, PrescriptionEditState, TreatmentPeriod>(
+      selector: (state) => state.treatmentPeriod,
+      builder: (_, period) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
             width: double.infinity,
             child: CupertinoSlidingSegmentedControl(
-              groupValue: data.data,
+              groupValue: period,
               children: <TreatmentPeriod, Widget>{
                 TreatmentPeriod.daily: Text(StringRes.current.prescriptionDaily),
                 TreatmentPeriod.weekly: Text(StringRes.current.prescriptionWeekly),
               },
-              onValueChanged: controller.onTreatmentPeriodChanged,
+              onValueChanged: cubit.onTreatmentPeriodChanged,
             ),
           ),
         );

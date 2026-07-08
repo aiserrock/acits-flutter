@@ -8,7 +8,6 @@ import 'package:acits_flutter/ui/screen/registration/cubit/email_confirm_cubit.d
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/ui/widget/success_holder.dart';
-import 'package:acits_flutter/util/data_state.dart';
 
 const _switchDuration = Duration(milliseconds: 300);
 

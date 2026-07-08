@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/util/data_state.dart';
 
 /// Состояние экрана личного кабинета: данные пользователя ([data]) и признак
 /// видимости кнопки сохранения ([fabVisible]).

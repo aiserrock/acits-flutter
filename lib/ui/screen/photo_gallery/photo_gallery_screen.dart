@@ -10,7 +10,6 @@ import 'package:acits_flutter/ui/screen/photo_gallery/cubit/photo_gallery_state.
 import 'package:acits_flutter/ui/screen/photo_gallery/widget/gallery_item_data_x.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:acits_flutter/util/data_state.dart';
 
 part './widget/corner_clipper.dart';
 part './widget/gallery_item.dart';

@@ -10,7 +10,6 @@ import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_state.dar
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:acits_flutter/util/data_state.dart';
 
 /// Экран личного кабинета пользователя
 class PersonalScreen extends StatelessWidget {

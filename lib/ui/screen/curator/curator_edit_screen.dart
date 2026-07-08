@@ -2,7 +2,6 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/curator/cubit/curator_edit_cubit.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,50 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:rxdart/subjects.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/service/personal/personal_service.dart';
+import 'package:acits_flutter/ui/widget/cubit/personal_drawer_cubit.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
 
 const Duration _kBaseSettleDuration = Duration(milliseconds: 246);
 
-class PersonalDrawerWidget extends StatefulWidget {
+class PersonalDrawerWidget extends StatelessWidget {
   const PersonalDrawerWidget({super.key});
 
   @override
-  State<PersonalDrawerWidget> createState() => _PersonalDrawerScreenDataState();
+  Widget build(BuildContext context) {
+    return BlocProvider(create: (_) => PersonalDrawerCubit(), child: const _PersonalDrawerView());
+  }
 }
 
-class _PersonalDrawerScreenDataState extends State<PersonalDrawerWidget> {
-  _PersonalDrawerScreenDataState()
-    : _authService = getIt<AuthService>(),
-      _personalService = getIt<PersonalService>();
-
-  final AuthService _authService;
-  final PersonalService _personalService;
-
-  final _widgetState = BehaviorSubject<ScreenDataState<UserSerializers>>.seeded(
-    ScreenDataState()..loading(),
-  );
+class _PersonalDrawerView extends StatefulWidget {
+  const _PersonalDrawerView();
 
   @override
-  void initState() {
-    super.initState();
-    _init();
-  }
+  State<_PersonalDrawerView> createState() => _PersonalDrawerViewState();
+}
+
+class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
+  _PersonalDrawerViewState() : _authService = getIt<AuthService>();
+
+  final AuthService _authService;
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: StreamBuilder<ScreenDataState<UserSerializers>>(
-        stream: _widgetState,
-        builder: (_, snapshot) {
-          final isLoading = snapshot.data?.isLoading ?? false;
-          final hasError = snapshot.data?.hasError ?? false;
-          final person = snapshot.data?.value;
+      child: BlocBuilder<PersonalDrawerCubit, DataState<UserSerializers>>(
+        builder: (_, state) {
+          final isLoading = state.isLoading;
+          final hasError = state.hasError;
+          final person = state.valueOrNull;
           return ListView(
             children: [
               _buildHeader(),
@@ -131,17 +126,6 @@ class _PersonalDrawerScreenDataState extends State<PersonalDrawerWidget> {
 
   Widget _buildDivider() {
     return const Divider(endIndent: 16.0, indent: 16.0, thickness: 2.0);
-  }
-
-  void _init() {
-    _personalService
-        .fetchPersonal()
-        .then((value) {
-          _widgetState.add(ScreenDataState(value));
-        })
-        .catchError((e) {
-          _widgetState.add(ScreenDataState()..error = e);
-        });
   }
 
   void _openPersonalScreen({bool isChangePass = false}) async {

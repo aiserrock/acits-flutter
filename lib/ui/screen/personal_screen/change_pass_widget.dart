@@ -7,7 +7,6 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/cubit/change_pass_cubit.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/validator.dart';
 
 class ChangePassWidget extends StatelessWidget {

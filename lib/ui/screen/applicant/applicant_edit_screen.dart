@@ -3,7 +3,6 @@ import 'package:acits_flutter/ui/screen/applicant/cubit/applicant_edit_cubit.dar
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
