@@ -6,22 +6,24 @@ import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
-import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
+import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_detail_cubit.dart';
+import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_detail_state.dart';
 import 'package:acits_flutter/ui/widget/animal_prescription_card.dart';
 import 'package:acits_flutter/ui/widget/default_app_bar.dart';
 import 'package:acits_flutter/ui/widget/default_icon_button.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
+import 'package:acits_flutter/util/data_state.dart';
 
 part 'animal_common_info.dart';
 part 'animal_prescriptions.dart';
@@ -33,56 +35,63 @@ final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _expandedHeight = 408.0;
 const _collapsedHeight = 235.0;
 
-class AnimalDetailScreen extends StatefulWidget {
+class AnimalDetailScreen extends StatelessWidget {
   const AnimalDetailScreen({required this.id, super.key});
 
   final int id;
 
   @override
-  State<AnimalDetailScreen> createState() => _AnimalDetailScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AnimalDetailCubit(id: id),
+      child: _AnimalDetailView(id: id),
+    );
+  }
 }
 
-class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
-  _AnimalDetailScreenState()
-    : _animalService = getIt<AnimalService>(),
-      _prescriptionService = getIt<PrescriptionService>();
+class _AnimalDetailView extends StatefulWidget {
+  const _AnimalDetailView({required this.id});
+
+  final int id;
+
+  @override
+  State<_AnimalDetailView> createState() => _AnimalDetailViewState();
+}
+
+class _AnimalDetailViewState extends State<_AnimalDetailView> {
+  _AnimalDetailViewState() : _animalService = getIt<AnimalService>();
 
   final AnimalService _animalService;
-  final PrescriptionService _prescriptionService;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _scrollController = ScrollController();
   final _imagePageController = PageController();
 
   final _onCreateCommentStream = StreamController<AnimalNote>.broadcast();
-  final _prescriptionSwichState = BehaviorSubject.seeded(_PrescriptionState.active);
 
   late bool _isSmallScreen;
   int _currentTab = 0;
   double _titleOpacity = .0;
 
-  ScreenDataState<AnimalRead> _state = ScreenDataState()..loading();
-  ScreenDataState<List<Prescription?>?> _statePrescriptions = ScreenDataState()..loading();
+  AnimalDetailCubit get _cubit => context.read<AnimalDetailCubit>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _isSmallScreen = MediaQuery.of(context).size.width <= 340.0;
-    _scrollController.addListener(_onScroll);
   }
 
   @override
   void initState() {
     super.initState();
-    _loadAnimal();
-    _loadPrescriptions();
-    _prescriptionSwichState.listen((value) => _loadPrescriptions());
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    _imagePageController.dispose();
     _onCreateCommentStream.close();
-    _prescriptionSwichState.close();
     super.dispose();
   }
 
@@ -111,17 +120,22 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
   Widget _buildDrawer() => const Drawer();
 
   Widget _buildBody() {
-    return StateBuilder<AnimalRead>(
-      state: _state,
-      builder: _buildContent,
-      errorBuilder: (_, error) => _AnimalDetailStub(error: error, onRefresh: _loadAnimal),
-      loader: (_) => _AnimalDetailStub(onRefresh: _loadAnimal),
+    return BlocBuilder<AnimalDetailCubit, AnimalDetailState>(
+      buildWhen: (prev, next) => prev.animal != next.animal,
+      builder: (context, state) {
+        return DataStateBuilder<AnimalRead>(
+          state: state.animal,
+          builder: _buildContent,
+          errorBuilder: (_, error) => _AnimalDetailStub(error: error, onRefresh: _cubit.loadAnimal),
+          loader: (_) => _AnimalDetailStub(onRefresh: _cubit.loadAnimal),
+        );
+      },
     );
   }
 
   Widget _buildContent(BuildContext context, AnimalRead animal) {
     return RefreshIndicator(
-      onRefresh: _loadAnimal,
+      onRefresh: _cubit.loadAnimal,
       child: CustomScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
@@ -364,11 +378,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       case 0:
         return _buildCommonInfoPage(animal);
       case 1:
-        return _buildPrescriptionsPage(
-          _statePrescriptions,
-          _prescriptionSwichState,
-          _loadPrescriptions,
-        );
+        return _buildPrescriptionsPage();
       case 2:
         return _buildCuratorPage(animal);
       case 3:
@@ -447,7 +457,7 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
     final id = animal.id;
     if (id != null) {
       context.push(AppRoutes.photoGalleryPath(animal.id!)).then((value) {
-        if (value is bool && value) _loadAnimal();
+        if (value is bool && value) _cubit.loadAnimal();
       });
     }
   }
@@ -458,29 +468,6 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       final scroll = min(delta, max(.0, _scrollController.offset));
       setState(() => _titleOpacity = scroll / delta);
     }
-  }
-
-  Future<void> _loadAnimal() async {
-    setState(() => _state = ScreenDataState()..loading());
-    await _animalService
-        .fetchAnimalDetail(id: widget.id)
-        .then((value) => setState(() => _state = ScreenDataState()..content(value)))
-        .catchError((e) => setState(() => _state = ScreenDataState()..error = e));
-  }
-
-  Future<void> _loadPrescriptions() async {
-    setState(() => _statePrescriptions = ScreenDataState()..loading());
-    await _prescriptionService
-        .fetchPrescriptionListByAnimal(
-          widget.id,
-          isActual: _prescriptionSwichState.value == _PrescriptionState.active,
-          isOld: _prescriptionSwichState.value == _PrescriptionState.inactive,
-        )
-        .then(
-          (value) =>
-              setState(() => _statePrescriptions = ScreenDataState()..content(value?.results)),
-        )
-        .catchError((e) => setState(() => _state = ScreenDataState()..error = e));
   }
 
   void _onFabPressed(BuildContext context) {
@@ -495,11 +482,11 @@ class _AnimalDetailScreenState extends State<AnimalDetailScreen> {
       context
           .push<Prescription>(
             AppRoutes.prescriptionEdit,
-            extra: <String, Object?>{'prescription': null, 'animal': _state.value},
+            extra: <String, Object?>{'prescription': null, 'animal': _cubit.animalOrNull},
           )
           .then((value) {
             if (value != null) {
-              _loadPrescriptions();
+              _cubit.reloadPrescriptions();
             }
           });
     }

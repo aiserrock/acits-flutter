@@ -6,23 +6,25 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/file/file_service.dart';
+import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_cubit.dart';
+import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_state.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
+import 'package:acits_flutter/util/data_state.dart';
 
-class CommentListWidget extends StatefulWidget {
+class CommentListWidget extends StatelessWidget {
   const CommentListWidget(
     this.animalId, {
     this.scrollController,
@@ -35,106 +37,111 @@ class CommentListWidget extends StatefulWidget {
   final StreamController<AnimalNote>? onCreateCommentStream;
 
   @override
-  State<CommentListWidget> createState() => _CommentListScreenDataState(animalId);
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CommentListCubit(
+        animalId: animalId,
+        onCreateCommentStream: onCreateCommentStream?.stream,
+      ),
+      child: _CommentListView(animalId: animalId, scrollController: scrollController),
+    );
+  }
 }
 
-class _CommentListScreenDataState extends State<CommentListWidget> {
-  _CommentListScreenDataState(this._animalId)
-    : _animalService = getIt<AnimalService>(),
-      _fileService = getIt<FileService>();
+class _CommentListView extends StatefulWidget {
+  const _CommentListView({required this.animalId, this.scrollController});
 
-  final int _animalId;
-  final AnimalService _animalService;
-  final FileService _fileService;
+  final int animalId;
+  final ScrollController? scrollController;
 
-  final _widgetState = BehaviorSubject<ScreenDataState<List<AnimalNote>>>.seeded(
-    ScreenDataState()..loading(),
-  );
-  final _pagingState = BehaviorSubject<ScreenDataState<Object>>.seeded(ScreenDataState(Object()));
+  @override
+  State<_CommentListView> createState() => _CommentListViewState();
+}
+
+class _CommentListViewState extends State<_CommentListView> {
+  final FileService _fileService = getIt<FileService>();
 
   late final ScrollController _scrollController;
+  bool _ownsScrollController = false;
 
   @override
   void initState() {
-    _scrollController = widget.scrollController ?? ScrollController();
-    widget.onCreateCommentStream?.stream.forEach(_onCreateComment);
-    _init();
     super.initState();
+    _ownsScrollController = widget.scrollController == null;
+    _scrollController = widget.scrollController ?? ScrollController();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
-    _widgetState.close();
-    _pagingState.close();
+    if (_ownsScrollController) _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ScreenDataState<List<AnimalNote>>>(
-      stream: _widgetState,
-      builder: (_, snapshot) {
-        final comments = snapshot.data?.value;
-        return SliverList(
-          delegate: SliverChildListDelegate([
-            if (snapshot.data?.isLoading ?? false)
-              const SizedBox(height: 240.0, child: LoaderHolderWidget()),
-            if (snapshot.data?.hasError ?? false)
-              SizedBox(height: 240.0, child: ErrorHolderWidget(onPressed: _init)),
-            if (comments != null && comments.isNotEmpty)
-              ...(comments..sort(
-                    (first, second) => (second.createdAt ?? DateTime.now()).compareTo(
-                      first.createdAt ?? DateTime.now(),
-                    ),
-                  ))
-                  .map<Widget>((comment) => _buildCommentItem(comment)),
-            _buildPagingLoader(),
-            const SizedBox(height: 64.0),
-          ]),
+    return BlocBuilder<CommentListCubit, CommentListState>(
+      builder: (_, state) {
+        return DataStateBuilder<List<AnimalNote>>(
+          state: state.data,
+          loader: (_) =>
+              const SliverToBoxAdapter(child: SizedBox(height: 240.0, child: LoaderHolderWidget())),
+          errorBuilder: (_, _) => SliverToBoxAdapter(
+            child: SizedBox(
+              height: 240.0,
+              child: ErrorHolderWidget(onPressed: () => context.read<CommentListCubit>().init()),
+            ),
+          ),
+          builder: (_, comments) => _buildList(state, comments),
         );
       },
     );
   }
 
-  Widget _buildPagingLoader() {
-    return StreamBuilder<ScreenDataState<Object>>(
-      stream: _pagingState,
-      builder: (_, partLoadingState) {
-        if (partLoadingState.data?.hasError ?? false) {
-          return SizedBox(
-            height: 64.0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  Expanded(child: LottieBuilder.asset(LottieRes.crashScratch)),
-                  Expanded(
-                    child: PrimaryButton(
-                      onPressed: _loadNextPage,
-                      child: Text(StringRes.current.commonReloadBtn),
-                    ),
-                  ),
-                ],
+  Widget _buildList(CommentListState state, List<AnimalNote> comments) {
+    final sorted = List<AnimalNote>.from(comments)
+      ..sort(
+        (first, second) =>
+            (second.createdAt ?? DateTime.now()).compareTo(first.createdAt ?? DateTime.now()),
+      );
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        ...sorted.map<Widget>((comment) => _buildCommentItem(comment)),
+        _buildPagingLoader(state),
+        const SizedBox(height: 64.0),
+      ]),
+    );
+  }
+
+  Widget _buildPagingLoader(CommentListState state) {
+    return DataStateBuilder<Object?>(
+      state: state.page,
+      loader: (_) =>
+          SizedBox(height: 64.0, child: Center(child: LottieBuilder.asset(LottieRes.dogLoading))),
+      errorBuilder: (_, _) => SizedBox(
+        height: 64.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Expanded(child: LottieBuilder.asset(LottieRes.crashScratch)),
+              Expanded(
+                child: PrimaryButton(
+                  onPressed: () => context.read<CommentListCubit>().loadNextPage(),
+                  child: Text(StringRes.current.commonReloadBtn),
+                ),
               ),
-            ),
-          );
-        }
-        if (partLoadingState.data?.isLoading ?? false) {
-          return SizedBox(
-            height: 64.0,
-            child: Center(child: LottieBuilder.asset(LottieRes.dogLoading)),
-          );
-        }
-        return const SizedBox();
-      },
+            ],
+          ),
+        ),
+      ),
+      builder: (_, _) => const SizedBox(),
     );
   }
 
@@ -255,6 +262,7 @@ class _CommentListScreenDataState extends State<CommentListWidget> {
   }
 
   void _onMorePressed(BuildContext context, AnimalNote comment) {
+    final cubit = context.read<CommentListCubit>();
     final actions = bsSelectorActions(context, <Widget, dynamic Function()>{
       Text(
         StringRes.current.commonEdit,
@@ -264,7 +272,7 @@ class _CommentListScreenDataState extends State<CommentListWidget> {
           AppRoutes.commentEditPath(widget.animalId),
           extra: comment,
         );
-        if (result != null) _onCommentEdited(result);
+        if (result != null) cubit.onCommentEdited(result);
         Navigator.of(context).pop();
       },
       Text(
@@ -284,60 +292,18 @@ class _CommentListScreenDataState extends State<CommentListWidget> {
   }
 
   Future<void> _deleteComment(BuildContext context, AnimalNote comment) async {
-    _animalService
-        .deleteAnimalNote(id: comment.id!)
-        .then((_) => _onCommentDeleted(comment))
-        .catchError((e) {
-          _onError(context, StringRes.current.commentDeletingFail);
-        });
-  }
-
-  void _onCommentDeleted(AnimalNote comment) {
-    if (!_widgetState.value.isContent) return;
-    _widgetState.add(ScreenDataState(_widgetState.value.value?..remove(comment)));
-  }
-
-  void _onCommentEdited(AnimalNote editedComment) {
-    if (!_widgetState.value.isContent) return;
-    final commentList = _widgetState.value.value;
-    final index = commentList?.indexWhere((comment) => comment.id == editedComment.id);
-    if (index == null || index < 0) return;
-    commentList?.replaceRange(index, index + 1, [editedComment]);
-    _widgetState.add(ScreenDataState(_widgetState.value.value));
+    final messenger = ScaffoldMessenger.of(context);
+    final success = await context.read<CommentListCubit>().deleteComment(comment);
+    if (!success) {
+      messenger.showSnackBar(SnackBar(content: Text(StringRes.current.commentDeletingFail)));
+    }
   }
 
   void _onScroll() {
     if (_scrollController.hasClients &&
-        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent &&
-        !_pagingState.value.isLoading) {
-      _loadNextPage();
+        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
+      context.read<CommentListCubit>().loadNextPage();
     }
-  }
-
-  void _init() {
-    _widgetState.add(ScreenDataState()..loading());
-    _animalService
-        .fetchAnimalNotes(_animalId)
-        .then((value) => _widgetState.add(ScreenDataState(value?.results ?? [])))
-        .catchError((e) {
-          _widgetState.add(ScreenDataState()..error = e);
-        });
-  }
-
-  void _loadNextPage() {
-    if (!_widgetState.value.isContent) return;
-    _pagingState.add(ScreenDataState<Object>()..loading());
-    _animalService
-        .fetchAnimalNotes(_animalId, offset: _widgetState.value.value?.length)
-        .then((value) {
-          _widgetState.add(
-            ScreenDataState(_widgetState.value.value?..addAll(value?.results ?? [])),
-          );
-          _pagingState.add(ScreenDataState());
-        })
-        .catchError((e) {
-          _pagingState.add(ScreenDataState()..error = e);
-        });
   }
 
   Future<void> _onFilePressed(BuildContext context, AnimalNoteFile file) async {
@@ -369,11 +335,6 @@ class _CommentListScreenDataState extends State<CommentListWidget> {
 
   Future<void> _onUrlPressed(String url) async {
     FlutterWebBrowser.openWebPage(url: url);
-  }
-
-  void _onCreateComment(AnimalNote comment) {
-    if (!_widgetState.value.isContent) return;
-    _widgetState.add(ScreenDataState(_widgetState.value.value?..add(comment)));
   }
 
   void _onError(BuildContext context, String? msg) {

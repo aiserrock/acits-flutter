@@ -1,51 +1,48 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildPrescriptionsPage(
-  ScreenDataState<List<Prescription?>?> state,
-  BehaviorSubject<_PrescriptionState> switchState,
-  VoidCallback onReload,
-) {
-  return SliverList(
-    delegate: SliverChildListDelegate([
-      Padding(
-        padding: const EdgeInsets.only(top: 24.0, left: 16.0, bottom: 8.0),
-        child: StreamBuilder<_PrescriptionState>(
-          stream: switchState,
-          builder: (_, snapshot) {
-            return Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    StringRes.current.animalPrescriptions,
-                    style: StyleRes.title.copyWith(fontSize: 22.0),
+extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
+  Widget _buildPrescriptionsPage() {
+    return BlocBuilder<AnimalDetailCubit, AnimalDetailState>(
+      buildWhen: (prev, next) =>
+          prev.prescriptions != next.prescriptions ||
+          prev.prescriptionActive != next.prescriptionActive,
+      builder: (context, state) {
+        return SliverList(
+          delegate: SliverChildListDelegate([
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0, left: 16.0, bottom: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      StringRes.current.animalPrescriptions,
+                      style: StyleRes.title.copyWith(fontSize: 22.0),
+                    ),
                   ),
-                ),
-                Text(
-                  snapshot.data == _PrescriptionState.active
-                      ? StringRes.current.prescriptionCurrent
-                      : StringRes.current.prescriptionPast,
-                ),
-                Switch(
-                  value: snapshot.data == _PrescriptionState.active,
-                  onChanged: (state) => switchState.add(
-                    state ? _PrescriptionState.active : _PrescriptionState.inactive,
+                  Text(
+                    state.prescriptionActive
+                        ? StringRes.current.prescriptionCurrent
+                        : StringRes.current.prescriptionPast,
                   ),
-                  activeThumbColor: ColorRes.accent,
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-      if (state.isContent)
-        ...state.value!
-            .where((element) => element != null)
-            .map<Widget>((item) => AnimalPrescriptionCard(prescription: item!)),
-      if (state.isLoading) const LoaderHolderWidget(),
-      if (state.hasError) ErrorHolderWidget(onPressed: onReload),
-      const SizedBox(height: 64.0),
-    ]),
-  );
+                  Switch(
+                    value: state.prescriptionActive,
+                    onChanged: _cubit.togglePrescriptionActive,
+                    activeThumbColor: ColorRes.accent,
+                  ),
+                ],
+              ),
+            ),
+            if (state.prescriptions.isContent)
+              ...?state.prescriptions.valueOrNull
+                  ?.where((element) => element != null)
+                  .map<Widget>((item) => AnimalPrescriptionCard(prescription: item!)),
+            if (state.prescriptions.isLoading) const LoaderHolderWidget(),
+            if (state.prescriptions.hasError)
+              ErrorHolderWidget(onPressed: _cubit.reloadPrescriptions),
+            const SizedBox(height: 64.0),
+          ]),
+        );
+      },
+    );
+  }
 }
-
-enum _PrescriptionState { active, inactive }
