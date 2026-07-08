@@ -13,9 +13,13 @@ on:
 env:
   FLUTTER_VERSION: "3.44.0"
 
+# Stages mirror our GitLab pipelines (prepare -> lint -> analyse -> test ->
+# build -> notify) as separate jobs, so a failure is immediately visible as
+# a single named check instead of being buried in one big job's step list.
 jobs:
-  analyze:
-    name: Analyse & Test
+  ##### prepare #####
+  prepare:
+    name: Prepare
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -27,7 +31,7 @@ jobs:
           cache: true
 
       # Firebase configs are gitignored; materialise them from the committed
-      # *.example templates so codegen and analysis can run.
+      # *.example templates so codegen/analysis/tests can run.
       - name: Provision Firebase placeholders
         run: |
           cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
@@ -39,6 +43,37 @@ jobs:
 
       - name: Generate code (build_runner)
         run: dart run build_runner build --delete-conflicting-outputs
+
+      # Share the exact post-codegen working tree with every downstream job,
+      # so lint/analyse/test/build all see identical generated output instead
+      # of each re-running build_runner (and potentially generating slightly
+      # different code, as generator patch versions drift over time).
+      - name: Archive workspace
+        run: tar -czf workspace.tar.gz --exclude='.git' .
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: workspace
+          path: workspace.tar.gz
+          retention-days: 1
+
+  ##### lint #####
+  lint:
+    name: Lint
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: workspace
+
+      - run: tar -xzf workspace.tar.gz
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
 
       # Format only hand-written code (line length 100). Generated files
       # (*.g.dart, *.config.dart, *.swagger.dart, *.chopper.dart, *.gen.dart,
@@ -55,18 +90,59 @@ jobs:
             ! -name 'locale_keys.g.dart')
           dart format --output=none --set-exit-if-changed -l 100 $files
 
+  ##### analyse #####
+  analyse:
+    name: Analyse
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: workspace
+
+      - run: tar -xzf workspace.tar.gz
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
       - name: Analyse
         run: flutter analyze
+
+  ##### test #####
+  test:
+    name: Test
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: workspace
+
+      - run: tar -xzf workspace.tar.gz
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
 
       - name: Run tests
         run: flutter test
 
+  ##### build #####
   build-android:
     name: Build Android (dev APK)
-    needs: analyze
+    needs: [lint, analyse, test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: workspace
+
+      - run: tar -xzf workspace.tar.gz
 
       - uses: actions/setup-java@v5
         with:
@@ -80,34 +156,26 @@ jobs:
           cache: true
 
       # Prefer real Firebase configs from secrets; fall back to the *.example
-      # placeholders so the build still succeeds without secrets configured.
+      # placeholders (already in the workspace archive) so the build still
+      # succeeds without secrets configured.
       - name: Provision Firebase config
         env:
           GOOGLE_SERVICES_DEV: ${{ secrets.GOOGLE_SERVICES_JSON_DEV }}
           GOOGLE_SERVICES_PROD: ${{ secrets.GOOGLE_SERVICES_JSON_PROD }}
         run: |
-          mkdir -p android/app/src/dev android/app/src/prod
           if [ -n "$GOOGLE_SERVICES_DEV" ]; then
             echo "$GOOGLE_SERVICES_DEV" | base64 --decode > android/app/src/dev/google-services.json
-          else
-            cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
           fi
           if [ -n "$GOOGLE_SERVICES_PROD" ]; then
             echo "$GOOGLE_SERVICES_PROD" | base64 --decode > android/app/src/prod/google-services.json
-          else
-            cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
           fi
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Generate code (build_runner)
-        run: dart run build_runner build --delete-conflicting-outputs
-
       # Debug build so it is signed with the debug keystore (no release
-      # signing secrets needed in CI).
+      # signing secrets needed in CI). --build-number is stamped from the
+      # workflow run number so every CI build gets a unique, increasing
+      # build number instead of the static one committed in pubspec.yaml.
       - name: Build dev APK
-        run: flutter build apk --debug --flavor dev --target test/dev/main.dart
+        run: flutter build apk --debug --flavor dev --target test/dev/main.dart --build-number=$GITHUB_RUN_NUMBER
 
       - name: Upload APK
         uses: actions/upload-artifact@v7
@@ -119,10 +187,14 @@ jobs:
 
   build-ios:
     name: Build iOS (unsigned)
-    needs: analyze
+    needs: [lint, analyse, test]
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: workspace
+
+      - run: tar -xzf workspace.tar.gz
 
       - uses: subosito/flutter-action@v2
         with:
@@ -143,21 +215,15 @@ jobs:
         env:
           GOOGLE_SERVICE_INFO: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }}
         run: |
-          mkdir -p ios/Runner
           if [ -n "$GOOGLE_SERVICE_INFO" ]; then
             echo "$GOOGLE_SERVICE_INFO" | base64 --decode > ios/Runner/GoogleService-Info.plist
-          else
-            cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
           fi
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Generate code (build_runner)
-        run: dart run build_runner build --delete-conflicting-outputs
-
+      # --build-number is stamped from the workflow run number, same as the
+      # Android build, so both artifacts from one CI run carry a matching,
+      # unique build number instead of the static one in pubspec.yaml.
       - name: Build iOS (no codesign, dev flavor)
-        run: flutter build ios --debug --no-codesign --flavor dev --target test/dev/main.dart
+        run: flutter build ios --debug --no-codesign --flavor dev --target test/dev/main.dart --build-number=$GITHUB_RUN_NUMBER
 
       - name: Package .app
         run: |
@@ -173,9 +239,10 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  ##### notify #####
   notify:
     name: Notify Telegram
-    needs: [analyze, build-android, build-ios]
+    needs: [prepare, lint, analyse, test, build-android, build-ios]
     if: always() && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -187,7 +254,10 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          RESULT_ANALYZE: ${{ needs.analyze.result }}
+          RESULT_PREPARE: ${{ needs.prepare.result }}
+          RESULT_LINT: ${{ needs.lint.result }}
+          RESULT_ANALYSE: ${{ needs.analyse.result }}
+          RESULT_TEST: ${{ needs.test.result }}
           RESULT_ANDROID: ${{ needs.build-android.result }}
           RESULT_IOS: ${{ needs.build-ios.result }}
         run: |
@@ -196,7 +266,11 @@ jobs:
             exit 0
           fi
 
-          version=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *//')
+          # Version name from pubspec.yaml + the actual build number this run
+          # stamped onto the APK/IPA (flutter build ... --build-number=$GITHUB_RUN_NUMBER),
+          # not the stale +N suffix committed in pubspec.yaml.
+          version_name=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *([0-9.]+)\+.*/\1/')
+          version="${version_name}+${GITHUB_RUN_NUMBER}"
           branch="${GITHUB_REF#refs/heads/}"
           short_sha="${GITHUB_SHA:0:8}"
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
@@ -207,10 +281,12 @@ jobs:
           # avoids that failure mode entirely.
           changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
 
-          if [ "$RESULT_ANALYZE" = "success" ] && [ "$RESULT_ANDROID" = "success" ] && [ "$RESULT_IOS" = "success" ]; then
+          if [ "$RESULT_PREPARE" = "success" ] && [ "$RESULT_LINT" = "success" ] && \
+             [ "$RESULT_ANALYSE" = "success" ] && [ "$RESULT_TEST" = "success" ] && \
+             [ "$RESULT_ANDROID" = "success" ] && [ "$RESULT_IOS" = "success" ]; then
             status_line="✅ Build succeeded"
           else
-            status_line="❌ Build failed (analyse: $RESULT_ANALYZE, android: $RESULT_ANDROID, ios: $RESULT_IOS)"
+            status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS)"
           fi
 
           text=$(printf '%s\nacits_flutter v%s\nBranch: %s\nCommit: %s\nRun: %s\n\nChangelog:\n%s' \
