@@ -3,13 +3,13 @@
     "apps": [],
     "details": [
       {
-        "appID": "97H6SSU25U.io.github.andx2.dev",
+        "appID": "45G32KJDV7.ru.acits.dev",
         "paths": [
           "/api/v1/users/verify-email/*"
         ]
       },
       {
-        "appID": "97H6SSU25U.io.github.andx2",
+        "appID": "45G32KJDV7.ru.acits",
         "paths": [
           "/api/v1/users/verify-email/*"
         ]
