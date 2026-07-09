@@ -3,7 +3,7 @@ description: Flutter client for https://acits.ru/
 
 publish_to: "none"
 
-version: 0.5.1+17
+version: 0.6.0+18
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -13,6 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
+    sdk: flutter
+  flutter_web_plugins:
     sdk: flutter
 
   app_links: ^7.0.0
@@ -30,7 +32,6 @@ dependencies:
   flutter_secure_storage: ^10.0.0
   flutter_slidable: ^4.0.3
   flutter_svg: ^2.2.4
-  flutter_web_browser: ^0.17.3
   formz: ^0.8.0
   get_it: ^9.2.1
   go_router: ^17.3.0
@@ -55,6 +56,8 @@ dependencies:
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   easy_localization: ^3.0.8
+  firebase_crashlytics: ^5.2.4
+  firebase_analytics: ^12.4.3
 
 dev_dependencies:
   flutter_test:
@@ -110,6 +113,6 @@ flutter_gen:
 patrol:
   app_name: ACITS
   android:
-    package_name: io.github.andx2.acits.dev
+    package_name: ru.acits.dev
   ios:
-    bundle_id: io.github.andx2
+    bundle_id: ru.acits.dev
