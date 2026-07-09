@@ -13,8 +13,8 @@
 # Update this, if you use features of a newer version
 fastlane_version "2.173.0"
 
-dev_bundle_id = "io.github.andx2.dev"
-prod_bundle_id = "io.github.andx2"
+dev_bundle_id = "ru.acits.dev"
+prod_bundle_id = "ru.acits"
 
 dev_config = "Release-dev"
 prod_config = "Release-prod"
