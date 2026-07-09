@@ -3,8 +3,6 @@ PODS:
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
-  - flutter_web_browser (0.17.3):
-    - Flutter
   - open_filex (0.0.2):
     - Flutter
   - patrol (0.0.1):
@@ -17,7 +15,6 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - flutter_web_browser (from `.symlinks/plugins/flutter_web_browser/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - patrol (from `.symlinks/plugins/patrol/darwin`)
   - pdfx (from `.symlinks/plugins/pdfx/ios`)
@@ -31,8 +28,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  flutter_web_browser:
-    :path: ".symlinks/plugins/flutter_web_browser/ios"
   open_filex:
     :path: ".symlinks/plugins/open_filex/ios"
   patrol:
@@ -44,7 +39,6 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
-  flutter_web_browser: 68b27d2c4773b059cef19e12c890cb204518d3c3
   open_filex: 432f3cd11432da3e39f47fcc0df2b1603854eff1
   patrol: cea8074f183a2a4232d0ebd10569ae05149ada42
   pdfx: 77f4dddc48361fbb01486fa2bdee4532cbb97ef3
