@@ -1,6 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/res/l10n.dart';
@@ -8,9 +12,27 @@ import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/firebase/firebase_config.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Обычные web-пути (/login вместо /#/login). No-op на мобильных. Требует
+  // SPA-fallback на сервере (nginx try_files; для GitHub Pages — 404.html).
+  usePathUrlStrategy();
+
+  // prod-окружение: Firebase-проект acits-prod на android/ios/web (Analytics
+  // везде). dev-сборка (test/dev/main.dart) поднимает свой acits-dev. Crashlytics
+  // существует только на мобильных — на web плагина нет, обработчики под kIsWeb.
+  await Firebase.initializeApp(options: prodFirebaseOptions);
+  if (!kIsWeb) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
+
   await EasyLocalization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initDi();

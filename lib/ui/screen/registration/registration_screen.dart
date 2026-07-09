@@ -3,8 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -434,7 +434,9 @@ class RegistrationPersonalData extends StatelessWidget {
   }
 
   void _onPrivateTermsPressed() {
-    FlutterWebBrowser.openWebPage(url: _termsUrl);
+    // url_launcher вместо flutter_web_browser (нет web-поддержки). На web
+    // открывает новую вкладку, на мобильных — внешний браузер.
+    launchUrl(Uri.parse(_termsUrl), mode: LaunchMode.externalApplication);
   }
 }
 
