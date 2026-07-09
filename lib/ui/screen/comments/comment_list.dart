@@ -1,16 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/file/file_service.dart';
@@ -310,10 +310,22 @@ class _CommentListViewState extends State<_CommentListView> {
     final fileName = file.filename;
 
     if (url == null || fileName == null) return;
-    final File localFile;
-    try {
-      localFile = await _fileService.loadFile(url, fileName);
-    } catch (_) {
+
+    // На web нет доступа к файловой системе (path_provider) и open_filex —
+    // открываем файл по URL, браузер сам скачает/покажет.
+    if (kIsWeb) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    final localFile = await () async {
+      try {
+        return await _fileService.loadFile(url, fileName);
+      } catch (_) {
+        return null;
+      }
+    }();
+    if (localFile == null) {
       _onError(context, LocaleKeys.commentDeletingFail.tr());
       return;
     }
@@ -333,7 +345,8 @@ class _CommentListViewState extends State<_CommentListView> {
   }
 
   Future<void> _onUrlPressed(String url) async {
-    FlutterWebBrowser.openWebPage(url: url);
+    // url_launcher вместо flutter_web_browser (нет web-поддержки).
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
   }
 
   void _onError(BuildContext context, String? msg) {

@@ -7,16 +7,31 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
-### Fixed
+## [0.6.0+18] - 2026-07-09
 
-- Web PWA now boots ~4s faster: `main.dart.js` loads immediately instead of waiting on service-worker registration (which stalled and hit a 4s fallback timeout on GitHub Pages)
+### Added
+
+- Firebase for both flavors on Android, iOS and web, each flavor in its own project (`acits-prod` / `acits-dev`): Analytics on all three platforms, Crashlytics on Android/iOS (no web plugin exists; guarded off with `kIsWeb`). Configured via FlutterFire (`firebase_options.dart` per flavor) with native `google-services.json` per flavor and per-flavor iOS `GoogleService-Info.plist` selected by an Xcode `flutterfire bundle-service-file` build phase, plus the Android Crashlytics Gradle plugin (NDK symbol upload) — ready for push notifications.
+- Web PWA now uses the path URL strategy (`/login` instead of `/#/login`), with a `404.html` SPA-fallback for GitHub Pages and `try_files` on nginx
+- iOS now has `Profile-dev` / `Profile-prod` build configurations, so `flutter build ios --profile --flavor {dev,prod}` works (Android profile builds already worked)
+- iOS builds via Swift Package Manager (hybrid): SPM-capable plugins use SPM, the rest stay on CocoaPods
 
 ### Changed
 
 - CI no longer runs on a plain push to `main`/`develop`; it now runs only on pull requests and on a `v*` release tag
+- CI now builds a signed release: the dev flavor on a PR, the prod flavor on a `v*` tag (both signed with the release keystore); artifacts are named `acits-dev-release` / `acits-prod-release`
 - README now links directly to the deployed PWA
 - Telegram build notification now fires on every CI run, including pull requests (previously tag-only)
+- Telegram notification now includes the live PWA link when the web deploy succeeds
 - Web PWA shows a loading spinner over the splash screen until the app's first frame renders
+- Bundle identifier changed to `ru.acits` (prod) / `ru.acits.dev` (dev) across Android and iOS; iOS signing team set to `45G32KJDV7`
+- `assetLinks.json` fingerprint updated to the release keystore's certificate
+
+### Fixed
+
+- Web PWA now boots ~4s faster: `main.dart.js` loads immediately instead of waiting on service-worker registration (which stalled and hit a 4s fallback timeout on GitHub Pages)
+- iOS pod install no longer fails on a stale `Podfile.lock` that pinned Firebase 8.9.0 against `firebase_core 4.x` (which needs Firebase 12.x)
+- Web PWA no longer crashes on the "terms" link (registration), comment links and comment attachments: `flutter_web_browser` (no web support) replaced with `url_launcher`, and the attachment download (`path_provider` / `open_filex`, mobile-only) now opens the file URL directly on web
 
 ## [0.5.1+17] - 2026-07-08
 
