@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [0.6.0+18] - 2026-07-09
+
 ### Added
 
 - Firebase for both flavors on Android, iOS and web, each flavor in its own project (`acits-prod` / `acits-dev`): Analytics on all three platforms, Crashlytics on Android/iOS (no web plugin exists; guarded off with `kIsWeb`). Configured via FlutterFire (`firebase_options.dart` per flavor) with native `google-services.json` per flavor and per-flavor iOS `GoogleService-Info.plist` selected by an Xcode `flutterfire bundle-service-file` build phase, plus the Android Crashlytics Gradle plugin (NDK symbol upload) — ready for push notifications.
