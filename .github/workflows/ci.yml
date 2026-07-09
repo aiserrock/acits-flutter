@@ -305,6 +305,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # Exposed so notify can put the live PWA URL in the Telegram message.
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       # Full checkout for web/ (index.html, manifest.json, icons).
       - uses: actions/checkout@v7
@@ -437,6 +440,7 @@ jobs:
           RESULT_IOS: ${{ needs.build-ios.result }}
           RESULT_WEB: ${{ needs.build-web.result }}
           RESULT_RELEASE: ${{ needs.release.result }}
+          PWA_URL: ${{ needs.build-web.outputs.page_url }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
             echo "Telegram secrets are not configured — skipping notification."
@@ -478,8 +482,16 @@ jobs:
             status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB, release: $RESULT_RELEASE)"
           fi
 
-          text=$(printf '%s\nacits_flutter v%s\nRef: %s\nCommit: %s\nRun: %s\n\nChangelog:\n%s' \
-            "$status_line" "$version" "$ref" "$short_sha" "$run_url" "$changelog")
+          # On a successful web deploy, add the live PWA URL — same slot the
+          # mobile builds imply the APK/IPA artifact in. Empty on PRs (web is
+          # tag-only), so the line is omitted then.
+          pwa_line=""
+          if [ "$RESULT_WEB" = "success" ] && [ -n "$PWA_URL" ]; then
+            pwa_line=$(printf '\nPWA: %s' "$PWA_URL")
+          fi
+
+          text=$(printf '%s\nacits_flutter v%s\nRef: %s\nCommit: %s\nRun: %s%s\n\nChangelog:\n%s' \
+            "$status_line" "$version" "$ref" "$short_sha" "$run_url" "$pwa_line" "$changelog")
 
           response=$(curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
