@@ -38,37 +38,37 @@
           "Debug-prod": {
             "projectId": "acits-prod",
             "appId": "1:783694751281:ios:857fc77a2eaee11ec99710",
-            "uploadDebugSymbols": true,
+            "uploadDebugSymbols": false,
             "fileOutput": "ios/flavors/prod/GoogleService-Info.plist"
           },
           "Release-prod": {
             "projectId": "acits-prod",
             "appId": "1:783694751281:ios:857fc77a2eaee11ec99710",
-            "uploadDebugSymbols": true,
+            "uploadDebugSymbols": false,
             "fileOutput": "ios/flavors/prod/GoogleService-Info.plist"
           },
           "Profile-prod": {
             "projectId": "acits-prod",
             "appId": "1:783694751281:ios:857fc77a2eaee11ec99710",
-            "uploadDebugSymbols": true,
+            "uploadDebugSymbols": false,
             "fileOutput": "ios/flavors/prod/GoogleService-Info.plist"
           },
           "Debug-dev": {
             "projectId": "acits-dev",
             "appId": "1:874749050746:ios:833b35fa19c8eabdc3a0c3",
-            "uploadDebugSymbols": true,
+            "uploadDebugSymbols": false,
             "fileOutput": "ios/flavors/dev/GoogleService-Info.plist"
           },
           "Release-dev": {
             "projectId": "acits-dev",
             "appId": "1:874749050746:ios:833b35fa19c8eabdc3a0c3",
-            "uploadDebugSymbols": true,
+            "uploadDebugSymbols": false,
             "fileOutput": "ios/flavors/dev/GoogleService-Info.plist"
           },
           "Profile-dev": {
             "projectId": "acits-dev",
             "appId": "1:874749050746:ios:833b35fa19c8eabdc3a0c3",
-            "uploadDebugSymbols": true,
+            "uploadDebugSymbols": false,
             "fileOutput": "ios/flavors/dev/GoogleService-Info.plist"
           }
         }
