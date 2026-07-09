@@ -1,4 +1,7 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,6 +76,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
               child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
               onTap: () => Navigator.of(context).pop(),
             ),
+            // TODO(firebase-check): временные кнопки для проверки Firebase на
+            // проде — удалить после подтверждения крашей/аналитики в консоли.
+            actions: const [_FirebaseAnalyticsTestButton(), _FirebaseCrashTestButton()],
             bottom: _buildTabs(),
           ),
           backgroundColor: ColorRes.background,
@@ -738,5 +744,52 @@ extension _MessagedExceptionX on MessagedException {
     final errMsg = error;
     if (errMsg is String) return errMsg;
     return LocaleKeys.errorDefaultMsg.tr();
+  }
+}
+
+/// ВРЕМЕННО: кнопка-краш для проверки Crashlytics на проде. Роняет приложение
+/// сразу; отчёт уходит в Firebase при следующем запуске. Только android/ios —
+/// на web Crashlytics-плагина нет (кнопка скрыта). Удалить после проверки.
+class _FirebaseCrashTestButton extends StatelessWidget {
+  const _FirebaseCrashTestButton();
+
+  @override
+  Widget build(BuildContext context) {
+    if (kIsWeb) return const SizedBox.shrink();
+    return IconButton(
+      tooltip: 'Test crash',
+      icon: const Icon(Icons.bug_report, color: ColorRes.accent),
+      onPressed: () async {
+        // Записываем контекст перед крашем — поможет найти его в консоли.
+        await FirebaseCrashlytics.instance.log('manual test crash from RegistrationScreen');
+        await FirebaseCrashlytics.instance.setCustomKey('test_source', 'registration_screen');
+        FirebaseCrashlytics.instance.crash();
+      },
+    );
+  }
+}
+
+/// ВРЕМЕННО: кнопка-аналитика для проверки Analytics на проде (android/ios/web).
+/// Шлёт кастомное событие `test_event`. Удалить после проверки.
+class _FirebaseAnalyticsTestButton extends StatelessWidget {
+  const _FirebaseAnalyticsTestButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: 'Test analytics event',
+      icon: const Icon(Icons.analytics_outlined, color: ColorRes.accent),
+      onPressed: () async {
+        await FirebaseAnalytics.instance.logEvent(
+          name: 'test_event',
+          parameters: {'source': 'registration_screen', 'platform': defaultTargetPlatform.name},
+        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Analytics test_event sent')),
+          );
+        }
+      },
+    );
   }
 }
