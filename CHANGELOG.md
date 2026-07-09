@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning].
 - CI no longer runs on a plain push to `main`/`develop`; it now runs only on pull requests and on a `v*` release tag
 - README now links directly to the deployed PWA
 - Telegram build notification now fires on every CI run, including pull requests (previously tag-only)
+- Telegram notification now includes the live PWA link when the web deploy succeeds
 - Web PWA shows a loading spinner over the splash screen until the app's first frame renders
 
 ## [0.5.1+17] - 2026-07-08
