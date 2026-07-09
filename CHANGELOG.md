@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [0.6.1+19] - 2026-07-09
+
+### Added
+
+- Dev-only floating debug button (draggable-overlay pattern): a draggable bug-icon that opens the debug screen (tap) or hides itself (long-press), shown only in debug mode. The debug screen gains a Firebase test card — trigger a fatal crash, a non-fatal error (Android/iOS) or an analytics event (all platforms) to verify Crashlytics/Analytics against the `acits-dev` project.
+
 ### Fixed
 
 - CI provisions Firebase configs for the new per-flavor layout (`ios/flavors/{dev,prod}/`) and installs the flutterfire CLI so the iOS `bundle-service-file` build phase can select the right plist; the stale `ios/Runner/GoogleService-Info.plist.example` copy no longer breaks the pipeline
 - Removed the FlutterFire `upload-crashlytics-symbols` Xcode build phase (it looked for the Crashlytics run script in SPM's DerivedData and failed the unsigned CI build with `ProcessException: No such file or directory`); `uploadDebugSymbols` set to false in `firebase.json`
+- Emptied `Runner.entitlements` (kept the original as `.example`) so a personal (free) Apple team can sign local device builds — the inherited Push Notifications / Associated Domains capabilities aren't supported without a paid Apple Developer Program
+- Re-added a guarded Crashlytics dSYM upload build phase: uploads symbols on release/profile builds (readable iOS crash traces) and skips cleanly on debug/CI (`--no-codesign`) builds where no dSYM exists, instead of failing the build
 
 ## [0.6.0+18] - 2026-07-09
 
