@@ -90,8 +90,8 @@ jobs:
 
       # Format only hand-written code (line length 100). Generated files
       # (*.g.dart, *.config.dart, *.swagger.dart, *.chopper.dart, *.gen.dart,
-      # locale_keys) are excluded: their exact formatting depends on generator
-      # patch versions and is not something contributors hand-maintain.
+      # locale_keys, firebase_options) are excluded: their exact formatting
+      # depends on generator/CLI versions and isn't hand-maintained.
       - name: Verify formatting
         run: |
           files=$(find lib test -name '*.dart' \
@@ -100,7 +100,8 @@ jobs:
             ! -name '*.swagger.dart' \
             ! -name '*.chopper.dart' \
             ! -name '*.gen.dart' \
-            ! -name 'locale_keys.g.dart')
+            ! -name 'locale_keys.g.dart' \
+            ! -name 'firebase_options.dart')
           dart format --output=none --set-exit-if-changed -l 100 $files
 
   ##### analyse #####
