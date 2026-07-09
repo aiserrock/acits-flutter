@@ -4,7 +4,10 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,7 +40,77 @@ class DebugScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return ListView(children: const [_SearchSpeciesCard(), _ConnectionCard(), _UIKitCard()]);
+    return ListView(
+      children: const [_FirebaseTestCard(), _SearchSpeciesCard(), _ConnectionCard(), _UIKitCard()],
+    );
+  }
+}
+
+/// Проверка Firebase (dev-проект acits-dev): Crashlytics и Analytics.
+class _FirebaseTestCard extends StatelessWidget {
+  const _FirebaseTestCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 8.0),
+              const Text('Firebase', style: StyleRes.subTitle),
+              const SizedBox(height: 8.0),
+              // Crashlytics существует только на android/ios.
+              if (!kIsWeb) ...[
+                PrimaryButton(
+                  onPressed: () async {
+                    await FirebaseCrashlytics.instance.log('manual test crash from DebugScreen');
+                    await FirebaseCrashlytics.instance.setCustomKey('test_source', 'debug_screen');
+                    FirebaseCrashlytics.instance.crash();
+                  },
+                  child: Text('Test crash (fatal)'.toUpperCase()),
+                ),
+                const SizedBox(height: 8.0),
+                PrimaryButton(
+                  onPressed: () async {
+                    await FirebaseCrashlytics.instance.recordError(
+                      Exception('manual non-fatal test error from DebugScreen'),
+                      StackTrace.current,
+                      fatal: false,
+                    );
+                    _snack(context, 'Non-fatal error recorded');
+                  },
+                  child: Text('Test non-fatal error'.toUpperCase()),
+                ),
+                const SizedBox(height: 8.0),
+              ],
+              PrimaryButton(
+                onPressed: () async {
+                  await FirebaseAnalytics.instance.logEvent(
+                    name: 'test_event',
+                    parameters: {
+                      'source': 'debug_screen',
+                      'platform': kIsWeb ? 'web' : defaultTargetPlatform.name,
+                    },
+                  );
+                  _snack(context, 'Analytics test_event sent');
+                },
+                child: Text('Test analytics event'.toUpperCase()),
+              ),
+              const SizedBox(height: 8.0),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _snack(BuildContext context, String msg) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    }
   }
 }
 
