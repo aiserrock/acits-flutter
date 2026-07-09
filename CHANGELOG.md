@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning].
 ### Fixed
 
 - CI provisions Firebase configs for the new per-flavor layout (`ios/flavors/{dev,prod}/`) and installs the flutterfire CLI so the iOS `bundle-service-file` build phase can select the right plist; the stale `ios/Runner/GoogleService-Info.plist.example` copy no longer breaks the pipeline
+- Removed the FlutterFire `upload-crashlytics-symbols` Xcode build phase (it looked for the Crashlytics run script in SPM's DerivedData and failed the unsigned CI build with `ProcessException: No such file or directory`); `uploadDebugSymbols` set to false in `firebase.json`
 
 ## [0.6.0+18] - 2026-07-09
 
