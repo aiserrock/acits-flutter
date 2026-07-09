@@ -7,25 +7,25 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-- Web PWA now boots ~4s faster: `main.dart.js` loads immediately instead of waiting on service-worker registration (which stalled and hit a 4s fallback timeout on GitHub Pages)
+- iOS now has `Profile-dev` / `Profile-prod` build configurations, so `flutter build ios --profile --flavor {dev,prod}` works (Android profile builds already worked)
+- iOS builds via Swift Package Manager (hybrid): SPM-capable plugins use SPM, the rest stay on CocoaPods
 
 ### Changed
 
 - CI no longer runs on a plain push to `main`/`develop`; it now runs only on pull requests and on a `v*` release tag
+- CI now builds a signed release: the dev flavor on a PR, the prod flavor on a `v*` tag (both signed with the release keystore); artifacts are named `acits-dev-release` / `acits-prod-release`
 - README now links directly to the deployed PWA
 - Telegram build notification now fires on every CI run, including pull requests (previously tag-only)
 - Telegram notification now includes the live PWA link when the web deploy succeeds
 - Web PWA shows a loading spinner over the splash screen until the app's first frame renders
 - Bundle identifier changed to `ru.acits` (prod) / `ru.acits.dev` (dev) across Android and iOS; iOS signing team set to `45G32KJDV7`
-
-### Added
-
-- iOS now has `Profile-dev` / `Profile-prod` build configurations, so `flutter build ios --profile --flavor {dev,prod}` works (Android profile builds already worked)
+- `assetLinks.json` fingerprint updated to the release keystore's certificate
 
 ### Fixed
 
+- Web PWA now boots ~4s faster: `main.dart.js` loads immediately instead of waiting on service-worker registration (which stalled and hit a 4s fallback timeout on GitHub Pages)
 - iOS pod install no longer fails on a stale `Podfile.lock` that pinned Firebase 8.9.0 against `firebase_core 4.x` (which needs Firebase 12.x)
 
 ## [0.5.1+17] - 2026-07-08
