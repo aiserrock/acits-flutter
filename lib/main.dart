@@ -41,8 +41,14 @@ Future<void> main() async {
 
 /// Корневой виджет приложения. Оборачивает [MyApp] в [EasyLocalization],
 /// который должен стоять выше [MaterialApp] в дереве.
+///
+/// [overlayBuilder] — необязательная обёртка над деревом MaterialApp (передаётся
+/// в её `builder:`). dev-сборка использует её для плавающей debug-кнопки; в prod
+/// не задаётся.
 class AcitsApp extends StatelessWidget {
-  const AcitsApp({super.key});
+  const AcitsApp({super.key, this.overlayBuilder});
+
+  final TransitionBuilder? overlayBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +57,15 @@ class AcitsApp extends StatelessWidget {
       path: L10n.translationsPath,
       fallbackLocale: L10n.fallbackLocale,
       startLocale: L10n.fallbackLocale,
-      child: const MyApp(),
+      child: MyApp(overlayBuilder: overlayBuilder),
     );
   }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, this.overlayBuilder});
+
+  final TransitionBuilder? overlayBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +93,7 @@ class MyApp extends StatelessWidget {
       color: ColorRes.accent,
       scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
       routerConfig: getIt<GoRouter>(),
+      builder: overlayBuilder,
     );
   }
 }

@@ -10,6 +10,7 @@ import 'package:logging/logging.dart';
 import 'package:acits_flutter/main.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
 import 'di/di_container.dart';
+import 'ui/debug_screen/debug_overlay.dart';
 
 // Раньше dev-сборка подмешивала Charles-сертификаты прошлого разработчика в
 // глобальный HttpOverrides (см. закомментированный _addDebugHttpCerts ниже).
@@ -40,7 +41,8 @@ Future<void> main() async {
   _setupLogging();
   // if (!kIsWeb) await _addDebugHttpCerts(); // см. комментарий выше
   await initDevDi();
-  runApp(const AcitsApp());
+  // Плавающая debug-кнопка поверх приложения (только dev, только debug mode).
+  runApp(AcitsApp(overlayBuilder: (_, child) => DebugOverlay(child: child ?? const SizedBox())));
 }
 
 void _setupLogging() {
