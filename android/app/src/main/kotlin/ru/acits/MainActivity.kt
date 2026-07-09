@@ -1,4 +1,4 @@
-package io.github.andx2.acits
+package ru.acits
 
 import io.flutter.embedding.android.FlutterActivity
 
