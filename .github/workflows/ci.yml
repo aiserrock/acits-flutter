@@ -37,12 +37,13 @@ jobs:
           cache: true
 
       # Firebase configs are gitignored; materialise them from the committed
-      # *.example templates so codegen/analysis/tests can run.
+      # *.example templates so codegen/analysis/tests can run. iOS plists are
+      # per-flavor (ios/flavors/) and only needed at build time (bundle-service
+      # build phase), not for codegen — so not provisioned here.
       - name: Provision Firebase placeholders
         run: |
           cp android/app/src/dev/google-services.json.example android/app/src/dev/google-services.json
           cp android/app/src/prod/google-services.json.example android/app/src/prod/google-services.json
-          cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
 
       - name: Install dependencies
         run: flutter pub get
@@ -311,16 +312,30 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-spm-
 
-      # Firebase config is gitignored; materialise it from the committed
-      # *.example template, then override with the real secret if configured.
+      # Per-flavor Firebase plists (gitignored) — materialise both from their
+      # *.example templates, then override with the real secrets if configured.
+      # The Xcode `flutterfire bundle-service-file` build phase picks the right
+      # one by build configuration (Debug/Release/Profile-{dev,prod}).
       - name: Provision Firebase config
         env:
-          GOOGLE_SERVICE_INFO: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }}
+          GOOGLE_SERVICE_INFO_DEV: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_DEV }}
+          GOOGLE_SERVICE_INFO_PROD: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
         run: |
-          cp ios/Runner/GoogleService-Info.plist.example ios/Runner/GoogleService-Info.plist
-          if [ -n "$GOOGLE_SERVICE_INFO" ]; then
-            echo "$GOOGLE_SERVICE_INFO" | base64 --decode > ios/Runner/GoogleService-Info.plist
+          cp ios/flavors/dev/GoogleService-Info.plist.example ios/flavors/dev/GoogleService-Info.plist
+          cp ios/flavors/prod/GoogleService-Info.plist.example ios/flavors/prod/GoogleService-Info.plist
+          if [ -n "$GOOGLE_SERVICE_INFO_DEV" ]; then
+            echo "$GOOGLE_SERVICE_INFO_DEV" | base64 --decode > ios/flavors/dev/GoogleService-Info.plist
           fi
+          if [ -n "$GOOGLE_SERVICE_INFO_PROD" ]; then
+            echo "$GOOGLE_SERVICE_INFO_PROD" | base64 --decode > ios/flavors/prod/GoogleService-Info.plist
+          fi
+
+      # The iOS build's flutterfire bundle-service-file build phase needs the
+      # flutterfire CLI on PATH to copy the right plist into the .app.
+      - name: Install flutterfire CLI
+        run: |
+          dart pub global activate flutterfire_cli
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
 
       # Unsigned release build (no paid Apple Developer Program for signing).
       # --build-number matches the Android build so both artifacts from one run
