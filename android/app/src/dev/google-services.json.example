@@ -1,8 +1,8 @@
 {
   "project_info": {
     "project_number": "YOUR_PROJECT_NUMBER",
-    "project_id": "your-firebase-project-id",
-    "storage_bucket": "your-firebase-project-id.appspot.com"
+    "project_id": "acits-dev",
+    "storage_bucket": "acits-dev.firebasestorage.app"
   },
   "client": [
     {
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "YOUR_ANDROID_API_KEY"
+          "current_key": "YOUR_DEV_ANDROID_API_KEY"
         }
       ],
       "services": {

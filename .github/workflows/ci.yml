@@ -157,12 +157,11 @@ jobs:
         run: flutter test
 
   ##### build #####
-  # Android/iOS builds only run where they earn their cost: on PRs (catch a
-  # broken build before merge) and on a release tag (produce the artifact
-  # that gets attached to the GitHub Release). A plain push to main/develop
-  # doesn't build them — merging already implies the PR build passed.
+  # PR builds the dev flavor; a v* tag builds prod. Both are signed release
+  # builds (release keystore from secrets). A plain push to main/develop
+  # builds nothing — merging already implies the PR build passed.
   build-android:
-    name: Build Android (dev APK)
+    name: Build Android (signed release)
     needs: [lint, analyse, test]
     if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -178,6 +177,18 @@ jobs:
           name: workspace
 
       - run: tar -xzf workspace.tar.gz
+
+      # dev on PR, prod on a tag. Downstream steps read these outputs.
+      - name: Select flavor
+        id: flavor
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "name=dev"   >> "$GITHUB_OUTPUT"
+            echo "target=test/dev/main.dart" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=prod"  >> "$GITHUB_OUTPUT"
+            echo "target=lib/main.dart" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/setup-java@v5
         with:
@@ -209,23 +220,46 @@ jobs:
             echo "$GOOGLE_SERVICES_PROD" | base64 --decode > android/app/src/prod/google-services.json
           fi
 
-      # Debug build so it is signed with the debug keystore (no release
-      # signing secrets needed in CI). --build-number is stamped from the
-      # workflow run number so every CI build gets a unique, increasing
-      # build number instead of the static one committed in pubspec.yaml.
-      - name: Build dev APK
-        run: flutter build apk --debug --flavor dev --target test/dev/main.dart --build-number=$GITHUB_RUN_NUMBER
+      # Decode the release keystore and write key.properties, which
+      # keystoreConfig.gradle reads to sign the release build.
+      - name: Provision release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "ANDROID_KEYSTORE_BASE64 is not set — cannot sign release build." >&2
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/keystore/release.jks
+          cat > android/keystore/key.properties <<EOF
+          storeFile=../keystore/release.jks
+          storePassword=$STORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          EOF
+
+      # Signed release build. --build-number is stamped from the run number so
+      # every CI build gets a unique, increasing build number.
+      - name: Build signed release APK
+        run: |
+          flutter build apk --release \
+            --flavor ${{ steps.flavor.outputs.name }} \
+            --target ${{ steps.flavor.outputs.target }} \
+            --build-number="$GITHUB_RUN_NUMBER"
 
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
-          name: app-dev-debug-apk
-          path: build/app/outputs/flutter-apk/app-dev-debug.apk
+          name: acits-${{ steps.flavor.outputs.name }}-release
+          path: build/app/outputs/flutter-apk/app-${{ steps.flavor.outputs.name }}-release.apk
           if-no-files-found: error
           retention-days: 14
 
   build-ios:
-    name: Build iOS (unsigned)
+    name: Build iOS (unsigned release)
     needs: [lint, analyse, test]
     if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
     runs-on: macos-latest
@@ -242,6 +276,18 @@ jobs:
 
       - run: tar -xzf workspace.tar.gz
 
+      # dev on PR, prod on a tag.
+      - name: Select flavor
+        id: flavor
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "name=dev"   >> "$GITHUB_OUTPUT"
+            echo "target=test/dev/main.dart" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=prod"  >> "$GITHUB_OUTPUT"
+            echo "target=lib/main.dart" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -251,7 +297,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Cache Swift Package Manager artifacts (SPM is default in Flutter 3.44).
+      # SPM-capable plugins build via Swift Package Manager; the rest stay on
+      # CocoaPods (hybrid). The flag is a machine setting, not a repo file.
+      - name: Enable Swift Package Manager
+        run: flutter config --enable-swift-package-manager
+
+      # Cache SPM's downloaded binary artifacts (Firebase etc.) across runs.
       - name: Cache SwiftPM
         uses: actions/cache@v6
         with:
@@ -271,23 +322,27 @@ jobs:
             echo "$GOOGLE_SERVICE_INFO" | base64 --decode > ios/Runner/GoogleService-Info.plist
           fi
 
-      # --build-number is stamped from the workflow run number, same as the
-      # Android build, so both artifacts from one CI run carry a matching,
-      # unique build number instead of the static one in pubspec.yaml.
-      - name: Build iOS (no codesign, dev flavor)
-        run: flutter build ios --debug --no-codesign --flavor dev --target test/dev/main.dart --build-number=$GITHUB_RUN_NUMBER
+      # Unsigned release build (no paid Apple Developer Program for signing).
+      # --build-number matches the Android build so both artifacts from one run
+      # carry the same unique build number.
+      - name: Build iOS (release, no codesign)
+        run: |
+          flutter build ios --release --no-codesign \
+            --flavor ${{ steps.flavor.outputs.name }} \
+            --target ${{ steps.flavor.outputs.target }} \
+            --build-number="$GITHUB_RUN_NUMBER"
 
       - name: Package .app
         run: |
           APP_PATH=$(find build/ios -name '*.app' -type d | head -1)
           test -n "$APP_PATH"
           cd "$(dirname "$APP_PATH")"
-          zip -ry "$GITHUB_WORKSPACE/Runner-dev-debug.app.zip" "$(basename "$APP_PATH")"
+          zip -ry "$GITHUB_WORKSPACE/Runner-${{ steps.flavor.outputs.name }}.app.zip" "$(basename "$APP_PATH")"
 
       - uses: actions/upload-artifact@v7
         with:
-          name: app-dev-debug-ios
-          path: Runner-dev-debug.app.zip
+          name: acits-${{ steps.flavor.outputs.name }}-ios
+          path: Runner-${{ steps.flavor.outputs.name }}.app.zip
           if-no-files-found: error
           retention-days: 14
 
@@ -358,8 +413,8 @@ jobs:
         uses: actions/deploy-pages@v4
 
   ##### release (tags only) #####
-  # Publishes the GitHub Release: attaches the dev APK built above and writes
-  # release notes from CHANGELOG.md. Pushing a tag is the whole release
+  # Publishes the GitHub Release: attaches the signed prod APK built above and
+  # writes release notes from CHANGELOG.md. Pushing a tag is the whole release
   # process — no manual release-page editing.
   release:
     name: Publish GitHub Release
@@ -373,7 +428,7 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          name: app-dev-debug-apk
+          name: acits-prod-release
           path: release-assets
 
       # Release notes are an extract of CHANGELOG.md, nothing invented here:
@@ -407,7 +462,7 @@ jobs:
           NOTES: ${{ steps.changelog.outputs.notes }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            release-assets/app-dev-debug.apk \
+            release-assets/app-prod-release.apk \
             --title "$GITHUB_REF_NAME" \
             --notes "$NOTES"
 
@@ -448,7 +503,7 @@ jobs:
           fi
 
           # Version name from pubspec.yaml + the actual build number this run
-          # stamped onto the APK/IPA (flutter build ... --build-number=$GITHUB_RUN_NUMBER),
+          # stamped onto the APK/IPA (flutter build ... --build-number="$GITHUB_RUN_NUMBER"),
           # not the stale +N suffix committed in pubspec.yaml.
           version_name=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: *([0-9.]+)\+.*/\1/')
           version="${version_name}+${GITHUB_RUN_NUMBER}"
