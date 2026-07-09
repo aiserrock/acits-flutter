@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+### Fixed
+
+- CI provisions Firebase configs for the new per-flavor layout (`ios/flavors/{dev,prod}/`) and installs the flutterfire CLI so the iOS `bundle-service-file` build phase can select the right plist; the stale `ios/Runner/GoogleService-Info.plist.example` copy no longer breaks the pipeline
+
 ## [0.6.0+18] - 2026-07-09
 
 ### Added
