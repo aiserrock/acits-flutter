@@ -110,6 +110,6 @@ flutter_gen:
 patrol:
   app_name: ACITS
   android:
-    package_name: io.github.andx2.acits.dev
+    package_name: io.github.aiserrock.acits.dev
   ios:
-    bundle_id: io.github.andx2
+    bundle_id: io.github.aiserrock.acits.dev

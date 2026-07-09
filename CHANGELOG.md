@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning].
 - Telegram build notification now fires on every CI run, including pull requests (previously tag-only)
 - Telegram notification now includes the live PWA link when the web deploy succeeds
 - Web PWA shows a loading spinner over the splash screen until the app's first frame renders
+- Bundle identifier changed to `io.github.aiserrock.acits` (prod) / `io.github.aiserrock.acits.dev` (dev) across Android and iOS; iOS signing team set to `45G32KJDV7`
 
 ## [0.5.1+17] - 2026-07-08
 
