@@ -18,6 +18,15 @@ and this project adheres to [Semantic Versioning].
 - Telegram build notification now fires on every CI run, including pull requests (previously tag-only)
 - Telegram notification now includes the live PWA link when the web deploy succeeds
 - Web PWA shows a loading spinner over the splash screen until the app's first frame renders
+- Bundle identifier changed to `ru.acits` (prod) / `ru.acits.dev` (dev) across Android and iOS; iOS signing team set to `45G32KJDV7`
+
+### Added
+
+- iOS now has `Profile-dev` / `Profile-prod` build configurations, so `flutter build ios --profile --flavor {dev,prod}` works (Android profile builds already worked)
+
+### Fixed
+
+- iOS pod install no longer fails on a stale `Podfile.lock` that pinned Firebase 8.9.0 against `firebase_core 4.x` (which needs Firebase 12.x)
 
 ## [0.5.1+17] - 2026-07-08
 
