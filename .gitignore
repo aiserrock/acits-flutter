@@ -34,7 +34,6 @@
 .fvm/
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -76,6 +75,8 @@ android/app/google-services.json
 android/app/src/dev/google-services.json
 android/app/src/prod/google-services.json
 ios/Runner/GoogleService-Info.plist
+ios/flavors/dev/GoogleService-Info.plist
+ios/flavors/prod/GoogleService-Info.plist
 macos/Runner/GoogleService-Info.plist
 
 # Android signing (release keystore + credentials). test.keystore is the
