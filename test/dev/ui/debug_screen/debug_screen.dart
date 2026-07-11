@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/domain/env.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
@@ -135,7 +136,7 @@ class _UIKitCard extends StatelessWidget {
                   // токеном подставляйте из тестового письма — живые токены в
                   // репозитории не храним.
                   const link =
-                      'https://dev-01.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/';
+                      'https://stage.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/';
                   context.push('${AppRoutes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
                 },
                 child: Text('Email confirm'.toUpperCase()),
@@ -148,11 +149,8 @@ class _UIKitCard extends StatelessWidget {
   }
 }
 
-const _domainUrlList = [
-  'https://app.acits.ru',
-  'https://dev-01.app.acits.ru',
-  'https://dev-1.app.acits.ru',
-];
+/// Список контуров для ручного переключения: prod, stage, dev-0..3.
+final _domainUrlList = AcitsEnvUrls.all;
 
 class _ConnectionCard extends StatefulWidget {
   const _ConnectionCard();
@@ -169,7 +167,8 @@ class _ConnectionCardState extends State<_ConnectionCard> {
   final _formKey = GlobalKey<FormState>();
   final _proxyController = TextEditingController();
 
-  int _domainIndex = 1;
+  /// По умолчанию выбран stage (совпадает с дефолтом dev-флейвора).
+  int _domainIndex = _domainUrlList.indexOf(AcitsEnvUrls.stage);
 
   @override
   void initState() {
@@ -196,23 +195,13 @@ class _ConnectionCardState extends State<_ConnectionCard> {
                 ),
                 const SizedBox(height: 24.0),
                 const Text('Domain', style: StyleRes.subTitle),
-                RadioListTile<int>(
-                  value: 0,
-                  groupValue: _domainIndex,
-                  onChanged: _domainUrlChanged,
-                  title: Text(_domainUrlList[0]),
-                ),
-                RadioListTile<int>(
-                  value: 1,
-                  groupValue: _domainIndex,
-                  onChanged: _domainUrlChanged,
-                  title: Text(_domainUrlList[1]),
-                ),
-                RadioListTile<int>(
-                  value: 2,
-                  groupValue: _domainIndex,
-                  onChanged: _domainUrlChanged,
-                  title: Text(_domainUrlList[2]),
+                ..._domainUrlList.asMap().entries.map(
+                  (entry) => RadioListTile<int>(
+                    value: entry.key,
+                    groupValue: _domainIndex,
+                    onChanged: _domainUrlChanged,
+                    title: Text(entry.value),
+                  ),
                 ),
                 const SizedBox(height: 16.0),
                 PrimaryButton(text: 'Применить', onPressed: () => _accept(context)),
