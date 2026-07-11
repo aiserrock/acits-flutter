@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 /// Сервис конфигурации
 @singleton
@@ -36,28 +37,35 @@ class ConfigService {
   }
 
   Future<ValuesForSelection?> getTypeValues({int? currentShelterId}) async {
+    Log.debug('Get type values: shelterId=${currentShelterId ?? _authService.currentShelterId}');
     final result = await _acitsClient.apiV1ValuesForSelectionGet(
       xCurrentShelter: currentShelterId ?? _authService.currentShelterId,
     );
     if (result.body != null) {
       _typeValues = json.decode(utf8.decode(result.bodyBytes));
+      Log.info('Type values loaded: keys=${_typeValues?.length ?? 0}');
       return result.body;
     } else {
+      Log.warning('Get type values failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
 
   Future<List<AnimalAttribute>> getAnimalAttr({int? currentShelterId}) async {
     final shelterId = currentShelterId ?? _authService.currentShelterId;
+    Log.debug('Get animal attributes: shelterId=$shelterId');
     if (_animalAttributes != null && _animalAttributesShelterId == shelterId) {
+      Log.debug('Animal attributes returned from cache: count=${_animalAttributes!.length}');
       return _animalAttributes!;
     }
     final result = await _acitsClient.apiV1AnimalsAttributesGet(xCurrentShelter: shelterId);
     if (result.body != null) {
       _animalAttributes = result.body!;
       _animalAttributesShelterId = shelterId;
+      Log.info('Animal attributes loaded: count=${_animalAttributes!.length}');
       return _animalAttributes!;
     } else {
+      Log.warning('Get animal attributes failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }

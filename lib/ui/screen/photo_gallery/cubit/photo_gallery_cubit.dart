@@ -4,6 +4,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/cubit/photo_gallery_state.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/widget/gallery_item_data_x.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -37,6 +38,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
 
   /// Загружает изображения животного и добавляет пресетные аватарки.
   Future<void> _init() async {
+    Log.debug('PhotoGalleryCubit._init animalId=$animalId');
     safeEmit(state.copyWith(data: const DataState.loading()));
     try {
       final animal = await _animalService.fetchAnimalDetail(id: animalId);
@@ -44,8 +46,10 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
         ...animal.images.map<GalleryItemData>((e) => GalleryItemData.fromAnimalImage(e)),
         ..._galleryImageSet.map<GalleryItemData>((e) => GalleryItemData(assetPath: e.path)),
       ];
+      Log.info('PhotoGalleryCubit._init ok: ${items.length} items');
       safeEmit(state.copyWith(data: DataState.content(items)));
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('PhotoGalleryCubit._init failed', e, s);
       safeEmit(state.copyWith(data: DataState.error(e)));
     }
   }
@@ -85,11 +89,14 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
   Future<bool> submit() async {
     final list = state.data.valueOrNull;
     if (list == null) return false;
+    Log.debug('PhotoGalleryCubit.submit animalId=$animalId, chosen=$choosedCount');
     safeEmit(state.copyWith(data: const DataState.loading()));
     try {
       await _animalService.changeAnimalPhotos(animalId, list);
+      Log.info('PhotoGalleryCubit.submit ok: animalId=$animalId');
       return true;
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('PhotoGalleryCubit.submit failed', e, s);
       safeEmit(state.copyWith(data: DataState.error(e)));
       return false;
     }

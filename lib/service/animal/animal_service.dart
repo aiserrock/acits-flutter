@@ -13,6 +13,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 const _maxAnimalImageSize = 1024;
 const _notesListLimit = 25;
@@ -30,6 +31,7 @@ class AnimalService {
     int offset = 0,
     String? searchRequest,
   }) async {
+    Log.debug('Fetch animal list: limit=$limit offset=$offset search=$searchRequest');
     final result = await _client.apiV1AnimalsGet(
       limit: limit,
       offset: offset,
@@ -38,22 +40,27 @@ class AnimalService {
     );
 
     if (result.body != null) {
+      Log.info('Animal list: ${result.body?.results?.length ?? 0} items');
       return result.body;
     } else {
+      Log.warning('Fetch animal list failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
 
   /// Получить детальное представление животного по его ID
   Future<AnimalRead> fetchAnimalDetail({required int id}) async {
+    Log.debug('Fetch animal detail: id=$id');
     final result = await _client.apiV1AnimalsIdGet(
       id: id.toString(),
       xCurrentShelter: _authService.currentShelterId,
     );
 
     if (result.body != null) {
+      Log.info('Animal detail: id=${result.body!.id}');
       return result.body!;
     } else {
+      Log.warning('Fetch animal detail failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
@@ -65,6 +72,10 @@ class AnimalService {
     int? parentId,
     String? searchRequest,
   }) async {
+    Log.debug(
+      'Fetch animal species: level=$level limit=$limit offset=$offset '
+      'parentId=$parentId search=$searchRequest',
+    );
     final result = await _client.apiV1AnimalsSpeciesGet(
       level: level,
       limit: limit,
@@ -77,13 +88,16 @@ class AnimalService {
     final data = result.body?.results;
 
     if (data != null) {
+      Log.info('Animal species: ${data.length} items');
       return data;
     } else {
+      Log.warning('Fetch animal species failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
 
   Future<AnimalRead?> createAnimal(AnimalWrite animal) async {
+    Log.debug('Create animal');
     animal = animal.copyWith(
       shelter: _authService.shelterRole?.currentShelter,
       placeOfRelease: animal.placeOfRelease ?? '',
@@ -97,13 +111,16 @@ class AnimalService {
     final data = result.body;
 
     if (data != null) {
+      Log.info('Animal created: id=${data.id}');
       return data;
     } else {
+      Log.warning('Create animal failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
 
   Future<AnimalRead?> updateAnimal(int id, AnimalWrite animal) async {
+    Log.debug('Update animal: id=$id');
     animal = animal.copyWith(
       shelter: _authService.shelterRole?.currentShelter,
       placeOfRelease: animal.placeOfRelease ?? '',
@@ -118,8 +135,10 @@ class AnimalService {
     final data = result.body;
 
     if (data != null) {
+      Log.info('Animal updated: id=${data.id}');
       return data;
     } else {
+      Log.warning('Update animal failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
@@ -131,6 +150,7 @@ class AnimalService {
   }
 
   Future<AnimalRead> changeAnimalPhotos(int animalId, List<GalleryItemData> images) async {
+    Log.debug('Change animal photos: animalId=$animalId images=${images.length}');
     final animal = await _client.apiV1AnimalsIdGet(
       id: animalId.toString(),
       xCurrentShelter: _authService.currentShelterId,
@@ -191,21 +211,26 @@ class AnimalService {
     final data = result.body;
 
     if (data != null) {
+      Log.info('Animal photos changed: id=${data.id}');
       return data;
     } else {
+      Log.warning('Change animal photos failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
 
   Future<void> deleteAnimal(String id) async {
+    Log.debug('Delete animal: id=$id');
     final result = await _client.apiV1AnimalsIdDelete(
       id: id,
       xCurrentShelter: _authService.currentShelterId,
     );
 
     if (result.error != null) {
+      Log.warning('Delete animal failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
+    Log.info('Animal deleted: id=$id');
   }
 
   Future<PaginatedAnimalNoteList?> fetchAnimalNotes(
@@ -213,6 +238,7 @@ class AnimalService {
     int limit = _notesListLimit,
     int? offset = 0,
   }) async {
+    Log.debug('Fetch animal notes: animalId=$animalId limit=$limit offset=$offset');
     final result = await _client.apiV1AnimalsNotesGet(
       animal: animalId,
       limit: limit,
@@ -224,8 +250,10 @@ class AnimalService {
     final data = result.body;
 
     if (data != null) {
+      Log.info('Animal notes: ${data.results?.length ?? 0} items');
       return data;
     } else {
+      Log.warning('Fetch animal notes failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
@@ -236,6 +264,7 @@ class AnimalService {
     required String text,
     List<PlatformFile>? files,
   }) async {
+    Log.debug('Patch animal note: id=$id animalId=$animalId files=${files?.length ?? 0}');
     final content = PatchedAnimalNote(
       id: id,
       animal: animalId,
@@ -251,21 +280,26 @@ class AnimalService {
     final data = result.body;
 
     if (data != null) {
+      Log.info('Animal note patched: id=${data.id}');
       return data;
     } else {
+      Log.warning('Patch animal note failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
 
   Future<bool> deleteAnimalNote({required int id}) async {
+    Log.debug('Delete animal note: id=$id');
     final result = await _client.apiV1AnimalsNotesIdDelete(
       id: id,
       xCurrentShelter: _authService.currentShelterId,
     );
 
     if (result.error == null) {
+      Log.info('Animal note deleted: id=$id');
       return true;
     } else {
+      Log.warning('Delete animal note failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
@@ -275,6 +309,7 @@ class AnimalService {
     required String text,
     List<PlatformFile>? files,
   }) async {
+    Log.debug('Create animal note: animalId=$animalId files=${files?.length ?? 0}');
     final content = AnimalNote(animal: animalId, content: text, files: _prepareNoteFiles(files));
 
     final result = await _client.apiV1AnimalsNotesPost(
@@ -285,8 +320,10 @@ class AnimalService {
     final data = result.body;
 
     if (data != null) {
+      Log.info('Animal note created: id=${data.id}');
       return data;
     } else {
+      Log.warning('Create animal note failed: ${result.error}');
       throw MessagedException(error: result.error);
     }
   }
@@ -306,6 +343,7 @@ class AnimalService {
 
   /// Скачать и сохранить во временной директории файл карточки животного
   Future<File> fetchPdfAnimalCard(int animalId) async {
+    Log.debug('Fetch PDF animal card: animalId=$animalId');
     // TODO: extract to DI
     final repo = getIt<DocumentRepository>();
     final raw = await repo.fetchAnimalDoc(animalId);

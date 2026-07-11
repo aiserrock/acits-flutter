@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
@@ -18,8 +19,10 @@ class EmailConfirmRepository {
   static const _requiredPathSegment = '/api/v1/users/verify-email/';
 
   Future<void> confirmEmail(String confirmLink) async {
+    Log.debug('Confirm email');
     final uri = Uri.tryParse(confirmLink);
     if (!_isTrustedConfirmLink(uri)) {
+      Log.warning('Untrusted confirm link rejected: ${uri?.host ?? '<unparseable>'}');
       throw EmailConfirmException();
     }
 
@@ -31,6 +34,7 @@ class EmailConfirmRepository {
     }
 
     await _client.getUri(uri!, options: Options(followRedirects: false));
+    Log.info('Email confirmed: ${uri.host}');
   }
 
   /// Ссылка должна быть HTTPS, вести на `*.acits.ru` (или сам `acits.ru`) и

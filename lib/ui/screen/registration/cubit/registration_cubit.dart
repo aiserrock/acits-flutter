@@ -5,6 +5,7 @@ import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/registration/cubit/registration_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 /// Cubit флоу регистрации.
 ///
@@ -45,10 +46,15 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   /// snackbar). Бросает исключение наружу для показа сообщения.
   Future<bool> submitAdmin(UserShelterAdminSerializers admin) async {
     if (state.submitting) return false;
+    Log.debug('RegistrationCubit.submitAdmin email=${admin.email}');
     safeEmit(state.copyWith(submitting: true));
     try {
       final result = await _authService.registrationAdmin(admin);
+      Log.info('RegistrationCubit.submitAdmin ok: email=${admin.email}');
       return result is UserShelterAdminSerializers;
+    } catch (e, s) {
+      Log.error('RegistrationCubit.submitAdmin failed', e, s);
+      rethrow;
     } finally {
       safeEmit(state.copyWith(submitting: false));
     }
@@ -60,10 +66,15 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   /// snackbar). Бросает исключение наружу для показа сообщения.
   Future<bool> submitCustomer(UserShelterWorkerSerializers customer) async {
     if (state.submitting) return false;
+    Log.debug('RegistrationCubit.submitCustomer email=${customer.email}');
     safeEmit(state.copyWith(submitting: true));
     try {
       final result = await _authService.registrationCustomer(customer);
+      Log.info('RegistrationCubit.submitCustomer ok: email=${customer.email}');
       return result is UserShelterWorkerSerializers;
+    } catch (e, s) {
+      Log.error('RegistrationCubit.submitCustomer failed', e, s);
+      rethrow;
     } finally {
       safeEmit(state.copyWith(submitting: false));
     }

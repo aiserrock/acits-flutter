@@ -9,6 +9,7 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 /// Сервис назначений
 @singleton
@@ -20,6 +21,7 @@ class PrescriptionService {
   final ConfigService _configService;
 
   Future<PaginatedPrescriptionExecutionTodayList?> fetchTodayPrescriptionList() async {
+    Log.debug('Fetch today prescription executions');
     if (_configService.typeValues == null) {
       await _configService.getTypeValues();
     }
@@ -32,8 +34,10 @@ class PrescriptionService {
       to: to.toIso8601String(),
     );
     if (result.body != null) {
+      Log.info('Today prescription executions loaded: count=${result.body?.results?.length ?? 0}');
       return _toLocalExecutionsList(result.body);
     } else {
+      Log.warning('Fetch today prescription executions failed: ${result.error}');
       throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
@@ -49,6 +53,10 @@ class PrescriptionService {
     bool isActual = false,
     bool isOld = false,
   }) async {
+    Log.debug(
+      'Fetch prescriptions by animal: animalId=$animalId limit=$limit offset=$offset '
+      'isActual=$isActual isOld=$isOld',
+    );
     if (_configService.typeValues == null) {
       await _configService.getTypeValues();
     }
@@ -68,14 +76,17 @@ class PrescriptionService {
     );
     if (result.isSuccessful) {
       final page = PrescriptionListPage.fromJson(_decodeBody(result.bodyBytes));
+      Log.info('Prescriptions by animal loaded: animalId=$animalId count=${page.results.length}');
       return _toLocalList(page);
     } else {
+      Log.warning('Fetch prescriptions by animal failed: animalId=$animalId ${result.error}');
       throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
 
   /// получить назначение для животного по ID назначения
   Future<PrescriptionModel?> fetchPrescriptionById(int id) async {
+    Log.debug('Fetch prescription by id: id=$id');
     final result = await _acitsClient.apiV1PrescriptionsIdGet(
       id: id,
       xCurrentShelter: _authService.currentShelterId,
@@ -83,8 +94,10 @@ class PrescriptionService {
 
     if (result.isSuccessful) {
       final model = PrescriptionModel.fromJson(_decodeBody(result.bodyBytes));
+      Log.info('Prescription loaded: id=$id');
       return model.copyWith(executions: _toLocal(model.executions));
     } else {
+      Log.warning('Fetch prescription by id failed: id=$id ${result.error}');
       throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
@@ -94,6 +107,7 @@ class PrescriptionService {
   /// Тело шлём сырым JSON: сгенерённый `Prescription` — пустой oneOf-тип,
   /// его `toJson()` теряет поля.
   Future<PrescriptionModel?> createPrescription(PrescriptionModel prescription) async {
+    Log.debug('Create prescription: animalId=${prescription.animal}');
     final payload = prescription
         .copyWith(files: prescription.files ?? [], executions: _toUtc(prescription.executions))
         .toJson();
@@ -104,8 +118,11 @@ class PrescriptionService {
     );
 
     if (result.isSuccessful) {
-      return PrescriptionModel.fromJson(_decodeBody(result.bodyBytes));
+      final model = PrescriptionModel.fromJson(_decodeBody(result.bodyBytes));
+      Log.info('Prescription created: id=${model.id}');
+      return model;
     } else {
+      Log.warning('Create prescription failed: ${result.error ?? result.bodyString}');
       throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
@@ -125,6 +142,7 @@ class PrescriptionService {
     int limit = 25,
     int offset = 0,
   }) async {
+    Log.debug('Fetch drug list: search=$searchRequest limit=$limit offset=$offset');
     final result = await _acitsClient.apiV1ShelterDrugsGet(
       xCurrentShelter: _authService.currentShelterId,
       search: searchRequest,
@@ -132,14 +150,17 @@ class PrescriptionService {
       offset: offset,
     );
     if (result.body != null) {
+      Log.info('Drug list loaded: count=${result.body?.results?.length ?? 0}');
       return result.body;
     } else {
+      Log.warning('Fetch drug list failed: ${result.error ?? result.bodyString}');
       throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
 
   /// Изменить назначение
   Future<PrescriptionModel?> updatePrescription(PrescriptionModel prescription) async {
+    Log.debug('Update prescription: id=${prescription.id}');
     final payload = prescription
         .copyWith(files: prescription.files ?? [], executions: _toUtc(prescription.executions))
         .toJson();
@@ -150,8 +171,13 @@ class PrescriptionService {
     );
 
     if (result.isSuccessful) {
-      return PrescriptionModel.fromJson(_decodeBody(result.bodyBytes));
+      final model = PrescriptionModel.fromJson(_decodeBody(result.bodyBytes));
+      Log.info('Prescription updated: id=${model.id}');
+      return model;
     } else {
+      Log.warning(
+        'Update prescription failed: id=${prescription.id} ${result.error ?? result.bodyString}',
+      );
       throw MessagedException(error: result.error ?? result.bodyString);
     }
   }

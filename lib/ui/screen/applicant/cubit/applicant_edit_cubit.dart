@@ -1,6 +1,7 @@
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/staff/staff_service.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Cubit экрана создания/редактирования заявителя.
@@ -24,15 +25,18 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
   /// Загружает заявителя по id в режиме редактирования.
   Future<void> _init() async {
     if (!isEdit) return;
+    Log.debug('ApplicantEditCubit._init: load id=$applicantId');
     safeEmit(const DataState.loading());
     try {
       final applicant = await _service.fetchApplicantById(id: applicantId!);
+      Log.info('ApplicantEditCubit._init ok: id=$applicantId');
       safeEmit(
         DataState.content(
           applicant ?? const Applicant(firstName: '', lastName: '', phoneNumber: ''),
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('ApplicantEditCubit._init failed: id=$applicantId', e, s);
       safeEmit(DataState.error(e));
     }
   }
@@ -42,6 +46,7 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
   /// Возвращает сохранённого [Applicant] при успехе, либо `null` при ошибке.
   Future<Applicant?> submit(Applicant draft) async {
     if (state.isLoading) return null;
+    Log.debug('ApplicantEditCubit.submit: isEdit=$isEdit id=$applicantId');
     final previous =
         state.valueOrNull ?? const Applicant(firstName: '', lastName: '', phoneNumber: '');
     safeEmit(const DataState.loading());
@@ -52,9 +57,11 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
       } else {
         result = await _service.createApplicant(applicant: draft);
       }
+      Log.info('ApplicantEditCubit.submit ok: id=$applicantId');
       safeEmit(DataState.content(result ?? previous));
       return result;
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('ApplicantEditCubit.submit failed: id=$applicantId', e, s);
       safeEmit(DataState.error(e));
       return null;
     }

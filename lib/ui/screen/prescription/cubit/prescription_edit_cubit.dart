@@ -17,6 +17,7 @@ import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/domain/prescription_model.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 const _shiftFirtsStartDate = Duration(days: 30);
 const _shiftLastStartDate = Duration(days: 120);
@@ -79,6 +80,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     required BuildContext context,
   }) async {
     if (_checkIsLoading) return null;
+    Log.debug('PrescriptionEditCubit.submit isEdit=$isEdit');
 
     final animalId = state.animal?.id;
     if (animalId == null) {
@@ -115,9 +117,11 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       final result = isEdit
           ? await _prescriptionService.updatePrescription(data)
           : await _prescriptionService.createPrescription(data);
+      Log.info('PrescriptionEditCubit.submit ok: id=${result?.id}');
       safeEmit(state.copyWith(screen: DataState.content(result)));
       return result;
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('PrescriptionEditCubit.submit failed', e, s);
       safeEmit(state.copyWith(screen: DataState.error(e)));
       return null;
     }
@@ -152,6 +156,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   /// виджет синхронизировал [TabController]; комментарий возвращается через
   /// колбэк [onComment].
   Future<int?> setEditedState({ValueChanged<String>? onComment}) async {
+    Log.debug('PrescriptionEditCubit.setEditedState id=$editPrescriptionId');
     PrescriptionModel? prescription;
     final id = editPrescriptionId;
     if (editPrescription != null) {
@@ -159,7 +164,8 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     } else if (id != null) {
       try {
         prescription = await _prescriptionService.fetchPrescriptionById(id);
-      } catch (e) {
+      } catch (e, s) {
+        Log.error('PrescriptionEditCubit.setEditedState failed', e, s);
         safeEmit(state.copyWith(screen: DataState.error(e)));
       }
     }
@@ -170,7 +176,8 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     final AnimalRead animal;
     try {
       animal = await _animalService.fetchAnimalDetail(id: animalId);
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('PrescriptionEditCubit.setEditedState failed', e, s);
       safeEmit(state.copyWith(screen: DataState.error(e)));
       return null;
     }
@@ -212,6 +219,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     }
 
     safeEmit(next);
+    Log.info('PrescriptionEditCubit.setEditedState ok: id=${prescription.id}');
 
     final type = prescription.myType;
     final tabIndex = _filteredTypes.indexOf(type);

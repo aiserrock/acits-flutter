@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_alice/alice.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:chopper/chopper.dart';
 import 'package:injectable/injectable.dart';
@@ -10,7 +11,9 @@ import 'package:acits_flutter/domain/env.dart';
 import 'package:acits_flutter/service/client/auth_interceptor.dart';
 import 'package:acits_flutter/service/client/header_inteceptor.dart';
 
+import '../../di/di_container.dart';
 import '../shared_pref/debug_preference_storage.dart';
+import 'alice_chopper_interceptor.dart';
 import 'http_logger_interceptor.dart';
 
 // Прокси (Charles): глобальный HttpOverrides.global (main.dart) покрывает
@@ -31,7 +34,11 @@ abstract class ClientRegisterDev {
     final chopper = ChopperClient(
       client: _proxyClient(ps),
       baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
-      interceptors: [headerInterceptor, HttpLoggingInterceptorUtf8()],
+      interceptors: [
+        headerInterceptor,
+        HttpLoggingInterceptorUtf8(),
+        AliceChopperInterceptor(getIt<Alice>()),
+      ],
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
     );
@@ -49,7 +56,7 @@ abstract class ClientRegisterDev {
       client: _proxyClient(ps),
       baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
       converter: $JsonSerializableConverter(),
-      interceptors: [HttpLoggingInterceptorUtf8()],
+      interceptors: [HttpLoggingInterceptorUtf8(), AliceChopperInterceptor(getIt<Alice>())],
     );
     final client = Openapi.create(client: chopper);
 

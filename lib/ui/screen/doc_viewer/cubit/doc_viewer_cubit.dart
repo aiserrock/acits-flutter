@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:acits_flutter/util/bloc_ext.dart';
 
@@ -19,11 +20,14 @@ class DocViewerCubit extends Cubit<DataState<File>> {
 
   /// Загружает файл документа. Повторно вызывается из UI при ошибке.
   Future<void> fetchData() async {
+    Log.debug('DocViewerCubit.fetchData');
     safeEmit(const DataState.loading());
     try {
       final file = await _fetcher();
+      Log.info('DocViewerCubit.fetchData ok: path=${file.path}');
       safeEmit(DataState.content(file));
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('DocViewerCubit.fetchData failed', e, s);
       safeEmit(DataState.error(e));
     }
   }
