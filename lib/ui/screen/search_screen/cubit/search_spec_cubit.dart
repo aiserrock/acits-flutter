@@ -4,6 +4,7 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const _searchBouncePeriod = Duration(milliseconds: 1000);
@@ -53,6 +54,7 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
   /// [resetOffset] — начать список заново (первая страница / обновление),
   /// иначе — догрузка следующей страницы к уже загруженным элементам.
   Future<void> loadData({required String? searchRequest, bool resetOffset = false}) async {
+    Log.debug('SearchSpecCubit.loadData search=$searchRequest, resetOffset=$resetOffset');
     if (resetOffset) {
       safeEmit(state.copyWith(offset: 0, data: const DataState.loading(), isPaging: false));
     } else if (!state.data.isLoading) {
@@ -68,6 +70,7 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
         searchRequest: searchRequest,
       );
       final list = [...(state.data.valueOrNull ?? <Species>[]), ...value];
+      Log.info('SearchSpecCubit.loadData ok: ${value.length} new, ${list.length} total');
       safeEmit(
         state.copyWith(
           offset: state.offset + value.length,
@@ -76,7 +79,8 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
           pagingError: () => null,
         ),
       );
-    } catch (error) {
+    } catch (error, s) {
+      Log.error('SearchSpecCubit.loadData failed', error, s);
       if (state.data.isLoading) {
         safeEmit(state.copyWith(data: DataState.error(error), isPaging: false));
       } else {

@@ -2,6 +2,7 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/comments/cubit/comment_edit_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,6 +41,7 @@ class CommentEditCubit extends Cubit<CommentEditState> {
   /// Возвращает созданный/обновлённый [AnimalNote] при успехе, либо
   /// пробрасывает исключение. По завершении сбрасывает флаг отправки.
   Future<AnimalNote?> submit(String text) async {
+    Log.debug('CommentEditCubit.submit isEdit=$isEdit animalId=$animalId');
     safeEmit(state.copyWith(isSubmitting: true));
     final file = state.attachedFile;
     final files = file != null ? [file] : <PlatformFile>[];
@@ -53,8 +55,10 @@ class CommentEditCubit extends Cubit<CommentEditState> {
               files: files,
             )
           : await _animalService.createAnimalNote(animalId: animalId, text: text, files: files);
+      Log.info('CommentEditCubit.submit ok: id=${result?.id}');
       return result;
-    } catch (_) {
+    } catch (e, s) {
+      Log.error('CommentEditCubit.submit failed', e, s);
       safeEmit(state.copyWith(isSubmitting: false));
       rethrow;
     }

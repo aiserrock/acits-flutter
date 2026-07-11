@@ -65,6 +65,11 @@ dependencies:
   talker_flutter: ^5.1.16
   talker_bloc_logger: ^5.1.17
 
+  # Alice — in-app HTTP-инспектор (как в a large production app). Chopper подключается
+  # через кастомный интерцептор (addHttpCall), Dio — через getDioInterceptor.
+  # Открывается из dev debug-меню (showInspector). Только dev-трафик.
+  flutter_alice: 2.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
