@@ -1,9 +1,11 @@
 # Примеры deeplink-ов для ручного тестирования.
 # Реальные ссылки с токенами берите из тестовых писем — живые токены в
-# репозитории не храним. Рабочий dev-контур: dev-01.app.acits.ru.
+# репозитории не храним.
+#
+# Контуры: prod app.acits.ru, stage stage.app.acits.ru, dev-N dev-N.app.acits.ru (N=0..3).
 
 # Подтверждение почты:
-https://dev-01.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/
+https://stage.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/
 
 # Подтверждение работника приюта:
-https://dev-01.app.acits.ru/api/v1/users/verify-worker/<uidb64>/<sidb64>/<token>/
+https://stage.app.acits.ru/api/v1/users/verify-worker/<uidb64>/<sidb64>/<token>/
