@@ -228,12 +228,13 @@ class RegistrationFormControllers {
       fathersName: orgMNameController.text,
       phoneNumber: orgPhoneController.text,
       address: '',
-      shelter: {
-        "name": orgShelterNameController.text,
-        "country": orgCountryNameController.text,
-        "city": orgCityNameController.text,
-        "region": orgRegionNameController.text,
-      },
+      isOfferSigned: true,
+      shelter: ShelterSerializers(
+        name: orgShelterNameController.text,
+        country: orgCountryNameController.text,
+        city: orgCityNameController.text,
+        region: orgRegionNameController.text,
+      ),
     );
   }
 
@@ -252,6 +253,7 @@ class RegistrationFormControllers {
       fathersName: '',
       phoneNumber: '',
       address: '',
+      isOfferSigned: true,
       role: role == CustomerRole.employer ? RoleEnum.worker : RoleEnum.guest,
     );
   }

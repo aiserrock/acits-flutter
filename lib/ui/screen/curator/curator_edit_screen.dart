@@ -150,7 +150,7 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
     final cubit = context.read<CuratorEditCubit>();
     if (cubit.state.isLoading) return;
     if (!(formKey.currentState?.validate() ?? false)) return;
-    final draft = (cubit.state.valueOrNull ?? Curator()).copyWith(
+    final draft = (cubit.state.valueOrNull ?? const Curator(firstName: '', lastName: '', phoneNumber: '', address: '')).copyWith(
       firstName: _nameController.text,
       lastName: _lastNameController.text,
       phoneNumber: _phoneController.text,

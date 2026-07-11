@@ -1,4 +1,5 @@
 import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_flutter/gen/api/openapi.enums.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
@@ -11,7 +12,7 @@ extension PrescriptionShortX on PrescriptionShort {
   }
 }
 
-extension MyTypeEnumX on MyTypeEnum {
+extension PrescriptionShortMyTypeEnumX on PrescriptionShortMyTypeEnum {
   String? get typeString {
     final service = getIt<ConfigService>();
     return service.getMyTypeName(this);
@@ -19,19 +20,17 @@ extension MyTypeEnumX on MyTypeEnum {
 
   String get startDateLabel {
     switch (this) {
-      case MyTypeEnum.courseOfTreatment:
-        return LocaleKeys.prescriptionCurrent.tr();
-      case MyTypeEnum.swaggerGeneratedUnknown:
+      case PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown:
         return '';
-      case MyTypeEnum.appointment:
-        return LocaleKeys.prescriptionCurrent.tr();
-      case MyTypeEnum.readmission:
-        return LocaleKeys.prescriptionCurrent.tr();
-      case MyTypeEnum.removingStitches:
-        return LocaleKeys.prescriptionCurrent.tr();
-      case MyTypeEnum.woundHealing:
-        return LocaleKeys.prescriptionCurrent.tr();
-      case MyTypeEnum.analysis:
+      case PrescriptionShortMyTypeEnum.courseOfTreatment:
+      case PrescriptionShortMyTypeEnum.appointment:
+      case PrescriptionShortMyTypeEnum.readmission:
+      case PrescriptionShortMyTypeEnum.removingStitches:
+      case PrescriptionShortMyTypeEnum.woundHealing:
+      case PrescriptionShortMyTypeEnum.analysis:
+      case PrescriptionShortMyTypeEnum.parasitesTreatment:
+      case PrescriptionShortMyTypeEnum.vaccination:
+      case PrescriptionShortMyTypeEnum.other:
         return LocaleKeys.prescriptionCurrent.tr();
     }
   }

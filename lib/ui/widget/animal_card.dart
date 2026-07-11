@@ -247,7 +247,7 @@ class AnimalCardWidget extends StatelessWidget {
           TextSpan(text: LocaleKeys.animalAdmitted.tr(), style: StyleRes.content),
           const TextSpan(text: (': '), style: StyleRes.content),
           TextSpan(
-            text: itemData?.dateJoined?.toDateShortOnly ?? '',
+            text: itemData?.dateJoined.toDateShortOnly ?? '',
             style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
           ),
         ],
@@ -261,12 +261,12 @@ class AnimalCardWidget extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(
-            text: (itemData?.spec?['parent_name'] ?? ''),
+            text: (itemData?.spec?.parentName ?? ''),
             style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
           ),
           const TextSpan(text: (', '), style: StyleRes.mainContent),
           TextSpan(
-            text: itemData?.spec?['name'] ?? '',
+            text: itemData?.spec?.name ?? '',
             style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
           ),
         ],

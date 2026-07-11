@@ -234,14 +234,14 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
   Widget _buildHeaderImagePager(BuildContext context, AnimalRead animal) {
     return Stack(
       children: [
-        if (animal.images?.isEmpty ?? true)
+        if (animal.images.isEmpty)
           Center(
             child: CupertinoButton(
               onPressed: () => _onPhotoPressed(context, animal),
               child: _buildAddPhotoIcon(60.0),
             ),
           ),
-        if (animal.images?.isNotEmpty ?? false)
+        if (animal.images.isNotEmpty)
           Positioned.fill(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 100.0),
@@ -252,29 +252,27 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                 ),
                 child: PageView(
                   controller: _imagePageController,
-                  children:
-                      animal.images?.map<Widget>((image) {
-                        return Stack(
-                          children: [
-                            Positioned.fill(
-                              child: Image.network(
-                                UrlCorsProxy.add(image.image?.medium) ?? '',
-                                fit: BoxFit.cover,
-                              ),
+                  children: animal.images.map<Widget>((image) {
+                    return Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.network(
+                            UrlCorsProxy.add(image.image.medium) ?? '',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              splashColor: ColorRes.accent.withValues(alpha: .4),
+                              onTap: () => _onPhotoPressed(context, animal),
                             ),
-                            Positioned.fill(
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  splashColor: ColorRes.accent.withValues(alpha: .4),
-                                  onTap: () => _onPhotoPressed(context, animal),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList() ??
-                      [],
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
                 ),
               ),
             ),
@@ -335,10 +333,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               onPressed: Navigator.of(context).pop,
             ),
             const Spacer(),
-            if ((animal.images?.length ?? 1) > 1)
+            if (animal.images.length > 1)
               SmoothPageIndicator(
                 controller: _imagePageController,
-                count: animal.images?.length ?? 1,
+                count: animal.images.length,
                 effect: const ExpandingDotsEffect(
                   activeDotColor: ColorRes.indicatorActive,
                   dotColor: ColorRes.indicatorInactive,

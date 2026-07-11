@@ -11,6 +11,7 @@ import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cub
 import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
 import 'package:acits_flutter/ui/widget/visible_item.dart';
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
@@ -25,7 +26,7 @@ class PrescriptionEditScreen extends StatelessWidget {
   });
 
   final int? editPrescriptionId;
-  final Prescription? editPrescription;
+  final PrescriptionModel? editPrescription;
   final AnimalRead? animal;
 
   @override
@@ -44,7 +45,7 @@ class PrescriptionEditScreen extends StatelessWidget {
 class _PrescriptionEditView extends StatefulWidget {
   const _PrescriptionEditView({this.editPrescription});
 
-  final Prescription? editPrescription;
+  final PrescriptionModel? editPrescription;
 
   @override
   State<_PrescriptionEditView> createState() => _PrescriptionEditViewState();
@@ -71,10 +72,10 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
     super.initState();
     final editPrescription = widget.editPrescription;
     tabController = TabController(
-      initialIndex: editPrescription?.myType is MyTypeEnum
-          ? max(MyTypeEnum.values.indexOf(editPrescription!.myType!), 0)
+      initialIndex: editPrescription != null
+          ? max(PrescriptionShortMyTypeEnum.values.indexOf(editPrescription.myType), 0)
           : 0,
-      length: MyTypeEnum.values.length - 1,
+      length: PrescriptionShortMyTypeEnum.values.length - 1,
       vsync: this,
     );
     tabController.addListener(_onTabChanged);
