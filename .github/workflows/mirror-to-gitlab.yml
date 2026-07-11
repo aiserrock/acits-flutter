@@ -1,0 +1,46 @@
+name: Mirror to GitLab
+
+# Полное зеркало GitHub -> self-hosted GitLab (gitlab.acits.ru).
+# GitHub = source of truth. GitLab = точная копия (все ветки + все теги).
+# Любой push ветки или тега синхронизирует репозиторий целиком.
+
+on:
+  push:
+    branches: ['**']
+    tags: ['**']
+  workflow_dispatch: # ручной запуск для диагностики (GitHub иногда не регистрирует новый workflow с первого push)
+
+# Не запускать несколько зеркалирований одновременно — иначе гонка при push.
+concurrency:
+  group: mirror-to-gitlab
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (полная история + все refs)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push всех веток и тегов в GitLab
+        env:
+          GL_USER: ${{ secrets.GITLAB_MIRROR_USER }}
+          GL_TOKEN: ${{ secrets.GITLAB_MIRROR_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          GITLAB_URL="https://${GL_USER}:${GL_TOKEN}@gitlab.acits.ru/nasha-priroda/acits-mobile.git"
+
+          # checkout с fetch-depth:0 уже стянул все ветки (refs/remotes/origin/*) и теги;
+          # --prune актуализирует их на случай удалений между checkout и этим шагом.
+          git fetch --prune --tags origin "+refs/heads/*:refs/remotes/origin/*"
+
+          # Явные refspec вместo `push --mirror`: mirror из не-bare checkout утащил бы
+          # в GitLab мусорные refs/remotes/origin/*. Пушим прямо в URL (без `remote add`),
+          # чтобы токен не оседал в .git/config раннера.
+          # --prune = семантика зеркала: удалённые на GitHub ветки/теги удаляются и на GitLab.
+          git push --prune --force "$GITLAB_URL" \
+            "refs/remotes/origin/*:refs/heads/*" \
+            "refs/tags/*:refs/tags/*"
