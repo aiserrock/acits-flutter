@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [0.7.0+20] - 2026-07-11
+
+### Added
+
+- Backend environments switcher in the dev debug screen: prod / stage / dev-0..3 plus a custom URL field (Mockoon or any ad-hoc stand); the dev flavor now defaults to stage. Applying an environment shows an "Applying…" splash (Lottie paw) and rebuilds the whole widget tree, so all clients and blocs pick up the new base URL without a manual restart
+- Charles/mitmproxy support in the dev flavor: a proxy toggle with host:port field in the debug screen, applied globally via `HttpOverrides` and per-client for chopper (requires a full manual app restart, the UI says so)
+- In-app logging with Talker: a log screen in the dev debug menu showing HTTP traffic, BLoC transitions and manual log entries. Leveled logs (debug/info/warning/error) across all services, repositories and cubits; error/critical entries are forwarded to Crashlytics as non-fatals in prod
+- Alice HTTP inspector in the dev debug menu: full request/response browsing (with cURL export) for both chopper and dio traffic via a custom chopper interceptor
+- Mockoon mock server (`mockoon/`) with two organisations, per-route error variants (401/403/404/400/429/500) and response shapes captured from production
+
+### Changed
+
+- Android toolchain bumped to Gradle 8.14.3 / AGP 8.11.1 / Kotlin 2.2.20 and the app itself migrated to built-in Kotlin, clearing the Flutter 3.44 build warnings; deprecated `buildDir` usages replaced with `layout.buildDirectory`
+
 ## [0.6.1+19] - 2026-07-09
 
 ### Added
