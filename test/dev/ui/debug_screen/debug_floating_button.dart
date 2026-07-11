@@ -15,8 +15,8 @@ class DebugFloatingButton extends StatefulWidget {
 }
 
 class _DebugFloatingButtonState extends State<DebugFloatingButton> {
-  // Стартовая позиция — правый край, примерно на 60% высоты.
-  Alignment _alignment = const Alignment(0.95, 0.4);
+  // Стартовая позиция — правый край, строго по центру по вертикали.
+  Alignment _alignment = const Alignment(1.0, 0.0);
 
   @override
   Widget build(BuildContext context) {
