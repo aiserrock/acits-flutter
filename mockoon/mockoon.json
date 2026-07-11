@@ -28,8 +28,8 @@
           "sendFileAsBody": false,
           "rules": [],
           "rulesOperator": "AND",
-          "disableTemplating": false,
-          "fallbackTo404": false,
+          "disableTemplating": true,
+          "fallbackTo404": true,
           "default": true,
           "crudKey": "id",
           "callbacks": []
