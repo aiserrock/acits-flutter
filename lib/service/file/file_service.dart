@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:acits_flutter/service/file/file_repository.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -14,9 +15,14 @@ class FileService {
   /// Загрузить и сохранить PDF файл
   Future<File> loadFile(String url, String title) async {
     final filePath = await createNewFilePath(title);
-    await _fileRepository.getFile(url, filePath);
-    final file = File(filePath);
-    return file;
+    Log.info('Download file: $url → $filePath');
+    try {
+      await _fileRepository.getFile(url, filePath);
+    } catch (e, s) {
+      Log.error('Download file failed: $url', e, s);
+      rethrow;
+    }
+    return File(filePath);
   }
 
   /// Создать новый уникальный путь для файла
