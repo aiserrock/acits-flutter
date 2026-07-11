@@ -41,7 +41,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
     try {
       final animal = await _animalService.fetchAnimalDetail(id: animalId);
       final items = <GalleryItemData>[
-        ...(animal.images?.map<GalleryItemData>((e) => GalleryItemData.fromAnimalImage(e)) ?? []),
+        ...animal.images.map<GalleryItemData>((e) => GalleryItemData.fromAnimalImage(e)),
         ..._galleryImageSet.map<GalleryItemData>((e) => GalleryItemData(assetPath: e.path)),
       ];
       safeEmit(state.copyWith(data: DataState.content(items)));

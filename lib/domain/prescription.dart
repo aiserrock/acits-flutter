@@ -1,5 +1,4 @@
 import 'package:acits_flutter/gen/api/openapi.swagger.dart';
-import 'package:acits_flutter/gen/api/openapi.enums.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/service/config/config_service.dart';

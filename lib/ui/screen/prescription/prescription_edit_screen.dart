@@ -280,7 +280,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
   }
 
   Widget _buildAnimalTitle(AnimalRead animal) {
-    final avatarUrl = UrlCorsProxy.add(animal.avatar?.image?.small);
+    final avatarUrl = UrlCorsProxy.add(animal.avatar?.image.small);
     return Row(
       children: [
         if (avatarUrl != null)

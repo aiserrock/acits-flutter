@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/domain/prescription.dart';
 import 'package:acits_flutter/domain/prescription_model.dart';
 
 /// Виджет карточки назначения животного в детальном представлении
