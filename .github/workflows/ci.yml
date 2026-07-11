@@ -362,13 +362,14 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  ##### build web (tags only) #####
-  # Deploys the prod web build to GitHub Pages so every release gets a
-  # browsable PWA without needing a separate server.
+  ##### build web (tags + manual dispatch) #####
+  # Deploys the dev web build to GitHub Pages so every release gets a
+  # browsable developer PWA without needing a separate server.
+  # workflow_dispatch redeploys Pages on demand without cutting a tag.
   build-web:
     name: Build & deploy web (GitHub Pages)
     needs: [lint, analyse, test]
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -416,12 +417,16 @@ jobs:
       # stage reject the github.io origin the same way — the backend CORS
       # allowlist has only acits.ru) and keeps the floating debug button, so
       # the environment can be switched right in the browser.
+      # CORS_PROXY_BASE wraps every API/file URL in a public CORS proxy —
+      # a TEMPORARY workaround until the backend adds the Pages origin to its
+      # allowlist (see "CORS для web-PWA" in the release checklist / docs).
       # --base-href matches the Pages project path
       # (https://<owner>.github.io/<repo>/) so asset/router URLs resolve
       # correctly when served from a subpath instead of the domain root.
       - name: Build web (dev)
         run: |
           flutter build web -t test/dev/main.dart --release \
+            --dart-define=CORS_PROXY_BASE=https://proxy.cors.sh/ \
             --base-href "/${GITHUB_REPOSITORY#*/}/"
 
       - uses: actions/upload-pages-artifact@v4
