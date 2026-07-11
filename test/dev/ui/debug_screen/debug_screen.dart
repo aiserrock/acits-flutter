@@ -10,6 +10,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_alice/alice.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -78,6 +79,12 @@ class _LogsCard extends StatelessWidget {
                   MaterialPageRoute<void>(builder: (_) => TalkerScreen(talker: getIt<Talker>())),
                 ),
                 child: Text('Открыть логи (Talker)'.toUpperCase()),
+              ),
+              const SizedBox(height: 8.0),
+              // Alice — отдельный HTTP-инспектор (запросы/ответы, curl, поиск).
+              PrimaryButton(
+                onPressed: () => getIt<Alice>().showInspector(),
+                child: Text('HTTP-инспектор (Alice)'.toUpperCase()),
               ),
               const SizedBox(height: 8.0),
             ],
