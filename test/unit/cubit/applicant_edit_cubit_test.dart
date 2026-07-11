@@ -31,7 +31,10 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(cubit.isEdit, isFalse);
-      expect(cubit.state, DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: '')));
+      expect(
+        cubit.state,
+        DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: '')),
+      );
       verifyNever(() => service.fetchApplicantById(id: any(named: 'id')));
 
       await cubit.close();

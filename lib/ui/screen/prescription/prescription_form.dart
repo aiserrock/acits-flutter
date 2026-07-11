@@ -21,29 +21,31 @@ class PrescriptionForm extends StatelessWidget {
     final cubit = context.read<PrescriptionEditCubit>();
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: BlocSelector<PrescriptionEditCubit, PrescriptionEditState, PrescriptionShortMyTypeEnum?>(
-        selector: (state) => state.type,
-        builder: (_, type) {
-          return Column(
-            children: [
-              if (type == PrescriptionShortMyTypeEnum.courseOfTreatment) _buildPeriodSelector(cubit),
-              BlocSelector<PrescriptionEditCubit, PrescriptionEditState, TreatmentPeriod>(
-                selector: (state) => state.treatmentPeriod,
-                builder: (_, periodData) => _periodForm(context, cubit, periodData),
-              ),
-              type.hasDrugs ? _buildDrugList(context, cubit) : const SizedBox(),
-              FormEditCard([
-                EditCardData(
-                  controller: commentContoroller,
-                  label: LocaleKeys.prescriptionComment.tr(),
-                  maxLength: _maxCommentLength,
-                ),
-              ]),
-              const SizedBox(height: 64.0),
-            ],
-          );
-        },
-      ),
+      child:
+          BlocSelector<PrescriptionEditCubit, PrescriptionEditState, PrescriptionShortMyTypeEnum?>(
+            selector: (state) => state.type,
+            builder: (_, type) {
+              return Column(
+                children: [
+                  if (type == PrescriptionShortMyTypeEnum.courseOfTreatment)
+                    _buildPeriodSelector(cubit),
+                  BlocSelector<PrescriptionEditCubit, PrescriptionEditState, TreatmentPeriod>(
+                    selector: (state) => state.treatmentPeriod,
+                    builder: (_, periodData) => _periodForm(context, cubit, periodData),
+                  ),
+                  type.hasDrugs ? _buildDrugList(context, cubit) : const SizedBox(),
+                  FormEditCard([
+                    EditCardData(
+                      controller: commentContoroller,
+                      label: LocaleKeys.prescriptionComment.tr(),
+                      maxLength: _maxCommentLength,
+                    ),
+                  ]),
+                  const SizedBox(height: 64.0),
+                ],
+              );
+            },
+          ),
     );
   }
 

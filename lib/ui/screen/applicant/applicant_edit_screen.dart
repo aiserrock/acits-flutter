@@ -152,13 +152,15 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
     final cubit = context.read<ApplicantEditCubit>();
     if (cubit.state.isLoading) return;
     if (!(formKey.currentState?.validate() ?? false)) return;
-    final applicant = (cubit.state.valueOrNull ?? const Applicant(firstName: '', lastName: '', phoneNumber: '')).copyWith(
-      firstName: _nameController.text,
-      lastName: _lastNameController.text,
-      phoneNumber: _phoneController.text,
-      contactDetails: _socialController.text,
-      email: _emailController.text,
-    );
+    final applicant =
+        (cubit.state.valueOrNull ?? const Applicant(firstName: '', lastName: '', phoneNumber: ''))
+            .copyWith(
+              firstName: _nameController.text,
+              lastName: _lastNameController.text,
+              phoneNumber: _phoneController.text,
+              contactDetails: _socialController.text,
+              email: _emailController.text,
+            );
     final result = await cubit.submit(applicant);
     if (result != null && mounted) _navigator.pop(result);
   }
