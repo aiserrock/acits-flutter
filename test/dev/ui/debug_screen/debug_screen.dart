@@ -131,8 +131,11 @@ class _UIKitCard extends StatelessWidget {
               const SizedBox(height: 8.0),
               PrimaryButton(
                 onPressed: () {
+                  // Пример deeplink подтверждения почты. Реальную ссылку с
+                  // токеном подставляйте из тестового письма — живые токены в
+                  // репозитории не храним.
                   const link =
-                      'https://dev.acits.ru/api/v1/users/verify-email/MTYz/Mg/bcnwgl-1628091c27480b1975f3998b4a2565e6/';
+                      'https://dev-01.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/';
                   context.push('${AppRoutes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
                 },
                 child: Text('Email confirm'.toUpperCase()),
@@ -145,7 +148,11 @@ class _UIKitCard extends StatelessWidget {
   }
 }
 
-const _domainUrlList = ['https://app.acits.ru', 'https://dev.acits.ru', 'https://test.acits.ru'];
+const _domainUrlList = [
+  'https://app.acits.ru',
+  'https://dev-01.app.acits.ru',
+  'https://dev-1.app.acits.ru',
+];
 
 class _ConnectionCard extends StatefulWidget {
   const _ConnectionCard();
