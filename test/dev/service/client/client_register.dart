@@ -33,7 +33,10 @@ abstract class ClientRegisterDev {
 
     final chopper = ChopperClient(
       client: _proxyClient(ps),
-      baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
+      // wrapBase: на web с CORS_PROXY_BASE базовый URL оборачивается в
+      // CORS-прокси (бэкенд пускает только Origin acits.ru); chopper корректно
+      // доклеивает path к прокси-стилю https://proxy/https://host.
+      baseUrl: Uri.parse(UrlCorsProxy.wrapBase(baseUrl ?? env.apiUrl)),
       interceptors: [
         headerInterceptor,
         HttpLoggingInterceptorUtf8(),
@@ -54,7 +57,7 @@ abstract class ClientRegisterDev {
 
     final chopper = ChopperClient(
       client: _proxyClient(ps),
-      baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
+      baseUrl: Uri.parse(UrlCorsProxy.wrapBase(baseUrl ?? env.apiUrl)),
       converter: $JsonSerializableConverter(),
       interceptors: [HttpLoggingInterceptorUtf8(), AliceChopperInterceptor(getIt<Alice>())],
     );
