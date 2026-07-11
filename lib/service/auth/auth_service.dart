@@ -46,11 +46,10 @@ class AuthService extends ChangeNotifier {
 
   UserCurrentShelterSerializers? get shelterRole => _shelterRole;
 
-  String? get currentShelterId => _shelterRole?.currentShelter?.toString();
+  int? get currentShelterId => _shelterRole?.currentShelter;
 
-  ShelterShortSerializers? get currentShelter => _shelterList?.results?.firstWhereOrNull(
-    (shelter) => shelter.id.toString() == currentShelterId,
-  );
+  ShelterShortSerializers? get currentShelter =>
+      _shelterList?.results?.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
   Future<TokenRefresh?> refreshToken({String? refresh}) async {
     final request = TokenRefresh(access: _access, refresh: refresh ?? _refresh);
@@ -92,9 +91,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<UserCurrentShelterSerializers?> setCurrentShelter(int shelterId) async {
-    final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(
-      xCurrentShelter: shelterId.toString(),
-    );
+    final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(xCurrentShelter: shelterId);
     if (result.body != null) {
       _shelterRole = result.body;
       return _shelterRole;
@@ -104,6 +101,7 @@ class AuthService extends ChangeNotifier {
 
   void logout() {
     _access = _refresh = _shelterList = _shelterRole = null;
+    _authRepository.clearRefresh();
     notifyListeners();
     getIt<GoRouter>().go(AppRoutes.login);
   }
@@ -111,8 +109,7 @@ class AuthService extends ChangeNotifier {
   /// Попробовать обновить авторизацию из прошлой сессии если срок
   /// действия токена не истек
   Future<bool> tryRefreshLastAuth() async {
-    if (_refresh != null) return false;
-    final oldRefresh = await _authRepository.refresh;
+    final oldRefresh = _refresh ?? await _authRepository.refresh;
     if (oldRefresh == null) return false;
     return await refreshToken(
       refresh: oldRefresh,
@@ -152,9 +149,7 @@ class AuthService extends ChangeNotifier {
   Future<UserShelterWorkerSerializers?> registrationCustomer(
     UserShelterWorkerSerializers customer,
   ) async {
-    final result = await _acitsGuestClient.apiV1UsersWorkerRegisterPost(
-      body: customer.copyWith(role: roleEnumToJson(customer.role as RoleEnum)),
-    );
+    final result = await _acitsGuestClient.apiV1UsersWorkerRegisterPost(body: customer);
 
     if (result.body != null) {
       return result.body;

@@ -15,4 +15,7 @@ class AuthRepository {
 
   /// Прочитать refresh токен
   Future<String?> get refresh => _secureStorage.read(key: _refreshKey);
+
+  /// Удалить refresh токен из хранилища
+  Future<void> clearRefresh() => _secureStorage.delete(key: _refreshKey);
 }
