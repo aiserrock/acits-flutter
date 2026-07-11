@@ -7,17 +7,10 @@ import 'package:acits_flutter/res/lottie.dart';
 ///
 /// Показывается при смене окружения перед рестартом дерева, чтобы юзер видел,
 /// что настройки применяются (по мотивам a large production app «Restarting app…»,
-/// адаптировано с тематическим Lottie приюта).
+/// адаптировано с тематическим Lottie приюта). Кладётся в Stack внутри
+/// [RestartWidget], поэтому не требует внешнего Overlay/Navigator-контекста.
 class ApplyingOverlay extends StatelessWidget {
   const ApplyingOverlay({super.key});
-
-  /// Показывает заставку поверх всего через корневой [Overlay] и возвращает
-  /// хендл для скрытия. Живёт до рестарта дерева либо ручного [OverlayEntry.remove].
-  static OverlayEntry show(BuildContext context) {
-    final entry = OverlayEntry(builder: (_) => const ApplyingOverlay());
-    Overlay.of(context, rootOverlay: true).insert(entry);
-    return entry;
-  }
 
   @override
   Widget build(BuildContext context) {

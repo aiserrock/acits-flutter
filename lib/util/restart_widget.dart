@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
-/// Обёртка, позволяющая пересоздать всё поддерево виджетов «начисто».
-///
-/// Меняет [Key] у поддерева → Flutter выбрасывает и заново строит всё дерево,
-/// вместе со всеми BlocProvider/StatefulWidget. Нужно, когда пересоздаются
-/// DI-зависимости (смена окружения/прокси в dev): иначе виджеты продолжали бы
-/// держать старые ссылки на сервисы, захваченные в конструкторах.
+/// Обёртка над всем деревом приложения, которая умеет:
+///  1. Пересоздать поддерево «начисто» (смена [Key] → Flutter выбрасывает и
+///     заново строит дерево вместе со всеми BlocProvider/StatefulWidget). Нужно
+///     при пересоздании DI (смена окружения/прокси в dev), иначе виджеты держали
+///     бы старые ссылки на сервисы, захваченные в конструкторах.
+///  2. Показать поверх дерева полноэкранную заставку «Применение…» ([overlay])
+///     на время применения настроек. Заставка живёт в этом же дереве (Stack),
+///     поэтому не требует внешнего Overlay/Navigator-контекста.
 ///
 /// Использование:
 /// ```dart
 /// RestartWidget(child: MyApp());
-/// // ...откуда угодно:
+/// // показать заставку:
+/// RestartWidget.showOverlay(context, const ApplyingOverlay());
+/// // пересоздать дерево (и убрать заставку):
 /// RestartWidget.restartApp(context);
 /// ```
 class RestartWidget extends StatefulWidget {
@@ -18,9 +22,21 @@ class RestartWidget extends StatefulWidget {
 
   final Widget child;
 
-  static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_RestartWidgetState>()?.restart();
-  }
+  /// Хендл на состояние — стабилен между reset/init DI (RestartWidget сам не
+  /// пересоздаётся при рестарте поддерева), поэтому надёжнее, чем искать по
+  /// context после `getIt.reset()`, когда старый navigator-контекст мог
+  /// «отвязаться».
+  static _RestartWidgetState? _current;
+
+  /// Пересоздать всё дерево. Заодно скрывает заставку (новое дерево строится
+  /// без неё).
+  static void restartApp() => _current?.restart();
+
+  /// Показать полноэкранную заставку поверх дерева (без рестарта).
+  static void showOverlay(Widget overlay) => _current?.showOverlay(overlay);
+
+  /// Скрыть заставку.
+  static void hideOverlay() => _current?.hideOverlay();
 
   @override
   State<RestartWidget> createState() => _RestartWidgetState();
@@ -28,11 +44,45 @@ class RestartWidget extends StatefulWidget {
 
 class _RestartWidgetState extends State<RestartWidget> {
   Key _key = UniqueKey();
+  Widget? _overlay;
 
-  void restart() => setState(() => _key = UniqueKey());
+  @override
+  void initState() {
+    super.initState();
+    RestartWidget._current = this;
+  }
+
+  @override
+  void dispose() {
+    if (identical(RestartWidget._current, this)) RestartWidget._current = null;
+    super.dispose();
+  }
+
+  void restart() => setState(() {
+    _key = UniqueKey();
+    _overlay = null;
+  });
+
+  void showOverlay(Widget overlay) => setState(() => _overlay = overlay);
+
+  void hideOverlay() => setState(() => _overlay = null);
 
   @override
   Widget build(BuildContext context) {
-    return KeyedSubtree(key: _key, child: widget.child);
+    final child = KeyedSubtree(key: _key, child: widget.child);
+    if (_overlay == null) return child;
+
+    // Directionality/Material — заставка выше MaterialApp, у неё нет наследуемых
+    // Directionality и Material-контекста, задаём их явно.
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          child,
+          Material(type: MaterialType.transparency, child: _overlay),
+        ],
+      ),
+    );
   }
 }

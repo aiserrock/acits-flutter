@@ -7,6 +7,7 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/export.dart';
 
 const _shelterListDefaultLenght = 25;
@@ -57,20 +58,25 @@ class AuthService extends ChangeNotifier {
     if (result.body != null) {
       _access = result.body?.access;
       _refresh = result.body?.refresh ?? _refresh;
+      Log.info('Token refreshed');
       return result.body;
     }
+    Log.warning('Token refresh failed (status=${result.base.statusCode})');
     return null;
   }
 
   Future<TokenObtainPair?> login(String? login, String? pass) async {
+    Log.info('Login attempt: username=$login');
     final request = TokenObtainPair(username: login, password: pass);
     final result = await _acitsGuestClient.apiTokenPost(body: request);
     if (result.body != null) {
       _access = result.body?.access;
       _refresh = result.body?.refresh;
+      Log.info('Login success: username=$login');
       return result.body;
     }
     if (result.error != null) {
+      Log.warning('Login failed (status=${result.base.statusCode}): username=$login');
       switch (result.base.statusCode) {
         case 401:
           throw NotAuthorizedException(message: result.error.toString());
@@ -91,6 +97,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<UserCurrentShelterSerializers?> setCurrentShelter(int shelterId) async {
+    Log.info('Set current shelter: id=$shelterId');
     final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(xCurrentShelter: shelterId);
     if (result.body != null) {
       _shelterRole = result.body;
@@ -100,6 +107,7 @@ class AuthService extends ChangeNotifier {
   }
 
   void logout() {
+    Log.info('Logout');
     _access = _refresh = _shelterList = _shelterRole = null;
     _authRepository.clearRefresh();
     notifyListeners();

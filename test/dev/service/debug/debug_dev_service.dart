@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
 
 import '../../di/di_container.dart';
@@ -31,7 +34,9 @@ class DebugDevService implements DebugService {
   String? get proxyUrl => _storage.proxy;
 
   set domainUrl(String? domainUrl) {
-    _storage.baseUrl = domainUrl;
+    // Обрезаем хвостовые '/', иначе chopper склеит baseUrl + '/api/...' в
+    // '//api/...' (Mockoon это глотает, но в логах/URL выглядит криво).
+    _storage.baseUrl = domainUrl?.replaceAll(RegExp(r'/+$'), '');
   }
 
   String? get domainUrl => _storage.baseUrl;
@@ -54,35 +59,34 @@ class DebugDevService implements DebugService {
   /// Заставка живёт до рестарта дерева, который её уничтожает вместе со старым
   /// Overlay — отдельно скрывать не нужно.
   Future<void> reloadApp() async {
-    // Берём context ДО reset (после reset navigatorKey пересоздаётся и старый
-    // становится невалидным).
-    final context = getIt<GlobalKey<NavigatorState>>().currentContext;
+    // Заставка применения поверх всего — кладётся в Stack внутри RestartWidget
+    // (не через Overlay, т.к. debug-экран уже закрыт и Overlay-контекста нет).
+    // RestartWidget.current стабилен между reset/init DI.
+    RestartWidget.showOverlay(const ApplyingOverlay());
 
-    // Заставка применения поверх всего.
-    if (context != null && context.mounted) {
-      ApplyingOverlay.show(context);
-    }
     // Небольшая пауза, чтобы заставка успела отрисоваться и была видна.
     await Future<void>.delayed(const Duration(milliseconds: 900));
 
     await getIt.reset();
     await initDevDi();
 
+    // getIt.reset() пересоздал Talker — переустанавливаем bloc-observer на новый
+    // инстанс, иначе логи cubit'ов уходили бы в уничтоженный старый Talker.
+    Bloc.observer = createAppBlocObserver(getIt<Talker>());
+
     // Полный рестарт дерева виджетов: все BlocProvider (LoginBloc и др.)
-    // пересоздаются и берут СВЕЖИЙ AuthService/клиенты из getIt. Без этого
-    // старые блоки держали бы прежний AuthService (старый хост + токен),
-    // из-за чего логин уходил на один контур, а refresh/shelters — на другой.
-    if (context != null && context.mounted) {
-      RestartWidget.restartApp(context);
-    }
+    // пересоздаются и берут СВЕЖИЙ AuthService/клиенты из getIt. Заодно убирает
+    // заставку (новое дерево строится без неё). Без рестарта старые блоки держали
+    // бы прежний AuthService (старый хост+токен) → логин на один контур, а
+    // refresh/shelters — на другой.
+    RestartWidget.restartApp();
   }
 
-  /// Показать штатное уведомление внизу экрана о том, что для применения
-  /// настройки нужен ПОЛНЫЙ ручной перезапуск приложения (закрыть и открыть).
+  /// Показать снекбар снизу о том, что для применения прокси нужен ПОЛНЫЙ ручной
+  /// перезапуск приложения (закрыть и открыть заново).
   ///
-  /// Нужно для proxy: он ставится в `HttpOverrides`/`HttpClient` при создании
-  /// клиента, и мягкий рестарт дерева (reloadApp) его не всегда подхватывает —
-  /// системному прокси нужен свежий процесс. Показываем долго-живущий SnackBar.
+  /// Прокси ставится глобально (`HttpOverrides.global`) при старте процесса —
+  /// мягкий рестарт дерева его не применяет, нужен свежий процесс.
   void showRestartRequired([
     String message = 'Прокси изменён — перезапустите приложение вручную (закрыть и открыть)',
   ]) {
@@ -92,9 +96,8 @@ class DebugDevService implements DebugService {
       ..showSnackBar(
         SnackBar(
           content: Text(message),
-          duration: const Duration(seconds: 10),
+          duration: const Duration(seconds: 6),
           behavior: SnackBarBehavior.floating,
-          action: SnackBarAction(label: 'OK', onPressed: messenger.hideCurrentSnackBar),
         ),
       );
   }

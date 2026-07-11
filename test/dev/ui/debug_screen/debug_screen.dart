@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import '../../di/di_container.dart';
 import '../../service/debug/debug_dev_service.dart';
@@ -44,7 +45,45 @@ class DebugScreen extends StatelessWidget {
     // Порядок: сначала часто используемое (подключение/окружения), затем
     // вспомогательное (UIKit), внизу — Firebase-тесты и AnimalTypeSelector.
     return ListView(
-      children: const [_ConnectionCard(), _UIKitCard(), _FirebaseTestCard(), _SearchSpeciesCard()],
+      children: const [
+        _LogsCard(),
+        _ConnectionCard(),
+        _ProxyCard(),
+        _UIKitCard(),
+        _FirebaseTestCard(),
+        _SearchSpeciesCard(),
+      ],
+    );
+  }
+}
+
+/// Открывает экран логов Talker (сеть, bloc-переходы, ручные `Log.*`).
+class _LogsCard extends StatelessWidget {
+  const _LogsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 8.0),
+              const Text('Логи', style: StyleRes.subTitle),
+              const SizedBox(height: 8.0),
+              PrimaryButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => TalkerScreen(talker: getIt<Talker>())),
+                ),
+                child: Text('Открыть логи (Talker)'.toUpperCase()),
+              ),
+              const SizedBox(height: 8.0),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -158,7 +197,7 @@ final _domainUrlList = AcitsEnvUrls.all;
 /// Индекс пункта Custom в radiobutton-списке (сразу после списка контуров).
 const _customDomainIndex = -1;
 
-/// Секция подключения: выбор контура/custom-URL (mockoon) + proxy (Charles).
+/// Секция подключения: выбор контура/custom-URL (mockoon). Прокси — в [_ProxyCard].
 class _ConnectionCard extends StatefulWidget {
   const _ConnectionCard();
 
@@ -171,14 +210,10 @@ class _ConnectionCardState extends State<_ConnectionCard> {
 
   final DebugDevService _debug;
 
-  final _proxyController = TextEditingController();
   final _customUrlController = TextEditingController();
 
   /// Выбранный индекс в списке контуров; [_customDomainIndex] = выбран Custom.
   late int _domainIndex;
-
-  /// Включён ли proxy (Charles).
-  late bool _proxyEnabled;
 
   @override
   void initState() {
@@ -188,7 +223,6 @@ class _ConnectionCardState extends State<_ConnectionCard> {
 
   @override
   void dispose() {
-    _proxyController.dispose();
     _customUrlController.dispose();
     super.dispose();
   }
@@ -237,21 +271,6 @@ class _ConnectionCardState extends State<_ConnectionCard> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24.0),
-              // Proxy (Charles) — тумблер + адрес.
-              Row(
-                children: [
-                  const Text('Proxy (Charles)', style: StyleRes.subTitle),
-                  const Spacer(),
-                  Switch(value: _proxyEnabled, onChanged: _onProxyToggled),
-                ],
-              ),
-              TextField(
-                controller: _proxyController,
-                enabled: _proxyEnabled,
-                keyboardType: TextInputType.url,
-                decoration: const InputDecoration(hintText: '192.168.0.102:8888'),
-              ),
               const SizedBox(height: 16.0),
               PrimaryButton(text: 'Применить', onPressed: () => _accept(context)),
               const SizedBox(height: 16.0),
@@ -264,8 +283,6 @@ class _ConnectionCardState extends State<_ConnectionCard> {
   }
 
   void _init() {
-    _proxyController.text = _debug.proxyUrl ?? '';
-    _proxyEnabled = _debug.proxyEnabled;
     _customUrlController.text = _debug.customUrl ?? '';
 
     final domain = _debug.domainUrl;
@@ -286,8 +303,6 @@ class _ConnectionCardState extends State<_ConnectionCard> {
 
   void _onDomainChanged(int? index) => setState(() => _domainIndex = index ?? 0);
 
-  void _onProxyToggled(bool value) => setState(() => _proxyEnabled = value);
-
   void _accept(BuildContext context) {
     // Определяем целевой baseUrl: контур из списка либо custom-поле.
     final String? targetUrl;
@@ -305,41 +320,96 @@ class _ConnectionCardState extends State<_ConnectionCard> {
       targetUrl = _domainUrlList[_domainIndex];
     }
 
-    // Изменился ли флаг прокси — от этого зависит, нужен ли ПОЛНЫЙ ручной
-    // перезапуск (прокси ставится в HttpClient и системному прокси нужен свежий
-    // процесс — мягкий рестарт дерева его не подхватывает надёжно).
-    final proxyChanged = _proxyEnabled != _debug.proxyEnabled;
-
     _debug.domainUrl = targetUrl;
-    _debug.proxyEnabled = _proxyEnabled;
-    _debug.proxyUrl = _proxyController.text.trim();
 
     Navigator.of(context).pop();
-
-    if (proxyChanged) {
-      // Прокси вкл/выкл — НЕ авторестарт, просим перезапустить вручную и
-      // показываем уведомление (иначе прокси не применится/не отключится).
-      _debug.showRestartRequired();
-    } else {
-      // Смена контура/custom-URL — заставка «Применение…» + рестарт дерева.
-      _debug.reloadApp();
-    }
+    // Смена контура/custom-URL — заставка «Применение…» + рестарт дерева.
+    // (Клиенты пересоздаются из свежего baseUrl — этого достаточно.)
+    _debug.reloadApp();
   }
 
   void _reset(BuildContext context) {
-    final hadProxy = _debug.proxyEnabled;
     Navigator.of(context).pop();
     _debug.domainUrl = null;
-    _debug.proxyUrl = null;
-    _debug.proxyEnabled = false;
     _debug.customUrl = null;
+    _debug.reloadApp();
+  }
+}
 
-    if (hadProxy) {
-      // Прокси был включён — для его отключения нужен полный ручной рестарт.
-      _debug.showRestartRequired();
-    } else {
-      _debug.reloadApp();
-    }
+/// Секция прокси (Charles/mitmproxy) — отдельно от контуров, т.к. прокси
+/// применяется только при ПОЛНОМ ручном перезапуске приложения (мягкий рестарт
+/// дерева не пересоздаёт системные соединения). Своя кнопка + алерт.
+class _ProxyCard extends StatefulWidget {
+  const _ProxyCard();
+
+  @override
+  State<_ProxyCard> createState() => _ProxyCardState();
+}
+
+class _ProxyCardState extends State<_ProxyCard> {
+  _ProxyCardState() : _debug = getIt.get<DebugService>() as DebugDevService;
+
+  final DebugDevService _debug;
+  final _proxyController = TextEditingController();
+  late bool _proxyEnabled;
+
+  @override
+  void initState() {
+    super.initState();
+    _proxyEnabled = _debug.proxyEnabled;
+    _proxyController.text = _debug.proxyUrl ?? '';
+  }
+
+  @override
+  void dispose() {
+    _proxyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8.0),
+              Row(
+                children: [
+                  const Text('Proxy (Charles)', style: StyleRes.subTitle),
+                  const Spacer(),
+                  Switch(value: _proxyEnabled, onChanged: _onProxyToggled),
+                ],
+              ),
+              TextField(
+                controller: _proxyController,
+                enabled: _proxyEnabled,
+                keyboardType: TextInputType.url,
+                onChanged: (v) => _debug.proxyUrl = v.trim(),
+                decoration: const InputDecoration(
+                  hintText: '192.168.0.102:8888',
+                  helperText: 'перезапустите приложение вручную для применения',
+                  helperMaxLines: 2,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onProxyToggled(bool value) {
+    setState(() => _proxyEnabled = value);
+    // Сохраняем сразу (кнопки нет). Адрес тоже пишем — на случай, если юзер
+    // ввёл его до включения тумблера.
+    _debug.proxyEnabled = value;
+    _debug.proxyUrl = _proxyController.text.trim();
+    // При включении — предупреждаем, что нужен ручной перезапуск.
+    if (value) _debug.showRestartRequired();
   }
 }
 
