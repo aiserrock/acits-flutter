@@ -41,11 +41,13 @@ import 'package:acits_flutter/service/shared_pref/preference_storage.dart'
 import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart'
     as _i718;
 import 'package:acits_flutter/service/staff/staff_service.dart' as _i156;
+import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
+import 'package:talker_flutter/talker_flutter.dart' as _i207;
 
 import '../env/env_register.dart' as _i962;
 import '../service/client/client_register.dart' as _i913;
@@ -65,6 +67,7 @@ Future<_i174.GetIt> $initDevGetIt(
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final secureStorageRegister = _$SecureStorageRegister();
   final sharedPreferenceRegister = _$SharedPreferenceRegister();
+  final appLoggerModule = _$AppLoggerModule();
   final envDevRegistrer = _$EnvDevRegistrer();
   final dioRegisterDev = _$DioRegisterDev();
   final dioRegister = _$DioRegister();
@@ -83,6 +86,7 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.singleton<_i430.ColorRes>(() => _i430.ColorRes());
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
+  gh.singleton<_i207.Talker>(() => appLoggerModule.talker());
   gh.factory<_i531.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i361.Dio>(
     () => dioRegisterDev.createDioClient(),
@@ -185,6 +189,8 @@ Future<_i174.GetIt> $initDevGetIt(
 class _$SecureStorageRegister extends _i539.SecureStorageRegister {}
 
 class _$SharedPreferenceRegister extends _i718.SharedPreferenceRegister {}
+
+class _$AppLoggerModule extends _i197.AppLoggerModule {}
 
 class _$EnvDevRegistrer extends _i962.EnvDevRegistrer {}
 

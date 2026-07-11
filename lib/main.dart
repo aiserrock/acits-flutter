@@ -4,8 +4,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:acits_flutter/res/l10n.dart';
 import 'package:acits_flutter/res/color.dart';
@@ -13,6 +15,8 @@ import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
+import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
 
 Future<void> main() async {
@@ -37,6 +41,11 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initDi();
+
+  // Логи всех cubit'ов/bloc'ов идут в общий Talker (в prod-release он выключен).
+  Bloc.observer = createAppBlocObserver(getIt<Talker>());
+  Log.info('App start · flavor=prod');
+
   runApp(const AcitsApp());
 }
 
