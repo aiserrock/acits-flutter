@@ -5,10 +5,12 @@ import 'package:injectable/injectable.dart';
 @module
 @dev
 abstract class EnvDevRegistrer {
-  // Было: 'https://andx2.tplinkdns.com/cors/https://dev.acits.ru' — запросы шли
-  // через личный CORS-прокси прошлого разработчика (`andx2.tplinkdns.com`,
-  // сейчас недоступен), а хост `dev.acits.ru` не резолвится в DNS.
-  // Рабочий dev-контур — `dev-01.app.acits.ru` (алиас `dev-1.app.acits.ru`).
+  // Контур окружений (app-frontend/app-backend):
+  //   prod    → https://app.acits.ru
+  //   stage   → https://stage.app.acits.ru
+  //   dev-N   → https://dev-N.app.acits.ru (N = 0..3)
+  // dev-флейвор по умолчанию стартует со stage; переключение на любой контур —
+  // в debug-экране (см. AcitsEnvUrls / _domainUrlList).
   @dev
-  Env createEnv() => Env('https://dev-01.app.acits.ru');
+  Env createEnv() => Env(AcitsEnvUrls.stage);
 }
