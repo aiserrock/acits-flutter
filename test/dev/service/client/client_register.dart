@@ -13,6 +13,10 @@ import 'package:acits_flutter/service/client/header_inteceptor.dart';
 import '../shared_pref/debug_preference_storage.dart';
 import 'http_logger_interceptor.dart';
 
+// Прокси (Charles): глобальный HttpOverrides.global (main.dart) покрывает
+// картинки/dio, а chopper-клиенты получают ЯВНЫЙ IOClient с findProxy — иначе
+// на iOS/Android chopper не всегда подхватывает глобальный override для своих
+// keep-alive соединений (симптом: API мимо прокси, картинки — через).
 @module
 abstract class ClientRegisterDev {
   @dev
@@ -25,7 +29,7 @@ abstract class ClientRegisterDev {
     final baseUrl = ps.baseUrl;
 
     final chopper = ChopperClient(
-      client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
+      client: _proxyClient(ps),
       baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
       interceptors: [headerInterceptor, HttpLoggingInterceptorUtf8()],
       authenticator: authInterceptor,
@@ -42,7 +46,7 @@ abstract class ClientRegisterDev {
     final baseUrl = ps.baseUrl;
 
     final chopper = ChopperClient(
-      client: kIsWeb ? null : http.IOClient(_proxyClient(ps)),
+      client: _proxyClient(ps),
       baseUrl: Uri.parse(baseUrl ?? env.apiUrl),
       converter: $JsonSerializableConverter(),
       interceptors: [HttpLoggingInterceptorUtf8()],
@@ -52,20 +56,19 @@ abstract class ClientRegisterDev {
     return client;
   }
 
-  HttpClient _proxyClient(DebugPreferenceStorage ps) {
+  /// http-клиент для chopper: при включённом прокси — IOClient с findProxy +
+  /// доверием сертам (Charles); иначе дефолтный клиент. На web возвращаем null
+  /// (там HttpClient недоступен, chopper использует BrowserClient).
+  http.IOClient? _proxyClient(DebugPreferenceStorage ps) {
+    if (kIsWeb) return null;
     final t = HttpClient();
-
-    // Прокси (Charles/mitmproxy) применяется только при включённом тумблере.
     if (ps.proxyEnabled) {
       final proxyUrl = ps.proxy;
       if (proxyUrl != null && proxyUrl.isNotEmpty) {
         t.findProxy = (url) => 'PROXY $proxyUrl';
       }
-      // Charles перехватывает HTTPS своим сертификатом — доверяем любому серту,
-      // чтобы запросы не падали на проверке TLS. Только dev-сборка.
       t.badCertificateCallback = (cert, host, port) => true;
     }
-
-    return t;
+    return http.IOClient(t);
   }
 }

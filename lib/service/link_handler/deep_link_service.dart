@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 @singleton
 class DeepLinkService implements Disposable {
@@ -49,6 +50,7 @@ class DeepLinkService implements Disposable {
   /// путь), а не подстрокой — иначе `contains` матчит и `https://evil.test/?x=api/v1/users/verify-email`.
   /// Окончательная проверка доверенного хоста — в [EmailConfirmRepository].
   void onLinkHandle(String link) {
+    Log.info('Deeplink received: $link');
     if (_isEmailVerifyLink(link)) {
       getIt<GoRouter>().push('${AppRoutes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
     }
