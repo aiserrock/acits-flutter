@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_alice/alice.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../di/di_container.dart';
 
 @module
 abstract class DioRegisterDev {
@@ -10,6 +13,10 @@ abstract class DioRegisterDev {
       receiveTimeout: const Duration(milliseconds: 30000),
       sendTimeout: const Duration(milliseconds: 30000),
     );
-    return Dio(options)..interceptors.add(LogInterceptor());
+    // Alice HTTP-инспектор (dev): dio-трафик (файлы, email-confirm) виден в
+    // debug-меню → «HTTP». LogInterceptor оставлен для консольного вывода.
+    return Dio(options)
+      ..interceptors.add(LogInterceptor())
+      ..interceptors.add(getIt<Alice>().getDioInterceptor());
   }
 }

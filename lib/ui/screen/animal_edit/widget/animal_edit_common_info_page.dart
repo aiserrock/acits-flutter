@@ -160,7 +160,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
         _kindSpec = null;
         _kindController.clear();
         _familyController.clear();
-        _categoryController.text = result.name ?? '';
+        _categoryController.text = result.name;
       });
     }
   }
@@ -179,7 +179,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
         _familySpec = result;
         _kindSpec = null;
         _kindController.clear();
-        _familyController.text = result.name ?? '';
+        _familyController.text = result.name;
       });
     }
   }
@@ -196,7 +196,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
     if (result != null) {
       setState(() {
         _kindSpec = result;
-        _kindController.text = result.name ?? '';
+        _kindController.text = result.name;
       });
     }
   }

@@ -4,6 +4,7 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:acits_flutter/util/bloc_ext.dart';
 
@@ -37,6 +38,7 @@ class PickShelterCubit extends Cubit<PickShelterState> {
     if (_autoSelectHandled) return false;
     if (!autoSelectSingle || state.results.length != 1) return false;
     _autoSelectHandled = true;
+    Log.debug('PickShelterCubit.maybeAutoSelectSingle: auto-selecting single shelter');
     return pickShelter(0);
   }
 
@@ -50,12 +52,15 @@ class PickShelterCubit extends Cubit<PickShelterState> {
     final results = state.results;
     if (index < 0 || index >= results.length) return false;
     final shelter = results[index];
+    Log.debug('PickShelterCubit.pickShelter: index=$index id=${shelter.id}');
     safeEmit(state.copyWith(status: const DataState.loading()));
     try {
       await _authService.setCurrentShelter(shelter.id!);
       await _configService.initConfig(currentShelterId: shelter.id);
+      Log.info('PickShelterCubit.pickShelter ok: id=${shelter.id}');
       return true;
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('PickShelterCubit.pickShelter failed: id=${shelter.id}', e, s);
       safeEmit(state.copyWith(status: DataState.error(e)));
       return false;
     }

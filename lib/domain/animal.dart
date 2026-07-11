@@ -11,17 +11,15 @@ extension AnimalX on AnimalRead {
   }
 
   String? get sexString {
-    return animalAttributes?.firstWhereOrNull((attr) => (attr.name ?? '') == 'sex')?.value;
+    return animalAttributes.firstWhereOrNull((attr) => attr.name == 'sex')?.value;
   }
 
   String? get colorString {
-    return animalAttributes?.firstWhereOrNull((attr) => (attr.name ?? '') == 'color')?.value;
+    return animalAttributes.firstWhereOrNull((attr) => attr.name == 'color')?.value;
   }
 
   String? get specialSignsString {
-    return animalAttributes
-        ?.firstWhereOrNull((attr) => (attr.name ?? '') == 'special_signs')
-        ?.value;
+    return animalAttributes.firstWhereOrNull((attr) => attr.name == 'special_signs')?.value;
   }
 
   String? get ageString {
@@ -37,41 +35,41 @@ extension AnimalX on AnimalRead {
   }
 
   String? get specFamily {
-    return spec?['parent_name'];
+    return spec?.parentName;
   }
 
   String? get specKind {
-    return spec?['name'];
+    return spec?.name;
   }
 
   String? get specCategory {
-    return spec?['category_name'];
+    return spec?.categoryName;
   }
 
   int? get idSpec {
-    return spec?['id'];
+    return spec?.id;
   }
 
   Color get statusColor {
     switch (status) {
-      case Status131Enum.released:
+      case Status69fEnum.released:
         return const Color(0xFF54d4d4);
-      case Status131Enum.inTheShelter:
+      case Status69fEnum.inTheShelter:
         return const Color(0xFF6775e0);
-      case Status131Enum.overexposure:
+      case Status69fEnum.overexposure:
         return const Color(0xFFf2984a);
-      case Status131Enum.hospital:
+      case Status69fEnum.hospital:
         return const Color(0xFFa156eb);
-      case Status131Enum.attached:
+      case Status69fEnum.attached:
         return const Color(0xFF279754);
       //TODO: добавить цвета статусов
-      case Status131Enum.preparingToRelease:
+      case Status69fEnum.preparingToRelease:
         return ColorRes.textSecondary;
-      case Status131Enum.swaggerGeneratedUnknown:
+      case Status69fEnum.swaggerGeneratedUnknown:
         return ColorRes.textSecondary;
-      case Status131Enum.death:
+      case Status69fEnum.death:
         return ColorRes.textSecondary;
-      case Status131Enum.euthanasia:
+      case Status69fEnum.euthanasia:
         return ColorRes.textSecondary;
       default:
         return ColorRes.textSecondary;
@@ -79,53 +77,43 @@ extension AnimalX on AnimalRead {
   }
 
   String? get curatorFullName {
-    if (curator is! Map<String, dynamic>) return null;
-    final data = curator as Map<String, dynamic>;
-    return '${data['first_name']} ${data['last_name']}';
+    final data = curator;
+    if (data == null) return null;
+    return '${data.firstName} ${data.lastName}';
   }
 
   String? get curatorPhone {
-    if (curator is! Map<String, dynamic>) return null;
-    final data = curator as Map<String, dynamic>;
-    return data['phone_number'];
+    return curator?.phoneNumber;
   }
 
   String? get curatorEmail {
-    if (curator is! Map<String, dynamic>) return null;
-    final data = curator as Map<String, dynamic>;
-    return data['email'];
+    return curator?.email;
   }
 
   String? get curatorAddress {
-    if (curator is! Map<String, dynamic>) return null;
-    final data = curator as Map<String, dynamic>;
-    return data['address'];
+    return curator?.address;
   }
 
   String? get applicantFullName {
-    if (applicant is! Map<String, dynamic>) return null;
-    final data = applicant as Map<String, dynamic>;
-    return '${data['first_name']} ${data['last_name']}';
+    final data = applicant;
+    if (data == null) return null;
+    return '${data.firstName} ${data.lastName}';
   }
 
   String? get applicantPhone {
-    if (applicant is! Map<String, dynamic>) return null;
-    final data = applicant as Map<String, dynamic>;
-    return data['phone_number'];
+    return applicant?.phoneNumber;
   }
 
   String? get applicantEmail {
-    if (applicant is! Map<String, dynamic>) return null;
-    final data = applicant as Map<String, dynamic>;
-    return data['email'];
+    return applicant?.email;
   }
 
   AnimalImageRead? get avatar {
-    return images?.firstWhereOrNull((image) => image.isPrimary ?? false) ?? images?.firstOrNull;
+    return images.firstWhereOrNull((image) => image.isPrimary ?? false) ?? images.firstOrNull;
   }
 
   String? get thumb {
-    return (avatar?.image?.small ?? avatar?.image?.medium) ?? avatar?.image?.large;
+    return (avatar?.image.small ?? avatar?.image.medium) ?? avatar?.image.large;
   }
 
   AnimalWrite get write {
@@ -135,7 +123,7 @@ extension AnimalX on AnimalRead {
       // images: _imageWriteList ?? [],
       images: [],
       validImages: _validImages,
-      specId: spec?['id'],
+      specId: spec?.id,
       status: status,
       dateJoined: dateJoined,
       birthDate: birthDate,
@@ -148,8 +136,8 @@ extension AnimalX on AnimalRead {
       height: height,
       weight: weight,
       shelter: shelter,
-      curatorId: curator?['id'],
-      applicantId: applicant?['id'],
+      curatorId: curator?.id,
+      applicantId: applicant?.id,
       animalAttributes: animalAttributes,
     );
   }
@@ -157,11 +145,11 @@ extension AnimalX on AnimalRead {
   //ignore: unused_element
   List<AnimalImageWrite>? get _imageWriteList {
     final out = images
-        ?.map(
+        .map(
           (read) => AnimalImageWrite(
-            image: read.image?.large,
+            image: read.image.large,
             isPrimary: read.isPrimary,
-            name: read.filename,
+            name: read.filename ?? '',
           ),
         )
         .toList();
@@ -169,31 +157,33 @@ extension AnimalX on AnimalRead {
   }
 
   List<int> get _validImages {
-    return images?.map<int?>((e) => e.id).nonNulls.toList() ?? [];
+    return images.map<int?>((e) => e.id).nonNulls.toList();
   }
 }
 
-extension StatusX on Status131Enum {
+extension StatusX on Status69fEnum {
   Color get statusColor {
     switch (this) {
-      case Status131Enum.released:
+      case Status69fEnum.released:
         return const Color(0xFF54d4d4);
-      case Status131Enum.inTheShelter:
+      case Status69fEnum.inTheShelter:
         return const Color(0xFF6775e0);
-      case Status131Enum.overexposure:
+      case Status69fEnum.overexposure:
         return const Color(0xFFf2984a);
-      case Status131Enum.hospital:
+      case Status69fEnum.hospital:
         return const Color(0xFFa156eb);
-      case Status131Enum.attached:
+      case Status69fEnum.attached:
         return const Color(0xFF279754);
       //TODO: добавить цвета статусов
-      case Status131Enum.preparingToRelease:
+      case Status69fEnum.preparingToRelease:
         return ColorRes.textSecondary;
-      case Status131Enum.swaggerGeneratedUnknown:
+      case Status69fEnum.swaggerGeneratedUnknown:
         return ColorRes.textSecondary;
-      case Status131Enum.death:
+      case Status69fEnum.death:
         return ColorRes.textSecondary;
-      case Status131Enum.euthanasia:
+      case Status69fEnum.euthanasia:
+        return ColorRes.textSecondary;
+      case Status69fEnum.inClinic:
         return ColorRes.textSecondary;
     }
   }

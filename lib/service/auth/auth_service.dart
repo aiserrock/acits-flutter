@@ -7,6 +7,7 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/export.dart';
 
 const _shelterListDefaultLenght = 25;
@@ -46,11 +47,10 @@ class AuthService extends ChangeNotifier {
 
   UserCurrentShelterSerializers? get shelterRole => _shelterRole;
 
-  String? get currentShelterId => _shelterRole?.currentShelter?.toString();
+  int? get currentShelterId => _shelterRole?.currentShelter;
 
-  ShelterShortSerializers? get currentShelter => _shelterList?.results?.firstWhereOrNull(
-    (shelter) => shelter.id.toString() == currentShelterId,
-  );
+  ShelterShortSerializers? get currentShelter =>
+      _shelterList?.results?.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
   Future<TokenRefresh?> refreshToken({String? refresh}) async {
     final request = TokenRefresh(access: _access, refresh: refresh ?? _refresh);
@@ -58,20 +58,25 @@ class AuthService extends ChangeNotifier {
     if (result.body != null) {
       _access = result.body?.access;
       _refresh = result.body?.refresh ?? _refresh;
+      Log.info('Token refreshed');
       return result.body;
     }
+    Log.warning('Token refresh failed (status=${result.base.statusCode})');
     return null;
   }
 
   Future<TokenObtainPair?> login(String? login, String? pass) async {
+    Log.info('Login attempt: username=$login');
     final request = TokenObtainPair(username: login, password: pass);
     final result = await _acitsGuestClient.apiTokenPost(body: request);
     if (result.body != null) {
       _access = result.body?.access;
       _refresh = result.body?.refresh;
+      Log.info('Login success: username=$login');
       return result.body;
     }
     if (result.error != null) {
+      Log.warning('Login failed (status=${result.base.statusCode}): username=$login');
       switch (result.base.statusCode) {
         case 401:
           throw NotAuthorizedException(message: result.error.toString());
@@ -92,9 +97,8 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<UserCurrentShelterSerializers?> setCurrentShelter(int shelterId) async {
-    final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(
-      xCurrentShelter: shelterId.toString(),
-    );
+    Log.info('Set current shelter: id=$shelterId');
+    final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(xCurrentShelter: shelterId);
     if (result.body != null) {
       _shelterRole = result.body;
       return _shelterRole;
@@ -103,7 +107,9 @@ class AuthService extends ChangeNotifier {
   }
 
   void logout() {
+    Log.info('Logout');
     _access = _refresh = _shelterList = _shelterRole = null;
+    _authRepository.clearRefresh();
     notifyListeners();
     getIt<GoRouter>().go(AppRoutes.login);
   }
@@ -111,8 +117,7 @@ class AuthService extends ChangeNotifier {
   /// Попробовать обновить авторизацию из прошлой сессии если срок
   /// действия токена не истек
   Future<bool> tryRefreshLastAuth() async {
-    if (_refresh != null) return false;
-    final oldRefresh = await _authRepository.refresh;
+    final oldRefresh = _refresh ?? await _authRepository.refresh;
     if (oldRefresh == null) return false;
     return await refreshToken(
       refresh: oldRefresh,
@@ -152,9 +157,7 @@ class AuthService extends ChangeNotifier {
   Future<UserShelterWorkerSerializers?> registrationCustomer(
     UserShelterWorkerSerializers customer,
   ) async {
-    final result = await _acitsGuestClient.apiV1UsersWorkerRegisterPost(
-      body: customer.copyWith(role: roleEnumToJson(customer.role as RoleEnum)),
-    );
+    final result = await _acitsGuestClient.apiV1UsersWorkerRegisterPost(body: customer);
 
     if (result.body != null) {
       return result.body;

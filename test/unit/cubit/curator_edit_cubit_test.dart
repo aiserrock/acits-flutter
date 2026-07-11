@@ -12,7 +12,7 @@ void main() {
   late MockStaffService service;
 
   setUpAll(() {
-    registerFallbackValue(Curator());
+    registerFallbackValue(const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''));
   });
 
   setUp(() {
@@ -37,12 +37,15 @@ void main() {
     blocTest<CuratorEditCubit, DataState<Curator>>(
       'submit calls createCurator and emits [loading, content(result)]',
       build: () {
-        when(
-          () => service.createCurator(curator: any(named: 'curator')),
-        ).thenAnswer((_) async => Curator(id: 42, firstName: 'Anna'));
+        when(() => service.createCurator(curator: any(named: 'curator'))).thenAnswer(
+          (_) async =>
+              const Curator(id: 42, firstName: 'Anna', lastName: '', phoneNumber: '', address: ''),
+        );
         return CuratorEditCubit();
       },
-      act: (cubit) => cubit.submit(Curator(firstName: 'Anna')),
+      act: (cubit) => cubit.submit(
+        const Curator(firstName: 'Anna', lastName: '', phoneNumber: '', address: ''),
+      ),
       expect: () => [
         isA<DataLoading<Curator>>(),
         isA<DataContent<Curator>>()
@@ -68,7 +71,9 @@ void main() {
         ).thenThrow(Exception('boom'));
         return CuratorEditCubit();
       },
-      act: (cubit) => cubit.submit(Curator(firstName: 'Anna')),
+      act: (cubit) => cubit.submit(
+        const Curator(firstName: 'Anna', lastName: '', phoneNumber: '', address: ''),
+      ),
       expect: () => [isA<DataLoading<Curator>>(), isA<DataError<Curator>>()],
     );
   });
@@ -79,9 +84,10 @@ void main() {
     // settled cubit state with `test` + await instead of on the stream.
 
     test('_init fetches curator by id and lands on content(curator)', () async {
-      when(
-        () => service.fetchCuratorById(id: any(named: 'id')),
-      ).thenAnswer((_) async => Curator(id: 7, firstName: 'Bob'));
+      when(() => service.fetchCuratorById(id: any(named: 'id'))).thenAnswer(
+        (_) async =>
+            const Curator(id: 7, firstName: 'Bob', lastName: '', phoneNumber: '', address: ''),
+      );
 
       final cubit = CuratorEditCubit(curatorId: 7);
       expect(cubit.isEdit, isTrue);
@@ -106,20 +112,26 @@ void main() {
     });
 
     test('submit calls updateCurator and lands on content(result)', () async {
-      when(
-        () => service.fetchCuratorById(id: any(named: 'id')),
-      ).thenAnswer((_) async => Curator(id: 7, firstName: 'Bob'));
+      when(() => service.fetchCuratorById(id: any(named: 'id'))).thenAnswer(
+        (_) async =>
+            const Curator(id: 7, firstName: 'Bob', lastName: '', phoneNumber: '', address: ''),
+      );
       when(
         () => service.updateCurator(
           id: any(named: 'id'),
           curator: any(named: 'curator'),
         ),
-      ).thenAnswer((_) async => Curator(id: 7, firstName: 'Bobby'));
+      ).thenAnswer(
+        (_) async =>
+            const Curator(id: 7, firstName: 'Bobby', lastName: '', phoneNumber: '', address: ''),
+      );
 
       final cubit = CuratorEditCubit(curatorId: 7);
       await Future<void>.delayed(Duration.zero);
 
-      final result = await cubit.submit(Curator(id: 7, firstName: 'Bobby'));
+      final result = await cubit.submit(
+        const Curator(id: 7, firstName: 'Bobby', lastName: '', phoneNumber: '', address: ''),
+      );
 
       expect(result?.firstName, 'Bobby');
       expect(cubit.state, isA<DataContent<Curator>>());

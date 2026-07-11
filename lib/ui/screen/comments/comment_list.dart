@@ -211,7 +211,7 @@ class _CommentListViewState extends State<_CommentListView> {
         Flexible(
           child: Text.rich(
             TextSpan(
-              children: (TextUrlWrapper.fromString(comment.content ?? ''))
+              children: (TextUrlWrapper.fromString(comment.content))
                   .map<TextSpan>(
                     (item) => TextSpan(
                       text: item.value,
@@ -309,7 +309,7 @@ class _CommentListViewState extends State<_CommentListView> {
     final url = file.file;
     final fileName = file.filename;
 
-    if (url == null || fileName == null) return;
+    if (fileName == null) return;
 
     // На web нет доступа к файловой системе (path_provider) и open_filex —
     // открываем файл по URL, браузер сам скачает/покажет.

@@ -5,6 +5,7 @@ import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:acits_flutter/util/bloc_ext.dart';
 
@@ -35,11 +36,15 @@ class CommentListCubit extends Cubit<CommentListState> {
   Future<void> init() => _init();
 
   Future<void> _init() async {
+    Log.debug('CommentListCubit.init animalId=$animalId');
     safeEmit(state.copyWith(data: const DataState.loading()));
     try {
       final value = await _animalService.fetchAnimalNotes(animalId);
-      safeEmit(state.copyWith(data: DataState.content(value?.results ?? [])));
-    } catch (e) {
+      final results = value?.results ?? [];
+      Log.info('CommentListCubit.init ok: count=${results.length}');
+      safeEmit(state.copyWith(data: DataState.content(results)));
+    } catch (e, s) {
+      Log.error('CommentListCubit.init failed', e, s);
       safeEmit(state.copyWith(data: DataState.error(e)));
     }
   }
@@ -48,14 +53,17 @@ class CommentListCubit extends Cubit<CommentListState> {
   Future<void> loadNextPage() async {
     final current = state.data.valueOrNull;
     if (current == null || state.page.isLoading) return;
+    Log.debug('CommentListCubit.loadNextPage animalId=$animalId offset=${current.length}');
     safeEmit(state.copyWith(page: const DataState.loading()));
     try {
       final value = await _animalService.fetchAnimalNotes(animalId, offset: current.length);
       final newList = <AnimalNote>[...current, ...?value?.results];
+      Log.info('CommentListCubit.loadNextPage ok: count=${newList.length}');
       safeEmit(
         state.copyWith(data: DataState.content(newList), page: const DataState.content(null)),
       );
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('CommentListCubit.loadNextPage failed', e, s);
       safeEmit(state.copyWith(page: DataState.error(e)));
     }
   }
@@ -65,6 +73,7 @@ class CommentListCubit extends Cubit<CommentListState> {
   /// Возвращает `true` при успехе; `false` — если запрос упал (виджет
   /// показывает snackbar).
   Future<bool> deleteComment(AnimalNote comment) async {
+    Log.debug('CommentListCubit.deleteComment id=${comment.id}');
     try {
       await _animalService.deleteAnimalNote(id: comment.id!);
       final current = state.data.valueOrNull;
@@ -72,8 +81,10 @@ class CommentListCubit extends Cubit<CommentListState> {
         final newList = List<AnimalNote>.from(current)..remove(comment);
         safeEmit(state.copyWith(data: DataState.content(newList)));
       }
+      Log.info('CommentListCubit.deleteComment ok: id=${comment.id}');
       return true;
-    } catch (_) {
+    } catch (e, s) {
+      Log.error('CommentListCubit.deleteComment failed', e, s);
       return false;
     }
   }

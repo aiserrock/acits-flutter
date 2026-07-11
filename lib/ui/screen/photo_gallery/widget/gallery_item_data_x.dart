@@ -7,7 +7,7 @@ import 'package:acits_flutter/domain/gallery_item_data.dart';
 
 extension GalleryIyemDataX on GalleryItemData {
   Widget get widget => network != null
-      ? Image.network(UrlCorsProxy.add(network?.image?.medium) ?? '', fit: BoxFit.cover)
+      ? Image.network(UrlCorsProxy.add(network?.image.medium) ?? '', fit: BoxFit.cover)
       : assetPath != null
       ? Padding(
           padding: const EdgeInsets.all(8.0),

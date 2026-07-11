@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
@@ -128,7 +129,7 @@ GoRouter createAppRouter() {
           final extra = state.extra as Map<String, Object?>?;
           return PrescriptionEditScreen(
             editPrescriptionId: int.tryParse(state.uri.queryParameters['id'] ?? ''),
-            editPrescription: extra?['prescription'] as Prescription?,
+            editPrescription: extra?['prescription'] as PrescriptionModel?,
             animal: extra?['animal'] as AnimalRead?,
           );
         },

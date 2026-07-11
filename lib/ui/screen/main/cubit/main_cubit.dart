@@ -5,6 +5,7 @@ import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 /// Cubit главного экрана (вкладка «Сегодня»).
 ///
@@ -26,11 +27,14 @@ class MainCubit extends Cubit<DataState<PaginatedPrescriptionExecutionTodayList?
   /// [DataState.error] (баг из аудита: старая реализация мутировала состояние
   /// без обновления UI — лоадер крутился вечно).
   Future<void> loadExecutions() async {
+    Log.debug('MainCubit.loadExecutions');
     safeEmit(const DataState.loading());
     try {
       final value = await _prescriptionService.fetchTodayPrescriptionList();
+      Log.info('MainCubit.loadExecutions ok: count=${value?.results?.length ?? 0}');
       safeEmit(DataState.content(value));
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('MainCubit.loadExecutions failed', e, s);
       safeEmit(DataState.error(e));
     }
   }

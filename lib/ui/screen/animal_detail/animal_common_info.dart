@@ -27,14 +27,11 @@ List<Widget> _buildCommonInfoContent(AnimalRead animal) {
     AnimalContentCard([
       CardData(
         firstCaption: LocaleKeys.animalReceiptDate.tr(),
-        firstValue: animal.dateJoined != null ? _dateFormatter.format(animal.dateJoined!) : '',
+        firstValue: _dateFormatter.format(animal.dateJoined),
         secondCaption: LocaleKeys.animalStatus.tr(),
         secondValue: animal.statusString ?? '',
       ),
-      CardData(
-        firstCaption: LocaleKeys.animalCatchPlace.tr(),
-        firstValue: animal.placeOfCatch ?? '',
-      ),
+      CardData(firstCaption: LocaleKeys.animalCatchPlace.tr(), firstValue: animal.placeOfCatch),
     ]),
     AnimalContentCard([
       CardData(firstCaption: LocaleKeys.animalFamily.tr(), firstValue: animal.specFamily ?? ''),

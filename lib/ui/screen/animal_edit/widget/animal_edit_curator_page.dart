@@ -118,14 +118,14 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
     if (result != null) {
       setState(() => _curator = result);
       _curatorController.text = result.fullName ?? '';
-      _phoneController.text = result.phoneNumber ?? '';
+      _phoneController.text = result.phoneNumber;
       _emailController.text = result.email ?? '';
-      _addressController.text = result.address ?? '';
+      _addressController.text = result.address;
     }
   }
 
   void _setControllers(AnimalRead value) {
-    if (value.curator != null) setState(() => _curator = Curator.fromJson(value.curator));
+    if (value.curator != null) setState(() => _curator = value.curator);
     _curatorController.text = value.curatorFullName ?? '';
     _phoneController.text = _curator?.phoneNumber ?? '';
     _emailController.text = _curator?.email ?? '';
@@ -135,9 +135,7 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
   @override
   void onChangePage() {
     if (page != 3) return;
-    final curator = _curator?.toJson();
-    curator?['id'] = _curator?.id;
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(curator: curator);
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(curator: _curator);
   }
 
   Future<void> _addEditCurator(BuildContext context, {int? curatorId}) async {
@@ -147,9 +145,9 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
     if (result != null) {
       setState(() => _curator = result);
       _curatorController.text = result.fullName ?? '';
-      _phoneController.text = result.phoneNumber ?? '';
+      _phoneController.text = result.phoneNumber;
       _emailController.text = result.email ?? '';
-      _addressController.text = result.address ?? '';
+      _addressController.text = result.address;
     }
   }
 }

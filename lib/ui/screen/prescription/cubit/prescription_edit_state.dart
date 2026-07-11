@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
 
 /// Состояние экрана создания/редактирования назначения.
@@ -27,13 +28,13 @@ class PrescriptionEditState extends Equatable {
 
   /// Состояние данных назначения (загрузка/контент/ошибка) для режима
   /// редактирования и отправки формы.
-  final DataState<Prescription?> screen;
+  final DataState<PrescriptionModel?> screen;
 
   /// Выбранное животное.
   final AnimalRead? animal;
 
   /// Тип назначения (соответствует выбранной вкладке).
-  final MyTypeEnum? type;
+  final PrescriptionShortMyTypeEnum? type;
 
   /// Тип периодичности назначения (ежедневно | еженедельно).
   final TreatmentPeriod treatmentPeriod;
@@ -51,9 +52,9 @@ class PrescriptionEditState extends Equatable {
   final bool loading;
 
   PrescriptionEditState copyWith({
-    DataState<Prescription?>? screen,
+    DataState<PrescriptionModel?>? screen,
     AnimalRead? animal,
-    MyTypeEnum? type,
+    PrescriptionShortMyTypeEnum? type,
     TreatmentPeriod? treatmentPeriod,
     List<TimeOfDay>? atTimeList,
     List<DateTime>? daysList,

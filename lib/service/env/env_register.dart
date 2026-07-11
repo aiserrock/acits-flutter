@@ -6,5 +6,5 @@ import 'package:injectable/injectable.dart';
 @prod
 abstract class EnvRegistrer {
   @prod
-  Env createEnv() => Env('https://app.acits.ru');
+  Env createEnv() => Env(AcitsEnvUrls.prod);
 }

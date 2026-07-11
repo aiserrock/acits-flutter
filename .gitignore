@@ -22,7 +22,12 @@
 #.vscode/
 
 # Flutter/Dart/Pub related
+# `**/doc/api/` игнорит dartdoc-артефакты, но у нас там лежит исходная
+# OpenAPI-схема для swagger-генератора — её нужно коммитить (иначе CI не
+# сгенерит API-клиент). Игнорим папку, но НЕ схему.
 **/doc/api/
+!doc/api/
+!doc/api/openapi.json
 **/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
@@ -107,3 +112,4 @@ CLAUDE.md
 # Internal backend handoff notes — not for the public repo (kept locally)
 doc/backend-handoff.md
 doc/backend-integration-checklist.md
+mockoon/_bodies.json
