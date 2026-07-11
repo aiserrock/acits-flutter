@@ -294,7 +294,9 @@ class _ConnectionCardState extends State<_ConnectionCard> {
     if (_domainIndex == _customDomainIndex) {
       final custom = _customUrlController.text.trim();
       if (custom.isEmpty) {
-        _debug.showRestartRequired('Введите custom URL');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Введите custom URL')));
         return;
       }
       _debug.customUrl = custom;
@@ -303,22 +305,41 @@ class _ConnectionCardState extends State<_ConnectionCard> {
       targetUrl = _domainUrlList[_domainIndex];
     }
 
+    // Изменился ли флаг прокси — от этого зависит, нужен ли ПОЛНЫЙ ручной
+    // перезапуск (прокси ставится в HttpClient и системному прокси нужен свежий
+    // процесс — мягкий рестарт дерева его не подхватывает надёжно).
+    final proxyChanged = _proxyEnabled != _debug.proxyEnabled;
+
     _debug.domainUrl = targetUrl;
     _debug.proxyEnabled = _proxyEnabled;
     _debug.proxyUrl = _proxyController.text.trim();
 
     Navigator.of(context).pop();
-    // Перезапуск нужен всегда (baseUrl/proxy читаются при создании клиента).
-    _debug.reloadApp();
+
+    if (proxyChanged) {
+      // Прокси вкл/выкл — НЕ авторестарт, просим перезапустить вручную и
+      // показываем уведомление (иначе прокси не применится/не отключится).
+      _debug.showRestartRequired();
+    } else {
+      // Смена контура/custom-URL — заставка «Применение…» + рестарт дерева.
+      _debug.reloadApp();
+    }
   }
 
   void _reset(BuildContext context) {
+    final hadProxy = _debug.proxyEnabled;
     Navigator.of(context).pop();
     _debug.domainUrl = null;
     _debug.proxyUrl = null;
     _debug.proxyEnabled = false;
     _debug.customUrl = null;
-    _debug.reloadApp();
+
+    if (hadProxy) {
+      // Прокси был включён — для его отключения нужен полный ручной рестарт.
+      _debug.showRestartRequired();
+    } else {
+      _debug.reloadApp();
+    }
   }
 }
 

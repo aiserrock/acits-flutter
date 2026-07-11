@@ -5,6 +5,7 @@ import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
 
 import '../../di/di_container.dart';
+import '../../ui/debug_screen/applying_overlay.dart';
 import '../../ui/debug_screen/debug_screen.dart';
 import '../shared_pref/debug_preference_storage.dart';
 
@@ -47,10 +48,22 @@ class DebugDevService implements DebugService {
 
   String? get customUrl => _storage.customUrl;
 
+  /// Пересоздаёт окружение (DI + всё дерево виджетов), показывая заставку
+  /// «Применение…» на тёмном фоне. Используется при смене контура/custom-URL.
+  ///
+  /// Заставка живёт до рестарта дерева, который её уничтожает вместе со старым
+  /// Overlay — отдельно скрывать не нужно.
   Future<void> reloadApp() async {
     // Берём context ДО reset (после reset navigatorKey пересоздаётся и старый
     // становится невалидным).
     final context = getIt<GlobalKey<NavigatorState>>().currentContext;
+
+    // Заставка применения поверх всего.
+    if (context != null && context.mounted) {
+      ApplyingOverlay.show(context);
+    }
+    // Небольшая пауза, чтобы заставка успела отрисоваться и была видна.
+    await Future<void>.delayed(const Duration(milliseconds: 900));
 
     await getIt.reset();
     await initDevDi();
@@ -65,19 +78,23 @@ class DebugDevService implements DebugService {
   }
 
   /// Показать штатное уведомление внизу экрана о том, что для применения
-  /// настройки нужен перезапуск приложения, с кнопкой немедленного рестарта.
+  /// настройки нужен ПОЛНЫЙ ручной перезапуск приложения (закрыть и открыть).
   ///
-  /// Используется для настроек, применяемых только при старте (proxy — ставится
-  /// в HttpClient при создании клиента).
-  void showRestartRequired([String message = 'Настройки изменены, нужен перезапуск']) {
+  /// Нужно для proxy: он ставится в `HttpOverrides`/`HttpClient` при создании
+  /// клиента, и мягкий рестарт дерева (reloadApp) его не всегда подхватывает —
+  /// системному прокси нужен свежий процесс. Показываем долго-живущий SnackBar.
+  void showRestartRequired([
+    String message = 'Прокси изменён — перезапустите приложение вручную (закрыть и открыть)',
+  ]) {
     final messenger = getIt<GlobalKey<ScaffoldMessengerState>>().currentState;
     messenger
       ?..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           content: Text(message),
-          duration: const Duration(seconds: 8),
-          action: SnackBarAction(label: 'Перезапустить', onPressed: reloadApp),
+          duration: const Duration(seconds: 10),
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(label: 'OK', onPressed: messenger.hideCurrentSnackBar),
         ),
       );
   }
