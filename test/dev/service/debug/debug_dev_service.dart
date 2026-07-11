@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/util/restart_widget.dart';
 
 import '../../di/di_container.dart';
 import '../../ui/debug_screen/debug_screen.dart';
@@ -49,9 +48,20 @@ class DebugDevService implements DebugService {
   String? get customUrl => _storage.customUrl;
 
   Future<void> reloadApp() async {
+    // Берём context ДО reset (после reset navigatorKey пересоздаётся и старый
+    // становится невалидным).
+    final context = getIt<GlobalKey<NavigatorState>>().currentContext;
+
     await getIt.reset();
     await initDevDi();
-    getIt<GoRouter>().go(AppRoutes.onboarding);
+
+    // Полный рестарт дерева виджетов: все BlocProvider (LoginBloc и др.)
+    // пересоздаются и берут СВЕЖИЙ AuthService/клиенты из getIt. Без этого
+    // старые блоки держали бы прежний AuthService (старый хост + токен),
+    // из-за чего логин уходил на один контур, а refresh/shelters — на другой.
+    if (context != null && context.mounted) {
+      RestartWidget.restartApp(context);
+    }
   }
 
   /// Показать штатное уведомление внизу экрана о том, что для применения
