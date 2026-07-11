@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/domain/prescription_model.dart';
 
 /// Виджет карточки назначения животного в детальном представлении
 class AnimalPrescriptionCard extends StatefulWidget {
   const AnimalPrescriptionCard({required this.prescription, super.key});
 
-  final Prescription prescription;
+  final PrescriptionModel prescription;
 
   @override
   State<AnimalPrescriptionCard> createState() => _AnimalPrescriptionCardState();
@@ -30,13 +31,13 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            _formatter.format(widget.prescription.executions!.first.executeAt!),
-            style: StyleRes.mainContent,
-          ),
+          if (widget.prescription.executions.isNotEmpty)
+            Text(
+              _formatter.format(widget.prescription.executions.first.executeAt),
+              style: StyleRes.mainContent,
+            ),
           const SizedBox(height: 4.0),
-          if (widget.prescription.myType != null)
-            Text(widget.prescription.myType!.typeString ?? '', style: StyleRes.title),
+          Text(widget.prescription.myType.typeString ?? '', style: StyleRes.title),
           const SizedBox(height: 4.0),
           Row(
             children: [
@@ -55,22 +56,20 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
             const Divider(),
             Text(LocaleKeys.animalPrescriptions.tr(), style: StyleRes.caption),
             const SizedBox(height: 4.0),
-            if (widget.prescription.drugs != null)
-              ...widget.prescription.drugs!.map<Widget>(
-                (drug) => Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(text: (drug.drugName ?? ''), style: StyleRes.mainContent),
-                      const TextSpan(text: (', '), style: StyleRes.mainContent),
-                      if (drug.drugDosage != null)
-                        TextSpan(text: (drug.drugDosage.toString()), style: StyleRes.mainContent),
-                      if (drug.formOfDrug != null)
-                        TextSpan(text: (drug.formOfDrug), style: StyleRes.mainContent),
-                    ],
-                  ),
-                  maxLines: 3,
+            ...widget.prescription.drugs.map<Widget>(
+              (drug) => Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: drug.drugName, style: StyleRes.mainContent),
+                    const TextSpan(text: ', ', style: StyleRes.mainContent),
+                    TextSpan(text: drug.drugDosage.toString(), style: StyleRes.mainContent),
+                    if (drug.formOfDrug != null)
+                      TextSpan(text: drug.formOfDrug, style: StyleRes.mainContent),
+                  ],
                 ),
+                maxLines: 3,
               ),
+            ),
           ],
         ],
       ),

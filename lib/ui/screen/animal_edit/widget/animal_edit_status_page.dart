@@ -27,7 +27,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
   final _dateReceiptController = TextEditingController();
   final _statusController = TextEditingController();
   final _catchController = TextEditingController();
-  Status131Enum? status;
+  Status69fEnum? status;
   DateTime? date;
 
   @override
@@ -94,7 +94,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
 
   Future<void> _setStatus(BuildContext context) async {
     Map<Widget, dynamic Function()> actionsMap(BuildContext ctx) {
-      final entries = Status131Enum.values
+      final entries = Status69fEnum.values
           .where((status) => status.statusString != null)
           .map<MapEntry<Widget, dynamic Function()>>(
             (status) => MapEntry(
@@ -136,11 +136,9 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
   }
 
   void _setControllers(AnimalRead value) {
-    _dateReceiptController.text = value.dateJoined != null
-        ? _dateFormatter.format(value.dateJoined!)
-        : '';
+    _dateReceiptController.text = _dateFormatter.format(value.dateJoined);
     _statusController.text = value.statusString ?? '';
-    _catchController.text = value.placeOfCatch ?? '';
+    _catchController.text = value.placeOfCatch;
   }
 
   @override

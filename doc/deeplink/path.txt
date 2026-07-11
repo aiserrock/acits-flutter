@@ -1,5 +1,11 @@
-https://dev.acits.ru/api/v1/users/verify-email/MTQ4/Mg/b7ji8d-3b45576b3f2783f8c95a1e41964a3294/
+# Примеры deeplink-ов для ручного тестирования.
+# Реальные ссылки с токенами берите из тестовых писем — живые токены в
+# репозитории не храним.
+#
+# Контуры: prod app.acits.ru, stage stage.app.acits.ru, dev-N dev-N.app.acits.ru (N=0..3).
 
-https://dev.acits.ru/api/v1/users/verify-email/MTU1/Mg/bcmlcf-a88339a62e85ff81c35196f10b28cb31/
+# Подтверждение почты:
+https://stage.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/
 
-https://dev.acits.ru/api/v1/users/verify-email/MTYw/Mg/bcnpnn-d50701df6f083d947f063140df9fb05b/
+# Подтверждение работника приюта:
+https://stage.app.acits.ru/api/v1/users/verify-worker/<uidb64>/<sidb64>/<token>/

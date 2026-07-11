@@ -12,7 +12,7 @@ void main() {
   late MockStaffService service;
 
   setUpAll(() {
-    registerFallbackValue(Applicant());
+    registerFallbackValue(const Applicant(firstName: '', lastName: '', phoneNumber: ''));
   });
 
   setUp(() {
@@ -31,7 +31,10 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(cubit.isEdit, isFalse);
-      expect(cubit.state, DataState.content(Applicant()));
+      expect(
+        cubit.state,
+        DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: '')),
+      );
       verifyNever(() => service.fetchApplicantById(id: any(named: 'id')));
 
       await cubit.close();
@@ -40,7 +43,7 @@ void main() {
 
   group('ApplicantEditCubit — edit mode (applicantId != null)', () {
     const id = 42;
-    final loaded = Applicant(id: id, firstName: 'Ada', lastName: 'Lovelace');
+    final loaded = Applicant(id: id, firstName: 'Ada', lastName: 'Lovelace', phoneNumber: '');
 
     // _init() запускается в конструкторе и синхронно эмитит loading до того,
     // как какой-либо слушатель успевает подписаться, поэтому проверяем весь
@@ -74,8 +77,8 @@ void main() {
   });
 
   group('ApplicantEditCubit — submit() in create mode', () {
-    final draft = Applicant(firstName: 'Grace', lastName: 'Hopper');
-    final created = Applicant(id: 7, firstName: 'Grace', lastName: 'Hopper');
+    final draft = const Applicant(firstName: 'Grace', lastName: 'Hopper', phoneNumber: '');
+    final created = const Applicant(id: 7, firstName: 'Grace', lastName: 'Hopper', phoneNumber: '');
 
     blocTest<ApplicantEditCubit, DataState<Applicant>>(
       'success calls createApplicant, emits [loading, content], returns the Applicant',
