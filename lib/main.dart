@@ -13,6 +13,7 @@ import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
+import 'package:acits_flutter/util/restart_widget.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,7 +58,10 @@ class AcitsApp extends StatelessWidget {
       path: L10n.translationsPath,
       fallbackLocale: L10n.fallbackLocale,
       startLocale: L10n.fallbackLocale,
-      child: MyApp(overlayBuilder: overlayBuilder),
+      // RestartWidget выше MyApp: dev-инструменты пересоздают всё дерево (и все
+      // BlocProvider) после смены окружения/прокси, чтобы виджеты взяли свежие
+      // сервисы из getIt, а не держали старые ссылки.
+      child: RestartWidget(child: MyApp(overlayBuilder: overlayBuilder)),
     );
   }
 }
