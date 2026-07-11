@@ -411,13 +411,17 @@ jobs:
             echo "$GOOGLE_SERVICES_PROD" | base64 --decode > android/app/src/prod/google-services.json
           fi
 
-      # prod flavor (lib/main.dart) — the same entry point used for release
-      # Android/iOS builds. --base-href matches the Pages project path
+      # dev flavor (test/dev/main.dart) — the GitHub Pages PWA is a developer
+      # build: it talks to the dev-0 stand (test accounts live there; prod and
+      # stage reject the github.io origin the same way — the backend CORS
+      # allowlist has only acits.ru) and keeps the floating debug button, so
+      # the environment can be switched right in the browser.
+      # --base-href matches the Pages project path
       # (https://<owner>.github.io/<repo>/) so asset/router URLs resolve
       # correctly when served from a subpath instead of the domain root.
-      - name: Build web (prod)
+      - name: Build web (dev)
         run: |
-          flutter build web -t lib/main.dart --release \
+          flutter build web -t test/dev/main.dart --release \
             --base-href "/${GITHUB_REPOSITORY#*/}/"
 
       - uses: actions/upload-pages-artifact@v4
