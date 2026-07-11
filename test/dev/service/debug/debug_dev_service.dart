@@ -36,9 +36,39 @@ class DebugDevService implements DebugService {
 
   String? get domainUrl => _storage.baseUrl;
 
+  set proxyEnabled(bool value) {
+    _storage.proxyEnabled = value;
+  }
+
+  bool get proxyEnabled => _storage.proxyEnabled;
+
+  set customUrl(String? url) {
+    _storage.customUrl = url;
+  }
+
+  String? get customUrl => _storage.customUrl;
+
   Future<void> reloadApp() async {
     await getIt.reset();
     await initDevDi();
     getIt<GoRouter>().go(AppRoutes.onboarding);
+  }
+
+  /// Показать штатное уведомление внизу экрана о том, что для применения
+  /// настройки нужен перезапуск приложения, с кнопкой немедленного рестарта.
+  ///
+  /// Используется для настроек, применяемых только при старте (proxy — ставится
+  /// в HttpClient при создании клиента).
+  void showRestartRequired([String message = 'Настройки изменены, нужен перезапуск']) {
+    final messenger = getIt<GlobalKey<ScaffoldMessengerState>>().currentState;
+    messenger
+      ?..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 8),
+          action: SnackBarAction(label: 'Перезапустить', onPressed: reloadApp),
+        ),
+      );
   }
 }

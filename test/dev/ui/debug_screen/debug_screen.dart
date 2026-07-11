@@ -41,8 +41,10 @@ class DebugScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
+    // Порядок: сначала часто используемое (подключение/окружения), затем
+    // вспомогательное (UIKit), внизу — Firebase-тесты и AnimalTypeSelector.
     return ListView(
-      children: const [_FirebaseTestCard(), _SearchSpeciesCard(), _ConnectionCard(), _UIKitCard()],
+      children: const [_ConnectionCard(), _UIKitCard(), _FirebaseTestCard(), _SearchSpeciesCard()],
     );
   }
 }
@@ -149,9 +151,14 @@ class _UIKitCard extends StatelessWidget {
   }
 }
 
-/// Список контуров для ручного переключения: prod, stage, dev-0..3.
+/// Контуры для ручного переключения: prod, stage, dev-0..3, затем Custom.
+/// Custom — последний пункт, под ним поле ввода произвольного URL (mockoon).
 final _domainUrlList = AcitsEnvUrls.all;
 
+/// Индекс пункта Custom в radiobutton-списке (сразу после списка контуров).
+const _customDomainIndex = -1;
+
+/// Секция подключения: выбор контура/custom-URL (mockoon) + proxy (Charles).
 class _ConnectionCard extends StatefulWidget {
   const _ConnectionCard();
 
@@ -160,15 +167,18 @@ class _ConnectionCard extends StatefulWidget {
 }
 
 class _ConnectionCardState extends State<_ConnectionCard> {
-  _ConnectionCardState() : _debugDevService = getIt.get<DebugService>() as DebugDevService;
+  _ConnectionCardState() : _debug = getIt.get<DebugService>() as DebugDevService;
 
-  final DebugDevService _debugDevService;
+  final DebugDevService _debug;
 
-  final _formKey = GlobalKey<FormState>();
   final _proxyController = TextEditingController();
+  final _customUrlController = TextEditingController();
 
-  /// По умолчанию выбран dev-0 (совпадает с дефолтом dev-флейвора).
-  int _domainIndex = _domainUrlList.indexOf(AcitsEnvUrls.dev(0));
+  /// Выбранный индекс в списке контуров; [_customDomainIndex] = выбран Custom.
+  late int _domainIndex;
+
+  /// Включён ли proxy (Charles).
+  late bool _proxyEnabled;
 
   @override
   void initState() {
@@ -177,38 +187,76 @@ class _ConnectionCardState extends State<_ConnectionCard> {
   }
 
   @override
+  void dispose() {
+    _proxyController.dispose();
+    _customUrlController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        child: Form(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 8.0),
-                const Text('Proxy', style: StyleRes.subTitle),
-                TextField(
-                  key: _formKey,
-                  controller: _proxyController,
-                  decoration: const InputDecoration(hintText: '192.168.0.102:9000'),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8.0),
+              const Center(child: Text('Endpoint', style: StyleRes.subTitle)),
+              const SizedBox(height: 8.0),
+              // Контуры окружений.
+              ..._domainUrlList.asMap().entries.map(
+                (entry) => RadioListTile<int>(
+                  value: entry.key,
+                  groupValue: _domainIndex,
+                  onChanged: _onDomainChanged,
+                  title: Text(entry.value),
+                  contentPadding: EdgeInsets.zero,
                 ),
-                const SizedBox(height: 24.0),
-                const Text('Domain', style: StyleRes.subTitle),
-                ..._domainUrlList.asMap().entries.map(
-                  (entry) => RadioListTile<int>(
-                    value: entry.key,
-                    groupValue: _domainIndex,
-                    onChanged: _domainUrlChanged,
-                    title: Text(entry.value),
+              ),
+              // Custom URL (mockoon / динамический стенд).
+              RadioListTile<int>(
+                value: _customDomainIndex,
+                groupValue: _domainIndex,
+                onChanged: _onDomainChanged,
+                title: const Text('Custom (mockoon)'),
+                contentPadding: EdgeInsets.zero,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                child: TextField(
+                  controller: _customUrlController,
+                  enabled: _domainIndex == _customDomainIndex,
+                  keyboardType: TextInputType.url,
+                  decoration: const InputDecoration(
+                    hintText: 'http://192.168.1.10:3000',
+                    helperText: 'для mockoon используйте http и хост машины в сети',
+                    helperMaxLines: 2,
                   ),
                 ),
-                const SizedBox(height: 16.0),
-                PrimaryButton(text: 'Применить', onPressed: () => _accept(context)),
-                const SizedBox(height: 16.0),
-                PrimaryButton(text: 'Сбросить', onPressed: () => _reset(context)),
-              ],
-            ),
+              ),
+              const SizedBox(height: 24.0),
+              // Proxy (Charles) — тумблер + адрес.
+              Row(
+                children: [
+                  const Text('Proxy (Charles)', style: StyleRes.subTitle),
+                  const Spacer(),
+                  Switch(value: _proxyEnabled, onChanged: _onProxyToggled),
+                ],
+              ),
+              TextField(
+                controller: _proxyController,
+                enabled: _proxyEnabled,
+                keyboardType: TextInputType.url,
+                decoration: const InputDecoration(hintText: '192.168.0.102:8888'),
+              ),
+              const SizedBox(height: 16.0),
+              PrimaryButton(text: 'Применить', onPressed: () => _accept(context)),
+              const SizedBox(height: 16.0),
+              PrimaryButton(text: 'Сбросить', onPressed: () => _reset(context)),
+            ],
           ),
         ),
       ),
@@ -216,35 +264,61 @@ class _ConnectionCardState extends State<_ConnectionCard> {
   }
 
   void _init() {
-    _proxyController.text = _debugDevService.proxyUrl ?? '';
-    final domain = _debugDevService.domainUrl;
-    if (domain != null) {
+    _proxyController.text = _debug.proxyUrl ?? '';
+    _proxyEnabled = _debug.proxyEnabled;
+    _customUrlController.text = _debug.customUrl ?? '';
+
+    final domain = _debug.domainUrl;
+    if (domain == null) {
+      // Ничего не выбрано — дефолт dev-флейвора (dev-0).
+      _domainIndex = _domainUrlList.indexOf(AcitsEnvUrls.dev(0));
+    } else {
       final index = _domainUrlList.indexOf(domain);
       if (index > -1) {
         _domainIndex = index;
       } else {
-        // В storage лежит URL, которого больше нет в списке контуров (например
-        // устаревший dev-01). Иначе radiobutton показывал бы дефолт, а клиент
-        // всё равно ходил бы на мёртвый сохранённый URL. Сбрасываем на дефолт.
-        _debugDevService.domainUrl = null;
+        // Сохранённый URL не из списка контуров — значит это custom (mockoon).
+        _domainIndex = _customDomainIndex;
+        if (_customUrlController.text.isEmpty) _customUrlController.text = domain;
       }
     }
   }
 
-  void _domainUrlChanged(int? index) => setState(() => _domainIndex = index ?? 0);
+  void _onDomainChanged(int? index) => setState(() => _domainIndex = index ?? 0);
+
+  void _onProxyToggled(bool value) => setState(() => _proxyEnabled = value);
 
   void _accept(BuildContext context) {
+    // Определяем целевой baseUrl: контур из списка либо custom-поле.
+    final String? targetUrl;
+    if (_domainIndex == _customDomainIndex) {
+      final custom = _customUrlController.text.trim();
+      if (custom.isEmpty) {
+        _debug.showRestartRequired('Введите custom URL');
+        return;
+      }
+      _debug.customUrl = custom;
+      targetUrl = custom;
+    } else {
+      targetUrl = _domainUrlList[_domainIndex];
+    }
+
+    _debug.domainUrl = targetUrl;
+    _debug.proxyEnabled = _proxyEnabled;
+    _debug.proxyUrl = _proxyController.text.trim();
+
     Navigator.of(context).pop();
-    _debugDevService.proxyUrl = _proxyController.text;
-    _debugDevService.domainUrl = _domainUrlList[_domainIndex];
-    _debugDevService.reloadApp();
+    // Перезапуск нужен всегда (baseUrl/proxy читаются при создании клиента).
+    _debug.reloadApp();
   }
 
   void _reset(BuildContext context) {
     Navigator.of(context).pop();
-    _debugDevService.proxyUrl = null;
-    _debugDevService.domainUrl = null;
-    _debugDevService.reloadApp();
+    _debug.domainUrl = null;
+    _debug.proxyUrl = null;
+    _debug.proxyEnabled = false;
+    _debug.customUrl = null;
+    _debug.reloadApp();
   }
 }
 

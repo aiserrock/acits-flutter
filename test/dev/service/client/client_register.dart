@@ -53,12 +53,17 @@ abstract class ClientRegisterDev {
   }
 
   HttpClient _proxyClient(DebugPreferenceStorage ps) {
-    final proxyUrl = ps.proxy;
-
     final t = HttpClient();
 
-    if (proxyUrl != null && proxyUrl.isNotEmpty) {
-      t.findProxy = (url) => 'PROXY $proxyUrl';
+    // Прокси (Charles/mitmproxy) применяется только при включённом тумблере.
+    if (ps.proxyEnabled) {
+      final proxyUrl = ps.proxy;
+      if (proxyUrl != null && proxyUrl.isNotEmpty) {
+        t.findProxy = (url) => 'PROXY $proxyUrl';
+      }
+      // Charles перехватывает HTTPS своим сертификатом — доверяем любому серту,
+      // чтобы запросы не падали на проверке TLS. Только dev-сборка.
+      t.badCertificateCallback = (cert, host, port) => true;
     }
 
     return t;
