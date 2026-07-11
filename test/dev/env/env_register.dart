@@ -9,8 +9,9 @@ abstract class EnvDevRegistrer {
   //   prod    → https://app.acits.ru
   //   stage   → https://stage.app.acits.ru
   //   dev-N   → https://dev-N.app.acits.ru (N = 0..3)
-  // dev-флейвор по умолчанию стартует со stage; переключение на любой контур —
-  // в debug-экране (см. AcitsEnvUrls / _domainUrlList).
+  // dev-флейвор по умолчанию стартует с dev-0 (там заведены тестовые аккаунты;
+  // на prod/stage их нет). Переключение на любой контур — в debug-экране
+  // (см. AcitsEnvUrls / _domainUrlList).
   @dev
-  Env createEnv() => Env(AcitsEnvUrls.stage);
+  Env createEnv() => Env(AcitsEnvUrls.dev(0));
 }

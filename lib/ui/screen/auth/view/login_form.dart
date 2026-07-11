@@ -198,7 +198,10 @@ class _PasswordInput extends StatelessWidget {
                   ),
                 ),
                 obscureText: state.passObscured,
-                keyboardType: TextInputType.visiblePassword,
+                // TextInputType.text (не visiblePassword): при visiblePassword
+                // Android/сторонние клавиатуры (SwiftKey и т.п.) подменяют ввод
+                // на системную клаву. obscureText скрывает символы независимо.
+                keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChanged(value)),
                 onEditingComplete: () {
