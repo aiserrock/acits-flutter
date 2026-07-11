@@ -4,6 +4,7 @@ import 'package:stream_transform/stream_transform.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -34,11 +35,13 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
   Future<void> _onFetchNext(FetchNextSearchEvent event, Emitter<SearchState<T>> emitter) async {
     if (state.status == SearchStatus.loading || state.isReachedMax) return;
 
+    Log.debug('SearchBloc.fetchNext offset=${state.items.length}');
     emitter(state.copyWith(status: SearchStatus.loading));
 
     await adapter
         .fetch(limit: pageLimit, offset: state.items.length, search: state.searchRequest)
         .then((value) {
+          Log.info('SearchBloc.fetchNext ok: +${value.length} items');
           emitter(
             state.copyWith(
               status: SearchStatus.success,
@@ -47,7 +50,8 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
             ),
           );
         })
-        .catchError((error) {
+        .catchError((Object error, StackTrace s) {
+          Log.error('SearchBloc.fetchNext failed', error, s);
           emitter(state.copyWith(status: SearchStatus.failure, error: error));
         });
   }
@@ -55,11 +59,13 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
   Future<void> _onResetFetch(ResetFetchSearchEvent event, Emitter<SearchState<T>> emitter) async {
     if (state.status == SearchStatus.loading) return;
 
+    Log.debug('SearchBloc.resetFetch search=${state.searchRequest}');
     emitter(state.copyWith(status: SearchStatus.loading));
 
     await adapter
         .fetch(limit: pageLimit, offset: 0, search: state.searchRequest)
         .then((value) {
+          Log.info('SearchBloc.resetFetch ok: ${value.length} items');
           emitter(
             state.copyWith(
               status: SearchStatus.success,
@@ -68,7 +74,8 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
             ),
           );
         })
-        .catchError((error) {
+        .catchError((Object error, StackTrace s) {
+          Log.error('SearchBloc.resetFetch failed', error, s);
           emitter(state.copyWith(status: SearchStatus.failure, error: error));
         });
   }
@@ -79,11 +86,13 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
   ) async {
     if (state.status == SearchStatus.loading) return;
 
+    Log.debug('SearchBloc.changeSearch search=${event.searchRequest}');
     emitter(state.copyWith(status: SearchStatus.loading));
 
     await adapter
         .fetch(limit: pageLimit, offset: 0, search: event.searchRequest)
         .then((value) {
+          Log.info('SearchBloc.changeSearch ok: ${value.length} items');
           emitter(
             state.copyWith(
               status: SearchStatus.success,
@@ -93,7 +102,8 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
             ),
           );
         })
-        .catchError((error) {
+        .catchError((Object error, StackTrace s) {
+          Log.error('SearchBloc.changeSearch failed', error, s);
           emitter(
             state.copyWith(
               status: SearchStatus.failure,

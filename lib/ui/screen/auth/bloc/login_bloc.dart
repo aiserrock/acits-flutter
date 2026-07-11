@@ -9,6 +9,7 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/auth/login.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -65,14 +66,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emitter(state.copyWith(password: pass, name: name));
 
     if (Formz.validate([name, pass])) {
+      Log.debug('LoginBloc.submit: login attempt name=${state.name.value}');
       emitter(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
       try {
         await _authService.login(state.name.value, state.password.value);
+        Log.info('LoginBloc.submit ok: name=${state.name.value}');
         emitter(state.copyWith(status: FormzSubmissionStatus.success));
-      } catch (_) {
+      } catch (e, s) {
+        Log.error('LoginBloc.submit failed: name=${state.name.value}', e, s);
         emitter(state.copyWith(status: FormzSubmissionStatus.failure));
       }
+    } else {
+      Log.debug('LoginBloc.submit: validation failed');
     }
   }
 
@@ -96,9 +102,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     if (state.status.isInProgress) return;
 
+    Log.debug('LoginBloc.tryRefreshLastSession');
     emitter(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
     final refreshed = await _authService.tryRefreshLastAuth();
+    Log.info('LoginBloc.tryRefreshLastSession ok: refreshed=$refreshed');
     emitter(state.copyWith(status: FormzSubmissionStatus.canceled));
     if (refreshed) {
       _pickShelter();
@@ -106,10 +114,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _pickShelter() async {
-    final list = await _authService.getShelterList().catchError((error) {
+    Log.debug('LoginBloc.pickShelter: fetching shelter list');
+    final list = await _authService.getShelterList().catchError((error, stack) {
+      Log.error('LoginBloc.pickShelter failed to load shelter list', error, stack);
       return null;
     });
     if (list != null) {
+      Log.info('LoginBloc.pickShelter ok: navigating to pick shelter');
       getIt<GoRouter>().push(
         AppRoutes.pickShelter,
         extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true},
