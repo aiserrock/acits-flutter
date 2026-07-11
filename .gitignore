@@ -112,3 +112,4 @@ CLAUDE.md
 # Internal backend handoff notes — not for the public repo (kept locally)
 doc/backend-handoff.md
 doc/backend-integration-checklist.md
+mockoon/_bodies.json
