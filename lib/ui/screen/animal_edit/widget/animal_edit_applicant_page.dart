@@ -130,7 +130,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
   }
 
   void _setControllers(AnimalRead value) {
-    if (value.applicant != null) setState(() => _applicant = Applicant.fromJson(value.applicant));
+    if (value.applicant != null) setState(() => _applicant = value.applicant);
     _applicantNameController.text = _applicant?.firstName ?? '';
     _applicantLastNameController.text = _applicant?.lastName ?? '';
     _applicantPhoneController.text = _applicant?.phoneNumber ?? '';
@@ -152,16 +152,16 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
     Provider.of<AnimalEditHolder>(
       context,
       listen: false,
-    ).copyWith(applicant: applicant.toJson(), applicantId: _applicant?.id);
+    ).copyWith(applicant: applicant, applicantId: _applicant?.id);
   }
 
   Future<void> _searchApplicant() async {
     final result = await context.push<Applicant>(AppRoutes.searchPath(SearchTypeKey.applicant));
     if (result != null) {
       setState(() => _applicant = result);
-      _applicantNameController.text = result.firstName ?? '';
-      _applicantLastNameController.text = result.lastName ?? '';
-      _applicantPhoneController.text = result.phoneNumber ?? '';
+      _applicantNameController.text = result.firstName;
+      _applicantLastNameController.text = result.lastName;
+      _applicantPhoneController.text = result.phoneNumber;
       _applicantEmailController.text = result.email ?? '';
       _applicantSocialController.text = result.contactDetails ?? '';
     }
@@ -175,9 +175,9 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
     );
     if (result != null) {
       setState(() => _applicant = result);
-      _applicantNameController.text = result.firstName ?? '';
-      _applicantLastNameController.text = result.lastName ?? '';
-      _applicantPhoneController.text = result.phoneNumber ?? '';
+      _applicantNameController.text = result.firstName;
+      _applicantLastNameController.text = result.lastName;
+      _applicantPhoneController.text = result.phoneNumber;
       _applicantEmailController.text = result.email ?? '';
       _applicantSocialController.text = result.contactDetails ?? '';
     }

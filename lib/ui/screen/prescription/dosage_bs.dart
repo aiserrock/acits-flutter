@@ -38,7 +38,7 @@ class _BsDosageState extends State<BsDosage> {
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              Text('${drug.drug?.name}, ${drug.drug?.formOfDrugName}', style: StyleRes.subTitle),
+              Text('${drug.drug.name}, ${drug.drug.formOfDrugName}', style: StyleRes.subTitle),
               const SizedBox(height: 16.0),
               TextField(
                 controller: _controller,
