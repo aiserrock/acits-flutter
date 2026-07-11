@@ -167,8 +167,8 @@ class _ConnectionCardState extends State<_ConnectionCard> {
   final _formKey = GlobalKey<FormState>();
   final _proxyController = TextEditingController();
 
-  /// По умолчанию выбран stage (совпадает с дефолтом dev-флейвора).
-  int _domainIndex = _domainUrlList.indexOf(AcitsEnvUrls.stage);
+  /// По умолчанию выбран dev-0 (совпадает с дефолтом dev-флейвора).
+  int _domainIndex = _domainUrlList.indexOf(AcitsEnvUrls.dev(0));
 
   @override
   void initState() {
@@ -220,7 +220,14 @@ class _ConnectionCardState extends State<_ConnectionCard> {
     final domain = _debugDevService.domainUrl;
     if (domain != null) {
       final index = _domainUrlList.indexOf(domain);
-      if (index > -1) _domainIndex = index;
+      if (index > -1) {
+        _domainIndex = index;
+      } else {
+        // В storage лежит URL, которого больше нет в списке контуров (например
+        // устаревший dev-01). Иначе radiobutton показывал бы дефолт, а клиент
+        // всё равно ходил бы на мёртвый сохранённый URL. Сбрасываем на дефолт.
+        _debugDevService.domainUrl = null;
+      }
     }
   }
 
