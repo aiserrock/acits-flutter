@@ -53,6 +53,7 @@ import '../env/env_register.dart' as _i962;
 import '../service/client/client_register.dart' as _i913;
 import '../service/client/dio_register.dart' as _i230;
 import '../service/debug/debug_dev_service.dart' as _i218;
+import '../service/logger/logger_register.dart' as _i175;
 import '../service/shared_pref/debug_preference_storage.dart' as _i1058;
 
 const String _dev = 'dev';
@@ -67,9 +68,10 @@ Future<_i174.GetIt> $initDevGetIt(
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final secureStorageRegister = _$SecureStorageRegister();
   final sharedPreferenceRegister = _$SharedPreferenceRegister();
-  final appLoggerModule = _$AppLoggerModule();
   final envDevRegistrer = _$EnvDevRegistrer();
   final dioRegisterDev = _$DioRegisterDev();
+  final loggerRegisterDev = _$LoggerRegisterDev();
+  final appLoggerModule = _$AppLoggerModule();
   final dioRegister = _$DioRegister();
   final envRegistrer = _$EnvRegistrer();
   final clientRegisterDev = _$ClientRegisterDev();
@@ -86,7 +88,6 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.singleton<_i430.ColorRes>(() => _i430.ColorRes());
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
-  gh.singleton<_i207.Talker>(() => appLoggerModule.talker());
   gh.factory<_i531.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i361.Dio>(
     () => dioRegisterDev.createDioClient(),
@@ -94,6 +95,10 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i1058.DebugPreferenceStorage>(
     () => _i1058.DebugPreferenceStorage(),
+    registerFor: {_dev},
+  );
+  gh.singleton<_i207.Talker>(
+    () => loggerRegisterDev.talker(),
     registerFor: {_dev},
   );
   gh.singleton<_i47.DebugService>(
@@ -105,6 +110,10 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.singleton<_i47.DebugService>(
     () => _i47.DebugService(),
+    registerFor: {_prod},
+  );
+  gh.singleton<_i207.Talker>(
+    () => appLoggerModule.talker(),
     registerFor: {_prod},
   );
   gh.factory<_i361.Dio>(
@@ -190,11 +199,13 @@ class _$SecureStorageRegister extends _i539.SecureStorageRegister {}
 
 class _$SharedPreferenceRegister extends _i718.SharedPreferenceRegister {}
 
-class _$AppLoggerModule extends _i197.AppLoggerModule {}
-
 class _$EnvDevRegistrer extends _i962.EnvDevRegistrer {}
 
 class _$DioRegisterDev extends _i230.DioRegisterDev {}
+
+class _$LoggerRegisterDev extends _i175.LoggerRegisterDev {}
+
+class _$AppLoggerModule extends _i197.AppLoggerModule {}
 
 class _$DioRegister extends _i693.DioRegister {}
 

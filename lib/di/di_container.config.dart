@@ -76,12 +76,15 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.singleton<_i430.ColorRes>(() => _i430.ColorRes());
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
-  gh.singleton<_i207.Talker>(() => appLoggerModule.talker());
   gh.factory<_i622.AuthRepository>(
     () => _i622.AuthRepository(gh<_i558.FlutterSecureStorage>()),
   );
   gh.singleton<_i47.DebugService>(
     () => _i47.DebugService(),
+    registerFor: {_prod},
+  );
+  gh.singleton<_i207.Talker>(
+    () => appLoggerModule.talker(),
     registerFor: {_prod},
   );
   gh.factory<_i361.Dio>(
