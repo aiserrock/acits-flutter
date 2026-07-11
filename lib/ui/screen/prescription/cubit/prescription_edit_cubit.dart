@@ -16,6 +16,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
+import 'package:acits_flutter/domain/prescription_model.dart';
 
 const _shiftFirtsStartDate = Duration(days: 30);
 const _shiftLastStartDate = Duration(days: 120);
@@ -42,21 +43,21 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   /// Типы без служебного `swaggerGeneratedUnknown` — в том же порядке, что и
   /// табы на экране (см. [getTypes]).
-  static final List<MyTypeEnum> _filteredTypes = MyTypeEnum.values
-      .where((type) => type != MyTypeEnum.swaggerGeneratedUnknown)
+  static final List<PrescriptionShortMyTypeEnum> _filteredTypes = PrescriptionShortMyTypeEnum.values
+      .where((type) => type != PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown)
       .toList();
 
   /// Индекс начального типа в ОТФИЛЬТРОВАННОМ списке [_filteredTypes]
   /// (совпадает с индексом таба). Раньше ошибочно использовался индекс в
-  /// нефильтрованном `MyTypeEnum.values`, из-за чего тип съезжал на один.
-  static int _initialTabIndex(Prescription? editPrescription) {
+  /// нефильтрованном `PrescriptionShortMyTypeEnum.values`, из-за чего тип съезжал на один.
+  static int _initialTabIndex(PrescriptionModel? editPrescription) {
     final myType = editPrescription?.myType;
-    if (myType is! MyTypeEnum) return 0;
+    if (myType == null) return 0;
     return max(_filteredTypes.indexOf(myType), 0);
   }
 
   final int? editPrescriptionId;
-  final Prescription? editPrescription;
+  final PrescriptionModel? editPrescription;
   final ConfigService _configService;
   final PrescriptionService _prescriptionService;
   final AnimalService _animalService;
@@ -73,7 +74,10 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   ///
   /// Возвращает сохранённое [Prescription] при успехе, либо `null` (ошибка
   /// показана через [state]) — виджет закрывает экран с результатом.
-  Future<Prescription?> submit({required String description, required BuildContext context}) async {
+  Future<PrescriptionModel?> submit({
+    required String description,
+    required BuildContext context,
+  }) async {
     if (_checkIsLoading) return null;
 
     final animalId = state.animal?.id;
@@ -84,14 +88,14 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return null;
     if (state.type.hasDrugs && !(drugFormKey.currentState?.validate() ?? false)) return null;
 
-    final data = Prescription(
+    final data = PrescriptionModel(
       id: editPrescription?.id ?? editPrescriptionId,
       animal: animalId,
-      myType: state.type,
+      myType: state.type ?? PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown,
       description: description,
       drugs: state.drugs,
       duration:
-          state.type == MyTypeEnum.courseOfTreatment &&
+          state.type == PrescriptionShortMyTypeEnum.courseOfTreatment &&
               state.treatmentPeriod == TreatmentPeriod.weekly
           ? DurationEnum.everyWeek
           : DurationEnum.custom,
@@ -119,8 +123,10 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     }
   }
 
-  List<MyTypeEnum> getTypes() {
-    return MyTypeEnum.values.where((type) => type != MyTypeEnum.swaggerGeneratedUnknown).toList();
+  List<PrescriptionShortMyTypeEnum> getTypes() {
+    return PrescriptionShortMyTypeEnum.values
+        .where((type) => type != PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown)
+        .toList();
   }
 
   List<String> getTabs() {
@@ -146,7 +152,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   /// виджет синхронизировал [TabController]; комментарий возвращается через
   /// колбэк [onComment].
   Future<int?> setEditedState({ValueChanged<String>? onComment}) async {
-    Prescription? prescription;
+    PrescriptionModel? prescription;
     final id = editPrescriptionId;
     if (editPrescription != null) {
       prescription = editPrescription;
@@ -161,7 +167,6 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     if (prescription == null) return null;
 
     final animalId = prescription.animal;
-    if (animalId == null) return null;
     final AnimalRead animal;
     try {
       animal = await _animalService.fetchAnimalDetail(id: animalId);
@@ -173,47 +178,43 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     var next = state.copyWith(screen: DataState.content(prescription), animal: animal);
 
     final drugs = prescription.drugs;
-    if (drugs != null && drugs.isNotEmpty) {
+    if (drugs.isNotEmpty) {
       next = next.copyWith(drugs: drugs);
     }
 
     final executuons = prescription.executions;
-    if (executuons != null) {
-      final days = <DateTime>{}
-        ..addAll(
-          executuons
-              .map((item) => item.executeAt)
-              .nonNulls
-              .map((date) => DateTime(date.year, date.month, date.day)),
-        );
-      final times = <TimeOfDay>{}
-        ..addAll(
-          executuons
-              .map((item) => item.executeAt)
-              .nonNulls
-              .map((time) => TimeOfDay(hour: time.hour, minute: time.minute)),
-        );
+    final days = <DateTime>{}
+      ..addAll(
+        executuons
+            .map((item) => item.executeAt)
+            .map((date) => DateTime(date.year, date.month, date.day)),
+      );
+    final times = <TimeOfDay>{}
+      ..addAll(
+        executuons
+            .map((item) => item.executeAt)
+            .map((time) => TimeOfDay(hour: time.hour, minute: time.minute)),
+      );
 
-      if (days.isNotEmpty && times.isNotEmpty) {
-        next = next.copyWith(
-          daysList: days.toList()..sort(),
-          atTimeList: times.toList()..sort(TimeOfDayX.timeSort),
-        );
-      }
+    if (days.isNotEmpty && times.isNotEmpty) {
+      next = next.copyWith(
+        daysList: days.toList()..sort(),
+        atTimeList: times.toList()..sort(TimeOfDayX.timeSort),
+      );
     }
 
     final comment = prescription.description;
     if (comment != null) onComment?.call(comment);
 
     if (prescription.duration == DurationEnum.everyWeek &&
-        prescription.myType == MyTypeEnum.courseOfTreatment) {
+        prescription.myType == PrescriptionShortMyTypeEnum.courseOfTreatment) {
       next = next.copyWith(treatmentPeriod: TreatmentPeriod.weekly);
     }
 
     safeEmit(next);
 
     final type = prescription.myType;
-    final tabIndex = type != null ? _filteredTypes.indexOf(type) : -1;
+    final tabIndex = _filteredTypes.indexOf(type);
     return tabIndex >= 0 ? tabIndex : null;
   }
 
@@ -297,10 +298,10 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
         drugs: List<PrescriptionDrug>.from(state.drugs)
           ..add(
             PrescriptionDrug(
-              drugId: drug.drug?.id,
+              drugId: drug.drug.id ?? 0,
               drugDosage: dosage,
-              drugName: drug.drug?.name,
-              formOfDrug: drug.drug?.formOfDrugName,
+              drugName: drug.drug.name,
+              formOfDrug: drug.drug.formOfDrugName,
             ),
           ),
       ),
@@ -347,16 +348,16 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
 enum TreatmentPeriod { daily, weekly }
 
-extension MyTypeEnumX on MyTypeEnum? {
+extension PrescriptionShortMyTypeEnumX on PrescriptionShortMyTypeEnum? {
   /// Нужны ли лекарства для данного типа назначения
   bool get hasDrugs =>
-      this == MyTypeEnum.courseOfTreatment ||
-      this == MyTypeEnum.removingStitches ||
-      this == MyTypeEnum.woundHealing;
+      this == PrescriptionShortMyTypeEnum.courseOfTreatment ||
+      this == PrescriptionShortMyTypeEnum.removingStitches ||
+      this == PrescriptionShortMyTypeEnum.woundHealing;
 
   /// Можно ли установить несколько дат для данного типа назначения
-  bool get allowMultiDate => this == MyTypeEnum.courseOfTreatment;
+  bool get allowMultiDate => this == PrescriptionShortMyTypeEnum.courseOfTreatment;
 
   /// Можно ли установить время несколько время для данного типа назначения
-  bool get allowMultiTime => this == MyTypeEnum.courseOfTreatment;
+  bool get allowMultiTime => this == PrescriptionShortMyTypeEnum.courseOfTreatment;
 }

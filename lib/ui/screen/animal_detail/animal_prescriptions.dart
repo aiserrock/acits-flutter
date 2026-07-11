@@ -33,9 +33,9 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
               ),
             ),
             if (state.prescriptions.isContent)
-              ...?state.prescriptions.valueOrNull
-                  ?.where((element) => element != null)
-                  .map<Widget>((item) => AnimalPrescriptionCard(prescription: item!)),
+              ...?state.prescriptions.valueOrNull?.map<Widget>(
+                (item) => AnimalPrescriptionCard(prescription: item),
+              ),
             if (state.prescriptions.isLoading) const LoaderHolderWidget(),
             if (state.prescriptions.hasError)
               ErrorHolderWidget(onPressed: _cubit.reloadPrescriptions),

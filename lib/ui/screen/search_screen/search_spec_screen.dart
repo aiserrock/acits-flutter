@@ -134,7 +134,7 @@ class _SearchViewState extends State<_SearchView> {
                       child: Builder(
                         builder: (context) {
                           return ListTile(
-                            title: Text(list[index].name ?? ''),
+                            title: Text(list[index].name),
                             onTap: () {
                               _onItemPressed(list[index]);
                             },

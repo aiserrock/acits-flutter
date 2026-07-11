@@ -110,7 +110,7 @@ class _PickShelterViewState extends State<_PickShelterView> {
           shrinkWrap: true,
           itemCount: results.length,
           itemBuilder: (_, index) =>
-              ListTile(title: Text(results[index].name ?? ''), onTap: () => _pickShelter(index)),
+              ListTile(title: Text(results[index].name), onTap: () => _pickShelter(index)),
           separatorBuilder: (_, _) =>
               const Divider(indent: 16.0, endIndent: 16.0, height: 2.0, thickness: 2.0),
         ),

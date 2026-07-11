@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
   ApplicantEditCubit({this.applicantId})
     : _service = getIt<StaffService>(),
-      super(DataState.content(Applicant())) {
+      super(DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: ''))) {
     _init();
   }
 
@@ -27,7 +27,11 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
     safeEmit(const DataState.loading());
     try {
       final applicant = await _service.fetchApplicantById(id: applicantId!);
-      safeEmit(DataState.content(applicant ?? Applicant()));
+      safeEmit(
+        DataState.content(
+          applicant ?? const Applicant(firstName: '', lastName: '', phoneNumber: ''),
+        ),
+      );
     } catch (e) {
       safeEmit(DataState.error(e));
     }
@@ -38,7 +42,8 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
   /// Возвращает сохранённого [Applicant] при успехе, либо `null` при ошибке.
   Future<Applicant?> submit(Applicant draft) async {
     if (state.isLoading) return null;
-    final previous = state.valueOrNull ?? Applicant();
+    final previous =
+        state.valueOrNull ?? const Applicant(firstName: '', lastName: '', phoneNumber: '');
     safeEmit(const DataState.loading());
     try {
       final Applicant? result;

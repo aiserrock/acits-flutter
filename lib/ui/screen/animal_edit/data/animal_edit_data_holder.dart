@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 class AnimalEditHolder extends ChangeNotifier {
   AnimalRead? _initState;
 
-  AnimalRead _state = AnimalRead();
+  AnimalRead _state = AnimalRead(
+    images: const [],
+    dateJoined: DateTime.now(),
+    placeOfCatch: '',
+    shelter: 0,
+    animalAttributes: const [],
+  );
 
   void init(AnimalRead animal) {
     _initState = _state = animal;
@@ -26,7 +32,7 @@ class AnimalEditHolder extends ChangeNotifier {
     String? url,
     String? name,
     dynamic spec,
-    Status131Enum? status,
+    Status69fEnum? status,
     DateTime? dateJoined,
     DateTime? birthDate,
     DateTime? deathDate,
@@ -39,8 +45,8 @@ class AnimalEditHolder extends ChangeNotifier {
     String? weight,
     bool? hasDocuments,
     int? shelter,
-    dynamic curator,
-    dynamic applicant,
+    Curator? curator,
+    Applicant? applicant,
     int? applicantId,
     List<AnimalAttributeValue>? animalAttributes,
     DateTime? deletedAt,

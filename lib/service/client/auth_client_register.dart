@@ -24,7 +24,7 @@ abstract class ClientRegister {
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
     );
-    final client = Openapi.create(chopper);
+    final client = Openapi.create(client: chopper);
     return client;
   }
 
@@ -35,7 +35,7 @@ abstract class ClientRegister {
       baseUrl: Uri.parse(env.apiUrl),
       converter: $JsonSerializableConverter(),
     );
-    final client = Openapi.create(chopper);
+    final client = Openapi.create(client: chopper);
     return client;
   }
 }

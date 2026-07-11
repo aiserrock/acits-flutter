@@ -170,8 +170,8 @@ class _PersonalViewState extends State<_PersonalView> {
   Future<void> _init() async {
     final user = await context.read<PersonalCubit>().load();
     if (!mounted || user == null) return;
-    _firstNameController.text = user.firstName ?? '';
-    _lastNameController.text = user.lastName ?? '';
+    _firstNameController.text = user.firstName;
+    _lastNameController.text = user.lastName;
     _fatherNameController.text = user.fathersName ?? '';
     _phoneController.text = user.phoneNumber ?? '';
     _emailController.text = user.email ?? '';

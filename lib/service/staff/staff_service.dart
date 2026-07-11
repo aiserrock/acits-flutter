@@ -22,7 +22,7 @@ class StaffService {
       limit: limit,
       offset: offset,
       search: searchRequest,
-      xCurrentShelter: _currentShelter,
+      xCurrentShelter: _currentShelterInt,
     );
 
     final data = result.body?.results;
@@ -36,7 +36,7 @@ class StaffService {
 
   /// Получить куратора по Id
   Future<Curator?> fetchCuratorById({required int id}) async {
-    final result = await _client.apiV1CuratorsIdGet(id: id, xCurrentShelter: _currentShelter);
+    final result = await _client.apiV1CuratorsIdGet(id: id, xCurrentShelter: _currentShelterInt);
 
     final data = result.body;
 
@@ -51,8 +51,8 @@ class StaffService {
   Future<Curator?> updateCurator({required int id, required Curator curator}) async {
     final result = await _client.apiV1CuratorsIdPut(
       id: id,
-      body: curator.copyWith(shelter: _currentShelter),
-      xCurrentShelter: _currentShelter,
+      body: curator.copyWith(shelter: _currentShelterStr),
+      xCurrentShelter: _currentShelterInt,
     );
 
     final data = result.body;
@@ -67,8 +67,8 @@ class StaffService {
   /// Создать куратора
   Future<Curator?> createCurator({required Curator curator}) async {
     final result = await _client.apiV1CuratorsPost(
-      body: curator.copyWith(shelter: _currentShelter),
-      xCurrentShelter: _currentShelter,
+      body: curator.copyWith(shelter: _currentShelterStr),
+      xCurrentShelter: _currentShelterInt,
     );
 
     final data = result.body;
@@ -90,7 +90,7 @@ class StaffService {
       limit: limit,
       offset: offset,
       search: searchRequest,
-      xCurrentShelter: _currentShelter,
+      xCurrentShelter: _currentShelterInt,
     );
 
     final data = result.body?.results;
@@ -104,7 +104,7 @@ class StaffService {
 
   /// Получить заявителя по Id
   Future<Applicant?> fetchApplicantById({required int id}) async {
-    final result = await _client.apiV1ApplicantsIdGet(id: id, xCurrentShelter: _currentShelter);
+    final result = await _client.apiV1ApplicantsIdGet(id: id, xCurrentShelter: _currentShelterInt);
 
     final data = result.body;
 
@@ -119,8 +119,8 @@ class StaffService {
   Future<Applicant?> updateApplicant({required int id, required Applicant applicant}) async {
     final result = await _client.apiV1ApplicantsIdPut(
       id: id,
-      body: applicant.copyWith(shelter: int.tryParse(_currentShelter ?? '')),
-      xCurrentShelter: _currentShelter,
+      body: applicant.copyWith(shelter: _currentShelterInt),
+      xCurrentShelter: _currentShelterInt,
     );
 
     final data = result.body;
@@ -135,8 +135,8 @@ class StaffService {
   /// Создать заявителя
   Future<Applicant?> createApplicant({required Applicant applicant}) async {
     final result = await _client.apiV1ApplicantsPost(
-      body: applicant.copyWith(shelter: int.tryParse(_currentShelter ?? '')),
-      xCurrentShelter: _currentShelter,
+      body: applicant.copyWith(shelter: _currentShelterInt),
+      xCurrentShelter: _currentShelterInt,
     );
 
     final data = result.body;
@@ -148,5 +148,7 @@ class StaffService {
     }
   }
 
-  String? get _currentShelter => _authService.currentShelterId;
+  int? get _currentShelterInt => _authService.currentShelterId;
+
+  String? get _currentShelterStr => _currentShelterInt?.toString();
 }

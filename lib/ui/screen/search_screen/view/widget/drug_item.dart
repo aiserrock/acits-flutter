@@ -10,12 +10,12 @@ class DrugListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final drugForm = drug.drug?.formOfDrugName;
+    final drugForm = drug.drug.formOfDrugName;
     return ListTile(
       title: Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: drug.drug?.name ?? '', style: StyleRes.subTitle),
+            TextSpan(text: drug.drug.name, style: StyleRes.subTitle),
             if (drugForm != null) const TextSpan(text: ', ', style: StyleRes.subTitle),
             if (drugForm != null)
               TextSpan(

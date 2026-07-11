@@ -1,4 +1,5 @@
 import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:equatable/equatable.dart';
 
@@ -20,14 +21,14 @@ class AnimalDetailState extends Equatable {
   final DataState<AnimalRead> animal;
 
   /// Состояние загрузки списка назначений.
-  final DataState<List<Prescription?>?> prescriptions;
+  final DataState<List<PrescriptionModel>?> prescriptions;
 
   /// Показывать ли актуальные назначения (иначе — прошлые).
   final bool prescriptionActive;
 
   AnimalDetailState copyWith({
     DataState<AnimalRead>? animal,
-    DataState<List<Prescription?>?>? prescriptions,
+    DataState<List<PrescriptionModel>?>? prescriptions,
     bool? prescriptionActive,
   }) {
     return AnimalDetailState(

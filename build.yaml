@@ -9,6 +9,7 @@ targets:
     sources:
       include:
         - lib/**
+        - doc/**
         - test/**
         - pubspec.*
         - $package$
@@ -17,8 +18,9 @@ targets:
         # исходников, чтобы не падать на нерезолвящихся @GherkinTestSuite.
         - test/integration_test/**
     builders:
-      # Swagger генератор отключён: входной OpenAPI-спеки в репозитории нет,
-      # файлы lib/gen/api/*.swagger.dart уже закоммичены. Включить при необходимости,
-      # добавив doc/api/*.json и поменяв enabled на true.
       swagger_dart_code_generator:
-        enabled: false
+        enabled: true
+        options:
+          input_folder: "doc/api/"
+          output_folder: "lib/gen/api/"
+          separate_models: false

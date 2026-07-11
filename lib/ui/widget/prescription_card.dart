@@ -34,7 +34,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         children: [
           _buildTimeAction(),
           const SizedBox(height: 4.0),
-          if (widget.itemData?.prescription?.myType != null) _buildType(),
+          if (widget.itemData?.prescription.myType != null) _buildType(),
           const SizedBox(height: 4.0),
           _buildAnimal(),
         ],
@@ -59,12 +59,12 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
           TextSpan(
             children: [
               TextSpan(
-                text: (widget.itemData?.prescription?.animal?.specParentName ?? ''),
+                text: (widget.itemData?.prescription.animal.specParentName ?? ''),
                 style: StyleRes.mainContent,
               ),
               const TextSpan(text: (', '), style: StyleRes.mainContent),
               TextSpan(
-                text: widget.itemData?.prescription?.animal?.specName ?? '',
+                text: widget.itemData?.prescription.animal.specName ?? '',
                 style: StyleRes.mainContent,
               ),
             ],
@@ -75,22 +75,21 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         Text(LocaleKeys.mainAppoinmentAuthor.tr(), style: StyleRes.content),
         const SizedBox(height: 4.0),
         Text(
-          widget.itemData?.prescription?.createdBy ?? ' ',
+          widget.itemData?.prescription.createdBy ?? ' ',
           style: StyleRes.mainContent,
           maxLines: 3,
         ),
         const Divider(height: 24.0),
         Text(LocaleKeys.mainAppoinment.tr(), style: StyleRes.content),
         const SizedBox(height: 4.0),
-        if (widget.itemData?.prescription?.drugs != null)
-          ...widget.itemData!.prescription!.drugs!.map<Widget>(
+        if (widget.itemData?.prescription.drugs != null)
+          ...widget.itemData!.prescription.drugs.map<Widget>(
             (drug) => Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(text: (drug.drugName ?? ''), style: StyleRes.mainContent),
+                  TextSpan(text: (drug.drugName), style: StyleRes.mainContent),
                   const TextSpan(text: (', '), style: StyleRes.mainContent),
-                  if (drug.drugDosage != null)
-                    TextSpan(text: (drug.drugDosage.toString()), style: StyleRes.mainContent),
+                  TextSpan(text: (drug.drugDosage.toString()), style: StyleRes.mainContent),
                   if (drug.formOfDrug != null)
                     TextSpan(text: (drug.formOfDrug), style: StyleRes.mainContent),
                 ],
@@ -102,7 +101,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         Text(LocaleKeys.animalComments.tr(), style: StyleRes.content),
         const SizedBox(height: 4.0),
         Text(
-          widget.itemData?.prescription?.description ?? '',
+          widget.itemData?.prescription.description ?? '',
           style: StyleRes.mainContent.copyWith(fontSize: 16.0),
         ),
       ],
@@ -117,7 +116,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             TextSpan(
               children: [
                 TextSpan(
-                  text: (widget.itemData?.prescription?.animal?.name ?? ''),
+                  text: (widget.itemData?.prescription.animal.name ?? ''),
                   style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
                 ),
                 TextSpan(
@@ -125,7 +124,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
                   style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
                 ),
                 TextSpan(
-                  text: (widget.itemData?.prescription?.animal?.id ?? '').toString(),
+                  text: (widget.itemData?.prescription.animal.id ?? '').toString(),
                   style: StyleRes.content,
                 ),
               ],
@@ -150,7 +149,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
 
   Widget _buildType() {
     return Text(
-      widget.itemData?.prescription?.typeString ?? '',
+      widget.itemData?.prescription.typeString ?? '',
       style: StyleRes.subTitle,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
@@ -160,8 +159,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
   Widget _buildTimeAction() {
     return Row(
       children: [
-        if (widget.itemData?.executeAt != null)
-          Text(_formatter.format(widget.itemData!.executeAt!)),
+        if (widget.itemData?.executeAt != null) Text(_formatter.format(widget.itemData!.executeAt)),
         const Spacer(),
         InkWell(
           onTap: _openBsActions,
