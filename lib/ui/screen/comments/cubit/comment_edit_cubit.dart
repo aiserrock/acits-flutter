@@ -48,7 +48,7 @@ class CommentEditCubit extends Cubit<CommentEditState> {
       final result = source != null
           ? await _animalService.patchAnimalNote(
               id: source.id!,
-              animalId: source.animal!,
+              animalId: source.animal,
               text: text,
               files: files,
             )

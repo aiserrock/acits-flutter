@@ -14,7 +14,7 @@ class ShelterListItem extends StatelessWidget {
       title: Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: shelter.name ?? '', style: StyleRes.subTitle),
+            TextSpan(text: shelter.name, style: StyleRes.subTitle),
             const TextSpan(text: ', ', style: StyleRes.subTitle),
             TextSpan(
               text: shelter.id.toString(),

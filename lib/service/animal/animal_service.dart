@@ -151,7 +151,7 @@ class AnimalService {
           additional.add(
             AnimalImageWrite(
               isPrimary: false,
-              name: e.assetPath,
+              name: e.assetPath ?? '',
               image: base64Encode(
                 buffer.asUint8List(fileBytes.offsetInBytes, fileBytes.lengthInBytes),
               ),
@@ -176,7 +176,7 @@ class AnimalService {
       additional.add(
         AnimalImageWrite(
           isPrimary: false,
-          name: e.filePath,
+          name: e.filePath ?? '',
           image: base64Encode(image_util.encodePng(image)),
         ),
       );

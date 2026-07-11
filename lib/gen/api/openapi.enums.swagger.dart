@@ -1,182 +1,327 @@
+// coverage:ignore-file
+// ignore_for_file: type=lint
+
 import 'package:json_annotation/json_annotation.dart';
+import 'package:collection/collection.dart';
+
+enum AnalysisPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('ANALYSIS')
+  analysis('ANALYSIS');
+
+  final String? value;
+
+  const AnalysisPrescriptionMyTypeEnum(this.value);
+}
+
+enum AppointmentPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('APPOINTMENT')
+  appointment('APPOINTMENT');
+
+  final String? value;
+
+  const AppointmentPrescriptionMyTypeEnum(this.value);
+}
+
+enum CourseOfTreatmentPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('COURSE_OF_TREATMENT')
+  courseOfTreatment('COURSE_OF_TREATMENT');
+
+  final String? value;
+
+  const CourseOfTreatmentPrescriptionMyTypeEnum(this.value);
+}
 
 enum DurationEnum {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
-  @JsonValue('EVERYDAY')
-  everyday,
-  @JsonValue('EVERY_WEEK')
-  everyWeek,
-  @JsonValue('CUSTOM')
-  custom,
-}
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
 
-const $DurationEnumMap = {
-  DurationEnum.everyday: 'EVERYDAY',
-  DurationEnum.everyWeek: 'EVERY_WEEK',
-  DurationEnum.custom: 'CUSTOM',
-};
+  @JsonValue('EVERYDAY')
+  everyday('EVERYDAY'),
+  @JsonValue('EVERY_WEEK')
+  everyWeek('EVERY_WEEK'),
+  @JsonValue('CUSTOM')
+  custom('CUSTOM');
+
+  final String? value;
+
+  const DurationEnum(this.value);
+}
 
 enum LevelEnum {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
-  @JsonValue('1')
-  value_1,
-  @JsonValue('2')
-  value_2,
-  @JsonValue('3')
-  value_3,
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue(1)
+  value_1(1),
+  @JsonValue(2)
+  value_2(2),
+  @JsonValue(3)
+  value_3(3);
+
+  final int? value;
+
+  const LevelEnum(this.value);
 }
 
-const $LevelEnumMap = {LevelEnum.value_1: '1', LevelEnum.value_2: '2', LevelEnum.value_3: '3'};
+enum OtherPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
 
-enum MyTypeEnum {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
-  @JsonValue('COURSE_OF_TREATMENT')
-  courseOfTreatment,
-  @JsonValue('APPOINTMENT')
-  appointment,
-  @JsonValue('READMISSION')
-  readmission,
-  @JsonValue('REMOVING_STITCHES')
-  removingStitches,
-  @JsonValue('WOUND_HEALING')
-  woundHealing,
-  @JsonValue('ANALYSIS')
-  analysis,
+  @JsonValue('OTHER')
+  other('OTHER');
+
+  final String? value;
+
+  const OtherPrescriptionMyTypeEnum(this.value);
 }
 
-const $MyTypeEnumMap = {
-  MyTypeEnum.courseOfTreatment: 'COURSE_OF_TREATMENT',
-  MyTypeEnum.appointment: 'APPOINTMENT',
-  MyTypeEnum.readmission: 'READMISSION',
-  MyTypeEnum.removingStitches: 'REMOVING_STITCHES',
-  MyTypeEnum.woundHealing: 'WOUND_HEALING',
-  MyTypeEnum.analysis: 'ANALYSIS',
-};
+enum ParasitesTreatmentPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('PARASITES_TREATMENT')
+  parasitesTreatment('PARASITES_TREATMENT');
+
+  final String? value;
+
+  const ParasitesTreatmentPrescriptionMyTypeEnum(this.value);
+}
+
+enum ParasitesTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('ENDOPARASITES')
+  endoparasites('ENDOPARASITES'),
+  @JsonValue('ECTOPARASITES')
+  ectoparasites('ECTOPARASITES');
+
+  final String? value;
+
+  const ParasitesTypeEnum(this.value);
+}
 
 enum PrescriptionExecutionStatusEnum {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
   @JsonValue('IN_PROGRESS')
-  inProgress,
+  inProgress('IN_PROGRESS'),
   @JsonValue('DONE')
-  done,
+  done('DONE'),
   @JsonValue('EXPIRED')
-  expired,
+  expired('EXPIRED'),
   @JsonValue('CANCELLED')
-  cancelled,
+  cancelled('CANCELLED');
+
+  final String? value;
+
+  const PrescriptionExecutionStatusEnum(this.value);
 }
 
-const $PrescriptionExecutionStatusEnumMap = {
-  PrescriptionExecutionStatusEnum.inProgress: 'IN_PROGRESS',
-  PrescriptionExecutionStatusEnum.done: 'DONE',
-  PrescriptionExecutionStatusEnum.expired: 'EXPIRED',
-  PrescriptionExecutionStatusEnum.cancelled: 'CANCELLED',
-};
+enum PrescriptionShortMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('COURSE_OF_TREATMENT')
+  courseOfTreatment('COURSE_OF_TREATMENT'),
+  @JsonValue('APPOINTMENT')
+  appointment('APPOINTMENT'),
+  @JsonValue('READMISSION')
+  readmission('READMISSION'),
+  @JsonValue('REMOVING_STITCHES')
+  removingStitches('REMOVING_STITCHES'),
+  @JsonValue('WOUND_HEALING')
+  woundHealing('WOUND_HEALING'),
+  @JsonValue('ANALYSIS')
+  analysis('ANALYSIS'),
+  @JsonValue('PARASITES_TREATMENT')
+  parasitesTreatment('PARASITES_TREATMENT'),
+  @JsonValue('VACCINATION')
+  vaccination('VACCINATION'),
+  @JsonValue('OTHER')
+  other('OTHER');
+
+  final String? value;
+
+  const PrescriptionShortMyTypeEnum(this.value);
+}
+
+enum ReadmissionPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('READMISSION')
+  readmission('READMISSION');
+
+  final String? value;
+
+  const ReadmissionPrescriptionMyTypeEnum(this.value);
+}
+
+enum RemovingStitchesPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('REMOVING_STITCHES')
+  removingStitches('REMOVING_STITCHES');
+
+  final String? value;
+
+  const RemovingStitchesPrescriptionMyTypeEnum(this.value);
+}
 
 enum RoleEnum {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
   @JsonValue('GUEST')
-  guest,
+  guest('GUEST'),
   @JsonValue('WORKER')
-  worker,
+  worker('WORKER');
+
+  final String? value;
+
+  const RoleEnum(this.value);
 }
 
-const $RoleEnumMap = {RoleEnum.guest: 'GUEST', RoleEnum.worker: 'WORKER'};
+enum Status69fEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
 
-enum Status131Enum {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
   @JsonValue('IN_THE_SHELTER')
-  inTheShelter,
+  inTheShelter('IN_THE_SHELTER'),
   @JsonValue('HOSPITAL')
-  hospital,
+  hospital('HOSPITAL'),
   @JsonValue('OVEREXPOSURE')
-  overexposure,
+  overexposure('OVEREXPOSURE'),
   @JsonValue('ATTACHED')
-  attached,
+  attached('ATTACHED'),
   @JsonValue('PREPARING_TO_RELEASE')
-  preparingToRelease,
+  preparingToRelease('PREPARING_TO_RELEASE'),
   @JsonValue('RELEASED')
-  released,
+  released('RELEASED'),
   @JsonValue('DEATH')
-  death,
+  death('DEATH'),
   @JsonValue('EUTHANASIA')
-  euthanasia,
+  euthanasia('EUTHANASIA'),
+  @JsonValue('IN_CLINIC')
+  inClinic('IN_CLINIC');
+
+  final String? value;
+
+  const Status69fEnum(this.value);
 }
 
-const $Status131EnumMap = {
-  Status131Enum.inTheShelter: 'IN_THE_SHELTER',
-  Status131Enum.hospital: 'HOSPITAL',
-  Status131Enum.overexposure: 'OVEREXPOSURE',
-  Status131Enum.attached: 'ATTACHED',
-  Status131Enum.preparingToRelease: 'PREPARING_TO_RELEASE',
-  Status131Enum.released: 'RELEASED',
-  Status131Enum.death: 'DEATH',
-  Status131Enum.euthanasia: 'EUTHANASIA',
-};
+enum VaccinationPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('VACCINATION')
+  vaccination('VACCINATION');
+
+  final String? value;
+
+  const VaccinationPrescriptionMyTypeEnum(this.value);
+}
+
+enum WoundHealingPrescriptionMyTypeEnum {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('WOUND_HEALING')
+  woundHealing('WOUND_HEALING');
+
+  final String? value;
+
+  const WoundHealingPrescriptionMyTypeEnum(this.value);
+}
 
 enum ApiSchemaGetFormat {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
-  @JsonValue('json')
-  json,
-  @JsonValue('yaml')
-  yaml,
-}
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
 
-const $ApiSchemaGetFormatMap = {ApiSchemaGetFormat.json: 'json', ApiSchemaGetFormat.yaml: 'yaml'};
+  @JsonValue('json')
+  json('json'),
+  @JsonValue('yaml')
+  yaml('yaml');
+
+  final String? value;
+
+  const ApiSchemaGetFormat(this.value);
+}
 
 enum ApiSchemaGetLang {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
-  @JsonValue('en')
-  en,
-  @JsonValue('ru')
-  ru,
-}
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
 
-const $ApiSchemaGetLangMap = {ApiSchemaGetLang.en: 'en', ApiSchemaGetLang.ru: 'ru'};
+  @JsonValue('en')
+  en('en'),
+  @JsonValue('ru')
+  ru('ru');
+
+  final String? value;
+
+  const ApiSchemaGetLang(this.value);
+}
 
 enum ApiV1AnimalsIdHistoryGetCreatedAtRange {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
-  @JsonValue('month')
-  month,
-  @JsonValue('today')
-  today,
-  @JsonValue('week')
-  week,
-  @JsonValue('year')
-  year,
-  @JsonValue('yesterday')
-  yesterday,
-}
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
 
-const $ApiV1AnimalsIdHistoryGetCreatedAtRangeMap = {
-  ApiV1AnimalsIdHistoryGetCreatedAtRange.month: 'month',
-  ApiV1AnimalsIdHistoryGetCreatedAtRange.today: 'today',
-  ApiV1AnimalsIdHistoryGetCreatedAtRange.week: 'week',
-  ApiV1AnimalsIdHistoryGetCreatedAtRange.year: 'year',
-  ApiV1AnimalsIdHistoryGetCreatedAtRange.yesterday: 'yesterday',
-};
+  @JsonValue('month')
+  month('month'),
+  @JsonValue('today')
+  today('today'),
+  @JsonValue('week')
+  week('week'),
+  @JsonValue('year')
+  year('year'),
+  @JsonValue('yesterday')
+  yesterday('yesterday');
+
+  final String? value;
+
+  const ApiV1AnimalsIdHistoryGetCreatedAtRange(this.value);
+}
 
 enum ApiV1AnimalsSpeciesGetLevel {
-  @JsonValue('swaggerGeneratedUnknown')
-  swaggerGeneratedUnknown,
-  @JsonValue('1')
-  value_1,
-  @JsonValue('2')
-  value_2,
-  @JsonValue('3')
-  value_3,
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue(1)
+  value_1(1),
+  @JsonValue(2)
+  value_2(2),
+  @JsonValue(3)
+  value_3(3);
+
+  final int? value;
+
+  const ApiV1AnimalsSpeciesGetLevel(this.value);
 }
 
-const $ApiV1AnimalsSpeciesGetLevelMap = {
-  ApiV1AnimalsSpeciesGetLevel.value_1: '1',
-  ApiV1AnimalsSpeciesGetLevel.value_2: '2',
-  ApiV1AnimalsSpeciesGetLevel.value_3: '3',
-};
+enum ApiV1AnimalsStatsGetFormat {
+  @JsonValue(null)
+  swaggerGeneratedUnknown(null),
+
+  @JsonValue('json')
+  json('json'),
+  @JsonValue('pdf')
+  pdf('pdf'),
+  @JsonValue('xlsx')
+  xlsx('xlsx');
+
+  final String? value;
+
+  const ApiV1AnimalsStatsGetFormat(this.value);
+}
