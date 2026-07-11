@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/export.dart';
 
 /// Репозиторий доступа к документам (pdf)
@@ -15,6 +16,7 @@ class DocumentRepository with PdfDocumentMixin {
 
   /// История редактирования информации о животном
   Future<String> fetchAnimalEditingHistory(int animalId, DateTime from, DateTime to) async {
+    Log.debug('Fetch animal editing history: animalId=$animalId, from=$from, to=$to');
     final result = await _client.apiV1AnimalsIdPdfTypePdfGet(
       id: animalId,
       pdfType: 'history-editing',
@@ -26,8 +28,10 @@ class DocumentRepository with PdfDocumentMixin {
     final body = result.body;
 
     if (body != null) {
+      Log.info('Animal editing history fetched: animalId=$animalId');
       return body;
     } else {
+      Log.warning('Fetch animal editing history failed: animalId=$animalId, error=${result.error}');
       throw MessagedException(error: result.error);
     }
   }
@@ -38,6 +42,7 @@ class DocumentRepository with PdfDocumentMixin {
     DateTime from,
     DateTime to,
   ) async {
+    Log.debug('Fetch animal prescription history: animalId=$animalId, from=$from, to=$to');
     final result = await _client.apiV1AnimalsIdPdfTypePdfGet(
       id: animalId,
       pdfType: 'history-prescriptions',
@@ -49,14 +54,19 @@ class DocumentRepository with PdfDocumentMixin {
     final body = result.body;
 
     if (body != null) {
+      Log.info('Animal prescription history fetched: animalId=$animalId');
       return body;
     } else {
+      Log.warning(
+        'Fetch animal prescription history failed: animalId=$animalId, error=${result.error}',
+      );
       throw MessagedException(error: result.error);
     }
   }
 
   /// Карточка животного
   Future<String> fetchAnimalDoc(int animalId) async {
+    Log.debug('Fetch animal doc: animalId=$animalId');
     final result = await _client.apiV1AnimalsIdPdfTypePdfGet(
       id: animalId,
       pdfType: 'history',
@@ -68,8 +78,10 @@ class DocumentRepository with PdfDocumentMixin {
     final body = result.body;
 
     if (body != null) {
+      Log.info('Animal doc fetched: animalId=$animalId');
       return body;
     } else {
+      Log.warning('Fetch animal doc failed: animalId=$animalId, error=${result.error}');
       throw MessagedException(error: result.error);
     }
   }

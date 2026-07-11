@@ -4,6 +4,7 @@ import 'package:acits_flutter/domain/animal.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/cubit/animal_edit_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:acits_flutter/util/bloc_ext.dart';
 
@@ -34,11 +35,14 @@ class AnimalEditCubit extends Cubit<DataState<AnimalEditContent>> {
 
   Future<void> _init() async {
     if (!isEdit) return;
+    Log.debug('AnimalEditCubit._init: load id=$id');
     safeEmit(const DataState.loading());
     try {
       final animal = await _animalService.fetchAnimalDetail(id: id!);
+      Log.info('AnimalEditCubit._init ok: id=$id');
       safeEmit(DataState.content(AnimalEditContent(animal: animal)));
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('AnimalEditCubit._init failed: id=$id', e, s);
       safeEmit(DataState.error(e));
     }
   }
@@ -54,16 +58,19 @@ class AnimalEditCubit extends Cubit<DataState<AnimalEditContent>> {
   /// [AnimalEditScreenMode.success]), иначе `false`.
   Future<bool> submit(AnimalRead editedAnimal) async {
     final isEditRequest = isEdit && editedAnimal.id != null;
+    Log.debug('AnimalEditCubit.submit: isEdit=$isEditRequest id=${editedAnimal.id}');
     AnimalRead? result;
     try {
       result = isEditRequest
           ? await _animalService.updateAnimal(editedAnimal.id!, editedAnimal.write)
           : await _animalService.createAnimal(editedAnimal.write);
-    } catch (e) {
+    } catch (e, s) {
+      Log.error('AnimalEditCubit.submit failed: id=${editedAnimal.id}', e, s);
       safeEmit(DataState.error(e));
       return false;
     }
     if (result != null) {
+      Log.info('AnimalEditCubit.submit ok: id=${result.id}');
       safeEmit(const DataState.content(AnimalEditContent(mode: AnimalEditScreenMode.success)));
       return true;
     }

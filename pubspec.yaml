@@ -3,7 +3,7 @@ description: Flutter client for https://acits.ru/
 
 publish_to: "none"
 
-version: 0.6.1+19
+version: 0.7.0+20
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
@@ -58,6 +58,17 @@ dependencies:
   easy_localization: ^3.0.8
   firebase_crashlytics: ^5.2.4
   firebase_analytics: ^12.4.3
+
+  # In-app логи: Talker + экран логов (dev debug-меню) и BLoC-observer.
+  # talker_dio_logger НЕ нужен — основной клиент chopper (сетевой логгер —
+  # свой chopper-интерцептор в test/dev/).
+  talker_flutter: ^5.1.16
+  talker_bloc_logger: ^5.1.17
+
+  # Alice — in-app HTTP-инспектор (как в hamkormobile). Chopper подключается
+  # через кастомный интерцептор (addHttpCall), Dio — через getDioInterceptor.
+  # Открывается из dev debug-меню (showInspector). Только dev-трафик.
+  flutter_alice: 2.0.1
 
 dev_dependencies:
   flutter_test:

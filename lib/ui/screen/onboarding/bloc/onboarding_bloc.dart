@@ -1,5 +1,6 @@
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -25,17 +26,21 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   }
 
   void _onOnNextEvent(OnboardingEventOnNext event, Emitter<OnboardingState> emit) {
+    Log.debug('OnboardingBloc.onNext currentPage=${state.currentViewPage} isLast=${state.isLast}');
     if (state.isLast) {
+      Log.info('OnboardingBloc.onNext ok: finished, closing route');
       emit(const OnboardingStateNeedCloseRoute());
       return;
     }
     final currentPage = state.currentViewPage + 1;
     final isLast = currentPage == onboardingData.length - 1;
 
+    Log.info('OnboardingBloc.onNext ok: page=$currentPage');
     emit(OnboardingState(currentViewPage: currentPage, isLast: isLast));
   }
 
   void _onOnPosition(OnboardingEventOnPosition event, Emitter<OnboardingState> emit) {
+    Log.debug('OnboardingBloc.onPosition position=${event.position}');
     emit(
       OnboardingState(
         currentViewPage: event.position,
