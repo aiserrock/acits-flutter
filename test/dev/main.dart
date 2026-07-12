@@ -13,6 +13,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:acits_flutter/main.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
+import 'package:acits_flutter/util/app_version.dart';
 import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 import 'di/di_container.dart';
@@ -37,6 +38,7 @@ Future<void> main() async {
 
   await EasyLocalization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await AppVersion.load();
   _setupLogging();
   await initDevDi();
 

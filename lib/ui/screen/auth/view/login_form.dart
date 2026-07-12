@@ -13,6 +13,7 @@ import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:acits_flutter/ui/widget/app_version_label.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class LoginForm extends StatelessWidget {
@@ -58,6 +59,8 @@ class LoginForm extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: StyleRes.content,
               ),
+              const SizedBox(height: 12.0),
+              const AppVersionLabel(),
             ],
           ),
         ),
