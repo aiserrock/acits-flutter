@@ -19,6 +19,12 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <!-- viewport-fit=cover: обязательно для standalone-PWA на iOS, иначе Safari
+       не отдаёт env(safe-area-inset-*), Flutter получает viewPadding.bottom=0
+       и BottomNavigationBar залезает под home-indicator. С этим meta Scaffold
+       сам добавляет нижний отступ по системной safe-area. -->
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Acits</title>
   <meta name="description"
     content="Работаете в приюте для животных? Acits - ваш бесплатный помощник! Заботиться о животных стало проще.">
