@@ -1,22 +1,23 @@
 name: CI
 
 # Triggers:
-#   pull_request -> quality gate (lint/analyse/test/build dev) + deploy the dev
-#     web PWA to GitHub Pages, so every develop PR refreshes the dev stand.
+#   pull_request -> quality gate (lint/analyse/test/build dev) before merge.
+#   push to develop (i.e. a merged PR) -> deploy the dev web PWA to GitHub
+#     Pages, refreshing the dev stand. Deploy runs post-merge (not from the PR
+#     context) because the github-pages environment only allows deploys from
+#     the develop branch, not from refs/pull/*/merge.
 #   push tags "v*" -> build the signed prod APK/IPA artifacts. Prod server
 #     deployment (prod flavor) is added here later.
-# A plain push to main/develop (no tag) runs nothing — merging already means
-# the PR build passed.
 on:
   push:
+    branches: [develop]
     tags: ["v*"]
   pull_request:
     branches: [main, develop]
   workflow_dispatch:
 
-# GitHub Pages is a single per-repo site: parallel develop PRs would overwrite
-# the same dev PWA. Serialise Pages deploys so they don't race; the newest PR
-# wins the stand.
+# GitHub Pages is a single per-repo site. Serialise Pages deploys so back-to-back
+# merges into develop don't race; the newest deploy wins the stand.
 concurrency:
   group: pages-${{ github.workflow }}
   cancel-in-progress: false
@@ -73,10 +74,14 @@ jobs:
           path: workspace.tar.gz
           retention-days: 1
 
+  # lint/analyse/test are the PR/tag quality gate. A push to develop only
+  # redeploys the PWA (that PR already passed the gate at review time), so
+  # skip them there.
   ##### lint #####
   lint:
     name: Lint
     needs: prepare
+    if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -116,6 +121,7 @@ jobs:
   analyse:
     name: Analyse
     needs: prepare
+    if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -143,6 +149,7 @@ jobs:
   test:
     name: Test
     needs: prepare
+    if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -370,15 +377,19 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  ##### build web (develop PRs + manual dispatch) #####
-  # Deploys the dev web build to GitHub Pages so every develop PR refreshes a
-  # browsable developer PWA (dev-0 stand) without needing a separate server.
-  # workflow_dispatch redeploys Pages on demand.
+  ##### build web (push to develop + manual dispatch) #####
+  # Deploys the dev web build to GitHub Pages so every merge into develop
+  # refreshes a browsable developer PWA (dev-0 stand) without a separate server.
+  # Runs on push-to-develop (not from the PR context) because the github-pages
+  # environment only permits deploys from the develop branch. Depends only on
+  # prepare (for the codegen workspace artifact) — the merged PR already passed
+  # lint/analyse/test, so they are not re-run here. workflow_dispatch redeploys
+  # Pages on demand.
   build-web:
     name: Build & deploy web (GitHub Pages)
-    needs: [lint, analyse, test]
+    needs: [prepare]
     if: >-
-      (github.event_name == 'pull_request' && github.base_ref == 'develop')
+      (github.event_name == 'push' && github.ref == 'refs/heads/develop')
       || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
@@ -509,22 +520,23 @@ jobs:
           # avoids that failure mode entirely.
           changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
 
-          # build-android/build-ios/build-web are gated to PR/tag (see each
-          # job's `if:`); "skipped" is their expected result here, not a
-          # failure — only "failure"/"cancelled" should turn this red.
+          # Every stage is conditionally gated (PR vs push-develop vs tag), so
+          # "skipped" is an expected result, not a failure — only
+          # "failure"/"cancelled" turns this red. prepare always runs, so it
+          # must be a hard success.
           is_bad() { [ "$1" = "failure" ] || [ "$1" = "cancelled" ]; }
-          if [ "$RESULT_PREPARE" = "success" ] && [ "$RESULT_LINT" = "success" ] && \
-             [ "$RESULT_ANALYSE" = "success" ] && [ "$RESULT_TEST" = "success" ] && \
-             ! is_bad "$RESULT_ANDROID" && ! is_bad "$RESULT_IOS" && \
-             ! is_bad "$RESULT_WEB"; then
+          if [ "$RESULT_PREPARE" = "success" ] && \
+             ! is_bad "$RESULT_LINT" && ! is_bad "$RESULT_ANALYSE" && \
+             ! is_bad "$RESULT_TEST" && ! is_bad "$RESULT_ANDROID" && \
+             ! is_bad "$RESULT_IOS" && ! is_bad "$RESULT_WEB"; then
             status_line="✅ Build succeeded"
           else
             status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB)"
           fi
 
           # On a successful web deploy, add the live PWA URL — same slot the
-          # mobile builds imply the APK/IPA artifact in. Empty on PRs (web is
-          # tag-only), so the line is omitted then.
+          # mobile builds imply the APK/IPA artifact in. Empty when web is
+          # skipped (PR/tag runs), so the line is omitted then.
           pwa_line=""
           if [ "$RESULT_WEB" = "success" ] && [ -n "$PWA_URL" ]; then
             pwa_line=$(printf '\nPWA: %s' "$PWA_URL")
