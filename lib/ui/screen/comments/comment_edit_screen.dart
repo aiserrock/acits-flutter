@@ -199,6 +199,9 @@ class _CommentEditViewState extends State<_CommentEditView> {
     final result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: _allowedFileAttachExtensions,
+      // withData: байты кладутся в PlatformFile.bytes на всех платформах —
+      // на web это единственный способ получить содержимое (path == null).
+      withData: true,
     );
     if (result != null) {
       if (!mounted) return;

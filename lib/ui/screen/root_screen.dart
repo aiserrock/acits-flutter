@@ -45,6 +45,15 @@ class _RootScreenState extends State<RootScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int _current = 0;
 
+  /// Индексы вкладок, которые уже были показаны хотя бы раз. Вкладку строим
+  /// (и поднимаем её cubit) лениво — только после первого перехода на неё,
+  /// а не все четыре с первого кадра. AnimalsScreen не грузит список, пока
+  /// пользователь не откроет вкладку «Животные».
+  final _visited = <int>{0};
+
+  /// Отмена подписки на WebInsets (см. dispose).
+  void Function()? _insetsSub;
+
   @override
   void initState() {
     super.initState();
@@ -54,10 +63,16 @@ class _RootScreenState extends State<RootScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) setState(() {});
       });
-      WebInsets.onChange(() {
+      _insetsSub = WebInsets.onChange(() {
         if (mounted) setState(() {});
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _insetsSub?.call();
+    super.dispose();
   }
 
   @override
@@ -75,7 +90,10 @@ class _RootScreenState extends State<RootScreen> {
               ),
             );
         }
-        if (_current != index && index < 2) _current = index;
+        if (_current != index && index < 2) {
+          _current = index;
+          _visited.add(index);
+        }
       }),
       currentIndex: _current,
       showSelectedLabels: true,
@@ -101,12 +119,18 @@ class _RootScreenState extends State<RootScreen> {
         key: _scaffoldKey,
         drawer: const PersonalDrawerWidget(),
         bottomNavigationBar: bottomNavWithInset,
-        body: Stack(
+        // IndexedStack сохраняет состояние уже открытых вкладок (скролл,
+        // введённый поиск), но каждую вкладку строим лениво — до первого
+        // перехода на неё в дереве стоит пустой SizedBox, и её cubit не
+        // поднимается. Calendar/Drugs пока недостижимы (см. onTap: index<2),
+        // поэтому остаются заглушками навсегда, не тратя ресурсы.
+        body: IndexedStack(
+          index: _current,
           children: [
-            Offstage(offstage: _current != 0, child: const MainScreen()),
-            Offstage(offstage: _current != 1, child: const AnimalsScreen()),
-            Offstage(offstage: _current != 2, child: const CalendarScreen()),
-            Offstage(offstage: _current != 3, child: const DrugsScreen()),
+            _visited.contains(0) ? const MainScreen() : const SizedBox.shrink(),
+            _visited.contains(1) ? const AnimalsScreen() : const SizedBox.shrink(),
+            const CalendarScreen(),
+            const DrugsScreen(),
           ],
         ),
       ),

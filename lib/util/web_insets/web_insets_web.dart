@@ -85,7 +85,16 @@ abstract final class WebInsets {
         'sb=${isStandalone ? 1 : 0} h=${_innerHeight.toStringAsFixed(0)}';
   }
 
-  static void onChange(void Function() callback) {
-    _safeAreaInsets?.onChange(((JSAny _) => callback()).toJS);
+  /// Подписка на изменение insets. JS-либа не умеет removeListener, поэтому
+  /// отписка реализована guard-флагом в замыкании: возвращённый [VoidCallback]
+  /// глушит колбэк, чтобы уже размонтированный виджет не дёргал setState.
+  static void Function() onChange(void Function() callback) {
+    var active = true;
+    _safeAreaInsets?.onChange(
+      (((JSAny _) {
+        if (active) callback();
+      })).toJS,
+    );
+    return () => active = false;
   }
 }

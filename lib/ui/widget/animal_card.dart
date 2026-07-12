@@ -3,7 +3,6 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
@@ -66,27 +65,26 @@ class AnimalCardWidget extends StatelessWidget {
                     controller?.openEndActionPane();
                   },
                 ),
-              // TODO: impl for web
-              if (!kIsWeb)
-                Builder(
-                  builder: (context) {
-                    return CupertinoButton(
-                      padding: const EdgeInsets.only(),
-                      child: const Icon(Icons.download, color: ColorRes.accent),
-                      onPressed: () {
-                        final animalId = itemData?.id;
-                        if (animalId == null) return;
-                        context.push(
-                          AppRoutes.docViewer,
-                          extra: <String, Object?>{
-                            'fetcher': () => _animalService.fetchPdfAnimalCard(animalId),
-                            'title': 'Animal $animalId',
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
+              Builder(
+                builder: (context) {
+                  return CupertinoButton(
+                    padding: const EdgeInsets.only(),
+                    child: const Icon(Icons.download, color: ColorRes.accent),
+                    onPressed: () {
+                      final animalId = itemData?.id;
+                      if (animalId == null) return;
+                      context.push(
+                        AppRoutes.docViewer,
+                        extra: <String, Object?>{
+                          'fetcher': () => _animalService.fetchPdfAnimalCard(animalId),
+                          'title': 'Animal $animalId',
+                          'fileName': 'animal_$animalId.pdf',
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           );
         },

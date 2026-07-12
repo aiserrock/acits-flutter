@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/gallery_item_data.dart';
 import 'package:acits_flutter/export.dart';
@@ -181,8 +183,11 @@ class AnimalService {
       );
     }
 
-    images.where((e) => e.filePath != null && e.isChoosed).forEach((e) {
-      var image = image_util.decodeImage(File(e.filePath!).readAsBytesSync());
+    // Байты выбранных с устройства фото читаются кроссплатформенно на этапе
+    // выбора (GalleryItemData.bytes) — File(path).readAsBytesSync() падал бы на
+    // web. Элементы без bytes (старый blob-URL без данных) пропускаем.
+    images.where((e) => e.bytes != null && e.isChoosed).forEach((e) {
+      var image = image_util.decodeImage(e.bytes!);
       if (image == null) return;
       if (image.height > _maxAnimalImageSize || image.width > _maxAnimalImageSize) {
         final ratio = _maxAnimalImageSize / max(image.height, image.width);
@@ -329,25 +334,42 @@ class AnimalService {
   }
 
   List<AnimalNoteFile>? _prepareNoteFiles(List<PlatformFile>? files) {
-    final preparedfiles = files?.where((file) => file.path != null).map<AnimalNoteFile>((file) {
-      int indexOfExtSplit = file.name.lastIndexOf('.');
-      if (indexOfExtSplit < 0) indexOfExtSplit = file.name.length;
-      return AnimalNoteFile(
-        name: file.name.substring(0, indexOfExtSplit),
-        file:
-            'data:application/${file.extension};base64,${base64Encode(File(file.path!).readAsBytesSync())}',
-      );
-    }).toList();
+    // Байты берём кроссплатформенно: file_picker на web кладёт содержимое в
+    // PlatformFile.bytes (path == null), на нативе — читаем с ФС по path.
+    // Раньше фильтр `path != null` молча выкидывал ВСЕ файлы в web.
+    final preparedfiles = files
+        ?.map<AnimalNoteFile?>((file) {
+          final bytes = _readPlatformFileBytes(file);
+          if (bytes == null) return null;
+          int indexOfExtSplit = file.name.lastIndexOf('.');
+          if (indexOfExtSplit < 0) indexOfExtSplit = file.name.length;
+          return AnimalNoteFile(
+            name: file.name.substring(0, indexOfExtSplit),
+            file: 'data:application/${file.extension};base64,${base64Encode(bytes)}',
+          );
+        })
+        .whereType<AnimalNoteFile>()
+        .toList();
     return preparedfiles;
   }
 
-  /// Скачать и сохранить во временной директории файл карточки животного
-  Future<File> fetchPdfAnimalCard(int animalId) async {
+  /// Читает байты выбранного файла кроссплатформенно: из памяти (web/при
+  /// withData) либо с ФС по пути (натив). Возвращает null, если ни то ни другое
+  /// недоступно.
+  Uint8List? _readPlatformFileBytes(PlatformFile file) {
+    if (file.bytes != null) return file.bytes;
+    if (!kIsWeb && file.path != null) return File(file.path!).readAsBytesSync();
+    return null;
+  }
+
+  /// Получить PDF карточки животного как байты (кроссплатформенно, без диска).
+  /// Раньше возвращал `File` и был доступен только на mobile; теперь байты идут
+  /// прямо в рендерер/шаринг и работают в PWA.
+  Future<Uint8List> fetchPdfAnimalCard(int animalId) async {
     Log.debug('Fetch PDF animal card: animalId=$animalId');
     // TODO: extract to DI
     final repo = getIt<DocumentRepository>();
     final raw = await repo.fetchAnimalDoc(animalId);
-    final pdf = await repo.convertPdfStringToFile(raw, fileName: 'animal_$animalId.pdf');
-    return pdf;
+    return repo.decodePdfBytes(raw);
   }
 }
