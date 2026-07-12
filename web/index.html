@@ -79,21 +79,14 @@
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" type="text/css" href="splash/style.css">
 
-  <!-- iOS PWA safe-area: Flutter web-движок НЕ читает env(safe-area-inset),
-       поэтому поджимаем его хост-элементы через CSS напрямую. Flutter в
-       standalone растягивает flutter-view / flt-glass-pane на весь экран
-       (position: absolute; top/bottom: 0) — перекрывая home-indicator.
-       Заставляем их заканчиваться над системной полоской. !important нужен:
-       Flutter выставляет inline-стили при инициализации. -->
+  <!-- iOS PWA safe-area: Flutter web НЕ пробрасывает env(safe-area-inset) в
+       MediaQuery. Библиотека safe-area-insets (pengfeiw) измеряет реальные
+       insets и кладёт в window.safeAreaInsets{top,bottom,left,right}; Dart
+       читает их через JS-interop (lib/util/web_insets.dart) и применяет
+       SafeArea(minimum: bottom) к нав-бару. Проверенный подход из a banking app. -->
+  <script src="js/webinsets.min.js"></script>
   <style>
     body { background: #6776E0; }
-    flutter-view,
-    flt-glass-pane,
-    flt-scene-host,
-    #flutter_host {
-      bottom: env(safe-area-inset-bottom, 0px) !important;
-      height: calc(100% - env(safe-area-inset-bottom, 0px)) !important;
-    }
   </style>
 </head>
 
@@ -128,43 +121,6 @@
         navigator.serviceWorker.register('flutter_service_worker.js');
       });
     }
-  </script>
-
-  <script>
-    // iOS PWA safe-area: Flutter web игнорит env(safe-area-inset) и растягивает
-    // flutter-view на весь экран, перекрывая home-indicator. CSS-правила выше
-    // Flutter может переписать inline-стилями при инициализации, поэтому
-    // дожимаем програмно: измеряем реальный inset (через невидимый пробник с
-    // env()) и применяем padding-bottom к flutter-view, повторяя на каждую
-    // мутацию DOM (Flutter создаёт/перестраивает view уже после загрузки).
-    (function () {
-      var probe = document.createElement('div');
-      probe.style.cssText =
-        'position:fixed;left:0;bottom:0;width:0;height:env(safe-area-inset-bottom,0px);pointer-events:none;';
-      document.documentElement.appendChild(probe);
-
-      function inset() {
-        return probe.getBoundingClientRect().height || 0;
-      }
-
-      function apply() {
-        var pad = inset();
-        if (pad <= 0) return;
-        var views = document.querySelectorAll('flutter-view, flt-glass-pane, #flutter_host');
-        views.forEach(function (v) {
-          v.style.setProperty('bottom', pad + 'px', 'important');
-          v.style.setProperty('height', 'calc(100% - ' + pad + 'px)', 'important');
-        });
-      }
-
-      var obs = new MutationObserver(apply);
-      obs.observe(document.body, { childList: true, subtree: true });
-      window.addEventListener('resize', apply);
-      window.addEventListener('orientationchange', apply);
-      // Первичный прогон + несколько отложенных (Flutter доинициализирует view).
-      apply();
-      [200, 600, 1200, 2500].forEach(function (t) { setTimeout(apply, t); });
-    })();
   </script>
 
   <picture id="splash">
