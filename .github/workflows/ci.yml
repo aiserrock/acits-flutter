@@ -459,16 +459,66 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  # NOTE: prod release on tag (GitHub Release + prod server deploy) is
-  # intentionally not here yet — it will be added as a prod-flavor server
-  # deployment step later.
+  ##### release (tags only) #####
+  # Publishes the GitHub Release: attaches the signed prod APK built above and
+  # writes release notes from CHANGELOG.md. Pushing a tag is the whole release
+  # process — no manual release-page editing.
+  release:
+    name: Publish GitHub Release
+    needs: [build-android]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: acits-prod-release
+          path: release-assets
+
+      # Release notes are an extract of CHANGELOG.md, nothing invented here:
+      # take the section for this tag's version, keep only the "- " bullet
+      # lines (drop the ### Added/Changed/Fixed subheadings), no emoji, no
+      # generated commentary.
+      - name: Extract changelog section
+        id: changelog
+        run: |
+          tag="${GITHUB_REF#refs/tags/v}"
+          notes=$(awk -v ver="$tag" '
+            $0 ~ "^## \\[" ver "([+ ]|\\])" { found=1; next }
+            found && /^## \[/ { exit }
+            found && /^- / { print }
+          ' CHANGELOG.md)
+
+          if [ -z "$notes" ]; then
+            echo "No CHANGELOG.md section found for version $tag" >&2
+            exit 1
+          fi
+
+          {
+            echo "notes<<CHANGELOG_EOF"
+            echo "$notes"
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NOTES: ${{ steps.changelog.outputs.notes }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            release-assets/app-prod-release.apk \
+            --title "$GITHUB_REF_NAME" \
+            --notes "$NOTES"
 
   ##### notify #####
   # Runs on every trigger — PR, tag push, and manual workflow_dispatch — so
   # every pipeline run gets a Telegram notification.
   notify:
     name: Notify Telegram
-    needs: [prepare, lint, analyse, test, build-android, build-ios, build-web]
+    needs: [prepare, lint, analyse, test, build-android, build-ios, build-web, release]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -491,6 +541,7 @@ jobs:
           RESULT_ANDROID: ${{ needs.build-android.result }}
           RESULT_IOS: ${{ needs.build-ios.result }}
           RESULT_WEB: ${{ needs.build-web.result }}
+          RESULT_RELEASE: ${{ needs.release.result }}
           PWA_URL: ${{ needs.build-web.outputs.page_url }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
@@ -528,10 +579,11 @@ jobs:
           if [ "$RESULT_PREPARE" = "success" ] && \
              ! is_bad "$RESULT_LINT" && ! is_bad "$RESULT_ANALYSE" && \
              ! is_bad "$RESULT_TEST" && ! is_bad "$RESULT_ANDROID" && \
-             ! is_bad "$RESULT_IOS" && ! is_bad "$RESULT_WEB"; then
+             ! is_bad "$RESULT_IOS" && ! is_bad "$RESULT_WEB" && \
+             ! is_bad "$RESULT_RELEASE"; then
             status_line="✅ Build succeeded"
           else
-            status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB)"
+            status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB, release: $RESULT_RELEASE)"
           fi
 
           # On a successful web deploy, add the live PWA URL — same slot the
