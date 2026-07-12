@@ -39,7 +39,16 @@ class DebugScreen extends StatelessWidget {
   }
 
   Widget _buildTitle() {
-    return const Text('Debug screen', style: TextStyle(color: ColorRes.textPrimary));
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('Debug screen', style: TextStyle(color: ColorRes.textPrimary)),
+        Text(
+          AppVersion.labelWithMode,
+          style: const TextStyle(fontSize: 11.0, color: ColorRes.textSecondary),
+        ),
+      ],
+    );
   }
 
   Widget _buildBody(BuildContext context) {

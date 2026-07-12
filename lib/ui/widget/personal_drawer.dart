@@ -8,6 +8,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/widget/cubit/personal_drawer_cubit.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
+import 'package:acits_flutter/ui/widget/app_version_label.dart';
 
 const Duration _kBaseSettleDuration = Duration(milliseconds: 246);
 
@@ -79,6 +80,11 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               ListTile(
                 title: Text(LocaleKeys.personLogout.tr(), style: StyleRes.title),
                 onTap: _authService.logout,
+              ),
+              _buildDivider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12.0),
+                child: AppVersionLabel(),
               ),
             ],
           );
