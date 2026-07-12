@@ -6,6 +6,8 @@ import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';
 import 'package:acits_flutter/ui/screen/drugs/drugs_screen.dart';
 import 'package:acits_flutter/ui/screen/main/main_screen.dart';
 import 'package:acits_flutter/ui/widget/personal_drawer.dart';
+import 'package:acits_flutter/util/web_insets/web_insets.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -44,6 +46,21 @@ class _RootScreenState extends State<RootScreen> {
   int _current = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // safe-area (iOS PWA): библиотека меряет inset лениво — на первом кадре он
+    // может быть 0. После первого кадра и на изменение (поворот) — пересобираем.
+    if (kIsWeb) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
+      WebInsets.onChange(() {
+        if (mounted) setState(() {});
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bottomNav = BottomNavigationBar(
       items: _bottomNavItems,
@@ -67,16 +84,23 @@ class _RootScreenState extends State<RootScreen> {
       fixedColor: ColorRes.accent,
     );
 
+    // Web (iOS PWA): Flutter не пробрасывает env(safe-area-inset) в MediaQuery,
+    // поэтому нав-бар лезет под home-indicator. Берём реальный inset из JS-либы
+    // (WebInsets) и заставляем SafeArea дать минимум этого отступа. На нативе
+    // WebInsets.bottom = 0, и обёртку не ставим — Scaffold сам учитывает inset.
+    final bottomNavWithInset = kIsWeb
+        ? SafeArea(
+            minimum: EdgeInsets.only(bottom: WebInsets.bottom),
+            child: bottomNav,
+          )
+        : bottomNav;
+
     return RootDrawerProvider(
       rootScaffoldKey: _scaffoldKey,
       child: Scaffold(
         key: _scaffoldKey,
         drawer: const PersonalDrawerWidget(),
-        // safe-area для нав-бара НЕ здесь: на нативе Scaffold сам учитывает
-        // нижний inset; на web Flutter игнорирует env(safe-area-inset) —
-        // там canvas поджат под home-indicator через body в web/index.html
-        // (padding снизу = env(safe-area-inset-bottom)).
-        bottomNavigationBar: bottomNav,
+        bottomNavigationBar: bottomNavWithInset,
         body: Stack(
           children: [
             Offstage(offstage: _current != 0, child: const MainScreen()),
