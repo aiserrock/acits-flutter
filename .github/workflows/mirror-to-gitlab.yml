@@ -26,12 +26,14 @@ jobs:
 
       - name: Push всех веток и тегов в GitLab
         env:
-          GL_USER: ${{ secrets.GITLAB_MIRROR_USER }}
-          GL_TOKEN: ${{ secrets.GITLAB_MIRROR_TOKEN }}
+          # Project Access Token из gitlab.acits.ru (Name: ACTIONS_GITHUB_MIRROR,
+          # scope write_repository). Для Project Access Token username в git-URL =
+          # имя токена; сам glpat-... лежит в секрете GitHub с тем же именем.
+          GL_TOKEN: ${{ secrets.ACTIONS_GITHUB_MIRROR }}
         run: |
           set -euo pipefail
 
-          GITLAB_URL="https://${GL_USER}:${GL_TOKEN}@gitlab.acits.ru/nasha-priroda/acits-mobile.git"
+          GITLAB_URL="https://ACTIONS_GITHUB_MIRROR:${GL_TOKEN}@gitlab.acits.ru/nasha-priroda/acits-mobile.git"
 
           # checkout с fetch-depth:0 уже стянул все ветки (refs/remotes/origin/*) и теги;
           # --prune актуализирует их на случай удалений между checkout и этим шагом.
