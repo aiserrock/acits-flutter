@@ -69,6 +69,7 @@ dependencies:
   # через кастомный интерцептор (addHttpCall), Dio — через getDioInterceptor.
   # Открывается из dev debug-меню (showInspector). Только dev-трафик.
   flutter_alice: 2.0.1
+  package_info_plus: ^9.0.1
 
 dev_dependencies:
   flutter_test:
