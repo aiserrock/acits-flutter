@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [0.8.0+21] - 2026-07-12
+
+### Added
+
+- PWA-сборка dev-флейвора на GitHub Pages с CORS-прокси для API.
+- Отображение версии и режима сборки на экране входа и в profile-шторке.
+- Технический roadmap проекта (`docs/tech-roadmap.md`) и design spec.
+
+### Fixed
+
+- Safe-area для нижней навигации в iOS PWA (home-indicator, standalone).
+
 ## [0.7.0+20] - 2026-07-11
 
 ### Added
