@@ -68,7 +68,12 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
 
   late bool _isSmallScreen;
   int _currentTab = 0;
-  double _titleOpacity = .0;
+
+  /// Прозрачность заголовка в схлопнутом состоянии. ValueNotifier (а не поле в
+  /// setState) — чтобы скролл перестраивал ТОЛЬКО ValueListenableBuilder вокруг
+  /// Opacity, а не весь экран (Scaffold+PageView+картинки). На web это ключевое:
+  /// setState на каждый скролл-тик ронял FPS.
+  final _titleOpacity = ValueNotifier<double>(.0);
 
   AnimalDetailCubit get _cubit => context.read<AnimalDetailCubit>();
 
@@ -90,6 +95,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     _scrollController.dispose();
     _imagePageController.dispose();
     _onCreateCommentStream.close();
+    _titleOpacity.dispose();
     super.dispose();
   }
 
@@ -175,8 +181,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Opacity(
-              opacity: Curves.easeInOutExpo.transform(_titleOpacity),
+            child: ValueListenableBuilder<double>(
+              valueListenable: _titleOpacity,
+              // child не зависит от opacity — строится один раз, ребилдится
+              // только обёртка Opacity при скролле.
               child: Row(
                 children: [
                   InkWell(
@@ -209,6 +217,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                   ),
                 ],
               ),
+              builder: (context, opacity, child) {
+                return Opacity(opacity: Curves.easeInOutExpo.transform(opacity), child: child);
+              },
             ),
           ),
         ),
@@ -462,7 +473,8 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     if (_scrollController.hasClients) {
       const delta = _expandedHeight - _collapsedHeight;
       final scroll = min(delta, max(.0, _scrollController.offset));
-      setState(() => _titleOpacity = scroll / delta);
+      // Без setState: обновляем только notifier → перестраивается лишь Opacity.
+      _titleOpacity.value = scroll / delta;
     }
   }
 
