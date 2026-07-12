@@ -6,6 +6,7 @@ import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';
 import 'package:acits_flutter/ui/screen/drugs/drugs_screen.dart';
 import 'package:acits_flutter/ui/screen/main/main_screen.dart';
 import 'package:acits_flutter/ui/widget/personal_drawer.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -45,39 +46,38 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomNav = BottomNavigationBar(
+      items: _bottomNavItems,
+      onTap: (index) => setState(() {
+        if (index > 1) {
+          ScaffoldMessenger.of(context)
+            ..clearSnackBars()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(LocaleKeys.commonDidNotImpl.tr()),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+        }
+        if (_current != index && index < 2) _current = index;
+      }),
+      currentIndex: _current,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      type: BottomNavigationBarType.fixed,
+      fixedColor: ColorRes.accent,
+    );
+
     return RootDrawerProvider(
       rootScaffoldKey: _scaffoldKey,
       child: Scaffold(
         key: _scaffoldKey,
         drawer: const PersonalDrawerWidget(),
-        // SafeArea(top: false) добавляет нижний отступ под системную полоску
-        // (iOS home-indicator, некоторые Android-жестовые бары), чтобы иконки
-        // навигации не перекрывались. На устройствах без нижней safe-area
-        // (обычные Android) отступ = 0 — визуально ничего не меняется.
-        bottomNavigationBar: SafeArea(
-          top: false,
-          child: BottomNavigationBar(
-            items: _bottomNavItems,
-            onTap: (index) => setState(() {
-              if (index > 1) {
-                ScaffoldMessenger.of(context)
-                  ..clearSnackBars()
-                  ..showSnackBar(
-                    SnackBar(
-                      content: Text(LocaleKeys.commonDidNotImpl.tr()),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-              }
-              if (_current != index && index < 2) _current = index;
-            }),
-            currentIndex: _current,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            type: BottomNavigationBarType.fixed,
-            fixedColor: ColorRes.accent,
-          ),
-        ),
+        // Только web-PWA: в standalone на iOS home-indicator перекрывает нав-бар,
+        // поэтому добавляем нижний safe-area отступ. На нативных мобильных
+        // Scaffold сам корректно учитывает нижний inset — там оборачивать НЕ
+        // нужно (иначе отступ задвоится).
+        bottomNavigationBar: kIsWeb ? SafeArea(top: false, child: bottomNav) : bottomNav,
         body: Stack(
           children: [
             Offstage(offstage: _current != 0, child: const MainScreen()),
