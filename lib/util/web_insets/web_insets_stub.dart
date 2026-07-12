@@ -9,6 +9,10 @@ abstract final class WebInsets {
 
   static double get right => 0;
 
+  static bool get isStandalone => false;
+
+  static String get debugInfo => '';
+
   /// На нативе insets не меняются через JS — no-op.
   static void onChange(void Function() callback) {}
 }
