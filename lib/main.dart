@@ -15,6 +15,7 @@ import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
+import 'package:acits_flutter/util/app_version.dart';
 import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
@@ -40,6 +41,7 @@ Future<void> main() async {
 
   await EasyLocalization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await AppVersion.load();
   await initDi();
 
   // Логи всех cubit'ов/bloc'ов идут в общий Talker (в prod-release он выключен).

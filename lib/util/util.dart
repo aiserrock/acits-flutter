@@ -1,3 +1,4 @@
+export 'app_version.dart';
 export 'data_state.dart';
 export 'bloc_ext.dart';
 export 'datetime.dart';
