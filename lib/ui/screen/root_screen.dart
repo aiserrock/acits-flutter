@@ -6,7 +6,6 @@ import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';
 import 'package:acits_flutter/ui/screen/drugs/drugs_screen.dart';
 import 'package:acits_flutter/ui/screen/main/main_screen.dart';
 import 'package:acits_flutter/ui/widget/personal_drawer.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -73,11 +72,11 @@ class _RootScreenState extends State<RootScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: const PersonalDrawerWidget(),
-        // Только web-PWA: в standalone на iOS home-indicator перекрывает нав-бар,
-        // поэтому добавляем нижний safe-area отступ. На нативных мобильных
-        // Scaffold сам корректно учитывает нижний inset — там оборачивать НЕ
-        // нужно (иначе отступ задвоится).
-        bottomNavigationBar: kIsWeb ? SafeArea(top: false, child: bottomNav) : bottomNav,
+        // safe-area для нав-бара НЕ здесь: на нативе Scaffold сам учитывает
+        // нижний inset; на web Flutter игнорирует env(safe-area-inset) —
+        // там canvas поджат под home-indicator через body в web/index.html
+        // (padding снизу = env(safe-area-inset-bottom)).
+        bottomNavigationBar: bottomNav,
         body: Stack(
           children: [
             Offstage(offstage: _current != 0, child: const MainScreen()),
