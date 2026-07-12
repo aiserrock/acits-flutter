@@ -74,8 +74,11 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
     if (currentList == null) return;
     final xFile = await ImagePicker().pickImage(source: source);
     if (xFile == null) return;
+    // Читаем байты кроссплатформенно (работает и в web) сразу при выборе —
+    // при сабмите File(path).readAsBytesSync() падал бы на web.
+    final bytes = await xFile.readAsBytes();
     final updated = List<GalleryItemData>.of(currentList)
-      ..insert(0, GalleryItemData(filePath: xFile.path, isChoosed: true));
+      ..insert(0, GalleryItemData(filePath: xFile.path, bytes: bytes, isChoosed: true));
     safeEmit(state.copyWith(data: DataState.content(updated), isSelectorChanged: true));
   }
 

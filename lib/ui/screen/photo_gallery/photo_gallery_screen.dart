@@ -93,27 +93,35 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
 
   Widget _buildContent(List<GalleryItemData> list) {
     final cubit = context.read<PhotoGalleryCubit>();
-    return GridView(
+    // Ленивый builder вместо GridView(children:[...map]) — ячейки (в т.ч.
+    // декодирование картинок) строятся по мере прокрутки, а не все сразу.
+    // Первые две ячейки — кнопки «камера» и «галерея».
+    const controlsCount = 2;
+    return GridView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.all(8.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-      children: [
-        _GalleryItemWidget(
-          const Icon(Icons.add_a_photo_outlined, size: 48.0, color: ColorRes.accent),
-          onPressed: () => cubit.addPhoto(ImageSource.camera),
-        ),
-        _GalleryItemWidget(
-          const Icon(Icons.photo_library_outlined, size: 48.0, color: ColorRes.accent),
-          onPressed: () => cubit.addPhoto(ImageSource.gallery),
-        ),
-        ...list.map<Widget>(
-          (e) => _GalleryItemWidget(
-            e.widget,
-            onPressed: () => cubit.chooseItem(e),
-            isChoosed: e.isChoosed,
-          ),
-        ),
-      ],
+      itemCount: list.length + controlsCount,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return _GalleryItemWidget(
+            const Icon(Icons.add_a_photo_outlined, size: 48.0, color: ColorRes.accent),
+            onPressed: () => cubit.addPhoto(ImageSource.camera),
+          );
+        }
+        if (index == 1) {
+          return _GalleryItemWidget(
+            const Icon(Icons.photo_library_outlined, size: 48.0, color: ColorRes.accent),
+            onPressed: () => cubit.addPhoto(ImageSource.gallery),
+          );
+        }
+        final e = list[index - controlsCount];
+        return _GalleryItemWidget(
+          e.widget,
+          onPressed: () => cubit.chooseItem(e),
+          isChoosed: e.isChoosed,
+        );
+      },
     );
   }
 

@@ -60,6 +60,12 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
   /// Контроллер вкладок типов назначения. Владеет и утилизирует его сам State.
   late final TabController tabController;
 
+  /// Один переиспользуемый контроллер докрутки вкладки после свайпа. Раньше
+  /// создавался заново в каждом onHorizontalDragEnd и никогда не dispose() —
+  /// утечка Ticker на каждый свайп. Теперь живёт как поле, утилизируется в
+  /// dispose().
+  late final AnimationController _swipeSettleController;
+
   /// Контроллер поля комментария. Владеет и утилизирует его сам State
   /// (устранена утечка старого `commentContoroller`, который никогда не
   /// закрывался).
@@ -79,6 +85,10 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
       vsync: this,
     );
     tabController.addListener(_onTabChanged);
+
+    _swipeSettleController = AnimationController(vsync: this, lowerBound: -1.0, upperBound: 1.0)
+      ..addListener(() => tabController.offset = _swipeSettleController.value);
+
     // Синхронизируем комментарий с загруженным назначением (режим правки).
     if (_cubit.isEdit) {
       _cubit.setEditedState(onComment: (comment) => commentContoroller.text = comment).then((
@@ -97,6 +107,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
 
   @override
   void dispose() {
+    _swipeSettleController.dispose();
     tabController
       ..removeListener(_onTabChanged)
       ..dispose();
@@ -183,7 +194,10 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
   Widget _buildBody() {
     return Builder(
       builder: (context) {
-        final sw = MediaQuery.of(context).size.width;
+        // sizeOf вместо of(context).size — подписка только на изменение
+        // размера, а не на весь MediaQuery (клавиатура/insets не триггерят
+        // лишний ребилд этого поддерева).
+        final sw = MediaQuery.sizeOf(context).width;
         return Column(
           children: [
             BlocSelector<PrescriptionEditCubit, PrescriptionEditState, bool>(
@@ -216,26 +230,17 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
                       if (indexOffset != 0) {
                         tabController.animateTo(tabController.index + indexOffset);
                       } else {
+                        // Докрутить недотянутый свайп обратно к 0 через один
+                        // переиспользуемый контроллер (без создания нового
+                        // Ticker на каждый жест).
                         final offset = tabController.offset;
-                        final animation = AnimationController(
-                          vsync: this,
-                          value: offset,
-                          lowerBound: -1.0,
+                        _swipeSettleController
+                          ..stop()
+                          ..value = offset;
+                        _swipeSettleController.animateTo(
+                          .0,
                           duration: kTabScrollDuration * offset.abs(),
-                          reverseDuration: kTabScrollDuration * offset.abs(),
                         );
-
-                        void onAnimation() {
-                          tabController.offset = animation.value;
-                        }
-
-                        animation.addListener(onAnimation);
-                        animation.addStatusListener((status) {
-                          if (status == AnimationStatus.completed) {
-                            animation.removeListener(onAnimation);
-                          }
-                        });
-                        animation.animateTo(.0, duration: kTabScrollDuration);
                       }
                     },
                     child: PrescriptionForm(commentContoroller: commentContoroller),

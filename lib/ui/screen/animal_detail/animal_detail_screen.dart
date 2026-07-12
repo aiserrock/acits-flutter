@@ -4,7 +4,6 @@ import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -357,23 +356,19 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                 ),
               ),
             const Spacer(),
-            // TODO: impl for web
-            if (!kIsWeb)
-              DefaultIconButton(
-                icon: const Icon(Icons.share_outlined, color: ColorRes.accent),
-                onPressed: () {
-                  context.push(
-                    AppRoutes.docViewer,
-                    extra: <String, Object?>{
-                      'fetcher': (() async {
-                        final pdf = await _animalService.fetchPdfAnimalCard(widget.id);
-                        return pdf;
-                      }),
-                      'title': '${LocaleKeys.mainAnimal.tr()} ${widget.id}',
-                    },
-                  );
-                },
-              ),
+            DefaultIconButton(
+              icon: const Icon(Icons.share_outlined, color: ColorRes.accent),
+              onPressed: () {
+                context.push(
+                  AppRoutes.docViewer,
+                  extra: <String, Object?>{
+                    'fetcher': () => _animalService.fetchPdfAnimalCard(widget.id),
+                    'title': '${LocaleKeys.mainAnimal.tr()} ${widget.id}',
+                    'fileName': 'animal_${widget.id}.pdf',
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),

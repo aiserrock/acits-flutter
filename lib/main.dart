@@ -18,6 +18,7 @@ import 'package:acits_flutter/firebase/firebase_config.dart';
 import 'package:acits_flutter/util/app_version.dart';
 import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 import 'package:acits_flutter/util/logger/log.dart';
+import 'package:acits_flutter/util/phone_frame.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
 
 Future<void> main() async {
@@ -39,9 +40,14 @@ Future<void> main() async {
     };
   }
 
-  await EasyLocalization.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await AppVersion.load();
+  // Независимые инициализации — параллельно (ускоряет старт, особенно «белый
+  // экран» на web): локализация, ориентация и версия приложения не зависят
+  // друг от друга. initDi идёт после — часть сервисов может опираться на них.
+  await Future.wait([
+    EasyLocalization.ensureInitialized(),
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
+    AppVersion.load(),
+  ]);
   await initDi();
 
   // Логи всех cubit'ов/bloc'ов идут в общий Talker (в prod-release он выключен).
@@ -108,7 +114,14 @@ class MyApp extends StatelessWidget {
       color: ColorRes.accent,
       scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
       routerConfig: getIt<GoRouter>(),
-      builder: overlayBuilder,
+      // На web-десктопе ограничиваем интерфейс шириной смартфона (PhoneFrame),
+      // затем поверх — необязательный overlayBuilder (dev-кнопка). Порядок:
+      // сначала рамка, потом overlay, чтобы кнопка была над «телефоном».
+      builder: (context, child) {
+        Widget framed = PhoneFrame(child: child ?? const SizedBox.shrink());
+        if (overlayBuilder != null) framed = overlayBuilder!(context, framed);
+        return framed;
+      },
     );
   }
 }

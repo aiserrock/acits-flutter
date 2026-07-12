@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -29,14 +31,35 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginFocusTargetChanged>(_onFocusTargetChanged);
 
     _init();
-    stream.listen((event) {
-      if (state.status.isSuccess) _pickShelter();
+    // Навигация на pick-shelter — ровно один раз на переход статуса в success.
+    // Подписка сохраняется и отменяется в close() (иначе утечка листенера с
+    // getIt<GoRouter>().push после ухода с экрана). Guard `_pickShelterHandled`
+    // не даёт повторно дёргать getShelterList/push на каждой последующей
+    // эмиссии, пока статус остаётся success (ввод, toggle пароля, смена фокуса).
+    _statusSub = stream.listen((state) {
+      if (state.status.isSuccess) {
+        if (!_pickShelterHandled) {
+          _pickShelterHandled = true;
+          _pickShelter();
+        }
+      } else {
+        _pickShelterHandled = false;
+      }
     });
   }
 
   final AuthService _authService;
   final DebugService _debugService;
   final DeepLinkService _deepLinkService;
+
+  StreamSubscription<LoginState>? _statusSub;
+  bool _pickShelterHandled = false;
+
+  @override
+  Future<void> close() {
+    _statusSub?.cancel();
+    return super.close();
+  }
 
   void _handleDeeplink(String initLink) {
     Future.delayed(const Duration(milliseconds: 32), () => _deepLinkService.onLinkHandle(initLink));
