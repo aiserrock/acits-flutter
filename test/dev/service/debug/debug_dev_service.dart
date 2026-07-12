@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -20,11 +22,25 @@ class DebugDevService implements DebugService {
 
   final DebugPreferenceStorage _storage;
 
-  /// Открыть экран отладки
+  /// Видимость плавающей debug-кнопки (по образцу a production app):
+  /// скрывается на время открытого debug-экрана и по long-press на кнопке.
+  final _buttonVisibility = StreamController<bool>.broadcast();
+
+  Stream<bool> get debugButtonStream => _buttonVisibility.stream;
+
+  void showDebugButton() => _buttonVisibility.add(true);
+
+  void hideDebugButton() => _buttonVisibility.add(false);
+
+  /// Открыть экран отладки. Кнопка скрывается на время экрана и
+  /// возвращается после его закрытия (pop).
   @override
   void openDebugScreen() {
     final navigator = getIt<GlobalKey<NavigatorState>>();
-    navigator.currentState?.push(MaterialPageRoute(builder: (_) => const DebugScreen()));
+    hideDebugButton();
+    navigator.currentState
+        ?.push(MaterialPageRoute<void>(builder: (_) => const DebugScreen()))
+        .whenComplete(showDebugButton);
   }
 
   set proxyUrl(String? proxyUrl) {
