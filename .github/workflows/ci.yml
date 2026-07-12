@@ -427,6 +427,7 @@ jobs:
         run: |
           flutter build web -t test/dev/main.dart --release \
             --dart-define=CORS_PROXY_BASE=https://proxy.cors.sh/ \
+            --build-number="$GITHUB_RUN_NUMBER" \
             --base-href "/${GITHUB_REPOSITORY#*/}/"
 
       - uses: actions/upload-pages-artifact@v4
