@@ -43,6 +43,20 @@ jobs:
           # в GitLab мусорные refs/remotes/origin/*. Пушим прямо в URL (без `remote add`),
           # чтобы токен не оседал в .git/config раннера.
           # --prune = семантика зеркала: удалённые на GitHub ветки/теги удаляются и на GitLab.
-          git push --prune --force "$GITLAB_URL" \
-            "refs/remotes/origin/*:refs/heads/*" \
-            "refs/tags/*:refs/tags/*"
+          #
+          # Retry: self-hosted gitlab.acits.ru периодически отдаёт 502
+          # ("GitLab is not responding") под нагрузкой — транзиентная ошибка,
+          # не конфиг/токен. 3 попытки с нарастающей паузой прежде чем падать.
+          attempt=1
+          max=3
+          until git push --prune --force "$GITLAB_URL" \
+                  "refs/remotes/origin/*:refs/heads/*" \
+                  "refs/tags/*:refs/tags/*"; do
+            if [ "$attempt" -ge "$max" ]; then
+              echo "Push в GitLab не удался после $max попыток." >&2
+              exit 1
+            fi
+            echo "Попытка $attempt не удалась (вероятно 502) — повтор через $((attempt*15))s..." >&2
+            sleep $((attempt*15))
+            attempt=$((attempt+1))
+          done
