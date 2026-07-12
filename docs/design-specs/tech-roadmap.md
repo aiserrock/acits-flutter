@@ -1,8 +1,7 @@
 # Design Spec: Технический roadmap acits_flutter
 
-> Дата: 2026-07-12. Метод: параллельное исследование 5 продакшн-кодовых баз
-> (a large production app, a production driver app + a shared library set, экосистема a production monorepo, a banking app)
-> + аудит acits_flutter; каждый пункт адверсариально верифицирован против реального кода репозитория.
+> Дата: 2026-07-12. Метод: аудит acits_flutter + сверка с индустриальными практиками;
+> каждый пункт адверсариально верифицирован против реального кода репозитория.
 
 ## Problem
 
