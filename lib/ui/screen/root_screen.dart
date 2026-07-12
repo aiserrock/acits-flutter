@@ -50,26 +50,33 @@ class _RootScreenState extends State<RootScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: const PersonalDrawerWidget(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: _bottomNavItems,
-          onTap: (index) => setState(() {
-            if (index > 1) {
-              ScaffoldMessenger.of(context)
-                ..clearSnackBars()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text(LocaleKeys.commonDidNotImpl.tr()),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-            }
-            if (_current != index && index < 2) _current = index;
-          }),
-          currentIndex: _current,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          fixedColor: ColorRes.accent,
+        // SafeArea(top: false) добавляет нижний отступ под системную полоску
+        // (iOS home-indicator, некоторые Android-жестовые бары), чтобы иконки
+        // навигации не перекрывались. На устройствах без нижней safe-area
+        // (обычные Android) отступ = 0 — визуально ничего не меняется.
+        bottomNavigationBar: SafeArea(
+          top: false,
+          child: BottomNavigationBar(
+            items: _bottomNavItems,
+            onTap: (index) => setState(() {
+              if (index > 1) {
+                ScaffoldMessenger.of(context)
+                  ..clearSnackBars()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(LocaleKeys.commonDidNotImpl.tr()),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+              }
+              if (_current != index && index < 2) _current = index;
+            }),
+            currentIndex: _current,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
+            fixedColor: ColorRes.accent,
+          ),
         ),
         body: Stack(
           children: [
