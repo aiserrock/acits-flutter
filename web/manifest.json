@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#6776E0",
     "theme_color": "#6776E0",
-    "description": "A new Flutter project.",
+    "description": "Работаете в приюте для животных? Acits — ваш бесплатный помощник! Заботиться о животных стало проще.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

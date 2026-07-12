@@ -18,6 +18,16 @@ EventTransformer<E> _throttleDroppable<E>(Duration duration) {
   };
 }
 
+/// Для ввода поиска: debounce (ждём паузу в наборе) + restartable (отменяем
+/// предыдущий запрос и запускаем по последней строке). Раньше здесь стоял
+/// throttle+droppable, из-за чего последний введённый запрос мог не выполниться
+/// вовсе — droppable ронял событие, пока шёл предыдущий fetch.
+EventTransformer<E> _debounceRestartable<E>(Duration duration) {
+  return (events, mapper) {
+    return restartable<E>().call(events.debounce(duration), mapper);
+  };
+}
+
 class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
   final PagingFetchAdapter adapter;
   final int pageLimit;
@@ -28,7 +38,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
     on<ResetFetchSearchEvent>(_onResetFetch, transformer: _throttleDroppable(_throttleDuration));
     on<ChangeSearchRequestSearchEvent>(
       _onChangeSearch,
-      transformer: _throttleDroppable(_throttleDuration),
+      transformer: _debounceRestartable(_throttleDuration),
     );
   }
 
@@ -47,6 +57,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
               status: SearchStatus.success,
               items: List.of(state.items)..addAll(value as List<T>),
               isReachedMax: value.length < pageLimit,
+              error: null,
             ),
           );
         })
@@ -71,6 +82,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
               status: SearchStatus.success,
               items: value as List<T>,
               isReachedMax: value.length < pageLimit,
+              error: null,
             ),
           );
         })
@@ -84,10 +96,11 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
     ChangeSearchRequestSearchEvent event,
     Emitter<SearchState<T>> emitter,
   ) async {
-    if (state.status == SearchStatus.loading) return;
-
+    // Без раннего return по loading: transformer restartable отменяет прошлый
+    // обработчик, поэтому актуален всегда последний ввод. Прошлая проверка
+    // `status == loading` глушила новый запрос и оставляла устаревшие результаты.
     Log.debug('SearchBloc.changeSearch search=${event.searchRequest}');
-    emitter(state.copyWith(status: SearchStatus.loading));
+    emitter(state.copyWith(status: SearchStatus.loading, searchRequest: event.searchRequest));
 
     await adapter
         .fetch(limit: pageLimit, offset: 0, search: event.searchRequest)
@@ -99,6 +112,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
               items: value as List<T>,
               searchRequest: event.searchRequest,
               isReachedMax: value.length < pageLimit,
+              error: null,
             ),
           );
         })

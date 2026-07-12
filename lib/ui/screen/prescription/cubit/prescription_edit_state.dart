@@ -5,6 +5,10 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
 
+/// Сентинел для copyWith: отличает «параметр не передан» от явного сброса
+/// nullable-поля в null (иначе `animal ?? this.animal` не давал снять выбор).
+const Object _unset = Object();
+
 /// Состояние экрана создания/редактирования назначения.
 ///
 /// Сворачивает восемь бывших [BehaviorSubject] контроллера в один
@@ -53,8 +57,8 @@ class PrescriptionEditState extends Equatable {
 
   PrescriptionEditState copyWith({
     DataState<PrescriptionModel?>? screen,
-    AnimalRead? animal,
-    PrescriptionShortMyTypeEnum? type,
+    Object? animal = _unset,
+    Object? type = _unset,
     TreatmentPeriod? treatmentPeriod,
     List<TimeOfDay>? atTimeList,
     List<DateTime>? daysList,
@@ -63,8 +67,10 @@ class PrescriptionEditState extends Equatable {
   }) {
     return PrescriptionEditState(
       screen: screen ?? this.screen,
-      animal: animal ?? this.animal,
-      type: type ?? this.type,
+      // animal/type: _unset → оставить текущее; иначе заменить (в т.ч. на null,
+      // чтобы можно было снять выбранное животное/тип).
+      animal: identical(animal, _unset) ? this.animal : animal as AnimalRead?,
+      type: identical(type, _unset) ? this.type : type as PrescriptionShortMyTypeEnum?,
       treatmentPeriod: treatmentPeriod ?? this.treatmentPeriod,
       atTimeList: atTimeList ?? this.atTimeList,
       daysList: daysList ?? this.daysList,

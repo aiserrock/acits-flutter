@@ -1,45 +1,22 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:path_provider/path_provider.dart';
-
-const _pdfExtension = '.pdf';
-
-typedef PdfDocFetcher = Future<File> Function();
+/// Провайдер байтов PDF-документа. Байты (а не File) — единый кроссплатформенный
+/// формат: `pdfx` рендерит их через `PdfDocument.openData` на всех платформах,
+/// включая web, где файловой системы нет. Раньше здесь был
+/// `Future<File> Function()`, что жёстко привязывало просмотр PDF к mobile.
+typedef PdfDocFetcher = Future<Uint8List> Function();
 
 mixin PdfDocumentMixin {
-  /// Конвертировать строку Base64 в файл и сохранить его в ФС
-  Future<File> convertPdfStringToFile(String raw, {required String fileName}) async {
-    // Оставляем только имя файла, отсекая любые разделители пути и обход директорий
-    fileName = fileName.split(RegExp(r'[/\\]')).last.replaceAll('..', '');
-    if (fileName.isEmpty) fileName = 'document';
-    if (!(fileName.contains('.'))) fileName = '$fileName$_pdfExtension';
-    final dir = (await getTemporaryDirectory()).absolute.path;
-    final path = '$dir/$fileName';
-
-    final file = File(path);
-    // Тело PDF приходит строкой (Response<String>). Пытаемся декодировать как base64,
-    // иначе трактуем строку как latin1 (round-trip байт 1:1).
-    final bytes = _decodePdfBytes(raw);
-    await file.writeAsBytes(bytes);
-    return file;
-
-    // final bytes = base64.decode(rawFile.fileBody!);
-
-    // final fileName =
-    //     rawFile.fileName?.replaceFirst(overrideExtension ?? _pdfExtension, '').replaceAll('/', '_');
-    // final path = await createNewFilePath(fileName, overrideExtension: overrideExtension);
-    // final file = File(path);
-    // await file.writeAsBytes(bytes);
-    // return FileEntity.file(file, fileName: fileName);
-  }
-
-  /// Декодировать тело PDF: сначала пробуем base64, иначе latin1 (round-trip байт 1:1).
-  List<int> _decodePdfBytes(String raw) {
+  /// Декодировать тело PDF в байты. Бэк отдаёт PDF строкой (`Response<String>`):
+  /// сначала пробуем base64, иначе трактуем строку как latin1 (round-trip
+  /// байт 1:1). Диск не задействуется — байты остаются в памяти и идут прямо в
+  /// рендерер/шаринг, что одинаково работает и в web, и на устройстве.
+  Uint8List decodePdfBytes(String raw) {
     try {
       return base64Decode(raw);
     } on FormatException {
-      return latin1.encode(raw);
+      return Uint8List.fromList(latin1.encode(raw));
     }
   }
 }

@@ -32,6 +32,22 @@ class CommentListCubit extends Cubit<CommentListState> {
 
   StreamSubscription<AnimalNote>? _createCommentSub;
 
+  /// Сортировка по дате создания (новые сверху). Делается здесь, в источнике
+  /// правды, один раз на изменение данных — раньше список сортировался в build()
+  /// на каждый ребилд списка.
+  static List<AnimalNote> _sorted(List<AnimalNote> notes) {
+    final copy = List<AnimalNote>.of(notes);
+    copy.sort((a, b) {
+      final da = a.createdAt, db = b.createdAt;
+      // Записи без даты — в конец, стабильно.
+      if (da == null && db == null) return 0;
+      if (da == null) return 1;
+      if (db == null) return -1;
+      return db.compareTo(da);
+    });
+    return copy;
+  }
+
   /// Первичная загрузка списка комментариев.
   Future<void> init() => _init();
 
@@ -42,7 +58,7 @@ class CommentListCubit extends Cubit<CommentListState> {
       final value = await _animalService.fetchAnimalNotes(animalId);
       final results = value?.results ?? [];
       Log.info('CommentListCubit.init ok: count=${results.length}');
-      safeEmit(state.copyWith(data: DataState.content(results)));
+      safeEmit(state.copyWith(data: DataState.content(_sorted(results))));
     } catch (e, s) {
       Log.error('CommentListCubit.init failed', e, s);
       safeEmit(state.copyWith(data: DataState.error(e)));
@@ -60,7 +76,10 @@ class CommentListCubit extends Cubit<CommentListState> {
       final newList = <AnimalNote>[...current, ...?value?.results];
       Log.info('CommentListCubit.loadNextPage ok: count=${newList.length}');
       safeEmit(
-        state.copyWith(data: DataState.content(newList), page: const DataState.content(null)),
+        state.copyWith(
+          data: DataState.content(_sorted(newList)),
+          page: const DataState.content(null),
+        ),
       );
     } catch (e, s) {
       Log.error('CommentListCubit.loadNextPage failed', e, s);
@@ -96,13 +115,13 @@ class CommentListCubit extends Cubit<CommentListState> {
     final index = current.indexWhere((comment) => comment.id == editedComment.id);
     if (index < 0) return;
     final newList = List<AnimalNote>.from(current)..replaceRange(index, index + 1, [editedComment]);
-    safeEmit(state.copyWith(data: DataState.content(newList)));
+    safeEmit(state.copyWith(data: DataState.content(_sorted(newList))));
   }
 
   void _onCreateComment(AnimalNote comment) {
     final current = state.data.valueOrNull;
     if (current == null) return;
-    safeEmit(state.copyWith(data: DataState.content(<AnimalNote>[...current, comment])));
+    safeEmit(state.copyWith(data: DataState.content(_sorted(<AnimalNote>[...current, comment]))));
   }
 
   @override

@@ -141,6 +141,7 @@ GoRouter createAppRouter() {
           return DocViewerScreen(
             extra?['fetcher'] as PdfDocFetcher,
             title: extra?['title'] as String?,
+            fileName: extra?['fileName'] as String?,
           );
         },
       ),
