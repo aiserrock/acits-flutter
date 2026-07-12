@@ -37,7 +37,13 @@ jobs:
 
           # checkout с fetch-depth:0 уже стянул все ветки (refs/remotes/origin/*) и теги;
           # --prune актуализирует их на случай удалений между checkout и этим шагом.
-          git fetch --prune --tags origin "+refs/heads/*:refs/remotes/origin/*"
+          # Теги тянем ФОРСОВЫМ refspec (+refs/tags/*), а не флагом --tags: при push
+          # нового тега раннер уже держит его из checkout, и неявный --tags падал бы
+          # "would clobber existing tag" (set -e рушит job до push-цикла). Явный `+`
+          # перезаписывает локальные теги, снимая конфликт.
+          git fetch --prune --prune-tags origin \
+            "+refs/heads/*:refs/remotes/origin/*" \
+            "+refs/tags/*:refs/tags/*"
 
           # Явные refspec вместo `push --mirror`: mirror из не-bare checkout утащил бы
           # в GitLab мусорные refs/remotes/origin/*. Пушим прямо в URL (без `remote add`),
