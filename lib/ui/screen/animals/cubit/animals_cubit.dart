@@ -26,6 +26,12 @@ class AnimalsCubit extends Cubit<AnimalsState> {
   /// Достигнут ли конец списка (последняя страница вернула меньше [_animalPageLength]).
   bool _reachedEnd = false;
 
+  /// Поколение запроса. Инкрементится при каждом reset (pull-to-refresh):
+  /// ответ догрузки страницы, стартовавшей до reset, приходит с устаревшим
+  /// поколением и игнорируется — иначе поздний ответ склеивал старый список с
+  /// новым (дубликаты) и сбивал offset.
+  int _requestGen = 0;
+
   /// Переключить режим поиска в шапке экрана.
   void toggleSearch() {
     safeEmit(state.copyWith(isSearchActive: !state.isSearchActive));
@@ -50,13 +56,21 @@ class AnimalsCubit extends Cubit<AnimalsState> {
     if (needResetOffset) {
       _currentListOffset = 0;
       _reachedEnd = false;
+      _requestGen++;
       safeEmit(state.copyWith(data: const DataState.loading()));
     }
+    final gen = _requestGen;
     try {
       final value = await _animalService.fetchAnimalList(
         offset: _currentListOffset,
         limit: _animalPageLength,
       );
+      // Пока шёл запрос, случился reset (сменилось поколение) — этот ответ
+      // устарел, не применяем.
+      if (gen != _requestGen) {
+        Log.debug('AnimalsCubit.loadAnimalList: stale response gen=$gen cur=$_requestGen, skip');
+        return;
+      }
       final fetched = value?.results ?? const [];
       final newList = <AnimalRead>[...?state.data.valueOrNull, ...fetched];
       _currentListOffset += fetched.length;
@@ -69,6 +83,7 @@ class AnimalsCubit extends Cubit<AnimalsState> {
         ),
       );
     } catch (e, s) {
+      if (gen != _requestGen) return;
       Log.error('AnimalsCubit.loadAnimalList failed: reset=$needResetOffset', e, s);
       if (needResetOffset) {
         safeEmit(state.copyWith(data: DataState.error(e)));

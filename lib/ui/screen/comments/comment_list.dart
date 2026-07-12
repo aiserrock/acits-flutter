@@ -104,17 +104,29 @@ class _CommentListViewState extends State<_CommentListView> {
   }
 
   Widget _buildList(CommentListState state, List<AnimalNote> comments) {
-    final sorted = List<AnimalNote>.from(comments)
-      ..sort(
-        (first, second) =>
-            (second.createdAt ?? DateTime.now()).compareTo(first.createdAt ?? DateTime.now()),
-      );
+    // Список уже отсортирован в cubit (source of truth). Здесь — ленивый
+    // builder-делегат: строятся только видимые элементы, а не весь список на
+    // каждый ребилд. Последние два индекса — paging-лоадер и нижний отступ.
+    final itemCount = comments.length + 2;
     return SliverList(
-      delegate: SliverChildListDelegate([
-        ...sorted.map<Widget>((comment) => _buildCommentItem(comment)),
-        _buildPagingLoader(state),
-        const SizedBox(height: 64.0),
-      ]),
+      delegate: SliverChildBuilderDelegate((context, index) {
+        if (index < comments.length) {
+          final comment = comments[index];
+          return _CommentItem(
+            key: ValueKey(comment.id ?? index),
+            comment: comment,
+            onUrlPressed: _onUrlPressed,
+            onFilePressed: (file) => _onFilePressed(context, file).catchError((_) {
+              _onError(context, LocaleKeys.commonErrorStubMsg.tr());
+            }),
+            onMorePressed: comment.isUserCanEditOrDelete ?? false
+                ? (ctx) => _onMorePressed(ctx, comment)
+                : null,
+          );
+        }
+        if (index == comments.length) return _buildPagingLoader(state);
+        return const SizedBox(height: 64.0);
+      }, childCount: itemCount),
     );
   }
 
@@ -141,122 +153,6 @@ class _CommentListViewState extends State<_CommentListView> {
         ),
       ),
       builder: (_, _) => const SizedBox(),
-    );
-  }
-
-  Widget _buildCommentItem(AnimalNote comment) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                color: ColorRes.foreground,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  topRight: Radius.circular(8.0),
-                  bottomLeft: Radius.circular(8.0),
-                ),
-                boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 4.0)],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _buildContent(comment),
-                  if (comment.files?.isNotEmpty ?? false) _buildFileList(comment),
-                  const SizedBox(height: 8.0),
-                  _buildCaption(comment),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFileList(AnimalNote comment) {
-    return Column(
-      children:
-          comment.files
-              ?.map<Widget>(
-                (file) => CupertinoButton(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  onPressed: () => _onFilePressed(context, file).catchError((e) {
-                    _onError(context, LocaleKeys.commonErrorStubMsg.tr());
-                  }),
-                  child: Text(
-                    file.filename ?? '',
-                    style: StyleRes.content.copyWith(
-                      color: ColorRes.accent,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              )
-              .toList() ??
-          [],
-    );
-  }
-
-  Widget _buildContent(AnimalNote comment) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(
-          child: Text.rich(
-            TextSpan(
-              children: (TextUrlWrapper.fromString(comment.content))
-                  .map<TextSpan>(
-                    (item) => TextSpan(
-                      text: item.value,
-                      style: item.isUrl
-                          ? StyleRes.content.copyWith(
-                              color: ColorRes.accent,
-                              decoration: TextDecoration.underline,
-                            )
-                          : null,
-                      recognizer: item.isUrl
-                          ? (TapGestureRecognizer()..onTap = () => _onUrlPressed(item.value))
-                          : null,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ),
-        if (comment.isUserCanEditOrDelete ?? false)
-          Builder(
-            builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: CupertinoButton(
-                  onPressed: () => _onMorePressed(context, comment),
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  child: const Icon(Icons.more_vert, color: ColorRes.accent),
-                ),
-              );
-            },
-          ),
-      ],
-    );
-  }
-
-  Widget _buildCaption(AnimalNote comment) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(text: comment.updatedAt?.toDateTimeHuman ?? '', style: StyleRes.caption),
-          const TextSpan(text: ',  ', style: StyleRes.caption),
-          TextSpan(text: comment.updatedBy ?? '', style: StyleRes.caption),
-        ],
-      ),
     );
   }
 
@@ -352,5 +248,158 @@ class _CommentListViewState extends State<_CommentListView> {
   void _onError(BuildContext context, String? msg) {
     if (msg == null || msg.isEmpty) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+}
+
+/// Одна карточка комментария. Выделена в отдельный StatefulWidget, чтобы владеть
+/// [TapGestureRecognizer] для URL-ссылок и корректно их dispose(): раньше
+/// recognizer'ы создавались в build() на каждый ребилд и никогда не
+/// освобождались — утечка при скролле длинного списка.
+class _CommentItem extends StatefulWidget {
+  const _CommentItem({
+    required this.comment,
+    required this.onUrlPressed,
+    required this.onFilePressed,
+    required this.onMorePressed,
+    super.key,
+  });
+
+  final AnimalNote comment;
+  final Future<void> Function(String url) onUrlPressed;
+  final void Function(AnimalNoteFile file) onFilePressed;
+  final void Function(BuildContext context)? onMorePressed;
+
+  @override
+  State<_CommentItem> createState() => _CommentItemState();
+}
+
+class _CommentItemState extends State<_CommentItem> {
+  final _recognizers = <TapGestureRecognizer>[];
+
+  @override
+  void dispose() {
+    _disposeRecognizers();
+    super.dispose();
+  }
+
+  void _disposeRecognizers() {
+    for (final r in _recognizers) {
+      r.dispose();
+    }
+    _recognizers.clear();
+  }
+
+  List<TextSpan> _buildContentSpans() {
+    // Пересоздаём recognizer'ы под текущий контент (пересобирается на каждый
+    // build этого элемента, но элемент лениво строится только когда виден).
+    _disposeRecognizers();
+    return TextUrlWrapper.fromString(widget.comment.content).map<TextSpan>((item) {
+      TapGestureRecognizer? recognizer;
+      if (item.isUrl) {
+        recognizer = TapGestureRecognizer()..onTap = () => widget.onUrlPressed(item.value);
+        _recognizers.add(recognizer);
+      }
+      return TextSpan(
+        text: item.value,
+        style: item.isUrl
+            ? StyleRes.content.copyWith(
+                color: ColorRes.accent,
+                decoration: TextDecoration.underline,
+              )
+            : null,
+        recognizer: recognizer,
+      );
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final comment = widget.comment;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: const BoxDecoration(
+                color: ColorRes.foreground,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  topRight: Radius.circular(8.0),
+                  bottomLeft: Radius.circular(8.0),
+                ),
+                boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 4.0)],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _buildContent(comment),
+                  if (comment.files?.isNotEmpty ?? false) _buildFileList(comment),
+                  const SizedBox(height: 8.0),
+                  _buildCaption(comment),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContent(AnimalNote comment) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(child: Text.rich(TextSpan(children: _buildContentSpans()))),
+        if (widget.onMorePressed != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: CupertinoButton(
+              onPressed: () => widget.onMorePressed!(context),
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              child: const Icon(Icons.more_vert, color: ColorRes.accent),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildFileList(AnimalNote comment) {
+    return Column(
+      children:
+          comment.files
+              ?.map<Widget>(
+                (file) => CupertinoButton(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  onPressed: () => widget.onFilePressed(file),
+                  child: Text(
+                    file.filename ?? '',
+                    style: StyleRes.content.copyWith(
+                      color: ColorRes.accent,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              )
+              .toList() ??
+          [],
+    );
+  }
+
+  Widget _buildCaption(AnimalNote comment) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(text: comment.updatedAt?.toDateTimeHuman ?? '', style: StyleRes.caption),
+          const TextSpan(text: ',  ', style: StyleRes.caption),
+          TextSpan(text: comment.updatedBy ?? '', style: StyleRes.caption),
+        ],
+      ),
+    );
   }
 }

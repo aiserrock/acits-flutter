@@ -52,17 +52,27 @@ class AnimalDetailCubit extends Cubit<AnimalDetailState> {
 
   /// Загрузить список назначений с учётом текущего фильтра.
   Future<void> reloadPrescriptions() async {
-    Log.debug('AnimalDetailCubit.reloadPrescriptions: id=$id active=${state.prescriptionActive}');
+    // Фиксируем фильтр, под который запрашиваем. Если во время запроса
+    // пользователь переключил тумблер (актуальные/прошлые), поздний ответ уже
+    // не соответствует текущему выбору — не применяем его, иначе список не
+    // совпадёт с положением переключателя.
+    final requestedActive = state.prescriptionActive;
+    Log.debug('AnimalDetailCubit.reloadPrescriptions: id=$id active=$requestedActive');
     safeEmit(state.copyWith(prescriptions: const DataState.loading()));
     try {
       final value = await _prescriptionService.fetchPrescriptionListByAnimal(
         id,
-        isActual: state.prescriptionActive,
-        isOld: !state.prescriptionActive,
+        isActual: requestedActive,
+        isOld: !requestedActive,
       );
+      if (requestedActive != state.prescriptionActive) {
+        Log.debug('AnimalDetailCubit.reloadPrescriptions: stale filter, skip');
+        return;
+      }
       Log.info('AnimalDetailCubit.reloadPrescriptions ok: count=${value?.results.length}');
       safeEmit(state.copyWith(prescriptions: DataState.content(value?.results)));
     } catch (e, s) {
+      if (requestedActive != state.prescriptionActive) return;
       Log.error('AnimalDetailCubit.reloadPrescriptions failed: id=$id', e, s);
       safeEmit(state.copyWith(prescriptions: DataState.error(e)));
     }

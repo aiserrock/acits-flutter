@@ -13,6 +13,6 @@ abstract final class WebInsets {
 
   static String get debugInfo => '';
 
-  /// На нативе insets не меняются через JS — no-op.
-  static void onChange(void Function() callback) {}
+  /// На нативе insets не меняются через JS — no-op, отписка тоже no-op.
+  static void Function() onChange(void Function() callback) => () {};
 }

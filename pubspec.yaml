@@ -55,6 +55,9 @@ dependencies:
   smooth_page_indicator: ^2.0.1
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
+  # Прямой доступ к браузерным API (Web Share / скачивание blob) в web-реализации
+  # DocExporter. Только под web (conditional import).
+  web: ^1.1.0
   easy_localization: ^3.0.8
   firebase_crashlytics: ^5.2.4
   firebase_analytics: ^12.4.3
