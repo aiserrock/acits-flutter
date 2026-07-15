@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({
-    required this.onPressed,
-    this.text,
-    this.child,
-    this.isFill = true,
-    this.onLongPress,
-    super.key,
-  }) : assert(text != null || child != null);
+  const PrimaryButton({required this.onPressed, this.text, this.child, this.isFill = true, this.onLongPress, super.key})
+    : assert(text != null || child != null);
 
   final VoidCallback onPressed;
   final String? text;
@@ -26,9 +20,7 @@ class PrimaryButton extends StatelessWidget {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         ),
         textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 16.0)),
-        padding: WidgetStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-        ),
+        padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0)),
         backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
       ),
       child: _buildChild(),

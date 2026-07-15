@@ -43,18 +43,13 @@ List<Widget> _buildCommonInfoContent(BuildContext context, AnimalRead animal) {
     ]),
     AnimalContentCard([
       CardData(firstCaption: LocaleKeys.animalColor.tr(), firstValue: animal.colorString ?? ''),
-      CardData(
-        firstCaption: LocaleKeys.animalSpecSigns.tr(),
-        firstValue: animal.specialSignsString ?? '',
-      ),
+      CardData(firstCaption: LocaleKeys.animalSpecSigns.tr(), firstValue: animal.specialSignsString ?? ''),
     ]),
     AnimalContentCard([
       CardData(firstCaption: LocaleKeys.animalChip.tr(), firstValue: animal.chippingCode ?? ''),
       CardData(
         firstCaption: LocaleKeys.animalChipDate.tr(),
-        firstValue: animal.dateOfChipping != null
-            ? _dateFormatter.format(animal.dateOfChipping!)
-            : '',
+        firstValue: animal.dateOfChipping != null ? _dateFormatter.format(animal.dateOfChipping!) : '',
       ),
     ]),
     const SizedBox(height: 12.0),

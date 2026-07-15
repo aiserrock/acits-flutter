@@ -33,10 +33,7 @@ class DebugOverlay extends StatelessWidget {
           stream: debug.debugButtonStream,
           builder: (context, snapshot) {
             if (!snapshot.requireData) return const SizedBox.shrink();
-            return DebugFloatingButton(
-              onTap: debug.openDebugScreen,
-              onLongPress: debug.hideDebugButton,
-            );
+            return DebugFloatingButton(onTap: debug.openDebugScreen, onLongPress: debug.hideDebugButton);
           },
         ),
       ],

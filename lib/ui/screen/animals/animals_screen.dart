@@ -192,15 +192,10 @@ class _AnimalsViewState extends State<_AnimalsView> {
                 suffixIconConstraints: const BoxConstraints(minWidth: 36.0, minHeight: 40.0),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
           )
-        : Text(
-            LocaleKeys.commonAnimals.tr(),
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-          );
+        : Text(LocaleKeys.commonAnimals.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface));
   }
 
   Widget _buildScreenContent(AnimalsState state, List<AnimalRead> data) {
@@ -239,10 +234,8 @@ class _AnimalsViewState extends State<_AnimalsView> {
     return DataStateBuilder<int>(
       state: state.page,
       builder: (_, _) => const SizedBox(height: 16.0),
-      loader: (_) =>
-          const SizedBox(height: 48.0, child: Center(child: CircularProgressIndicator())),
-      errorBuilder: (_, _) =>
-          SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr()))),
+      loader: (_) => const SizedBox(height: 48.0, child: Center(child: CircularProgressIndicator())),
+      errorBuilder: (_, _) => SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr()))),
     );
   }
 
@@ -259,10 +252,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Assets.common.emptyState.svg()],
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [Assets.common.emptyState.svg()]),
               Text(
                 message,
                 style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary),

@@ -89,10 +89,7 @@ class _MainViewState extends State<_MainView> {
             leading: state.isSearchActive
                 ? GestureDetector(
                     onTap: _exitSearch,
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
                   )
                 : Builder(
                     builder: (context) {
@@ -173,32 +170,19 @@ class _MainViewState extends State<_MainView> {
                 isDense: true,
                 hintText: LocaleKeys.commonSearch.tr(),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: 20.0,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                prefixIcon: Icon(Icons.search, size: 20.0, color: Theme.of(context).colorScheme.primary),
                 prefixIconConstraints: const BoxConstraints(minWidth: 40.0, minHeight: 40.0),
                 suffixIcon: GestureDetector(
                   onTap: _searchController.clear,
-                  child: Icon(
-                    Icons.close,
-                    size: 18.0,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  child: Icon(Icons.close, size: 18.0, color: Theme.of(context).colorScheme.primary),
                 ),
                 suffixIconConstraints: const BoxConstraints(minWidth: 36.0, minHeight: 40.0),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
           )
-        : Text(
-            LocaleKeys.mainTitle.tr(),
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-          );
+        : Text(LocaleKeys.mainTitle.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface));
   }
 
   void _openDebug(BuildContext context) {
@@ -233,10 +217,7 @@ class _MainScreenContent extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
         itemBuilder: (_, index) {
           final item = (data?.results ?? [])[index];
-          return PrescriptionCardWidget(
-            item,
-            onEditedPrescription: () => _onEditPrescriptionPressed(item),
-          );
+          return PrescriptionCardWidget(item, onEditedPrescription: () => _onEditPrescriptionPressed(item));
         },
         itemCount: data?.results?.length ?? 0,
         separatorBuilder: (_, _) => const SizedBox(height: 16.0),
@@ -257,10 +238,7 @@ class _MainScreenContent extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Assets.common.emptyState.svg()],
-                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [Assets.common.emptyState.svg()]),
                     Text(
                       isSearching ? LocaleKeys.commonNotFound.tr() : LocaleKeys.mainEmptyState.tr(),
                       style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary),

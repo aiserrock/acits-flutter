@@ -139,11 +139,6 @@ class PrescriptionListPage {
   }
 
   PrescriptionListPage copyWith({List<PrescriptionModel>? results}) {
-    return PrescriptionListPage(
-      count: count,
-      next: next,
-      previous: previous,
-      results: results ?? this.results,
-    );
+    return PrescriptionListPage(count: count, next: next, previous: previous, results: results ?? this.results);
   }
 }

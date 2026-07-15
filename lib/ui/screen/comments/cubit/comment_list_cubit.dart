@@ -75,12 +75,7 @@ class CommentListCubit extends Cubit<CommentListState> {
       final value = await _animalService.fetchAnimalNotes(animalId, offset: current.length);
       final newList = <AnimalNote>[...current, ...?value?.results];
       Log.info('CommentListCubit.loadNextPage ok: count=${newList.length}');
-      safeEmit(
-        state.copyWith(
-          data: DataState.content(_sorted(newList)),
-          page: const DataState.content(null),
-        ),
-      );
+      safeEmit(state.copyWith(data: DataState.content(_sorted(newList)), page: const DataState.content(null)));
     } catch (e, s) {
       Log.error('CommentListCubit.loadNextPage failed', e, s);
       safeEmit(state.copyWith(page: DataState.error(e)));

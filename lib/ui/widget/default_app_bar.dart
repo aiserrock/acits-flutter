@@ -6,12 +6,7 @@ import 'package:flutter/material.dart';
 /// (M3-тема), поэтому App Bar автоматически следует за светлой/тёмной темой.
 /// Цвет стрелки «назад» берётся из `colorScheme.primary`.
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const DefaultAppBar({
-    super.key,
-    required this.titleString,
-    required this.onBackPressure,
-    this.elevation,
-  });
+  const DefaultAppBar({super.key, required this.titleString, required this.onBackPressure, this.elevation});
 
   final String titleString;
   final VoidCallback onBackPressure;

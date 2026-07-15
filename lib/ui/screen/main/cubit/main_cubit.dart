@@ -38,9 +38,7 @@ class MainCubit extends Cubit<MainState> {
   /// Также используется как обработчик pull-to-refresh. Прокидывает текущий
   /// поиск и сортировку. При ошибке эмитит [DataState.error].
   Future<void> loadExecutions() async {
-    Log.debug(
-      'MainCubit.loadExecutions search=${state.searchRequest} ordering=${state.activeSort.ordering}',
-    );
+    Log.debug('MainCubit.loadExecutions search=${state.searchRequest} ordering=${state.activeSort.ordering}');
     _requestGen++;
     final gen = _requestGen;
     safeEmit(state.copyWith(data: const DataState.loading()));

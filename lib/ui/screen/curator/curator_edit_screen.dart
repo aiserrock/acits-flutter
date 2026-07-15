@@ -114,20 +114,14 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
               controller: _nameController,
               validator: Validator.emptyValidator,
             ),
-            EditCardData(
-              label: LocaleKeys.animalCuratorLastName.tr(),
-              controller: _lastNameController,
-            ),
+            EditCardData(label: LocaleKeys.animalCuratorLastName.tr(), controller: _lastNameController),
             EditCardData(
               label: '${LocaleKeys.animalCuratorPhone.tr()} *',
               controller: _phoneController,
               validator: Validator.emptyValidator,
             ),
             EditCardData(label: LocaleKeys.animalCuratorEmail.tr(), controller: _emailController),
-            EditCardData(
-              label: LocaleKeys.animalCuratorAddress.tr(),
-              controller: _addressController,
-            ),
+            EditCardData(label: LocaleKeys.animalCuratorAddress.tr(), controller: _addressController),
           ]),
         ),
       ],
@@ -150,16 +144,14 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
     final cubit = context.read<CuratorEditCubit>();
     if (cubit.state.isLoading) return;
     if (!(formKey.currentState?.validate() ?? false)) return;
-    final draft =
-        (cubit.state.valueOrNull ??
-                const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''))
-            .copyWith(
-              firstName: _nameController.text,
-              lastName: _lastNameController.text,
-              phoneNumber: _phoneController.text,
-              address: _addressController.text,
-              email: _emailController.text,
-            );
+    final draft = (cubit.state.valueOrNull ?? const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''))
+        .copyWith(
+          firstName: _nameController.text,
+          lastName: _lastNameController.text,
+          phoneNumber: _phoneController.text,
+          address: _addressController.text,
+          email: _emailController.text,
+        );
     final result = await cubit.submit(draft);
     if (result != null && mounted) Navigator.of(context).pop(result);
   }

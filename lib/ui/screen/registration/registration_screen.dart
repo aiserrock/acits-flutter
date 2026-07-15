@@ -82,9 +82,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
               child: BlocSelector<RegistrationCubit, RegistrationState, int>(
                 selector: (state) => state.tabIndex,
                 builder: (_, tabIndex) {
-                  final current = tabIndex == 0
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond;
+                  final current = tabIndex == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond;
                   return AnimatedCrossFade(
                     firstChild: const RegistrationOrgForm(),
                     secondChild: const RegistrationCustomerForm(),
@@ -241,10 +239,7 @@ class RegistrationFormControllers {
   }
 
   /// Собрать модель кастомера из введённых данных.
-  UserShelterWorkerSerializers buildCustomer({
-    required ShelterShortSerializers? shelter,
-    required CustomerRole role,
-  }) {
+  UserShelterWorkerSerializers buildCustomer({required ShelterShortSerializers? shelter, required CustomerRole role}) {
     return UserShelterWorkerSerializers(
       shelter: shelter?.id,
       email: customerEmailController.text,
@@ -294,10 +289,7 @@ class RegistrationSubmitBtn extends StatelessWidget {
             : Shimmer.fromColors(
                 baseColor: Theme.of(context).colorScheme.primary,
                 highlightColor: Theme.of(context).colorScheme.surface,
-                child: PrimaryButton(
-                  onPressed: () {},
-                  text: LocaleKeys.loginToRegistration.tr().toUpperCase(),
-                ),
+                child: PrimaryButton(onPressed: () {}, text: LocaleKeys.loginToRegistration.tr().toUpperCase()),
               );
       },
     );
@@ -332,9 +324,7 @@ class RegistrationSubmitBtn extends StatelessWidget {
       if (state.tabIndex == 0) {
         success = await cubit.submitAdmin(forms.buildAdmin());
       } else {
-        success = await cubit.submitCustomer(
-          forms.buildCustomer(shelter: state.shelter, role: state.role),
-        );
+        success = await cubit.submitCustomer(forms.buildCustomer(shelter: state.shelter, role: state.role));
       }
       if (success) _onSuccess(navigator);
     } catch (e) {
@@ -423,10 +413,9 @@ class RegistrationPersonalData extends StatelessWidget {
                 TextSpan(text: LocaleKeys.regAgreePersonalDataPart0.tr()),
                 TextSpan(
                   text: LocaleKeys.regAgreePersonalDataPart1.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.blue, decoration: TextDecoration.underline),
                   recognizer: TapGestureRecognizer()..onTap = _onPrivateTermsPressed,
                 ),
               ],
@@ -526,26 +515,17 @@ class RegistrationOrgForm extends StatelessWidget {
           ),
           TextFormField(
             controller: forms.orgSNameController,
-            decoration: InputDecoration(
-              labelText: '${LocaleKeys.animalCuratorLastName.tr()} *',
-              hintText: 'Иванов',
-            ),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorLastName.tr()} *', hintText: 'Иванов'),
             validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.orgNameController,
-            decoration: InputDecoration(
-              labelText: '${LocaleKeys.animalCuratorName.tr()} *',
-              hintText: 'Иван',
-            ),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorName.tr()} *', hintText: 'Иван'),
             validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.orgMNameController,
-            decoration: InputDecoration(
-              labelText: LocaleKeys.regFathersName.tr(),
-              hintText: 'Иванович',
-            ),
+            decoration: InputDecoration(labelText: LocaleKeys.regFathersName.tr(), hintText: 'Иванович'),
           ),
         ],
       ),
@@ -574,17 +554,11 @@ class RegistrationOrgForm extends StatelessWidget {
           ),
           TextFormField(
             controller: forms.orgRegionNameController,
-            decoration: InputDecoration(
-              labelText: LocaleKeys.regRegion.tr(),
-              hintText: LocaleKeys.regWriteRegion.tr(),
-            ),
+            decoration: InputDecoration(labelText: LocaleKeys.regRegion.tr(), hintText: LocaleKeys.regWriteRegion.tr()),
           ),
           TextFormField(
             controller: forms.orgCityNameController,
-            decoration: InputDecoration(
-              labelText: LocaleKeys.regCity.tr(),
-              hintText: LocaleKeys.regWriteCity.tr(),
-            ),
+            decoration: InputDecoration(labelText: LocaleKeys.regCity.tr(), hintText: LocaleKeys.regWriteCity.tr()),
             validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
         ],
@@ -655,18 +629,12 @@ class RegistrationCustomerForm extends StatelessWidget {
           ),
           TextFormField(
             controller: forms.customerSNameController,
-            decoration: InputDecoration(
-              labelText: '${LocaleKeys.animalCuratorLastName.tr()} *',
-              hintText: 'Иванов',
-            ),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorLastName.tr()} *', hintText: 'Иванов'),
             validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.customerNameController,
-            decoration: InputDecoration(
-              labelText: '${LocaleKeys.animalCuratorName.tr()} *',
-              hintText: 'Иван',
-            ),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorName.tr()} *', hintText: 'Иван'),
             validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
         ],
@@ -705,10 +673,7 @@ class RegistrationCustomerForm extends StatelessWidget {
                   EditCardData(
                     label: LocaleKeys.shelterSelectShelter.tr(),
                     initValue: state.shelter?.name,
-                    suffix: Icon(
-                      Icons.menu_open_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    suffix: Icon(Icons.menu_open_rounded, color: Theme.of(context).colorScheme.primary),
                     onPressed: () => _pickShelter(context),
                     validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
                   ),
@@ -726,16 +691,13 @@ class RegistrationCustomerForm extends StatelessWidget {
 
   Future<void> _pickShelter(BuildContext context) async {
     final cubit = context.read<RegistrationCubit>();
-    final shelter = await context.push<ShelterShortSerializers>(
-      AppRoutes.searchPath(SearchTypeKey.shelter),
-    );
+    final shelter = await context.push<ShelterShortSerializers>(AppRoutes.searchPath(SearchTypeKey.shelter));
     if (shelter != null) cubit.setShelter(shelter);
   }
 }
 
 extension CustomerRoleX on CustomerRole {
-  String get value =>
-      this == CustomerRole.employer ? LocaleKeys.regEmployee.tr() : LocaleKeys.regGuest.tr();
+  String get value => this == CustomerRole.employer ? LocaleKeys.regEmployee.tr() : LocaleKeys.regGuest.tr();
 }
 
 extension _MessagedExceptionX on MessagedException {

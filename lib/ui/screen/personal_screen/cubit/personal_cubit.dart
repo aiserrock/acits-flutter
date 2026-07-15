@@ -9,9 +9,7 @@ import 'package:acits_flutter/util/logger/log.dart';
 /// Cubit экрана личного кабинета. Загружает данные пользователя и сохраняет
 /// изменённые поля. UI-контроллеры (TextEditingController) живут в виджете.
 class PersonalCubit extends Cubit<PersonalState> {
-  PersonalCubit()
-    : _personalService = getIt<PersonalService>(),
-      super(const PersonalState.loading());
+  PersonalCubit() : _personalService = getIt<PersonalService>(), super(const PersonalState.loading());
 
   final PersonalService _personalService;
 

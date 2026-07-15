@@ -71,10 +71,7 @@ class _AnimalDetailStub extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Row(
                     children: const [
-                      Padding(
-                        padding: EdgeInsets.only(left: 16.0),
-                        child: Skeleton(height: 22.0, width: 195.0),
-                      ),
+                      Padding(padding: EdgeInsets.only(left: 16.0), child: Skeleton(height: 22.0, width: 195.0)),
                     ],
                   ),
                 ),

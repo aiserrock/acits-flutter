@@ -22,10 +22,7 @@ class PhotoGalleryState extends Equatable {
   final bool isSelectorChanged;
 
   PhotoGalleryState copyWith({DataState<List<GalleryItemData>>? data, bool? isSelectorChanged}) {
-    return PhotoGalleryState(
-      data: data ?? this.data,
-      isSelectorChanged: isSelectorChanged ?? this.isSelectorChanged,
-    );
+    return PhotoGalleryState(data: data ?? this.data, isSelectorChanged: isSelectorChanged ?? this.isSelectorChanged);
   }
 
   @override

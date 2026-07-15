@@ -79,8 +79,7 @@ abstract class Openapi extends ChopperService {
     @Header('x-current-shelter') String? xCurrentShelter,
     @chopper.Tag()
     SwaggerMetaData swaggerMetaData = const SwaggerMetaData(
-      description:
-          '''OpenApi3 schema for this API. Format can be selected via content negotiation.
+      description: '''OpenApi3 schema for this API. Format can be selected via content negotiation.
 
 - YAML: application/vnd.oai.openapi
 - JSON: application/vnd.oai.openapi+json''',
@@ -96,19 +95,10 @@ abstract class Openapi extends ChopperService {
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<TokenObtainPair>> apiTokenPost({
-    int? xCurrentShelter,
-    required TokenObtainPair? body,
-  }) {
-    generatedMapping.putIfAbsent(
-      TokenObtainPair,
-      () => TokenObtainPair.fromJsonFactory,
-    );
+  Future<chopper.Response<TokenObtainPair>> apiTokenPost({int? xCurrentShelter, required TokenObtainPair? body}) {
+    generatedMapping.putIfAbsent(TokenObtainPair, () => TokenObtainPair.fromJsonFactory);
 
-    return _apiTokenPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiTokenPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -119,8 +109,7 @@ abstract class Openapi extends ChopperService {
     @Body() required TokenObtainPair? body,
     @chopper.Tag()
     SwaggerMetaData swaggerMetaData = const SwaggerMetaData(
-      description:
-          '''Takes a set of user credentials and returns an access and refresh JSON web
+      description: '''Takes a set of user credentials and returns an access and refresh JSON web
 token pair to prove the authentication of those credentials.''',
       summary: '',
       operationId: 'token_create',
@@ -134,19 +123,10 @@ token pair to prove the authentication of those credentials.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<TokenRefresh>> apiTokenRefreshPost({
-    int? xCurrentShelter,
-    required TokenRefresh? body,
-  }) {
-    generatedMapping.putIfAbsent(
-      TokenRefresh,
-      () => TokenRefresh.fromJsonFactory,
-    );
+  Future<chopper.Response<TokenRefresh>> apiTokenRefreshPost({int? xCurrentShelter, required TokenRefresh? body}) {
+    generatedMapping.putIfAbsent(TokenRefresh, () => TokenRefresh.fromJsonFactory);
 
-    return _apiTokenRefreshPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiTokenRefreshPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -157,8 +137,7 @@ token pair to prove the authentication of those credentials.''',
     @Body() required TokenRefresh? body,
     @chopper.Tag()
     SwaggerMetaData swaggerMetaData = const SwaggerMetaData(
-      description:
-          '''Takes a refresh type JSON web token and returns an access type JSON web
+      description: '''Takes a refresh type JSON web token and returns an access type JSON web
 token if the refresh token is valid.''',
       summary: '',
       operationId: 'token_refresh_create',
@@ -181,10 +160,7 @@ token if the refresh token is valid.''',
     String? search,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedAdopterList,
-      () => PaginatedAdopterList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedAdopterList, () => PaginatedAdopterList.fromJsonFactory);
 
     return _apiV1AdoptersGet(
       limit: limit,
@@ -220,16 +196,10 @@ token if the refresh token is valid.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Adopter>> apiV1AdoptersPost({
-    int? xCurrentShelter,
-    required Adopter? body,
-  }) {
+  Future<chopper.Response<Adopter>> apiV1AdoptersPost({int? xCurrentShelter, required Adopter? body}) {
     generatedMapping.putIfAbsent(Adopter, () => Adopter.fromJsonFactory);
 
-    return _apiV1AdoptersPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AdoptersPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -254,16 +224,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id A unique integer value identifying this Adopter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Adopter>> apiV1AdoptersIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<Adopter>> apiV1AdoptersIdGet({required int? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(Adopter, () => Adopter.fromJsonFactory);
 
-    return _apiV1AdoptersIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AdoptersIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -296,11 +260,7 @@ token if the refresh token is valid.''',
   }) {
     generatedMapping.putIfAbsent(Adopter, () => Adopter.fromJsonFactory);
 
-    return _apiV1AdoptersIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AdoptersIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -334,11 +294,7 @@ token if the refresh token is valid.''',
   }) {
     generatedMapping.putIfAbsent(Adopter, () => Adopter.fromJsonFactory);
 
-    return _apiV1AdoptersIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AdoptersIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -373,10 +329,7 @@ token if the refresh token is valid.''',
     String? search,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedAnimalSitterList,
-      () => PaginatedAnimalSitterList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedAnimalSitterList, () => PaginatedAnimalSitterList.fromJsonFactory);
 
     return _apiV1AnimalSittersGet(
       limit: limit,
@@ -412,19 +365,10 @@ token if the refresh token is valid.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalSitter>> apiV1AnimalSittersPost({
-    int? xCurrentShelter,
-    required AnimalSitter? body,
-  }) {
-    generatedMapping.putIfAbsent(
-      AnimalSitter,
-      () => AnimalSitter.fromJsonFactory,
-    );
+  Future<chopper.Response<AnimalSitter>> apiV1AnimalSittersPost({int? xCurrentShelter, required AnimalSitter? body}) {
+    generatedMapping.putIfAbsent(AnimalSitter, () => AnimalSitter.fromJsonFactory);
 
-    return _apiV1AnimalSittersPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalSittersPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -449,19 +393,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id A unique integer value identifying this AnimalSitter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalSitter>> apiV1AnimalSittersIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    generatedMapping.putIfAbsent(
-      AnimalSitter,
-      () => AnimalSitter.fromJsonFactory,
-    );
+  Future<chopper.Response<AnimalSitter>> apiV1AnimalSittersIdGet({required int? id, int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(AnimalSitter, () => AnimalSitter.fromJsonFactory);
 
-    return _apiV1AnimalSittersIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalSittersIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -492,16 +427,9 @@ token if the refresh token is valid.''',
     int? xCurrentShelter,
     required AnimalSitter? body,
   }) {
-    generatedMapping.putIfAbsent(
-      AnimalSitter,
-      () => AnimalSitter.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(AnimalSitter, () => AnimalSitter.fromJsonFactory);
 
-    return _apiV1AnimalSittersIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalSittersIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -533,16 +461,9 @@ token if the refresh token is valid.''',
     int? xCurrentShelter,
     required PatchedAnimalSitter? body,
   }) {
-    generatedMapping.putIfAbsent(
-      AnimalSitter,
-      () => AnimalSitter.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(AnimalSitter, () => AnimalSitter.fromJsonFactory);
 
-    return _apiV1AnimalSittersIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalSittersIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -579,10 +500,7 @@ token if the refresh token is valid.''',
     String? search,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedAnimalReadList,
-      () => PaginatedAnimalReadList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedAnimalReadList, () => PaginatedAnimalReadList.fromJsonFactory);
 
     return _apiV1AnimalsGet(
       limit: limit,
@@ -621,16 +539,10 @@ token if the refresh token is valid.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalRead>> apiV1AnimalsPost({
-    int? xCurrentShelter,
-    required AnimalWrite? body,
-  }) {
+  Future<chopper.Response<AnimalRead>> apiV1AnimalsPost({int? xCurrentShelter, required AnimalWrite? body}) {
     generatedMapping.putIfAbsent(AnimalRead, () => AnimalRead.fromJsonFactory);
 
-    return _apiV1AnimalsPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalsPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -657,17 +569,13 @@ token if the refresh token is valid.''',
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedAdoptionList>>
-  apiV1AnimalsAnimalPkAdoptionsGet({
+  Future<chopper.Response<PaginatedAdoptionList>> apiV1AnimalsAnimalPkAdoptionsGet({
     required int? animalPk,
     int? limit,
     int? offset,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedAdoptionList,
-      () => PaginatedAdoptionList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedAdoptionList, () => PaginatedAdoptionList.fromJsonFactory);
 
     return _apiV1AnimalsAnimalPkAdoptionsGet(
       animalPk: animalPk,
@@ -683,8 +591,7 @@ token if the refresh token is valid.''',
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/animals/{animal_pk}/adoptions/')
-  Future<chopper.Response<PaginatedAdoptionList>>
-  _apiV1AnimalsAnimalPkAdoptionsGet({
+  Future<chopper.Response<PaginatedAdoptionList>> _apiV1AnimalsAnimalPkAdoptionsGet({
     @Path('animal_pk') required int? animalPk,
     @Query('limit') int? limit,
     @Query('offset') int? offset,
@@ -847,10 +754,7 @@ token if the refresh token is valid.''',
   ///@param animal_pk
   ///@param id A unique integer value identifying this Adoption.
   ///@param x-current-shelter Set current shelter id
-  @PATCH(
-    path: '/api/v1/animals/{animal_pk}/adoptions/{id}/',
-    optionalBody: true,
-  )
+  @PATCH(path: '/api/v1/animals/{animal_pk}/adoptions/{id}/', optionalBody: true)
   Future<chopper.Response<Adoption>> _apiV1AnimalsAnimalPkAdoptionsIdPatch({
     @Path('animal_pk') required int? animalPk,
     @Path('id') required int? id,
@@ -874,17 +778,13 @@ token if the refresh token is valid.''',
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedOverstayList>>
-  apiV1AnimalsAnimalPkOverstaysGet({
+  Future<chopper.Response<PaginatedOverstayList>> apiV1AnimalsAnimalPkOverstaysGet({
     required int? animalPk,
     int? limit,
     int? offset,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedOverstayList,
-      () => PaginatedOverstayList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedOverstayList, () => PaginatedOverstayList.fromJsonFactory);
 
     return _apiV1AnimalsAnimalPkOverstaysGet(
       animalPk: animalPk,
@@ -900,8 +800,7 @@ token if the refresh token is valid.''',
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/animals/{animal_pk}/overstays/')
-  Future<chopper.Response<PaginatedOverstayList>>
-  _apiV1AnimalsAnimalPkOverstaysGet({
+  Future<chopper.Response<PaginatedOverstayList>> _apiV1AnimalsAnimalPkOverstaysGet({
     @Path('animal_pk') required int? animalPk,
     @Query('limit') int? limit,
     @Query('offset') int? offset,
@@ -1064,10 +963,7 @@ token if the refresh token is valid.''',
   ///@param animal_pk
   ///@param id A unique integer value identifying this Overstay.
   ///@param x-current-shelter Set current shelter id
-  @PATCH(
-    path: '/api/v1/animals/{animal_pk}/overstays/{id}/',
-    optionalBody: true,
-  )
+  @PATCH(path: '/api/v1/animals/{animal_pk}/overstays/{id}/', optionalBody: true)
   Future<chopper.Response<Overstay>> _apiV1AnimalsAnimalPkOverstaysIdPatch({
     @Path('animal_pk') required int? animalPk,
     @Path('id') required int? id,
@@ -1091,8 +987,7 @@ token if the refresh token is valid.''',
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedReleaseSerializersList>>
-  apiV1AnimalsAnimalPkReleasesGet({
+  Future<chopper.Response<PaginatedReleaseSerializersList>> apiV1AnimalsAnimalPkReleasesGet({
     required int? animalPk,
     int? limit,
     int? offset,
@@ -1117,8 +1012,7 @@ token if the refresh token is valid.''',
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/animals/{animal_pk}/releases/')
-  Future<chopper.Response<PaginatedReleaseSerializersList>>
-  _apiV1AnimalsAnimalPkReleasesGet({
+  Future<chopper.Response<PaginatedReleaseSerializersList>> _apiV1AnimalsAnimalPkReleasesGet({
     @Path('animal_pk') required int? animalPk,
     @Query('limit') int? limit,
     @Query('offset') int? offset,
@@ -1139,16 +1033,12 @@ token if the refresh token is valid.''',
   ///
   ///@param animal_pk
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<ReleaseSerializers>>
-  apiV1AnimalsAnimalPkReleasesPost({
+  Future<chopper.Response<ReleaseSerializers>> apiV1AnimalsAnimalPkReleasesPost({
     required int? animalPk,
     int? xCurrentShelter,
     required ReleaseSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      ReleaseSerializers,
-      () => ReleaseSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(ReleaseSerializers, () => ReleaseSerializers.fromJsonFactory);
 
     return _apiV1AnimalsAnimalPkReleasesPost(
       animalPk: animalPk,
@@ -1161,8 +1051,7 @@ token if the refresh token is valid.''',
   ///@param animal_pk
   ///@param x-current-shelter Set current shelter id
   @POST(path: '/api/v1/animals/{animal_pk}/releases/', optionalBody: true)
-  Future<chopper.Response<ReleaseSerializers>>
-  _apiV1AnimalsAnimalPkReleasesPost({
+  Future<chopper.Response<ReleaseSerializers>> _apiV1AnimalsAnimalPkReleasesPost({
     @Path('animal_pk') required int? animalPk,
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required ReleaseSerializers? body,
@@ -1183,22 +1072,14 @@ token if the refresh token is valid.''',
   ///@param animal_pk
   ///@param id A unique integer value identifying this Release.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<ReleaseSerializers>>
-  apiV1AnimalsAnimalPkReleasesIdGet({
+  Future<chopper.Response<ReleaseSerializers>> apiV1AnimalsAnimalPkReleasesIdGet({
     required int? animalPk,
     required int? id,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      ReleaseSerializers,
-      () => ReleaseSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(ReleaseSerializers, () => ReleaseSerializers.fromJsonFactory);
 
-    return _apiV1AnimalsAnimalPkReleasesIdGet(
-      animalPk: animalPk,
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalsAnimalPkReleasesIdGet(animalPk: animalPk, id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -1206,8 +1087,7 @@ token if the refresh token is valid.''',
   ///@param id A unique integer value identifying this Release.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/animals/{animal_pk}/releases/{id}/')
-  Future<chopper.Response<ReleaseSerializers>>
-  _apiV1AnimalsAnimalPkReleasesIdGet({
+  Future<chopper.Response<ReleaseSerializers>> _apiV1AnimalsAnimalPkReleasesIdGet({
     @Path('animal_pk') required int? animalPk,
     @Path('id') required int? id,
     @Header('x-current-shelter') String? xCurrentShelter,
@@ -1228,17 +1108,13 @@ token if the refresh token is valid.''',
   ///@param animal_pk
   ///@param id A unique integer value identifying this Release.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<ReleaseSerializers>>
-  apiV1AnimalsAnimalPkReleasesIdPut({
+  Future<chopper.Response<ReleaseSerializers>> apiV1AnimalsAnimalPkReleasesIdPut({
     required int? animalPk,
     required int? id,
     int? xCurrentShelter,
     required ReleaseSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      ReleaseSerializers,
-      () => ReleaseSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(ReleaseSerializers, () => ReleaseSerializers.fromJsonFactory);
 
     return _apiV1AnimalsAnimalPkReleasesIdPut(
       animalPk: animalPk,
@@ -1253,8 +1129,7 @@ token if the refresh token is valid.''',
   ///@param id A unique integer value identifying this Release.
   ///@param x-current-shelter Set current shelter id
   @PUT(path: '/api/v1/animals/{animal_pk}/releases/{id}/', optionalBody: true)
-  Future<chopper.Response<ReleaseSerializers>>
-  _apiV1AnimalsAnimalPkReleasesIdPut({
+  Future<chopper.Response<ReleaseSerializers>> _apiV1AnimalsAnimalPkReleasesIdPut({
     @Path('animal_pk') required int? animalPk,
     @Path('id') required int? id,
     @Header('x-current-shelter') String? xCurrentShelter,
@@ -1276,17 +1151,13 @@ token if the refresh token is valid.''',
   ///@param animal_pk
   ///@param id A unique integer value identifying this Release.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<ReleaseSerializers>>
-  apiV1AnimalsAnimalPkReleasesIdPatch({
+  Future<chopper.Response<ReleaseSerializers>> apiV1AnimalsAnimalPkReleasesIdPatch({
     required int? animalPk,
     required int? id,
     int? xCurrentShelter,
     required PatchedReleaseSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      ReleaseSerializers,
-      () => ReleaseSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(ReleaseSerializers, () => ReleaseSerializers.fromJsonFactory);
 
     return _apiV1AnimalsAnimalPkReleasesIdPatch(
       animalPk: animalPk,
@@ -1301,8 +1172,7 @@ token if the refresh token is valid.''',
   ///@param id A unique integer value identifying this Release.
   ///@param x-current-shelter Set current shelter id
   @PATCH(path: '/api/v1/animals/{animal_pk}/releases/{id}/', optionalBody: true)
-  Future<chopper.Response<ReleaseSerializers>>
-  _apiV1AnimalsAnimalPkReleasesIdPatch({
+  Future<chopper.Response<ReleaseSerializers>> _apiV1AnimalsAnimalPkReleasesIdPatch({
     @Path('animal_pk') required int? animalPk,
     @Path('id') required int? id,
     @Header('x-current-shelter') String? xCurrentShelter,
@@ -1323,16 +1193,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdGet({
-    required String? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<AnimalRead>> apiV1AnimalsIdGet({required String? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(AnimalRead, () => AnimalRead.fromJsonFactory);
 
-    return _apiV1AnimalsIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalsIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -1365,11 +1229,7 @@ token if the refresh token is valid.''',
   }) {
     generatedMapping.putIfAbsent(AnimalRead, () => AnimalRead.fromJsonFactory);
 
-    return _apiV1AnimalsIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalsIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -1403,11 +1263,7 @@ token if the refresh token is valid.''',
   }) {
     generatedMapping.putIfAbsent(AnimalRead, () => AnimalRead.fromJsonFactory);
 
-    return _apiV1AnimalsIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalsIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -1434,14 +1290,8 @@ token if the refresh token is valid.''',
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response> apiV1AnimalsIdDelete({
-    required String? id,
-    int? xCurrentShelter,
-  }) {
-    return _apiV1AnimalsIdDelete(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+  Future<chopper.Response> apiV1AnimalsIdDelete({required String? id, int? xCurrentShelter}) {
+    return _apiV1AnimalsIdDelete(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -1506,8 +1356,7 @@ token if the refresh token is valid.''',
     @Header('x-current-shelter') String? xCurrentShelter,
     @chopper.Tag()
     SwaggerMetaData swaggerMetaData = const SwaggerMetaData(
-      description:
-          'Generate PDF File by Animal, AnimalHistorySnapshot and Prescriptions.',
+      description: 'Generate PDF File by Animal, AnimalHistorySnapshot and Prescriptions.',
       summary: '',
       operationId: 'v1_animals_pdf_retrieve',
       consumes: [],
@@ -1521,19 +1370,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id A unique integer value identifying this Applicant File.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<List<ApplicantFile>>> apiV1AnimalsIdFilesGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    generatedMapping.putIfAbsent(
-      ApplicantFile,
-      () => ApplicantFile.fromJsonFactory,
-    );
+  Future<chopper.Response<List<ApplicantFile>>> apiV1AnimalsIdFilesGet({required int? id, int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(ApplicantFile, () => ApplicantFile.fromJsonFactory);
 
-    return _apiV1AnimalsIdFilesGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalsIdFilesGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -1565,8 +1405,7 @@ token if the refresh token is valid.''',
   ///@param offset The initial index from which to return the results.
   ///@param ordering Which field to use when ordering the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>>
-  apiV1AnimalsIdHistoryGet({
+  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>> apiV1AnimalsIdHistoryGet({
     String? createdAtAfter,
     String? createdAtBefore,
     enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? createdAtRange,
@@ -1603,8 +1442,7 @@ token if the refresh token is valid.''',
   ///@param ordering Which field to use when ordering the results.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/animals/{id}/history/')
-  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>>
-  _apiV1AnimalsIdHistoryGet({
+  Future<chopper.Response<PaginatedAnimalHistorySnapshotList>> _apiV1AnimalsIdHistoryGet({
     @Query('created_at_after') String? createdAtAfter,
     @Query('created_at_before') String? createdAtBefore,
     @Query('created_at_range') String? createdAtRange,
@@ -1648,10 +1486,7 @@ token if the refresh token is valid.''',
   ///@param id
   ///@param image_pk
   ///@param x-current-shelter Set current shelter id
-  @PUT(
-    path: '/api/v1/animals/{id}/primary_image/{image_pk}/',
-    optionalBody: true,
-  )
+  @PUT(path: '/api/v1/animals/{id}/primary_image/{image_pk}/', optionalBody: true)
   Future<chopper.Response<Status>> _apiV1AnimalsIdPrimaryImageImagePkPut({
     @Path('id') required String? id,
     @Path('image_pk') required String? imagePk,
@@ -1672,16 +1507,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Status>> apiV1AnimalsIdRestorePut({
-    required String? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<Status>> apiV1AnimalsIdRestorePut({required String? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(Status, () => Status.fromJsonFactory);
 
-    return _apiV1AnimalsIdRestorePut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalsIdRestorePut(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -1713,10 +1542,7 @@ token if the refresh token is valid.''',
     String? ordering,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      AnimalAttribute,
-      () => AnimalAttribute.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(AnimalAttribute, () => AnimalAttribute.fromJsonFactory);
 
     return _apiV1AnimalsAttributesGet(
       isRequired: isRequired,
@@ -1750,19 +1576,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id A unique integer value identifying this Animal Attribute.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalAttribute>> apiV1AnimalsAttributesIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    generatedMapping.putIfAbsent(
-      AnimalAttribute,
-      () => AnimalAttribute.fromJsonFactory,
-    );
+  Future<chopper.Response<AnimalAttribute>> apiV1AnimalsAttributesIdGet({required int? id, int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(AnimalAttribute, () => AnimalAttribute.fromJsonFactory);
 
-    return _apiV1AnimalsAttributesIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalsAttributesIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -1798,10 +1615,7 @@ token if the refresh token is valid.''',
     String? ordering,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedAnimalNoteList,
-      () => PaginatedAnimalNoteList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedAnimalNoteList, () => PaginatedAnimalNoteList.fromJsonFactory);
 
     return _apiV1AnimalsNotesGet(
       animal: animal,
@@ -1840,16 +1654,10 @@ token if the refresh token is valid.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesPost({
-    int? xCurrentShelter,
-    required AnimalNote? body,
-  }) {
+  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesPost({int? xCurrentShelter, required AnimalNote? body}) {
     generatedMapping.putIfAbsent(AnimalNote, () => AnimalNote.fromJsonFactory);
 
-    return _apiV1AnimalsNotesPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalsNotesPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -1874,16 +1682,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<AnimalNote>> apiV1AnimalsNotesIdGet({required int? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(AnimalNote, () => AnimalNote.fromJsonFactory);
 
-    return _apiV1AnimalsNotesIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalsNotesIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -1916,11 +1718,7 @@ token if the refresh token is valid.''',
   }) {
     generatedMapping.putIfAbsent(AnimalNote, () => AnimalNote.fromJsonFactory);
 
-    return _apiV1AnimalsNotesIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalsNotesIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -1954,11 +1752,7 @@ token if the refresh token is valid.''',
   }) {
     generatedMapping.putIfAbsent(AnimalNote, () => AnimalNote.fromJsonFactory);
 
-    return _apiV1AnimalsNotesIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalsNotesIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -1985,14 +1779,8 @@ token if the refresh token is valid.''',
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response> apiV1AnimalsNotesIdDelete({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    return _apiV1AnimalsNotesIdDelete(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+  Future<chopper.Response> apiV1AnimalsNotesIdDelete({required int? id, int? xCurrentShelter}) {
+    return _apiV1AnimalsNotesIdDelete(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -2032,10 +1820,7 @@ token if the refresh token is valid.''',
     String? search,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedSpeciesList,
-      () => PaginatedSpeciesList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedSpeciesList, () => PaginatedSpeciesList.fromJsonFactory);
 
     return _apiV1AnimalsSpeciesGet(
       level: level?.value?.toString(),
@@ -2080,16 +1865,10 @@ token if the refresh token is valid.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Species>> apiV1AnimalsSpeciesPost({
-    int? xCurrentShelter,
-    required Species? body,
-  }) {
+  Future<chopper.Response<Species>> apiV1AnimalsSpeciesPost({int? xCurrentShelter, required Species? body}) {
     generatedMapping.putIfAbsent(Species, () => Species.fromJsonFactory);
 
-    return _apiV1AnimalsSpeciesPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1AnimalsSpeciesPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2114,16 +1893,10 @@ token if the refresh token is valid.''',
   ///
   ///@param id A unique integer value identifying this Species.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Species>> apiV1AnimalsSpeciesIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<Species>> apiV1AnimalsSpeciesIdGet({required int? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(Species, () => Species.fromJsonFactory);
 
-    return _apiV1AnimalsSpeciesIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1AnimalsSpeciesIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -2167,10 +1940,7 @@ token if the refresh token is valid.''',
     String? statusTransitionsTo,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      AnimalStatsResponse,
-      () => AnimalStatsResponse.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(AnimalStatsResponse, () => AnimalStatsResponse.fromJsonFactory);
 
     return _apiV1AnimalsStatsGet(
       breeds: breeds,
@@ -2208,8 +1978,7 @@ token if the refresh token is valid.''',
     @Header('x-current-shelter') String? xCurrentShelter,
     @chopper.Tag()
     SwaggerMetaData swaggerMetaData = const SwaggerMetaData(
-      description:
-          '''An endpoint to collect statistical information about animals.
+      description: '''An endpoint to collect statistical information about animals.
 The endpoint provides the number of animals with respect to different factors.
 Currently breeds, species, date_joined_from, date_joined_to, status_transitions_from,
 status_transitions_to and status_transitions are supported.
@@ -2238,10 +2007,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
     String? search,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedApplicantList,
-      () => PaginatedApplicantList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedApplicantList, () => PaginatedApplicantList.fromJsonFactory);
 
     return _apiV1ApplicantsGet(
       limit: limit,
@@ -2280,16 +2046,10 @@ If numbers across all breeds are necessary, then pass `all`.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Applicant>> apiV1ApplicantsPost({
-    int? xCurrentShelter,
-    required Applicant? body,
-  }) {
+  Future<chopper.Response<Applicant>> apiV1ApplicantsPost({int? xCurrentShelter, required Applicant? body}) {
     generatedMapping.putIfAbsent(Applicant, () => Applicant.fromJsonFactory);
 
-    return _apiV1ApplicantsPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1ApplicantsPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2314,16 +2074,10 @@ If numbers across all breeds are necessary, then pass `all`.''',
   ///
   ///@param id A unique integer value identifying this Applicant.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Applicant>> apiV1ApplicantsIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<Applicant>> apiV1ApplicantsIdGet({required int? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(Applicant, () => Applicant.fromJsonFactory);
 
-    return _apiV1ApplicantsIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1ApplicantsIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -2356,11 +2110,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
   }) {
     generatedMapping.putIfAbsent(Applicant, () => Applicant.fromJsonFactory);
 
-    return _apiV1ApplicantsIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1ApplicantsIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2394,11 +2144,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
   }) {
     generatedMapping.putIfAbsent(Applicant, () => Applicant.fromJsonFactory);
 
-    return _apiV1ApplicantsIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1ApplicantsIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2425,14 +2171,8 @@ If numbers across all breeds are necessary, then pass `all`.''',
   ///
   ///@param id A unique integer value identifying this Applicant.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response> apiV1ApplicantsIdDelete({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    return _apiV1ApplicantsIdDelete(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+  Future<chopper.Response> apiV1ApplicantsIdDelete({required int? id, int? xCurrentShelter}) {
+    return _apiV1ApplicantsIdDelete(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -2460,8 +2200,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
   ///@param offset The initial index from which to return the results.
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedShelterShortSerializersList>>
-  apiV1AvailableSheltersGet({
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1AvailableSheltersGet({
     int? limit,
     int? offset,
     String? search,
@@ -2486,8 +2225,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/available-shelters/')
-  Future<chopper.Response<PaginatedShelterShortSerializersList>>
-  _apiV1AvailableSheltersGet({
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> _apiV1AvailableSheltersGet({
     @Query('limit') int? limit,
     @Query('offset') int? offset,
     @Query('search') String? search,
@@ -2516,10 +2254,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
     String? search,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedCuratorList,
-      () => PaginatedCuratorList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedCuratorList, () => PaginatedCuratorList.fromJsonFactory);
 
     return _apiV1CuratorsGet(
       limit: limit,
@@ -2555,16 +2290,10 @@ If numbers across all breeds are necessary, then pass `all`.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Curator>> apiV1CuratorsPost({
-    int? xCurrentShelter,
-    required Curator? body,
-  }) {
+  Future<chopper.Response<Curator>> apiV1CuratorsPost({int? xCurrentShelter, required Curator? body}) {
     generatedMapping.putIfAbsent(Curator, () => Curator.fromJsonFactory);
 
-    return _apiV1CuratorsPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1CuratorsPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2589,16 +2318,10 @@ If numbers across all breeds are necessary, then pass `all`.''',
   ///
   ///@param id A unique integer value identifying this Curator.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Curator>> apiV1CuratorsIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<Curator>> apiV1CuratorsIdGet({required int? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(Curator, () => Curator.fromJsonFactory);
 
-    return _apiV1CuratorsIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1CuratorsIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -2631,11 +2354,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
   }) {
     generatedMapping.putIfAbsent(Curator, () => Curator.fromJsonFactory);
 
-    return _apiV1CuratorsIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1CuratorsIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2669,11 +2388,7 @@ If numbers across all breeds are necessary, then pass `all`.''',
   }) {
     generatedMapping.putIfAbsent(Curator, () => Curator.fromJsonFactory);
 
-    return _apiV1CuratorsIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1CuratorsIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2700,16 +2415,10 @@ If numbers across all breeds are necessary, then pass `all`.''',
   ///
   ///@param uuid
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<AnimalRead>> apiV1ExtAnimalsUuidGet({
-    required String? uuid,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<AnimalRead>> apiV1ExtAnimalsUuidGet({required String? uuid, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(AnimalRead, () => AnimalRead.fromJsonFactory);
 
-    return _apiV1ExtAnimalsUuidGet(
-      uuid: uuid,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1ExtAnimalsUuidGet(uuid: uuid, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -2735,16 +2444,10 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Feedback>> apiV1FeedbackPost({
-    int? xCurrentShelter,
-    required Feedback? body,
-  }) {
+  Future<chopper.Response<Feedback>> apiV1FeedbackPost({int? xCurrentShelter, required Feedback? body}) {
     generatedMapping.putIfAbsent(Feedback, () => Feedback.fromJsonFactory);
 
-    return _apiV1FeedbackPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1FeedbackPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2781,10 +2484,7 @@ Supports retrieving only now, to prevent scraping.''',
     int? offset,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedPrescriptionList,
-      () => PaginatedPrescriptionList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedPrescriptionList, () => PaginatedPrescriptionList.fromJsonFactory);
 
     return _apiV1PrescriptionsGet(
       animal: animal,
@@ -2826,19 +2526,10 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Prescription>> apiV1PrescriptionsPost({
-    int? xCurrentShelter,
-    required Prescription? body,
-  }) {
-    generatedMapping.putIfAbsent(
-      Prescription,
-      () => Prescription.fromJsonFactory,
-    );
+  Future<chopper.Response<Prescription>> apiV1PrescriptionsPost({int? xCurrentShelter, required Prescription? body}) {
+    generatedMapping.putIfAbsent(Prescription, () => Prescription.fromJsonFactory);
 
-    return _apiV1PrescriptionsPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1PrescriptionsPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2863,19 +2554,10 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this Prescription.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    generatedMapping.putIfAbsent(
-      Prescription,
-      () => Prescription.fromJsonFactory,
-    );
+  Future<chopper.Response<Prescription>> apiV1PrescriptionsIdGet({required int? id, int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(Prescription, () => Prescription.fromJsonFactory);
 
-    return _apiV1PrescriptionsIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1PrescriptionsIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -2906,16 +2588,9 @@ Supports retrieving only now, to prevent scraping.''',
     int? xCurrentShelter,
     required Prescription? body,
   }) {
-    generatedMapping.putIfAbsent(
-      Prescription,
-      () => Prescription.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(Prescription, () => Prescription.fromJsonFactory);
 
-    return _apiV1PrescriptionsIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1PrescriptionsIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2947,16 +2622,9 @@ Supports retrieving only now, to prevent scraping.''',
     int? xCurrentShelter,
     required PatchedPrescription? body,
   }) {
-    generatedMapping.putIfAbsent(
-      Prescription,
-      () => Prescription.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(Prescription, () => Prescription.fromJsonFactory);
 
-    return _apiV1PrescriptionsIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1PrescriptionsIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -2983,14 +2651,8 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this Prescription.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response> apiV1PrescriptionsIdDelete({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    return _apiV1PrescriptionsIdDelete(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+  Future<chopper.Response> apiV1PrescriptionsIdDelete({required int? id, int? xCurrentShelter}) {
+    return _apiV1PrescriptionsIdDelete(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -3021,8 +2683,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param search A search term.
   ///@param to To datetime
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>>
-  apiV1PrescriptionsExecutionsGet({
+  Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>> apiV1PrescriptionsExecutionsGet({
     required String? from,
     int? limit,
     int? offset,
@@ -3056,8 +2717,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param to To datetime
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/prescriptions/executions/')
-  Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>>
-  _apiV1PrescriptionsExecutionsGet({
+  Future<chopper.Response<PaginatedPrescriptionExecutionTodayList>> _apiV1PrescriptionsExecutionsGet({
     @Path('from') required String? from,
     @Query('limit') int? limit,
     @Query('offset') int? offset,
@@ -3089,10 +2749,7 @@ Supports retrieving only now, to prevent scraping.''',
     String? search,
     int? xCurrentShelter,
   }) {
-    generatedMapping.putIfAbsent(
-      PaginatedShelterDrugList,
-      () => PaginatedShelterDrugList.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(PaginatedShelterDrugList, () => PaginatedShelterDrugList.fromJsonFactory);
 
     return _apiV1ShelterDrugsGet(
       limit: limit,
@@ -3132,8 +2789,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedUserSheltersAdminSerializersList>>
-  apiV1ShelterWorkersGet({
+  Future<chopper.Response<PaginatedUserSheltersAdminSerializersList>> apiV1ShelterWorkersGet({
     bool? isVerifiedByAdmin,
     bool? isVerifiedByAdminIsnull,
     int? limit,
@@ -3161,8 +2817,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/shelter/workers/')
-  Future<chopper.Response<PaginatedUserSheltersAdminSerializersList>>
-  _apiV1ShelterWorkersGet({
+  Future<chopper.Response<PaginatedUserSheltersAdminSerializersList>> _apiV1ShelterWorkersGet({
     @Query('is_verified_by_admin') bool? isVerifiedByAdmin,
     @Query('is_verified_by_admin__isnull') bool? isVerifiedByAdminIsnull,
     @Query('limit') int? limit,
@@ -3183,27 +2838,19 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  apiV1ShelterWorkersPost({
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersPost({
     int? xCurrentShelter,
     required UserSheltersAdminSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserSheltersAdminSerializers,
-      () => UserSheltersAdminSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserSheltersAdminSerializers, () => UserSheltersAdminSerializers.fromJsonFactory);
 
-    return _apiV1ShelterWorkersPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1ShelterWorkersPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param x-current-shelter Set current shelter id
   @POST(path: '/api/v1/shelter/workers/', optionalBody: true)
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  _apiV1ShelterWorkersPost({
+  Future<chopper.Response<UserSheltersAdminSerializers>> _apiV1ShelterWorkersPost({
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required UserSheltersAdminSerializers? body,
     @chopper.Tag()
@@ -3222,25 +2869,20 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  apiV1ShelterWorkersIdGet({required int? id, int? xCurrentShelter}) {
-    generatedMapping.putIfAbsent(
-      UserSheltersAdminSerializers,
-      () => UserSheltersAdminSerializers.fromJsonFactory,
-    );
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdGet({
+    required int? id,
+    int? xCurrentShelter,
+  }) {
+    generatedMapping.putIfAbsent(UserSheltersAdminSerializers, () => UserSheltersAdminSerializers.fromJsonFactory);
 
-    return _apiV1ShelterWorkersIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1ShelterWorkersIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/shelter/workers/{id}/')
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  _apiV1ShelterWorkersIdGet({
+  Future<chopper.Response<UserSheltersAdminSerializers>> _apiV1ShelterWorkersIdGet({
     @Path('id') required int? id,
     @Header('x-current-shelter') String? xCurrentShelter,
     @chopper.Tag()
@@ -3259,30 +2901,21 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  apiV1ShelterWorkersIdPut({
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdPut({
     required int? id,
     int? xCurrentShelter,
     required UserSheltersAdminSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserSheltersAdminSerializers,
-      () => UserSheltersAdminSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserSheltersAdminSerializers, () => UserSheltersAdminSerializers.fromJsonFactory);
 
-    return _apiV1ShelterWorkersIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1ShelterWorkersIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @PUT(path: '/api/v1/shelter/workers/{id}/', optionalBody: true)
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  _apiV1ShelterWorkersIdPut({
+  Future<chopper.Response<UserSheltersAdminSerializers>> _apiV1ShelterWorkersIdPut({
     @Path('id') required int? id,
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required UserSheltersAdminSerializers? body,
@@ -3302,30 +2935,21 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  apiV1ShelterWorkersIdPatch({
+  Future<chopper.Response<UserSheltersAdminSerializers>> apiV1ShelterWorkersIdPatch({
     required int? id,
     int? xCurrentShelter,
     required PatchedUserSheltersAdminSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserSheltersAdminSerializers,
-      () => UserSheltersAdminSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserSheltersAdminSerializers, () => UserSheltersAdminSerializers.fromJsonFactory);
 
-    return _apiV1ShelterWorkersIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1ShelterWorkersIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
   @PATCH(path: '/api/v1/shelter/workers/{id}/', optionalBody: true)
-  Future<chopper.Response<UserSheltersAdminSerializers>>
-  _apiV1ShelterWorkersIdPatch({
+  Future<chopper.Response<UserSheltersAdminSerializers>> _apiV1ShelterWorkersIdPatch({
     @Path('id') required int? id,
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required PatchedUserSheltersAdminSerializers? body,
@@ -3345,14 +2969,8 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response> apiV1ShelterWorkersIdDelete({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    return _apiV1ShelterWorkersIdDelete(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+  Future<chopper.Response> apiV1ShelterWorkersIdDelete({required int? id, int? xCurrentShelter}) {
+    return _apiV1ShelterWorkersIdDelete(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -3378,16 +2996,10 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Approve>> apiV1ShelterWorkersIdApprovePut({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<Approve>> apiV1ShelterWorkersIdApprovePut({required int? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(Approve, () => Approve.fromJsonFactory);
 
-    return _apiV1ShelterWorkersIdApprovePut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1ShelterWorkersIdApprovePut(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -3413,16 +3025,10 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id A unique integer value identifying this user shelter.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<Decline>> apiV1ShelterWorkersIdDeclinePut({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
+  Future<chopper.Response<Decline>> apiV1ShelterWorkersIdDeclinePut({required int? id, int? xCurrentShelter}) {
     generatedMapping.putIfAbsent(Decline, () => Decline.fromJsonFactory);
 
-    return _apiV1ShelterWorkersIdDeclinePut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1ShelterWorkersIdDeclinePut(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -3450,8 +3056,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param offset The initial index from which to return the results.
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedShelterShortSerializersList>>
-  apiV1SheltersGet({
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1SheltersGet({
     int? limit,
     int? offset,
     String? search,
@@ -3476,8 +3081,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param search A search term.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/shelters/')
-  Future<chopper.Response<PaginatedShelterShortSerializersList>>
-  _apiV1SheltersGet({
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> _apiV1SheltersGet({
     @Query('limit') int? limit,
     @Query('offset') int? offset,
     @Query('search') String? search,
@@ -3498,19 +3102,10 @@ Supports retrieving only now, to prevent scraping.''',
   ///
   ///@param id
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<ShelterSerializers>> apiV1SheltersIdGet({
-    required int? id,
-    int? xCurrentShelter,
-  }) {
-    generatedMapping.putIfAbsent(
-      ShelterSerializers,
-      () => ShelterSerializers.fromJsonFactory,
-    );
+  Future<chopper.Response<ShelterSerializers>> apiV1SheltersIdGet({required int? id, int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(ShelterSerializers, () => ShelterSerializers.fromJsonFactory);
 
-    return _apiV1SheltersIdGet(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1SheltersIdGet(id: id, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -3541,16 +3136,9 @@ Supports retrieving only now, to prevent scraping.''',
     int? xCurrentShelter,
     required ShelterSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      ShelterSerializers,
-      () => ShelterSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(ShelterSerializers, () => ShelterSerializers.fromJsonFactory);
 
-    return _apiV1SheltersIdPut(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1SheltersIdPut(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -3582,16 +3170,9 @@ Supports retrieving only now, to prevent scraping.''',
     int? xCurrentShelter,
     required PatchedShelterSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      ShelterSerializers,
-      () => ShelterSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(ShelterSerializers, () => ShelterSerializers.fromJsonFactory);
 
-    return _apiV1SheltersIdPatch(
-      id: id,
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1SheltersIdPatch(id: id, xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -3621,22 +3202,15 @@ Supports retrieving only now, to prevent scraping.''',
     int? xCurrentShelter,
     required UserSheltersWorkerSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserSheltersWorkerSerializers,
-      () => UserSheltersWorkerSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserSheltersWorkerSerializers, () => UserSheltersWorkerSerializers.fromJsonFactory);
 
-    return _apiV1SheltersAddPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1SheltersAddPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param x-current-shelter Set current shelter id
   @POST(path: '/api/v1/shelters/add/', optionalBody: true)
-  Future<chopper.Response<UserSheltersWorkerSerializers>>
-  _apiV1SheltersAddPost({
+  Future<chopper.Response<UserSheltersWorkerSerializers>> _apiV1SheltersAddPost({
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required UserSheltersWorkerSerializers? body,
     @chopper.Tag()
@@ -3654,27 +3228,19 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserShelterAdminSerializers>>
-  apiV1UsersAdminRegisterPost({
+  Future<chopper.Response<UserShelterAdminSerializers>> apiV1UsersAdminRegisterPost({
     int? xCurrentShelter,
     required UserShelterAdminSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserShelterAdminSerializers,
-      () => UserShelterAdminSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserShelterAdminSerializers, () => UserShelterAdminSerializers.fromJsonFactory);
 
-    return _apiV1UsersAdminRegisterPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1UsersAdminRegisterPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param x-current-shelter Set current shelter id
   @POST(path: '/api/v1/users/admin-register/', optionalBody: true)
-  Future<chopper.Response<UserShelterAdminSerializers>>
-  _apiV1UsersAdminRegisterPost({
+  Future<chopper.Response<UserShelterAdminSerializers>> _apiV1UsersAdminRegisterPost({
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required UserShelterAdminSerializers? body,
     @chopper.Tag()
@@ -3694,8 +3260,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedUserShortSerializersList>>
-  apiV1UsersAvailableWorkersGet({
+  Future<chopper.Response<PaginatedUserShortSerializersList>> apiV1UsersAvailableWorkersGet({
     int? limit,
     int? offset,
     int? xCurrentShelter,
@@ -3705,11 +3270,7 @@ Supports retrieving only now, to prevent scraping.''',
       () => PaginatedUserShortSerializersList.fromJsonFactory,
     );
 
-    return _apiV1UsersAvailableWorkersGet(
-      limit: limit,
-      offset: offset,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1UsersAvailableWorkersGet(limit: limit, offset: offset, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -3717,8 +3278,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/users/available-workers/')
-  Future<chopper.Response<PaginatedUserShortSerializersList>>
-  _apiV1UsersAvailableWorkersGet({
+  Future<chopper.Response<PaginatedUserShortSerializersList>> _apiV1UsersAvailableWorkersGet({
     @Query('limit') int? limit,
     @Query('offset') int? offset,
     @Header('x-current-shelter') String? xCurrentShelter,
@@ -3737,13 +3297,8 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserSerializers>> apiV1UsersMeGet({
-    int? xCurrentShelter,
-  }) {
-    generatedMapping.putIfAbsent(
-      UserSerializers,
-      () => UserSerializers.fromJsonFactory,
-    );
+  Future<chopper.Response<UserSerializers>> apiV1UsersMeGet({int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(UserSerializers, () => UserSerializers.fromJsonFactory);
 
     return _apiV1UsersMeGet(xCurrentShelter: xCurrentShelter?.toString());
   }
@@ -3768,19 +3323,10 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserSerializers>> apiV1UsersMePut({
-    int? xCurrentShelter,
-    required UserSerializers? body,
-  }) {
-    generatedMapping.putIfAbsent(
-      UserSerializers,
-      () => UserSerializers.fromJsonFactory,
-    );
+  Future<chopper.Response<UserSerializers>> apiV1UsersMePut({int? xCurrentShelter, required UserSerializers? body}) {
+    generatedMapping.putIfAbsent(UserSerializers, () => UserSerializers.fromJsonFactory);
 
-    return _apiV1UsersMePut(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1UsersMePut(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -3808,15 +3354,9 @@ Supports retrieving only now, to prevent scraping.''',
     int? xCurrentShelter,
     required PatchedUserSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserSerializers,
-      () => UserSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserSerializers, () => UserSerializers.fromJsonFactory);
 
-    return _apiV1UsersMePatch(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1UsersMePatch(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -3840,27 +3380,19 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserChangePasswordSerializers>>
-  apiV1UsersMeChangePasswordPut({
+  Future<chopper.Response<UserChangePasswordSerializers>> apiV1UsersMeChangePasswordPut({
     int? xCurrentShelter,
     required UserChangePasswordSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserChangePasswordSerializers,
-      () => UserChangePasswordSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserChangePasswordSerializers, () => UserChangePasswordSerializers.fromJsonFactory);
 
-    return _apiV1UsersMeChangePasswordPut(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1UsersMeChangePasswordPut(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param x-current-shelter Set current shelter id
   @PUT(path: '/api/v1/users/me/change_password/', optionalBody: true)
-  Future<chopper.Response<UserChangePasswordSerializers>>
-  _apiV1UsersMeChangePasswordPut({
+  Future<chopper.Response<UserChangePasswordSerializers>> _apiV1UsersMeChangePasswordPut({
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required UserChangePasswordSerializers? body,
     @chopper.Tag()
@@ -3878,27 +3410,19 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserChangePasswordSerializers>>
-  apiV1UsersMeChangePasswordPatch({
+  Future<chopper.Response<UserChangePasswordSerializers>> apiV1UsersMeChangePasswordPatch({
     int? xCurrentShelter,
     required PatchedUserChangePasswordSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserChangePasswordSerializers,
-      () => UserChangePasswordSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserChangePasswordSerializers, () => UserChangePasswordSerializers.fromJsonFactory);
 
-    return _apiV1UsersMeChangePasswordPatch(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1UsersMeChangePasswordPatch(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param x-current-shelter Set current shelter id
   @PATCH(path: '/api/v1/users/me/change_password/', optionalBody: true)
-  Future<chopper.Response<UserChangePasswordSerializers>>
-  _apiV1UsersMeChangePasswordPatch({
+  Future<chopper.Response<UserChangePasswordSerializers>> _apiV1UsersMeChangePasswordPatch({
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required PatchedUserChangePasswordSerializers? body,
     @chopper.Tag()
@@ -3918,18 +3442,17 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param limit Number of results to return per page.
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<PaginatedShelterShortSerializersList>>
-  apiV1UsersMeSheltersGet({int? limit, int? offset, int? xCurrentShelter}) {
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> apiV1UsersMeSheltersGet({
+    int? limit,
+    int? offset,
+    int? xCurrentShelter,
+  }) {
     generatedMapping.putIfAbsent(
       PaginatedShelterShortSerializersList,
       () => PaginatedShelterShortSerializersList.fromJsonFactory,
     );
 
-    return _apiV1UsersMeSheltersGet(
-      limit: limit,
-      offset: offset,
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1UsersMeSheltersGet(limit: limit, offset: offset, xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -3937,8 +3460,7 @@ Supports retrieving only now, to prevent scraping.''',
   ///@param offset The initial index from which to return the results.
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/users/me/shelters/')
-  Future<chopper.Response<PaginatedShelterShortSerializersList>>
-  _apiV1UsersMeSheltersGet({
+  Future<chopper.Response<PaginatedShelterShortSerializersList>> _apiV1UsersMeSheltersGet({
     @Query('limit') int? limit,
     @Query('offset') int? offset,
     @Header('x-current-shelter') String? xCurrentShelter,
@@ -3957,23 +3479,16 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserCurrentShelterSerializers>>
-  apiV1UsersMeSheltersCurrentGet({int? xCurrentShelter}) {
-    generatedMapping.putIfAbsent(
-      UserCurrentShelterSerializers,
-      () => UserCurrentShelterSerializers.fromJsonFactory,
-    );
+  Future<chopper.Response<UserCurrentShelterSerializers>> apiV1UsersMeSheltersCurrentGet({int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(UserCurrentShelterSerializers, () => UserCurrentShelterSerializers.fromJsonFactory);
 
-    return _apiV1UsersMeSheltersCurrentGet(
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1UsersMeSheltersCurrentGet(xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
   ///@param x-current-shelter Set current shelter id
   @GET(path: '/api/v1/users/me/shelters/current/')
-  Future<chopper.Response<UserCurrentShelterSerializers>>
-  _apiV1UsersMeSheltersCurrentGet({
+  Future<chopper.Response<UserCurrentShelterSerializers>> _apiV1UsersMeSheltersCurrentGet({
     @Header('x-current-shelter') String? xCurrentShelter,
     @chopper.Tag()
     SwaggerMetaData swaggerMetaData = const SwaggerMetaData(
@@ -3990,14 +3505,8 @@ Supports retrieving only now, to prevent scraping.''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response> apiV1UsersResetPasswordPost({
-    int? xCurrentShelter,
-    required Email? body,
-  }) {
-    return _apiV1UsersResetPasswordPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+  Future<chopper.Response> apiV1UsersResetPasswordPost({int? xCurrentShelter, required Email? body}) {
+    return _apiV1UsersResetPasswordPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -4026,10 +3535,7 @@ Returns 400 in case user is not found''',
     int? xCurrentShelter,
     required UserResetPasswordComplete? body,
   }) {
-    return _apiV1UsersResetPasswordCompletePost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1UsersResetPasswordCompletePost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
@@ -4079,8 +3585,7 @@ and calls PasswordResetService service''',
     @Header('x-current-shelter') String? xCurrentShelter,
     @chopper.Tag()
     SwaggerMetaData swaggerMetaData = const SwaggerMetaData(
-      description:
-          'A view to verify credentials for the following password reset.',
+      description: 'A view to verify credentials for the following password reset.',
       summary: '',
       operationId: 'v1_users_reset_password_confirm_retrieve',
       consumes: [],
@@ -4179,27 +3684,19 @@ and calls PasswordResetService service''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<UserShelterWorkerSerializers>>
-  apiV1UsersWorkerRegisterPost({
+  Future<chopper.Response<UserShelterWorkerSerializers>> apiV1UsersWorkerRegisterPost({
     int? xCurrentShelter,
     required UserShelterWorkerSerializers? body,
   }) {
-    generatedMapping.putIfAbsent(
-      UserShelterWorkerSerializers,
-      () => UserShelterWorkerSerializers.fromJsonFactory,
-    );
+    generatedMapping.putIfAbsent(UserShelterWorkerSerializers, () => UserShelterWorkerSerializers.fromJsonFactory);
 
-    return _apiV1UsersWorkerRegisterPost(
-      xCurrentShelter: xCurrentShelter?.toString(),
-      body: body,
-    );
+    return _apiV1UsersWorkerRegisterPost(xCurrentShelter: xCurrentShelter?.toString(), body: body);
   }
 
   ///
   ///@param x-current-shelter Set current shelter id
   @POST(path: '/api/v1/users/worker-register/', optionalBody: true)
-  Future<chopper.Response<UserShelterWorkerSerializers>>
-  _apiV1UsersWorkerRegisterPost({
+  Future<chopper.Response<UserShelterWorkerSerializers>> _apiV1UsersWorkerRegisterPost({
     @Header('x-current-shelter') String? xCurrentShelter,
     @Body() required UserShelterWorkerSerializers? body,
     @chopper.Tag()
@@ -4217,17 +3714,10 @@ and calls PasswordResetService service''',
 
   ///
   ///@param x-current-shelter Set current shelter id
-  Future<chopper.Response<ValuesForSelection>> apiV1ValuesForSelectionGet({
-    int? xCurrentShelter,
-  }) {
-    generatedMapping.putIfAbsent(
-      ValuesForSelection,
-      () => ValuesForSelection.fromJsonFactory,
-    );
+  Future<chopper.Response<ValuesForSelection>> apiV1ValuesForSelectionGet({int? xCurrentShelter}) {
+    generatedMapping.putIfAbsent(ValuesForSelection, () => ValuesForSelection.fromJsonFactory);
 
-    return _apiV1ValuesForSelectionGet(
-      xCurrentShelter: xCurrentShelter?.toString(),
-    );
+    return _apiV1ValuesForSelectionGet(xCurrentShelter: xCurrentShelter?.toString());
   }
 
   ///
@@ -4266,8 +3756,7 @@ class Adopter {
     this.updatedAt,
   });
 
-  factory Adopter.fromJson(Map<String, dynamic> json) =>
-      _$AdopterFromJson(json);
+  factory Adopter.fromJson(Map<String, dynamic> json) => _$AdopterFromJson(json);
 
   static const toJsonFactory = _$AdopterToJson;
   Map<String, dynamic> toJson() => _$AdopterToJson(this);
@@ -4302,57 +3791,24 @@ class Adopter {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Adopter &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -4441,8 +3897,7 @@ extension $AdopterExtension on Adopter {
 class Adoption {
   const Adoption({this.startDate, this.endDate, this.adopter});
 
-  factory Adoption.fromJson(Map<String, dynamic> json) =>
-      _$AdoptionFromJson(json);
+  factory Adoption.fromJson(Map<String, dynamic> json) => _$AdoptionFromJson(json);
 
   static const toJsonFactory = _$AdoptionToJson;
   Map<String, dynamic> toJson() => _$AdoptionToJson(this);
@@ -4460,17 +3915,9 @@ class Adoption {
     return identical(this, other) ||
         (other is Adoption &&
             (identical(other.startDate, startDate) ||
-                const DeepCollectionEquality().equals(
-                  other.startDate,
-                  startDate,
-                )) &&
-            (identical(other.endDate, endDate) ||
-                const DeepCollectionEquality().equals(
-                  other.endDate,
-                  endDate,
-                )) &&
-            (identical(other.adopter, adopter) ||
-                const DeepCollectionEquality().equals(other.adopter, adopter)));
+                const DeepCollectionEquality().equals(other.startDate, startDate)) &&
+            (identical(other.endDate, endDate) || const DeepCollectionEquality().equals(other.endDate, endDate)) &&
+            (identical(other.adopter, adopter) || const DeepCollectionEquality().equals(other.adopter, adopter)));
   }
 
   @override
@@ -4493,11 +3940,7 @@ extension $AdoptionExtension on Adoption {
     );
   }
 
-  Adoption copyWithWrapped({
-    Wrapped<DateTime?>? startDate,
-    Wrapped<DateTime?>? endDate,
-    Wrapped<int?>? adopter,
-  }) {
+  Adoption copyWithWrapped({Wrapped<DateTime?>? startDate, Wrapped<DateTime?>? endDate, Wrapped<int?>? adopter}) {
     return Adoption(
       startDate: (startDate != null ? startDate.value : this.startDate),
       endDate: (endDate != null ? endDate.value : this.endDate),
@@ -4522,8 +3965,7 @@ class AnalysisPrescription {
     this.files,
   });
 
-  factory AnalysisPrescription.fromJson(Map<String, dynamic> json) =>
-      _$AnalysisPrescriptionFromJson(json);
+  factory AnalysisPrescription.fromJson(Map<String, dynamic> json) => _$AnalysisPrescriptionFromJson(json);
 
   static const toJsonFactory = _$AnalysisPrescriptionToJson;
   Map<String, dynamic> toJson() => _$AnalysisPrescriptionToJson(this);
@@ -4540,11 +3982,7 @@ class AnalysisPrescription {
     fromJson: analysisPrescriptionMyTypeEnumFromJson,
   )
   final enums.AnalysisPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -4564,43 +4002,21 @@ class AnalysisPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnalysisPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -4684,8 +4100,7 @@ extension $AnalysisPrescriptionExtension on AnalysisPrescription {
 class AnimalAttribute {
   const AnimalAttribute({this.id, required this.name, this.isRequired});
 
-  factory AnimalAttribute.fromJson(Map<String, dynamic> json) =>
-      _$AnimalAttributeFromJson(json);
+  factory AnimalAttribute.fromJson(Map<String, dynamic> json) => _$AnimalAttributeFromJson(json);
 
   static const toJsonFactory = _$AnimalAttributeToJson;
   Map<String, dynamic> toJson() => _$AnimalAttributeToJson(this);
@@ -4702,15 +4117,10 @@ class AnimalAttribute {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalAttribute &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.isRequired, isRequired) ||
-                const DeepCollectionEquality().equals(
-                  other.isRequired,
-                  isRequired,
-                )));
+                const DeepCollectionEquality().equals(other.isRequired, isRequired)));
   }
 
   @override
@@ -4726,18 +4136,10 @@ class AnimalAttribute {
 
 extension $AnimalAttributeExtension on AnimalAttribute {
   AnimalAttribute copyWith({int? id, String? name, bool? isRequired}) {
-    return AnimalAttribute(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      isRequired: isRequired ?? this.isRequired,
-    );
+    return AnimalAttribute(id: id ?? this.id, name: name ?? this.name, isRequired: isRequired ?? this.isRequired);
   }
 
-  AnimalAttribute copyWithWrapped({
-    Wrapped<int?>? id,
-    Wrapped<String>? name,
-    Wrapped<bool?>? isRequired,
-  }) {
+  AnimalAttribute copyWithWrapped({Wrapped<int?>? id, Wrapped<String>? name, Wrapped<bool?>? isRequired}) {
     return AnimalAttribute(
       id: (id != null ? id.value : this.id),
       name: (name != null ? name.value : this.name),
@@ -4748,15 +4150,9 @@ extension $AnimalAttributeExtension on AnimalAttribute {
 
 @JsonSerializable(explicitToJson: true)
 class AnimalAttributeValue {
-  const AnimalAttributeValue({
-    required this.attrId,
-    required this.name,
-    required this.value,
-    this.isRequired,
-  });
+  const AnimalAttributeValue({required this.attrId, required this.name, required this.value, this.isRequired});
 
-  factory AnimalAttributeValue.fromJson(Map<String, dynamic> json) =>
-      _$AnimalAttributeValueFromJson(json);
+  factory AnimalAttributeValue.fromJson(Map<String, dynamic> json) => _$AnimalAttributeValueFromJson(json);
 
   static const toJsonFactory = _$AnimalAttributeValueToJson;
   Map<String, dynamic> toJson() => _$AnimalAttributeValueToJson(this);
@@ -4775,17 +4171,11 @@ class AnimalAttributeValue {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalAttributeValue &&
-            (identical(other.attrId, attrId) ||
-                const DeepCollectionEquality().equals(other.attrId, attrId)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.value, value) ||
-                const DeepCollectionEquality().equals(other.value, value)) &&
+            (identical(other.attrId, attrId) || const DeepCollectionEquality().equals(other.attrId, attrId)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.value, value) || const DeepCollectionEquality().equals(other.value, value)) &&
             (identical(other.isRequired, isRequired) ||
-                const DeepCollectionEquality().equals(
-                  other.isRequired,
-                  isRequired,
-                )));
+                const DeepCollectionEquality().equals(other.isRequired, isRequired)));
   }
 
   @override
@@ -4801,12 +4191,7 @@ class AnimalAttributeValue {
 }
 
 extension $AnimalAttributeValueExtension on AnimalAttributeValue {
-  AnimalAttributeValue copyWith({
-    int? attrId,
-    String? name,
-    String? value,
-    bool? isRequired,
-  }) {
+  AnimalAttributeValue copyWith({int? attrId, String? name, String? value, bool? isRequired}) {
     return AnimalAttributeValue(
       attrId: attrId ?? this.attrId,
       name: name ?? this.name,
@@ -4842,8 +4227,7 @@ class AnimalHistorySnapshot {
     required this.editor,
   });
 
-  factory AnimalHistorySnapshot.fromJson(Map<String, dynamic> json) =>
-      _$AnimalHistorySnapshotFromJson(json);
+  factory AnimalHistorySnapshot.fromJson(Map<String, dynamic> json) => _$AnimalHistorySnapshotFromJson(json);
 
   static const toJsonFactory = _$AnimalHistorySnapshotToJson;
   Map<String, dynamic> toJson() => _$AnimalHistorySnapshotToJson(this);
@@ -4852,11 +4236,7 @@ class AnimalHistorySnapshot {
   final int animal;
   @JsonKey(name: 'created_at')
   final DateTime? createdAt;
-  @JsonKey(
-    name: 'status',
-    toJson: status69fEnumNullableToJson,
-    fromJson: status69fEnumNullableFromJson,
-  )
+  @JsonKey(name: 'status', toJson: status69fEnumNullableToJson, fromJson: status69fEnumNullableFromJson)
   final enums.Status69fEnum? status;
   @JsonKey(name: 'height')
   final String? height;
@@ -4872,26 +4252,15 @@ class AnimalHistorySnapshot {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalHistorySnapshot &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)) &&
-            (identical(other.height, height) ||
-                const DeepCollectionEquality().equals(other.height, height)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)) &&
+            (identical(other.height, height) || const DeepCollectionEquality().equals(other.height, height)) &&
+            (identical(other.weight, weight) || const DeepCollectionEquality().equals(other.weight, weight)) &&
             (identical(other.shelterName, shelterName) ||
-                const DeepCollectionEquality().equals(
-                  other.shelterName,
-                  shelterName,
-                )) &&
-            (identical(other.editor, editor) ||
-                const DeepCollectionEquality().equals(other.editor, editor)));
+                const DeepCollectionEquality().equals(other.shelterName, shelterName)) &&
+            (identical(other.editor, editor) || const DeepCollectionEquality().equals(other.editor, editor)));
   }
 
   @override
@@ -4953,15 +4322,9 @@ extension $AnimalHistorySnapshotExtension on AnimalHistorySnapshot {
 
 @JsonSerializable(explicitToJson: true)
 class AnimalImageRead {
-  const AnimalImageRead({
-    this.id,
-    this.isPrimary,
-    this.filename,
-    required this.image,
-  });
+  const AnimalImageRead({this.id, this.isPrimary, this.filename, required this.image});
 
-  factory AnimalImageRead.fromJson(Map<String, dynamic> json) =>
-      _$AnimalImageReadFromJson(json);
+  factory AnimalImageRead.fromJson(Map<String, dynamic> json) => _$AnimalImageReadFromJson(json);
 
   static const toJsonFactory = _$AnimalImageReadToJson;
   Map<String, dynamic> toJson() => _$AnimalImageReadToJson(this);
@@ -4980,20 +4343,11 @@ class AnimalImageRead {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalImageRead &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.isPrimary, isPrimary) ||
-                const DeepCollectionEquality().equals(
-                  other.isPrimary,
-                  isPrimary,
-                )) &&
-            (identical(other.filename, filename) ||
-                const DeepCollectionEquality().equals(
-                  other.filename,
-                  filename,
-                )) &&
-            (identical(other.image, image) ||
-                const DeepCollectionEquality().equals(other.image, image)));
+                const DeepCollectionEquality().equals(other.isPrimary, isPrimary)) &&
+            (identical(other.filename, filename) || const DeepCollectionEquality().equals(other.filename, filename)) &&
+            (identical(other.image, image) || const DeepCollectionEquality().equals(other.image, image)));
   }
 
   @override
@@ -5009,12 +4363,7 @@ class AnimalImageRead {
 }
 
 extension $AnimalImageReadExtension on AnimalImageRead {
-  AnimalImageRead copyWith({
-    int? id,
-    bool? isPrimary,
-    String? filename,
-    ImageThumbnails? image,
-  }) {
+  AnimalImageRead copyWith({int? id, bool? isPrimary, String? filename, ImageThumbnails? image}) {
     return AnimalImageRead(
       id: id ?? this.id,
       isPrimary: isPrimary ?? this.isPrimary,
@@ -5040,14 +4389,9 @@ extension $AnimalImageReadExtension on AnimalImageRead {
 
 @JsonSerializable(explicitToJson: true)
 class AnimalImageWrite {
-  const AnimalImageWrite({
-    this.isPrimary,
-    required this.name,
-    required this.image,
-  });
+  const AnimalImageWrite({this.isPrimary, required this.name, required this.image});
 
-  factory AnimalImageWrite.fromJson(Map<String, dynamic> json) =>
-      _$AnimalImageWriteFromJson(json);
+  factory AnimalImageWrite.fromJson(Map<String, dynamic> json) => _$AnimalImageWriteFromJson(json);
 
   static const toJsonFactory = _$AnimalImageWriteToJson;
   Map<String, dynamic> toJson() => _$AnimalImageWriteToJson(this);
@@ -5065,14 +4409,9 @@ class AnimalImageWrite {
     return identical(this, other) ||
         (other is AnimalImageWrite &&
             (identical(other.isPrimary, isPrimary) ||
-                const DeepCollectionEquality().equals(
-                  other.isPrimary,
-                  isPrimary,
-                )) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.image, image) ||
-                const DeepCollectionEquality().equals(other.image, image)));
+                const DeepCollectionEquality().equals(other.isPrimary, isPrimary)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.image, image) || const DeepCollectionEquality().equals(other.image, image)));
   }
 
   @override
@@ -5095,11 +4434,7 @@ extension $AnimalImageWriteExtension on AnimalImageWrite {
     );
   }
 
-  AnimalImageWrite copyWithWrapped({
-    Wrapped<bool?>? isPrimary,
-    Wrapped<String>? name,
-    Wrapped<String>? image,
-  }) {
+  AnimalImageWrite copyWithWrapped({Wrapped<bool?>? isPrimary, Wrapped<String>? name, Wrapped<String>? image}) {
     return AnimalImageWrite(
       isPrimary: (isPrimary != null ? isPrimary.value : this.isPrimary),
       name: (name != null ? name.value : this.name),
@@ -5123,8 +4458,7 @@ class AnimalNote {
     this.isUserCanEditOrDelete,
   });
 
-  factory AnimalNote.fromJson(Map<String, dynamic> json) =>
-      _$AnimalNoteFromJson(json);
+  factory AnimalNote.fromJson(Map<String, dynamic> json) => _$AnimalNoteFromJson(json);
 
   static const toJsonFactory = _$AnimalNoteToJson;
   Map<String, dynamic> toJson() => _$AnimalNoteToJson(this);
@@ -5155,44 +4489,21 @@ class AnimalNote {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalNote &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.content, content) ||
-                const DeepCollectionEquality().equals(
-                  other.content,
-                  content,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.content, content) || const DeepCollectionEquality().equals(other.content, content)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.isUserCanEditOrDelete, isUserCanEditOrDelete) ||
-                const DeepCollectionEquality().equals(
-                  other.isUserCanEditOrDelete,
-                  isUserCanEditOrDelete,
-                )));
+                const DeepCollectionEquality().equals(other.isUserCanEditOrDelete, isUserCanEditOrDelete)));
   }
 
   @override
@@ -5236,8 +4547,7 @@ extension $AnimalNoteExtension on AnimalNote {
       updatedAt: updatedAt ?? this.updatedAt,
       createdBy: createdBy ?? this.createdBy,
       updatedBy: updatedBy ?? this.updatedBy,
-      isUserCanEditOrDelete:
-          isUserCanEditOrDelete ?? this.isUserCanEditOrDelete,
+      isUserCanEditOrDelete: isUserCanEditOrDelete ?? this.isUserCanEditOrDelete,
     );
   }
 
@@ -5263,25 +4573,16 @@ extension $AnimalNoteExtension on AnimalNote {
       updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt),
       createdBy: (createdBy != null ? createdBy.value : this.createdBy),
       updatedBy: (updatedBy != null ? updatedBy.value : this.updatedBy),
-      isUserCanEditOrDelete: (isUserCanEditOrDelete != null
-          ? isUserCanEditOrDelete.value
-          : this.isUserCanEditOrDelete),
+      isUserCanEditOrDelete: (isUserCanEditOrDelete != null ? isUserCanEditOrDelete.value : this.isUserCanEditOrDelete),
     );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class AnimalNoteFile {
-  const AnimalNoteFile({
-    this.id,
-    required this.file,
-    this.name,
-    this.filename,
-    this.createdAt,
-  });
+  const AnimalNoteFile({this.id, required this.file, this.name, this.filename, this.createdAt});
 
-  factory AnimalNoteFile.fromJson(Map<String, dynamic> json) =>
-      _$AnimalNoteFileFromJson(json);
+  factory AnimalNoteFile.fromJson(Map<String, dynamic> json) => _$AnimalNoteFileFromJson(json);
 
   static const toJsonFactory = _$AnimalNoteFileToJson;
   Map<String, dynamic> toJson() => _$AnimalNoteFileToJson(this);
@@ -5302,22 +4603,12 @@ class AnimalNoteFile {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalNoteFile &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.file, file) ||
-                const DeepCollectionEquality().equals(other.file, file)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.filename, filename) ||
-                const DeepCollectionEquality().equals(
-                  other.filename,
-                  filename,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.file, file) || const DeepCollectionEquality().equals(other.file, file)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.filename, filename) || const DeepCollectionEquality().equals(other.filename, filename)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )));
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)));
   }
 
   @override
@@ -5334,13 +4625,7 @@ class AnimalNoteFile {
 }
 
 extension $AnimalNoteFileExtension on AnimalNoteFile {
-  AnimalNoteFile copyWith({
-    int? id,
-    String? file,
-    String? name,
-    String? filename,
-    DateTime? createdAt,
-  }) {
+  AnimalNoteFile copyWith({int? id, String? file, String? name, String? filename, DateTime? createdAt}) {
     return AnimalNoteFile(
       id: id ?? this.id,
       file: file ?? this.file,
@@ -5400,8 +4685,7 @@ class AnimalRead {
     this.canBeShared,
   });
 
-  factory AnimalRead.fromJson(Map<String, dynamic> json) =>
-      _$AnimalReadFromJson(json);
+  factory AnimalRead.fromJson(Map<String, dynamic> json) => _$AnimalReadFromJson(json);
 
   static const toJsonFactory = _$AnimalReadToJson;
   Map<String, dynamic> toJson() => _$AnimalReadToJson(this);
@@ -5418,11 +4702,7 @@ class AnimalRead {
   final List<AnimalImageRead> images;
   @JsonKey(name: 'spec')
   final Species? spec;
-  @JsonKey(
-    name: 'status',
-    toJson: status69fEnumNullableToJson,
-    fromJson: status69fEnumNullableFromJson,
-  )
+  @JsonKey(name: 'status', toJson: status69fEnumNullableToJson, fromJson: status69fEnumNullableFromJson)
   final enums.Status69fEnum? status;
   @JsonKey(name: 'date_joined', toJson: _dateToJson)
   final DateTime dateJoined;
@@ -5472,119 +4752,48 @@ class AnimalRead {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalRead &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.uuid, uuid) ||
-                const DeepCollectionEquality().equals(other.uuid, uuid)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.images, images) ||
-                const DeepCollectionEquality().equals(other.images, images)) &&
-            (identical(other.spec, spec) ||
-                const DeepCollectionEquality().equals(other.spec, spec)) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.uuid, uuid) || const DeepCollectionEquality().equals(other.uuid, uuid)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.images, images) || const DeepCollectionEquality().equals(other.images, images)) &&
+            (identical(other.spec, spec) || const DeepCollectionEquality().equals(other.spec, spec)) &&
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)) &&
             (identical(other.dateJoined, dateJoined) ||
-                const DeepCollectionEquality().equals(
-                  other.dateJoined,
-                  dateJoined,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateJoined, dateJoined)) &&
             (identical(other.birthDate, birthDate) ||
-                const DeepCollectionEquality().equals(
-                  other.birthDate,
-                  birthDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.birthDate, birthDate)) &&
             (identical(other.deathDate, deathDate) ||
-                const DeepCollectionEquality().equals(
-                  other.deathDate,
-                  deathDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.deathDate, deathDate)) &&
             (identical(other.deathReason, deathReason) ||
-                const DeepCollectionEquality().equals(
-                  other.deathReason,
-                  deathReason,
-                )) &&
+                const DeepCollectionEquality().equals(other.deathReason, deathReason)) &&
             (identical(other.defaultImageId, defaultImageId) ||
-                const DeepCollectionEquality().equals(
-                  other.defaultImageId,
-                  defaultImageId,
-                )) &&
+                const DeepCollectionEquality().equals(other.defaultImageId, defaultImageId)) &&
             (identical(other.placeOfCatch, placeOfCatch) ||
-                const DeepCollectionEquality().equals(
-                  other.placeOfCatch,
-                  placeOfCatch,
-                )) &&
+                const DeepCollectionEquality().equals(other.placeOfCatch, placeOfCatch)) &&
             (identical(other.placeOfRelease, placeOfRelease) ||
-                const DeepCollectionEquality().equals(
-                  other.placeOfRelease,
-                  placeOfRelease,
-                )) &&
+                const DeepCollectionEquality().equals(other.placeOfRelease, placeOfRelease)) &&
             (identical(other.dateOfChipping, dateOfChipping) ||
-                const DeepCollectionEquality().equals(
-                  other.dateOfChipping,
-                  dateOfChipping,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateOfChipping, dateOfChipping)) &&
             (identical(other.chippingCode, chippingCode) ||
-                const DeepCollectionEquality().equals(
-                  other.chippingCode,
-                  chippingCode,
-                )) &&
-            (identical(other.height, height) ||
-                const DeepCollectionEquality().equals(other.height, height)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)) &&
+                const DeepCollectionEquality().equals(other.chippingCode, chippingCode)) &&
+            (identical(other.height, height) || const DeepCollectionEquality().equals(other.height, height)) &&
+            (identical(other.weight, weight) || const DeepCollectionEquality().equals(other.weight, weight)) &&
             (identical(other.hasDocuments, hasDocuments) ||
-                const DeepCollectionEquality().equals(
-                  other.hasDocuments,
-                  hasDocuments,
-                )) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
-            (identical(other.curator, curator) ||
-                const DeepCollectionEquality().equals(
-                  other.curator,
-                  curator,
-                )) &&
+                const DeepCollectionEquality().equals(other.hasDocuments, hasDocuments)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
+            (identical(other.curator, curator) || const DeepCollectionEquality().equals(other.curator, curator)) &&
             (identical(other.applicant, applicant) ||
-                const DeepCollectionEquality().equals(
-                  other.applicant,
-                  applicant,
-                )) &&
+                const DeepCollectionEquality().equals(other.applicant, applicant)) &&
             (identical(other.animalAttributes, animalAttributes) ||
-                const DeepCollectionEquality().equals(
-                  other.animalAttributes,
-                  animalAttributes,
-                )) &&
+                const DeepCollectionEquality().equals(other.animalAttributes, animalAttributes)) &&
             (identical(other.deletedAt, deletedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.deletedAt,
-                  deletedAt,
-                )) &&
-            (identical(other.adoption, adoption) ||
-                const DeepCollectionEquality().equals(
-                  other.adoption,
-                  adoption,
-                )) &&
-            (identical(other.release, release) ||
-                const DeepCollectionEquality().equals(
-                  other.release,
-                  release,
-                )) &&
-            (identical(other.overstay, overstay) ||
-                const DeepCollectionEquality().equals(
-                  other.overstay,
-                  overstay,
-                )) &&
+                const DeepCollectionEquality().equals(other.deletedAt, deletedAt)) &&
+            (identical(other.adoption, adoption) || const DeepCollectionEquality().equals(other.adoption, adoption)) &&
+            (identical(other.release, release) || const DeepCollectionEquality().equals(other.release, release)) &&
+            (identical(other.overstay, overstay) || const DeepCollectionEquality().equals(other.overstay, overstay)) &&
             (identical(other.canBeShared, canBeShared) ||
-                const DeepCollectionEquality().equals(
-                  other.canBeShared,
-                  canBeShared,
-                )));
+                const DeepCollectionEquality().equals(other.canBeShared, canBeShared)));
   }
 
   @override
@@ -5728,32 +4937,18 @@ extension $AnimalReadExtension on AnimalRead {
       birthDate: (birthDate != null ? birthDate.value : this.birthDate),
       deathDate: (deathDate != null ? deathDate.value : this.deathDate),
       deathReason: (deathReason != null ? deathReason.value : this.deathReason),
-      defaultImageId: (defaultImageId != null
-          ? defaultImageId.value
-          : this.defaultImageId),
-      placeOfCatch: (placeOfCatch != null
-          ? placeOfCatch.value
-          : this.placeOfCatch),
-      placeOfRelease: (placeOfRelease != null
-          ? placeOfRelease.value
-          : this.placeOfRelease),
-      dateOfChipping: (dateOfChipping != null
-          ? dateOfChipping.value
-          : this.dateOfChipping),
-      chippingCode: (chippingCode != null
-          ? chippingCode.value
-          : this.chippingCode),
+      defaultImageId: (defaultImageId != null ? defaultImageId.value : this.defaultImageId),
+      placeOfCatch: (placeOfCatch != null ? placeOfCatch.value : this.placeOfCatch),
+      placeOfRelease: (placeOfRelease != null ? placeOfRelease.value : this.placeOfRelease),
+      dateOfChipping: (dateOfChipping != null ? dateOfChipping.value : this.dateOfChipping),
+      chippingCode: (chippingCode != null ? chippingCode.value : this.chippingCode),
       height: (height != null ? height.value : this.height),
       weight: (weight != null ? weight.value : this.weight),
-      hasDocuments: (hasDocuments != null
-          ? hasDocuments.value
-          : this.hasDocuments),
+      hasDocuments: (hasDocuments != null ? hasDocuments.value : this.hasDocuments),
       shelter: (shelter != null ? shelter.value : this.shelter),
       curator: (curator != null ? curator.value : this.curator),
       applicant: (applicant != null ? applicant.value : this.applicant),
-      animalAttributes: (animalAttributes != null
-          ? animalAttributes.value
-          : this.animalAttributes),
+      animalAttributes: (animalAttributes != null ? animalAttributes.value : this.animalAttributes),
       deletedAt: (deletedAt != null ? deletedAt.value : this.deletedAt),
       adoption: (adoption != null ? adoption.value : this.adoption),
       release: (release != null ? release.value : this.release),
@@ -5775,8 +4970,7 @@ class AnimalShort {
     this.defaultImageId,
   });
 
-  factory AnimalShort.fromJson(Map<String, dynamic> json) =>
-      _$AnimalShortFromJson(json);
+  factory AnimalShort.fromJson(Map<String, dynamic> json) => _$AnimalShortFromJson(json);
 
   static const toJsonFactory = _$AnimalShortToJson;
   Map<String, dynamic> toJson() => _$AnimalShortToJson(this);
@@ -5801,29 +4995,15 @@ class AnimalShort {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalShort &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.uuid, uuid) ||
-                const DeepCollectionEquality().equals(other.uuid, uuid)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.specName, specName) ||
-                const DeepCollectionEquality().equals(
-                  other.specName,
-                  specName,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.uuid, uuid) || const DeepCollectionEquality().equals(other.uuid, uuid)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.specName, specName) || const DeepCollectionEquality().equals(other.specName, specName)) &&
             (identical(other.specParentName, specParentName) ||
-                const DeepCollectionEquality().equals(
-                  other.specParentName,
-                  specParentName,
-                )) &&
-            (identical(other.avatar, avatar) ||
-                const DeepCollectionEquality().equals(other.avatar, avatar)) &&
+                const DeepCollectionEquality().equals(other.specParentName, specParentName)) &&
+            (identical(other.avatar, avatar) || const DeepCollectionEquality().equals(other.avatar, avatar)) &&
             (identical(other.defaultImageId, defaultImageId) ||
-                const DeepCollectionEquality().equals(
-                  other.defaultImageId,
-                  defaultImageId,
-                )));
+                const DeepCollectionEquality().equals(other.defaultImageId, defaultImageId)));
   }
 
   @override
@@ -5876,13 +5056,9 @@ extension $AnimalShortExtension on AnimalShort {
       uuid: (uuid != null ? uuid.value : this.uuid),
       name: (name != null ? name.value : this.name),
       specName: (specName != null ? specName.value : this.specName),
-      specParentName: (specParentName != null
-          ? specParentName.value
-          : this.specParentName),
+      specParentName: (specParentName != null ? specParentName.value : this.specParentName),
       avatar: (avatar != null ? avatar.value : this.avatar),
-      defaultImageId: (defaultImageId != null
-          ? defaultImageId.value
-          : this.defaultImageId),
+      defaultImageId: (defaultImageId != null ? defaultImageId.value : this.defaultImageId),
     );
   }
 }
@@ -5904,8 +5080,7 @@ class AnimalSitter {
     this.updatedAt,
   });
 
-  factory AnimalSitter.fromJson(Map<String, dynamic> json) =>
-      _$AnimalSitterFromJson(json);
+  factory AnimalSitter.fromJson(Map<String, dynamic> json) => _$AnimalSitterFromJson(json);
 
   static const toJsonFactory = _$AnimalSitterToJson;
   Map<String, dynamic> toJson() => _$AnimalSitterToJson(this);
@@ -5940,57 +5115,24 @@ class AnimalSitter {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalSitter &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -6077,15 +5219,9 @@ extension $AnimalSitterExtension on AnimalSitter {
 
 @JsonSerializable(explicitToJson: true)
 class AnimalStatsResponse {
-  const AnimalStatsResponse({
-    this.breeds,
-    this.species,
-    this.dateJoined,
-    this.statusTransitions,
-  });
+  const AnimalStatsResponse({this.breeds, this.species, this.dateJoined, this.statusTransitions});
 
-  factory AnimalStatsResponse.fromJson(Map<String, dynamic> json) =>
-      _$AnimalStatsResponseFromJson(json);
+  factory AnimalStatsResponse.fromJson(Map<String, dynamic> json) => _$AnimalStatsResponseFromJson(json);
 
   static const toJsonFactory = _$AnimalStatsResponseToJson;
   Map<String, dynamic> toJson() => _$AnimalStatsResponseToJson(this);
@@ -6104,23 +5240,12 @@ class AnimalStatsResponse {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalStatsResponse &&
-            (identical(other.breeds, breeds) ||
-                const DeepCollectionEquality().equals(other.breeds, breeds)) &&
-            (identical(other.species, species) ||
-                const DeepCollectionEquality().equals(
-                  other.species,
-                  species,
-                )) &&
+            (identical(other.breeds, breeds) || const DeepCollectionEquality().equals(other.breeds, breeds)) &&
+            (identical(other.species, species) || const DeepCollectionEquality().equals(other.species, species)) &&
             (identical(other.dateJoined, dateJoined) ||
-                const DeepCollectionEquality().equals(
-                  other.dateJoined,
-                  dateJoined,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateJoined, dateJoined)) &&
             (identical(other.statusTransitions, statusTransitions) ||
-                const DeepCollectionEquality().equals(
-                  other.statusTransitions,
-                  statusTransitions,
-                )));
+                const DeepCollectionEquality().equals(other.statusTransitions, statusTransitions)));
   }
 
   @override
@@ -6160,9 +5285,7 @@ extension $AnimalStatsResponseExtension on AnimalStatsResponse {
       breeds: (breeds != null ? breeds.value : this.breeds),
       species: (species != null ? species.value : this.species),
       dateJoined: (dateJoined != null ? dateJoined.value : this.dateJoined),
-      statusTransitions: (statusTransitions != null
-          ? statusTransitions.value
-          : this.statusTransitions),
+      statusTransitions: (statusTransitions != null ? statusTransitions.value : this.statusTransitions),
     );
   }
 }
@@ -6193,8 +5316,7 @@ class AnimalWrite {
     this.canBeShared,
   });
 
-  factory AnimalWrite.fromJson(Map<String, dynamic> json) =>
-      _$AnimalWriteFromJson(json);
+  factory AnimalWrite.fromJson(Map<String, dynamic> json) => _$AnimalWriteFromJson(json);
 
   static const toJsonFactory = _$AnimalWriteToJson;
   Map<String, dynamic> toJson() => _$AnimalWriteToJson(this);
@@ -6207,11 +5329,7 @@ class AnimalWrite {
   final List<int>? validImages;
   @JsonKey(name: 'spec_id')
   final int? specId;
-  @JsonKey(
-    name: 'status',
-    toJson: status69fEnumNullableToJson,
-    fromJson: status69fEnumNullableFromJson,
-  )
+  @JsonKey(name: 'status', toJson: status69fEnumNullableToJson, fromJson: status69fEnumNullableFromJson)
   final enums.Status69fEnum? status;
   @JsonKey(name: 'date_joined', toJson: _dateToJson)
   final DateTime dateJoined;
@@ -6251,93 +5369,41 @@ class AnimalWrite {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AnimalWrite &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.images, images) ||
-                const DeepCollectionEquality().equals(other.images, images)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.images, images) || const DeepCollectionEquality().equals(other.images, images)) &&
             (identical(other.validImages, validImages) ||
-                const DeepCollectionEquality().equals(
-                  other.validImages,
-                  validImages,
-                )) &&
-            (identical(other.specId, specId) ||
-                const DeepCollectionEquality().equals(other.specId, specId)) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)) &&
+                const DeepCollectionEquality().equals(other.validImages, validImages)) &&
+            (identical(other.specId, specId) || const DeepCollectionEquality().equals(other.specId, specId)) &&
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)) &&
             (identical(other.dateJoined, dateJoined) ||
-                const DeepCollectionEquality().equals(
-                  other.dateJoined,
-                  dateJoined,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateJoined, dateJoined)) &&
             (identical(other.birthDate, birthDate) ||
-                const DeepCollectionEquality().equals(
-                  other.birthDate,
-                  birthDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.birthDate, birthDate)) &&
             (identical(other.deathDate, deathDate) ||
-                const DeepCollectionEquality().equals(
-                  other.deathDate,
-                  deathDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.deathDate, deathDate)) &&
             (identical(other.deathReason, deathReason) ||
-                const DeepCollectionEquality().equals(
-                  other.deathReason,
-                  deathReason,
-                )) &&
+                const DeepCollectionEquality().equals(other.deathReason, deathReason)) &&
             (identical(other.defaultImageId, defaultImageId) ||
-                const DeepCollectionEquality().equals(
-                  other.defaultImageId,
-                  defaultImageId,
-                )) &&
+                const DeepCollectionEquality().equals(other.defaultImageId, defaultImageId)) &&
             (identical(other.placeOfCatch, placeOfCatch) ||
-                const DeepCollectionEquality().equals(
-                  other.placeOfCatch,
-                  placeOfCatch,
-                )) &&
+                const DeepCollectionEquality().equals(other.placeOfCatch, placeOfCatch)) &&
             (identical(other.placeOfRelease, placeOfRelease) ||
-                const DeepCollectionEquality().equals(
-                  other.placeOfRelease,
-                  placeOfRelease,
-                )) &&
+                const DeepCollectionEquality().equals(other.placeOfRelease, placeOfRelease)) &&
             (identical(other.dateOfChipping, dateOfChipping) ||
-                const DeepCollectionEquality().equals(
-                  other.dateOfChipping,
-                  dateOfChipping,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateOfChipping, dateOfChipping)) &&
             (identical(other.chippingCode, chippingCode) ||
-                const DeepCollectionEquality().equals(
-                  other.chippingCode,
-                  chippingCode,
-                )) &&
-            (identical(other.height, height) ||
-                const DeepCollectionEquality().equals(other.height, height)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+                const DeepCollectionEquality().equals(other.chippingCode, chippingCode)) &&
+            (identical(other.height, height) || const DeepCollectionEquality().equals(other.height, height)) &&
+            (identical(other.weight, weight) || const DeepCollectionEquality().equals(other.weight, weight)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.curatorId, curatorId) ||
-                const DeepCollectionEquality().equals(
-                  other.curatorId,
-                  curatorId,
-                )) &&
+                const DeepCollectionEquality().equals(other.curatorId, curatorId)) &&
             (identical(other.applicantId, applicantId) ||
-                const DeepCollectionEquality().equals(
-                  other.applicantId,
-                  applicantId,
-                )) &&
+                const DeepCollectionEquality().equals(other.applicantId, applicantId)) &&
             (identical(other.animalAttributes, animalAttributes) ||
-                const DeepCollectionEquality().equals(
-                  other.animalAttributes,
-                  animalAttributes,
-                )) &&
+                const DeepCollectionEquality().equals(other.animalAttributes, animalAttributes)) &&
             (identical(other.canBeShared, canBeShared) ||
-                const DeepCollectionEquality().equals(
-                  other.canBeShared,
-                  canBeShared,
-                )));
+                const DeepCollectionEquality().equals(other.canBeShared, canBeShared)));
   }
 
   @override
@@ -6451,29 +5517,17 @@ extension $AnimalWriteExtension on AnimalWrite {
       birthDate: (birthDate != null ? birthDate.value : this.birthDate),
       deathDate: (deathDate != null ? deathDate.value : this.deathDate),
       deathReason: (deathReason != null ? deathReason.value : this.deathReason),
-      defaultImageId: (defaultImageId != null
-          ? defaultImageId.value
-          : this.defaultImageId),
-      placeOfCatch: (placeOfCatch != null
-          ? placeOfCatch.value
-          : this.placeOfCatch),
-      placeOfRelease: (placeOfRelease != null
-          ? placeOfRelease.value
-          : this.placeOfRelease),
-      dateOfChipping: (dateOfChipping != null
-          ? dateOfChipping.value
-          : this.dateOfChipping),
-      chippingCode: (chippingCode != null
-          ? chippingCode.value
-          : this.chippingCode),
+      defaultImageId: (defaultImageId != null ? defaultImageId.value : this.defaultImageId),
+      placeOfCatch: (placeOfCatch != null ? placeOfCatch.value : this.placeOfCatch),
+      placeOfRelease: (placeOfRelease != null ? placeOfRelease.value : this.placeOfRelease),
+      dateOfChipping: (dateOfChipping != null ? dateOfChipping.value : this.dateOfChipping),
+      chippingCode: (chippingCode != null ? chippingCode.value : this.chippingCode),
       height: (height != null ? height.value : this.height),
       weight: (weight != null ? weight.value : this.weight),
       shelter: (shelter != null ? shelter.value : this.shelter),
       curatorId: (curatorId != null ? curatorId.value : this.curatorId),
       applicantId: (applicantId != null ? applicantId.value : this.applicantId),
-      animalAttributes: (animalAttributes != null
-          ? animalAttributes.value
-          : this.animalAttributes),
+      animalAttributes: (animalAttributes != null ? animalAttributes.value : this.animalAttributes),
       canBeShared: (canBeShared != null ? canBeShared.value : this.canBeShared),
     );
   }
@@ -6498,8 +5552,7 @@ class Applicant {
     this.applicantFiles,
   });
 
-  factory Applicant.fromJson(Map<String, dynamic> json) =>
-      _$ApplicantFromJson(json);
+  factory Applicant.fromJson(Map<String, dynamic> json) => _$ApplicantFromJson(json);
 
   static const toJsonFactory = _$ApplicantToJson;
   Map<String, dynamic> toJson() => _$ApplicantToJson(this);
@@ -6538,67 +5591,28 @@ class Applicant {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Applicant &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
             (identical(other.contactDetails, contactDetails) ||
-                const DeepCollectionEquality().equals(
-                  other.contactDetails,
-                  contactDetails,
-                )) &&
+                const DeepCollectionEquality().equals(other.contactDetails, contactDetails)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )) &&
-            (identical(other.animalId, animalId) ||
-                const DeepCollectionEquality().equals(
-                  other.animalId,
-                  animalId,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)) &&
+            (identical(other.animalId, animalId) || const DeepCollectionEquality().equals(other.animalId, animalId)) &&
             (identical(other.applicantFiles, applicantFiles) ||
-                const DeepCollectionEquality().equals(
-                  other.applicantFiles,
-                  applicantFiles,
-                )));
+                const DeepCollectionEquality().equals(other.applicantFiles, applicantFiles)));
   }
 
   @override
@@ -6682,33 +5696,22 @@ extension $ApplicantExtension on Applicant {
       lastName: (lastName != null ? lastName.value : this.lastName),
       email: (email != null ? email.value : this.email),
       phoneNumber: (phoneNumber != null ? phoneNumber.value : this.phoneNumber),
-      contactDetails: (contactDetails != null
-          ? contactDetails.value
-          : this.contactDetails),
+      contactDetails: (contactDetails != null ? contactDetails.value : this.contactDetails),
       createdBy: (createdBy != null ? createdBy.value : this.createdBy),
       updatedBy: (updatedBy != null ? updatedBy.value : this.updatedBy),
       createdAt: (createdAt != null ? createdAt.value : this.createdAt),
       updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt),
       animalId: (animalId != null ? animalId.value : this.animalId),
-      applicantFiles: (applicantFiles != null
-          ? applicantFiles.value
-          : this.applicantFiles),
+      applicantFiles: (applicantFiles != null ? applicantFiles.value : this.applicantFiles),
     );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class ApplicantFile {
-  const ApplicantFile({
-    this.id,
-    required this.file,
-    this.name,
-    this.filename,
-    this.createdAt,
-  });
+  const ApplicantFile({this.id, required this.file, this.name, this.filename, this.createdAt});
 
-  factory ApplicantFile.fromJson(Map<String, dynamic> json) =>
-      _$ApplicantFileFromJson(json);
+  factory ApplicantFile.fromJson(Map<String, dynamic> json) => _$ApplicantFileFromJson(json);
 
   static const toJsonFactory = _$ApplicantFileToJson;
   Map<String, dynamic> toJson() => _$ApplicantFileToJson(this);
@@ -6729,22 +5732,12 @@ class ApplicantFile {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ApplicantFile &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.file, file) ||
-                const DeepCollectionEquality().equals(other.file, file)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.filename, filename) ||
-                const DeepCollectionEquality().equals(
-                  other.filename,
-                  filename,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.file, file) || const DeepCollectionEquality().equals(other.file, file)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.filename, filename) || const DeepCollectionEquality().equals(other.filename, filename)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )));
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)));
   }
 
   @override
@@ -6761,13 +5754,7 @@ class ApplicantFile {
 }
 
 extension $ApplicantFileExtension on ApplicantFile {
-  ApplicantFile copyWith({
-    int? id,
-    String? file,
-    String? name,
-    String? filename,
-    DateTime? createdAt,
-  }) {
+  ApplicantFile copyWith({int? id, String? file, String? name, String? filename, DateTime? createdAt}) {
     return ApplicantFile(
       id: id ?? this.id,
       file: file ?? this.file,
@@ -6810,8 +5797,7 @@ class AppointmentPrescription {
     this.files,
   });
 
-  factory AppointmentPrescription.fromJson(Map<String, dynamic> json) =>
-      _$AppointmentPrescriptionFromJson(json);
+  factory AppointmentPrescription.fromJson(Map<String, dynamic> json) => _$AppointmentPrescriptionFromJson(json);
 
   static const toJsonFactory = _$AppointmentPrescriptionToJson;
   Map<String, dynamic> toJson() => _$AppointmentPrescriptionToJson(this);
@@ -6828,11 +5814,7 @@ class AppointmentPrescription {
     fromJson: appointmentPrescriptionMyTypeEnumFromJson,
   )
   final enums.AppointmentPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -6852,43 +5834,21 @@ class AppointmentPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is AppointmentPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -6972,8 +5932,7 @@ extension $AppointmentPrescriptionExtension on AppointmentPrescription {
 class Approve {
   const Approve({required this.status});
 
-  factory Approve.fromJson(Map<String, dynamic> json) =>
-      _$ApproveFromJson(json);
+  factory Approve.fromJson(Map<String, dynamic> json) => _$ApproveFromJson(json);
 
   static const toJsonFactory = _$ApproveToJson;
   Map<String, dynamic> toJson() => _$ApproveToJson(this);
@@ -6986,16 +5945,14 @@ class Approve {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Approve &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)));
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)));
   }
 
   @override
   String toString() => jsonEncode(this);
 
   @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(status) ^ runtimeType.hashCode;
+  int get hashCode => const DeepCollectionEquality().hash(status) ^ runtimeType.hashCode;
 }
 
 extension $ApproveExtension on Approve {
@@ -7010,14 +5967,9 @@ extension $ApproveExtension on Approve {
 
 @JsonSerializable(explicitToJson: true)
 class BreedsSpeciesStatsItem {
-  const BreedsSpeciesStatsItem({
-    required this.id,
-    required this.name,
-    required this.count,
-  });
+  const BreedsSpeciesStatsItem({required this.id, required this.name, required this.count});
 
-  factory BreedsSpeciesStatsItem.fromJson(Map<String, dynamic> json) =>
-      _$BreedsSpeciesStatsItemFromJson(json);
+  factory BreedsSpeciesStatsItem.fromJson(Map<String, dynamic> json) => _$BreedsSpeciesStatsItemFromJson(json);
 
   static const toJsonFactory = _$BreedsSpeciesStatsItemToJson;
   Map<String, dynamic> toJson() => _$BreedsSpeciesStatsItemToJson(this);
@@ -7034,12 +5986,9 @@ class BreedsSpeciesStatsItem {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is BreedsSpeciesStatsItem &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)));
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)));
   }
 
   @override
@@ -7055,18 +6004,10 @@ class BreedsSpeciesStatsItem {
 
 extension $BreedsSpeciesStatsItemExtension on BreedsSpeciesStatsItem {
   BreedsSpeciesStatsItem copyWith({int? id, String? name, int? count}) {
-    return BreedsSpeciesStatsItem(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      count: count ?? this.count,
-    );
+    return BreedsSpeciesStatsItem(id: id ?? this.id, name: name ?? this.name, count: count ?? this.count);
   }
 
-  BreedsSpeciesStatsItem copyWithWrapped({
-    Wrapped<int>? id,
-    Wrapped<String>? name,
-    Wrapped<int>? count,
-  }) {
+  BreedsSpeciesStatsItem copyWithWrapped({Wrapped<int>? id, Wrapped<String>? name, Wrapped<int>? count}) {
     return BreedsSpeciesStatsItem(
       id: (id != null ? id.value : this.id),
       name: (name != null ? name.value : this.name),
@@ -7109,11 +6050,7 @@ class CourseOfTreatmentPrescription {
     fromJson: courseOfTreatmentPrescriptionMyTypeEnumFromJson,
   )
   final enums.CourseOfTreatmentPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -7133,43 +6070,21 @@ class CourseOfTreatmentPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is CourseOfTreatmentPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -7191,8 +6106,7 @@ class CourseOfTreatmentPrescription {
       runtimeType.hashCode;
 }
 
-extension $CourseOfTreatmentPrescriptionExtension
-    on CourseOfTreatmentPrescription {
+extension $CourseOfTreatmentPrescriptionExtension on CourseOfTreatmentPrescription {
   CourseOfTreatmentPrescription copyWith({
     int? id,
     String? url,
@@ -7267,8 +6181,7 @@ class Curator {
     this.updatedAt,
   });
 
-  factory Curator.fromJson(Map<String, dynamic> json) =>
-      _$CuratorFromJson(json);
+  factory Curator.fromJson(Map<String, dynamic> json) => _$CuratorFromJson(json);
 
   static const toJsonFactory = _$CuratorToJson;
   Map<String, dynamic> toJson() => _$CuratorToJson(this);
@@ -7303,57 +6216,24 @@ class Curator {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Curator &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -7440,12 +6320,7 @@ extension $CuratorExtension on Curator {
 
 @JsonSerializable(explicitToJson: true)
 class DateJoinedInnerSpeciesCounts {
-  const DateJoinedInnerSpeciesCounts({
-    required this.id,
-    required this.name,
-    required this.count,
-    this.breeds,
-  });
+  const DateJoinedInnerSpeciesCounts({required this.id, required this.name, required this.count, this.breeds});
 
   factory DateJoinedInnerSpeciesCounts.fromJson(Map<String, dynamic> json) =>
       _$DateJoinedInnerSpeciesCountsFromJson(json);
@@ -7467,14 +6342,10 @@ class DateJoinedInnerSpeciesCounts {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is DateJoinedInnerSpeciesCounts &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.breeds, breeds) ||
-                const DeepCollectionEquality().equals(other.breeds, breeds)));
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.breeds, breeds) || const DeepCollectionEquality().equals(other.breeds, breeds)));
   }
 
   @override
@@ -7489,14 +6360,8 @@ class DateJoinedInnerSpeciesCounts {
       runtimeType.hashCode;
 }
 
-extension $DateJoinedInnerSpeciesCountsExtension
-    on DateJoinedInnerSpeciesCounts {
-  DateJoinedInnerSpeciesCounts copyWith({
-    int? id,
-    String? name,
-    int? count,
-    List<BreedsSpeciesStatsItem>? breeds,
-  }) {
+extension $DateJoinedInnerSpeciesCountsExtension on DateJoinedInnerSpeciesCounts {
+  DateJoinedInnerSpeciesCounts copyWith({int? id, String? name, int? count, List<BreedsSpeciesStatsItem>? breeds}) {
     return DateJoinedInnerSpeciesCounts(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -7522,14 +6387,9 @@ extension $DateJoinedInnerSpeciesCountsExtension
 
 @JsonSerializable(explicitToJson: true)
 class DateJoinedStatsItem {
-  const DateJoinedStatsItem({
-    required this.dateJoined,
-    required this.count,
-    this.species,
-  });
+  const DateJoinedStatsItem({required this.dateJoined, required this.count, this.species});
 
-  factory DateJoinedStatsItem.fromJson(Map<String, dynamic> json) =>
-      _$DateJoinedStatsItemFromJson(json);
+  factory DateJoinedStatsItem.fromJson(Map<String, dynamic> json) => _$DateJoinedStatsItemFromJson(json);
 
   static const toJsonFactory = _$DateJoinedStatsItemToJson;
   Map<String, dynamic> toJson() => _$DateJoinedStatsItemToJson(this);
@@ -7547,14 +6407,9 @@ class DateJoinedStatsItem {
     return identical(this, other) ||
         (other is DateJoinedStatsItem &&
             (identical(other.dateJoined, dateJoined) ||
-                const DeepCollectionEquality().equals(
-                  other.dateJoined,
-                  dateJoined,
-                )) &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.species, species) ||
-                const DeepCollectionEquality().equals(other.species, species)));
+                const DeepCollectionEquality().equals(other.dateJoined, dateJoined)) &&
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.species, species) || const DeepCollectionEquality().equals(other.species, species)));
   }
 
   @override
@@ -7569,11 +6424,7 @@ class DateJoinedStatsItem {
 }
 
 extension $DateJoinedStatsItemExtension on DateJoinedStatsItem {
-  DateJoinedStatsItem copyWith({
-    DateTime? dateJoined,
-    int? count,
-    List<DateJoinedInnerSpeciesCounts>? species,
-  }) {
+  DateJoinedStatsItem copyWith({DateTime? dateJoined, int? count, List<DateJoinedInnerSpeciesCounts>? species}) {
     return DateJoinedStatsItem(
       dateJoined: dateJoined ?? this.dateJoined,
       count: count ?? this.count,
@@ -7598,8 +6449,7 @@ extension $DateJoinedStatsItemExtension on DateJoinedStatsItem {
 class Decline {
   const Decline({required this.status});
 
-  factory Decline.fromJson(Map<String, dynamic> json) =>
-      _$DeclineFromJson(json);
+  factory Decline.fromJson(Map<String, dynamic> json) => _$DeclineFromJson(json);
 
   static const toJsonFactory = _$DeclineToJson;
   Map<String, dynamic> toJson() => _$DeclineToJson(this);
@@ -7612,16 +6462,14 @@ class Decline {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Decline &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)));
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)));
   }
 
   @override
   String toString() => jsonEncode(this);
 
   @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(status) ^ runtimeType.hashCode;
+  int get hashCode => const DeepCollectionEquality().hash(status) ^ runtimeType.hashCode;
 }
 
 extension $DeclineExtension on Decline {
@@ -7665,25 +6513,14 @@ class Drug {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Drug &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.usageInstruction, usageInstruction) ||
-                const DeepCollectionEquality().equals(
-                  other.usageInstruction,
-                  usageInstruction,
-                )) &&
+                const DeepCollectionEquality().equals(other.usageInstruction, usageInstruction)) &&
             (identical(other.formOfDrug, formOfDrug) ||
-                const DeepCollectionEquality().equals(
-                  other.formOfDrug,
-                  formOfDrug,
-                )) &&
+                const DeepCollectionEquality().equals(other.formOfDrug, formOfDrug)) &&
             (identical(other.formOfDrugName, formOfDrugName) ||
-                const DeepCollectionEquality().equals(
-                  other.formOfDrugName,
-                  formOfDrugName,
-                )));
+                const DeepCollectionEquality().equals(other.formOfDrugName, formOfDrugName)));
   }
 
   @override
@@ -7700,13 +6537,7 @@ class Drug {
 }
 
 extension $DrugExtension on Drug {
-  Drug copyWith({
-    int? id,
-    String? name,
-    String? usageInstruction,
-    int? formOfDrug,
-    String? formOfDrugName,
-  }) {
+  Drug copyWith({int? id, String? name, String? usageInstruction, int? formOfDrug, String? formOfDrugName}) {
     return Drug(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -7726,13 +6557,9 @@ extension $DrugExtension on Drug {
     return Drug(
       id: (id != null ? id.value : this.id),
       name: (name != null ? name.value : this.name),
-      usageInstruction: (usageInstruction != null
-          ? usageInstruction.value
-          : this.usageInstruction),
+      usageInstruction: (usageInstruction != null ? usageInstruction.value : this.usageInstruction),
       formOfDrug: (formOfDrug != null ? formOfDrug.value : this.formOfDrug),
-      formOfDrugName: (formOfDrugName != null
-          ? formOfDrugName.value
-          : this.formOfDrugName),
+      formOfDrugName: (formOfDrugName != null ? formOfDrugName.value : this.formOfDrugName),
     );
   }
 }
@@ -7754,16 +6581,14 @@ class Email {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Email &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)));
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)));
   }
 
   @override
   String toString() => jsonEncode(this);
 
   @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(email) ^ runtimeType.hashCode;
+  int get hashCode => const DeepCollectionEquality().hash(email) ^ runtimeType.hashCode;
 }
 
 extension $EmailExtension on Email {
@@ -7787,8 +6612,7 @@ class Feedback {
     required this.message,
   });
 
-  factory Feedback.fromJson(Map<String, dynamic> json) =>
-      _$FeedbackFromJson(json);
+  factory Feedback.fromJson(Map<String, dynamic> json) => _$FeedbackFromJson(json);
 
   static const toJsonFactory = _$FeedbackToJson;
   Map<String, dynamic> toJson() => _$FeedbackToJson(this);
@@ -7812,23 +6636,13 @@ class Feedback {
     return identical(this, other) ||
         (other is Feedback &&
             (identical(other.shelterId, shelterId) ||
-                const DeepCollectionEquality().equals(
-                  other.shelterId,
-                  shelterId,
-                )) &&
+                const DeepCollectionEquality().equals(other.shelterId, shelterId)) &&
             (identical(other.shelterName, shelterName) ||
-                const DeepCollectionEquality().equals(
-                  other.shelterName,
-                  shelterName,
-                )) &&
-            (identical(other.date, date) ||
-                const DeepCollectionEquality().equals(other.date, date)) &&
-            (identical(other.action, action) ||
-                const DeepCollectionEquality().equals(other.action, action)) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
-            (identical(other.message, message) ||
-                const DeepCollectionEquality().equals(other.message, message)));
+                const DeepCollectionEquality().equals(other.shelterName, shelterName)) &&
+            (identical(other.date, date) || const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.action, action) || const DeepCollectionEquality().equals(other.action, action)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.message, message) || const DeepCollectionEquality().equals(other.message, message)));
   }
 
   @override
@@ -7885,14 +6699,9 @@ extension $FeedbackExtension on Feedback {
 
 @JsonSerializable(explicitToJson: true)
 class ImageThumbnails {
-  const ImageThumbnails({
-    required this.large,
-    required this.medium,
-    required this.small,
-  });
+  const ImageThumbnails({required this.large, required this.medium, required this.small});
 
-  factory ImageThumbnails.fromJson(Map<String, dynamic> json) =>
-      _$ImageThumbnailsFromJson(json);
+  factory ImageThumbnails.fromJson(Map<String, dynamic> json) => _$ImageThumbnailsFromJson(json);
 
   static const toJsonFactory = _$ImageThumbnailsToJson;
   Map<String, dynamic> toJson() => _$ImageThumbnailsToJson(this);
@@ -7909,12 +6718,9 @@ class ImageThumbnails {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ImageThumbnails &&
-            (identical(other.large, large) ||
-                const DeepCollectionEquality().equals(other.large, large)) &&
-            (identical(other.medium, medium) ||
-                const DeepCollectionEquality().equals(other.medium, medium)) &&
-            (identical(other.small, small) ||
-                const DeepCollectionEquality().equals(other.small, small)));
+            (identical(other.large, large) || const DeepCollectionEquality().equals(other.large, large)) &&
+            (identical(other.medium, medium) || const DeepCollectionEquality().equals(other.medium, medium)) &&
+            (identical(other.small, small) || const DeepCollectionEquality().equals(other.small, small)));
   }
 
   @override
@@ -7930,18 +6736,10 @@ class ImageThumbnails {
 
 extension $ImageThumbnailsExtension on ImageThumbnails {
   ImageThumbnails copyWith({String? large, String? medium, String? small}) {
-    return ImageThumbnails(
-      large: large ?? this.large,
-      medium: medium ?? this.medium,
-      small: small ?? this.small,
-    );
+    return ImageThumbnails(large: large ?? this.large, medium: medium ?? this.medium, small: small ?? this.small);
   }
 
-  ImageThumbnails copyWithWrapped({
-    Wrapped<String>? large,
-    Wrapped<String>? medium,
-    Wrapped<String>? small,
-  }) {
+  ImageThumbnails copyWithWrapped({Wrapped<String>? large, Wrapped<String>? medium, Wrapped<String>? small}) {
     return ImageThumbnails(
       large: (large != null ? large.value : this.large),
       medium: (medium != null ? medium.value : this.medium),
@@ -7966,8 +6764,7 @@ class OtherPrescription {
     this.files,
   });
 
-  factory OtherPrescription.fromJson(Map<String, dynamic> json) =>
-      _$OtherPrescriptionFromJson(json);
+  factory OtherPrescription.fromJson(Map<String, dynamic> json) => _$OtherPrescriptionFromJson(json);
 
   static const toJsonFactory = _$OtherPrescriptionToJson;
   Map<String, dynamic> toJson() => _$OtherPrescriptionToJson(this);
@@ -7978,17 +6775,9 @@ class OtherPrescription {
   final String? url;
   @JsonKey(name: 'animal')
   final int animal;
-  @JsonKey(
-    name: 'my_type',
-    toJson: otherPrescriptionMyTypeEnumToJson,
-    fromJson: otherPrescriptionMyTypeEnumFromJson,
-  )
+  @JsonKey(name: 'my_type', toJson: otherPrescriptionMyTypeEnumToJson, fromJson: otherPrescriptionMyTypeEnumFromJson)
   final enums.OtherPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -8008,43 +6797,21 @@ class OtherPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is OtherPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -8128,8 +6895,7 @@ extension $OtherPrescriptionExtension on OtherPrescription {
 class Overstay {
   const Overstay({this.startDate, this.endDate, this.animalSitter});
 
-  factory Overstay.fromJson(Map<String, dynamic> json) =>
-      _$OverstayFromJson(json);
+  factory Overstay.fromJson(Map<String, dynamic> json) => _$OverstayFromJson(json);
 
   static const toJsonFactory = _$OverstayToJson;
   Map<String, dynamic> toJson() => _$OverstayToJson(this);
@@ -8147,20 +6913,10 @@ class Overstay {
     return identical(this, other) ||
         (other is Overstay &&
             (identical(other.startDate, startDate) ||
-                const DeepCollectionEquality().equals(
-                  other.startDate,
-                  startDate,
-                )) &&
-            (identical(other.endDate, endDate) ||
-                const DeepCollectionEquality().equals(
-                  other.endDate,
-                  endDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.startDate, startDate)) &&
+            (identical(other.endDate, endDate) || const DeepCollectionEquality().equals(other.endDate, endDate)) &&
             (identical(other.animalSitter, animalSitter) ||
-                const DeepCollectionEquality().equals(
-                  other.animalSitter,
-                  animalSitter,
-                )));
+                const DeepCollectionEquality().equals(other.animalSitter, animalSitter)));
   }
 
   @override
@@ -8175,11 +6931,7 @@ class Overstay {
 }
 
 extension $OverstayExtension on Overstay {
-  Overstay copyWith({
-    DateTime? startDate,
-    DateTime? endDate,
-    int? animalSitter,
-  }) {
+  Overstay copyWith({DateTime? startDate, DateTime? endDate, int? animalSitter}) {
     return Overstay(
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -8187,32 +6939,20 @@ extension $OverstayExtension on Overstay {
     );
   }
 
-  Overstay copyWithWrapped({
-    Wrapped<DateTime?>? startDate,
-    Wrapped<DateTime?>? endDate,
-    Wrapped<int?>? animalSitter,
-  }) {
+  Overstay copyWithWrapped({Wrapped<DateTime?>? startDate, Wrapped<DateTime?>? endDate, Wrapped<int?>? animalSitter}) {
     return Overstay(
       startDate: (startDate != null ? startDate.value : this.startDate),
       endDate: (endDate != null ? endDate.value : this.endDate),
-      animalSitter: (animalSitter != null
-          ? animalSitter.value
-          : this.animalSitter),
+      animalSitter: (animalSitter != null ? animalSitter.value : this.animalSitter),
     );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAdopterList {
-  const PaginatedAdopterList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedAdopterList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedAdopterList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedAdopterListFromJson(json);
+  factory PaginatedAdopterList.fromJson(Map<String, dynamic> json) => _$PaginatedAdopterListFromJson(json);
 
   static const toJsonFactory = _$PaginatedAdopterListToJson;
   Map<String, dynamic> toJson() => _$PaginatedAdopterListToJson(this);
@@ -8231,17 +6971,10 @@ class PaginatedAdopterList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedAdopterList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8257,12 +6990,7 @@ class PaginatedAdopterList {
 }
 
 extension $PaginatedAdopterListExtension on PaginatedAdopterList {
-  PaginatedAdopterList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<Adopter>? results,
-  }) {
+  PaginatedAdopterList copyWith({int? count, String? next, String? previous, List<Adopter>? results}) {
     return PaginatedAdopterList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8288,15 +7016,9 @@ extension $PaginatedAdopterListExtension on PaginatedAdopterList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAdoptionList {
-  const PaginatedAdoptionList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedAdoptionList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedAdoptionList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedAdoptionListFromJson(json);
+  factory PaginatedAdoptionList.fromJson(Map<String, dynamic> json) => _$PaginatedAdoptionListFromJson(json);
 
   static const toJsonFactory = _$PaginatedAdoptionListToJson;
   Map<String, dynamic> toJson() => _$PaginatedAdoptionListToJson(this);
@@ -8315,17 +7037,10 @@ class PaginatedAdoptionList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedAdoptionList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8341,12 +7056,7 @@ class PaginatedAdoptionList {
 }
 
 extension $PaginatedAdoptionListExtension on PaginatedAdoptionList {
-  PaginatedAdoptionList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<Adoption>? results,
-  }) {
+  PaginatedAdoptionList copyWith({int? count, String? next, String? previous, List<Adoption>? results}) {
     return PaginatedAdoptionList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8372,20 +7082,13 @@ extension $PaginatedAdoptionListExtension on PaginatedAdoptionList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAnimalHistorySnapshotList {
-  const PaginatedAnimalHistorySnapshotList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedAnimalHistorySnapshotList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedAnimalHistorySnapshotList.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PaginatedAnimalHistorySnapshotListFromJson(json);
+  factory PaginatedAnimalHistorySnapshotList.fromJson(Map<String, dynamic> json) =>
+      _$PaginatedAnimalHistorySnapshotListFromJson(json);
 
   static const toJsonFactory = _$PaginatedAnimalHistorySnapshotListToJson;
-  Map<String, dynamic> toJson() =>
-      _$PaginatedAnimalHistorySnapshotListToJson(this);
+  Map<String, dynamic> toJson() => _$PaginatedAnimalHistorySnapshotListToJson(this);
 
   @JsonKey(name: 'count')
   final int? count;
@@ -8401,17 +7104,10 @@ class PaginatedAnimalHistorySnapshotList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedAnimalHistorySnapshotList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8426,8 +7122,7 @@ class PaginatedAnimalHistorySnapshotList {
       runtimeType.hashCode;
 }
 
-extension $PaginatedAnimalHistorySnapshotListExtension
-    on PaginatedAnimalHistorySnapshotList {
+extension $PaginatedAnimalHistorySnapshotListExtension on PaginatedAnimalHistorySnapshotList {
   PaginatedAnimalHistorySnapshotList copyWith({
     int? count,
     String? next,
@@ -8459,15 +7154,9 @@ extension $PaginatedAnimalHistorySnapshotListExtension
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAnimalNoteList {
-  const PaginatedAnimalNoteList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedAnimalNoteList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedAnimalNoteList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedAnimalNoteListFromJson(json);
+  factory PaginatedAnimalNoteList.fromJson(Map<String, dynamic> json) => _$PaginatedAnimalNoteListFromJson(json);
 
   static const toJsonFactory = _$PaginatedAnimalNoteListToJson;
   Map<String, dynamic> toJson() => _$PaginatedAnimalNoteListToJson(this);
@@ -8486,17 +7175,10 @@ class PaginatedAnimalNoteList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedAnimalNoteList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8512,12 +7194,7 @@ class PaginatedAnimalNoteList {
 }
 
 extension $PaginatedAnimalNoteListExtension on PaginatedAnimalNoteList {
-  PaginatedAnimalNoteList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<AnimalNote>? results,
-  }) {
+  PaginatedAnimalNoteList copyWith({int? count, String? next, String? previous, List<AnimalNote>? results}) {
     return PaginatedAnimalNoteList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8543,15 +7220,9 @@ extension $PaginatedAnimalNoteListExtension on PaginatedAnimalNoteList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAnimalReadList {
-  const PaginatedAnimalReadList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedAnimalReadList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedAnimalReadList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedAnimalReadListFromJson(json);
+  factory PaginatedAnimalReadList.fromJson(Map<String, dynamic> json) => _$PaginatedAnimalReadListFromJson(json);
 
   static const toJsonFactory = _$PaginatedAnimalReadListToJson;
   Map<String, dynamic> toJson() => _$PaginatedAnimalReadListToJson(this);
@@ -8570,17 +7241,10 @@ class PaginatedAnimalReadList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedAnimalReadList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8596,12 +7260,7 @@ class PaginatedAnimalReadList {
 }
 
 extension $PaginatedAnimalReadListExtension on PaginatedAnimalReadList {
-  PaginatedAnimalReadList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<AnimalRead>? results,
-  }) {
+  PaginatedAnimalReadList copyWith({int? count, String? next, String? previous, List<AnimalRead>? results}) {
     return PaginatedAnimalReadList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8627,15 +7286,9 @@ extension $PaginatedAnimalReadListExtension on PaginatedAnimalReadList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedAnimalSitterList {
-  const PaginatedAnimalSitterList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedAnimalSitterList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedAnimalSitterList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedAnimalSitterListFromJson(json);
+  factory PaginatedAnimalSitterList.fromJson(Map<String, dynamic> json) => _$PaginatedAnimalSitterListFromJson(json);
 
   static const toJsonFactory = _$PaginatedAnimalSitterListToJson;
   Map<String, dynamic> toJson() => _$PaginatedAnimalSitterListToJson(this);
@@ -8654,17 +7307,10 @@ class PaginatedAnimalSitterList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedAnimalSitterList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8680,12 +7326,7 @@ class PaginatedAnimalSitterList {
 }
 
 extension $PaginatedAnimalSitterListExtension on PaginatedAnimalSitterList {
-  PaginatedAnimalSitterList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<AnimalSitter>? results,
-  }) {
+  PaginatedAnimalSitterList copyWith({int? count, String? next, String? previous, List<AnimalSitter>? results}) {
     return PaginatedAnimalSitterList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8711,15 +7352,9 @@ extension $PaginatedAnimalSitterListExtension on PaginatedAnimalSitterList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedApplicantList {
-  const PaginatedApplicantList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedApplicantList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedApplicantList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedApplicantListFromJson(json);
+  factory PaginatedApplicantList.fromJson(Map<String, dynamic> json) => _$PaginatedApplicantListFromJson(json);
 
   static const toJsonFactory = _$PaginatedApplicantListToJson;
   Map<String, dynamic> toJson() => _$PaginatedApplicantListToJson(this);
@@ -8738,17 +7373,10 @@ class PaginatedApplicantList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedApplicantList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8764,12 +7392,7 @@ class PaginatedApplicantList {
 }
 
 extension $PaginatedApplicantListExtension on PaginatedApplicantList {
-  PaginatedApplicantList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<Applicant>? results,
-  }) {
+  PaginatedApplicantList copyWith({int? count, String? next, String? previous, List<Applicant>? results}) {
     return PaginatedApplicantList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8795,15 +7418,9 @@ extension $PaginatedApplicantListExtension on PaginatedApplicantList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedCuratorList {
-  const PaginatedCuratorList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedCuratorList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedCuratorList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedCuratorListFromJson(json);
+  factory PaginatedCuratorList.fromJson(Map<String, dynamic> json) => _$PaginatedCuratorListFromJson(json);
 
   static const toJsonFactory = _$PaginatedCuratorListToJson;
   Map<String, dynamic> toJson() => _$PaginatedCuratorListToJson(this);
@@ -8822,17 +7439,10 @@ class PaginatedCuratorList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedCuratorList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8848,12 +7458,7 @@ class PaginatedCuratorList {
 }
 
 extension $PaginatedCuratorListExtension on PaginatedCuratorList {
-  PaginatedCuratorList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<Curator>? results,
-  }) {
+  PaginatedCuratorList copyWith({int? count, String? next, String? previous, List<Curator>? results}) {
     return PaginatedCuratorList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8879,15 +7484,9 @@ extension $PaginatedCuratorListExtension on PaginatedCuratorList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedOverstayList {
-  const PaginatedOverstayList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedOverstayList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedOverstayList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedOverstayListFromJson(json);
+  factory PaginatedOverstayList.fromJson(Map<String, dynamic> json) => _$PaginatedOverstayListFromJson(json);
 
   static const toJsonFactory = _$PaginatedOverstayListToJson;
   Map<String, dynamic> toJson() => _$PaginatedOverstayListToJson(this);
@@ -8906,17 +7505,10 @@ class PaginatedOverstayList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedOverstayList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -8932,12 +7524,7 @@ class PaginatedOverstayList {
 }
 
 extension $PaginatedOverstayListExtension on PaginatedOverstayList {
-  PaginatedOverstayList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<Overstay>? results,
-  }) {
+  PaginatedOverstayList copyWith({int? count, String? next, String? previous, List<Overstay>? results}) {
     return PaginatedOverstayList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -8963,20 +7550,13 @@ extension $PaginatedOverstayListExtension on PaginatedOverstayList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedPrescriptionExecutionTodayList {
-  const PaginatedPrescriptionExecutionTodayList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedPrescriptionExecutionTodayList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedPrescriptionExecutionTodayList.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PaginatedPrescriptionExecutionTodayListFromJson(json);
+  factory PaginatedPrescriptionExecutionTodayList.fromJson(Map<String, dynamic> json) =>
+      _$PaginatedPrescriptionExecutionTodayListFromJson(json);
 
   static const toJsonFactory = _$PaginatedPrescriptionExecutionTodayListToJson;
-  Map<String, dynamic> toJson() =>
-      _$PaginatedPrescriptionExecutionTodayListToJson(this);
+  Map<String, dynamic> toJson() => _$PaginatedPrescriptionExecutionTodayListToJson(this);
 
   @JsonKey(name: 'count')
   final int? count;
@@ -8986,24 +7566,16 @@ class PaginatedPrescriptionExecutionTodayList {
   final String? previous;
   @JsonKey(name: 'results', defaultValue: <PrescriptionExecutionToday>[])
   final List<PrescriptionExecutionToday>? results;
-  static const fromJsonFactory =
-      _$PaginatedPrescriptionExecutionTodayListFromJson;
+  static const fromJsonFactory = _$PaginatedPrescriptionExecutionTodayListFromJson;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedPrescriptionExecutionTodayList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9018,8 +7590,7 @@ class PaginatedPrescriptionExecutionTodayList {
       runtimeType.hashCode;
 }
 
-extension $PaginatedPrescriptionExecutionTodayListExtension
-    on PaginatedPrescriptionExecutionTodayList {
+extension $PaginatedPrescriptionExecutionTodayListExtension on PaginatedPrescriptionExecutionTodayList {
   PaginatedPrescriptionExecutionTodayList copyWith({
     int? count,
     String? next,
@@ -9051,15 +7622,9 @@ extension $PaginatedPrescriptionExecutionTodayListExtension
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedPrescriptionList {
-  const PaginatedPrescriptionList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedPrescriptionList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedPrescriptionList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedPrescriptionListFromJson(json);
+  factory PaginatedPrescriptionList.fromJson(Map<String, dynamic> json) => _$PaginatedPrescriptionListFromJson(json);
 
   static const toJsonFactory = _$PaginatedPrescriptionListToJson;
   Map<String, dynamic> toJson() => _$PaginatedPrescriptionListToJson(this);
@@ -9078,17 +7643,10 @@ class PaginatedPrescriptionList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedPrescriptionList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9104,12 +7662,7 @@ class PaginatedPrescriptionList {
 }
 
 extension $PaginatedPrescriptionListExtension on PaginatedPrescriptionList {
-  PaginatedPrescriptionList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<Prescription>? results,
-  }) {
+  PaginatedPrescriptionList copyWith({int? count, String? next, String? previous, List<Prescription>? results}) {
     return PaginatedPrescriptionList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -9135,19 +7688,13 @@ extension $PaginatedPrescriptionListExtension on PaginatedPrescriptionList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedReleaseSerializersList {
-  const PaginatedReleaseSerializersList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedReleaseSerializersList({this.count, this.next, this.previous, this.results});
 
   factory PaginatedReleaseSerializersList.fromJson(Map<String, dynamic> json) =>
       _$PaginatedReleaseSerializersListFromJson(json);
 
   static const toJsonFactory = _$PaginatedReleaseSerializersListToJson;
-  Map<String, dynamic> toJson() =>
-      _$PaginatedReleaseSerializersListToJson(this);
+  Map<String, dynamic> toJson() => _$PaginatedReleaseSerializersListToJson(this);
 
   @JsonKey(name: 'count')
   final int? count;
@@ -9163,17 +7710,10 @@ class PaginatedReleaseSerializersList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedReleaseSerializersList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9188,8 +7728,7 @@ class PaginatedReleaseSerializersList {
       runtimeType.hashCode;
 }
 
-extension $PaginatedReleaseSerializersListExtension
-    on PaginatedReleaseSerializersList {
+extension $PaginatedReleaseSerializersListExtension on PaginatedReleaseSerializersList {
   PaginatedReleaseSerializersList copyWith({
     int? count,
     String? next,
@@ -9221,15 +7760,9 @@ extension $PaginatedReleaseSerializersListExtension
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedShelterDrugList {
-  const PaginatedShelterDrugList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedShelterDrugList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedShelterDrugList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedShelterDrugListFromJson(json);
+  factory PaginatedShelterDrugList.fromJson(Map<String, dynamic> json) => _$PaginatedShelterDrugListFromJson(json);
 
   static const toJsonFactory = _$PaginatedShelterDrugListToJson;
   Map<String, dynamic> toJson() => _$PaginatedShelterDrugListToJson(this);
@@ -9248,17 +7781,10 @@ class PaginatedShelterDrugList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedShelterDrugList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9274,12 +7800,7 @@ class PaginatedShelterDrugList {
 }
 
 extension $PaginatedShelterDrugListExtension on PaginatedShelterDrugList {
-  PaginatedShelterDrugList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<ShelterDrug>? results,
-  }) {
+  PaginatedShelterDrugList copyWith({int? count, String? next, String? previous, List<ShelterDrug>? results}) {
     return PaginatedShelterDrugList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -9305,20 +7826,13 @@ extension $PaginatedShelterDrugListExtension on PaginatedShelterDrugList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedShelterShortSerializersList {
-  const PaginatedShelterShortSerializersList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedShelterShortSerializersList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedShelterShortSerializersList.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PaginatedShelterShortSerializersListFromJson(json);
+  factory PaginatedShelterShortSerializersList.fromJson(Map<String, dynamic> json) =>
+      _$PaginatedShelterShortSerializersListFromJson(json);
 
   static const toJsonFactory = _$PaginatedShelterShortSerializersListToJson;
-  Map<String, dynamic> toJson() =>
-      _$PaginatedShelterShortSerializersListToJson(this);
+  Map<String, dynamic> toJson() => _$PaginatedShelterShortSerializersListToJson(this);
 
   @JsonKey(name: 'count')
   final int? count;
@@ -9334,17 +7848,10 @@ class PaginatedShelterShortSerializersList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedShelterShortSerializersList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9359,8 +7866,7 @@ class PaginatedShelterShortSerializersList {
       runtimeType.hashCode;
 }
 
-extension $PaginatedShelterShortSerializersListExtension
-    on PaginatedShelterShortSerializersList {
+extension $PaginatedShelterShortSerializersListExtension on PaginatedShelterShortSerializersList {
   PaginatedShelterShortSerializersList copyWith({
     int? count,
     String? next,
@@ -9392,15 +7898,9 @@ extension $PaginatedShelterShortSerializersListExtension
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedSpeciesList {
-  const PaginatedSpeciesList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedSpeciesList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedSpeciesList.fromJson(Map<String, dynamic> json) =>
-      _$PaginatedSpeciesListFromJson(json);
+  factory PaginatedSpeciesList.fromJson(Map<String, dynamic> json) => _$PaginatedSpeciesListFromJson(json);
 
   static const toJsonFactory = _$PaginatedSpeciesListToJson;
   Map<String, dynamic> toJson() => _$PaginatedSpeciesListToJson(this);
@@ -9419,17 +7919,10 @@ class PaginatedSpeciesList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedSpeciesList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9445,12 +7938,7 @@ class PaginatedSpeciesList {
 }
 
 extension $PaginatedSpeciesListExtension on PaginatedSpeciesList {
-  PaginatedSpeciesList copyWith({
-    int? count,
-    String? next,
-    String? previous,
-    List<Species>? results,
-  }) {
+  PaginatedSpeciesList copyWith({int? count, String? next, String? previous, List<Species>? results}) {
     return PaginatedSpeciesList(
       count: count ?? this.count,
       next: next ?? this.next,
@@ -9476,21 +7964,13 @@ extension $PaginatedSpeciesListExtension on PaginatedSpeciesList {
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedUserSheltersAdminSerializersList {
-  const PaginatedUserSheltersAdminSerializersList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedUserSheltersAdminSerializersList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedUserSheltersAdminSerializersList.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PaginatedUserSheltersAdminSerializersListFromJson(json);
+  factory PaginatedUserSheltersAdminSerializersList.fromJson(Map<String, dynamic> json) =>
+      _$PaginatedUserSheltersAdminSerializersListFromJson(json);
 
-  static const toJsonFactory =
-      _$PaginatedUserSheltersAdminSerializersListToJson;
-  Map<String, dynamic> toJson() =>
-      _$PaginatedUserSheltersAdminSerializersListToJson(this);
+  static const toJsonFactory = _$PaginatedUserSheltersAdminSerializersListToJson;
+  Map<String, dynamic> toJson() => _$PaginatedUserSheltersAdminSerializersListToJson(this);
 
   @JsonKey(name: 'count')
   final int? count;
@@ -9500,24 +7980,16 @@ class PaginatedUserSheltersAdminSerializersList {
   final String? previous;
   @JsonKey(name: 'results', defaultValue: <UserSheltersAdminSerializers>[])
   final List<UserSheltersAdminSerializers>? results;
-  static const fromJsonFactory =
-      _$PaginatedUserSheltersAdminSerializersListFromJson;
+  static const fromJsonFactory = _$PaginatedUserSheltersAdminSerializersListFromJson;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedUserSheltersAdminSerializersList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9532,8 +8004,7 @@ class PaginatedUserSheltersAdminSerializersList {
       runtimeType.hashCode;
 }
 
-extension $PaginatedUserSheltersAdminSerializersListExtension
-    on PaginatedUserSheltersAdminSerializersList {
+extension $PaginatedUserSheltersAdminSerializersListExtension on PaginatedUserSheltersAdminSerializersList {
   PaginatedUserSheltersAdminSerializersList copyWith({
     int? count,
     String? next,
@@ -9565,20 +8036,13 @@ extension $PaginatedUserSheltersAdminSerializersListExtension
 
 @JsonSerializable(explicitToJson: true)
 class PaginatedUserShortSerializersList {
-  const PaginatedUserShortSerializersList({
-    this.count,
-    this.next,
-    this.previous,
-    this.results,
-  });
+  const PaginatedUserShortSerializersList({this.count, this.next, this.previous, this.results});
 
-  factory PaginatedUserShortSerializersList.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PaginatedUserShortSerializersListFromJson(json);
+  factory PaginatedUserShortSerializersList.fromJson(Map<String, dynamic> json) =>
+      _$PaginatedUserShortSerializersListFromJson(json);
 
   static const toJsonFactory = _$PaginatedUserShortSerializersListToJson;
-  Map<String, dynamic> toJson() =>
-      _$PaginatedUserShortSerializersListToJson(this);
+  Map<String, dynamic> toJson() => _$PaginatedUserShortSerializersListToJson(this);
 
   @JsonKey(name: 'count')
   final int? count;
@@ -9594,17 +8058,10 @@ class PaginatedUserShortSerializersList {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PaginatedUserShortSerializersList &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
-            (identical(other.next, next) ||
-                const DeepCollectionEquality().equals(other.next, next)) &&
-            (identical(other.previous, previous) ||
-                const DeepCollectionEquality().equals(
-                  other.previous,
-                  previous,
-                )) &&
-            (identical(other.results, results) ||
-                const DeepCollectionEquality().equals(other.results, results)));
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.next, next) || const DeepCollectionEquality().equals(other.next, next)) &&
+            (identical(other.previous, previous) || const DeepCollectionEquality().equals(other.previous, previous)) &&
+            (identical(other.results, results) || const DeepCollectionEquality().equals(other.results, results)));
   }
 
   @override
@@ -9619,8 +8076,7 @@ class PaginatedUserShortSerializersList {
       runtimeType.hashCode;
 }
 
-extension $PaginatedUserShortSerializersListExtension
-    on PaginatedUserShortSerializersList {
+extension $PaginatedUserShortSerializersListExtension on PaginatedUserShortSerializersList {
   PaginatedUserShortSerializersList copyWith({
     int? count,
     String? next,
@@ -9660,11 +8116,7 @@ class ParasitesPrescriptionExtraAttr {
   static const toJsonFactory = _$ParasitesPrescriptionExtraAttrToJson;
   Map<String, dynamic> toJson() => _$ParasitesPrescriptionExtraAttrToJson(this);
 
-  @JsonKey(
-    name: 'parasites_type',
-    toJson: parasitesTypeEnumNullableToJson,
-    fromJson: parasitesTypeEnumNullableFromJson,
-  )
+  @JsonKey(name: 'parasites_type', toJson: parasitesTypeEnumNullableToJson, fromJson: parasitesTypeEnumNullableFromJson)
   final enums.ParasitesTypeEnum? parasitesType;
   @JsonKey(name: 'reaction')
   final String? reaction;
@@ -9675,15 +8127,8 @@ class ParasitesPrescriptionExtraAttr {
     return identical(this, other) ||
         (other is ParasitesPrescriptionExtraAttr &&
             (identical(other.parasitesType, parasitesType) ||
-                const DeepCollectionEquality().equals(
-                  other.parasitesType,
-                  parasitesType,
-                )) &&
-            (identical(other.reaction, reaction) ||
-                const DeepCollectionEquality().equals(
-                  other.reaction,
-                  reaction,
-                )));
+                const DeepCollectionEquality().equals(other.parasitesType, parasitesType)) &&
+            (identical(other.reaction, reaction) || const DeepCollectionEquality().equals(other.reaction, reaction)));
   }
 
   @override
@@ -9696,12 +8141,8 @@ class ParasitesPrescriptionExtraAttr {
       runtimeType.hashCode;
 }
 
-extension $ParasitesPrescriptionExtraAttrExtension
-    on ParasitesPrescriptionExtraAttr {
-  ParasitesPrescriptionExtraAttr copyWith({
-    enums.ParasitesTypeEnum? parasitesType,
-    String? reaction,
-  }) {
+extension $ParasitesPrescriptionExtraAttrExtension on ParasitesPrescriptionExtraAttr {
+  ParasitesPrescriptionExtraAttr copyWith({enums.ParasitesTypeEnum? parasitesType, String? reaction}) {
     return ParasitesPrescriptionExtraAttr(
       parasitesType: parasitesType ?? this.parasitesType,
       reaction: reaction ?? this.reaction,
@@ -9713,9 +8154,7 @@ extension $ParasitesPrescriptionExtraAttrExtension
     Wrapped<String?>? reaction,
   }) {
     return ParasitesPrescriptionExtraAttr(
-      parasitesType: (parasitesType != null
-          ? parasitesType.value
-          : this.parasitesType),
+      parasitesType: (parasitesType != null ? parasitesType.value : this.parasitesType),
       reaction: (reaction != null ? reaction.value : this.reaction),
     );
   }
@@ -9758,11 +8197,7 @@ class ParasitesTreatmentPrescription {
   final enums.ParasitesTreatmentPrescriptionMyTypeEnum myType;
   @JsonKey(name: 'extra_type_attributes')
   final ParasitesPrescriptionExtraAttr extraTypeAttributes;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -9782,48 +8217,23 @@ class ParasitesTreatmentPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ParasitesTreatmentPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
             (identical(other.extraTypeAttributes, extraTypeAttributes) ||
-                const DeepCollectionEquality().equals(
-                  other.extraTypeAttributes,
-                  extraTypeAttributes,
-                )) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+                const DeepCollectionEquality().equals(other.extraTypeAttributes, extraTypeAttributes)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -9846,8 +8256,7 @@ class ParasitesTreatmentPrescription {
       runtimeType.hashCode;
 }
 
-extension $ParasitesTreatmentPrescriptionExtension
-    on ParasitesTreatmentPrescription {
+extension $ParasitesTreatmentPrescriptionExtension on ParasitesTreatmentPrescription {
   ParasitesTreatmentPrescription copyWith({
     int? id,
     String? url,
@@ -9897,9 +8306,7 @@ extension $ParasitesTreatmentPrescriptionExtension
       url: (url != null ? url.value : this.url),
       animal: (animal != null ? animal.value : this.animal),
       myType: (myType != null ? myType.value : this.myType),
-      extraTypeAttributes: (extraTypeAttributes != null
-          ? extraTypeAttributes.value
-          : this.extraTypeAttributes),
+      extraTypeAttributes: (extraTypeAttributes != null ? extraTypeAttributes.value : this.extraTypeAttributes),
       duration: (duration != null ? duration.value : this.duration),
       description: (description != null ? description.value : this.description),
       createdBy: (createdBy != null ? createdBy.value : this.createdBy),
@@ -9928,8 +8335,7 @@ class PatchedAdopter {
     this.updatedAt,
   });
 
-  factory PatchedAdopter.fromJson(Map<String, dynamic> json) =>
-      _$PatchedAdopterFromJson(json);
+  factory PatchedAdopter.fromJson(Map<String, dynamic> json) => _$PatchedAdopterFromJson(json);
 
   static const toJsonFactory = _$PatchedAdopterToJson;
   Map<String, dynamic> toJson() => _$PatchedAdopterToJson(this);
@@ -9964,57 +8370,24 @@ class PatchedAdopter {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedAdopter &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -10103,8 +8476,7 @@ extension $PatchedAdopterExtension on PatchedAdopter {
 class PatchedAdoption {
   const PatchedAdoption({this.startDate, this.endDate, this.adopter});
 
-  factory PatchedAdoption.fromJson(Map<String, dynamic> json) =>
-      _$PatchedAdoptionFromJson(json);
+  factory PatchedAdoption.fromJson(Map<String, dynamic> json) => _$PatchedAdoptionFromJson(json);
 
   static const toJsonFactory = _$PatchedAdoptionToJson;
   Map<String, dynamic> toJson() => _$PatchedAdoptionToJson(this);
@@ -10122,17 +8494,9 @@ class PatchedAdoption {
     return identical(this, other) ||
         (other is PatchedAdoption &&
             (identical(other.startDate, startDate) ||
-                const DeepCollectionEquality().equals(
-                  other.startDate,
-                  startDate,
-                )) &&
-            (identical(other.endDate, endDate) ||
-                const DeepCollectionEquality().equals(
-                  other.endDate,
-                  endDate,
-                )) &&
-            (identical(other.adopter, adopter) ||
-                const DeepCollectionEquality().equals(other.adopter, adopter)));
+                const DeepCollectionEquality().equals(other.startDate, startDate)) &&
+            (identical(other.endDate, endDate) || const DeepCollectionEquality().equals(other.endDate, endDate)) &&
+            (identical(other.adopter, adopter) || const DeepCollectionEquality().equals(other.adopter, adopter)));
   }
 
   @override
@@ -10147,11 +8511,7 @@ class PatchedAdoption {
 }
 
 extension $PatchedAdoptionExtension on PatchedAdoption {
-  PatchedAdoption copyWith({
-    DateTime? startDate,
-    DateTime? endDate,
-    int? adopter,
-  }) {
+  PatchedAdoption copyWith({DateTime? startDate, DateTime? endDate, int? adopter}) {
     return PatchedAdoption(
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -10206,11 +8566,7 @@ class PatchedAnalysisPrescription {
     fromJson: analysisPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.AnalysisPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -10230,43 +8586,21 @@ class PatchedAnalysisPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedAnalysisPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -10361,8 +8695,7 @@ class PatchedAnimalNote {
     this.isUserCanEditOrDelete,
   });
 
-  factory PatchedAnimalNote.fromJson(Map<String, dynamic> json) =>
-      _$PatchedAnimalNoteFromJson(json);
+  factory PatchedAnimalNote.fromJson(Map<String, dynamic> json) => _$PatchedAnimalNoteFromJson(json);
 
   static const toJsonFactory = _$PatchedAnimalNoteToJson;
   Map<String, dynamic> toJson() => _$PatchedAnimalNoteToJson(this);
@@ -10393,44 +8726,21 @@ class PatchedAnimalNote {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedAnimalNote &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.content, content) ||
-                const DeepCollectionEquality().equals(
-                  other.content,
-                  content,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.content, content) || const DeepCollectionEquality().equals(other.content, content)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.isUserCanEditOrDelete, isUserCanEditOrDelete) ||
-                const DeepCollectionEquality().equals(
-                  other.isUserCanEditOrDelete,
-                  isUserCanEditOrDelete,
-                )));
+                const DeepCollectionEquality().equals(other.isUserCanEditOrDelete, isUserCanEditOrDelete)));
   }
 
   @override
@@ -10474,8 +8784,7 @@ extension $PatchedAnimalNoteExtension on PatchedAnimalNote {
       updatedAt: updatedAt ?? this.updatedAt,
       createdBy: createdBy ?? this.createdBy,
       updatedBy: updatedBy ?? this.updatedBy,
-      isUserCanEditOrDelete:
-          isUserCanEditOrDelete ?? this.isUserCanEditOrDelete,
+      isUserCanEditOrDelete: isUserCanEditOrDelete ?? this.isUserCanEditOrDelete,
     );
   }
 
@@ -10501,9 +8810,7 @@ extension $PatchedAnimalNoteExtension on PatchedAnimalNote {
       updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt),
       createdBy: (createdBy != null ? createdBy.value : this.createdBy),
       updatedBy: (updatedBy != null ? updatedBy.value : this.updatedBy),
-      isUserCanEditOrDelete: (isUserCanEditOrDelete != null
-          ? isUserCanEditOrDelete.value
-          : this.isUserCanEditOrDelete),
+      isUserCanEditOrDelete: (isUserCanEditOrDelete != null ? isUserCanEditOrDelete.value : this.isUserCanEditOrDelete),
     );
   }
 }
@@ -10525,8 +8832,7 @@ class PatchedAnimalSitter {
     this.updatedAt,
   });
 
-  factory PatchedAnimalSitter.fromJson(Map<String, dynamic> json) =>
-      _$PatchedAnimalSitterFromJson(json);
+  factory PatchedAnimalSitter.fromJson(Map<String, dynamic> json) => _$PatchedAnimalSitterFromJson(json);
 
   static const toJsonFactory = _$PatchedAnimalSitterToJson;
   Map<String, dynamic> toJson() => _$PatchedAnimalSitterToJson(this);
@@ -10561,57 +8867,24 @@ class PatchedAnimalSitter {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedAnimalSitter &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -10722,8 +8995,7 @@ class PatchedAnimalWrite {
     this.canBeShared,
   });
 
-  factory PatchedAnimalWrite.fromJson(Map<String, dynamic> json) =>
-      _$PatchedAnimalWriteFromJson(json);
+  factory PatchedAnimalWrite.fromJson(Map<String, dynamic> json) => _$PatchedAnimalWriteFromJson(json);
 
   static const toJsonFactory = _$PatchedAnimalWriteToJson;
   Map<String, dynamic> toJson() => _$PatchedAnimalWriteToJson(this);
@@ -10736,11 +9008,7 @@ class PatchedAnimalWrite {
   final List<int>? validImages;
   @JsonKey(name: 'spec_id')
   final int? specId;
-  @JsonKey(
-    name: 'status',
-    toJson: status69fEnumNullableToJson,
-    fromJson: status69fEnumNullableFromJson,
-  )
+  @JsonKey(name: 'status', toJson: status69fEnumNullableToJson, fromJson: status69fEnumNullableFromJson)
   final enums.Status69fEnum? status;
   @JsonKey(name: 'date_joined', toJson: _dateToJson)
   final DateTime? dateJoined;
@@ -10780,93 +9048,41 @@ class PatchedAnimalWrite {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedAnimalWrite &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.images, images) ||
-                const DeepCollectionEquality().equals(other.images, images)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.images, images) || const DeepCollectionEquality().equals(other.images, images)) &&
             (identical(other.validImages, validImages) ||
-                const DeepCollectionEquality().equals(
-                  other.validImages,
-                  validImages,
-                )) &&
-            (identical(other.specId, specId) ||
-                const DeepCollectionEquality().equals(other.specId, specId)) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)) &&
+                const DeepCollectionEquality().equals(other.validImages, validImages)) &&
+            (identical(other.specId, specId) || const DeepCollectionEquality().equals(other.specId, specId)) &&
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)) &&
             (identical(other.dateJoined, dateJoined) ||
-                const DeepCollectionEquality().equals(
-                  other.dateJoined,
-                  dateJoined,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateJoined, dateJoined)) &&
             (identical(other.birthDate, birthDate) ||
-                const DeepCollectionEquality().equals(
-                  other.birthDate,
-                  birthDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.birthDate, birthDate)) &&
             (identical(other.deathDate, deathDate) ||
-                const DeepCollectionEquality().equals(
-                  other.deathDate,
-                  deathDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.deathDate, deathDate)) &&
             (identical(other.deathReason, deathReason) ||
-                const DeepCollectionEquality().equals(
-                  other.deathReason,
-                  deathReason,
-                )) &&
+                const DeepCollectionEquality().equals(other.deathReason, deathReason)) &&
             (identical(other.defaultImageId, defaultImageId) ||
-                const DeepCollectionEquality().equals(
-                  other.defaultImageId,
-                  defaultImageId,
-                )) &&
+                const DeepCollectionEquality().equals(other.defaultImageId, defaultImageId)) &&
             (identical(other.placeOfCatch, placeOfCatch) ||
-                const DeepCollectionEquality().equals(
-                  other.placeOfCatch,
-                  placeOfCatch,
-                )) &&
+                const DeepCollectionEquality().equals(other.placeOfCatch, placeOfCatch)) &&
             (identical(other.placeOfRelease, placeOfRelease) ||
-                const DeepCollectionEquality().equals(
-                  other.placeOfRelease,
-                  placeOfRelease,
-                )) &&
+                const DeepCollectionEquality().equals(other.placeOfRelease, placeOfRelease)) &&
             (identical(other.dateOfChipping, dateOfChipping) ||
-                const DeepCollectionEquality().equals(
-                  other.dateOfChipping,
-                  dateOfChipping,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateOfChipping, dateOfChipping)) &&
             (identical(other.chippingCode, chippingCode) ||
-                const DeepCollectionEquality().equals(
-                  other.chippingCode,
-                  chippingCode,
-                )) &&
-            (identical(other.height, height) ||
-                const DeepCollectionEquality().equals(other.height, height)) &&
-            (identical(other.weight, weight) ||
-                const DeepCollectionEquality().equals(other.weight, weight)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+                const DeepCollectionEquality().equals(other.chippingCode, chippingCode)) &&
+            (identical(other.height, height) || const DeepCollectionEquality().equals(other.height, height)) &&
+            (identical(other.weight, weight) || const DeepCollectionEquality().equals(other.weight, weight)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.curatorId, curatorId) ||
-                const DeepCollectionEquality().equals(
-                  other.curatorId,
-                  curatorId,
-                )) &&
+                const DeepCollectionEquality().equals(other.curatorId, curatorId)) &&
             (identical(other.applicantId, applicantId) ||
-                const DeepCollectionEquality().equals(
-                  other.applicantId,
-                  applicantId,
-                )) &&
+                const DeepCollectionEquality().equals(other.applicantId, applicantId)) &&
             (identical(other.animalAttributes, animalAttributes) ||
-                const DeepCollectionEquality().equals(
-                  other.animalAttributes,
-                  animalAttributes,
-                )) &&
+                const DeepCollectionEquality().equals(other.animalAttributes, animalAttributes)) &&
             (identical(other.canBeShared, canBeShared) ||
-                const DeepCollectionEquality().equals(
-                  other.canBeShared,
-                  canBeShared,
-                )));
+                const DeepCollectionEquality().equals(other.canBeShared, canBeShared)));
   }
 
   @override
@@ -10980,29 +9196,17 @@ extension $PatchedAnimalWriteExtension on PatchedAnimalWrite {
       birthDate: (birthDate != null ? birthDate.value : this.birthDate),
       deathDate: (deathDate != null ? deathDate.value : this.deathDate),
       deathReason: (deathReason != null ? deathReason.value : this.deathReason),
-      defaultImageId: (defaultImageId != null
-          ? defaultImageId.value
-          : this.defaultImageId),
-      placeOfCatch: (placeOfCatch != null
-          ? placeOfCatch.value
-          : this.placeOfCatch),
-      placeOfRelease: (placeOfRelease != null
-          ? placeOfRelease.value
-          : this.placeOfRelease),
-      dateOfChipping: (dateOfChipping != null
-          ? dateOfChipping.value
-          : this.dateOfChipping),
-      chippingCode: (chippingCode != null
-          ? chippingCode.value
-          : this.chippingCode),
+      defaultImageId: (defaultImageId != null ? defaultImageId.value : this.defaultImageId),
+      placeOfCatch: (placeOfCatch != null ? placeOfCatch.value : this.placeOfCatch),
+      placeOfRelease: (placeOfRelease != null ? placeOfRelease.value : this.placeOfRelease),
+      dateOfChipping: (dateOfChipping != null ? dateOfChipping.value : this.dateOfChipping),
+      chippingCode: (chippingCode != null ? chippingCode.value : this.chippingCode),
       height: (height != null ? height.value : this.height),
       weight: (weight != null ? weight.value : this.weight),
       shelter: (shelter != null ? shelter.value : this.shelter),
       curatorId: (curatorId != null ? curatorId.value : this.curatorId),
       applicantId: (applicantId != null ? applicantId.value : this.applicantId),
-      animalAttributes: (animalAttributes != null
-          ? animalAttributes.value
-          : this.animalAttributes),
+      animalAttributes: (animalAttributes != null ? animalAttributes.value : this.animalAttributes),
       canBeShared: (canBeShared != null ? canBeShared.value : this.canBeShared),
     );
   }
@@ -11027,8 +9231,7 @@ class PatchedApplicant {
     this.applicantFiles,
   });
 
-  factory PatchedApplicant.fromJson(Map<String, dynamic> json) =>
-      _$PatchedApplicantFromJson(json);
+  factory PatchedApplicant.fromJson(Map<String, dynamic> json) => _$PatchedApplicantFromJson(json);
 
   static const toJsonFactory = _$PatchedApplicantToJson;
   Map<String, dynamic> toJson() => _$PatchedApplicantToJson(this);
@@ -11067,67 +9270,28 @@ class PatchedApplicant {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedApplicant &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
             (identical(other.contactDetails, contactDetails) ||
-                const DeepCollectionEquality().equals(
-                  other.contactDetails,
-                  contactDetails,
-                )) &&
+                const DeepCollectionEquality().equals(other.contactDetails, contactDetails)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )) &&
-            (identical(other.animalId, animalId) ||
-                const DeepCollectionEquality().equals(
-                  other.animalId,
-                  animalId,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)) &&
+            (identical(other.animalId, animalId) || const DeepCollectionEquality().equals(other.animalId, animalId)) &&
             (identical(other.applicantFiles, applicantFiles) ||
-                const DeepCollectionEquality().equals(
-                  other.applicantFiles,
-                  applicantFiles,
-                )));
+                const DeepCollectionEquality().equals(other.applicantFiles, applicantFiles)));
   }
 
   @override
@@ -11211,17 +9375,13 @@ extension $PatchedApplicantExtension on PatchedApplicant {
       lastName: (lastName != null ? lastName.value : this.lastName),
       email: (email != null ? email.value : this.email),
       phoneNumber: (phoneNumber != null ? phoneNumber.value : this.phoneNumber),
-      contactDetails: (contactDetails != null
-          ? contactDetails.value
-          : this.contactDetails),
+      contactDetails: (contactDetails != null ? contactDetails.value : this.contactDetails),
       createdBy: (createdBy != null ? createdBy.value : this.createdBy),
       updatedBy: (updatedBy != null ? updatedBy.value : this.updatedBy),
       createdAt: (createdAt != null ? createdAt.value : this.createdAt),
       updatedAt: (updatedAt != null ? updatedAt.value : this.updatedAt),
       animalId: (animalId != null ? animalId.value : this.animalId),
-      applicantFiles: (applicantFiles != null
-          ? applicantFiles.value
-          : this.applicantFiles),
+      applicantFiles: (applicantFiles != null ? applicantFiles.value : this.applicantFiles),
     );
   }
 }
@@ -11260,11 +9420,7 @@ class PatchedAppointmentPrescription {
     fromJson: appointmentPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.AppointmentPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -11284,43 +9440,21 @@ class PatchedAppointmentPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedAppointmentPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -11342,8 +9476,7 @@ class PatchedAppointmentPrescription {
       runtimeType.hashCode;
 }
 
-extension $PatchedAppointmentPrescriptionExtension
-    on PatchedAppointmentPrescription {
+extension $PatchedAppointmentPrescriptionExtension on PatchedAppointmentPrescription {
   PatchedAppointmentPrescription copyWith({
     int? id,
     String? url,
@@ -11417,13 +9550,11 @@ class PatchedCourseOfTreatmentPrescription {
     this.files,
   });
 
-  factory PatchedCourseOfTreatmentPrescription.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PatchedCourseOfTreatmentPrescriptionFromJson(json);
+  factory PatchedCourseOfTreatmentPrescription.fromJson(Map<String, dynamic> json) =>
+      _$PatchedCourseOfTreatmentPrescriptionFromJson(json);
 
   static const toJsonFactory = _$PatchedCourseOfTreatmentPrescriptionToJson;
-  Map<String, dynamic> toJson() =>
-      _$PatchedCourseOfTreatmentPrescriptionToJson(this);
+  Map<String, dynamic> toJson() => _$PatchedCourseOfTreatmentPrescriptionToJson(this);
 
   @JsonKey(name: 'id')
   final int? id;
@@ -11437,11 +9568,7 @@ class PatchedCourseOfTreatmentPrescription {
     fromJson: courseOfTreatmentPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.CourseOfTreatmentPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -11461,43 +9588,21 @@ class PatchedCourseOfTreatmentPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedCourseOfTreatmentPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -11519,8 +9624,7 @@ class PatchedCourseOfTreatmentPrescription {
       runtimeType.hashCode;
 }
 
-extension $PatchedCourseOfTreatmentPrescriptionExtension
-    on PatchedCourseOfTreatmentPrescription {
+extension $PatchedCourseOfTreatmentPrescriptionExtension on PatchedCourseOfTreatmentPrescription {
   PatchedCourseOfTreatmentPrescription copyWith({
     int? id,
     String? url,
@@ -11595,8 +9699,7 @@ class PatchedCurator {
     this.updatedAt,
   });
 
-  factory PatchedCurator.fromJson(Map<String, dynamic> json) =>
-      _$PatchedCuratorFromJson(json);
+  factory PatchedCurator.fromJson(Map<String, dynamic> json) => _$PatchedCuratorFromJson(json);
 
   static const toJsonFactory = _$PatchedCuratorToJson;
   Map<String, dynamic> toJson() => _$PatchedCuratorToJson(this);
@@ -11631,57 +9734,24 @@ class PatchedCurator {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedCurator &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -11782,8 +9852,7 @@ class PatchedOtherPrescription {
     this.files,
   });
 
-  factory PatchedOtherPrescription.fromJson(Map<String, dynamic> json) =>
-      _$PatchedOtherPrescriptionFromJson(json);
+  factory PatchedOtherPrescription.fromJson(Map<String, dynamic> json) => _$PatchedOtherPrescriptionFromJson(json);
 
   static const toJsonFactory = _$PatchedOtherPrescriptionToJson;
   Map<String, dynamic> toJson() => _$PatchedOtherPrescriptionToJson(this);
@@ -11800,11 +9869,7 @@ class PatchedOtherPrescription {
     fromJson: otherPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.OtherPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -11824,43 +9889,21 @@ class PatchedOtherPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedOtherPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -11944,8 +9987,7 @@ extension $PatchedOtherPrescriptionExtension on PatchedOtherPrescription {
 class PatchedOverstay {
   const PatchedOverstay({this.startDate, this.endDate, this.animalSitter});
 
-  factory PatchedOverstay.fromJson(Map<String, dynamic> json) =>
-      _$PatchedOverstayFromJson(json);
+  factory PatchedOverstay.fromJson(Map<String, dynamic> json) => _$PatchedOverstayFromJson(json);
 
   static const toJsonFactory = _$PatchedOverstayToJson;
   Map<String, dynamic> toJson() => _$PatchedOverstayToJson(this);
@@ -11963,20 +10005,10 @@ class PatchedOverstay {
     return identical(this, other) ||
         (other is PatchedOverstay &&
             (identical(other.startDate, startDate) ||
-                const DeepCollectionEquality().equals(
-                  other.startDate,
-                  startDate,
-                )) &&
-            (identical(other.endDate, endDate) ||
-                const DeepCollectionEquality().equals(
-                  other.endDate,
-                  endDate,
-                )) &&
+                const DeepCollectionEquality().equals(other.startDate, startDate)) &&
+            (identical(other.endDate, endDate) || const DeepCollectionEquality().equals(other.endDate, endDate)) &&
             (identical(other.animalSitter, animalSitter) ||
-                const DeepCollectionEquality().equals(
-                  other.animalSitter,
-                  animalSitter,
-                )));
+                const DeepCollectionEquality().equals(other.animalSitter, animalSitter)));
   }
 
   @override
@@ -11991,11 +10023,7 @@ class PatchedOverstay {
 }
 
 extension $PatchedOverstayExtension on PatchedOverstay {
-  PatchedOverstay copyWith({
-    DateTime? startDate,
-    DateTime? endDate,
-    int? animalSitter,
-  }) {
+  PatchedOverstay copyWith({DateTime? startDate, DateTime? endDate, int? animalSitter}) {
     return PatchedOverstay(
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -12011,9 +10039,7 @@ extension $PatchedOverstayExtension on PatchedOverstay {
     return PatchedOverstay(
       startDate: (startDate != null ? startDate.value : this.startDate),
       endDate: (endDate != null ? endDate.value : this.endDate),
-      animalSitter: (animalSitter != null
-          ? animalSitter.value
-          : this.animalSitter),
+      animalSitter: (animalSitter != null ? animalSitter.value : this.animalSitter),
     );
   }
 }
@@ -12035,13 +10061,11 @@ class PatchedParasitesTreatmentPrescription {
     this.files,
   });
 
-  factory PatchedParasitesTreatmentPrescription.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PatchedParasitesTreatmentPrescriptionFromJson(json);
+  factory PatchedParasitesTreatmentPrescription.fromJson(Map<String, dynamic> json) =>
+      _$PatchedParasitesTreatmentPrescriptionFromJson(json);
 
   static const toJsonFactory = _$PatchedParasitesTreatmentPrescriptionToJson;
-  Map<String, dynamic> toJson() =>
-      _$PatchedParasitesTreatmentPrescriptionToJson(this);
+  Map<String, dynamic> toJson() => _$PatchedParasitesTreatmentPrescriptionToJson(this);
 
   @JsonKey(name: 'id')
   final int? id;
@@ -12057,11 +10081,7 @@ class PatchedParasitesTreatmentPrescription {
   final enums.ParasitesTreatmentPrescriptionMyTypeEnum? myType;
   @JsonKey(name: 'extra_type_attributes')
   final ParasitesPrescriptionExtraAttr? extraTypeAttributes;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -12075,55 +10095,29 @@ class PatchedParasitesTreatmentPrescription {
   final List<PrescriptionExecution>? executions;
   @JsonKey(name: 'files', defaultValue: <PrescriptionFile>[])
   final List<PrescriptionFile>? files;
-  static const fromJsonFactory =
-      _$PatchedParasitesTreatmentPrescriptionFromJson;
+  static const fromJsonFactory = _$PatchedParasitesTreatmentPrescriptionFromJson;
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedParasitesTreatmentPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
             (identical(other.extraTypeAttributes, extraTypeAttributes) ||
-                const DeepCollectionEquality().equals(
-                  other.extraTypeAttributes,
-                  extraTypeAttributes,
-                )) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+                const DeepCollectionEquality().equals(other.extraTypeAttributes, extraTypeAttributes)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -12146,8 +10140,7 @@ class PatchedParasitesTreatmentPrescription {
       runtimeType.hashCode;
 }
 
-extension $PatchedParasitesTreatmentPrescriptionExtension
-    on PatchedParasitesTreatmentPrescription {
+extension $PatchedParasitesTreatmentPrescriptionExtension on PatchedParasitesTreatmentPrescription {
   PatchedParasitesTreatmentPrescription copyWith({
     int? id,
     String? url,
@@ -12197,9 +10190,7 @@ extension $PatchedParasitesTreatmentPrescriptionExtension
       url: (url != null ? url.value : this.url),
       animal: (animal != null ? animal.value : this.animal),
       myType: (myType != null ? myType.value : this.myType),
-      extraTypeAttributes: (extraTypeAttributes != null
-          ? extraTypeAttributes.value
-          : this.extraTypeAttributes),
+      extraTypeAttributes: (extraTypeAttributes != null ? extraTypeAttributes.value : this.extraTypeAttributes),
       duration: (duration != null ? duration.value : this.duration),
       description: (description != null ? description.value : this.description),
       createdBy: (createdBy != null ? createdBy.value : this.createdBy),
@@ -12215,8 +10206,7 @@ extension $PatchedParasitesTreatmentPrescriptionExtension
 class PatchedPrescription {
   const PatchedPrescription();
 
-  factory PatchedPrescription.fromJson(Map<String, dynamic> json) =>
-      _$PatchedPrescriptionFromJson(json);
+  factory PatchedPrescription.fromJson(Map<String, dynamic> json) => _$PatchedPrescriptionFromJson(json);
 
   static const toJsonFactory = _$PatchedPrescriptionToJson;
   Map<String, dynamic> toJson() => _$PatchedPrescriptionToJson(this);
@@ -12264,11 +10254,7 @@ class PatchedReadmissionPrescription {
     fromJson: readmissionPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.ReadmissionPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -12288,43 +10274,21 @@ class PatchedReadmissionPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedReadmissionPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -12346,8 +10310,7 @@ class PatchedReadmissionPrescription {
       runtimeType.hashCode;
 }
 
-extension $PatchedReadmissionPrescriptionExtension
-    on PatchedReadmissionPrescription {
+extension $PatchedReadmissionPrescriptionExtension on PatchedReadmissionPrescription {
   PatchedReadmissionPrescription copyWith({
     int? id,
     String? url,
@@ -12418,8 +10381,7 @@ class PatchedReleaseSerializers {
     this.updatedAt,
   });
 
-  factory PatchedReleaseSerializers.fromJson(Map<String, dynamic> json) =>
-      _$PatchedReleaseSerializersFromJson(json);
+  factory PatchedReleaseSerializers.fromJson(Map<String, dynamic> json) => _$PatchedReleaseSerializersFromJson(json);
 
   static const toJsonFactory = _$PatchedReleaseSerializersToJson;
   Map<String, dynamic> toJson() => _$PatchedReleaseSerializersToJson(this);
@@ -12446,37 +10408,19 @@ class PatchedReleaseSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedReleaseSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.place, place) ||
-                const DeepCollectionEquality().equals(other.place, place)) &&
-            (identical(other.date, date) ||
-                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.place, place) || const DeepCollectionEquality().equals(other.place, place)) &&
+            (identical(other.date, date) || const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.veterinarianName, veterinarianName) ||
-                const DeepCollectionEquality().equals(
-                  other.veterinarianName,
-                  veterinarianName,
-                )) &&
+                const DeepCollectionEquality().equals(other.veterinarianName, veterinarianName)) &&
             (identical(other.veterinarianSurname, veterinarianSurname) ||
-                const DeepCollectionEquality().equals(
-                  other.veterinarianSurname,
-                  veterinarianSurname,
-                )) &&
+                const DeepCollectionEquality().equals(other.veterinarianSurname, veterinarianSurname)) &&
             (identical(other.veterinarianPatronymic, veterinarianPatronymic) ||
-                const DeepCollectionEquality().equals(
-                  other.veterinarianPatronymic,
-                  veterinarianPatronymic,
-                )) &&
+                const DeepCollectionEquality().equals(other.veterinarianPatronymic, veterinarianPatronymic)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -12512,8 +10456,7 @@ extension $PatchedReleaseSerializersExtension on PatchedReleaseSerializers {
       date: date ?? this.date,
       veterinarianName: veterinarianName ?? this.veterinarianName,
       veterinarianSurname: veterinarianSurname ?? this.veterinarianSurname,
-      veterinarianPatronymic:
-          veterinarianPatronymic ?? this.veterinarianPatronymic,
+      veterinarianPatronymic: veterinarianPatronymic ?? this.veterinarianPatronymic,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -12533,12 +10476,8 @@ extension $PatchedReleaseSerializersExtension on PatchedReleaseSerializers {
       id: (id != null ? id.value : this.id),
       place: (place != null ? place.value : this.place),
       date: (date != null ? date.value : this.date),
-      veterinarianName: (veterinarianName != null
-          ? veterinarianName.value
-          : this.veterinarianName),
-      veterinarianSurname: (veterinarianSurname != null
-          ? veterinarianSurname.value
-          : this.veterinarianSurname),
+      veterinarianName: (veterinarianName != null ? veterinarianName.value : this.veterinarianName),
+      veterinarianSurname: (veterinarianSurname != null ? veterinarianSurname.value : this.veterinarianSurname),
       veterinarianPatronymic: (veterinarianPatronymic != null
           ? veterinarianPatronymic.value
           : this.veterinarianPatronymic),
@@ -12564,13 +10503,11 @@ class PatchedRemovingStitchesPrescription {
     this.files,
   });
 
-  factory PatchedRemovingStitchesPrescription.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PatchedRemovingStitchesPrescriptionFromJson(json);
+  factory PatchedRemovingStitchesPrescription.fromJson(Map<String, dynamic> json) =>
+      _$PatchedRemovingStitchesPrescriptionFromJson(json);
 
   static const toJsonFactory = _$PatchedRemovingStitchesPrescriptionToJson;
-  Map<String, dynamic> toJson() =>
-      _$PatchedRemovingStitchesPrescriptionToJson(this);
+  Map<String, dynamic> toJson() => _$PatchedRemovingStitchesPrescriptionToJson(this);
 
   @JsonKey(name: 'id')
   final int? id;
@@ -12584,11 +10521,7 @@ class PatchedRemovingStitchesPrescription {
     fromJson: removingStitchesPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.RemovingStitchesPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -12608,43 +10541,21 @@ class PatchedRemovingStitchesPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedRemovingStitchesPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -12666,8 +10577,7 @@ class PatchedRemovingStitchesPrescription {
       runtimeType.hashCode;
 }
 
-extension $PatchedRemovingStitchesPrescriptionExtension
-    on PatchedRemovingStitchesPrescription {
+extension $PatchedRemovingStitchesPrescriptionExtension on PatchedRemovingStitchesPrescription {
   PatchedRemovingStitchesPrescription copyWith({
     int? id,
     String? url,
@@ -12758,8 +10668,7 @@ class PatchedShelterSerializers {
     this.bicOfTheBank,
   });
 
-  factory PatchedShelterSerializers.fromJson(Map<String, dynamic> json) =>
-      _$PatchedShelterSerializersFromJson(json);
+  factory PatchedShelterSerializers.fromJson(Map<String, dynamic> json) => _$PatchedShelterSerializersFromJson(json);
 
   static const toJsonFactory = _$PatchedShelterSerializersToJson;
   Map<String, dynamic> toJson() => _$PatchedShelterSerializersToJson(this);
@@ -12826,122 +10735,57 @@ class PatchedShelterSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedShelterSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.country, country) ||
-                const DeepCollectionEquality().equals(
-                  other.country,
-                  country,
-                )) &&
-            (identical(other.city, city) ||
-                const DeepCollectionEquality().equals(other.city, city)) &&
-            (identical(other.state, state) ||
-                const DeepCollectionEquality().equals(other.state, state)) &&
-            (identical(other.region, region) ||
-                const DeepCollectionEquality().equals(other.region, region)) &&
-            (identical(other.street, street) ||
-                const DeepCollectionEquality().equals(other.street, street)) &&
-            (identical(other.house, house) ||
-                const DeepCollectionEquality().equals(other.house, house)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.country, country) || const DeepCollectionEquality().equals(other.country, country)) &&
+            (identical(other.city, city) || const DeepCollectionEquality().equals(other.city, city)) &&
+            (identical(other.state, state) || const DeepCollectionEquality().equals(other.state, state)) &&
+            (identical(other.region, region) || const DeepCollectionEquality().equals(other.region, region)) &&
+            (identical(other.street, street) || const DeepCollectionEquality().equals(other.street, street)) &&
+            (identical(other.house, house) || const DeepCollectionEquality().equals(other.house, house)) &&
             (identical(other.apartment, apartment) ||
-                const DeepCollectionEquality().equals(
-                  other.apartment,
-                  apartment,
-                )) &&
+                const DeepCollectionEquality().equals(other.apartment, apartment)) &&
             (identical(other.officialName, officialName) ||
-                const DeepCollectionEquality().equals(
-                  other.officialName,
-                  officialName,
-                )) &&
-            (identical(other.ogrn, ogrn) ||
-                const DeepCollectionEquality().equals(other.ogrn, ogrn)) &&
-            (identical(other.inn, inn) ||
-                const DeepCollectionEquality().equals(other.inn, inn)) &&
-            (identical(other.kpp, kpp) ||
-                const DeepCollectionEquality().equals(other.kpp, kpp)) &&
+                const DeepCollectionEquality().equals(other.officialName, officialName)) &&
+            (identical(other.ogrn, ogrn) || const DeepCollectionEquality().equals(other.ogrn, ogrn)) &&
+            (identical(other.inn, inn) || const DeepCollectionEquality().equals(other.inn, inn)) &&
+            (identical(other.kpp, kpp) || const DeepCollectionEquality().equals(other.kpp, kpp)) &&
             (identical(other.organizationEmail, organizationEmail) ||
-                const DeepCollectionEquality().equals(
-                  other.organizationEmail,
-                  organizationEmail,
-                )) &&
+                const DeepCollectionEquality().equals(other.organizationEmail, organizationEmail)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
             (identical(other.websiteLink, websiteLink) ||
-                const DeepCollectionEquality().equals(
-                  other.websiteLink,
-                  websiteLink,
-                )) &&
+                const DeepCollectionEquality().equals(other.websiteLink, websiteLink)) &&
             (identical(other.positionOfManager, positionOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.positionOfManager,
-                  positionOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.positionOfManager, positionOfManager)) &&
             (identical(other.firstNameOfManager, firstNameOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.firstNameOfManager,
-                  firstNameOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.firstNameOfManager, firstNameOfManager)) &&
             (identical(other.lastNameOfManager, lastNameOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.lastNameOfManager,
-                  lastNameOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.lastNameOfManager, lastNameOfManager)) &&
             (identical(other.middleNameOfManager, middleNameOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.middleNameOfManager,
-                  middleNameOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.middleNameOfManager, middleNameOfManager)) &&
             (identical(other.fullNameOfTheBank, fullNameOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.fullNameOfTheBank,
-                  fullNameOfTheBank,
-                )) &&
+                const DeepCollectionEquality().equals(other.fullNameOfTheBank, fullNameOfTheBank)) &&
             (identical(other.shortBankName, shortBankName) ||
-                const DeepCollectionEquality().equals(
-                  other.shortBankName,
-                  shortBankName,
-                )) &&
+                const DeepCollectionEquality().equals(other.shortBankName, shortBankName)) &&
             (identical(other.fullEnglishBankName, fullEnglishBankName) ||
-                const DeepCollectionEquality().equals(
-                  other.fullEnglishBankName,
-                  fullEnglishBankName,
-                )) &&
+                const DeepCollectionEquality().equals(other.fullEnglishBankName, fullEnglishBankName)) &&
             (identical(other.legalAddressOfTheBank, legalAddressOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.legalAddressOfTheBank,
-                  legalAddressOfTheBank,
-                )) &&
+                const DeepCollectionEquality().equals(other.legalAddressOfTheBank, legalAddressOfTheBank)) &&
             (identical(other.postalAddressOfTheBank, postalAddressOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.postalAddressOfTheBank,
-                  postalAddressOfTheBank,
-                )) &&
-            (identical(
-                  other.correspondentAccountOfTheBank,
-                  correspondentAccountOfTheBank,
-                ) ||
+                const DeepCollectionEquality().equals(other.postalAddressOfTheBank, postalAddressOfTheBank)) &&
+            (identical(other.correspondentAccountOfTheBank, correspondentAccountOfTheBank) ||
                 const DeepCollectionEquality().equals(
                   other.correspondentAccountOfTheBank,
                   correspondentAccountOfTheBank,
                 )) &&
-            (identical(
-                  other.paymentAccountOfTheOrganization,
-                  paymentAccountOfTheOrganization,
-                ) ||
+            (identical(other.paymentAccountOfTheOrganization, paymentAccountOfTheOrganization) ||
                 const DeepCollectionEquality().equals(
                   other.paymentAccountOfTheOrganization,
                   paymentAccountOfTheOrganization,
                 )) &&
             (identical(other.bicOfTheBank, bicOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.bicOfTheBank,
-                  bicOfTheBank,
-                )));
+                const DeepCollectionEquality().equals(other.bicOfTheBank, bicOfTheBank)));
   }
 
   @override
@@ -13035,15 +10879,10 @@ extension $PatchedShelterSerializersExtension on PatchedShelterSerializers {
       fullNameOfTheBank: fullNameOfTheBank ?? this.fullNameOfTheBank,
       shortBankName: shortBankName ?? this.shortBankName,
       fullEnglishBankName: fullEnglishBankName ?? this.fullEnglishBankName,
-      legalAddressOfTheBank:
-          legalAddressOfTheBank ?? this.legalAddressOfTheBank,
-      postalAddressOfTheBank:
-          postalAddressOfTheBank ?? this.postalAddressOfTheBank,
-      correspondentAccountOfTheBank:
-          correspondentAccountOfTheBank ?? this.correspondentAccountOfTheBank,
-      paymentAccountOfTheOrganization:
-          paymentAccountOfTheOrganization ??
-          this.paymentAccountOfTheOrganization,
+      legalAddressOfTheBank: legalAddressOfTheBank ?? this.legalAddressOfTheBank,
+      postalAddressOfTheBank: postalAddressOfTheBank ?? this.postalAddressOfTheBank,
+      correspondentAccountOfTheBank: correspondentAccountOfTheBank ?? this.correspondentAccountOfTheBank,
+      paymentAccountOfTheOrganization: paymentAccountOfTheOrganization ?? this.paymentAccountOfTheOrganization,
       bicOfTheBank: bicOfTheBank ?? this.bicOfTheBank,
     );
   }
@@ -13088,41 +10927,21 @@ extension $PatchedShelterSerializersExtension on PatchedShelterSerializers {
       street: (street != null ? street.value : this.street),
       house: (house != null ? house.value : this.house),
       apartment: (apartment != null ? apartment.value : this.apartment),
-      officialName: (officialName != null
-          ? officialName.value
-          : this.officialName),
+      officialName: (officialName != null ? officialName.value : this.officialName),
       ogrn: (ogrn != null ? ogrn.value : this.ogrn),
       inn: (inn != null ? inn.value : this.inn),
       kpp: (kpp != null ? kpp.value : this.kpp),
-      organizationEmail: (organizationEmail != null
-          ? organizationEmail.value
-          : this.organizationEmail),
+      organizationEmail: (organizationEmail != null ? organizationEmail.value : this.organizationEmail),
       phoneNumber: (phoneNumber != null ? phoneNumber.value : this.phoneNumber),
       websiteLink: (websiteLink != null ? websiteLink.value : this.websiteLink),
-      positionOfManager: (positionOfManager != null
-          ? positionOfManager.value
-          : this.positionOfManager),
-      firstNameOfManager: (firstNameOfManager != null
-          ? firstNameOfManager.value
-          : this.firstNameOfManager),
-      lastNameOfManager: (lastNameOfManager != null
-          ? lastNameOfManager.value
-          : this.lastNameOfManager),
-      middleNameOfManager: (middleNameOfManager != null
-          ? middleNameOfManager.value
-          : this.middleNameOfManager),
-      fullNameOfTheBank: (fullNameOfTheBank != null
-          ? fullNameOfTheBank.value
-          : this.fullNameOfTheBank),
-      shortBankName: (shortBankName != null
-          ? shortBankName.value
-          : this.shortBankName),
-      fullEnglishBankName: (fullEnglishBankName != null
-          ? fullEnglishBankName.value
-          : this.fullEnglishBankName),
-      legalAddressOfTheBank: (legalAddressOfTheBank != null
-          ? legalAddressOfTheBank.value
-          : this.legalAddressOfTheBank),
+      positionOfManager: (positionOfManager != null ? positionOfManager.value : this.positionOfManager),
+      firstNameOfManager: (firstNameOfManager != null ? firstNameOfManager.value : this.firstNameOfManager),
+      lastNameOfManager: (lastNameOfManager != null ? lastNameOfManager.value : this.lastNameOfManager),
+      middleNameOfManager: (middleNameOfManager != null ? middleNameOfManager.value : this.middleNameOfManager),
+      fullNameOfTheBank: (fullNameOfTheBank != null ? fullNameOfTheBank.value : this.fullNameOfTheBank),
+      shortBankName: (shortBankName != null ? shortBankName.value : this.shortBankName),
+      fullEnglishBankName: (fullEnglishBankName != null ? fullEnglishBankName.value : this.fullEnglishBankName),
+      legalAddressOfTheBank: (legalAddressOfTheBank != null ? legalAddressOfTheBank.value : this.legalAddressOfTheBank),
       postalAddressOfTheBank: (postalAddressOfTheBank != null
           ? postalAddressOfTheBank.value
           : this.postalAddressOfTheBank),
@@ -13132,29 +10951,20 @@ extension $PatchedShelterSerializersExtension on PatchedShelterSerializers {
       paymentAccountOfTheOrganization: (paymentAccountOfTheOrganization != null
           ? paymentAccountOfTheOrganization.value
           : this.paymentAccountOfTheOrganization),
-      bicOfTheBank: (bicOfTheBank != null
-          ? bicOfTheBank.value
-          : this.bicOfTheBank),
+      bicOfTheBank: (bicOfTheBank != null ? bicOfTheBank.value : this.bicOfTheBank),
     );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PatchedUserChangePasswordSerializers {
-  const PatchedUserChangePasswordSerializers({
-    this.id,
-    this.password,
-    this.rePassword,
-    this.oldPassword,
-  });
+  const PatchedUserChangePasswordSerializers({this.id, this.password, this.rePassword, this.oldPassword});
 
-  factory PatchedUserChangePasswordSerializers.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PatchedUserChangePasswordSerializersFromJson(json);
+  factory PatchedUserChangePasswordSerializers.fromJson(Map<String, dynamic> json) =>
+      _$PatchedUserChangePasswordSerializersFromJson(json);
 
   static const toJsonFactory = _$PatchedUserChangePasswordSerializersToJson;
-  Map<String, dynamic> toJson() =>
-      _$PatchedUserChangePasswordSerializersToJson(this);
+  Map<String, dynamic> toJson() => _$PatchedUserChangePasswordSerializersToJson(this);
 
   @JsonKey(name: 'id')
   final int? id;
@@ -13170,23 +10980,12 @@ class PatchedUserChangePasswordSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedUserChangePasswordSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.password, password) ||
-                const DeepCollectionEquality().equals(
-                  other.password,
-                  password,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.password, password) || const DeepCollectionEquality().equals(other.password, password)) &&
             (identical(other.rePassword, rePassword) ||
-                const DeepCollectionEquality().equals(
-                  other.rePassword,
-                  rePassword,
-                )) &&
+                const DeepCollectionEquality().equals(other.rePassword, rePassword)) &&
             (identical(other.oldPassword, oldPassword) ||
-                const DeepCollectionEquality().equals(
-                  other.oldPassword,
-                  oldPassword,
-                )));
+                const DeepCollectionEquality().equals(other.oldPassword, oldPassword)));
   }
 
   @override
@@ -13201,14 +11000,8 @@ class PatchedUserChangePasswordSerializers {
       runtimeType.hashCode;
 }
 
-extension $PatchedUserChangePasswordSerializersExtension
-    on PatchedUserChangePasswordSerializers {
-  PatchedUserChangePasswordSerializers copyWith({
-    int? id,
-    String? password,
-    String? rePassword,
-    String? oldPassword,
-  }) {
+extension $PatchedUserChangePasswordSerializersExtension on PatchedUserChangePasswordSerializers {
+  PatchedUserChangePasswordSerializers copyWith({int? id, String? password, String? rePassword, String? oldPassword}) {
     return PatchedUserChangePasswordSerializers(
       id: id ?? this.id,
       password: password ?? this.password,
@@ -13249,8 +11042,7 @@ class PatchedUserSerializers {
     this.isOfferSigned,
   });
 
-  factory PatchedUserSerializers.fromJson(Map<String, dynamic> json) =>
-      _$PatchedUserSerializersFromJson(json);
+  factory PatchedUserSerializers.fromJson(Map<String, dynamic> json) => _$PatchedUserSerializersFromJson(json);
 
   static const toJsonFactory = _$PatchedUserSerializersToJson;
   Map<String, dynamic> toJson() => _$PatchedUserSerializersToJson(this);
@@ -13285,60 +11077,24 @@ class PatchedUserSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedUserSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.username, username) ||
-                const DeepCollectionEquality().equals(
-                  other.username,
-                  username,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.username, username) || const DeepCollectionEquality().equals(other.username, username)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
             (identical(other.fathersName, fathersName) ||
-                const DeepCollectionEquality().equals(
-                  other.fathersName,
-                  fathersName,
-                )) &&
-            (identical(other.fullName, fullName) ||
-                const DeepCollectionEquality().equals(
-                  other.fullName,
-                  fullName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.fathersName, fathersName)) &&
+            (identical(other.fullName, fullName) || const DeepCollectionEquality().equals(other.fullName, fullName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.dateJoined, dateJoined) ||
-                const DeepCollectionEquality().equals(
-                  other.dateJoined,
-                  dateJoined,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateJoined, dateJoined)) &&
             (identical(other.isVerified, isVerified) ||
-                const DeepCollectionEquality().equals(
-                  other.isVerified,
-                  isVerified,
-                )) &&
+                const DeepCollectionEquality().equals(other.isVerified, isVerified)) &&
             (identical(other.isOfferSigned, isOfferSigned) ||
-                const DeepCollectionEquality().equals(
-                  other.isOfferSigned,
-                  isOfferSigned,
-                )));
+                const DeepCollectionEquality().equals(other.isOfferSigned, isOfferSigned)));
   }
 
   @override
@@ -13418,30 +11174,20 @@ extension $PatchedUserSerializersExtension on PatchedUserSerializers {
       address: (address != null ? address.value : this.address),
       dateJoined: (dateJoined != null ? dateJoined.value : this.dateJoined),
       isVerified: (isVerified != null ? isVerified.value : this.isVerified),
-      isOfferSigned: (isOfferSigned != null
-          ? isOfferSigned.value
-          : this.isOfferSigned),
+      isOfferSigned: (isOfferSigned != null ? isOfferSigned.value : this.isOfferSigned),
     );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class PatchedUserSheltersAdminSerializers {
-  const PatchedUserSheltersAdminSerializers({
-    this.id,
-    this.user,
-    this.userId,
-    this.role,
-    this.isVerifiedByAdmin,
-  });
+  const PatchedUserSheltersAdminSerializers({this.id, this.user, this.userId, this.role, this.isVerifiedByAdmin});
 
-  factory PatchedUserSheltersAdminSerializers.fromJson(
-    Map<String, dynamic> json,
-  ) => _$PatchedUserSheltersAdminSerializersFromJson(json);
+  factory PatchedUserSheltersAdminSerializers.fromJson(Map<String, dynamic> json) =>
+      _$PatchedUserSheltersAdminSerializersFromJson(json);
 
   static const toJsonFactory = _$PatchedUserSheltersAdminSerializersToJson;
-  Map<String, dynamic> toJson() =>
-      _$PatchedUserSheltersAdminSerializersToJson(this);
+  Map<String, dynamic> toJson() => _$PatchedUserSheltersAdminSerializersToJson(this);
 
   @JsonKey(name: 'id')
   final int? id;
@@ -13449,11 +11195,7 @@ class PatchedUserSheltersAdminSerializers {
   final UserSerializers? user;
   @JsonKey(name: 'user_id')
   final int? userId;
-  @JsonKey(
-    name: 'role',
-    toJson: roleEnumNullableToJson,
-    fromJson: roleEnumNullableFromJson,
-  )
+  @JsonKey(name: 'role', toJson: roleEnumNullableToJson, fromJson: roleEnumNullableFromJson)
   final enums.RoleEnum? role;
   @JsonKey(name: 'is_verified_by_admin')
   final bool? isVerifiedByAdmin;
@@ -13463,19 +11205,12 @@ class PatchedUserSheltersAdminSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedUserSheltersAdminSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.user, user) ||
-                const DeepCollectionEquality().equals(other.user, user)) &&
-            (identical(other.userId, userId) ||
-                const DeepCollectionEquality().equals(other.userId, userId)) &&
-            (identical(other.role, role) ||
-                const DeepCollectionEquality().equals(other.role, role)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.user, user) || const DeepCollectionEquality().equals(other.user, user)) &&
+            (identical(other.userId, userId) || const DeepCollectionEquality().equals(other.userId, userId)) &&
+            (identical(other.role, role) || const DeepCollectionEquality().equals(other.role, role)) &&
             (identical(other.isVerifiedByAdmin, isVerifiedByAdmin) ||
-                const DeepCollectionEquality().equals(
-                  other.isVerifiedByAdmin,
-                  isVerifiedByAdmin,
-                )));
+                const DeepCollectionEquality().equals(other.isVerifiedByAdmin, isVerifiedByAdmin)));
   }
 
   @override
@@ -13491,8 +11226,7 @@ class PatchedUserSheltersAdminSerializers {
       runtimeType.hashCode;
 }
 
-extension $PatchedUserSheltersAdminSerializersExtension
-    on PatchedUserSheltersAdminSerializers {
+extension $PatchedUserSheltersAdminSerializersExtension on PatchedUserSheltersAdminSerializers {
   PatchedUserSheltersAdminSerializers copyWith({
     int? id,
     UserSerializers? user,
@@ -13521,9 +11255,7 @@ extension $PatchedUserSheltersAdminSerializersExtension
       user: (user != null ? user.value : this.user),
       userId: (userId != null ? userId.value : this.userId),
       role: (role != null ? role.value : this.role),
-      isVerifiedByAdmin: (isVerifiedByAdmin != null
-          ? isVerifiedByAdmin.value
-          : this.isVerifiedByAdmin),
+      isVerifiedByAdmin: (isVerifiedByAdmin != null ? isVerifiedByAdmin.value : this.isVerifiedByAdmin),
     );
   }
 }
@@ -13562,11 +11294,7 @@ class PatchedVaccinationPrescription {
     fromJson: vaccinationPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.VaccinationPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -13586,43 +11314,21 @@ class PatchedVaccinationPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedVaccinationPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -13644,8 +11350,7 @@ class PatchedVaccinationPrescription {
       runtimeType.hashCode;
 }
 
-extension $PatchedVaccinationPrescriptionExtension
-    on PatchedVaccinationPrescription {
+extension $PatchedVaccinationPrescriptionExtension on PatchedVaccinationPrescription {
   PatchedVaccinationPrescription copyWith({
     int? id,
     String? url,
@@ -13723,8 +11428,7 @@ class PatchedWoundHealingPrescription {
       _$PatchedWoundHealingPrescriptionFromJson(json);
 
   static const toJsonFactory = _$PatchedWoundHealingPrescriptionToJson;
-  Map<String, dynamic> toJson() =>
-      _$PatchedWoundHealingPrescriptionToJson(this);
+  Map<String, dynamic> toJson() => _$PatchedWoundHealingPrescriptionToJson(this);
 
   @JsonKey(name: 'id')
   final int? id;
@@ -13738,11 +11442,7 @@ class PatchedWoundHealingPrescription {
     fromJson: woundHealingPrescriptionMyTypeEnumNullableFromJson,
   )
   final enums.WoundHealingPrescriptionMyTypeEnum? myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -13762,43 +11462,21 @@ class PatchedWoundHealingPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PatchedWoundHealingPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -13820,8 +11498,7 @@ class PatchedWoundHealingPrescription {
       runtimeType.hashCode;
 }
 
-extension $PatchedWoundHealingPrescriptionExtension
-    on PatchedWoundHealingPrescription {
+extension $PatchedWoundHealingPrescriptionExtension on PatchedWoundHealingPrescription {
   PatchedWoundHealingPrescription copyWith({
     int? id,
     String? url,
@@ -13883,8 +11560,7 @@ extension $PatchedWoundHealingPrescriptionExtension
 class Prescription {
   const Prescription();
 
-  factory Prescription.fromJson(Map<String, dynamic> json) =>
-      _$PrescriptionFromJson(json);
+  factory Prescription.fromJson(Map<String, dynamic> json) => _$PrescriptionFromJson(json);
 
   static const toJsonFactory = _$PrescriptionToJson;
   Map<String, dynamic> toJson() => _$PrescriptionToJson(this);
@@ -13908,8 +11584,7 @@ class PrescriptionDrug {
     required this.drugDosage,
   });
 
-  factory PrescriptionDrug.fromJson(Map<String, dynamic> json) =>
-      _$PrescriptionDrugFromJson(json);
+  factory PrescriptionDrug.fromJson(Map<String, dynamic> json) => _$PrescriptionDrugFromJson(json);
 
   static const toJsonFactory = _$PrescriptionDrugToJson;
   Map<String, dynamic> toJson() => _$PrescriptionDrugToJson(this);
@@ -13930,28 +11605,14 @@ class PrescriptionDrug {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PrescriptionDrug &&
-            (identical(other.drugId, drugId) ||
-                const DeepCollectionEquality().equals(other.drugId, drugId)) &&
-            (identical(other.drugName, drugName) ||
-                const DeepCollectionEquality().equals(
-                  other.drugName,
-                  drugName,
-                )) &&
+            (identical(other.drugId, drugId) || const DeepCollectionEquality().equals(other.drugId, drugId)) &&
+            (identical(other.drugName, drugName) || const DeepCollectionEquality().equals(other.drugName, drugName)) &&
             (identical(other.usageInstruction, usageInstruction) ||
-                const DeepCollectionEquality().equals(
-                  other.usageInstruction,
-                  usageInstruction,
-                )) &&
+                const DeepCollectionEquality().equals(other.usageInstruction, usageInstruction)) &&
             (identical(other.formOfDrug, formOfDrug) ||
-                const DeepCollectionEquality().equals(
-                  other.formOfDrug,
-                  formOfDrug,
-                )) &&
+                const DeepCollectionEquality().equals(other.formOfDrug, formOfDrug)) &&
             (identical(other.drugDosage, drugDosage) ||
-                const DeepCollectionEquality().equals(
-                  other.drugDosage,
-                  drugDosage,
-                )));
+                const DeepCollectionEquality().equals(other.drugDosage, drugDosage)));
   }
 
   @override
@@ -13994,9 +11655,7 @@ extension $PrescriptionDrugExtension on PrescriptionDrug {
     return PrescriptionDrug(
       drugId: (drugId != null ? drugId.value : this.drugId),
       drugName: (drugName != null ? drugName.value : this.drugName),
-      usageInstruction: (usageInstruction != null
-          ? usageInstruction.value
-          : this.usageInstruction),
+      usageInstruction: (usageInstruction != null ? usageInstruction.value : this.usageInstruction),
       formOfDrug: (formOfDrug != null ? formOfDrug.value : this.formOfDrug),
       drugDosage: (drugDosage != null ? drugDosage.value : this.drugDosage),
     );
@@ -14007,8 +11666,7 @@ extension $PrescriptionDrugExtension on PrescriptionDrug {
 class PrescriptionExecution {
   const PrescriptionExecution({this.id, required this.executeAt, this.status});
 
-  factory PrescriptionExecution.fromJson(Map<String, dynamic> json) =>
-      _$PrescriptionExecutionFromJson(json);
+  factory PrescriptionExecution.fromJson(Map<String, dynamic> json) => _$PrescriptionExecutionFromJson(json);
 
   static const toJsonFactory = _$PrescriptionExecutionToJson;
   Map<String, dynamic> toJson() => _$PrescriptionExecutionToJson(this);
@@ -14029,15 +11687,10 @@ class PrescriptionExecution {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PrescriptionExecution &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.executeAt, executeAt) ||
-                const DeepCollectionEquality().equals(
-                  other.executeAt,
-                  executeAt,
-                )) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)));
+                const DeepCollectionEquality().equals(other.executeAt, executeAt)) &&
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)));
   }
 
   @override
@@ -14052,11 +11705,7 @@ class PrescriptionExecution {
 }
 
 extension $PrescriptionExecutionExtension on PrescriptionExecution {
-  PrescriptionExecution copyWith({
-    int? id,
-    DateTime? executeAt,
-    enums.PrescriptionExecutionStatusEnum? status,
-  }) {
+  PrescriptionExecution copyWith({int? id, DateTime? executeAt, enums.PrescriptionExecutionStatusEnum? status}) {
     return PrescriptionExecution(
       id: id ?? this.id,
       executeAt: executeAt ?? this.executeAt,
@@ -14079,14 +11728,9 @@ extension $PrescriptionExecutionExtension on PrescriptionExecution {
 
 @JsonSerializable(explicitToJson: true)
 class PrescriptionExecutionToday {
-  const PrescriptionExecutionToday({
-    this.id,
-    required this.prescription,
-    required this.executeAt,
-  });
+  const PrescriptionExecutionToday({this.id, required this.prescription, required this.executeAt});
 
-  factory PrescriptionExecutionToday.fromJson(Map<String, dynamic> json) =>
-      _$PrescriptionExecutionTodayFromJson(json);
+  factory PrescriptionExecutionToday.fromJson(Map<String, dynamic> json) => _$PrescriptionExecutionTodayFromJson(json);
 
   static const toJsonFactory = _$PrescriptionExecutionTodayToJson;
   Map<String, dynamic> toJson() => _$PrescriptionExecutionTodayToJson(this);
@@ -14103,18 +11747,11 @@ class PrescriptionExecutionToday {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PrescriptionExecutionToday &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.prescription, prescription) ||
-                const DeepCollectionEquality().equals(
-                  other.prescription,
-                  prescription,
-                )) &&
+                const DeepCollectionEquality().equals(other.prescription, prescription)) &&
             (identical(other.executeAt, executeAt) ||
-                const DeepCollectionEquality().equals(
-                  other.executeAt,
-                  executeAt,
-                )));
+                const DeepCollectionEquality().equals(other.executeAt, executeAt)));
   }
 
   @override
@@ -14129,11 +11766,7 @@ class PrescriptionExecutionToday {
 }
 
 extension $PrescriptionExecutionTodayExtension on PrescriptionExecutionToday {
-  PrescriptionExecutionToday copyWith({
-    int? id,
-    PrescriptionShort? prescription,
-    DateTime? executeAt,
-  }) {
+  PrescriptionExecutionToday copyWith({int? id, PrescriptionShort? prescription, DateTime? executeAt}) {
     return PrescriptionExecutionToday(
       id: id ?? this.id,
       prescription: prescription ?? this.prescription,
@@ -14148,9 +11781,7 @@ extension $PrescriptionExecutionTodayExtension on PrescriptionExecutionToday {
   }) {
     return PrescriptionExecutionToday(
       id: (id != null ? id.value : this.id),
-      prescription: (prescription != null
-          ? prescription.value
-          : this.prescription),
+      prescription: (prescription != null ? prescription.value : this.prescription),
       executeAt: (executeAt != null ? executeAt.value : this.executeAt),
     );
   }
@@ -14158,16 +11789,9 @@ extension $PrescriptionExecutionTodayExtension on PrescriptionExecutionToday {
 
 @JsonSerializable(explicitToJson: true)
 class PrescriptionFile {
-  const PrescriptionFile({
-    this.id,
-    required this.file,
-    this.name,
-    this.filename,
-    this.createdAt,
-  });
+  const PrescriptionFile({this.id, required this.file, this.name, this.filename, this.createdAt});
 
-  factory PrescriptionFile.fromJson(Map<String, dynamic> json) =>
-      _$PrescriptionFileFromJson(json);
+  factory PrescriptionFile.fromJson(Map<String, dynamic> json) => _$PrescriptionFileFromJson(json);
 
   static const toJsonFactory = _$PrescriptionFileToJson;
   Map<String, dynamic> toJson() => _$PrescriptionFileToJson(this);
@@ -14188,22 +11812,12 @@ class PrescriptionFile {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PrescriptionFile &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.file, file) ||
-                const DeepCollectionEquality().equals(other.file, file)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.filename, filename) ||
-                const DeepCollectionEquality().equals(
-                  other.filename,
-                  filename,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.file, file) || const DeepCollectionEquality().equals(other.file, file)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.filename, filename) || const DeepCollectionEquality().equals(other.filename, filename)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )));
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)));
   }
 
   @override
@@ -14220,13 +11834,7 @@ class PrescriptionFile {
 }
 
 extension $PrescriptionFileExtension on PrescriptionFile {
-  PrescriptionFile copyWith({
-    int? id,
-    String? file,
-    String? name,
-    String? filename,
-    DateTime? createdAt,
-  }) {
+  PrescriptionFile copyWith({int? id, String? file, String? name, String? filename, DateTime? createdAt}) {
     return PrescriptionFile(
       id: id ?? this.id,
       file: file ?? this.file,
@@ -14267,8 +11875,7 @@ class PrescriptionShort {
     this.files,
   });
 
-  factory PrescriptionShort.fromJson(Map<String, dynamic> json) =>
-      _$PrescriptionShortFromJson(json);
+  factory PrescriptionShort.fromJson(Map<String, dynamic> json) => _$PrescriptionShortFromJson(json);
 
   static const toJsonFactory = _$PrescriptionShortToJson;
   Map<String, dynamic> toJson() => _$PrescriptionShortToJson(this);
@@ -14301,36 +11908,19 @@ class PrescriptionShort {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is PrescriptionShort &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
             (identical(other.extraTypeAttributes, extraTypeAttributes) ||
-                const DeepCollectionEquality().equals(
-                  other.extraTypeAttributes,
-                  extraTypeAttributes,
-                )) &&
+                const DeepCollectionEquality().equals(other.extraTypeAttributes, extraTypeAttributes)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -14389,9 +11979,7 @@ extension $PrescriptionShortExtension on PrescriptionShort {
     return PrescriptionShort(
       id: (id != null ? id.value : this.id),
       myType: (myType != null ? myType.value : this.myType),
-      extraTypeAttributes: (extraTypeAttributes != null
-          ? extraTypeAttributes.value
-          : this.extraTypeAttributes),
+      extraTypeAttributes: (extraTypeAttributes != null ? extraTypeAttributes.value : this.extraTypeAttributes),
       description: (description != null ? description.value : this.description),
       animal: (animal != null ? animal.value : this.animal),
       drugs: (drugs != null ? drugs.value : this.drugs),
@@ -14418,8 +12006,7 @@ class ReadmissionPrescription {
     this.files,
   });
 
-  factory ReadmissionPrescription.fromJson(Map<String, dynamic> json) =>
-      _$ReadmissionPrescriptionFromJson(json);
+  factory ReadmissionPrescription.fromJson(Map<String, dynamic> json) => _$ReadmissionPrescriptionFromJson(json);
 
   static const toJsonFactory = _$ReadmissionPrescriptionToJson;
   Map<String, dynamic> toJson() => _$ReadmissionPrescriptionToJson(this);
@@ -14436,11 +12023,7 @@ class ReadmissionPrescription {
     fromJson: readmissionPrescriptionMyTypeEnumFromJson,
   )
   final enums.ReadmissionPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -14460,43 +12043,21 @@ class ReadmissionPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ReadmissionPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -14589,8 +12150,7 @@ class ReleaseSerializers {
     this.updatedAt,
   });
 
-  factory ReleaseSerializers.fromJson(Map<String, dynamic> json) =>
-      _$ReleaseSerializersFromJson(json);
+  factory ReleaseSerializers.fromJson(Map<String, dynamic> json) => _$ReleaseSerializersFromJson(json);
 
   static const toJsonFactory = _$ReleaseSerializersToJson;
   Map<String, dynamic> toJson() => _$ReleaseSerializersToJson(this);
@@ -14617,37 +12177,19 @@ class ReleaseSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ReleaseSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.place, place) ||
-                const DeepCollectionEquality().equals(other.place, place)) &&
-            (identical(other.date, date) ||
-                const DeepCollectionEquality().equals(other.date, date)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.place, place) || const DeepCollectionEquality().equals(other.place, place)) &&
+            (identical(other.date, date) || const DeepCollectionEquality().equals(other.date, date)) &&
             (identical(other.veterinarianName, veterinarianName) ||
-                const DeepCollectionEquality().equals(
-                  other.veterinarianName,
-                  veterinarianName,
-                )) &&
+                const DeepCollectionEquality().equals(other.veterinarianName, veterinarianName)) &&
             (identical(other.veterinarianSurname, veterinarianSurname) ||
-                const DeepCollectionEquality().equals(
-                  other.veterinarianSurname,
-                  veterinarianSurname,
-                )) &&
+                const DeepCollectionEquality().equals(other.veterinarianSurname, veterinarianSurname)) &&
             (identical(other.veterinarianPatronymic, veterinarianPatronymic) ||
-                const DeepCollectionEquality().equals(
-                  other.veterinarianPatronymic,
-                  veterinarianPatronymic,
-                )) &&
+                const DeepCollectionEquality().equals(other.veterinarianPatronymic, veterinarianPatronymic)) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality().equals(
-                  other.createdAt,
-                  createdAt,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdAt, createdAt)) &&
             (identical(other.updatedAt, updatedAt) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedAt,
-                  updatedAt,
-                )));
+                const DeepCollectionEquality().equals(other.updatedAt, updatedAt)));
   }
 
   @override
@@ -14683,8 +12225,7 @@ extension $ReleaseSerializersExtension on ReleaseSerializers {
       date: date ?? this.date,
       veterinarianName: veterinarianName ?? this.veterinarianName,
       veterinarianSurname: veterinarianSurname ?? this.veterinarianSurname,
-      veterinarianPatronymic:
-          veterinarianPatronymic ?? this.veterinarianPatronymic,
+      veterinarianPatronymic: veterinarianPatronymic ?? this.veterinarianPatronymic,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -14704,12 +12245,8 @@ extension $ReleaseSerializersExtension on ReleaseSerializers {
       id: (id != null ? id.value : this.id),
       place: (place != null ? place.value : this.place),
       date: (date != null ? date.value : this.date),
-      veterinarianName: (veterinarianName != null
-          ? veterinarianName.value
-          : this.veterinarianName),
-      veterinarianSurname: (veterinarianSurname != null
-          ? veterinarianSurname.value
-          : this.veterinarianSurname),
+      veterinarianName: (veterinarianName != null ? veterinarianName.value : this.veterinarianName),
+      veterinarianSurname: (veterinarianSurname != null ? veterinarianSurname.value : this.veterinarianSurname),
       veterinarianPatronymic: (veterinarianPatronymic != null
           ? veterinarianPatronymic.value
           : this.veterinarianPatronymic),
@@ -14753,11 +12290,7 @@ class RemovingStitchesPrescription {
     fromJson: removingStitchesPrescriptionMyTypeEnumFromJson,
   )
   final enums.RemovingStitchesPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -14777,43 +12310,21 @@ class RemovingStitchesPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is RemovingStitchesPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -14835,8 +12346,7 @@ class RemovingStitchesPrescription {
       runtimeType.hashCode;
 }
 
-extension $RemovingStitchesPrescriptionExtension
-    on RemovingStitchesPrescription {
+extension $RemovingStitchesPrescriptionExtension on RemovingStitchesPrescription {
   RemovingStitchesPrescription copyWith({
     int? id,
     String? url,
@@ -14898,8 +12408,7 @@ extension $RemovingStitchesPrescriptionExtension
 class ShelterDrug {
   const ShelterDrug({required this.drug, this.drugResiduesCount});
 
-  factory ShelterDrug.fromJson(Map<String, dynamic> json) =>
-      _$ShelterDrugFromJson(json);
+  factory ShelterDrug.fromJson(Map<String, dynamic> json) => _$ShelterDrugFromJson(json);
 
   static const toJsonFactory = _$ShelterDrugToJson;
   Map<String, dynamic> toJson() => _$ShelterDrugToJson(this);
@@ -14914,13 +12423,9 @@ class ShelterDrug {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ShelterDrug &&
-            (identical(other.drug, drug) ||
-                const DeepCollectionEquality().equals(other.drug, drug)) &&
+            (identical(other.drug, drug) || const DeepCollectionEquality().equals(other.drug, drug)) &&
             (identical(other.drugResiduesCount, drugResiduesCount) ||
-                const DeepCollectionEquality().equals(
-                  other.drugResiduesCount,
-                  drugResiduesCount,
-                )));
+                const DeepCollectionEquality().equals(other.drugResiduesCount, drugResiduesCount)));
   }
 
   @override
@@ -14935,21 +12440,13 @@ class ShelterDrug {
 
 extension $ShelterDrugExtension on ShelterDrug {
   ShelterDrug copyWith({Drug? drug, int? drugResiduesCount}) {
-    return ShelterDrug(
-      drug: drug ?? this.drug,
-      drugResiduesCount: drugResiduesCount ?? this.drugResiduesCount,
-    );
+    return ShelterDrug(drug: drug ?? this.drug, drugResiduesCount: drugResiduesCount ?? this.drugResiduesCount);
   }
 
-  ShelterDrug copyWithWrapped({
-    Wrapped<Drug>? drug,
-    Wrapped<int?>? drugResiduesCount,
-  }) {
+  ShelterDrug copyWithWrapped({Wrapped<Drug>? drug, Wrapped<int?>? drugResiduesCount}) {
     return ShelterDrug(
       drug: (drug != null ? drug.value : this.drug),
-      drugResiduesCount: (drugResiduesCount != null
-          ? drugResiduesCount.value
-          : this.drugResiduesCount),
+      drugResiduesCount: (drugResiduesCount != null ? drugResiduesCount.value : this.drugResiduesCount),
     );
   }
 }
@@ -14987,8 +12484,7 @@ class ShelterSerializers {
     this.bicOfTheBank,
   });
 
-  factory ShelterSerializers.fromJson(Map<String, dynamic> json) =>
-      _$ShelterSerializersFromJson(json);
+  factory ShelterSerializers.fromJson(Map<String, dynamic> json) => _$ShelterSerializersFromJson(json);
 
   static const toJsonFactory = _$ShelterSerializersToJson;
   Map<String, dynamic> toJson() => _$ShelterSerializersToJson(this);
@@ -15055,122 +12551,57 @@ class ShelterSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ShelterSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.country, country) ||
-                const DeepCollectionEquality().equals(
-                  other.country,
-                  country,
-                )) &&
-            (identical(other.city, city) ||
-                const DeepCollectionEquality().equals(other.city, city)) &&
-            (identical(other.state, state) ||
-                const DeepCollectionEquality().equals(other.state, state)) &&
-            (identical(other.region, region) ||
-                const DeepCollectionEquality().equals(other.region, region)) &&
-            (identical(other.street, street) ||
-                const DeepCollectionEquality().equals(other.street, street)) &&
-            (identical(other.house, house) ||
-                const DeepCollectionEquality().equals(other.house, house)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.country, country) || const DeepCollectionEquality().equals(other.country, country)) &&
+            (identical(other.city, city) || const DeepCollectionEquality().equals(other.city, city)) &&
+            (identical(other.state, state) || const DeepCollectionEquality().equals(other.state, state)) &&
+            (identical(other.region, region) || const DeepCollectionEquality().equals(other.region, region)) &&
+            (identical(other.street, street) || const DeepCollectionEquality().equals(other.street, street)) &&
+            (identical(other.house, house) || const DeepCollectionEquality().equals(other.house, house)) &&
             (identical(other.apartment, apartment) ||
-                const DeepCollectionEquality().equals(
-                  other.apartment,
-                  apartment,
-                )) &&
+                const DeepCollectionEquality().equals(other.apartment, apartment)) &&
             (identical(other.officialName, officialName) ||
-                const DeepCollectionEquality().equals(
-                  other.officialName,
-                  officialName,
-                )) &&
-            (identical(other.ogrn, ogrn) ||
-                const DeepCollectionEquality().equals(other.ogrn, ogrn)) &&
-            (identical(other.inn, inn) ||
-                const DeepCollectionEquality().equals(other.inn, inn)) &&
-            (identical(other.kpp, kpp) ||
-                const DeepCollectionEquality().equals(other.kpp, kpp)) &&
+                const DeepCollectionEquality().equals(other.officialName, officialName)) &&
+            (identical(other.ogrn, ogrn) || const DeepCollectionEquality().equals(other.ogrn, ogrn)) &&
+            (identical(other.inn, inn) || const DeepCollectionEquality().equals(other.inn, inn)) &&
+            (identical(other.kpp, kpp) || const DeepCollectionEquality().equals(other.kpp, kpp)) &&
             (identical(other.organizationEmail, organizationEmail) ||
-                const DeepCollectionEquality().equals(
-                  other.organizationEmail,
-                  organizationEmail,
-                )) &&
+                const DeepCollectionEquality().equals(other.organizationEmail, organizationEmail)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
             (identical(other.websiteLink, websiteLink) ||
-                const DeepCollectionEquality().equals(
-                  other.websiteLink,
-                  websiteLink,
-                )) &&
+                const DeepCollectionEquality().equals(other.websiteLink, websiteLink)) &&
             (identical(other.positionOfManager, positionOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.positionOfManager,
-                  positionOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.positionOfManager, positionOfManager)) &&
             (identical(other.firstNameOfManager, firstNameOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.firstNameOfManager,
-                  firstNameOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.firstNameOfManager, firstNameOfManager)) &&
             (identical(other.lastNameOfManager, lastNameOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.lastNameOfManager,
-                  lastNameOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.lastNameOfManager, lastNameOfManager)) &&
             (identical(other.middleNameOfManager, middleNameOfManager) ||
-                const DeepCollectionEquality().equals(
-                  other.middleNameOfManager,
-                  middleNameOfManager,
-                )) &&
+                const DeepCollectionEquality().equals(other.middleNameOfManager, middleNameOfManager)) &&
             (identical(other.fullNameOfTheBank, fullNameOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.fullNameOfTheBank,
-                  fullNameOfTheBank,
-                )) &&
+                const DeepCollectionEquality().equals(other.fullNameOfTheBank, fullNameOfTheBank)) &&
             (identical(other.shortBankName, shortBankName) ||
-                const DeepCollectionEquality().equals(
-                  other.shortBankName,
-                  shortBankName,
-                )) &&
+                const DeepCollectionEquality().equals(other.shortBankName, shortBankName)) &&
             (identical(other.fullEnglishBankName, fullEnglishBankName) ||
-                const DeepCollectionEquality().equals(
-                  other.fullEnglishBankName,
-                  fullEnglishBankName,
-                )) &&
+                const DeepCollectionEquality().equals(other.fullEnglishBankName, fullEnglishBankName)) &&
             (identical(other.legalAddressOfTheBank, legalAddressOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.legalAddressOfTheBank,
-                  legalAddressOfTheBank,
-                )) &&
+                const DeepCollectionEquality().equals(other.legalAddressOfTheBank, legalAddressOfTheBank)) &&
             (identical(other.postalAddressOfTheBank, postalAddressOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.postalAddressOfTheBank,
-                  postalAddressOfTheBank,
-                )) &&
-            (identical(
-                  other.correspondentAccountOfTheBank,
-                  correspondentAccountOfTheBank,
-                ) ||
+                const DeepCollectionEquality().equals(other.postalAddressOfTheBank, postalAddressOfTheBank)) &&
+            (identical(other.correspondentAccountOfTheBank, correspondentAccountOfTheBank) ||
                 const DeepCollectionEquality().equals(
                   other.correspondentAccountOfTheBank,
                   correspondentAccountOfTheBank,
                 )) &&
-            (identical(
-                  other.paymentAccountOfTheOrganization,
-                  paymentAccountOfTheOrganization,
-                ) ||
+            (identical(other.paymentAccountOfTheOrganization, paymentAccountOfTheOrganization) ||
                 const DeepCollectionEquality().equals(
                   other.paymentAccountOfTheOrganization,
                   paymentAccountOfTheOrganization,
                 )) &&
             (identical(other.bicOfTheBank, bicOfTheBank) ||
-                const DeepCollectionEquality().equals(
-                  other.bicOfTheBank,
-                  bicOfTheBank,
-                )));
+                const DeepCollectionEquality().equals(other.bicOfTheBank, bicOfTheBank)));
   }
 
   @override
@@ -15264,15 +12695,10 @@ extension $ShelterSerializersExtension on ShelterSerializers {
       fullNameOfTheBank: fullNameOfTheBank ?? this.fullNameOfTheBank,
       shortBankName: shortBankName ?? this.shortBankName,
       fullEnglishBankName: fullEnglishBankName ?? this.fullEnglishBankName,
-      legalAddressOfTheBank:
-          legalAddressOfTheBank ?? this.legalAddressOfTheBank,
-      postalAddressOfTheBank:
-          postalAddressOfTheBank ?? this.postalAddressOfTheBank,
-      correspondentAccountOfTheBank:
-          correspondentAccountOfTheBank ?? this.correspondentAccountOfTheBank,
-      paymentAccountOfTheOrganization:
-          paymentAccountOfTheOrganization ??
-          this.paymentAccountOfTheOrganization,
+      legalAddressOfTheBank: legalAddressOfTheBank ?? this.legalAddressOfTheBank,
+      postalAddressOfTheBank: postalAddressOfTheBank ?? this.postalAddressOfTheBank,
+      correspondentAccountOfTheBank: correspondentAccountOfTheBank ?? this.correspondentAccountOfTheBank,
+      paymentAccountOfTheOrganization: paymentAccountOfTheOrganization ?? this.paymentAccountOfTheOrganization,
       bicOfTheBank: bicOfTheBank ?? this.bicOfTheBank,
     );
   }
@@ -15317,41 +12743,21 @@ extension $ShelterSerializersExtension on ShelterSerializers {
       street: (street != null ? street.value : this.street),
       house: (house != null ? house.value : this.house),
       apartment: (apartment != null ? apartment.value : this.apartment),
-      officialName: (officialName != null
-          ? officialName.value
-          : this.officialName),
+      officialName: (officialName != null ? officialName.value : this.officialName),
       ogrn: (ogrn != null ? ogrn.value : this.ogrn),
       inn: (inn != null ? inn.value : this.inn),
       kpp: (kpp != null ? kpp.value : this.kpp),
-      organizationEmail: (organizationEmail != null
-          ? organizationEmail.value
-          : this.organizationEmail),
+      organizationEmail: (organizationEmail != null ? organizationEmail.value : this.organizationEmail),
       phoneNumber: (phoneNumber != null ? phoneNumber.value : this.phoneNumber),
       websiteLink: (websiteLink != null ? websiteLink.value : this.websiteLink),
-      positionOfManager: (positionOfManager != null
-          ? positionOfManager.value
-          : this.positionOfManager),
-      firstNameOfManager: (firstNameOfManager != null
-          ? firstNameOfManager.value
-          : this.firstNameOfManager),
-      lastNameOfManager: (lastNameOfManager != null
-          ? lastNameOfManager.value
-          : this.lastNameOfManager),
-      middleNameOfManager: (middleNameOfManager != null
-          ? middleNameOfManager.value
-          : this.middleNameOfManager),
-      fullNameOfTheBank: (fullNameOfTheBank != null
-          ? fullNameOfTheBank.value
-          : this.fullNameOfTheBank),
-      shortBankName: (shortBankName != null
-          ? shortBankName.value
-          : this.shortBankName),
-      fullEnglishBankName: (fullEnglishBankName != null
-          ? fullEnglishBankName.value
-          : this.fullEnglishBankName),
-      legalAddressOfTheBank: (legalAddressOfTheBank != null
-          ? legalAddressOfTheBank.value
-          : this.legalAddressOfTheBank),
+      positionOfManager: (positionOfManager != null ? positionOfManager.value : this.positionOfManager),
+      firstNameOfManager: (firstNameOfManager != null ? firstNameOfManager.value : this.firstNameOfManager),
+      lastNameOfManager: (lastNameOfManager != null ? lastNameOfManager.value : this.lastNameOfManager),
+      middleNameOfManager: (middleNameOfManager != null ? middleNameOfManager.value : this.middleNameOfManager),
+      fullNameOfTheBank: (fullNameOfTheBank != null ? fullNameOfTheBank.value : this.fullNameOfTheBank),
+      shortBankName: (shortBankName != null ? shortBankName.value : this.shortBankName),
+      fullEnglishBankName: (fullEnglishBankName != null ? fullEnglishBankName.value : this.fullEnglishBankName),
+      legalAddressOfTheBank: (legalAddressOfTheBank != null ? legalAddressOfTheBank.value : this.legalAddressOfTheBank),
       postalAddressOfTheBank: (postalAddressOfTheBank != null
           ? postalAddressOfTheBank.value
           : this.postalAddressOfTheBank),
@@ -15361,9 +12767,7 @@ extension $ShelterSerializersExtension on ShelterSerializers {
       paymentAccountOfTheOrganization: (paymentAccountOfTheOrganization != null
           ? paymentAccountOfTheOrganization.value
           : this.paymentAccountOfTheOrganization),
-      bicOfTheBank: (bicOfTheBank != null
-          ? bicOfTheBank.value
-          : this.bicOfTheBank),
+      bicOfTheBank: (bicOfTheBank != null ? bicOfTheBank.value : this.bicOfTheBank),
     );
   }
 }
@@ -15372,8 +12776,7 @@ extension $ShelterSerializersExtension on ShelterSerializers {
 class ShelterShortSerializers {
   const ShelterShortSerializers({this.id, required this.name});
 
-  factory ShelterShortSerializers.fromJson(Map<String, dynamic> json) =>
-      _$ShelterShortSerializersFromJson(json);
+  factory ShelterShortSerializers.fromJson(Map<String, dynamic> json) => _$ShelterShortSerializersFromJson(json);
 
   static const toJsonFactory = _$ShelterShortSerializersToJson;
   Map<String, dynamic> toJson() => _$ShelterShortSerializersToJson(this);
@@ -15388,10 +12791,8 @@ class ShelterShortSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is ShelterShortSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)));
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)));
   }
 
   @override
@@ -15399,9 +12800,7 @@ class ShelterShortSerializers {
 
   @override
   int get hashCode =>
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(name) ^
-      runtimeType.hashCode;
+      const DeepCollectionEquality().hash(id) ^ const DeepCollectionEquality().hash(name) ^ runtimeType.hashCode;
 }
 
 extension $ShelterShortSerializersExtension on ShelterShortSerializers {
@@ -15409,10 +12808,7 @@ extension $ShelterShortSerializersExtension on ShelterShortSerializers {
     return ShelterShortSerializers(id: id ?? this.id, name: name ?? this.name);
   }
 
-  ShelterShortSerializers copyWithWrapped({
-    Wrapped<int?>? id,
-    Wrapped<String>? name,
-  }) {
+  ShelterShortSerializers copyWithWrapped({Wrapped<int?>? id, Wrapped<String>? name}) {
     return ShelterShortSerializers(
       id: (id != null ? id.value : this.id),
       name: (name != null ? name.value : this.name),
@@ -15422,17 +12818,9 @@ extension $ShelterShortSerializersExtension on ShelterShortSerializers {
 
 @JsonSerializable(explicitToJson: true)
 class Species {
-  const Species({
-    this.id,
-    required this.name,
-    required this.level,
-    this.parentId,
-    this.parentName,
-    this.categoryName,
-  });
+  const Species({this.id, required this.name, required this.level, this.parentId, this.parentName, this.categoryName});
 
-  factory Species.fromJson(Map<String, dynamic> json) =>
-      _$SpeciesFromJson(json);
+  factory Species.fromJson(Map<String, dynamic> json) => _$SpeciesFromJson(json);
 
   static const toJsonFactory = _$SpeciesToJson;
   Map<String, dynamic> toJson() => _$SpeciesToJson(this);
@@ -15455,27 +12843,14 @@ class Species {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Species &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.level, level) ||
-                const DeepCollectionEquality().equals(other.level, level)) &&
-            (identical(other.parentId, parentId) ||
-                const DeepCollectionEquality().equals(
-                  other.parentId,
-                  parentId,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.name, name) || const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.level, level) || const DeepCollectionEquality().equals(other.level, level)) &&
+            (identical(other.parentId, parentId) || const DeepCollectionEquality().equals(other.parentId, parentId)) &&
             (identical(other.parentName, parentName) ||
-                const DeepCollectionEquality().equals(
-                  other.parentName,
-                  parentName,
-                )) &&
+                const DeepCollectionEquality().equals(other.parentName, parentName)) &&
             (identical(other.categoryName, categoryName) ||
-                const DeepCollectionEquality().equals(
-                  other.categoryName,
-                  categoryName,
-                )));
+                const DeepCollectionEquality().equals(other.categoryName, categoryName)));
   }
 
   @override
@@ -15525,9 +12900,7 @@ extension $SpeciesExtension on Species {
       level: (level != null ? level.value : this.level),
       parentId: (parentId != null ? parentId.value : this.parentId),
       parentName: (parentName != null ? parentName.value : this.parentName),
-      categoryName: (categoryName != null
-          ? categoryName.value
-          : this.categoryName),
+      categoryName: (categoryName != null ? categoryName.value : this.categoryName),
     );
   }
 }
@@ -15549,16 +12922,14 @@ class Status {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is Status &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)));
+            (identical(other.status, status) || const DeepCollectionEquality().equals(other.status, status)));
   }
 
   @override
   String toString() => jsonEncode(this);
 
   @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(status) ^ runtimeType.hashCode;
+  int get hashCode => const DeepCollectionEquality().hash(status) ^ runtimeType.hashCode;
 }
 
 extension $StatusExtension on Status {
@@ -15573,13 +12944,9 @@ extension $StatusExtension on Status {
 
 @JsonSerializable(explicitToJson: true)
 class StatusTransitionsItem {
-  const StatusTransitionsItem({
-    required this.statusSequence,
-    required this.count,
-  });
+  const StatusTransitionsItem({required this.statusSequence, required this.count});
 
-  factory StatusTransitionsItem.fromJson(Map<String, dynamic> json) =>
-      _$StatusTransitionsItemFromJson(json);
+  factory StatusTransitionsItem.fromJson(Map<String, dynamic> json) => _$StatusTransitionsItemFromJson(json);
 
   static const toJsonFactory = _$StatusTransitionsItemToJson;
   Map<String, dynamic> toJson() => _$StatusTransitionsItemToJson(this);
@@ -15595,12 +12962,8 @@ class StatusTransitionsItem {
     return identical(this, other) ||
         (other is StatusTransitionsItem &&
             (identical(other.statusSequence, statusSequence) ||
-                const DeepCollectionEquality().equals(
-                  other.statusSequence,
-                  statusSequence,
-                )) &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)));
+                const DeepCollectionEquality().equals(other.statusSequence, statusSequence)) &&
+            (identical(other.count, count) || const DeepCollectionEquality().equals(other.count, count)));
   }
 
   @override
@@ -15615,20 +12978,12 @@ class StatusTransitionsItem {
 
 extension $StatusTransitionsItemExtension on StatusTransitionsItem {
   StatusTransitionsItem copyWith({List<Object>? statusSequence, int? count}) {
-    return StatusTransitionsItem(
-      statusSequence: statusSequence ?? this.statusSequence,
-      count: count ?? this.count,
-    );
+    return StatusTransitionsItem(statusSequence: statusSequence ?? this.statusSequence, count: count ?? this.count);
   }
 
-  StatusTransitionsItem copyWithWrapped({
-    Wrapped<List<Object>>? statusSequence,
-    Wrapped<int>? count,
-  }) {
+  StatusTransitionsItem copyWithWrapped({Wrapped<List<Object>>? statusSequence, Wrapped<int>? count}) {
     return StatusTransitionsItem(
-      statusSequence: (statusSequence != null
-          ? statusSequence.value
-          : this.statusSequence),
+      statusSequence: (statusSequence != null ? statusSequence.value : this.statusSequence),
       count: (count != null ? count.value : this.count),
     );
   }
@@ -15636,15 +12991,9 @@ extension $StatusTransitionsItemExtension on StatusTransitionsItem {
 
 @JsonSerializable(explicitToJson: true)
 class TokenObtainPair {
-  const TokenObtainPair({
-    this.username,
-    this.password,
-    this.access,
-    this.refresh,
-  });
+  const TokenObtainPair({this.username, this.password, this.access, this.refresh});
 
-  factory TokenObtainPair.fromJson(Map<String, dynamic> json) =>
-      _$TokenObtainPairFromJson(json);
+  factory TokenObtainPair.fromJson(Map<String, dynamic> json) => _$TokenObtainPairFromJson(json);
 
   static const toJsonFactory = _$TokenObtainPairToJson;
   Map<String, dynamic> toJson() => _$TokenObtainPairToJson(this);
@@ -15663,20 +13012,10 @@ class TokenObtainPair {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is TokenObtainPair &&
-            (identical(other.username, username) ||
-                const DeepCollectionEquality().equals(
-                  other.username,
-                  username,
-                )) &&
-            (identical(other.password, password) ||
-                const DeepCollectionEquality().equals(
-                  other.password,
-                  password,
-                )) &&
-            (identical(other.access, access) ||
-                const DeepCollectionEquality().equals(other.access, access)) &&
-            (identical(other.refresh, refresh) ||
-                const DeepCollectionEquality().equals(other.refresh, refresh)));
+            (identical(other.username, username) || const DeepCollectionEquality().equals(other.username, username)) &&
+            (identical(other.password, password) || const DeepCollectionEquality().equals(other.password, password)) &&
+            (identical(other.access, access) || const DeepCollectionEquality().equals(other.access, access)) &&
+            (identical(other.refresh, refresh) || const DeepCollectionEquality().equals(other.refresh, refresh)));
   }
 
   @override
@@ -15692,12 +13031,7 @@ class TokenObtainPair {
 }
 
 extension $TokenObtainPairExtension on TokenObtainPair {
-  TokenObtainPair copyWith({
-    String? username,
-    String? password,
-    String? access,
-    String? refresh,
-  }) {
+  TokenObtainPair copyWith({String? username, String? password, String? access, String? refresh}) {
     return TokenObtainPair(
       username: username ?? this.username,
       password: password ?? this.password,
@@ -15725,8 +13059,7 @@ extension $TokenObtainPairExtension on TokenObtainPair {
 class TokenRefresh {
   const TokenRefresh({this.access, this.refresh});
 
-  factory TokenRefresh.fromJson(Map<String, dynamic> json) =>
-      _$TokenRefreshFromJson(json);
+  factory TokenRefresh.fromJson(Map<String, dynamic> json) => _$TokenRefreshFromJson(json);
 
   static const toJsonFactory = _$TokenRefreshToJson;
   Map<String, dynamic> toJson() => _$TokenRefreshToJson(this);
@@ -15741,10 +13074,8 @@ class TokenRefresh {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is TokenRefresh &&
-            (identical(other.access, access) ||
-                const DeepCollectionEquality().equals(other.access, access)) &&
-            (identical(other.refresh, refresh) ||
-                const DeepCollectionEquality().equals(other.refresh, refresh)));
+            (identical(other.access, access) || const DeepCollectionEquality().equals(other.access, access)) &&
+            (identical(other.refresh, refresh) || const DeepCollectionEquality().equals(other.refresh, refresh)));
   }
 
   @override
@@ -15752,23 +13083,15 @@ class TokenRefresh {
 
   @override
   int get hashCode =>
-      const DeepCollectionEquality().hash(access) ^
-      const DeepCollectionEquality().hash(refresh) ^
-      runtimeType.hashCode;
+      const DeepCollectionEquality().hash(access) ^ const DeepCollectionEquality().hash(refresh) ^ runtimeType.hashCode;
 }
 
 extension $TokenRefreshExtension on TokenRefresh {
   TokenRefresh copyWith({String? access, String? refresh}) {
-    return TokenRefresh(
-      access: access ?? this.access,
-      refresh: refresh ?? this.refresh,
-    );
+    return TokenRefresh(access: access ?? this.access, refresh: refresh ?? this.refresh);
   }
 
-  TokenRefresh copyWithWrapped({
-    Wrapped<String?>? access,
-    Wrapped<String?>? refresh,
-  }) {
+  TokenRefresh copyWithWrapped({Wrapped<String?>? access, Wrapped<String?>? refresh}) {
     return TokenRefresh(
       access: (access != null ? access.value : this.access),
       refresh: (refresh != null ? refresh.value : this.refresh),
@@ -15778,12 +13101,7 @@ extension $TokenRefreshExtension on TokenRefresh {
 
 @JsonSerializable(explicitToJson: true)
 class UserChangePasswordSerializers {
-  const UserChangePasswordSerializers({
-    this.id,
-    this.password,
-    this.rePassword,
-    this.oldPassword,
-  });
+  const UserChangePasswordSerializers({this.id, this.password, this.rePassword, this.oldPassword});
 
   factory UserChangePasswordSerializers.fromJson(Map<String, dynamic> json) =>
       _$UserChangePasswordSerializersFromJson(json);
@@ -15805,23 +13123,12 @@ class UserChangePasswordSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UserChangePasswordSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.password, password) ||
-                const DeepCollectionEquality().equals(
-                  other.password,
-                  password,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.password, password) || const DeepCollectionEquality().equals(other.password, password)) &&
             (identical(other.rePassword, rePassword) ||
-                const DeepCollectionEquality().equals(
-                  other.rePassword,
-                  rePassword,
-                )) &&
+                const DeepCollectionEquality().equals(other.rePassword, rePassword)) &&
             (identical(other.oldPassword, oldPassword) ||
-                const DeepCollectionEquality().equals(
-                  other.oldPassword,
-                  oldPassword,
-                )));
+                const DeepCollectionEquality().equals(other.oldPassword, oldPassword)));
   }
 
   @override
@@ -15836,14 +13143,8 @@ class UserChangePasswordSerializers {
       runtimeType.hashCode;
 }
 
-extension $UserChangePasswordSerializersExtension
-    on UserChangePasswordSerializers {
-  UserChangePasswordSerializers copyWith({
-    int? id,
-    String? password,
-    String? rePassword,
-    String? oldPassword,
-  }) {
+extension $UserChangePasswordSerializersExtension on UserChangePasswordSerializers {
+  UserChangePasswordSerializers copyWith({int? id, String? password, String? rePassword, String? oldPassword}) {
     return UserChangePasswordSerializers(
       id: id ?? this.id,
       password: password ?? this.password,
@@ -15897,25 +13198,13 @@ class UserCurrentShelterSerializers {
     return identical(this, other) ||
         (other is UserCurrentShelterSerializers &&
             (identical(other.currentShelter, currentShelter) ||
-                const DeepCollectionEquality().equals(
-                  other.currentShelter,
-                  currentShelter,
-                )) &&
+                const DeepCollectionEquality().equals(other.currentShelter, currentShelter)) &&
             (identical(other.currentShelterUserRole, currentShelterUserRole) ||
-                const DeepCollectionEquality().equals(
-                  other.currentShelterUserRole,
-                  currentShelterUserRole,
-                )) &&
+                const DeepCollectionEquality().equals(other.currentShelterUserRole, currentShelterUserRole)) &&
             (identical(other.isUserCanEdit, isUserCanEdit) ||
-                const DeepCollectionEquality().equals(
-                  other.isUserCanEdit,
-                  isUserCanEdit,
-                )) &&
+                const DeepCollectionEquality().equals(other.isUserCanEdit, isUserCanEdit)) &&
             (identical(other.isUserCanDelete, isUserCanDelete) ||
-                const DeepCollectionEquality().equals(
-                  other.isUserCanDelete,
-                  isUserCanDelete,
-                )));
+                const DeepCollectionEquality().equals(other.isUserCanDelete, isUserCanDelete)));
   }
 
   @override
@@ -15930,8 +13219,7 @@ class UserCurrentShelterSerializers {
       runtimeType.hashCode;
 }
 
-extension $UserCurrentShelterSerializersExtension
-    on UserCurrentShelterSerializers {
+extension $UserCurrentShelterSerializersExtension on UserCurrentShelterSerializers {
   UserCurrentShelterSerializers copyWith({
     int? currentShelter,
     String? currentShelterUserRole,
@@ -15940,8 +13228,7 @@ extension $UserCurrentShelterSerializersExtension
   }) {
     return UserCurrentShelterSerializers(
       currentShelter: currentShelter ?? this.currentShelter,
-      currentShelterUserRole:
-          currentShelterUserRole ?? this.currentShelterUserRole,
+      currentShelterUserRole: currentShelterUserRole ?? this.currentShelterUserRole,
       isUserCanEdit: isUserCanEdit ?? this.isUserCanEdit,
       isUserCanDelete: isUserCanDelete ?? this.isUserCanDelete,
     );
@@ -15954,32 +13241,21 @@ extension $UserCurrentShelterSerializersExtension
     Wrapped<bool>? isUserCanDelete,
   }) {
     return UserCurrentShelterSerializers(
-      currentShelter: (currentShelter != null
-          ? currentShelter.value
-          : this.currentShelter),
+      currentShelter: (currentShelter != null ? currentShelter.value : this.currentShelter),
       currentShelterUserRole: (currentShelterUserRole != null
           ? currentShelterUserRole.value
           : this.currentShelterUserRole),
-      isUserCanEdit: (isUserCanEdit != null
-          ? isUserCanEdit.value
-          : this.isUserCanEdit),
-      isUserCanDelete: (isUserCanDelete != null
-          ? isUserCanDelete.value
-          : this.isUserCanDelete),
+      isUserCanEdit: (isUserCanEdit != null ? isUserCanEdit.value : this.isUserCanEdit),
+      isUserCanDelete: (isUserCanDelete != null ? isUserCanDelete.value : this.isUserCanDelete),
     );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class UserResetPasswordComplete {
-  const UserResetPasswordComplete({
-    required this.uidb64,
-    required this.token,
-    this.newPassword,
-  });
+  const UserResetPasswordComplete({required this.uidb64, required this.token, this.newPassword});
 
-  factory UserResetPasswordComplete.fromJson(Map<String, dynamic> json) =>
-      _$UserResetPasswordCompleteFromJson(json);
+  factory UserResetPasswordComplete.fromJson(Map<String, dynamic> json) => _$UserResetPasswordCompleteFromJson(json);
 
   static const toJsonFactory = _$UserResetPasswordCompleteToJson;
   Map<String, dynamic> toJson() => _$UserResetPasswordCompleteToJson(this);
@@ -15996,15 +13272,10 @@ class UserResetPasswordComplete {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UserResetPasswordComplete &&
-            (identical(other.uidb64, uidb64) ||
-                const DeepCollectionEquality().equals(other.uidb64, uidb64)) &&
-            (identical(other.token, token) ||
-                const DeepCollectionEquality().equals(other.token, token)) &&
+            (identical(other.uidb64, uidb64) || const DeepCollectionEquality().equals(other.uidb64, uidb64)) &&
+            (identical(other.token, token) || const DeepCollectionEquality().equals(other.token, token)) &&
             (identical(other.newPassword, newPassword) ||
-                const DeepCollectionEquality().equals(
-                  other.newPassword,
-                  newPassword,
-                )));
+                const DeepCollectionEquality().equals(other.newPassword, newPassword)));
   }
 
   @override
@@ -16019,11 +13290,7 @@ class UserResetPasswordComplete {
 }
 
 extension $UserResetPasswordCompleteExtension on UserResetPasswordComplete {
-  UserResetPasswordComplete copyWith({
-    String? uidb64,
-    String? token,
-    String? newPassword,
-  }) {
+  UserResetPasswordComplete copyWith({String? uidb64, String? token, String? newPassword}) {
     return UserResetPasswordComplete(
       uidb64: uidb64 ?? this.uidb64,
       token: token ?? this.token,
@@ -16061,8 +13328,7 @@ class UserSerializers {
     this.isOfferSigned,
   });
 
-  factory UserSerializers.fromJson(Map<String, dynamic> json) =>
-      _$UserSerializersFromJson(json);
+  factory UserSerializers.fromJson(Map<String, dynamic> json) => _$UserSerializersFromJson(json);
 
   static const toJsonFactory = _$UserSerializersToJson;
   Map<String, dynamic> toJson() => _$UserSerializersToJson(this);
@@ -16097,60 +13363,24 @@ class UserSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UserSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.username, username) ||
-                const DeepCollectionEquality().equals(
-                  other.username,
-                  username,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.username, username) || const DeepCollectionEquality().equals(other.username, username)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
             (identical(other.fathersName, fathersName) ||
-                const DeepCollectionEquality().equals(
-                  other.fathersName,
-                  fathersName,
-                )) &&
-            (identical(other.fullName, fullName) ||
-                const DeepCollectionEquality().equals(
-                  other.fullName,
-                  fullName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.fathersName, fathersName)) &&
+            (identical(other.fullName, fullName) || const DeepCollectionEquality().equals(other.fullName, fullName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
             (identical(other.dateJoined, dateJoined) ||
-                const DeepCollectionEquality().equals(
-                  other.dateJoined,
-                  dateJoined,
-                )) &&
+                const DeepCollectionEquality().equals(other.dateJoined, dateJoined)) &&
             (identical(other.isVerified, isVerified) ||
-                const DeepCollectionEquality().equals(
-                  other.isVerified,
-                  isVerified,
-                )) &&
+                const DeepCollectionEquality().equals(other.isVerified, isVerified)) &&
             (identical(other.isOfferSigned, isOfferSigned) ||
-                const DeepCollectionEquality().equals(
-                  other.isOfferSigned,
-                  isOfferSigned,
-                )));
+                const DeepCollectionEquality().equals(other.isOfferSigned, isOfferSigned)));
   }
 
   @override
@@ -16230,9 +13460,7 @@ extension $UserSerializersExtension on UserSerializers {
       address: (address != null ? address.value : this.address),
       dateJoined: (dateJoined != null ? dateJoined.value : this.dateJoined),
       isVerified: (isVerified != null ? isVerified.value : this.isVerified),
-      isOfferSigned: (isOfferSigned != null
-          ? isOfferSigned.value
-          : this.isOfferSigned),
+      isOfferSigned: (isOfferSigned != null ? isOfferSigned.value : this.isOfferSigned),
     );
   }
 }
@@ -16287,52 +13515,22 @@ class UserShelterAdminSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UserShelterAdminSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
             (identical(other.fathersName, fathersName) ||
-                const DeepCollectionEquality().equals(
-                  other.fathersName,
-                  fathersName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.fathersName, fathersName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
-            (identical(other.password, password) ||
-                const DeepCollectionEquality().equals(
-                  other.password,
-                  password,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
+            (identical(other.password, password) || const DeepCollectionEquality().equals(other.password, password)) &&
             (identical(other.rePassword, rePassword) ||
-                const DeepCollectionEquality().equals(
-                  other.rePassword,
-                  rePassword,
-                )) &&
+                const DeepCollectionEquality().equals(other.rePassword, rePassword)) &&
             (identical(other.isOfferSigned, isOfferSigned) ||
-                const DeepCollectionEquality().equals(
-                  other.isOfferSigned,
-                  isOfferSigned,
-                )) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(other.shelter, shelter)));
+                const DeepCollectionEquality().equals(other.isOfferSigned, isOfferSigned)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)));
   }
 
   @override
@@ -16406,9 +13604,7 @@ extension $UserShelterAdminSerializersExtension on UserShelterAdminSerializers {
       address: (address != null ? address.value : this.address),
       password: (password != null ? password.value : this.password),
       rePassword: (rePassword != null ? rePassword.value : this.rePassword),
-      isOfferSigned: (isOfferSigned != null
-          ? isOfferSigned.value
-          : this.isOfferSigned),
+      isOfferSigned: (isOfferSigned != null ? isOfferSigned.value : this.isOfferSigned),
       shelter: (shelter != null ? shelter.value : this.shelter),
     );
   }
@@ -16454,11 +13650,7 @@ class UserShelterWorkerSerializers {
   final String? rePassword;
   @JsonKey(name: 'shelter')
   final int? shelter;
-  @JsonKey(
-    name: 'role',
-    toJson: roleEnumNullableToJson,
-    fromJson: roleEnumNullableFromJson,
-  )
+  @JsonKey(name: 'role', toJson: roleEnumNullableToJson, fromJson: roleEnumNullableFromJson)
   final enums.RoleEnum? role;
   @JsonKey(name: 'is_offer_signed')
   final bool isOfferSigned;
@@ -16469,54 +13661,21 @@ class UserShelterWorkerSerializers {
     return identical(this, other) ||
         (other is UserShelterWorkerSerializers &&
             (identical(other.firstName, firstName) ||
-                const DeepCollectionEquality().equals(
-                  other.firstName,
-                  firstName,
-                )) &&
-            (identical(other.lastName, lastName) ||
-                const DeepCollectionEquality().equals(
-                  other.lastName,
-                  lastName,
-                )) &&
+                const DeepCollectionEquality().equals(other.firstName, firstName)) &&
+            (identical(other.lastName, lastName) || const DeepCollectionEquality().equals(other.lastName, lastName)) &&
             (identical(other.fathersName, fathersName) ||
-                const DeepCollectionEquality().equals(
-                  other.fathersName,
-                  fathersName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+                const DeepCollectionEquality().equals(other.fathersName, fathersName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(
-                  other.address,
-                  address,
-                )) &&
-            (identical(other.password, password) ||
-                const DeepCollectionEquality().equals(
-                  other.password,
-                  password,
-                )) &&
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)) &&
+            (identical(other.password, password) || const DeepCollectionEquality().equals(other.password, password)) &&
             (identical(other.rePassword, rePassword) ||
-                const DeepCollectionEquality().equals(
-                  other.rePassword,
-                  rePassword,
-                )) &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
-            (identical(other.role, role) ||
-                const DeepCollectionEquality().equals(other.role, role)) &&
+                const DeepCollectionEquality().equals(other.rePassword, rePassword)) &&
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
+            (identical(other.role, role) || const DeepCollectionEquality().equals(other.role, role)) &&
             (identical(other.isOfferSigned, isOfferSigned) ||
-                const DeepCollectionEquality().equals(
-                  other.isOfferSigned,
-                  isOfferSigned,
-                )));
+                const DeepCollectionEquality().equals(other.isOfferSigned, isOfferSigned)));
   }
 
   @override
@@ -16538,8 +13697,7 @@ class UserShelterWorkerSerializers {
       runtimeType.hashCode;
 }
 
-extension $UserShelterWorkerSerializersExtension
-    on UserShelterWorkerSerializers {
+extension $UserShelterWorkerSerializersExtension on UserShelterWorkerSerializers {
   UserShelterWorkerSerializers copyWith({
     String? firstName,
     String? lastName,
@@ -16592,22 +13750,14 @@ extension $UserShelterWorkerSerializersExtension
       rePassword: (rePassword != null ? rePassword.value : this.rePassword),
       shelter: (shelter != null ? shelter.value : this.shelter),
       role: (role != null ? role.value : this.role),
-      isOfferSigned: (isOfferSigned != null
-          ? isOfferSigned.value
-          : this.isOfferSigned),
+      isOfferSigned: (isOfferSigned != null ? isOfferSigned.value : this.isOfferSigned),
     );
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class UserSheltersAdminSerializers {
-  const UserSheltersAdminSerializers({
-    this.id,
-    this.user,
-    this.userId,
-    required this.role,
-    this.isVerifiedByAdmin,
-  });
+  const UserSheltersAdminSerializers({this.id, this.user, this.userId, required this.role, this.isVerifiedByAdmin});
 
   factory UserSheltersAdminSerializers.fromJson(Map<String, dynamic> json) =>
       _$UserSheltersAdminSerializersFromJson(json);
@@ -16631,19 +13781,12 @@ class UserSheltersAdminSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UserSheltersAdminSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.user, user) ||
-                const DeepCollectionEquality().equals(other.user, user)) &&
-            (identical(other.userId, userId) ||
-                const DeepCollectionEquality().equals(other.userId, userId)) &&
-            (identical(other.role, role) ||
-                const DeepCollectionEquality().equals(other.role, role)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.user, user) || const DeepCollectionEquality().equals(other.user, user)) &&
+            (identical(other.userId, userId) || const DeepCollectionEquality().equals(other.userId, userId)) &&
+            (identical(other.role, role) || const DeepCollectionEquality().equals(other.role, role)) &&
             (identical(other.isVerifiedByAdmin, isVerifiedByAdmin) ||
-                const DeepCollectionEquality().equals(
-                  other.isVerifiedByAdmin,
-                  isVerifiedByAdmin,
-                )));
+                const DeepCollectionEquality().equals(other.isVerifiedByAdmin, isVerifiedByAdmin)));
   }
 
   @override
@@ -16659,8 +13802,7 @@ class UserSheltersAdminSerializers {
       runtimeType.hashCode;
 }
 
-extension $UserSheltersAdminSerializersExtension
-    on UserSheltersAdminSerializers {
+extension $UserSheltersAdminSerializersExtension on UserSheltersAdminSerializers {
   UserSheltersAdminSerializers copyWith({
     int? id,
     UserSerializers? user,
@@ -16689,9 +13831,7 @@ extension $UserSheltersAdminSerializersExtension
       user: (user != null ? user.value : this.user),
       userId: (userId != null ? userId.value : this.userId),
       role: (role != null ? role.value : this.role),
-      isVerifiedByAdmin: (isVerifiedByAdmin != null
-          ? isVerifiedByAdmin.value
-          : this.isVerifiedByAdmin),
+      isVerifiedByAdmin: (isVerifiedByAdmin != null ? isVerifiedByAdmin.value : this.isVerifiedByAdmin),
     );
   }
 }
@@ -16716,13 +13856,8 @@ class UserSheltersWorkerSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UserSheltersWorkerSerializers &&
-            (identical(other.shelter, shelter) ||
-                const DeepCollectionEquality().equals(
-                  other.shelter,
-                  shelter,
-                )) &&
-            (identical(other.role, role) ||
-                const DeepCollectionEquality().equals(other.role, role)));
+            (identical(other.shelter, shelter) || const DeepCollectionEquality().equals(other.shelter, shelter)) &&
+            (identical(other.role, role) || const DeepCollectionEquality().equals(other.role, role)));
   }
 
   @override
@@ -16730,24 +13865,15 @@ class UserSheltersWorkerSerializers {
 
   @override
   int get hashCode =>
-      const DeepCollectionEquality().hash(shelter) ^
-      const DeepCollectionEquality().hash(role) ^
-      runtimeType.hashCode;
+      const DeepCollectionEquality().hash(shelter) ^ const DeepCollectionEquality().hash(role) ^ runtimeType.hashCode;
 }
 
-extension $UserSheltersWorkerSerializersExtension
-    on UserSheltersWorkerSerializers {
+extension $UserSheltersWorkerSerializersExtension on UserSheltersWorkerSerializers {
   UserSheltersWorkerSerializers copyWith({int? shelter, enums.RoleEnum? role}) {
-    return UserSheltersWorkerSerializers(
-      shelter: shelter ?? this.shelter,
-      role: role ?? this.role,
-    );
+    return UserSheltersWorkerSerializers(shelter: shelter ?? this.shelter, role: role ?? this.role);
   }
 
-  UserSheltersWorkerSerializers copyWithWrapped({
-    Wrapped<int?>? shelter,
-    Wrapped<enums.RoleEnum>? role,
-  }) {
+  UserSheltersWorkerSerializers copyWithWrapped({Wrapped<int?>? shelter, Wrapped<enums.RoleEnum>? role}) {
     return UserSheltersWorkerSerializers(
       shelter: (shelter != null ? shelter.value : this.shelter),
       role: (role != null ? role.value : this.role),
@@ -16757,16 +13883,9 @@ extension $UserSheltersWorkerSerializersExtension
 
 @JsonSerializable(explicitToJson: true)
 class UserShortSerializers {
-  const UserShortSerializers({
-    this.id,
-    this.fullName,
-    required this.email,
-    this.phoneNumber,
-    this.address,
-  });
+  const UserShortSerializers({this.id, this.fullName, required this.email, this.phoneNumber, this.address});
 
-  factory UserShortSerializers.fromJson(Map<String, dynamic> json) =>
-      _$UserShortSerializersFromJson(json);
+  factory UserShortSerializers.fromJson(Map<String, dynamic> json) => _$UserShortSerializersFromJson(json);
 
   static const toJsonFactory = _$UserShortSerializersToJson;
   Map<String, dynamic> toJson() => _$UserShortSerializersToJson(this);
@@ -16787,22 +13906,12 @@ class UserShortSerializers {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is UserShortSerializers &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.fullName, fullName) ||
-                const DeepCollectionEquality().equals(
-                  other.fullName,
-                  fullName,
-                )) &&
-            (identical(other.email, email) ||
-                const DeepCollectionEquality().equals(other.email, email)) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.fullName, fullName) || const DeepCollectionEquality().equals(other.fullName, fullName)) &&
+            (identical(other.email, email) || const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                const DeepCollectionEquality().equals(
-                  other.phoneNumber,
-                  phoneNumber,
-                )) &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(other.address, address)));
+                const DeepCollectionEquality().equals(other.phoneNumber, phoneNumber)) &&
+            (identical(other.address, address) || const DeepCollectionEquality().equals(other.address, address)));
   }
 
   @override
@@ -16819,13 +13928,7 @@ class UserShortSerializers {
 }
 
 extension $UserShortSerializersExtension on UserShortSerializers {
-  UserShortSerializers copyWith({
-    int? id,
-    String? fullName,
-    String? email,
-    String? phoneNumber,
-    String? address,
-  }) {
+  UserShortSerializers copyWith({int? id, String? fullName, String? email, String? phoneNumber, String? address}) {
     return UserShortSerializers(
       id: id ?? this.id,
       fullName: fullName ?? this.fullName,
@@ -16868,8 +13971,7 @@ class VaccinationPrescription {
     this.files,
   });
 
-  factory VaccinationPrescription.fromJson(Map<String, dynamic> json) =>
-      _$VaccinationPrescriptionFromJson(json);
+  factory VaccinationPrescription.fromJson(Map<String, dynamic> json) => _$VaccinationPrescriptionFromJson(json);
 
   static const toJsonFactory = _$VaccinationPrescriptionToJson;
   Map<String, dynamic> toJson() => _$VaccinationPrescriptionToJson(this);
@@ -16886,11 +13988,7 @@ class VaccinationPrescription {
     fromJson: vaccinationPrescriptionMyTypeEnumFromJson,
   )
   final enums.VaccinationPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -16910,43 +14008,21 @@ class VaccinationPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is VaccinationPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -17030,8 +14106,7 @@ extension $VaccinationPrescriptionExtension on VaccinationPrescription {
 class ValuesForSelection {
   const ValuesForSelection({required this.choicesName});
 
-  factory ValuesForSelection.fromJson(Map<String, dynamic> json) =>
-      _$ValuesForSelectionFromJson(json);
+  factory ValuesForSelection.fromJson(Map<String, dynamic> json) => _$ValuesForSelectionFromJson(json);
 
   static const toJsonFactory = _$ValuesForSelectionToJson;
   Map<String, dynamic> toJson() => _$ValuesForSelectionToJson(this);
@@ -17045,18 +14120,14 @@ class ValuesForSelection {
     return identical(this, other) ||
         (other is ValuesForSelection &&
             (identical(other.choicesName, choicesName) ||
-                const DeepCollectionEquality().equals(
-                  other.choicesName,
-                  choicesName,
-                )));
+                const DeepCollectionEquality().equals(other.choicesName, choicesName)));
   }
 
   @override
   String toString() => jsonEncode(this);
 
   @override
-  int get hashCode =>
-      const DeepCollectionEquality().hash(choicesName) ^ runtimeType.hashCode;
+  int get hashCode => const DeepCollectionEquality().hash(choicesName) ^ runtimeType.hashCode;
 }
 
 extension $ValuesForSelectionExtension on ValuesForSelection {
@@ -17064,24 +14135,16 @@ extension $ValuesForSelectionExtension on ValuesForSelection {
     return ValuesForSelection(choicesName: choicesName ?? this.choicesName);
   }
 
-  ValuesForSelection copyWithWrapped({
-    Wrapped<List<ValuesForSelectionItem>>? choicesName,
-  }) {
-    return ValuesForSelection(
-      choicesName: (choicesName != null ? choicesName.value : this.choicesName),
-    );
+  ValuesForSelection copyWithWrapped({Wrapped<List<ValuesForSelectionItem>>? choicesName}) {
+    return ValuesForSelection(choicesName: (choicesName != null ? choicesName.value : this.choicesName));
   }
 }
 
 @JsonSerializable(explicitToJson: true)
 class ValuesForSelectionItem {
-  const ValuesForSelectionItem({
-    required this.displayName,
-    required this.value,
-  });
+  const ValuesForSelectionItem({required this.displayName, required this.value});
 
-  factory ValuesForSelectionItem.fromJson(Map<String, dynamic> json) =>
-      _$ValuesForSelectionItemFromJson(json);
+  factory ValuesForSelectionItem.fromJson(Map<String, dynamic> json) => _$ValuesForSelectionItemFromJson(json);
 
   static const toJsonFactory = _$ValuesForSelectionItemToJson;
   Map<String, dynamic> toJson() => _$ValuesForSelectionItemToJson(this);
@@ -17097,12 +14160,8 @@ class ValuesForSelectionItem {
     return identical(this, other) ||
         (other is ValuesForSelectionItem &&
             (identical(other.displayName, displayName) ||
-                const DeepCollectionEquality().equals(
-                  other.displayName,
-                  displayName,
-                )) &&
-            (identical(other.value, value) ||
-                const DeepCollectionEquality().equals(other.value, value)));
+                const DeepCollectionEquality().equals(other.displayName, displayName)) &&
+            (identical(other.value, value) || const DeepCollectionEquality().equals(other.value, value)));
   }
 
   @override
@@ -17117,16 +14176,10 @@ class ValuesForSelectionItem {
 
 extension $ValuesForSelectionItemExtension on ValuesForSelectionItem {
   ValuesForSelectionItem copyWith({String? displayName, String? value}) {
-    return ValuesForSelectionItem(
-      displayName: displayName ?? this.displayName,
-      value: value ?? this.value,
-    );
+    return ValuesForSelectionItem(displayName: displayName ?? this.displayName, value: value ?? this.value);
   }
 
-  ValuesForSelectionItem copyWithWrapped({
-    Wrapped<String>? displayName,
-    Wrapped<String>? value,
-  }) {
+  ValuesForSelectionItem copyWithWrapped({Wrapped<String>? displayName, Wrapped<String>? value}) {
     return ValuesForSelectionItem(
       displayName: (displayName != null ? displayName.value : this.displayName),
       value: (value != null ? value.value : this.value),
@@ -17150,8 +14203,7 @@ class WoundHealingPrescription {
     this.files,
   });
 
-  factory WoundHealingPrescription.fromJson(Map<String, dynamic> json) =>
-      _$WoundHealingPrescriptionFromJson(json);
+  factory WoundHealingPrescription.fromJson(Map<String, dynamic> json) => _$WoundHealingPrescriptionFromJson(json);
 
   static const toJsonFactory = _$WoundHealingPrescriptionToJson;
   Map<String, dynamic> toJson() => _$WoundHealingPrescriptionToJson(this);
@@ -17168,11 +14220,7 @@ class WoundHealingPrescription {
     fromJson: woundHealingPrescriptionMyTypeEnumFromJson,
   )
   final enums.WoundHealingPrescriptionMyTypeEnum myType;
-  @JsonKey(
-    name: 'duration',
-    toJson: durationEnumNullableToJson,
-    fromJson: durationEnumNullableFromJson,
-  )
+  @JsonKey(name: 'duration', toJson: durationEnumNullableToJson, fromJson: durationEnumNullableFromJson)
   final enums.DurationEnum? duration;
   @JsonKey(name: 'description')
   final String? description;
@@ -17192,43 +14240,21 @@ class WoundHealingPrescription {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other is WoundHealingPrescription &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.animal, animal) ||
-                const DeepCollectionEquality().equals(other.animal, animal)) &&
-            (identical(other.myType, myType) ||
-                const DeepCollectionEquality().equals(other.myType, myType)) &&
-            (identical(other.duration, duration) ||
-                const DeepCollectionEquality().equals(
-                  other.duration,
-                  duration,
-                )) &&
+            (identical(other.id, id) || const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.url, url) || const DeepCollectionEquality().equals(other.url, url)) &&
+            (identical(other.animal, animal) || const DeepCollectionEquality().equals(other.animal, animal)) &&
+            (identical(other.myType, myType) || const DeepCollectionEquality().equals(other.myType, myType)) &&
+            (identical(other.duration, duration) || const DeepCollectionEquality().equals(other.duration, duration)) &&
             (identical(other.description, description) ||
-                const DeepCollectionEquality().equals(
-                  other.description,
-                  description,
-                )) &&
+                const DeepCollectionEquality().equals(other.description, description)) &&
             (identical(other.createdBy, createdBy) ||
-                const DeepCollectionEquality().equals(
-                  other.createdBy,
-                  createdBy,
-                )) &&
+                const DeepCollectionEquality().equals(other.createdBy, createdBy)) &&
             (identical(other.updatedBy, updatedBy) ||
-                const DeepCollectionEquality().equals(
-                  other.updatedBy,
-                  updatedBy,
-                )) &&
-            (identical(other.drugs, drugs) ||
-                const DeepCollectionEquality().equals(other.drugs, drugs)) &&
+                const DeepCollectionEquality().equals(other.updatedBy, updatedBy)) &&
+            (identical(other.drugs, drugs) || const DeepCollectionEquality().equals(other.drugs, drugs)) &&
             (identical(other.executions, executions) ||
-                const DeepCollectionEquality().equals(
-                  other.executions,
-                  executions,
-                )) &&
-            (identical(other.files, files) ||
-                const DeepCollectionEquality().equals(other.files, files)));
+                const DeepCollectionEquality().equals(other.executions, executions)) &&
+            (identical(other.files, files) || const DeepCollectionEquality().equals(other.files, files)));
   }
 
   @override
@@ -17314,9 +14340,7 @@ String? analysisPrescriptionMyTypeEnumNullableToJson(
   return analysisPrescriptionMyTypeEnum?.value;
 }
 
-String? analysisPrescriptionMyTypeEnumToJson(
-  enums.AnalysisPrescriptionMyTypeEnum analysisPrescriptionMyTypeEnum,
-) {
+String? analysisPrescriptionMyTypeEnumToJson(enums.AnalysisPrescriptionMyTypeEnum analysisPrescriptionMyTypeEnum) {
   return analysisPrescriptionMyTypeEnum.value;
 }
 
@@ -17331,8 +14355,7 @@ enums.AnalysisPrescriptionMyTypeEnum analysisPrescriptionMyTypeEnumFromJson(
       enums.AnalysisPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.AnalysisPrescriptionMyTypeEnum?
-analysisPrescriptionMyTypeEnumNullableFromJson(
+enums.AnalysisPrescriptionMyTypeEnum? analysisPrescriptionMyTypeEnumNullableFromJson(
   Object? analysisPrescriptionMyTypeEnum, [
   enums.AnalysisPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -17361,8 +14384,7 @@ List<String> analysisPrescriptionMyTypeEnumListToJson(
   return analysisPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.AnalysisPrescriptionMyTypeEnum>
-analysisPrescriptionMyTypeEnumListFromJson(
+List<enums.AnalysisPrescriptionMyTypeEnum> analysisPrescriptionMyTypeEnumListFromJson(
   List? analysisPrescriptionMyTypeEnum, [
   List<enums.AnalysisPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17370,13 +14392,10 @@ analysisPrescriptionMyTypeEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return analysisPrescriptionMyTypeEnum
-      .map((e) => analysisPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return analysisPrescriptionMyTypeEnum.map((e) => analysisPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
-List<enums.AnalysisPrescriptionMyTypeEnum>?
-analysisPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.AnalysisPrescriptionMyTypeEnum>? analysisPrescriptionMyTypeEnumNullableListFromJson(
   List? analysisPrescriptionMyTypeEnum, [
   List<enums.AnalysisPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17384,9 +14403,7 @@ analysisPrescriptionMyTypeEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return analysisPrescriptionMyTypeEnum
-      .map((e) => analysisPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return analysisPrescriptionMyTypeEnum.map((e) => analysisPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
 String? appointmentPrescriptionMyTypeEnumNullableToJson(
@@ -17401,8 +14418,7 @@ String? appointmentPrescriptionMyTypeEnumToJson(
   return appointmentPrescriptionMyTypeEnum.value;
 }
 
-enums.AppointmentPrescriptionMyTypeEnum
-appointmentPrescriptionMyTypeEnumFromJson(
+enums.AppointmentPrescriptionMyTypeEnum appointmentPrescriptionMyTypeEnumFromJson(
   Object? appointmentPrescriptionMyTypeEnum, [
   enums.AppointmentPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -17413,8 +14429,7 @@ appointmentPrescriptionMyTypeEnumFromJson(
       enums.AppointmentPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.AppointmentPrescriptionMyTypeEnum?
-appointmentPrescriptionMyTypeEnumNullableFromJson(
+enums.AppointmentPrescriptionMyTypeEnum? appointmentPrescriptionMyTypeEnumNullableFromJson(
   Object? appointmentPrescriptionMyTypeEnum, [
   enums.AppointmentPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -17428,16 +14443,13 @@ appointmentPrescriptionMyTypeEnumNullableFromJson(
 }
 
 String appointmentPrescriptionMyTypeEnumExplodedListToJson(
-  List<enums.AppointmentPrescriptionMyTypeEnum>?
-  appointmentPrescriptionMyTypeEnum,
+  List<enums.AppointmentPrescriptionMyTypeEnum>? appointmentPrescriptionMyTypeEnum,
 ) {
-  return appointmentPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ??
-      '';
+  return appointmentPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> appointmentPrescriptionMyTypeEnumListToJson(
-  List<enums.AppointmentPrescriptionMyTypeEnum>?
-  appointmentPrescriptionMyTypeEnum,
+  List<enums.AppointmentPrescriptionMyTypeEnum>? appointmentPrescriptionMyTypeEnum,
 ) {
   if (appointmentPrescriptionMyTypeEnum == null) {
     return [];
@@ -17446,8 +14458,7 @@ List<String> appointmentPrescriptionMyTypeEnumListToJson(
   return appointmentPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.AppointmentPrescriptionMyTypeEnum>
-appointmentPrescriptionMyTypeEnumListFromJson(
+List<enums.AppointmentPrescriptionMyTypeEnum> appointmentPrescriptionMyTypeEnumListFromJson(
   List? appointmentPrescriptionMyTypeEnum, [
   List<enums.AppointmentPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17455,13 +14466,10 @@ appointmentPrescriptionMyTypeEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return appointmentPrescriptionMyTypeEnum
-      .map((e) => appointmentPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return appointmentPrescriptionMyTypeEnum.map((e) => appointmentPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
-List<enums.AppointmentPrescriptionMyTypeEnum>?
-appointmentPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.AppointmentPrescriptionMyTypeEnum>? appointmentPrescriptionMyTypeEnumNullableListFromJson(
   List? appointmentPrescriptionMyTypeEnum, [
   List<enums.AppointmentPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17469,27 +14477,22 @@ appointmentPrescriptionMyTypeEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return appointmentPrescriptionMyTypeEnum
-      .map((e) => appointmentPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return appointmentPrescriptionMyTypeEnum.map((e) => appointmentPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
 String? courseOfTreatmentPrescriptionMyTypeEnumNullableToJson(
-  enums.CourseOfTreatmentPrescriptionMyTypeEnum?
-  courseOfTreatmentPrescriptionMyTypeEnum,
+  enums.CourseOfTreatmentPrescriptionMyTypeEnum? courseOfTreatmentPrescriptionMyTypeEnum,
 ) {
   return courseOfTreatmentPrescriptionMyTypeEnum?.value;
 }
 
 String? courseOfTreatmentPrescriptionMyTypeEnumToJson(
-  enums.CourseOfTreatmentPrescriptionMyTypeEnum
-  courseOfTreatmentPrescriptionMyTypeEnum,
+  enums.CourseOfTreatmentPrescriptionMyTypeEnum courseOfTreatmentPrescriptionMyTypeEnum,
 ) {
   return courseOfTreatmentPrescriptionMyTypeEnum.value;
 }
 
-enums.CourseOfTreatmentPrescriptionMyTypeEnum
-courseOfTreatmentPrescriptionMyTypeEnumFromJson(
+enums.CourseOfTreatmentPrescriptionMyTypeEnum courseOfTreatmentPrescriptionMyTypeEnumFromJson(
   Object? courseOfTreatmentPrescriptionMyTypeEnum, [
   enums.CourseOfTreatmentPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -17500,8 +14503,7 @@ courseOfTreatmentPrescriptionMyTypeEnumFromJson(
       enums.CourseOfTreatmentPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.CourseOfTreatmentPrescriptionMyTypeEnum?
-courseOfTreatmentPrescriptionMyTypeEnumNullableFromJson(
+enums.CourseOfTreatmentPrescriptionMyTypeEnum? courseOfTreatmentPrescriptionMyTypeEnumNullableFromJson(
   Object? courseOfTreatmentPrescriptionMyTypeEnum, [
   enums.CourseOfTreatmentPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -17515,18 +14517,13 @@ courseOfTreatmentPrescriptionMyTypeEnumNullableFromJson(
 }
 
 String courseOfTreatmentPrescriptionMyTypeEnumExplodedListToJson(
-  List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>?
-  courseOfTreatmentPrescriptionMyTypeEnum,
+  List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>? courseOfTreatmentPrescriptionMyTypeEnum,
 ) {
-  return courseOfTreatmentPrescriptionMyTypeEnum
-          ?.map((e) => e.value!)
-          .join(',') ??
-      '';
+  return courseOfTreatmentPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> courseOfTreatmentPrescriptionMyTypeEnumListToJson(
-  List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>?
-  courseOfTreatmentPrescriptionMyTypeEnum,
+  List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>? courseOfTreatmentPrescriptionMyTypeEnum,
 ) {
   if (courseOfTreatmentPrescriptionMyTypeEnum == null) {
     return [];
@@ -17535,8 +14532,7 @@ List<String> courseOfTreatmentPrescriptionMyTypeEnumListToJson(
   return courseOfTreatmentPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>
-courseOfTreatmentPrescriptionMyTypeEnumListFromJson(
+List<enums.CourseOfTreatmentPrescriptionMyTypeEnum> courseOfTreatmentPrescriptionMyTypeEnumListFromJson(
   List? courseOfTreatmentPrescriptionMyTypeEnum, [
   List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17549,8 +14545,7 @@ courseOfTreatmentPrescriptionMyTypeEnumListFromJson(
       .toList();
 }
 
-List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>?
-courseOfTreatmentPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>? courseOfTreatmentPrescriptionMyTypeEnumNullableListFromJson(
   List? courseOfTreatmentPrescriptionMyTypeEnum, [
   List<enums.CourseOfTreatmentPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17571,28 +14566,17 @@ String? durationEnumToJson(enums.DurationEnum durationEnum) {
   return durationEnum.value;
 }
 
-enums.DurationEnum durationEnumFromJson(
-  Object? durationEnum, [
-  enums.DurationEnum? defaultValue,
-]) {
-  return enums.DurationEnum.values.firstWhereOrNull(
-        (e) => e.value == durationEnum,
-      ) ??
+enums.DurationEnum durationEnumFromJson(Object? durationEnum, [enums.DurationEnum? defaultValue]) {
+  return enums.DurationEnum.values.firstWhereOrNull((e) => e.value == durationEnum) ??
       defaultValue ??
       enums.DurationEnum.swaggerGeneratedUnknown;
 }
 
-enums.DurationEnum? durationEnumNullableFromJson(
-  Object? durationEnum, [
-  enums.DurationEnum? defaultValue,
-]) {
+enums.DurationEnum? durationEnumNullableFromJson(Object? durationEnum, [enums.DurationEnum? defaultValue]) {
   if (durationEnum == null) {
     return null;
   }
-  return enums.DurationEnum.values.firstWhereOrNull(
-        (e) => e.value == durationEnum,
-      ) ??
-      defaultValue;
+  return enums.DurationEnum.values.firstWhereOrNull((e) => e.value == durationEnum) ?? defaultValue;
 }
 
 String durationEnumExplodedListToJson(List<enums.DurationEnum>? durationEnum) {
@@ -17607,10 +14591,7 @@ List<String> durationEnumListToJson(List<enums.DurationEnum>? durationEnum) {
   return durationEnum.map((e) => e.value!).toList();
 }
 
-List<enums.DurationEnum> durationEnumListFromJson(
-  List? durationEnum, [
-  List<enums.DurationEnum>? defaultValue,
-]) {
+List<enums.DurationEnum> durationEnumListFromJson(List? durationEnum, [List<enums.DurationEnum>? defaultValue]) {
   if (durationEnum == null) {
     return defaultValue ?? [];
   }
@@ -17637,24 +14618,17 @@ int? levelEnumToJson(enums.LevelEnum levelEnum) {
   return levelEnum.value;
 }
 
-enums.LevelEnum levelEnumFromJson(
-  Object? levelEnum, [
-  enums.LevelEnum? defaultValue,
-]) {
+enums.LevelEnum levelEnumFromJson(Object? levelEnum, [enums.LevelEnum? defaultValue]) {
   return enums.LevelEnum.values.firstWhereOrNull((e) => e.value == levelEnum) ??
       defaultValue ??
       enums.LevelEnum.swaggerGeneratedUnknown;
 }
 
-enums.LevelEnum? levelEnumNullableFromJson(
-  Object? levelEnum, [
-  enums.LevelEnum? defaultValue,
-]) {
+enums.LevelEnum? levelEnumNullableFromJson(Object? levelEnum, [enums.LevelEnum? defaultValue]) {
   if (levelEnum == null) {
     return null;
   }
-  return enums.LevelEnum.values.firstWhereOrNull((e) => e.value == levelEnum) ??
-      defaultValue;
+  return enums.LevelEnum.values.firstWhereOrNull((e) => e.value == levelEnum) ?? defaultValue;
 }
 
 String levelEnumExplodedListToJson(List<enums.LevelEnum>? levelEnum) {
@@ -17669,10 +14643,7 @@ List<int> levelEnumListToJson(List<enums.LevelEnum>? levelEnum) {
   return levelEnum.map((e) => e.value!).toList();
 }
 
-List<enums.LevelEnum> levelEnumListFromJson(
-  List? levelEnum, [
-  List<enums.LevelEnum>? defaultValue,
-]) {
+List<enums.LevelEnum> levelEnumListFromJson(List? levelEnum, [List<enums.LevelEnum>? defaultValue]) {
   if (levelEnum == null) {
     return defaultValue ?? [];
   }
@@ -17680,10 +14651,7 @@ List<enums.LevelEnum> levelEnumListFromJson(
   return levelEnum.map((e) => levelEnumFromJson(e)).toList();
 }
 
-List<enums.LevelEnum>? levelEnumNullableListFromJson(
-  List? levelEnum, [
-  List<enums.LevelEnum>? defaultValue,
-]) {
+List<enums.LevelEnum>? levelEnumNullableListFromJson(List? levelEnum, [List<enums.LevelEnum>? defaultValue]) {
   if (levelEnum == null) {
     return defaultValue;
   }
@@ -17691,15 +14659,11 @@ List<enums.LevelEnum>? levelEnumNullableListFromJson(
   return levelEnum.map((e) => levelEnumFromJson(e)).toList();
 }
 
-String? otherPrescriptionMyTypeEnumNullableToJson(
-  enums.OtherPrescriptionMyTypeEnum? otherPrescriptionMyTypeEnum,
-) {
+String? otherPrescriptionMyTypeEnumNullableToJson(enums.OtherPrescriptionMyTypeEnum? otherPrescriptionMyTypeEnum) {
   return otherPrescriptionMyTypeEnum?.value;
 }
 
-String? otherPrescriptionMyTypeEnumToJson(
-  enums.OtherPrescriptionMyTypeEnum otherPrescriptionMyTypeEnum,
-) {
+String? otherPrescriptionMyTypeEnumToJson(enums.OtherPrescriptionMyTypeEnum otherPrescriptionMyTypeEnum) {
   return otherPrescriptionMyTypeEnum.value;
 }
 
@@ -17707,9 +14671,7 @@ enums.OtherPrescriptionMyTypeEnum otherPrescriptionMyTypeEnumFromJson(
   Object? otherPrescriptionMyTypeEnum, [
   enums.OtherPrescriptionMyTypeEnum? defaultValue,
 ]) {
-  return enums.OtherPrescriptionMyTypeEnum.values.firstWhereOrNull(
-        (e) => e.value == otherPrescriptionMyTypeEnum,
-      ) ??
+  return enums.OtherPrescriptionMyTypeEnum.values.firstWhereOrNull((e) => e.value == otherPrescriptionMyTypeEnum) ??
       defaultValue ??
       enums.OtherPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
@@ -17721,9 +14683,7 @@ enums.OtherPrescriptionMyTypeEnum? otherPrescriptionMyTypeEnumNullableFromJson(
   if (otherPrescriptionMyTypeEnum == null) {
     return null;
   }
-  return enums.OtherPrescriptionMyTypeEnum.values.firstWhereOrNull(
-        (e) => e.value == otherPrescriptionMyTypeEnum,
-      ) ??
+  return enums.OtherPrescriptionMyTypeEnum.values.firstWhereOrNull((e) => e.value == otherPrescriptionMyTypeEnum) ??
       defaultValue;
 }
 
@@ -17751,13 +14711,10 @@ List<enums.OtherPrescriptionMyTypeEnum> otherPrescriptionMyTypeEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return otherPrescriptionMyTypeEnum
-      .map((e) => otherPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return otherPrescriptionMyTypeEnum.map((e) => otherPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
-List<enums.OtherPrescriptionMyTypeEnum>?
-otherPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.OtherPrescriptionMyTypeEnum>? otherPrescriptionMyTypeEnumNullableListFromJson(
   List? otherPrescriptionMyTypeEnum, [
   List<enums.OtherPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17765,27 +14722,22 @@ otherPrescriptionMyTypeEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return otherPrescriptionMyTypeEnum
-      .map((e) => otherPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return otherPrescriptionMyTypeEnum.map((e) => otherPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
 String? parasitesTreatmentPrescriptionMyTypeEnumNullableToJson(
-  enums.ParasitesTreatmentPrescriptionMyTypeEnum?
-  parasitesTreatmentPrescriptionMyTypeEnum,
+  enums.ParasitesTreatmentPrescriptionMyTypeEnum? parasitesTreatmentPrescriptionMyTypeEnum,
 ) {
   return parasitesTreatmentPrescriptionMyTypeEnum?.value;
 }
 
 String? parasitesTreatmentPrescriptionMyTypeEnumToJson(
-  enums.ParasitesTreatmentPrescriptionMyTypeEnum
-  parasitesTreatmentPrescriptionMyTypeEnum,
+  enums.ParasitesTreatmentPrescriptionMyTypeEnum parasitesTreatmentPrescriptionMyTypeEnum,
 ) {
   return parasitesTreatmentPrescriptionMyTypeEnum.value;
 }
 
-enums.ParasitesTreatmentPrescriptionMyTypeEnum
-parasitesTreatmentPrescriptionMyTypeEnumFromJson(
+enums.ParasitesTreatmentPrescriptionMyTypeEnum parasitesTreatmentPrescriptionMyTypeEnumFromJson(
   Object? parasitesTreatmentPrescriptionMyTypeEnum, [
   enums.ParasitesTreatmentPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -17796,8 +14748,7 @@ parasitesTreatmentPrescriptionMyTypeEnumFromJson(
       enums.ParasitesTreatmentPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.ParasitesTreatmentPrescriptionMyTypeEnum?
-parasitesTreatmentPrescriptionMyTypeEnumNullableFromJson(
+enums.ParasitesTreatmentPrescriptionMyTypeEnum? parasitesTreatmentPrescriptionMyTypeEnumNullableFromJson(
   Object? parasitesTreatmentPrescriptionMyTypeEnum, [
   enums.ParasitesTreatmentPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -17811,18 +14762,13 @@ parasitesTreatmentPrescriptionMyTypeEnumNullableFromJson(
 }
 
 String parasitesTreatmentPrescriptionMyTypeEnumExplodedListToJson(
-  List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>?
-  parasitesTreatmentPrescriptionMyTypeEnum,
+  List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>? parasitesTreatmentPrescriptionMyTypeEnum,
 ) {
-  return parasitesTreatmentPrescriptionMyTypeEnum
-          ?.map((e) => e.value!)
-          .join(',') ??
-      '';
+  return parasitesTreatmentPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> parasitesTreatmentPrescriptionMyTypeEnumListToJson(
-  List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>?
-  parasitesTreatmentPrescriptionMyTypeEnum,
+  List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>? parasitesTreatmentPrescriptionMyTypeEnum,
 ) {
   if (parasitesTreatmentPrescriptionMyTypeEnum == null) {
     return [];
@@ -17831,8 +14777,7 @@ List<String> parasitesTreatmentPrescriptionMyTypeEnumListToJson(
   return parasitesTreatmentPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>
-parasitesTreatmentPrescriptionMyTypeEnumListFromJson(
+List<enums.ParasitesTreatmentPrescriptionMyTypeEnum> parasitesTreatmentPrescriptionMyTypeEnumListFromJson(
   List? parasitesTreatmentPrescriptionMyTypeEnum, [
   List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17841,14 +14786,11 @@ parasitesTreatmentPrescriptionMyTypeEnumListFromJson(
   }
 
   return parasitesTreatmentPrescriptionMyTypeEnum
-      .map(
-        (e) => parasitesTreatmentPrescriptionMyTypeEnumFromJson(e.toString()),
-      )
+      .map((e) => parasitesTreatmentPrescriptionMyTypeEnumFromJson(e.toString()))
       .toList();
 }
 
-List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>?
-parasitesTreatmentPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>? parasitesTreatmentPrescriptionMyTypeEnumNullableListFromJson(
   List? parasitesTreatmentPrescriptionMyTypeEnum, [
   List<enums.ParasitesTreatmentPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -17857,15 +14799,11 @@ parasitesTreatmentPrescriptionMyTypeEnumNullableListFromJson(
   }
 
   return parasitesTreatmentPrescriptionMyTypeEnum
-      .map(
-        (e) => parasitesTreatmentPrescriptionMyTypeEnumFromJson(e.toString()),
-      )
+      .map((e) => parasitesTreatmentPrescriptionMyTypeEnumFromJson(e.toString()))
       .toList();
 }
 
-String? parasitesTypeEnumNullableToJson(
-  enums.ParasitesTypeEnum? parasitesTypeEnum,
-) {
+String? parasitesTypeEnumNullableToJson(enums.ParasitesTypeEnum? parasitesTypeEnum) {
   return parasitesTypeEnum?.value;
 }
 
@@ -17873,13 +14811,8 @@ String? parasitesTypeEnumToJson(enums.ParasitesTypeEnum parasitesTypeEnum) {
   return parasitesTypeEnum.value;
 }
 
-enums.ParasitesTypeEnum parasitesTypeEnumFromJson(
-  Object? parasitesTypeEnum, [
-  enums.ParasitesTypeEnum? defaultValue,
-]) {
-  return enums.ParasitesTypeEnum.values.firstWhereOrNull(
-        (e) => e.value == parasitesTypeEnum,
-      ) ??
+enums.ParasitesTypeEnum parasitesTypeEnumFromJson(Object? parasitesTypeEnum, [enums.ParasitesTypeEnum? defaultValue]) {
+  return enums.ParasitesTypeEnum.values.firstWhereOrNull((e) => e.value == parasitesTypeEnum) ??
       defaultValue ??
       enums.ParasitesTypeEnum.swaggerGeneratedUnknown;
 }
@@ -17891,21 +14824,14 @@ enums.ParasitesTypeEnum? parasitesTypeEnumNullableFromJson(
   if (parasitesTypeEnum == null) {
     return null;
   }
-  return enums.ParasitesTypeEnum.values.firstWhereOrNull(
-        (e) => e.value == parasitesTypeEnum,
-      ) ??
-      defaultValue;
+  return enums.ParasitesTypeEnum.values.firstWhereOrNull((e) => e.value == parasitesTypeEnum) ?? defaultValue;
 }
 
-String parasitesTypeEnumExplodedListToJson(
-  List<enums.ParasitesTypeEnum>? parasitesTypeEnum,
-) {
+String parasitesTypeEnumExplodedListToJson(List<enums.ParasitesTypeEnum>? parasitesTypeEnum) {
   return parasitesTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<String> parasitesTypeEnumListToJson(
-  List<enums.ParasitesTypeEnum>? parasitesTypeEnum,
-) {
+List<String> parasitesTypeEnumListToJson(List<enums.ParasitesTypeEnum>? parasitesTypeEnum) {
   if (parasitesTypeEnum == null) {
     return [];
   }
@@ -17921,9 +14847,7 @@ List<enums.ParasitesTypeEnum> parasitesTypeEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return parasitesTypeEnum
-      .map((e) => parasitesTypeEnumFromJson(e.toString()))
-      .toList();
+  return parasitesTypeEnum.map((e) => parasitesTypeEnumFromJson(e.toString())).toList();
 }
 
 List<enums.ParasitesTypeEnum>? parasitesTypeEnumNullableListFromJson(
@@ -17934,9 +14858,7 @@ List<enums.ParasitesTypeEnum>? parasitesTypeEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return parasitesTypeEnum
-      .map((e) => parasitesTypeEnumFromJson(e.toString()))
-      .toList();
+  return parasitesTypeEnum.map((e) => parasitesTypeEnumFromJson(e.toString())).toList();
 }
 
 String? prescriptionExecutionStatusEnumNullableToJson(
@@ -17945,9 +14867,7 @@ String? prescriptionExecutionStatusEnumNullableToJson(
   return prescriptionExecutionStatusEnum?.value;
 }
 
-String? prescriptionExecutionStatusEnumToJson(
-  enums.PrescriptionExecutionStatusEnum prescriptionExecutionStatusEnum,
-) {
+String? prescriptionExecutionStatusEnumToJson(enums.PrescriptionExecutionStatusEnum prescriptionExecutionStatusEnum) {
   return prescriptionExecutionStatusEnum.value;
 }
 
@@ -17962,8 +14882,7 @@ enums.PrescriptionExecutionStatusEnum prescriptionExecutionStatusEnumFromJson(
       enums.PrescriptionExecutionStatusEnum.swaggerGeneratedUnknown;
 }
 
-enums.PrescriptionExecutionStatusEnum?
-prescriptionExecutionStatusEnumNullableFromJson(
+enums.PrescriptionExecutionStatusEnum? prescriptionExecutionStatusEnumNullableFromJson(
   Object? prescriptionExecutionStatusEnum, [
   enums.PrescriptionExecutionStatusEnum? defaultValue,
 ]) {
@@ -17992,8 +14911,7 @@ List<String> prescriptionExecutionStatusEnumListToJson(
   return prescriptionExecutionStatusEnum.map((e) => e.value!).toList();
 }
 
-List<enums.PrescriptionExecutionStatusEnum>
-prescriptionExecutionStatusEnumListFromJson(
+List<enums.PrescriptionExecutionStatusEnum> prescriptionExecutionStatusEnumListFromJson(
   List? prescriptionExecutionStatusEnum, [
   List<enums.PrescriptionExecutionStatusEnum>? defaultValue,
 ]) {
@@ -18001,13 +14919,10 @@ prescriptionExecutionStatusEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return prescriptionExecutionStatusEnum
-      .map((e) => prescriptionExecutionStatusEnumFromJson(e.toString()))
-      .toList();
+  return prescriptionExecutionStatusEnum.map((e) => prescriptionExecutionStatusEnumFromJson(e.toString())).toList();
 }
 
-List<enums.PrescriptionExecutionStatusEnum>?
-prescriptionExecutionStatusEnumNullableListFromJson(
+List<enums.PrescriptionExecutionStatusEnum>? prescriptionExecutionStatusEnumNullableListFromJson(
   List? prescriptionExecutionStatusEnum, [
   List<enums.PrescriptionExecutionStatusEnum>? defaultValue,
 ]) {
@@ -18015,20 +14930,14 @@ prescriptionExecutionStatusEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return prescriptionExecutionStatusEnum
-      .map((e) => prescriptionExecutionStatusEnumFromJson(e.toString()))
-      .toList();
+  return prescriptionExecutionStatusEnum.map((e) => prescriptionExecutionStatusEnumFromJson(e.toString())).toList();
 }
 
-String? prescriptionShortMyTypeEnumNullableToJson(
-  enums.PrescriptionShortMyTypeEnum? prescriptionShortMyTypeEnum,
-) {
+String? prescriptionShortMyTypeEnumNullableToJson(enums.PrescriptionShortMyTypeEnum? prescriptionShortMyTypeEnum) {
   return prescriptionShortMyTypeEnum?.value;
 }
 
-String? prescriptionShortMyTypeEnumToJson(
-  enums.PrescriptionShortMyTypeEnum prescriptionShortMyTypeEnum,
-) {
+String? prescriptionShortMyTypeEnumToJson(enums.PrescriptionShortMyTypeEnum prescriptionShortMyTypeEnum) {
   return prescriptionShortMyTypeEnum.value;
 }
 
@@ -18036,9 +14945,7 @@ enums.PrescriptionShortMyTypeEnum prescriptionShortMyTypeEnumFromJson(
   Object? prescriptionShortMyTypeEnum, [
   enums.PrescriptionShortMyTypeEnum? defaultValue,
 ]) {
-  return enums.PrescriptionShortMyTypeEnum.values.firstWhereOrNull(
-        (e) => e.value == prescriptionShortMyTypeEnum,
-      ) ??
+  return enums.PrescriptionShortMyTypeEnum.values.firstWhereOrNull((e) => e.value == prescriptionShortMyTypeEnum) ??
       defaultValue ??
       enums.PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown;
 }
@@ -18050,9 +14957,7 @@ enums.PrescriptionShortMyTypeEnum? prescriptionShortMyTypeEnumNullableFromJson(
   if (prescriptionShortMyTypeEnum == null) {
     return null;
   }
-  return enums.PrescriptionShortMyTypeEnum.values.firstWhereOrNull(
-        (e) => e.value == prescriptionShortMyTypeEnum,
-      ) ??
+  return enums.PrescriptionShortMyTypeEnum.values.firstWhereOrNull((e) => e.value == prescriptionShortMyTypeEnum) ??
       defaultValue;
 }
 
@@ -18080,13 +14985,10 @@ List<enums.PrescriptionShortMyTypeEnum> prescriptionShortMyTypeEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return prescriptionShortMyTypeEnum
-      .map((e) => prescriptionShortMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return prescriptionShortMyTypeEnum.map((e) => prescriptionShortMyTypeEnumFromJson(e.toString())).toList();
 }
 
-List<enums.PrescriptionShortMyTypeEnum>?
-prescriptionShortMyTypeEnumNullableListFromJson(
+List<enums.PrescriptionShortMyTypeEnum>? prescriptionShortMyTypeEnumNullableListFromJson(
   List? prescriptionShortMyTypeEnum, [
   List<enums.PrescriptionShortMyTypeEnum>? defaultValue,
 ]) {
@@ -18094,9 +14996,7 @@ prescriptionShortMyTypeEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return prescriptionShortMyTypeEnum
-      .map((e) => prescriptionShortMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return prescriptionShortMyTypeEnum.map((e) => prescriptionShortMyTypeEnumFromJson(e.toString())).toList();
 }
 
 String? readmissionPrescriptionMyTypeEnumNullableToJson(
@@ -18111,8 +15011,7 @@ String? readmissionPrescriptionMyTypeEnumToJson(
   return readmissionPrescriptionMyTypeEnum.value;
 }
 
-enums.ReadmissionPrescriptionMyTypeEnum
-readmissionPrescriptionMyTypeEnumFromJson(
+enums.ReadmissionPrescriptionMyTypeEnum readmissionPrescriptionMyTypeEnumFromJson(
   Object? readmissionPrescriptionMyTypeEnum, [
   enums.ReadmissionPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18123,8 +15022,7 @@ readmissionPrescriptionMyTypeEnumFromJson(
       enums.ReadmissionPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.ReadmissionPrescriptionMyTypeEnum?
-readmissionPrescriptionMyTypeEnumNullableFromJson(
+enums.ReadmissionPrescriptionMyTypeEnum? readmissionPrescriptionMyTypeEnumNullableFromJson(
   Object? readmissionPrescriptionMyTypeEnum, [
   enums.ReadmissionPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18138,16 +15036,13 @@ readmissionPrescriptionMyTypeEnumNullableFromJson(
 }
 
 String readmissionPrescriptionMyTypeEnumExplodedListToJson(
-  List<enums.ReadmissionPrescriptionMyTypeEnum>?
-  readmissionPrescriptionMyTypeEnum,
+  List<enums.ReadmissionPrescriptionMyTypeEnum>? readmissionPrescriptionMyTypeEnum,
 ) {
-  return readmissionPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ??
-      '';
+  return readmissionPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> readmissionPrescriptionMyTypeEnumListToJson(
-  List<enums.ReadmissionPrescriptionMyTypeEnum>?
-  readmissionPrescriptionMyTypeEnum,
+  List<enums.ReadmissionPrescriptionMyTypeEnum>? readmissionPrescriptionMyTypeEnum,
 ) {
   if (readmissionPrescriptionMyTypeEnum == null) {
     return [];
@@ -18156,8 +15051,7 @@ List<String> readmissionPrescriptionMyTypeEnumListToJson(
   return readmissionPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.ReadmissionPrescriptionMyTypeEnum>
-readmissionPrescriptionMyTypeEnumListFromJson(
+List<enums.ReadmissionPrescriptionMyTypeEnum> readmissionPrescriptionMyTypeEnumListFromJson(
   List? readmissionPrescriptionMyTypeEnum, [
   List<enums.ReadmissionPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18165,13 +15059,10 @@ readmissionPrescriptionMyTypeEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return readmissionPrescriptionMyTypeEnum
-      .map((e) => readmissionPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return readmissionPrescriptionMyTypeEnum.map((e) => readmissionPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
-List<enums.ReadmissionPrescriptionMyTypeEnum>?
-readmissionPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.ReadmissionPrescriptionMyTypeEnum>? readmissionPrescriptionMyTypeEnumNullableListFromJson(
   List? readmissionPrescriptionMyTypeEnum, [
   List<enums.ReadmissionPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18179,27 +15070,22 @@ readmissionPrescriptionMyTypeEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return readmissionPrescriptionMyTypeEnum
-      .map((e) => readmissionPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return readmissionPrescriptionMyTypeEnum.map((e) => readmissionPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
 String? removingStitchesPrescriptionMyTypeEnumNullableToJson(
-  enums.RemovingStitchesPrescriptionMyTypeEnum?
-  removingStitchesPrescriptionMyTypeEnum,
+  enums.RemovingStitchesPrescriptionMyTypeEnum? removingStitchesPrescriptionMyTypeEnum,
 ) {
   return removingStitchesPrescriptionMyTypeEnum?.value;
 }
 
 String? removingStitchesPrescriptionMyTypeEnumToJson(
-  enums.RemovingStitchesPrescriptionMyTypeEnum
-  removingStitchesPrescriptionMyTypeEnum,
+  enums.RemovingStitchesPrescriptionMyTypeEnum removingStitchesPrescriptionMyTypeEnum,
 ) {
   return removingStitchesPrescriptionMyTypeEnum.value;
 }
 
-enums.RemovingStitchesPrescriptionMyTypeEnum
-removingStitchesPrescriptionMyTypeEnumFromJson(
+enums.RemovingStitchesPrescriptionMyTypeEnum removingStitchesPrescriptionMyTypeEnumFromJson(
   Object? removingStitchesPrescriptionMyTypeEnum, [
   enums.RemovingStitchesPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18210,8 +15096,7 @@ removingStitchesPrescriptionMyTypeEnumFromJson(
       enums.RemovingStitchesPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.RemovingStitchesPrescriptionMyTypeEnum?
-removingStitchesPrescriptionMyTypeEnumNullableFromJson(
+enums.RemovingStitchesPrescriptionMyTypeEnum? removingStitchesPrescriptionMyTypeEnumNullableFromJson(
   Object? removingStitchesPrescriptionMyTypeEnum, [
   enums.RemovingStitchesPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18225,18 +15110,13 @@ removingStitchesPrescriptionMyTypeEnumNullableFromJson(
 }
 
 String removingStitchesPrescriptionMyTypeEnumExplodedListToJson(
-  List<enums.RemovingStitchesPrescriptionMyTypeEnum>?
-  removingStitchesPrescriptionMyTypeEnum,
+  List<enums.RemovingStitchesPrescriptionMyTypeEnum>? removingStitchesPrescriptionMyTypeEnum,
 ) {
-  return removingStitchesPrescriptionMyTypeEnum
-          ?.map((e) => e.value!)
-          .join(',') ??
-      '';
+  return removingStitchesPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> removingStitchesPrescriptionMyTypeEnumListToJson(
-  List<enums.RemovingStitchesPrescriptionMyTypeEnum>?
-  removingStitchesPrescriptionMyTypeEnum,
+  List<enums.RemovingStitchesPrescriptionMyTypeEnum>? removingStitchesPrescriptionMyTypeEnum,
 ) {
   if (removingStitchesPrescriptionMyTypeEnum == null) {
     return [];
@@ -18245,8 +15125,7 @@ List<String> removingStitchesPrescriptionMyTypeEnumListToJson(
   return removingStitchesPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.RemovingStitchesPrescriptionMyTypeEnum>
-removingStitchesPrescriptionMyTypeEnumListFromJson(
+List<enums.RemovingStitchesPrescriptionMyTypeEnum> removingStitchesPrescriptionMyTypeEnumListFromJson(
   List? removingStitchesPrescriptionMyTypeEnum, [
   List<enums.RemovingStitchesPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18259,8 +15138,7 @@ removingStitchesPrescriptionMyTypeEnumListFromJson(
       .toList();
 }
 
-List<enums.RemovingStitchesPrescriptionMyTypeEnum>?
-removingStitchesPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.RemovingStitchesPrescriptionMyTypeEnum>? removingStitchesPrescriptionMyTypeEnumNullableListFromJson(
   List? removingStitchesPrescriptionMyTypeEnum, [
   List<enums.RemovingStitchesPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18281,24 +15159,17 @@ String? roleEnumToJson(enums.RoleEnum roleEnum) {
   return roleEnum.value;
 }
 
-enums.RoleEnum roleEnumFromJson(
-  Object? roleEnum, [
-  enums.RoleEnum? defaultValue,
-]) {
+enums.RoleEnum roleEnumFromJson(Object? roleEnum, [enums.RoleEnum? defaultValue]) {
   return enums.RoleEnum.values.firstWhereOrNull((e) => e.value == roleEnum) ??
       defaultValue ??
       enums.RoleEnum.swaggerGeneratedUnknown;
 }
 
-enums.RoleEnum? roleEnumNullableFromJson(
-  Object? roleEnum, [
-  enums.RoleEnum? defaultValue,
-]) {
+enums.RoleEnum? roleEnumNullableFromJson(Object? roleEnum, [enums.RoleEnum? defaultValue]) {
   if (roleEnum == null) {
     return null;
   }
-  return enums.RoleEnum.values.firstWhereOrNull((e) => e.value == roleEnum) ??
-      defaultValue;
+  return enums.RoleEnum.values.firstWhereOrNull((e) => e.value == roleEnum) ?? defaultValue;
 }
 
 String roleEnumExplodedListToJson(List<enums.RoleEnum>? roleEnum) {
@@ -18313,10 +15184,7 @@ List<String> roleEnumListToJson(List<enums.RoleEnum>? roleEnum) {
   return roleEnum.map((e) => e.value!).toList();
 }
 
-List<enums.RoleEnum> roleEnumListFromJson(
-  List? roleEnum, [
-  List<enums.RoleEnum>? defaultValue,
-]) {
+List<enums.RoleEnum> roleEnumListFromJson(List? roleEnum, [List<enums.RoleEnum>? defaultValue]) {
   if (roleEnum == null) {
     return defaultValue ?? [];
   }
@@ -18324,10 +15192,7 @@ List<enums.RoleEnum> roleEnumListFromJson(
   return roleEnum.map((e) => roleEnumFromJson(e.toString())).toList();
 }
 
-List<enums.RoleEnum>? roleEnumNullableListFromJson(
-  List? roleEnum, [
-  List<enums.RoleEnum>? defaultValue,
-]) {
+List<enums.RoleEnum>? roleEnumNullableListFromJson(List? roleEnum, [List<enums.RoleEnum>? defaultValue]) {
   if (roleEnum == null) {
     return defaultValue;
   }
@@ -18343,33 +15208,20 @@ String? status69fEnumToJson(enums.Status69fEnum status69fEnum) {
   return status69fEnum.value;
 }
 
-enums.Status69fEnum status69fEnumFromJson(
-  Object? status69fEnum, [
-  enums.Status69fEnum? defaultValue,
-]) {
-  return enums.Status69fEnum.values.firstWhereOrNull(
-        (e) => e.value == status69fEnum,
-      ) ??
+enums.Status69fEnum status69fEnumFromJson(Object? status69fEnum, [enums.Status69fEnum? defaultValue]) {
+  return enums.Status69fEnum.values.firstWhereOrNull((e) => e.value == status69fEnum) ??
       defaultValue ??
       enums.Status69fEnum.swaggerGeneratedUnknown;
 }
 
-enums.Status69fEnum? status69fEnumNullableFromJson(
-  Object? status69fEnum, [
-  enums.Status69fEnum? defaultValue,
-]) {
+enums.Status69fEnum? status69fEnumNullableFromJson(Object? status69fEnum, [enums.Status69fEnum? defaultValue]) {
   if (status69fEnum == null) {
     return null;
   }
-  return enums.Status69fEnum.values.firstWhereOrNull(
-        (e) => e.value == status69fEnum,
-      ) ??
-      defaultValue;
+  return enums.Status69fEnum.values.firstWhereOrNull((e) => e.value == status69fEnum) ?? defaultValue;
 }
 
-String status69fEnumExplodedListToJson(
-  List<enums.Status69fEnum>? status69fEnum,
-) {
+String status69fEnumExplodedListToJson(List<enums.Status69fEnum>? status69fEnum) {
   return status69fEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
@@ -18381,10 +15233,7 @@ List<String> status69fEnumListToJson(List<enums.Status69fEnum>? status69fEnum) {
   return status69fEnum.map((e) => e.value!).toList();
 }
 
-List<enums.Status69fEnum> status69fEnumListFromJson(
-  List? status69fEnum, [
-  List<enums.Status69fEnum>? defaultValue,
-]) {
+List<enums.Status69fEnum> status69fEnumListFromJson(List? status69fEnum, [List<enums.Status69fEnum>? defaultValue]) {
   if (status69fEnum == null) {
     return defaultValue ?? [];
   }
@@ -18415,8 +15264,7 @@ String? vaccinationPrescriptionMyTypeEnumToJson(
   return vaccinationPrescriptionMyTypeEnum.value;
 }
 
-enums.VaccinationPrescriptionMyTypeEnum
-vaccinationPrescriptionMyTypeEnumFromJson(
+enums.VaccinationPrescriptionMyTypeEnum vaccinationPrescriptionMyTypeEnumFromJson(
   Object? vaccinationPrescriptionMyTypeEnum, [
   enums.VaccinationPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18427,8 +15275,7 @@ vaccinationPrescriptionMyTypeEnumFromJson(
       enums.VaccinationPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.VaccinationPrescriptionMyTypeEnum?
-vaccinationPrescriptionMyTypeEnumNullableFromJson(
+enums.VaccinationPrescriptionMyTypeEnum? vaccinationPrescriptionMyTypeEnumNullableFromJson(
   Object? vaccinationPrescriptionMyTypeEnum, [
   enums.VaccinationPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18442,16 +15289,13 @@ vaccinationPrescriptionMyTypeEnumNullableFromJson(
 }
 
 String vaccinationPrescriptionMyTypeEnumExplodedListToJson(
-  List<enums.VaccinationPrescriptionMyTypeEnum>?
-  vaccinationPrescriptionMyTypeEnum,
+  List<enums.VaccinationPrescriptionMyTypeEnum>? vaccinationPrescriptionMyTypeEnum,
 ) {
-  return vaccinationPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ??
-      '';
+  return vaccinationPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> vaccinationPrescriptionMyTypeEnumListToJson(
-  List<enums.VaccinationPrescriptionMyTypeEnum>?
-  vaccinationPrescriptionMyTypeEnum,
+  List<enums.VaccinationPrescriptionMyTypeEnum>? vaccinationPrescriptionMyTypeEnum,
 ) {
   if (vaccinationPrescriptionMyTypeEnum == null) {
     return [];
@@ -18460,8 +15304,7 @@ List<String> vaccinationPrescriptionMyTypeEnumListToJson(
   return vaccinationPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.VaccinationPrescriptionMyTypeEnum>
-vaccinationPrescriptionMyTypeEnumListFromJson(
+List<enums.VaccinationPrescriptionMyTypeEnum> vaccinationPrescriptionMyTypeEnumListFromJson(
   List? vaccinationPrescriptionMyTypeEnum, [
   List<enums.VaccinationPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18469,13 +15312,10 @@ vaccinationPrescriptionMyTypeEnumListFromJson(
     return defaultValue ?? [];
   }
 
-  return vaccinationPrescriptionMyTypeEnum
-      .map((e) => vaccinationPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return vaccinationPrescriptionMyTypeEnum.map((e) => vaccinationPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
-List<enums.VaccinationPrescriptionMyTypeEnum>?
-vaccinationPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.VaccinationPrescriptionMyTypeEnum>? vaccinationPrescriptionMyTypeEnumNullableListFromJson(
   List? vaccinationPrescriptionMyTypeEnum, [
   List<enums.VaccinationPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18483,9 +15323,7 @@ vaccinationPrescriptionMyTypeEnumNullableListFromJson(
     return defaultValue;
   }
 
-  return vaccinationPrescriptionMyTypeEnum
-      .map((e) => vaccinationPrescriptionMyTypeEnumFromJson(e.toString()))
-      .toList();
+  return vaccinationPrescriptionMyTypeEnum.map((e) => vaccinationPrescriptionMyTypeEnumFromJson(e.toString())).toList();
 }
 
 String? woundHealingPrescriptionMyTypeEnumNullableToJson(
@@ -18500,8 +15338,7 @@ String? woundHealingPrescriptionMyTypeEnumToJson(
   return woundHealingPrescriptionMyTypeEnum.value;
 }
 
-enums.WoundHealingPrescriptionMyTypeEnum
-woundHealingPrescriptionMyTypeEnumFromJson(
+enums.WoundHealingPrescriptionMyTypeEnum woundHealingPrescriptionMyTypeEnumFromJson(
   Object? woundHealingPrescriptionMyTypeEnum, [
   enums.WoundHealingPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18512,8 +15349,7 @@ woundHealingPrescriptionMyTypeEnumFromJson(
       enums.WoundHealingPrescriptionMyTypeEnum.swaggerGeneratedUnknown;
 }
 
-enums.WoundHealingPrescriptionMyTypeEnum?
-woundHealingPrescriptionMyTypeEnumNullableFromJson(
+enums.WoundHealingPrescriptionMyTypeEnum? woundHealingPrescriptionMyTypeEnumNullableFromJson(
   Object? woundHealingPrescriptionMyTypeEnum, [
   enums.WoundHealingPrescriptionMyTypeEnum? defaultValue,
 ]) {
@@ -18527,16 +15363,13 @@ woundHealingPrescriptionMyTypeEnumNullableFromJson(
 }
 
 String woundHealingPrescriptionMyTypeEnumExplodedListToJson(
-  List<enums.WoundHealingPrescriptionMyTypeEnum>?
-  woundHealingPrescriptionMyTypeEnum,
+  List<enums.WoundHealingPrescriptionMyTypeEnum>? woundHealingPrescriptionMyTypeEnum,
 ) {
-  return woundHealingPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ??
-      '';
+  return woundHealingPrescriptionMyTypeEnum?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> woundHealingPrescriptionMyTypeEnumListToJson(
-  List<enums.WoundHealingPrescriptionMyTypeEnum>?
-  woundHealingPrescriptionMyTypeEnum,
+  List<enums.WoundHealingPrescriptionMyTypeEnum>? woundHealingPrescriptionMyTypeEnum,
 ) {
   if (woundHealingPrescriptionMyTypeEnum == null) {
     return [];
@@ -18545,8 +15378,7 @@ List<String> woundHealingPrescriptionMyTypeEnumListToJson(
   return woundHealingPrescriptionMyTypeEnum.map((e) => e.value!).toList();
 }
 
-List<enums.WoundHealingPrescriptionMyTypeEnum>
-woundHealingPrescriptionMyTypeEnumListFromJson(
+List<enums.WoundHealingPrescriptionMyTypeEnum> woundHealingPrescriptionMyTypeEnumListFromJson(
   List? woundHealingPrescriptionMyTypeEnum, [
   List<enums.WoundHealingPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18559,8 +15391,7 @@ woundHealingPrescriptionMyTypeEnumListFromJson(
       .toList();
 }
 
-List<enums.WoundHealingPrescriptionMyTypeEnum>?
-woundHealingPrescriptionMyTypeEnumNullableListFromJson(
+List<enums.WoundHealingPrescriptionMyTypeEnum>? woundHealingPrescriptionMyTypeEnumNullableListFromJson(
   List? woundHealingPrescriptionMyTypeEnum, [
   List<enums.WoundHealingPrescriptionMyTypeEnum>? defaultValue,
 ]) {
@@ -18573,9 +15404,7 @@ woundHealingPrescriptionMyTypeEnumNullableListFromJson(
       .toList();
 }
 
-String? apiSchemaGetFormatNullableToJson(
-  enums.ApiSchemaGetFormat? apiSchemaGetFormat,
-) {
+String? apiSchemaGetFormatNullableToJson(enums.ApiSchemaGetFormat? apiSchemaGetFormat) {
   return apiSchemaGetFormat?.value;
 }
 
@@ -18587,9 +15416,7 @@ enums.ApiSchemaGetFormat apiSchemaGetFormatFromJson(
   Object? apiSchemaGetFormat, [
   enums.ApiSchemaGetFormat? defaultValue,
 ]) {
-  return enums.ApiSchemaGetFormat.values.firstWhereOrNull(
-        (e) => e.value == apiSchemaGetFormat,
-      ) ??
+  return enums.ApiSchemaGetFormat.values.firstWhereOrNull((e) => e.value == apiSchemaGetFormat) ??
       defaultValue ??
       enums.ApiSchemaGetFormat.swaggerGeneratedUnknown;
 }
@@ -18601,21 +15428,14 @@ enums.ApiSchemaGetFormat? apiSchemaGetFormatNullableFromJson(
   if (apiSchemaGetFormat == null) {
     return null;
   }
-  return enums.ApiSchemaGetFormat.values.firstWhereOrNull(
-        (e) => e.value == apiSchemaGetFormat,
-      ) ??
-      defaultValue;
+  return enums.ApiSchemaGetFormat.values.firstWhereOrNull((e) => e.value == apiSchemaGetFormat) ?? defaultValue;
 }
 
-String apiSchemaGetFormatExplodedListToJson(
-  List<enums.ApiSchemaGetFormat>? apiSchemaGetFormat,
-) {
+String apiSchemaGetFormatExplodedListToJson(List<enums.ApiSchemaGetFormat>? apiSchemaGetFormat) {
   return apiSchemaGetFormat?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<String> apiSchemaGetFormatListToJson(
-  List<enums.ApiSchemaGetFormat>? apiSchemaGetFormat,
-) {
+List<String> apiSchemaGetFormatListToJson(List<enums.ApiSchemaGetFormat>? apiSchemaGetFormat) {
   if (apiSchemaGetFormat == null) {
     return [];
   }
@@ -18631,9 +15451,7 @@ List<enums.ApiSchemaGetFormat> apiSchemaGetFormatListFromJson(
     return defaultValue ?? [];
   }
 
-  return apiSchemaGetFormat
-      .map((e) => apiSchemaGetFormatFromJson(e.toString()))
-      .toList();
+  return apiSchemaGetFormat.map((e) => apiSchemaGetFormatFromJson(e.toString())).toList();
 }
 
 List<enums.ApiSchemaGetFormat>? apiSchemaGetFormatNullableListFromJson(
@@ -18644,14 +15462,10 @@ List<enums.ApiSchemaGetFormat>? apiSchemaGetFormatNullableListFromJson(
     return defaultValue;
   }
 
-  return apiSchemaGetFormat
-      .map((e) => apiSchemaGetFormatFromJson(e.toString()))
-      .toList();
+  return apiSchemaGetFormat.map((e) => apiSchemaGetFormatFromJson(e.toString())).toList();
 }
 
-String? apiSchemaGetLangNullableToJson(
-  enums.ApiSchemaGetLang? apiSchemaGetLang,
-) {
+String? apiSchemaGetLangNullableToJson(enums.ApiSchemaGetLang? apiSchemaGetLang) {
   return apiSchemaGetLang?.value;
 }
 
@@ -18659,13 +15473,8 @@ String? apiSchemaGetLangToJson(enums.ApiSchemaGetLang apiSchemaGetLang) {
   return apiSchemaGetLang.value;
 }
 
-enums.ApiSchemaGetLang apiSchemaGetLangFromJson(
-  Object? apiSchemaGetLang, [
-  enums.ApiSchemaGetLang? defaultValue,
-]) {
-  return enums.ApiSchemaGetLang.values.firstWhereOrNull(
-        (e) => e.value == apiSchemaGetLang,
-      ) ??
+enums.ApiSchemaGetLang apiSchemaGetLangFromJson(Object? apiSchemaGetLang, [enums.ApiSchemaGetLang? defaultValue]) {
+  return enums.ApiSchemaGetLang.values.firstWhereOrNull((e) => e.value == apiSchemaGetLang) ??
       defaultValue ??
       enums.ApiSchemaGetLang.swaggerGeneratedUnknown;
 }
@@ -18677,21 +15486,14 @@ enums.ApiSchemaGetLang? apiSchemaGetLangNullableFromJson(
   if (apiSchemaGetLang == null) {
     return null;
   }
-  return enums.ApiSchemaGetLang.values.firstWhereOrNull(
-        (e) => e.value == apiSchemaGetLang,
-      ) ??
-      defaultValue;
+  return enums.ApiSchemaGetLang.values.firstWhereOrNull((e) => e.value == apiSchemaGetLang) ?? defaultValue;
 }
 
-String apiSchemaGetLangExplodedListToJson(
-  List<enums.ApiSchemaGetLang>? apiSchemaGetLang,
-) {
+String apiSchemaGetLangExplodedListToJson(List<enums.ApiSchemaGetLang>? apiSchemaGetLang) {
   return apiSchemaGetLang?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<String> apiSchemaGetLangListToJson(
-  List<enums.ApiSchemaGetLang>? apiSchemaGetLang,
-) {
+List<String> apiSchemaGetLangListToJson(List<enums.ApiSchemaGetLang>? apiSchemaGetLang) {
   if (apiSchemaGetLang == null) {
     return [];
   }
@@ -18707,9 +15509,7 @@ List<enums.ApiSchemaGetLang> apiSchemaGetLangListFromJson(
     return defaultValue ?? [];
   }
 
-  return apiSchemaGetLang
-      .map((e) => apiSchemaGetLangFromJson(e.toString()))
-      .toList();
+  return apiSchemaGetLang.map((e) => apiSchemaGetLangFromJson(e.toString())).toList();
 }
 
 List<enums.ApiSchemaGetLang>? apiSchemaGetLangNullableListFromJson(
@@ -18720,27 +15520,22 @@ List<enums.ApiSchemaGetLang>? apiSchemaGetLangNullableListFromJson(
     return defaultValue;
   }
 
-  return apiSchemaGetLang
-      .map((e) => apiSchemaGetLangFromJson(e.toString()))
-      .toList();
+  return apiSchemaGetLang.map((e) => apiSchemaGetLangFromJson(e.toString())).toList();
 }
 
 String? apiV1AnimalsIdHistoryGetCreatedAtRangeNullableToJson(
-  enums.ApiV1AnimalsIdHistoryGetCreatedAtRange?
-  apiV1AnimalsIdHistoryGetCreatedAtRange,
+  enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? apiV1AnimalsIdHistoryGetCreatedAtRange,
 ) {
   return apiV1AnimalsIdHistoryGetCreatedAtRange?.value;
 }
 
 String? apiV1AnimalsIdHistoryGetCreatedAtRangeToJson(
-  enums.ApiV1AnimalsIdHistoryGetCreatedAtRange
-  apiV1AnimalsIdHistoryGetCreatedAtRange,
+  enums.ApiV1AnimalsIdHistoryGetCreatedAtRange apiV1AnimalsIdHistoryGetCreatedAtRange,
 ) {
   return apiV1AnimalsIdHistoryGetCreatedAtRange.value;
 }
 
-enums.ApiV1AnimalsIdHistoryGetCreatedAtRange
-apiV1AnimalsIdHistoryGetCreatedAtRangeFromJson(
+enums.ApiV1AnimalsIdHistoryGetCreatedAtRange apiV1AnimalsIdHistoryGetCreatedAtRangeFromJson(
   Object? apiV1AnimalsIdHistoryGetCreatedAtRange, [
   enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? defaultValue,
 ]) {
@@ -18751,8 +15546,7 @@ apiV1AnimalsIdHistoryGetCreatedAtRangeFromJson(
       enums.ApiV1AnimalsIdHistoryGetCreatedAtRange.swaggerGeneratedUnknown;
 }
 
-enums.ApiV1AnimalsIdHistoryGetCreatedAtRange?
-apiV1AnimalsIdHistoryGetCreatedAtRangeNullableFromJson(
+enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? apiV1AnimalsIdHistoryGetCreatedAtRangeNullableFromJson(
   Object? apiV1AnimalsIdHistoryGetCreatedAtRange, [
   enums.ApiV1AnimalsIdHistoryGetCreatedAtRange? defaultValue,
 ]) {
@@ -18766,18 +15560,13 @@ apiV1AnimalsIdHistoryGetCreatedAtRangeNullableFromJson(
 }
 
 String apiV1AnimalsIdHistoryGetCreatedAtRangeExplodedListToJson(
-  List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>?
-  apiV1AnimalsIdHistoryGetCreatedAtRange,
+  List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>? apiV1AnimalsIdHistoryGetCreatedAtRange,
 ) {
-  return apiV1AnimalsIdHistoryGetCreatedAtRange
-          ?.map((e) => e.value!)
-          .join(',') ??
-      '';
+  return apiV1AnimalsIdHistoryGetCreatedAtRange?.map((e) => e.value!).join(',') ?? '';
 }
 
 List<String> apiV1AnimalsIdHistoryGetCreatedAtRangeListToJson(
-  List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>?
-  apiV1AnimalsIdHistoryGetCreatedAtRange,
+  List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>? apiV1AnimalsIdHistoryGetCreatedAtRange,
 ) {
   if (apiV1AnimalsIdHistoryGetCreatedAtRange == null) {
     return [];
@@ -18786,8 +15575,7 @@ List<String> apiV1AnimalsIdHistoryGetCreatedAtRangeListToJson(
   return apiV1AnimalsIdHistoryGetCreatedAtRange.map((e) => e.value!).toList();
 }
 
-List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>
-apiV1AnimalsIdHistoryGetCreatedAtRangeListFromJson(
+List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange> apiV1AnimalsIdHistoryGetCreatedAtRangeListFromJson(
   List? apiV1AnimalsIdHistoryGetCreatedAtRange, [
   List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>? defaultValue,
 ]) {
@@ -18800,8 +15588,7 @@ apiV1AnimalsIdHistoryGetCreatedAtRangeListFromJson(
       .toList();
 }
 
-List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>?
-apiV1AnimalsIdHistoryGetCreatedAtRangeNullableListFromJson(
+List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>? apiV1AnimalsIdHistoryGetCreatedAtRangeNullableListFromJson(
   List? apiV1AnimalsIdHistoryGetCreatedAtRange, [
   List<enums.ApiV1AnimalsIdHistoryGetCreatedAtRange>? defaultValue,
 ]) {
@@ -18814,15 +15601,11 @@ apiV1AnimalsIdHistoryGetCreatedAtRangeNullableListFromJson(
       .toList();
 }
 
-int? apiV1AnimalsSpeciesGetLevelNullableToJson(
-  enums.ApiV1AnimalsSpeciesGetLevel? apiV1AnimalsSpeciesGetLevel,
-) {
+int? apiV1AnimalsSpeciesGetLevelNullableToJson(enums.ApiV1AnimalsSpeciesGetLevel? apiV1AnimalsSpeciesGetLevel) {
   return apiV1AnimalsSpeciesGetLevel?.value;
 }
 
-int? apiV1AnimalsSpeciesGetLevelToJson(
-  enums.ApiV1AnimalsSpeciesGetLevel apiV1AnimalsSpeciesGetLevel,
-) {
+int? apiV1AnimalsSpeciesGetLevelToJson(enums.ApiV1AnimalsSpeciesGetLevel apiV1AnimalsSpeciesGetLevel) {
   return apiV1AnimalsSpeciesGetLevel.value;
 }
 
@@ -18830,9 +15613,7 @@ enums.ApiV1AnimalsSpeciesGetLevel apiV1AnimalsSpeciesGetLevelFromJson(
   Object? apiV1AnimalsSpeciesGetLevel, [
   enums.ApiV1AnimalsSpeciesGetLevel? defaultValue,
 ]) {
-  return enums.ApiV1AnimalsSpeciesGetLevel.values.firstWhereOrNull(
-        (e) => e.value == apiV1AnimalsSpeciesGetLevel,
-      ) ??
+  return enums.ApiV1AnimalsSpeciesGetLevel.values.firstWhereOrNull((e) => e.value == apiV1AnimalsSpeciesGetLevel) ??
       defaultValue ??
       enums.ApiV1AnimalsSpeciesGetLevel.swaggerGeneratedUnknown;
 }
@@ -18844,9 +15625,7 @@ enums.ApiV1AnimalsSpeciesGetLevel? apiV1AnimalsSpeciesGetLevelNullableFromJson(
   if (apiV1AnimalsSpeciesGetLevel == null) {
     return null;
   }
-  return enums.ApiV1AnimalsSpeciesGetLevel.values.firstWhereOrNull(
-        (e) => e.value == apiV1AnimalsSpeciesGetLevel,
-      ) ??
+  return enums.ApiV1AnimalsSpeciesGetLevel.values.firstWhereOrNull((e) => e.value == apiV1AnimalsSpeciesGetLevel) ??
       defaultValue;
 }
 
@@ -18856,9 +15635,7 @@ String apiV1AnimalsSpeciesGetLevelExplodedListToJson(
   return apiV1AnimalsSpeciesGetLevel?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<int> apiV1AnimalsSpeciesGetLevelListToJson(
-  List<enums.ApiV1AnimalsSpeciesGetLevel>? apiV1AnimalsSpeciesGetLevel,
-) {
+List<int> apiV1AnimalsSpeciesGetLevelListToJson(List<enums.ApiV1AnimalsSpeciesGetLevel>? apiV1AnimalsSpeciesGetLevel) {
   if (apiV1AnimalsSpeciesGetLevel == null) {
     return [];
   }
@@ -18874,13 +15651,10 @@ List<enums.ApiV1AnimalsSpeciesGetLevel> apiV1AnimalsSpeciesGetLevelListFromJson(
     return defaultValue ?? [];
   }
 
-  return apiV1AnimalsSpeciesGetLevel
-      .map((e) => apiV1AnimalsSpeciesGetLevelFromJson(e))
-      .toList();
+  return apiV1AnimalsSpeciesGetLevel.map((e) => apiV1AnimalsSpeciesGetLevelFromJson(e)).toList();
 }
 
-List<enums.ApiV1AnimalsSpeciesGetLevel>?
-apiV1AnimalsSpeciesGetLevelNullableListFromJson(
+List<enums.ApiV1AnimalsSpeciesGetLevel>? apiV1AnimalsSpeciesGetLevelNullableListFromJson(
   List? apiV1AnimalsSpeciesGetLevel, [
   List<enums.ApiV1AnimalsSpeciesGetLevel>? defaultValue,
 ]) {
@@ -18888,20 +15662,14 @@ apiV1AnimalsSpeciesGetLevelNullableListFromJson(
     return defaultValue;
   }
 
-  return apiV1AnimalsSpeciesGetLevel
-      .map((e) => apiV1AnimalsSpeciesGetLevelFromJson(e))
-      .toList();
+  return apiV1AnimalsSpeciesGetLevel.map((e) => apiV1AnimalsSpeciesGetLevelFromJson(e)).toList();
 }
 
-String? apiV1AnimalsStatsGetFormatNullableToJson(
-  enums.ApiV1AnimalsStatsGetFormat? apiV1AnimalsStatsGetFormat,
-) {
+String? apiV1AnimalsStatsGetFormatNullableToJson(enums.ApiV1AnimalsStatsGetFormat? apiV1AnimalsStatsGetFormat) {
   return apiV1AnimalsStatsGetFormat?.value;
 }
 
-String? apiV1AnimalsStatsGetFormatToJson(
-  enums.ApiV1AnimalsStatsGetFormat apiV1AnimalsStatsGetFormat,
-) {
+String? apiV1AnimalsStatsGetFormatToJson(enums.ApiV1AnimalsStatsGetFormat apiV1AnimalsStatsGetFormat) {
   return apiV1AnimalsStatsGetFormat.value;
 }
 
@@ -18909,9 +15677,7 @@ enums.ApiV1AnimalsStatsGetFormat apiV1AnimalsStatsGetFormatFromJson(
   Object? apiV1AnimalsStatsGetFormat, [
   enums.ApiV1AnimalsStatsGetFormat? defaultValue,
 ]) {
-  return enums.ApiV1AnimalsStatsGetFormat.values.firstWhereOrNull(
-        (e) => e.value == apiV1AnimalsStatsGetFormat,
-      ) ??
+  return enums.ApiV1AnimalsStatsGetFormat.values.firstWhereOrNull((e) => e.value == apiV1AnimalsStatsGetFormat) ??
       defaultValue ??
       enums.ApiV1AnimalsStatsGetFormat.swaggerGeneratedUnknown;
 }
@@ -18923,9 +15689,7 @@ enums.ApiV1AnimalsStatsGetFormat? apiV1AnimalsStatsGetFormatNullableFromJson(
   if (apiV1AnimalsStatsGetFormat == null) {
     return null;
   }
-  return enums.ApiV1AnimalsStatsGetFormat.values.firstWhereOrNull(
-        (e) => e.value == apiV1AnimalsStatsGetFormat,
-      ) ??
+  return enums.ApiV1AnimalsStatsGetFormat.values.firstWhereOrNull((e) => e.value == apiV1AnimalsStatsGetFormat) ??
       defaultValue;
 }
 
@@ -18935,9 +15699,7 @@ String apiV1AnimalsStatsGetFormatExplodedListToJson(
   return apiV1AnimalsStatsGetFormat?.map((e) => e.value!).join(',') ?? '';
 }
 
-List<String> apiV1AnimalsStatsGetFormatListToJson(
-  List<enums.ApiV1AnimalsStatsGetFormat>? apiV1AnimalsStatsGetFormat,
-) {
+List<String> apiV1AnimalsStatsGetFormatListToJson(List<enums.ApiV1AnimalsStatsGetFormat>? apiV1AnimalsStatsGetFormat) {
   if (apiV1AnimalsStatsGetFormat == null) {
     return [];
   }
@@ -18953,13 +15715,10 @@ List<enums.ApiV1AnimalsStatsGetFormat> apiV1AnimalsStatsGetFormatListFromJson(
     return defaultValue ?? [];
   }
 
-  return apiV1AnimalsStatsGetFormat
-      .map((e) => apiV1AnimalsStatsGetFormatFromJson(e.toString()))
-      .toList();
+  return apiV1AnimalsStatsGetFormat.map((e) => apiV1AnimalsStatsGetFormatFromJson(e.toString())).toList();
 }
 
-List<enums.ApiV1AnimalsStatsGetFormat>?
-apiV1AnimalsStatsGetFormatNullableListFromJson(
+List<enums.ApiV1AnimalsStatsGetFormat>? apiV1AnimalsStatsGetFormatNullableListFromJson(
   List? apiV1AnimalsStatsGetFormat, [
   List<enums.ApiV1AnimalsStatsGetFormat>? defaultValue,
 ]) {
@@ -18967,9 +15726,7 @@ apiV1AnimalsStatsGetFormatNullableListFromJson(
     return defaultValue;
   }
 
-  return apiV1AnimalsStatsGetFormat
-      .map((e) => apiV1AnimalsStatsGetFormatFromJson(e.toString()))
-      .toList();
+  return apiV1AnimalsStatsGetFormat.map((e) => apiV1AnimalsStatsGetFormatFromJson(e.toString())).toList();
 }
 
 typedef $JsonFactory<T> = T Function(Map<String, dynamic> json);
@@ -19012,15 +15769,12 @@ class $CustomJsonDecoder {
     return jsonFactory(values);
   }
 
-  List<T> _decodeList<T>(Iterable values) =>
-      values.where((v) => v != null).map<T>((v) => decode<T>(v) as T).toList();
+  List<T> _decodeList<T>(Iterable values) => values.where((v) => v != null).map<T>((v) => decode<T>(v) as T).toList();
 }
 
 class $JsonSerializableConverter extends chopper.JsonConverter {
   @override
-  FutureOr<chopper.Response<ResultType>> convertResponse<ResultType, Item>(
-    chopper.Response response,
-  ) async {
+  FutureOr<chopper.Response<ResultType>> convertResponse<ResultType, Item>(chopper.Response response) async {
     if (response.bodyString.isEmpty) {
       // In rare cases, when let's say 204 (no content) is returned -
       // we cannot decode the missing json with the result type specified
@@ -19032,17 +15786,11 @@ class $JsonSerializableConverter extends chopper.JsonConverter {
     }
 
     if (ResultType == DateTime) {
-      return response.copyWith(
-        body:
-            DateTime.parse((response.body as String).replaceAll('"', ''))
-                as ResultType,
-      );
+      return response.copyWith(body: DateTime.parse((response.body as String).replaceAll('"', '')) as ResultType);
     }
 
     final jsonRes = await super.convertResponse(response);
-    return jsonRes.copyWith<ResultType>(
-      body: $jsonDecoder.decode<Item>(jsonRes.body) as ResultType,
-    );
+    return jsonRes.copyWith<ResultType>(body: $jsonDecoder.decode<Item>(jsonRes.body) as ResultType);
   }
 }
 

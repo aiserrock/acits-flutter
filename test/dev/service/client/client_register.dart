@@ -37,11 +37,7 @@ abstract class ClientRegisterDev {
       // CORS-прокси (бэкенд пускает только Origin acits.ru); chopper корректно
       // доклеивает path к прокси-стилю https://proxy/https://host.
       baseUrl: Uri.parse(UrlCorsProxy.wrapBase(baseUrl ?? env.apiUrl)),
-      interceptors: [
-        headerInterceptor,
-        HttpLoggingInterceptorUtf8(),
-        AliceChopperInterceptor(getIt<Alice>()),
-      ],
+      interceptors: [headerInterceptor, HttpLoggingInterceptorUtf8(), AliceChopperInterceptor(getIt<Alice>())],
       authenticator: authInterceptor,
       converter: $JsonSerializableConverter(),
     );

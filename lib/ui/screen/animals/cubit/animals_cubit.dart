@@ -127,12 +127,7 @@ class AnimalsCubit extends Cubit<AnimalsState> {
       _currentListOffset += fetched.length;
       if (fetched.length < _animalPageLength) _reachedEnd = true;
       Log.info('AnimalsCubit.loadAnimalList ok: fetched=${fetched.length} total=${newList.length}');
-      safeEmit(
-        state.copyWith(
-          data: DataState.content(newList),
-          page: DataState.content(_currentListOffset),
-        ),
-      );
+      safeEmit(state.copyWith(data: DataState.content(newList), page: DataState.content(_currentListOffset)));
     } catch (e, s) {
       if (gen != _requestGen) return;
       Log.error('AnimalsCubit.loadAnimalList failed: reset=$needResetOffset', e, s);
@@ -161,8 +156,7 @@ class AnimalsCubit extends Cubit<AnimalsState> {
       return true;
     } catch (e, s) {
       Log.error('AnimalsCubit.deleteAnimal failed, rolled back: id=${item.id}', e, s);
-      final restored = List<AnimalRead>.from(state.data.valueOrNull ?? const [])
-        ..insert(index < 0 ? 0 : index, item);
+      final restored = List<AnimalRead>.from(state.data.valueOrNull ?? const [])..insert(index < 0 ? 0 : index, item);
       safeEmit(state.copyWith(data: DataState.content(restored)));
       return false;
     }
