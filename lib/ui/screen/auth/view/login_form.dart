@@ -8,6 +8,7 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/auth/login.dart';
+import 'package:acits_flutter/ui/widget/locale_switcher.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/theme.dart';
@@ -49,6 +50,8 @@ class LoginForm extends StatelessWidget {
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
+              const SizedBox(height: 8.0),
+              const LocaleSwitcher(size: 18.0),
               const SizedBox(height: 16.0),
               const Spacer(),
               Text(

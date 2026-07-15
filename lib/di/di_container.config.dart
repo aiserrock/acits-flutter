@@ -120,6 +120,7 @@ Future<_i174.GetIt> $initGetIt(
       gh<_i965.Openapi>(instanceName: 'guest'),
       gh<_i622.AuthRepository>(),
       gh<_i422.EmailConfirmRepository>(),
+      gh<_i2.PreferenceStorage>(),
     ),
   );
   gh.singleton<_i245.ConfigService>(

@@ -5,7 +5,6 @@ import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
@@ -17,6 +16,7 @@ import 'package:acits_flutter/ui/screen/curator/curator_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_screen.dart';
 import 'package:acits_flutter/ui/screen/onboarding/bloc/onboarding_bloc.dart';
 import 'package:acits_flutter/ui/screen/onboarding/view/onboarding_screen.dart';
+import 'package:acits_flutter/ui/screen/splash/splash_screen.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/personal_screen.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_screen.dart';
 import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen.dart';
@@ -34,6 +34,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// возвращают значение, открываются через `context.push<T>()` + `context.pop(result)`.
 /// Сложные объекты передаются через `extra` (см. [AppExtraCodec]).
 abstract final class AppRoutes {
+  static const splash = '/splash';
   static const onboarding = '/onboarding';
   static const login = '/login';
   static const registration = '/registration';
@@ -72,13 +73,14 @@ abstract final class AppRoutes {
 /// т.к. флоу входа многошаговый (login → выбор приюта → root) и авто-redirect
 /// по наличию токена конфликтовал бы с промежуточным выбором приюта.
 GoRouter createAppRouter() {
-  final config = getIt<ConfigService>();
-
   return GoRouter(
     navigatorKey: getIt<GlobalKey<NavigatorState>>(),
-    initialLocation: config.isFirstLaunch ? AppRoutes.onboarding : AppRoutes.login,
+    // Всегда стартуем со splash: он делает refresh токена и решает, куда идти
+    // (onboarding / login / pick-shelter / root), без мелькания login.
+    initialLocation: AppRoutes.splash,
     extraCodec: const AppExtraCodec(),
     routes: [
+      GoRoute(path: AppRoutes.splash, builder: (context, state) => const SplashScreen()),
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => BlocProvider(create: (_) => OnboardingBloc(), child: const OnboardingScreen()),

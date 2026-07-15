@@ -57,7 +57,6 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
     final cubit = context.read<CuratorEditCubit>();
     return Scaffold(
       key: scaffoldKey,
-      drawer: const Drawer(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,

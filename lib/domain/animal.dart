@@ -143,6 +143,7 @@ extension AnimalX on AnimalRead {
       curatorId: curator?.id,
       applicantId: applicant?.id,
       animalAttributes: animalAttributes,
+      canBeShared: canBeShared ?? false,
     );
   }
 

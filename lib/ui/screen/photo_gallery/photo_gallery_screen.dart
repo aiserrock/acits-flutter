@@ -7,6 +7,7 @@ import 'package:acits_flutter/domain/gallery_item_data.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/cubit/photo_gallery_cubit.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/cubit/photo_gallery_state.dart';
+import 'package:acits_flutter/ui/screen/photo_editor/photo_editor_screen.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/widget/gallery_item_data_x.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
@@ -52,7 +53,6 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: const Drawer(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -105,17 +105,27 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
         if (index == 0) {
           return _GalleryItemWidget(
             Icon(Icons.add_a_photo_outlined, size: 48.0, color: Theme.of(context).colorScheme.primary),
-            onPressed: () => cubit.addPhoto(ImageSource.camera),
+            onPressed: () => cubit.addPhoto(ImageSource.camera, edit: (b) => openPhotoEditor(context, b)),
           );
         }
         if (index == 1) {
           return _GalleryItemWidget(
             Icon(Icons.photo_library_outlined, size: 48.0, color: Theme.of(context).colorScheme.primary),
-            onPressed: () => cubit.addPhoto(ImageSource.gallery),
+            onPressed: () => cubit.addPhoto(ImageSource.gallery, edit: (b) => openPhotoEditor(context, b)),
           );
         }
         final e = list[index - controlsCount];
-        return _GalleryItemWidget(e.widget, onPressed: () => cubit.chooseItem(e), isChoosed: e.isChoosed);
+        return _GalleryItemWidget(
+          e.widget,
+          onPressed: () => cubit.chooseItem(e),
+          isChoosed: e.isChoosed,
+          // Править можно фото с исходными байтами (с устройства) и уже
+          // загруженные сетевые (оригинал докачивается в editPhoto). Пресеты
+          // (assetPath) не редактируем.
+          onEdit: (e.bytes != null || e.network != null)
+              ? () => cubit.editPhoto(e, edit: (b) => openPhotoEditor(context, b))
+              : null,
+        );
       },
     );
   }
