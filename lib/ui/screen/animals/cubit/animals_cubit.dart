@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animals/cubit/animals_state.dart';
+import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:acits_flutter/util/bloc_ext.dart';
 
 const _animalPageLength = 25;
+const _searchDebounce = Duration(milliseconds: 300);
 
 /// Cubit экрана списка животных.
 ///
@@ -15,11 +19,15 @@ const _animalPageLength = 25;
 /// удаления с оптимистичным откатом. ScrollController остаётся во
 /// [StatefulWidget] экрана.
 class AnimalsCubit extends Cubit<AnimalsState> {
-  AnimalsCubit() : _animalService = getIt<AnimalService>(), super(const AnimalsState()) {
+  AnimalsCubit() : _animalService = getIt<AnimalService>(), super(AnimalsState()) {
     loadAnimalList(needResetOffset: true);
   }
 
   final AnimalService _animalService;
+
+  /// Таймер debounce для ввода в поле поиска: перезапускается на каждый символ,
+  /// запрос уходит только после паузы в наборе.
+  Timer? _searchDebounceTimer;
 
   int _currentListOffset = 0;
 
@@ -32,17 +40,58 @@ class AnimalsCubit extends Cubit<AnimalsState> {
   /// новым (дубликаты) и сбивал offset.
   int _requestGen = 0;
 
-  /// Переключить режим поиска в шапке экрана.
+  /// Переключить режим поиска в шапке экрана. При выключении сбрасывает
+  /// поисковый запрос и перезагружает список (чтобы не остаться на
+  /// отфильтрованной выдаче).
   void toggleSearch() {
-    safeEmit(state.copyWith(isSearchActive: !state.isSearchActive));
+    final nextActive = !state.isSearchActive;
+    if (!nextActive && state.searchRequest.isNotEmpty) {
+      _searchDebounceTimer?.cancel();
+      safeEmit(state.copyWith(isSearchActive: false, searchRequest: ''));
+      loadAnimalList(needResetOffset: true);
+      return;
+    }
+    safeEmit(state.copyWith(isSearchActive: nextActive));
+  }
+
+  /// Обработать ввод в поле поиска (debounce). Запрос уходит после паузы в
+  /// наборе; сортировка сохраняется и комбинируется с поиском.
+  void onSearchChanged(String query) {
+    _searchDebounceTimer?.cancel();
+    _searchDebounceTimer = Timer(_searchDebounce, () {
+      if (query == state.searchRequest) return;
+      safeEmit(state.copyWith(searchRequest: query));
+      loadAnimalList(needResetOffset: true);
+    });
+  }
+
+  /// Сменить пресет сортировки. Перезагружает список с новым `ordering`,
+  /// сохраняя текущий поисковый запрос. Отменяет висящий debounce поиска, чтобы
+  /// он не выстрелил лишним запросом после смены сортировки.
+  void onSortChanged(SortPreset preset) {
+    if (preset == state.activeSort) return;
+    _searchDebounceTimer?.cancel();
+    safeEmit(state.copyWith(activeSort: preset));
+    loadAnimalList(needResetOffset: true);
+  }
+
+  @override
+  Future<void> close() {
+    _searchDebounceTimer?.cancel();
+    return super.close();
   }
 
   /// Идёт ли сейчас догрузка следующей страницы.
   bool get _isPageLoading => state.page.isLoading;
 
   /// Запросить догрузку следующей страницы (для infinite scroll).
+  ///
+  /// Guard на `data.isLoading`: при reset (смена поиска/сортировки/refresh) в
+  /// loading переводится основной список, но `page` остаётся content — без этой
+  /// проверки одновременный доскролл мог запустить вторую загрузку в том же
+  /// поколении и продублировать первую страницу.
   void loadNextPage() {
-    if (_isPageLoading || _reachedEnd) return;
+    if (_isPageLoading || _reachedEnd || state.data.isLoading) return;
     safeEmit(state.copyWith(page: const DataState.loading()));
     loadAnimalList();
   }
@@ -61,7 +110,12 @@ class AnimalsCubit extends Cubit<AnimalsState> {
     }
     final gen = _requestGen;
     try {
-      final value = await _animalService.fetchAnimalList(offset: _currentListOffset, limit: _animalPageLength);
+      final value = await _animalService.fetchAnimalList(
+        offset: _currentListOffset,
+        limit: _animalPageLength,
+        searchRequest: state.searchRequest.isEmpty ? null : state.searchRequest,
+        ordering: state.activeSort.ordering,
+      );
       // Пока шёл запрос, случился reset (сменилось поколение) — этот ответ
       // устарел, не применяем.
       if (gen != _requestGen) {

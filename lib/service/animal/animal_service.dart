@@ -28,13 +28,19 @@ class AnimalService {
   final Openapi _client;
 
   /// Получить список живолных в приюте
-  Future<PaginatedAnimalReadList?> fetchAnimalList({int limit = 25, int offset = 0, String? searchRequest}) async {
-    Log.debug('Fetch animal list: limit=$limit offset=$offset search=$searchRequest');
+  Future<PaginatedAnimalReadList?> fetchAnimalList({
+    int limit = 25,
+    int offset = 0,
+    String? searchRequest,
+    String? ordering,
+  }) async {
+    Log.debug('Fetch animal list: limit=$limit offset=$offset search=$searchRequest ordering=$ordering');
     final result = await _client.apiV1AnimalsGet(
       limit: limit,
       offset: offset,
       xCurrentShelter: _authService.currentShelterId,
       search: searchRequest,
+      ordering: ordering,
     );
 
     if (result.body != null) {
@@ -336,6 +342,15 @@ class AnimalService {
     // TODO: extract to DI
     final repo = getIt<DocumentRepository>();
     final raw = await repo.fetchAnimalDoc(animalId);
-    return repo.decodePdfBytes(raw);
+    final bytes = repo.decodePdfBytes(raw);
+    // Диагностика источника PDF (одним сообщением): длина строки от бэка, длина
+    // после декода и первые байты (у валидного PDF — «%PDF» = 37 80 68 70).
+    final head = bytes.take(8).toList();
+    Log.info(
+      '[pdf] animalId=$animalId raw.len=${raw.length} '
+      'decoded=${bytes.lengthInBytes}B head=$head '
+      'rawHead="${raw.length > 8 ? raw.substring(0, 8) : raw}"',
+    );
+    return bytes;
   }
 }

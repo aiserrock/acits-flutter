@@ -20,8 +20,11 @@ class PrescriptionService {
   final AuthService _authService;
   final ConfigService _configService;
 
-  Future<PaginatedPrescriptionExecutionTodayList?> fetchTodayPrescriptionList() async {
-    Log.debug('Fetch today prescription executions');
+  Future<PaginatedPrescriptionExecutionTodayList?> fetchTodayPrescriptionList({
+    String? search,
+    String? ordering,
+  }) async {
+    Log.debug('Fetch today prescription executions: search=$search ordering=$ordering');
     if (_configService.typeValues == null) {
       await _configService.getTypeValues();
     }
@@ -32,6 +35,8 @@ class PrescriptionService {
       xCurrentShelter: _authService.currentShelterId,
       from: from.toIso8601String(),
       to: to.toIso8601String(),
+      search: search,
+      ordering: ordering,
     );
     if (result.body != null) {
       Log.info('Today prescription executions loaded: count=${result.body?.results?.length ?? 0}');
