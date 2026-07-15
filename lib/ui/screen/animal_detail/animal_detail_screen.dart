@@ -409,9 +409,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
             4: _buildTabIcon(Assets.icon.comment, 4),
           },
           groupValue: _currentTab,
-          // thumbColor задан явно: без него Cupertino рисует белый thumb, который
-          // в светлой теме сливался с иконками onPrimary и «перекрывал» их.
-          thumbColor: Theme.of(context).colorScheme.primary,
+          // По дизайну: дорожка сиреневая (indicatorActive), неактивные иконки —
+          // белые на ней, активная — на белом thumb в акцентном цвете. thumbColor
+          // задан белым явно, иначе в тёмной теме Cupertino подставлял тёмный thumb.
+          thumbColor: Colors.white,
           backgroundColor: context.appColors.indicatorActive,
           onValueChanged: (int? index) {
             setState(() {
@@ -424,19 +425,14 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  /// Иконка вкладки сегмент-контрола. Активная — на primary-thumb (`onPrimary`);
-  /// неактивная — на светлой дорожке (`onSurface` с alpha, контраст к
-  /// `indicatorActive`, в отличие от прежнего `onPrimary`, невидимого в светлой теме).
+  /// Иконка вкладки сегмент-контрола. По дизайну: активная — акцентный цвет
+  /// (`primary`) на белом thumb; неактивная — белая на сиреневой дорожке.
   Widget _buildTabIcon(SvgGenImage icon, int index) {
     final scheme = Theme.of(context).colorScheme;
     final isActive = _currentTab == index;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: icon.svg(
-        height: 28.0,
-        width: 28.0,
-        color: isActive ? scheme.onPrimary : scheme.onSurface.withValues(alpha: 0.6),
-      ),
+      child: icon.svg(height: 28.0, width: 28.0, color: isActive ? scheme.primary : Colors.white),
     );
   }
 
