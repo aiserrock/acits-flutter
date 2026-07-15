@@ -91,10 +91,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
             leading: state.isSearchActive
                 ? GestureDetector(
                     onTap: _exitSearch,
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
                   )
                 : GestureDetector(
                     onTap: RootDrawerProvider.of(context)?.openDrawer,
@@ -152,8 +149,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
             state: state.data,
             loader: (_) => ScreenLoader(
               height: 160.0,
-              pullToRefresh: () =>
-                  context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
+              pullToRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
             ),
             builder: (_, data) => _buildScreenContent(state, data),
             errorBuilder: (_, _) => Column(),
@@ -175,19 +171,11 @@ class _AnimalsViewState extends State<_AnimalsView> {
                 isDense: true,
                 hintText: LocaleKeys.commonSearch.tr(),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: 20.0,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                prefixIcon: Icon(Icons.search, size: 20.0, color: Theme.of(context).colorScheme.primary),
                 prefixIconConstraints: const BoxConstraints(minWidth: 40.0, minHeight: 40.0),
                 suffixIcon: GestureDetector(
                   onTap: _searchController.clear,
-                  child: Icon(
-                    Icons.close,
-                    size: 18.0,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  child: Icon(Icons.close, size: 18.0, color: Theme.of(context).colorScheme.primary),
                 ),
                 suffixIconConstraints: const BoxConstraints(minWidth: 36.0, minHeight: 40.0),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -241,9 +229,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
 
   Widget _buildEmptyState(AnimalsState state) {
     // При активном поиске пустой список = «ничего не найдено», а не «нет животных».
-    final message = state.searchRequest.isNotEmpty
-        ? LocaleKeys.commonNotFound.tr()
-        : LocaleKeys.animalsEmptyState.tr();
+    final message = state.searchRequest.isNotEmpty ? LocaleKeys.commonNotFound.tr() : LocaleKeys.animalsEmptyState.tr();
     return RefreshIndicator(
       onRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
       child: SingleChildScrollView(
@@ -253,10 +239,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
           child: Column(
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [Assets.common.emptyState.svg()]),
-              Text(
-                message,
-                style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary),
-              ),
+              Text(message, style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary)),
             ],
           ),
         ),
