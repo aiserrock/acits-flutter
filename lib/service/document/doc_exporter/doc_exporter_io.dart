@@ -19,20 +19,30 @@ class DocExporterImpl implements DocExporter {
     String? text,
     String? subject,
   }) async {
-    Log.debug('DocExporter(io).share: $fileName ${bytes.lengthInBytes}B');
-    final file = XFile.fromData(bytes, mimeType: mimeType, name: fileName);
-    await SharePlus.instance.share(
-      ShareParams(files: [file], text: text, subject: subject, fileNameOverrides: [fileName]),
+    Log.info(
+      '[share] io старт: $fileName ${bytes.lengthInBytes}B type=$mimeType '
+      'platform=${Platform.operatingSystem}',
     );
+    final file = XFile.fromData(bytes, mimeType: mimeType, name: fileName);
+    try {
+      final result = await SharePlus.instance.share(
+        ShareParams(files: [file], text: text, subject: subject, fileNameOverrides: [fileName]),
+      );
+      Log.info('[share] io результат: status=${result.status} raw=${result.raw}');
+    } catch (e, s) {
+      Log.error('[share] io ошибка share_plus: $fileName', e, s);
+      rethrow;
+    }
   }
 
   /// Пишет файл в temp и открывает системным вьювером — оттуда юзер сохранит.
   @override
   Future<void> download(Uint8List bytes, {required String fileName, String mimeType = 'application/pdf'}) async {
-    Log.info('DocExporter(io).download: $fileName ${bytes.lengthInBytes}B');
+    Log.info('[download] io старт: $fileName ${bytes.lengthInBytes}B');
     final dir = await getTemporaryDirectory();
     final path = '${dir.path}/$fileName';
     await File(path).writeAsBytes(bytes, flush: true);
-    await OpenFilex.open(path, type: mimeType);
+    final result = await OpenFilex.open(path, type: mimeType);
+    Log.info('[download] io открыт: path=$path result=${result.type} msg=${result.message}');
   }
 }

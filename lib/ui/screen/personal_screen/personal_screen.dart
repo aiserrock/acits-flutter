@@ -9,6 +9,7 @@ import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_cubit.dar
 import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_state.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
+import 'package:acits_flutter/ui/widget/locale_switcher.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 
 /// Экран личного кабинета пользователя
@@ -95,41 +96,56 @@ class _PersonalViewState extends State<_PersonalView> {
           child: Form(
             child: Builder(
               builder: (context) {
-                return FormEditCard([
-                  EditCardData(label: LocaleKeys.loginLoginLabel.tr(), enabled: false, initValue: user.username),
-                  EditCardData(
-                    label: LocaleKeys.loginPassLabel.tr(),
-                    enabled: false,
-                    initValue: '••••••••',
-                    suffix: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
-                    onPressed: () => _onPassChange(context),
-                  ),
-                  EditCardData(
-                    label: LocaleKeys.animalCuratorName.tr(),
-                    controller: _firstNameController,
-                    onChanged: _onFieldChanged,
-                  ),
-                  EditCardData(
-                    label: LocaleKeys.animalCuratorLastName.tr(),
-                    controller: _lastNameController,
-                    onChanged: _onFieldChanged,
-                  ),
-                  EditCardData(
-                    label: LocaleKeys.regFathersName.tr(),
-                    controller: _fatherNameController,
-                    onChanged: _onFieldChanged,
-                  ),
-                  EditCardData(
-                    label: LocaleKeys.animalCuratorPhone.tr(),
-                    controller: _phoneController,
-                    onChanged: _onFieldChanged,
-                  ),
-                  EditCardData(
-                    label: LocaleKeys.animalCuratorEmail.tr(),
-                    controller: _emailController,
-                    onChanged: _onFieldChanged,
-                  ),
-                ]);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FormEditCard([
+                      EditCardData(label: LocaleKeys.loginLoginLabel.tr(), enabled: false, initValue: user.username),
+                      EditCardData(
+                        label: LocaleKeys.loginPassLabel.tr(),
+                        enabled: false,
+                        initValue: '••••••••',
+                        suffix: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
+                        onPressed: () => _onPassChange(context),
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorName.tr(),
+                        controller: _firstNameController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorLastName.tr(),
+                        controller: _lastNameController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.regFathersName.tr(),
+                        controller: _fatherNameController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorPhone.tr(),
+                        controller: _phoneController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorEmail.tr(),
+                        controller: _emailController,
+                        onChanged: _onFieldChanged,
+                      ),
+                    ]),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.titleMedium),
+                          const LocaleSwitcher(),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
               },
             ),
           ),

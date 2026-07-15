@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const animalAdd = 'animalAdd';
   static const animalAdditionalInfo = 'animalAdditionalInfo';
   static const animalAdmitted = 'animalAdmitted';
@@ -81,6 +81,7 @@ abstract class LocaleKeys {
   static const commonErrorStubMsg = 'commonErrorStubMsg';
   static const commonErrorStubTitle = 'commonErrorStubTitle';
   static const commonErrorTryAgainMessage = 'commonErrorTryAgainMessage';
+  static const commonLanguage = 'commonLanguage';
   static const commonLoading = 'commonLoading';
   static const commonMonth = 'commonMonth';
   static const commonNDays = 'commonNDays';
@@ -204,4 +205,5 @@ abstract class LocaleKeys {
   static const themeLight = 'themeLight';
   static const themeSectionTitle = 'themeSectionTitle';
   static const themeSystem = 'themeSystem';
+
 }
