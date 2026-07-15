@@ -3,11 +3,15 @@ part of '../photo_gallery_screen.dart';
 const _maskSizePart = .6;
 
 class _GalleryItemWidget extends StatelessWidget {
-  const _GalleryItemWidget(this.child, {this.onPressed, this.isChoosed = false});
+  const _GalleryItemWidget(this.child, {this.onPressed, this.isChoosed = false, this.onEdit});
 
   final Widget child;
   final VoidCallback? onPressed;
   final bool isChoosed;
+
+  /// Если задан — на ячейке рисуется кнопка «редактировать» (только у фото с
+  /// исходными байтами). Тап по ней открывает редактор, не выбирая элемент.
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,29 @@ class _GalleryItemWidget extends StatelessWidget {
                   child: Container(color: Theme.of(context).colorScheme.surface, child: child),
                 ),
                 if (isChoosed) _buildChooseIcon(context),
+                if (onEdit != null) _buildEditButton(context),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEditButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Material(
+          color: Colors.black45,
+          shape: const CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onEdit,
+            child: const Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Icon(Icons.edit, color: Colors.white, size: 16.0),
             ),
           ),
         ),
