@@ -6,6 +6,7 @@ import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/export.dart';
@@ -15,12 +16,19 @@ const _shelterListDefaultLenght = 25;
 /// Сервис авторизации / регистрации
 @singleton
 class AuthService extends ChangeNotifier {
-  AuthService(this._acitsClient, @Named('guest') this._acitsGuestClient, this._authRepository, this._confirmRepository);
+  AuthService(
+    this._acitsClient,
+    @Named('guest') this._acitsGuestClient,
+    this._authRepository,
+    this._confirmRepository,
+    this._preferenceStorage,
+  );
 
   final Openapi _acitsClient;
   final Openapi _acitsGuestClient;
   final AuthRepository _authRepository;
   final EmailConfirmRepository _confirmRepository;
+  final PreferenceStorage _preferenceStorage;
 
   String? _access;
   String? _refreshValue;
@@ -96,15 +104,39 @@ class AuthService extends ChangeNotifier {
     final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(xCurrentShelter: shelterId);
     if (result.body != null) {
       _shelterRole = result.body;
+      // Запоминаем приют для автовхода без экрана выбора при следующем старте.
+      _preferenceStorage.currentShelterId = shelterId;
       return _shelterRole;
     }
     throw MessagedException(error: result.error);
+  }
+
+  /// Восстановить ранее выбранный приют из хранилища (для автовхода).
+  ///
+  /// Возвращает true, если сохранённый id есть и роль по нему успешно получена.
+  /// При ошибке (приют удалён/недоступен) — false, вызывающая сторона уходит на
+  /// экран выбора приюта, а не падает.
+  Future<bool> restoreShelter() async {
+    final savedId = _preferenceStorage.currentShelterId;
+    if (savedId == null) {
+      Log.debug('AuthService.restoreShelter: no saved shelter');
+      return false;
+    }
+    Log.info('AuthService.restoreShelter: id=$savedId');
+    try {
+      final role = await setCurrentShelter(savedId);
+      return role != null;
+    } catch (e, s) {
+      Log.warning('AuthService.restoreShelter failed', e, s);
+      return false;
+    }
   }
 
   void logout() {
     Log.info('Logout');
     _access = _refresh = _shelterList = _shelterRole = null;
     _authRepository.clearRefresh();
+    _preferenceStorage.currentShelterId = null;
     notifyListeners();
     getIt<GoRouter>().go(AppRoutes.login);
   }

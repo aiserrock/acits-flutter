@@ -74,7 +74,10 @@ class AcitsApp extends StatelessWidget {
       supportedLocales: L10n.supportedLocales,
       path: L10n.translationsPath,
       fallbackLocale: L10n.fallbackLocale,
-      startLocale: L10n.fallbackLocale,
+      // Без startLocale: он перебивал сохранённую локаль на каждом запуске.
+      // saveLocale по умолчанию true — easy_localization сам персистит выбор в
+      // SharedPreferences и восстанавливает его при старте; первый запуск берёт
+      // fallbackLocale.
       // RestartWidget выше MyApp: dev-инструменты пересоздают всё дерево (и все
       // BlocProvider) после смены окружения/прокси, чтобы виджеты взяли свежие
       // сервисы из getIt, а не держали старые ссылки.
