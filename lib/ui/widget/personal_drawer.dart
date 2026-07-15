@@ -9,6 +9,7 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/widget/cubit/personal_drawer_cubit.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
 import 'package:acits_flutter/ui/widget/app_version_label.dart';
+import 'package:acits_flutter/ui/widget/locale_switcher.dart';
 import 'package:acits_flutter/ui/widget/theme_switcher_tile.dart';
 
 const Duration _kBaseSettleDuration = Duration(milliseconds: 246);
@@ -80,6 +81,10 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               ),
               _buildDivider(),
               const ThemeSwitcherTile(),
+              ListTile(
+                title: Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.bodyLarge),
+                trailing: const LocaleSwitcher(size: 22.0),
+              ),
               _buildDivider(),
               const Padding(padding: EdgeInsets.symmetric(vertical: 12.0), child: AppVersionLabel()),
             ],

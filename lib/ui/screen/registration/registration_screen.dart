@@ -14,6 +14,7 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/registration/cubit/registration_cubit.dart';
 import 'package:acits_flutter/ui/screen/registration/cubit/registration_state.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
+import 'package:acits_flutter/ui/widget/app_logo.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/success_holder.dart';
@@ -67,7 +68,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
             shadowColor: Colors.transparent,
-            title: Assets.image.logoBar.svg(),
+            title: const AppLogoBar(),
             centerTitle: true,
             leading: GestureDetector(
               child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),

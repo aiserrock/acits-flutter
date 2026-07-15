@@ -32,6 +32,11 @@ final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _expandedHeight = 408.0;
 const _collapsedHeight = 235.0;
 
+/// Бренд-акцент (#6776E0) для активной иконки сегмент-переключателя. Фиксированный,
+/// а не `colorScheme.primary`: в тёмной теме primary бледнеет до #9DA7F1 и почти
+/// не читается на белом thumb. Насыщенный акцент контрастен на белом в обеих темах.
+const _kBrandAccent = Color(0xFF6776E0);
+
 class AnimalDetailScreen extends StatelessWidget {
   const AnimalDetailScreen({required this.id, super.key});
 
@@ -428,11 +433,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
   /// Иконка вкладки сегмент-контрола. По дизайну: активная — акцентный цвет
   /// (`primary`) на белом thumb; неактивная — белая на сиреневой дорожке.
   Widget _buildTabIcon(SvgGenImage icon, int index) {
-    final scheme = Theme.of(context).colorScheme;
     final isActive = _currentTab == index;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: icon.svg(height: 28.0, width: 28.0, color: isActive ? scheme.primary : Colors.white),
+      child: icon.svg(height: 28.0, width: 28.0, color: isActive ? _kBrandAccent : Colors.white),
     );
   }
 
