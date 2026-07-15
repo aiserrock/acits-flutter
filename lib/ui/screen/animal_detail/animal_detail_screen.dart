@@ -17,6 +17,7 @@ import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_detail_cubit.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_detail_state.dart';
 import 'package:acits_flutter/ui/widget/animal_prescription_card.dart';
+import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 import 'package:acits_flutter/ui/widget/default_app_bar.dart';
 import 'package:acits_flutter/ui/widget/default_icon_button.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
@@ -195,11 +196,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                     borderRadius: BorderRadius.circular(30.0),
                     onTap: () => _onPhotoPressed(context, animal),
                     child: avatar != null
-                        ? CircleAvatar(
-                            radius: 30.0,
-                            backgroundColor: Theme.of(context).colorScheme.surface,
-                            backgroundImage: NetworkImage(avatar),
-                          )
+                        ? ShimmerNetworkImage(url: avatar, width: 60.0, height: 60.0, radius: 30.0)
                         : _buildAddPhotoIcon(context, 30.0),
                   ),
                   const SizedBox(width: 16.0),
@@ -271,7 +268,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                     return Stack(
                       children: [
                         Positioned.fill(
-                          child: Image.network(UrlCorsProxy.add(image.image.medium) ?? '', fit: BoxFit.cover),
+                          child: ShimmerNetworkImage(url: UrlCorsProxy.add(image.image.medium), fit: BoxFit.cover),
                         ),
                         Positioned.fill(
                           child: Material(
@@ -400,6 +397,8 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     }
   }
 
+  bool get _isDarkTheme => Theme.of(context).brightness == Brightness.dark;
+
   Widget _buildTabBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -414,11 +413,13 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
             4: _buildTabIcon(Assets.icon.comment, 4),
           },
           groupValue: _currentTab,
-          // По дизайну: дорожка сиреневая (indicatorActive), неактивные иконки —
-          // белые на ней, активная — на белом thumb в акцентном цвете. thumbColor
-          // задан белым явно, иначе в тёмной теме Cupertino подставлял тёмный thumb.
-          thumbColor: Colors.white,
-          backgroundColor: context.appColors.indicatorActive,
+          // Тема-зависимая раскраска (раньше была захардкожена под светлую):
+          //  • светлая: сиреневая дорожка + белый thumb + акцентная активная иконка;
+          //  • тёмная: тёмная дорожка + сиреневый thumb + белая активная иконка.
+          thumbColor: _isDarkTheme ? Theme.of(context).colorScheme.primary : Colors.white,
+          backgroundColor: _isDarkTheme
+              ? Theme.of(context).colorScheme.surfaceContainerHigh
+              : context.appColors.indicatorActive,
           onValueChanged: (int? index) {
             setState(() {
               if (index != null) _currentTab = index;
@@ -434,9 +435,18 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
   /// (`primary`) на белом thumb; неактивная — белая на сиреневой дорожке.
   Widget _buildTabIcon(SvgGenImage icon, int index) {
     final isActive = _currentTab == index;
+    // Активная иконка контрастна к thumb, неактивная — к дорожке:
+    //  • светлая: активная = акцент #6776E0 на белом thumb; неактивная = белая;
+    //  • тёмная: активная = белая на сиреневом thumb; неактивная = приглушённо-светлая.
+    final Color color;
+    if (_isDarkTheme) {
+      color = isActive ? Theme.of(context).colorScheme.onPrimary : Colors.white70;
+    } else {
+      color = isActive ? _kBrandAccent : Colors.white;
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: icon.svg(height: 28.0, width: 28.0, color: isActive ? _kBrandAccent : Colors.white),
+      child: icon.svg(height: 28.0, width: 28.0, color: color),
     );
   }
 

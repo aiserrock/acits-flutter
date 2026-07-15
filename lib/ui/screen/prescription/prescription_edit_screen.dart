@@ -14,6 +14,7 @@ import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
+import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 
 /// Экран создания и редактирования назначений
@@ -277,7 +278,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
         if (avatarUrl != null)
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(backgroundImage: NetworkImage(avatarUrl), radius: 20.0),
+            child: ShimmerNetworkImage(url: avatarUrl, width: 40.0, height: 40.0, radius: 20.0),
           ),
         Expanded(
           child: Text.rich(
