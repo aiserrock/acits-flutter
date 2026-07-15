@@ -101,7 +101,7 @@ jobs:
           channel: stable
           cache: true
 
-      # Format only hand-written code (line length 100). Generated files
+      # Format only hand-written code (line length 120). Generated files
       # (*.g.dart, *.config.dart, *.swagger.dart, *.chopper.dart, *.gen.dart,
       # locale_keys, firebase_options) are excluded: their exact formatting
       # depends on generator/CLI versions and isn't hand-maintained.
@@ -115,7 +115,7 @@ jobs:
             ! -name '*.gen.dart' \
             ! -name 'locale_keys.g.dart' \
             ! -name 'firebase_options.dart')
-          dart format --output=none --set-exit-if-changed -l 100 $files
+          dart format --output=none --set-exit-if-changed -l 120 $files
 
   ##### analyse #####
   analyse:
