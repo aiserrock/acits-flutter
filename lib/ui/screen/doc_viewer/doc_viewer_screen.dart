@@ -48,13 +48,44 @@ class _DocViewerViewState extends State<_DocViewerView> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _exporter = DocExporter();
 
-  PdfController? _controller;
+  PdfControllerPinch? _controller;
   Uint8List? _controllerBytes;
+
+  /// Поворот страницы на экране: 0/1/2/3 четверти (0°/90°/180°/270°). Крутится
+  /// сама страница внутри вьюпорта — экран не вращается. Нужно для альбомных
+  /// PDF, которые иначе показываются мелко по центру.
+  int _quarterTurns = 0;
+
+  /// Множитель зума на одно нажатие кнопки +/−.
+  static const _zoomStep = 1.4;
 
   @override
   void dispose() {
     _controller?.dispose();
     super.dispose();
+  }
+
+  void _rotate() => setState(() => _quarterTurns = (_quarterTurns + 1) % 4);
+
+  /// Масштабирует относительно центра вьюпорта: сдвигаем к центру, множим,
+  /// сдвигаем обратно. Клэмпим в пределах min/max scale просмотрщика.
+  void _zoomBy(double factor) {
+    final controller = _controller;
+    if (controller == null) return;
+
+    final size = context.size;
+    if (size == null) return;
+    final center = Offset(size.width / 2, size.height / 2);
+
+    final current = controller.value.getMaxScaleOnAxis();
+    final target = (current * factor).clamp(1.0, 20.0);
+    final applied = target / current;
+    if ((applied - 1).abs() < 0.001) return;
+
+    controller.value = controller.value.clone()
+      ..translateByDouble(center.dx, center.dy, 0, 1)
+      ..scaleByDouble(applied, applied, 1, 1)
+      ..translateByDouble(-center.dx, -center.dy, 0, 1);
   }
 
   @override
@@ -73,6 +104,13 @@ class _DocViewerViewState extends State<_DocViewerView> {
           style: const TextStyle(color: ColorRes.textPrimary),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.rotate_90_degrees_cw, color: ColorRes.accent),
+            tooltip: 'Rotate',
+            onPressed: _rotate,
+          ),
+        ],
       ),
       body: BlocBuilder<DocViewerCubit, DataState<Uint8List>>(
         builder: (context, state) => DataStateBuilder<Uint8List>(
@@ -95,7 +133,22 @@ class _DocViewerViewState extends State<_DocViewerView> {
     final controller = _controllerFor(bytes);
     return Column(
       children: [
-        Expanded(child: PdfView(controller: controller)),
+        Expanded(
+          child: Stack(
+            children: [
+              // RotatedBox поворачивает страницу внутри вьюпорта (не сам экран),
+              // чтобы альбомный PDF занял всю ширину. Pinch-to-zoom — из коробки
+              // PdfViewPinch; кнопки +/− дублируют зум для десктопа без тача.
+              Positioned.fill(
+                child: RotatedBox(
+                  quarterTurns: _quarterTurns,
+                  child: PdfViewPinch(controller: controller),
+                ),
+              ),
+              Positioned(right: 12, bottom: 12, child: _zoomControls()),
+            ],
+          ),
+        ),
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -109,13 +162,36 @@ class _DocViewerViewState extends State<_DocViewerView> {
     );
   }
 
-  /// Создаёт `PdfController` один раз на набор байтов; при смене документа
+  Widget _zoomControls() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FloatingActionButton.small(
+          heroTag: 'zoom_in',
+          backgroundColor: ColorRes.foreground,
+          foregroundColor: ColorRes.accent,
+          onPressed: () => _zoomBy(_zoomStep),
+          child: const Icon(Icons.add),
+        ),
+        const SizedBox(height: 8),
+        FloatingActionButton.small(
+          heroTag: 'zoom_out',
+          backgroundColor: ColorRes.foreground,
+          foregroundColor: ColorRes.accent,
+          onPressed: () => _zoomBy(1 / _zoomStep),
+          child: const Icon(Icons.remove),
+        ),
+      ],
+    );
+  }
+
+  /// Создаёт `PdfControllerPinch` один раз на набор байтов; при смене документа
   /// старый диспозится. Идентичность — по ссылке на байты (fetcher отдаёт новый
   /// Uint8List на каждую загрузку), без побайтового хэша на каждый ребилд.
-  PdfController _controllerFor(Uint8List bytes) {
+  PdfControllerPinch _controllerFor(Uint8List bytes) {
     if (_controller == null || !identical(_controllerBytes, bytes)) {
       _controller?.dispose();
-      _controller = PdfController(document: PdfDocument.openData(bytes));
+      _controller = PdfControllerPinch(document: PdfDocument.openData(bytes));
       _controllerBytes = bytes;
     }
     return _controller!;
