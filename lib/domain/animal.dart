@@ -4,6 +4,10 @@ import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
+/// Цвет-заглушка для статусов без назначенного цвета. Статус-цвета — это данные
+/// (не chrome темы) и живут вне контекста темы, поэтому остаётся литералом.
+const Color _fallbackStatusColor = Color(0xFF9395A7);
+
 extension AnimalX on AnimalRead {
   String? get statusString {
     final service = getIt<ConfigService>();
@@ -64,15 +68,15 @@ extension AnimalX on AnimalRead {
         return const Color(0xFF279754);
       //TODO: добавить цвета статусов
       case Status69fEnum.preparingToRelease:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       case Status69fEnum.swaggerGeneratedUnknown:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       case Status69fEnum.death:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       case Status69fEnum.euthanasia:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       default:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
     }
   }
 
@@ -176,15 +180,15 @@ extension StatusX on Status69fEnum {
         return const Color(0xFF279754);
       //TODO: добавить цвета статусов
       case Status69fEnum.preparingToRelease:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       case Status69fEnum.swaggerGeneratedUnknown:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       case Status69fEnum.death:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       case Status69fEnum.euthanasia:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
       case Status69fEnum.inClinic:
-        return ColorRes.textSecondary;
+        return _fallbackStatusColor;
     }
   }
 

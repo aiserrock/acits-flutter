@@ -1,4 +1,3 @@
-import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 class AnimalContentCard extends StatelessWidget {
@@ -21,7 +20,7 @@ class AnimalContentCard extends StatelessWidget {
                     flex: 100,
                     child: Text(
                       item.firstCaption ?? '',
-                      style: StyleRes.content,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -32,7 +31,7 @@ class AnimalContentCard extends StatelessWidget {
                       flex: 100,
                       child: Text(
                         item.secondCaption ?? '',
-                        style: StyleRes.content,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         textAlign: TextAlign.right,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -47,7 +46,7 @@ class AnimalContentCard extends StatelessWidget {
                     flex: 100,
                     child: Text(
                       item.firstValue ?? '',
-                      style: valueStyle ?? StyleRes.mainContent,
+                      style: valueStyle ?? Theme.of(context).textTheme.bodyLarge,
                       maxLines: 8,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -58,7 +57,7 @@ class AnimalContentCard extends StatelessWidget {
                       flex: 100,
                       child: Text(
                         item.secondValue ?? '',
-                        style: valueStyle ?? StyleRes.mainContent,
+                        style: valueStyle ?? Theme.of(context).textTheme.bodyLarge,
                         textAlign: TextAlign.right,
                         maxLines: 8,
                         overflow: TextOverflow.ellipsis,
@@ -75,7 +74,7 @@ class AnimalContentCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
-        color: ColorRes.foreground,
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(children: rows),

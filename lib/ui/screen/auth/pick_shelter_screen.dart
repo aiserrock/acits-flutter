@@ -7,7 +7,6 @@ import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_cubit.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_state.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
@@ -62,15 +61,15 @@ class _PickShelterViewState extends State<_PickShelterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       endDrawer: const Drawer(child: DebugDrawerContent()),
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: Assets.image.logoLeadingBar.svg(),
         title: Text(
           LocaleKeys.shelterSelectShelter.tr(),
-          style: const TextStyle(color: ColorRes.textPrimary),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         centerTitle: true,
       ),

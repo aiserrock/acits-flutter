@@ -1,6 +1,5 @@
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
-import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,12 +16,12 @@ class ErrorStubWidget extends StatelessWidget {
     return height != null
         ? SizedBox(
             height: height,
-            child: Center(child: _buildContent()),
+            child: Center(child: _buildContent(context)),
           )
-        : _buildContent();
+        : _buildContent(context);
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -30,11 +29,11 @@ class ErrorStubWidget extends StatelessWidget {
         children: [
           if (showImage) Assets.image.errorStub.svg(),
           if (showImage) const SizedBox(height: 32.0),
-          Text(LocaleKeys.commonErrorStubTitle.tr(), style: StyleRes.title),
+          Text(LocaleKeys.commonErrorStubTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 12.0),
           Text(
             LocaleKeys.commonErrorStubMsg.tr(),
-            style: StyleRes.content.copyWith(fontSize: 16.0),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16.0),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16.0),

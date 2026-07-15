@@ -4,7 +4,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/res/color.dart';
 
 /// Экран входа по логину - паролю
 class LoginScreen extends StatelessWidget {
@@ -14,12 +13,12 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         title: Assets.image.logoBar.svg(),
         centerTitle: true,
       ),
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: KeyboardDismissOnTap(
         child: CustomScrollView(
           slivers: [

@@ -199,5 +199,9 @@
   "regWriteCity": "Укажите город",
   "regWriteCountry": "Укажите страну",
   "regWriteRegion": "Укажите область",
-  "shelterSelectShelter": "Выберите организацию"
+  "shelterSelectShelter": "Выберите организацию",
+  "themeDark": "Тёмная",
+  "themeLight": "Светлая",
+  "themeSectionTitle": "Тема оформления",
+  "themeSystem": "Системная"
 }

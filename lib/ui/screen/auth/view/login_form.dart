@@ -10,8 +10,7 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
-import 'package:acits_flutter/res/color.dart';
-import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/app_version_label.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -41,7 +40,7 @@ class LoginForm extends StatelessWidget {
           child: Column(
             children: [
               Card(
-                child: Padding(padding: const EdgeInsets.all(16.0), child: _buildForm()),
+                child: Padding(padding: const EdgeInsets.all(16.0), child: _buildForm(context)),
               ),
               const SizedBox(height: 16.0),
               const _SubmitButton(),
@@ -49,7 +48,7 @@ class LoginForm extends StatelessWidget {
                 onPressed: () => _onRegistration(context),
                 child: Text(
                   LocaleKeys.loginToRegistration.tr(),
-                  style: const TextStyle(color: ColorRes.accent),
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -57,7 +56,7 @@ class LoginForm extends StatelessWidget {
               Text(
                 LocaleKeys.loginDescribeMsg.tr(),
                 textAlign: TextAlign.center,
-                style: StyleRes.content,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 12.0),
               const AppVersionLabel(),
@@ -68,7 +67,7 @@ class LoginForm extends StatelessWidget {
     );
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -91,7 +90,7 @@ class LoginForm extends StatelessWidget {
             onPressed: () {},
             child: Text(
               LocaleKeys.loginForgetPass.tr(),
-              style: const TextStyle(color: ColorRes.textSecondary),
+              style: TextStyle(color: context.appColors.textSecondary),
             ),
           ),
         ),
@@ -131,14 +130,19 @@ class _NameInput extends StatelessWidget {
                   hintText: LocaleKeys.loginLoginHint.tr(),
                   labelText: LocaleKeys.loginLoginLabel.tr(),
                   floatingLabelStyle: TextStyle(
-                    color: state.focusTarget.isName ? ColorRes.accent : ColorRes.textSecondary,
+                    color: state.focusTarget.isName
+                        ? Theme.of(context).colorScheme.primary
+                        : context.appColors.textSecondary,
                   ),
                   errorStyle: const TextStyle(fontSize: 0.0),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2.0,
+                    ),
                   ),
                 ),
-                cursorColor: ColorRes.accent,
+                cursorColor: Theme.of(context).colorScheme.primary,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 onChanged: (value) => context.read<LoginBloc>().add(LoginNameChanged(value)),
@@ -187,7 +191,9 @@ class _PasswordInput extends StatelessWidget {
                   labelText: LocaleKeys.loginPassLabel.tr(),
                   errorText: state.password.isNotValid ? '' : null,
                   floatingLabelStyle: TextStyle(
-                    color: state.focusTarget.isPassword ? ColorRes.accent : ColorRes.textSecondary,
+                    color: state.focusTarget.isPassword
+                        ? Theme.of(context).colorScheme.primary
+                        : context.appColors.textSecondary,
                   ),
                   errorStyle: const TextStyle(fontSize: 0.0),
                   suffixIcon: CupertinoButton(
@@ -196,8 +202,11 @@ class _PasswordInput extends StatelessWidget {
                         ? Assets.icon.visible.svg()
                         : Assets.icon.visibleOff.svg(),
                   ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorRes.accent, width: 2.0),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2.0,
+                    ),
                   ),
                 ),
                 obscureText: state.passObscured,
@@ -234,8 +243,8 @@ class _SubmitButton extends StatelessWidget {
         return state.status != FormzSubmissionStatus.inProgress
             ? _buildButton(context, state)
             : Shimmer.fromColors(
-                baseColor: ColorRes.accent,
-                highlightColor: ColorRes.background,
+                baseColor: Theme.of(context).colorScheme.primary,
+                highlightColor: Theme.of(context).colorScheme.surface,
                 child: _buildButton(context, state),
               );
       },

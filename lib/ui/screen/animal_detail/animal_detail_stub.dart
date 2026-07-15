@@ -17,7 +17,7 @@ class _AnimalDetailStub extends StatelessWidget {
             slivers: [
               SliverToBoxAdapter(
                 child: Container(
-                  color: ColorRes.foreground,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Stack(
@@ -30,7 +30,10 @@ class _AnimalDetailStub extends StatelessWidget {
                             height: 80.0,
                             child: Align(
                               alignment: Alignment.center,
-                              child: Text(LocaleKeys.animalCardTitle.tr(), style: StyleRes.title),
+                              child: Text(
+                                LocaleKeys.animalCardTitle.tr(),
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
                             ),
                           ),
                         ),
@@ -96,7 +99,7 @@ class _AnimalDetailStub extends StatelessWidget {
         height: 80.0,
         child: CupertinoButton(
           padding: const EdgeInsets.all(0.0),
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

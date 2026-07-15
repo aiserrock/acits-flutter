@@ -140,25 +140,27 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
   Widget _buildForm(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: _buildTitle(),
+        title: _buildTitle(context),
         centerTitle: true,
         bottom: TabBar(
-          indicatorColor: ColorRes.accent,
+          indicatorColor: Theme.of(context).colorScheme.primary,
           indicatorWeight: 4.0,
           tabs: _cubit
               .getTabs()
               .map<Widget>(
                 (tab) => SizedBox(
                   height: kTextTabBarHeight,
-                  child: Center(child: Text(tab, style: StyleRes.subTitle, maxLines: 2)),
+                  child: Center(
+                    child: Text(tab, style: Theme.of(context).textTheme.titleMedium, maxLines: 2),
+                  ),
                 ),
               )
               .toList(),
@@ -166,16 +168,16 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
           isScrollable: true,
         ),
       ),
-      floatingActionButton: _buildFab(),
+      floatingActionButton: _buildFab(context),
       body: KeyboardDismissOnTap(child: _buildBody()),
     );
   }
 
-  Widget _buildFab() {
+  Widget _buildFab(BuildContext context) {
     return FloatingActionButton(
       onPressed: _onFabPressed,
-      backgroundColor: ColorRes.accent,
-      child: const Icon(Icons.done_all, color: Colors.white),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      child: Icon(Icons.done_all, color: Theme.of(context).colorScheme.onPrimary),
     );
   }
 
@@ -184,10 +186,10 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
     if (result != null) _navigator.pop(result);
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
     return Text(
       _cubit.isEdit ? LocaleKeys.prescriptionTitleEdit.tr() : LocaleKeys.prescriptionTitleAdd.tr(),
-      style: const TextStyle(color: ColorRes.textPrimary),
+      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
     );
   }
 
@@ -257,7 +259,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
   Widget _buildAnimalField() {
     return BlocSelector<PrescriptionEditCubit, PrescriptionEditState, AnimalRead?>(
       selector: (state) => state.animal,
-      builder: (_, animal) {
+      builder: (context, animal) {
         return CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => _cubit.onAnimalPressed(context),
@@ -271,7 +273,9 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Row(children: [Expanded(child: _buildAnimalTitle(animal))]),
+                          child: Row(
+                            children: [Expanded(child: _buildAnimalTitle(context, animal))],
+                          ),
                         ),
                         const Divider(height: 8.0, thickness: 1.0),
                       ],
@@ -284,7 +288,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
     );
   }
 
-  Widget _buildAnimalTitle(AnimalRead animal) {
+  Widget _buildAnimalTitle(BuildContext context, AnimalRead animal) {
     final avatarUrl = UrlCorsProxy.add(animal.avatar?.image.small);
     return Row(
       children: [
@@ -297,11 +301,13 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: animal.name, style: StyleRes.subTitle),
-                const TextSpan(text: ', ', style: StyleRes.subTitle),
+                TextSpan(text: animal.name, style: Theme.of(context).textTheme.titleMedium),
+                TextSpan(text: ', ', style: Theme.of(context).textTheme.titleMedium),
                 TextSpan(
                   text: animal.id.toString(),
-                  style: StyleRes.content.copyWith(color: ColorRes.textSecondary),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
                 ),
               ],
             ),

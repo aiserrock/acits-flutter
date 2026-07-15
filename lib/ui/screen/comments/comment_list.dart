@@ -161,7 +161,9 @@ class _CommentListViewState extends State<_CommentListView> {
     final actions = bsSelectorActions(context, <Widget, dynamic Function()>{
       Text(
         LocaleKeys.commonEdit.tr(),
-        style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
       ): () async {
         final result = await context.push<AnimalNote>(
           AppRoutes.commentEditPath(widget.animalId),
@@ -172,7 +174,9 @@ class _CommentListViewState extends State<_CommentListView> {
       },
       Text(
         LocaleKeys.commonDelete.tr(),
-        style: StyleRes.mainContent.copyWith(color: ColorRes.error),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
       ): () {
         _deleteComment(context, comment);
         Navigator.of(context).pop();
@@ -302,8 +306,8 @@ class _CommentItemState extends State<_CommentItem> {
       return TextSpan(
         text: item.value,
         style: item.isUrl
-            ? StyleRes.content.copyWith(
-                color: ColorRes.accent,
+            ? Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
                 decoration: TextDecoration.underline,
               )
             : null,
@@ -323,14 +327,14 @@ class _CommentItemState extends State<_CommentItem> {
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Container(
               padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                color: ColorRes.foreground,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0),
                   bottomLeft: Radius.circular(8.0),
                 ),
-                boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 4.0)],
+                boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 4.0)],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -362,7 +366,7 @@ class _CommentItemState extends State<_CommentItem> {
               onPressed: () => widget.onMorePressed!(context),
               padding: EdgeInsets.zero,
               minimumSize: Size.zero,
-              child: const Icon(Icons.more_vert, color: ColorRes.accent),
+              child: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.primary),
             ),
           ),
       ],
@@ -379,8 +383,8 @@ class _CommentItemState extends State<_CommentItem> {
                   onPressed: () => widget.onFilePressed(file),
                   child: Text(
                     file.filename ?? '',
-                    style: StyleRes.content.copyWith(
-                      color: ColorRes.accent,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                       decoration: TextDecoration.underline,
                     ),
                   ),
@@ -395,9 +399,12 @@ class _CommentItemState extends State<_CommentItem> {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: comment.updatedAt?.toDateTimeHuman ?? '', style: StyleRes.caption),
-          const TextSpan(text: ',  ', style: StyleRes.caption),
-          TextSpan(text: comment.updatedBy ?? '', style: StyleRes.caption),
+          TextSpan(
+            text: comment.updatedAt?.toDateTimeHuman ?? '',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          TextSpan(text: ',  ', style: Theme.of(context).textTheme.bodySmall),
+          TextSpan(text: comment.updatedBy ?? '', style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );

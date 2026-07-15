@@ -1,6 +1,4 @@
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
-import 'package:acits_flutter/res/color.dart';
-import 'package:acits_flutter/res/style.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -15,7 +13,7 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
       mainAxisSize: MainAxisSize.min,
       children: [
         Material(
-          color: ColorRes.foreground,
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
           child: InkWell(
             onTap: onPressed,
             child: SizedBox(
@@ -45,7 +43,7 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Container(
-              color: ColorRes.foreground,
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
               child: Column(children: actionTiles),
             ),
           ),
@@ -53,9 +51,9 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Container(
-              color: ColorRes.foreground,
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
               child: Material(
-                color: ColorRes.foreground,
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
                 child: InkWell(
                   child: SizedBox(
                     height: kToolbarHeight,
@@ -64,7 +62,9 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
                       children: [
                         Text(
                           LocaleKeys.commonCancel.tr(),
-                          style: StyleRes.subTitle.copyWith(color: ColorRes.accent),
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ],
                     ),

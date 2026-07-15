@@ -31,14 +31,17 @@ class _BsDosageState extends State<BsDosage> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
-          color: ColorRes.foreground,
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              Text('${drug.drug.name}, ${drug.drug.formOfDrugName}', style: StyleRes.subTitle),
+              Text(
+                '${drug.drug.name}, ${drug.drug.formOfDrugName}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 16.0),
               TextField(
                 controller: _controller,

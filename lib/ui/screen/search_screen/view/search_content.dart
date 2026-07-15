@@ -42,22 +42,22 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
   Widget build(BuildContext context) {
     return Scaffold(
       // key: _scaffoldKey,
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: CupertinoButton(
           onPressed: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back_ios_new, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
         ),
-        title: _buildTitle(),
+        title: _buildTitle(context),
         centerTitle: true,
       ),
       body: _buildBody(context),
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
     return SizedBox(
       height: 40.0,
       child: TextField(
@@ -70,12 +70,18 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
             onTap: _searchController.clear,
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: ColorRes.accent),
+              child: Assets.icon.close.svg(
+                height: 16.0,
+                width: 16.0,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
         ),
-        style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
     );
   }
@@ -158,7 +164,7 @@ class _EmptyStub extends StatelessWidget {
         children: [
           SizedBox(height: 120.0, width: 120.0, child: Assets.common.emptyState.svg()),
           const SizedBox(height: 32.0),
-          Text(LocaleKeys.commonNotFound.tr(), style: StyleRes.title),
+          Text(LocaleKeys.commonNotFound.tr(), style: Theme.of(context).textTheme.titleLarge),
         ],
       ),
     );

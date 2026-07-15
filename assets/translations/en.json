@@ -193,5 +193,9 @@
   "regWriteCity": "Enter the city",
   "regWriteCountry": "Enter the country",
   "regWriteRegion": "Enter the region",
-  "shelterSelectShelter": "Choose an organisation"
+  "shelterSelectShelter": "Choose an organisation",
+  "themeDark": "Dark",
+  "themeLight": "Light",
+  "themeSectionTitle": "Appearance",
+  "themeSystem": "System"
 }

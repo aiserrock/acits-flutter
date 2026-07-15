@@ -58,17 +58,17 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
     return Scaffold(
       key: scaffoldKey,
       drawer: const Drawer(),
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
           cubit.isEdit ? LocaleKeys.curatorEdit.tr() : LocaleKeys.curatorAdd.tr(),
-          style: const TextStyle(color: ColorRes.textPrimary),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         centerTitle: true,
       ),
@@ -76,8 +76,8 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
         builder: (context, state) => state.isContent
             ? FloatingActionButton(
                 onPressed: _onSubmit,
-                backgroundColor: ColorRes.accent,
-                child: const Icon(Icons.done_all, color: Colors.white),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: Icon(Icons.done_all, color: Theme.of(context).colorScheme.onPrimary),
               )
             : const SizedBox.shrink(),
       ),

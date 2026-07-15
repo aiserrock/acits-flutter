@@ -60,15 +60,19 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
                   padding: const EdgeInsets.only(right: 16.0),
                   child: CupertinoButton(
                     padding: const EdgeInsets.only(),
-                    child: const Icon(Icons.edit, color: ColorRes.accent, size: 40.0),
+                    child: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 40.0,
+                    ),
                     onPressed: () => _addEditCurator(context, curatorId: _curator?.id),
                   ),
                 ),
               CupertinoButton(
                 padding: const EdgeInsets.only(),
-                child: const Icon(
+                child: Icon(
                   Icons.add_circle_outline_rounded,
-                  color: ColorRes.accent,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 40.0,
                 ),
                 onPressed: () => _addEditCurator(context),
@@ -88,7 +92,10 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
         EditCardData(
           label: LocaleKeys.animalPickCurator.tr(),
           controller: _curatorController,
-          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchCurator,
         ),
         if (_curator != null)

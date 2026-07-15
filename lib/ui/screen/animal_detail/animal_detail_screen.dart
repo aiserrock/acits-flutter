@@ -103,7 +103,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     return Scaffold(
       key: scaffoldKey,
       drawer: _buildDrawer(),
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: _buildBody(),
       floatingActionButton: _buildFab(),
     );
@@ -113,9 +113,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     return (_currentTab == 1 || _currentTab == 4)
         ? FloatingActionButton(
             mini: _isSmallScreen,
-            foregroundColor: ColorRes.accent,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             onPressed: () => _onFabPressed(context),
-            child: const Icon(Icons.add, color: Colors.white),
+            child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
           )
         : null;
   }
@@ -142,7 +142,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       child: CustomScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
-        slivers: [_buildHeader(context, animal), _buildPage((_currentTab + 1) * 5, animal)],
+        slivers: [
+          _buildHeader(context, animal),
+          _buildPage(context, (_currentTab + 1) * 5, animal),
+        ],
       ),
     );
   }
@@ -159,7 +162,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       pinned: true,
       expandedHeight: _expandedHeight,
       collapsedHeight: _collapsedHeight,
-      backgroundColor: ColorRes.foreground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shadowColor: Colors.transparent,
       automaticallyImplyLeading: false,
       centerTitle: true,
@@ -192,10 +195,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                     child: avatar != null
                         ? CircleAvatar(
                             radius: 30.0,
-                            backgroundColor: ColorRes.background,
+                            backgroundColor: Theme.of(context).colorScheme.surface,
                             backgroundImage: NetworkImage(avatar),
                           )
-                        : _buildAddPhotoIcon(30.0),
+                        : _buildAddPhotoIcon(context, 30.0),
                   ),
                   const SizedBox(width: 16.0),
                   Column(
@@ -204,13 +207,16 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                     children: [
                       Text(
                         animal.name ?? '',
-                        style: StyleRes.mainContent.copyWith(fontSize: 24.0),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 24.0),
                         maxLines: 3,
                       ),
                       const SizedBox(height: 8.0),
                       Text(
                         animal.id.toString(),
-                        style: StyleRes.titleLight.copyWith(fontSize: 16.0),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: context.appColors.textSecondary,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ],
                   ),
@@ -227,16 +233,20 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildAddPhotoIcon(double radius) {
+  Widget _buildAddPhotoIcon(BuildContext context, double radius) {
     return Container(
       height: radius * 2,
       width: radius * 2,
       decoration: BoxDecoration(
-        color: ColorRes.background,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: const Center(
-        child: Icon(Icons.add_a_photo_outlined, color: ColorRes.accent, size: 32.0),
+      child: Center(
+        child: Icon(
+          Icons.add_a_photo_outlined,
+          color: Theme.of(context).colorScheme.primary,
+          size: 32.0,
+        ),
       ),
     );
   }
@@ -248,7 +258,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
           Center(
             child: CupertinoButton(
               onPressed: () => _onPhotoPressed(context, animal),
-              child: _buildAddPhotoIcon(60.0),
+              child: _buildAddPhotoIcon(context, 60.0),
             ),
           ),
         if (animal.images.isNotEmpty)
@@ -275,7 +285,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              splashColor: ColorRes.accent.withValues(alpha: .4),
+                              splashColor: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: .4),
                               onTap: () => _onPhotoPressed(context, animal),
                             ),
                           ),
@@ -287,13 +299,13 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               ),
             ),
           ),
-        _buildHeaderExpandedTitle(animal),
+        _buildHeaderExpandedTitle(context, animal),
         _buildHeaderImageIndicator(context, animal),
       ],
     );
   }
 
-  Widget _buildHeaderExpandedTitle(AnimalRead animal) {
+  Widget _buildHeaderExpandedTitle(BuildContext context, AnimalRead animal) {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 116.0),
       child: Align(
@@ -305,12 +317,15 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
             Container(
               padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
-                color: ColorRes.textPrimary.withValues(alpha: .3),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .3),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
                 animal.name ?? '',
-                style: StyleRes.mainContent.copyWith(fontSize: 24.0, color: ColorRes.foreground),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 24.0,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
                 maxLines: 3,
               ),
             ),
@@ -318,12 +333,15 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
             Container(
               padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
-                color: ColorRes.textPrimary.withValues(alpha: .3),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .3),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
                 animal.id.toString(),
-                style: StyleRes.titleLight.copyWith(fontSize: 16.0, color: ColorRes.foreground),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: 16.0,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ),
           ],
@@ -339,7 +357,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
         child: Row(
           children: [
             DefaultIconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+              icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
               onPressed: Navigator.of(context).pop,
             ),
             const Spacer(),
@@ -347,9 +365,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               SmoothPageIndicator(
                 controller: _imagePageController,
                 count: animal.images.length,
-                effect: const ExpandingDotsEffect(
-                  activeDotColor: ColorRes.indicatorActive,
-                  dotColor: ColorRes.indicatorInactive,
+                effect: ExpandingDotsEffect(
+                  activeDotColor: context.appColors.indicatorActive,
+                  dotColor: context.appColors.indicatorInactive,
                   dotHeight: 8.0,
                   dotWidth: 8.0,
                   strokeWidth: 16.0,
@@ -357,7 +375,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               ),
             const Spacer(),
             DefaultIconButton(
-              icon: const Icon(Icons.share_outlined, color: ColorRes.accent),
+              icon: Icon(Icons.share_outlined, color: Theme.of(context).colorScheme.primary),
               onPressed: () {
                 context.push(
                   AppRoutes.docViewer,
@@ -375,16 +393,16 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildPage(int count, AnimalRead animal) {
+  Widget _buildPage(BuildContext context, int count, AnimalRead animal) {
     switch (_currentTab) {
       case 0:
-        return _buildCommonInfoPage(animal);
+        return _buildCommonInfoPage(context, animal);
       case 1:
         return _buildPrescriptionsPage();
       case 2:
-        return _buildCuratorPage(animal);
+        return _buildCuratorPage(context, animal);
       case 3:
-        return _buildApplicantPage(animal);
+        return _buildApplicantPage(context, animal);
       default:
         return CommentListWidget(
           animal.id!,
@@ -406,7 +424,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               child: Assets.icon.animalFace.svg(
                 height: 28.0,
                 width: 28.0,
-                color: _currentTab == 0 ? ColorRes.accent : Colors.white,
+                color: _currentTab == 0
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
               ),
             ),
             1: Padding(
@@ -414,7 +434,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               child: Assets.icon.prescription.svg(
                 height: 28.0,
                 width: 28.0,
-                color: _currentTab == 1 ? ColorRes.accent : Colors.white,
+                color: _currentTab == 1
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
               ),
             ),
             2: Padding(
@@ -422,7 +444,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               child: Assets.icon.curator.svg(
                 height: 28.0,
                 width: 28.0,
-                color: _currentTab == 2 ? ColorRes.accent : Colors.white,
+                color: _currentTab == 2
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
               ),
             ),
             3: Padding(
@@ -430,7 +454,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               child: Assets.icon.applicant.svg(
                 height: 28.0,
                 width: 28.0,
-                color: _currentTab == 3 ? ColorRes.accent : Colors.white,
+                color: _currentTab == 3
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
               ),
             ),
             4: Padding(
@@ -438,12 +464,14 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               child: Assets.icon.comment.svg(
                 height: 28.0,
                 width: 28.0,
-                color: _currentTab == 4 ? ColorRes.accent : Colors.white,
+                color: _currentTab == 4
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
               ),
             ),
           },
           groupValue: _currentTab,
-          backgroundColor: ColorRes.indicatorActive,
+          backgroundColor: context.appColors.indicatorActive,
           onValueChanged: (int? index) {
             setState(() {
               if (index != null) _currentTab = index;
