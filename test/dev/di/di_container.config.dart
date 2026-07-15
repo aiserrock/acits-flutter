@@ -11,7 +11,6 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:acits_flutter/domain/env.dart' as _i531;
 import 'package:acits_flutter/export.dart' as _i965;
-import 'package:acits_flutter/res/color.dart' as _i430;
 import 'package:acits_flutter/service/animal/animal_service.dart' as _i876;
 import 'package:acits_flutter/service/auth/auth_repository.dart' as _i622;
 import 'package:acits_flutter/service/auth/auth_service.dart' as _i21;
@@ -41,6 +40,7 @@ import 'package:acits_flutter/service/shared_pref/preference_storage.dart'
 import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart'
     as _i718;
 import 'package:acits_flutter/service/staff/staff_service.dart' as _i156;
+import 'package:acits_flutter/service/theme/theme_storage.dart' as _i924;
 import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
@@ -86,7 +86,6 @@ Future<_i174.GetIt> $initDevGetIt(
     () => sharedPreferenceRegister.createSp(),
     preResolve: true,
   );
-  gh.singleton<_i430.ColorRes>(() => _i430.ColorRes());
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
   gh.factory<_i531.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i361.Dio>(
@@ -107,6 +106,9 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i622.AuthRepository>(
     () => _i622.AuthRepository(gh<_i558.FlutterSecureStorage>()),
+  );
+  gh.factory<_i924.ThemeStorage>(
+    () => _i924.ThemeStorage(gh<_i558.FlutterSecureStorage>()),
   );
   gh.singleton<_i47.DebugService>(
     () => _i47.DebugService(),

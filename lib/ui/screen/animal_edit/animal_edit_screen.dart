@@ -91,27 +91,27 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
         return Scaffold(
           key: scaffoldKey,
           drawer: const Drawer(),
-          backgroundColor: ColorRes.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
-            backgroundColor: ColorRes.foreground,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             shadowColor: Colors.transparent,
             leading: GestureDetector(
-              child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+              child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
               onTap: () => Navigator.of(context).pop(),
             ),
             title: Text(
               cubit.isEdit ? LocaleKeys.animalEdit.tr() : LocaleKeys.animalAdd.tr(),
-              style: const TextStyle(color: ColorRes.textPrimary),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
             centerTitle: true,
           ),
           floatingActionButton: showFab
               ? FloatingActionButton(
                   onPressed: _onFabPressed,
-                  backgroundColor: ColorRes.accent,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(
                     _isLastPage ? Icons.done_all : Icons.arrow_forward_ios_rounded,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 )
               : null,
@@ -153,14 +153,14 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
     );
   }
 
-  Widget _buildIndicator() {
+  Widget _buildIndicator(BuildContext context) {
     return SmoothPageIndicator(
       count: 5,
       controller: _pageController,
       onDotClicked: _scrollTo,
-      effect: const ExpandingDotsEffect(
-        activeDotColor: ColorRes.indicatorActive,
-        dotColor: ColorRes.indicatorInactive,
+      effect: ExpandingDotsEffect(
+        activeDotColor: context.appColors.indicatorActive,
+        dotColor: context.appColors.indicatorInactive,
         dotHeight: 8.0,
         dotWidth: 8.0,
         strokeWidth: 16.0,
@@ -201,7 +201,7 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
             child: SizedBox(height: 48.0, child: Center(child: CircularProgressIndicator())),
           ),
         const SizedBox(height: 16.0),
-        _buildIndicator(),
+        _buildIndicator(context),
         Expanded(
           child: PageView(
             physics: const ClampingScrollPhysics(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/res/theme.dart';
 
 /// Типовой лоадер
 class Skeleton extends StatelessWidget {
@@ -24,15 +24,15 @@ class Skeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       enabled: isLoading,
-      baseColor: ColorRes.inactiveIcon.withValues(alpha: .3),
-      highlightColor: ColorRes.background,
+      baseColor: context.appColors.inactiveIcon.withValues(alpha: .3),
+      highlightColor: Theme.of(context).colorScheme.surface,
       child:
           child ??
           Container(
             height: height,
             width: width,
             decoration: BoxDecoration(
-              color: ColorRes.textSecondary,
+              color: context.appColors.textSecondary,
               borderRadius: radius != null ? BorderRadius.all(Radius.circular(radius!)) : null,
             ),
           ),

@@ -93,13 +93,19 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
           EditCardData(
             label: LocaleKeys.animalBirth.tr(),
             controller: _birthController,
-            suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
+            suffix: Icon(
+              Icons.calendar_today_outlined,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             onPressed: _setBirthDate,
           ),
         EditCardData(
           label: '${LocaleKeys.animalSex.tr()}*',
           controller: _sexController,
-          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           validator: Validator.emptyValidator,
           onPressed: () => _selectGender(context),
         ),
@@ -128,7 +134,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
         EditCardData(
           label: LocaleKeys.animalChipDate.tr(),
           controller: _dateChipController,
-          suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
+          suffix: Icon(Icons.calendar_today_outlined, color: Theme.of(context).colorScheme.primary),
           validator: (value) {
             if (_chipController.text.isNotEmpty && (value == null || value.isEmpty)) {
               return '';
@@ -153,19 +159,23 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 LocaleKeys.animalAgeAppox.tr(),
-                style: StyleRes.button.copyWith(
-                  color: _currentAgeTab == 0 ? ColorRes.textPrimary : Colors.white,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: _currentAgeTab == 0
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Theme.of(context).colorScheme.surface,
                 ),
               ),
             ),
             1: Text(
               LocaleKeys.animalAgeExact.tr(),
-              style: StyleRes.button.copyWith(
-                color: _currentAgeTab == 1 ? ColorRes.textPrimary : Colors.white,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: _currentAgeTab == 1
+                    ? Theme.of(context).colorScheme.onSurface
+                    : Theme.of(context).colorScheme.surface,
               ),
             ),
           },
-          backgroundColor: ColorRes.indicatorActive,
+          backgroundColor: context.appColors.indicatorActive,
           onValueChanged: (int? index) => setState(() {
             if (index != null) _currentAgeTab = index;
           }),
@@ -218,7 +228,12 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
   void _selectGender(BuildContext ctx) {
     final actionList = AnimalGender.values.map<MapEntry<Widget, dynamic Function()>>(
       (gender) => MapEntry(
-        Text(gender.value, style: StyleRes.mainContent.copyWith(color: ColorRes.accent)),
+        Text(
+          gender.value,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
         () {
           _sexController.text = gender.value;
           this.gender = gender;

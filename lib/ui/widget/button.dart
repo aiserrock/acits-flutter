@@ -1,4 +1,3 @@
-import 'package:acits_flutter/res/color.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -30,7 +29,7 @@ class PrimaryButton extends StatelessWidget {
         padding: WidgetStateProperty.all(
           const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         ),
-        backgroundColor: WidgetStateProperty.all(ColorRes.primaryButton),
+        backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
       ),
       child: _buildChild(),
     );

@@ -16,7 +16,7 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
                   Expanded(
                     child: Text(
                       LocaleKeys.animalPrescriptions.tr(),
-                      style: StyleRes.title.copyWith(fontSize: 22.0),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22.0),
                     ),
                   ),
                   Text(
@@ -27,7 +27,7 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
                   Switch(
                     value: state.prescriptionActive,
                     onChanged: _cubit.togglePrescriptionActive,
-                    activeThumbColor: ColorRes.accent,
+                    activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),

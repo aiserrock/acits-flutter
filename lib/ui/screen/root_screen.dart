@@ -1,6 +1,6 @@
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
-import 'package:acits_flutter/res/color.dart';
+import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/ui/screen/animals/animals_screen.dart';
 import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';
 import 'package:acits_flutter/ui/screen/drugs/drugs_screen.dart';
@@ -11,28 +11,32 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-final _bottomNavItems = <BottomNavigationBarItem>[
-  BottomNavigationBarItem(
-    icon: Assets.icon.today.svg(color: ColorRes.inactiveIcon),
-    activeIcon: Assets.icon.today.svg(color: ColorRes.accent),
-    label: LocaleKeys.commonToday.tr(),
-  ),
-  BottomNavigationBarItem(
-    icon: Assets.icon.paw.svg(color: ColorRes.inactiveIcon),
-    activeIcon: Assets.icon.paw.svg(color: ColorRes.accent),
-    label: LocaleKeys.commonAnimals.tr(),
-  ),
-  BottomNavigationBarItem(
-    icon: Assets.icon.calendar.svg(color: ColorRes.inactiveIcon.withValues(alpha: .5)),
-    activeIcon: Assets.icon.calendar.svg(color: ColorRes.accent),
-    label: LocaleKeys.commonCalendar.tr(),
-  ),
-  BottomNavigationBarItem(
-    icon: Assets.icon.drugs.svg(color: ColorRes.inactiveIcon.withValues(alpha: .5)),
-    activeIcon: Assets.icon.drugs.svg(color: ColorRes.accent),
-    label: LocaleKeys.commonDrugs.tr(),
-  ),
-];
+List<BottomNavigationBarItem> _buildBottomNavItems(BuildContext context) {
+  final inactiveIcon = context.appColors.inactiveIcon;
+  final accent = Theme.of(context).colorScheme.primary;
+  return <BottomNavigationBarItem>[
+    BottomNavigationBarItem(
+      icon: Assets.icon.today.svg(color: inactiveIcon),
+      activeIcon: Assets.icon.today.svg(color: accent),
+      label: LocaleKeys.commonToday.tr(),
+    ),
+    BottomNavigationBarItem(
+      icon: Assets.icon.paw.svg(color: inactiveIcon),
+      activeIcon: Assets.icon.paw.svg(color: accent),
+      label: LocaleKeys.commonAnimals.tr(),
+    ),
+    BottomNavigationBarItem(
+      icon: Assets.icon.calendar.svg(color: inactiveIcon.withValues(alpha: .5)),
+      activeIcon: Assets.icon.calendar.svg(color: accent),
+      label: LocaleKeys.commonCalendar.tr(),
+    ),
+    BottomNavigationBarItem(
+      icon: Assets.icon.drugs.svg(color: inactiveIcon.withValues(alpha: .5)),
+      activeIcon: Assets.icon.drugs.svg(color: accent),
+      label: LocaleKeys.commonDrugs.tr(),
+    ),
+  ];
+}
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -78,7 +82,7 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     final bottomNav = BottomNavigationBar(
-      items: _bottomNavItems,
+      items: _buildBottomNavItems(context),
       onTap: (index) => setState(() {
         if (index > 1) {
           ScaffoldMessenger.of(context)
@@ -99,7 +103,7 @@ class _RootScreenState extends State<RootScreen> {
       showSelectedLabels: true,
       showUnselectedLabels: true,
       type: BottomNavigationBarType.fixed,
-      fixedColor: ColorRes.accent,
+      fixedColor: Theme.of(context).colorScheme.primary,
     );
 
     // Web (iOS PWA): Flutter не пробрасывает env(safe-area-inset) в MediaQuery,

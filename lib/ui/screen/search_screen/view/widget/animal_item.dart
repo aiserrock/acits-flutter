@@ -14,11 +14,13 @@ class AnimalListItem extends StatelessWidget {
       title: Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: animal.name ?? '', style: StyleRes.subTitle),
-            const TextSpan(text: ', ', style: StyleRes.subTitle),
+            TextSpan(text: animal.name ?? '', style: Theme.of(context).textTheme.titleMedium),
+            TextSpan(text: ', ', style: Theme.of(context).textTheme.titleMedium),
             TextSpan(
               text: animal.id.toString(),
-              style: StyleRes.content.copyWith(color: ColorRes.textSecondary),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
             ),
           ],
         ),

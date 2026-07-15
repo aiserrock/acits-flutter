@@ -61,23 +61,24 @@ class _PersonalViewState extends State<_PersonalView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
           LocaleKeys.personMyData.tr(),
-          style: const TextStyle(color: ColorRes.textPrimary),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         centerTitle: true,
       ),
       floatingActionButton: BlocBuilder<PersonalCubit, PersonalState>(
-        builder: (context, state) =>
-            (state.data.isContent && state.fabVisible) ? _buildFab() : const SizedBox.shrink(),
+        builder: (context, state) => (state.data.isContent && state.fabVisible)
+            ? _buildFab(context)
+            : const SizedBox.shrink(),
       ),
       body: BlocBuilder<PersonalCubit, PersonalState>(
         builder: (context, state) => DataStateBuilder<UserSerializers>(
@@ -108,7 +109,7 @@ class _PersonalViewState extends State<_PersonalView> {
                     label: LocaleKeys.loginPassLabel.tr(),
                     enabled: false,
                     initValue: '••••••••',
-                    suffix: const Icon(Icons.edit, color: ColorRes.accent),
+                    suffix: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
                     onPressed: () => _onPassChange(context),
                   ),
                   EditCardData(
@@ -145,11 +146,11 @@ class _PersonalViewState extends State<_PersonalView> {
     );
   }
 
-  Widget _buildFab() {
+  Widget _buildFab(BuildContext context) {
     return FloatingActionButton(
       onPressed: _submit,
-      backgroundColor: ColorRes.accent,
-      child: const Icon(Icons.done_all, color: ColorRes.foreground),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      child: Icon(Icons.done_all, color: Theme.of(context).colorScheme.onPrimary),
     );
   }
 

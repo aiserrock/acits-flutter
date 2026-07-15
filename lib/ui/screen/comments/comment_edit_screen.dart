@@ -52,7 +52,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
     return BlocBuilder<CommentEditCubit, CommentEditState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: ColorRes.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(context, state.attachedFile),
           floatingActionButton: _buildFab(context, state),
           body: _buildBody(context),
@@ -64,21 +64,21 @@ class _CommentEditViewState extends State<_CommentEditView> {
   PreferredSizeWidget _buildAppBar(BuildContext context, PlatformFile? attachedFile) {
     final cubit = context.read<CommentEditCubit>();
     return AppBar(
-      backgroundColor: ColorRes.foreground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shadowColor: Colors.transparent,
       leading: GestureDetector(
-        child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+        child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
         onTap: () => Navigator.of(context).pop(),
       ),
       title: Text(
         cubit.isEdit ? LocaleKeys.commentTitleEdit.tr() : LocaleKeys.commentTitleNew.tr(),
-        style: const TextStyle(color: ColorRes.textPrimary),
+        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
       ),
       centerTitle: true,
       actions: [
         CupertinoButton(
           onPressed: _pickFile,
-          child: const Icon(Icons.attach_file_rounded, color: ColorRes.accent),
+          child: Icon(Icons.attach_file_rounded, color: Theme.of(context).colorScheme.primary),
         ),
       ],
       bottom: _buildFileBar(context, attachedFile),
@@ -90,8 +90,8 @@ class _CommentEditViewState extends State<_CommentEditView> {
         ? const SizedBox()
         : FloatingActionButton(
             onPressed: () => _onSubmit(context),
-            backgroundColor: ColorRes.accent,
-            child: const Icon(Icons.send_rounded, color: Colors.white),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: Icon(Icons.send_rounded, color: Theme.of(context).colorScheme.onPrimary),
           );
   }
 
@@ -101,7 +101,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
         ? null
         : AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: ColorRes.foreground,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             shadowColor: Colors.transparent,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -109,8 +109,8 @@ class _CommentEditViewState extends State<_CommentEditView> {
                 Expanded(
                   child: Text(
                     fileName,
-                    style: StyleRes.content.copyWith(
-                      color: ColorRes.accent,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                       decoration: TextDecoration.underline,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -121,7 +121,10 @@ class _CommentEditViewState extends State<_CommentEditView> {
             ),
             actions: [
               CupertinoButton(
-                child: const Icon(Icons.delete_forever_rounded, color: ColorRes.error),
+                child: Icon(
+                  Icons.delete_forever_rounded,
+                  color: Theme.of(context).colorScheme.error,
+                ),
                 onPressed: () {
                   context.read<CommentEditCubit>().clearAttachedFile();
                 },
@@ -137,7 +140,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
           if (_sourceFileName != null)
             AppBar(
               automaticallyImplyLeading: false,
-              backgroundColor: ColorRes.foreground,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               shadowColor: Colors.transparent,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -145,8 +148,8 @@ class _CommentEditViewState extends State<_CommentEditView> {
                   Expanded(
                     child: Text(
                       _sourceFileName ?? '',
-                      style: StyleRes.content.copyWith(
-                        color: ColorRes.textSecondary,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: context.appColors.textSecondary,
                         decoration: TextDecoration.underline,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -155,10 +158,10 @@ class _CommentEditViewState extends State<_CommentEditView> {
                   ),
                 ],
               ),
-              actions: const [
+              actions: [
                 Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Icon(Icons.cloud_done, color: ColorRes.textSecondary),
+                  padding: const EdgeInsets.all(16.0),
+                  child: Icon(Icons.cloud_done, color: context.appColors.textSecondary),
                 ),
               ],
             ),

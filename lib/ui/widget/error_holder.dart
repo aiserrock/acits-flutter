@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/lottie.dart';
-import 'package:acits_flutter/res/style.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -46,13 +45,13 @@ class ErrorHolderWidget extends StatelessWidget {
                 const SizedBox(height: 24.0),
                 Text(
                   title ?? error?.title ?? '',
-                  style: StyleRes.title,
+                  style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16.0),
                 Text(
                   message ?? error?.message ?? '',
-                  style: StyleRes.content,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24.0),

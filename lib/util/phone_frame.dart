@@ -8,12 +8,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 /// этой ширины, а не растягивается на всё окно браузера.
 const double _phoneCanvasWidth = 430.0;
 
-/// Базовый цвет фона-«стекла» по бокам «телефона» на десктопе (под блюром).
-const Color _matteColor = Color(0xFF1F2233);
-
-/// Акцент приложения — основа цветных пятен под блюром.
-const Color _accent = Color(0xFF6776E0);
-
 /// Сила размытия матового фона по бокам.
 const double _backdropBlur = 70.0;
 
@@ -43,6 +37,13 @@ class PhoneFrame extends StatelessWidget {
     // Узкое окно (телефон/сложенный браузер) — ничего не ограничиваем.
     if (screenWidth <= _phoneCanvasWidth) return child;
 
+    // Матовый фон и пятна берут тон из темы: на светлой — светлее, на тёмной —
+    // темнее. Базу тянем из surfaceContainerHigh (глубокий фон), акцент — из
+    // primary, чтобы рамка гармонировала с текущей темой.
+    final scheme = Theme.of(context).colorScheme;
+    final matteColor = scheme.surfaceContainerHigh;
+    final accent = scheme.primary;
+
     // Внутри рамки экран «шириной с телефон»: отрезаем правый viewPadding/inset
     // (боковые safe-area десктопу не нужны) и подменяем ширину.
     final framedMedia = mq.copyWith(size: Size(_phoneCanvasWidth, mq.size.height));
@@ -56,21 +57,25 @@ class PhoneFrame extends StatelessWidget {
         // дерево дважды), размывается только этот декоративный задник.
         Positioned.fill(
           child: DecoratedBox(
-            decoration: const BoxDecoration(color: _matteColor),
+            decoration: BoxDecoration(color: matteColor),
             child: Stack(
               children: [
                 // Пятна расставлены по углам/краям — после блюра сливаются в
                 // мягкие цветные переливы вокруг «телефона».
-                const _Blob(alignment: Alignment(-0.9, -0.8), color: _accent, size: 460),
+                _Blob(alignment: const Alignment(-0.9, -0.8), color: accent, size: 460),
                 _Blob(
                   alignment: const Alignment(0.95, -0.6),
-                  color: _accent.withValues(alpha: 0.5),
+                  color: accent.withValues(alpha: 0.5),
                   size: 380,
                 ),
-                const _Blob(alignment: Alignment(-0.8, 0.9), color: Color(0xFF3A2E6E), size: 520),
+                _Blob(
+                  alignment: const Alignment(-0.8, 0.9),
+                  color: accent.withValues(alpha: 0.6),
+                  size: 520,
+                ),
                 _Blob(
                   alignment: const Alignment(0.9, 0.95),
-                  color: _accent.withValues(alpha: 0.35),
+                  color: accent.withValues(alpha: 0.35),
                   size: 440,
                 ),
                 // Сильный блюр превращает пятна в матовое стекло.

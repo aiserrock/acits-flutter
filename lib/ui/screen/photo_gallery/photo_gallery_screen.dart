@@ -53,15 +53,18 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
     return Scaffold(
       key: _scaffoldKey,
       drawer: const Drawer(),
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Choose the photos', style: TextStyle(color: ColorRes.textPrimary)),
+        title: Text(
+          'Choose the photos',
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
         centerTitle: true,
       ),
       floatingActionButton: BlocBuilder<PhotoGalleryCubit, PhotoGalleryState>(
@@ -69,8 +72,8 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
         builder: (_, state) => state.isSelectorChanged
             ? FloatingActionButton(
                 onPressed: _onSubmit,
-                backgroundColor: ColorRes.accent,
-                child: const Icon(Icons.done_all, color: Colors.white),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: Icon(Icons.done_all, color: Theme.of(context).colorScheme.onPrimary),
               )
             : const SizedBox(),
       ),
@@ -105,13 +108,21 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
       itemBuilder: (context, index) {
         if (index == 0) {
           return _GalleryItemWidget(
-            const Icon(Icons.add_a_photo_outlined, size: 48.0, color: ColorRes.accent),
+            Icon(
+              Icons.add_a_photo_outlined,
+              size: 48.0,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             onPressed: () => cubit.addPhoto(ImageSource.camera),
           );
         }
         if (index == 1) {
           return _GalleryItemWidget(
-            const Icon(Icons.photo_library_outlined, size: 48.0, color: ColorRes.accent),
+            Icon(
+              Icons.photo_library_outlined,
+              size: 48.0,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             onPressed: () => cubit.addPhoto(ImageSource.gallery),
           );
         }
