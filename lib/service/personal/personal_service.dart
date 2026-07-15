@@ -23,9 +23,7 @@ class PersonalService {
       return cached;
     }
 
-    final result = await _acitsClient.apiV1UsersMeGet(
-      xCurrentShelter: _authService.currentShelterId,
-    );
+    final result = await _acitsClient.apiV1UsersMeGet(xCurrentShelter: _authService.currentShelterId);
 
     final user = result.body;
     if (user != null) {
@@ -41,10 +39,7 @@ class PersonalService {
   /// Изменить данные пользователя
   Future<UserSerializers> changePersonal(UserSerializers data) async {
     Log.debug('Change personal: id=${data.id}');
-    final result = await _acitsClient.apiV1UsersMePut(
-      body: data,
-      xCurrentShelter: _authService.currentShelterId,
-    );
+    final result = await _acitsClient.apiV1UsersMePut(body: data, xCurrentShelter: _authService.currentShelterId);
 
     final user = result.body;
     if (user != null) {
@@ -66,11 +61,7 @@ class PersonalService {
   Future<void> changePass(String oldPass, String newPass) async {
     Log.debug('Change password attempt');
     final result = await _acitsClient.apiV1UsersMeChangePasswordPut(
-      body: UserChangePasswordSerializers(
-        oldPassword: oldPass,
-        password: newPass,
-        rePassword: newPass,
-      ),
+      body: UserChangePasswordSerializers(oldPassword: oldPass, password: newPass, rePassword: newPass),
       xCurrentShelter: _authService.currentShelterId,
     );
 

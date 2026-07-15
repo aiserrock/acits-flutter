@@ -24,8 +24,7 @@ class ConfigService {
   List<AnimalAttribute>? _animalAttributes;
   int? _animalAttributesShelterId;
 
-  Map<String, dynamic>? get typeValues =>
-      _typeValues != null ? Map<String, dynamic>.from(_typeValues!) : null;
+  Map<String, dynamic>? get typeValues => _typeValues != null ? Map<String, dynamic>.from(_typeValues!) : null;
 
   List<AnimalAttribute>? get animalAttributes => _animalAttributes;
 
@@ -107,9 +106,7 @@ class ConfigService {
       for (final item in raw) {
         if (item is Map) {
           final key = item['value'];
-          final type = PrescriptionShortMyTypeEnum.values.firstWhereOrNull(
-            (element) => element.value == key,
-          );
+          final type = PrescriptionShortMyTypeEnum.values.firstWhereOrNull((element) => element.value == key);
           if (type != null) _prescriptionTypeNames[type] = item['display_name'];
         }
       }

@@ -4,8 +4,7 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
   Widget _buildPrescriptionsPage() {
     return BlocBuilder<AnimalDetailCubit, AnimalDetailState>(
       buildWhen: (prev, next) =>
-          prev.prescriptions != next.prescriptions ||
-          prev.prescriptionActive != next.prescriptionActive,
+          prev.prescriptions != next.prescriptions || prev.prescriptionActive != next.prescriptionActive,
       builder: (context, state) {
         return SliverList(
           delegate: SliverChildListDelegate([
@@ -20,9 +19,7 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
                     ),
                   ),
                   Text(
-                    state.prescriptionActive
-                        ? LocaleKeys.prescriptionCurrent.tr()
-                        : LocaleKeys.prescriptionPast.tr(),
+                    state.prescriptionActive ? LocaleKeys.prescriptionCurrent.tr() : LocaleKeys.prescriptionPast.tr(),
                   ),
                   Switch(
                     value: state.prescriptionActive,
@@ -33,12 +30,9 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
               ),
             ),
             if (state.prescriptions.isContent)
-              ...?state.prescriptions.valueOrNull?.map<Widget>(
-                (item) => AnimalPrescriptionCard(prescription: item),
-              ),
+              ...?state.prescriptions.valueOrNull?.map<Widget>((item) => AnimalPrescriptionCard(prescription: item)),
             if (state.prescriptions.isLoading) const LoaderHolderWidget(),
-            if (state.prescriptions.hasError)
-              ErrorHolderWidget(onPressed: _cubit.reloadPrescriptions),
+            if (state.prescriptions.hasError) ErrorHolderWidget(onPressed: _cubit.reloadPrescriptions),
             const SizedBox(height: 64.0),
           ]),
         );

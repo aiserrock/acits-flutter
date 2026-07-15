@@ -43,10 +43,7 @@ class DebugScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text('Debug screen', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-        Text(
-          AppVersion.labelWithMode,
-          style: TextStyle(fontSize: 11.0, color: context.appColors.textSecondary),
-        ),
+        Text(AppVersion.labelWithMode, style: TextStyle(fontSize: 11.0, color: context.appColors.textSecondary)),
       ],
     );
   }
@@ -84,9 +81,9 @@ class _LogsCard extends StatelessWidget {
               Text('Логи', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
               PrimaryButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => TalkerScreen(talker: getIt<Talker>())),
-                ),
+                onPressed: () => Navigator.of(
+                  context,
+                ).push(MaterialPageRoute<void>(builder: (_) => TalkerScreen(talker: getIt<Talker>()))),
                 child: Text('Открыть логи (Talker)'.toUpperCase()),
               ),
               const SizedBox(height: 8.0),
@@ -148,10 +145,7 @@ class _FirebaseTestCard extends StatelessWidget {
                 onPressed: () async {
                   await FirebaseAnalytics.instance.logEvent(
                     name: 'test_event',
-                    parameters: {
-                      'source': 'debug_screen',
-                      'platform': kIsWeb ? 'web' : defaultTargetPlatform.name,
-                    },
+                    parameters: {'source': 'debug_screen', 'platform': kIsWeb ? 'web' : defaultTargetPlatform.name},
                   );
                   _snack(context, 'Analytics test_event sent');
                 },
@@ -192,8 +186,7 @@ class _UIKitCard extends StatelessWidget {
                   // Пример deeplink подтверждения почты. Реальную ссылку с
                   // токеном подставляйте из тестового письма — живые токены в
                   // репозитории не храним.
-                  const link =
-                      'https://stage.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/';
+                  const link = 'https://stage.app.acits.ru/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/';
                   context.push('${AppRoutes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
                 },
                 child: Text('Email confirm'.toUpperCase()),
@@ -325,9 +318,7 @@ class _ConnectionCardState extends State<_ConnectionCard> {
     if (_domainIndex == _customDomainIndex) {
       final custom = _customUrlController.text.trim();
       if (custom.isEmpty) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Введите custom URL')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите custom URL')));
         return;
       }
       _debug.customUrl = custom;
@@ -471,10 +462,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('family'),
               onTap: () async {
                 if (_category != null) {
-                  final result = await context.push<Species>(
-                    AppRoutes.searchSpec,
-                    extra: _category,
-                  );
+                  final result = await context.push<Species>(AppRoutes.searchSpec, extra: _category);
                   if (result != null) {
                     setState(() {
                       _family = result;

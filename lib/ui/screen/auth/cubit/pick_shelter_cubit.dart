@@ -15,10 +15,8 @@ import 'package:acits_flutter/util/bloc_ext.dart';
 /// приюта выполняется ровно один раз (защита от повторного входа). Навигацию к
 /// корню после успешного выбора делает виджет по возвращённому `true`.
 class PickShelterCubit extends Cubit<PickShelterState> {
-  PickShelterCubit({
-    required this.autoSelectSingle,
-    PaginatedShelterShortSerializersList? shelterList,
-  }) : super(PickShelterState(shelters: shelterList ?? getIt<AuthService>().shelterList));
+  PickShelterCubit({required this.autoSelectSingle, PaginatedShelterShortSerializersList? shelterList})
+    : super(PickShelterState(shelters: shelterList ?? getIt<AuthService>().shelterList));
 
   final AuthService _authService = getIt<AuthService>();
   final ConfigService _configService = getIt<ConfigService>();

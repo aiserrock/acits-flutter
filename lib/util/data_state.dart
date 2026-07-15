@@ -77,12 +77,7 @@ class DataStateBuilder<T> extends StatelessWidget {
 
 /// Удобный `BlocBuilder`, слушающий Cubit со состоянием-[DataState].
 class DataStateConsumer<C extends StateStreamable<DataState<T>>, T> extends StatelessWidget {
-  const DataStateConsumer({
-    required this.builder,
-    required this.loader,
-    required this.errorBuilder,
-    super.key,
-  });
+  const DataStateConsumer({required this.builder, required this.loader, required this.errorBuilder, super.key});
 
   final WidgetBuilder loader;
   final Widget Function(BuildContext context, Object error) errorBuilder;
@@ -91,12 +86,8 @@ class DataStateConsumer<C extends StateStreamable<DataState<T>>, T> extends Stat
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<C, DataState<T>>(
-      builder: (context, state) => DataStateBuilder<T>(
-        state: state,
-        builder: builder,
-        loader: loader,
-        errorBuilder: errorBuilder,
-      ),
+      builder: (context, state) =>
+          DataStateBuilder<T>(state: state, builder: builder, loader: loader, errorBuilder: errorBuilder),
     );
   }
 }

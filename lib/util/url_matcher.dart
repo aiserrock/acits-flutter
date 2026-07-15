@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-const urlPattern =
-    r'(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:,.;]*)?';
+const urlPattern = r'(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:,.;]*)?';
 
 @immutable
 class TextUrlWrapper {

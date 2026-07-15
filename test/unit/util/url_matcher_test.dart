@@ -37,10 +37,7 @@ void main() {
       const text = 'a https://one.com b http://two.org/p?q=1 c';
       final result = TextUrlWrapper.fromString(text);
       expect(result.map((e) => e.value).join(), text);
-      expect(result.where((e) => e.isUrl).map((e) => e.value).toList(), [
-        'https://one.com',
-        'http://two.org/p?q=1',
-      ]);
+      expect(result.where((e) => e.isUrl).map((e) => e.value).toList(), ['https://one.com', 'http://two.org/p?q=1']);
     });
 
     test('matches url with query string', () {
