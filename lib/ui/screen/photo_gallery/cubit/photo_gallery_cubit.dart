@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/gallery_item_data.dart';
 import 'package:acits_flutter/export.dart';
@@ -69,7 +71,11 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
   }
 
   /// Добавляет новое фото с камеры или из галереи и помечает его выбранным.
-  Future<void> addPhoto(ImageSource source) async {
+  ///
+  /// [edit] — коллбэк редактора (зум/поворот/кроп), вызывается сразу после
+  /// выбора. Открывается из UI-слоя (нужен BuildContext), поэтому передаётся
+  /// сюда как функция. Вернул `null` (отмена) — фото не добавляем.
+  Future<void> addPhoto(ImageSource source, {required Future<Uint8List?> Function(Uint8List) edit}) async {
     final currentList = state.data.valueOrNull;
     if (currentList == null) return;
     final xFile = await ImagePicker().pickImage(source: source);
@@ -77,8 +83,25 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
     // Читаем байты кроссплатформенно (работает и в web) сразу при выборе —
     // при сабмите File(path).readAsBytesSync() падал бы на web.
     final bytes = await xFile.readAsBytes();
+    final edited = await edit(bytes);
+    if (edited == null) return; // отмена в редакторе
     final updated = List<GalleryItemData>.of(currentList)
-      ..insert(0, GalleryItemData(filePath: xFile.path, bytes: bytes, isChoosed: true));
+      ..insert(0, GalleryItemData(filePath: xFile.path, bytes: edited, isChoosed: true));
+    safeEmit(state.copyWith(data: DataState.content(updated), isSelectorChanged: true));
+  }
+
+  /// Открывает редактор для уже добавленного фото [item] (у него должны быть
+  /// [GalleryItemData.bytes]) и заменяет его отредактированными байтами.
+  Future<void> editPhoto(GalleryItemData item, {required Future<Uint8List?> Function(Uint8List) edit}) async {
+    final currentList = state.data.valueOrNull;
+    if (currentList == null) return;
+    final bytes = item.bytes;
+    if (bytes == null) return; // редактируемы только фото с исходными байтами
+    final index = currentList.indexOf(item);
+    if (index < 0) return;
+    final edited = await edit(bytes);
+    if (edited == null) return; // отмена
+    final updated = List<GalleryItemData>.of(currentList)..[index] = item.copyWith(bytes: edited, isChoosed: true);
     safeEmit(state.copyWith(data: DataState.content(updated), isSelectorChanged: true));
   }
 
