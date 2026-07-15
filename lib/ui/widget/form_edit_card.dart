@@ -5,14 +5,7 @@ import 'package:flutter/services.dart';
 /// Контейнер полей ввода/редактирования данных
 /// при создании или редактировании
 class FormEditCard extends StatelessWidget {
-  const FormEditCard(
-    this.data, {
-    this.formKey,
-    this.background,
-    this.padding,
-    this.margin,
-    super.key,
-  });
+  const FormEditCard(this.data, {this.formKey, this.background, this.padding, this.margin, super.key});
 
   final List<EditCardData> data;
   final GlobalKey<FormState>? formKey;
@@ -32,8 +25,7 @@ class FormEditCard extends StatelessWidget {
                     Stack(
                       children: [
                         _buildField(context, item),
-                        if (item.onPressed != null)
-                          Positioned.fill(child: InkWell(onTap: item.onPressed)),
+                        if (item.onPressed != null) Positioned.fill(child: InkWell(onTap: item.onPressed)),
                       ],
                     ),
                   ]
@@ -80,9 +72,7 @@ class FormEditCard extends StatelessWidget {
         fillColor: Colors.transparent,
       ),
       maxLength: item.maxLength,
-      style: item.enabled
-          ? null
-          : const TextStyle().copyWith(color: context.appColors.textSecondary),
+      style: item.enabled ? null : const TextStyle().copyWith(color: context.appColors.textSecondary),
       maxLines: item.isObscure ? 1 : 8,
       minLines: 1,
       keyboardType: keyboardType,

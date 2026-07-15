@@ -59,9 +59,7 @@ class _EmailConfirmInterceptor extends Interceptor {
     if (response != null &&
         response.statusCode == HttpStatus.movedTemporarily &&
         (response.headers.value('location')?.contains('status=invalid_link') ?? false)) {
-      return handler.reject(
-        DioException(requestOptions: response.requestOptions, error: EmailConfirmException()),
-      );
+      return handler.reject(DioException(requestOptions: response.requestOptions, error: EmailConfirmException()));
     }
     super.onError(err, handler);
   }

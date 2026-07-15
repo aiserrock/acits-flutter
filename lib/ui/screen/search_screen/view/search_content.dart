@@ -70,18 +70,12 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
             onTap: _searchController.clear,
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: Assets.icon.close.svg(
-                height: 16.0,
-                width: 16.0,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: Theme.of(context).colorScheme.primary),
             ),
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
         ),
-        style: Theme.of(
-          context,
-        ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
     );
   }
@@ -107,8 +101,7 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
       builder: (context, state) {
         return state.items.isNotEmpty
             ? RefreshIndicator(
-                onRefresh: () async =>
-                    context.read<SearchBloc<T>>().add(const ResetFetchSearchEvent()),
+                onRefresh: () async => context.read<SearchBloc<T>>().add(const ResetFetchSearchEvent()),
                 child: CustomScrollView(
                   keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   controller: _scrollController,
@@ -125,10 +118,7 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
                                   onPressed: () => Navigator.of(context).pop(item),
                                   child: tileBuilder.call(item),
                                 )
-                              : ListTile(
-                                  title: Text(item.toString()),
-                                  onTap: () => Navigator.of(context).pop(item),
-                                ),
+                              : ListTile(title: Text(item.toString()), onTap: () => Navigator.of(context).pop(item)),
                         );
                       }, childCount: state.items.length),
                     ),

@@ -9,11 +9,9 @@ abstract class Validator {
   static String? emailOrEmptyValidator(String? value) =>
       ((value?.isEmpty ?? true) || RegExp(_emailPattern).hasMatch(value!)) ? null : '';
 
-  static String? intValidator(String? value) =>
-      value != null && int.tryParse(value) != null ? null : '';
+  static String? intValidator(String? value) => value != null && int.tryParse(value) != null ? null : '';
 
-  static String? doubleValidator(String? value) =>
-      value != null && double.tryParse(value) != null ? null : '';
+  static String? doubleValidator(String? value) => value != null && double.tryParse(value) != null ? null : '';
 
   static String? Function(String?) emptyValidatorMsg(String msg) {
     return (String? value) => (value?.isNotEmpty ?? false) ? null : msg;

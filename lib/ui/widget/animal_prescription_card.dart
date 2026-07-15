@@ -37,10 +37,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           const SizedBox(height: 4.0),
-          Text(
-            widget.prescription.myType.typeString ?? '',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text(widget.prescription.myType.typeString ?? '', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 4.0),
           Row(
             children: [
@@ -67,10 +64,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
                   children: [
                     TextSpan(text: drug.drugName, style: Theme.of(context).textTheme.bodyLarge),
                     TextSpan(text: ', ', style: Theme.of(context).textTheme.bodyLarge),
-                    TextSpan(
-                      text: drug.drugDosage.toString(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    TextSpan(text: drug.drugDosage.toString(), style: Theme.of(context).textTheme.bodyLarge),
                     if (drug.formOfDrug != null)
                       TextSpan(text: drug.formOfDrug, style: Theme.of(context).textTheme.bodyLarge),
                   ],

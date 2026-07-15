@@ -18,9 +18,7 @@ class AnimalListItem extends StatelessWidget {
             TextSpan(text: ', ', style: Theme.of(context).textTheme.titleMedium),
             TextSpan(
               text: animal.id.toString(),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
             ),
           ],
         ),

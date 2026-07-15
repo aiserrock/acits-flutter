@@ -33,11 +33,7 @@ class _DebugFloatingButtonState extends State<DebugFloatingButton> {
             alignment: _alignment,
             child: const DecoratedBox(
               decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-              child: SizedBox(
-                height: 48,
-                width: 48,
-                child: Icon(Icons.bug_report, color: Colors.white),
-              ),
+              child: SizedBox(height: 48, width: 48, child: Icon(Icons.bug_report, color: Colors.white)),
             ),
           ),
         ),
@@ -49,10 +45,7 @@ class _DebugFloatingButtonState extends State<DebugFloatingButton> {
     setState(() {
       final dx = details.delta.dx / (size.width / 2);
       final dy = details.delta.dy / (size.height / 2);
-      _alignment = Alignment(
-        (_alignment.x + dx).clamp(-1.0, 1.0),
-        (_alignment.y + dy).clamp(-1.0, 1.0),
-      );
+      _alignment = Alignment((_alignment.x + dx).clamp(-1.0, 1.0), (_alignment.y + dy).clamp(-1.0, 1.0));
     });
   }
 

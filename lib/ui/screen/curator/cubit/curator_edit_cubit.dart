@@ -11,9 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CuratorEditCubit extends Cubit<DataState<Curator>> {
   CuratorEditCubit({this.curatorId})
     : _service = getIt<StaffService>(),
-      super(
-        DataState.content(const Curator(firstName: '', lastName: '', phoneNumber: '', address: '')),
-      ) {
+      super(DataState.content(const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''))) {
     _init();
   }
 
@@ -31,11 +29,7 @@ class CuratorEditCubit extends Cubit<DataState<Curator>> {
     try {
       final curator = await _service.fetchCuratorById(id: curatorId!);
       Log.info('CuratorEditCubit.init ok: id=${curator?.id}');
-      safeEmit(
-        DataState.content(
-          curator ?? const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''),
-        ),
-      );
+      safeEmit(DataState.content(curator ?? const Curator(firstName: '', lastName: '', phoneNumber: '', address: '')));
     } catch (e, s) {
       Log.error('CuratorEditCubit.init failed', e, s);
       safeEmit(DataState.error(e));

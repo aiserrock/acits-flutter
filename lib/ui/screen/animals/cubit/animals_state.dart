@@ -23,11 +23,7 @@ class AnimalsState extends Equatable {
   /// Активен ли режим поиска в шапке экрана.
   final bool isSearchActive;
 
-  AnimalsState copyWith({
-    DataState<List<AnimalRead>>? data,
-    DataState<int>? page,
-    bool? isSearchActive,
-  }) {
+  AnimalsState copyWith({DataState<List<AnimalRead>>? data, DataState<int>? page, bool? isSearchActive}) {
     return AnimalsState(
       data: data ?? this.data,
       page: page ?? this.page,

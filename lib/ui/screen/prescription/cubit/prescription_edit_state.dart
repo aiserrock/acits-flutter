@@ -80,14 +80,5 @@ class PrescriptionEditState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-    screen,
-    animal,
-    type,
-    treatmentPeriod,
-    atTimeList,
-    daysList,
-    drugs,
-    loading,
-  ];
+  List<Object?> get props => [screen, animal, type, treatmentPeriod, atTimeList, daysList, drugs, loading];
 }

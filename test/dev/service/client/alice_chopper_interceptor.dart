@@ -61,8 +61,7 @@ class AliceChopperInterceptor implements Interceptor {
         aliceResponse.size = body.length;
       }
       call.response = aliceResponse;
-      call.duration =
-          aliceResponse.time.millisecondsSinceEpoch - aliceRequest.time.millisecondsSinceEpoch;
+      call.duration = aliceResponse.time.millisecondsSinceEpoch - aliceRequest.time.millisecondsSinceEpoch;
       call.loading = false;
       _alice.addHttpCall(call);
 

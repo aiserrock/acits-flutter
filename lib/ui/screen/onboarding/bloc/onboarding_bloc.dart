@@ -41,11 +41,6 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
 
   void _onOnPosition(OnboardingEventOnPosition event, Emitter<OnboardingState> emit) {
     Log.debug('OnboardingBloc.onPosition position=${event.position}');
-    emit(
-      OnboardingState(
-        currentViewPage: event.position,
-        isLast: event.position == onboardingData.length - 1,
-      ),
-    );
+    emit(OnboardingState(currentViewPage: event.position, isLast: event.position == onboardingData.length - 1));
   }
 }

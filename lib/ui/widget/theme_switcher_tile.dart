@@ -24,12 +24,7 @@ class ThemeSwitcherTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ListTile(
-            title: Text(
-              LocaleKeys.themeSectionTitle.tr(),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
+          ListTile(title: Text(LocaleKeys.themeSectionTitle.tr(), style: Theme.of(context).textTheme.titleLarge)),
           _option(context, ThemeMode.system, LocaleKeys.themeSystem.tr()),
           _option(context, ThemeMode.light, LocaleKeys.themeLight.tr()),
           _option(context, ThemeMode.dark, LocaleKeys.themeDark.tr()),

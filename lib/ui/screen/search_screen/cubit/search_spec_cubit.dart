@@ -15,9 +15,7 @@ const _searchBouncePeriod = Duration(milliseconds: 1000);
 /// поиска с дебаунсом. UI-контроллеры ([ScrollController], [TextEditingController])
 /// остаются во [StatefulWidget] экрана.
 class SearchSpecCubit extends Cubit<SearchSpecState> {
-  SearchSpecCubit({this.parentSearch})
-    : _service = getIt<AnimalService>(),
-      super(const SearchSpecState()) {
+  SearchSpecCubit({this.parentSearch}) : _service = getIt<AnimalService>(), super(const SearchSpecState()) {
     loadData(searchRequest: null, resetOffset: true);
   }
 
@@ -37,10 +35,7 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
       loadData(searchRequest: null, resetOffset: true);
       return;
     }
-    _bounceTimer = Timer(
-      _searchBouncePeriod,
-      () => loadData(searchRequest: query, resetOffset: true),
-    );
+    _bounceTimer = Timer(_searchBouncePeriod, () => loadData(searchRequest: query, resetOffset: true));
   }
 
   /// Догрузить следующую страницу, если сейчас нет активной загрузки.

@@ -82,9 +82,7 @@ class ApplicantFetchAdapter extends PagingFetchAdapter<Applicant> {
 
   @override
   Future<List<Applicant>> fetch({required int limit, int offset = 0, String? search}) async {
-    return fetcher
-        .call(limit: limit, offset: offset, searchRequest: search)
-        .then((value) => value ?? <Applicant>[]);
+    return fetcher.call(limit: limit, offset: offset, searchRequest: search).then((value) => value ?? <Applicant>[]);
   }
 }
 
@@ -93,9 +91,7 @@ class CuratorFetchAdapter extends PagingFetchAdapter<Curator> {
 
   @override
   Future<List<Curator>> fetch({required int limit, int offset = 0, String? search}) async {
-    return fetcher
-        .call(limit: limit, offset: offset, searchRequest: search)
-        .then((value) => value ?? <Curator>[]);
+    return fetcher.call(limit: limit, offset: offset, searchRequest: search).then((value) => value ?? <Curator>[]);
   }
 }
 
@@ -114,11 +110,7 @@ class ShelterFetchAdapter extends PagingFetchAdapter<ShelterShortSerializers> {
   ShelterFetchAdapter() : super(getIt<AuthService>().getAllShelterList);
 
   @override
-  Future<List<ShelterShortSerializers>> fetch({
-    required int limit,
-    int offset = 0,
-    String? search,
-  }) async {
+  Future<List<ShelterShortSerializers>> fetch({required int limit, int offset = 0, String? search}) async {
     return fetcher
         .call(limit: limit, offset: offset, searchRequest: search)
         .then((value) => value?.results ?? <ShelterShortSerializers>[]);

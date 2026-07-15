@@ -8,10 +8,7 @@ import 'package:equatable/equatable.dart';
 /// следующей страницы ([page], индикатор внизу списка). UI-контроллеры
 /// (ScrollController) остаются во [StatefulWidget] экрана.
 class CommentListState extends Equatable {
-  const CommentListState({
-    this.data = const DataState.loading(),
-    this.page = const DataState.content(null),
-  });
+  const CommentListState({this.data = const DataState.loading(), this.page = const DataState.content(null)});
 
   /// Состояние основного списка комментариев.
   final DataState<List<AnimalNote>> data;

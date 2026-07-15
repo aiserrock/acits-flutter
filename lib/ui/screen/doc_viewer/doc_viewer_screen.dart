@@ -109,10 +109,7 @@ class _DocViewerViewState extends State<_DocViewerView> {
           child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          widget.title ?? 'Doc viewer',
-          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-        ),
+        title: Text(widget.title ?? 'Doc viewer', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         centerTitle: true,
         actions: [
           IconButton(
@@ -129,8 +126,7 @@ class _DocViewerViewState extends State<_DocViewerView> {
         builder: (context, state) => DataStateBuilder<Uint8List>(
           state: state,
           loader: (_) => const LoaderHolderWidget(),
-          errorBuilder: (_, e) =>
-              ErrorHolderWidget(error: e, onPressed: context.read<DocViewerCubit>().fetchData),
+          errorBuilder: (_, e) => ErrorHolderWidget(error: e, onPressed: context.read<DocViewerCubit>().fetchData),
           builder: (_, bytes) => _buildContent(bytes),
         ),
       ),
@@ -154,11 +150,7 @@ class _DocViewerViewState extends State<_DocViewerView> {
               Positioned.fill(
                 child: RotatedBox(
                   quarterTurns: _landscape ? 1 : 0,
-                  child: PdfViewPinch(
-                    controller: controller,
-                    minScale: _minScale,
-                    maxScale: _maxScale,
-                  ),
+                  child: PdfViewPinch(controller: controller, minScale: _minScale, maxScale: _maxScale),
                 ),
               ),
               Positioned(right: 12, bottom: 12, child: _zoomControls(bytes)),
@@ -215,8 +207,7 @@ class _DocViewerViewState extends State<_DocViewerView> {
     if (_controller == null || !identical(_controllerBytes, bytes)) {
       _controller?.removeListener(_onTransform);
       _controller?.dispose();
-      _controller = PdfControllerPinch(document: PdfDocument.openData(bytes))
-        ..addListener(_onTransform);
+      _controller = PdfControllerPinch(document: PdfDocument.openData(bytes))..addListener(_onTransform);
       _controllerBytes = bytes;
     }
     return _controller!;

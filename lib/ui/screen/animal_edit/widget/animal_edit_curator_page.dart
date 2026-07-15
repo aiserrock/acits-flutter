@@ -18,8 +18,7 @@ class AnimalEditCuratorPage extends AnimalEditPage {
   State<AnimalEditCuratorPage> createState() => _AnimalEditCuratorPageState();
 }
 
-class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
-    with AnimalPageHolderListener {
+class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> with AnimalPageHolderListener {
   final _curatorController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
@@ -60,21 +59,13 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
                   padding: const EdgeInsets.only(right: 16.0),
                   child: CupertinoButton(
                     padding: const EdgeInsets.only(),
-                    child: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 40.0,
-                    ),
+                    child: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary, size: 40.0),
                     onPressed: () => _addEditCurator(context, curatorId: _curator?.id),
                   ),
                 ),
               CupertinoButton(
                 padding: const EdgeInsets.only(),
-                child: Icon(
-                  Icons.add_circle_outline_rounded,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 40.0,
-                ),
+                child: Icon(Icons.add_circle_outline_rounded, color: Theme.of(context).colorScheme.primary, size: 40.0),
                 onPressed: () => _addEditCurator(context),
               ),
               const SizedBox(width: 16.0),
@@ -92,30 +83,15 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage>
         EditCardData(
           label: LocaleKeys.animalPickCurator.tr(),
           controller: _curatorController,
-          suffix: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
           onPressed: _searchCurator,
         ),
         if (_curator != null)
-          EditCardData(
-            label: LocaleKeys.animalCuratorPhone.tr(),
-            enabled: false,
-            controller: _phoneController,
-          ),
+          EditCardData(label: LocaleKeys.animalCuratorPhone.tr(), enabled: false, controller: _phoneController),
         if (_curator != null)
-          EditCardData(
-            label: LocaleKeys.animalCuratorEmail.tr(),
-            enabled: false,
-            controller: _emailController,
-          ),
+          EditCardData(label: LocaleKeys.animalCuratorEmail.tr(), enabled: false, controller: _emailController),
         if (_curator != null)
-          EditCardData(
-            label: LocaleKeys.animalCuratorAddress.tr(),
-            enabled: false,
-            controller: _addressController,
-          ),
+          EditCardData(label: LocaleKeys.animalCuratorAddress.tr(), enabled: false, controller: _addressController),
       ]),
     );
   }

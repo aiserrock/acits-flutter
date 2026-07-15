@@ -31,10 +31,7 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(cubit.isEdit, isFalse);
-      expect(
-        cubit.state,
-        DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: '')),
-      );
+      expect(cubit.state, DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: '')));
       verifyNever(() => service.fetchApplicantById(id: any(named: 'id')));
 
       await cubit.close();
@@ -62,9 +59,7 @@ void main() {
     });
 
     test('emits [loading, error] when fetchApplicantById throws', () async {
-      when(
-        () => service.fetchApplicantById(id: id),
-      ).thenAnswer((_) async => throw Exception('boom'));
+      when(() => service.fetchApplicantById(id: id)).thenAnswer((_) async => throw Exception('boom'));
 
       final cubit = ApplicantEditCubit(applicantId: id);
 
@@ -83,9 +78,7 @@ void main() {
     blocTest<ApplicantEditCubit, DataState<Applicant>>(
       'success calls createApplicant, emits [loading, content], returns the Applicant',
       setUp: () {
-        when(
-          () => service.createApplicant(applicant: any(named: 'applicant')),
-        ).thenAnswer((_) async => created);
+        when(() => service.createApplicant(applicant: any(named: 'applicant'))).thenAnswer((_) async => created);
       },
       build: () => ApplicantEditCubit(),
       act: (cubit) async {
@@ -107,9 +100,7 @@ void main() {
     blocTest<ApplicantEditCubit, DataState<Applicant>>(
       'failure emits [loading, error] and submit returns null',
       setUp: () {
-        when(
-          () => service.createApplicant(applicant: any(named: 'applicant')),
-        ).thenThrow(Exception('nope'));
+        when(() => service.createApplicant(applicant: any(named: 'applicant'))).thenThrow(Exception('nope'));
       },
       build: () => ApplicantEditCubit(),
       act: (cubit) async {

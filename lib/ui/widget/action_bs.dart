@@ -28,9 +28,7 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
   }
 
   final actionTiles = actions.entries
-      .map<Widget>(
-        (action) => buildAction(action.key, action.value, islast: action == actions.entries.last),
-      )
+      .map<Widget>((action) => buildAction(action.key, action.value, islast: action == actions.entries.last))
       .toList();
 
   return SafeArea(
@@ -62,9 +60,9 @@ Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
                       children: [
                         Text(
                           LocaleKeys.commonCancel.tr(),
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     ),

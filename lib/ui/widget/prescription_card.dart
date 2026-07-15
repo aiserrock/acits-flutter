@@ -74,11 +74,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         const Divider(height: 24.0),
         Text(LocaleKeys.mainAppoinmentAuthor.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
-        Text(
-          widget.itemData?.prescription.createdBy ?? ' ',
-          style: Theme.of(context).textTheme.bodyLarge,
-          maxLines: 3,
-        ),
+        Text(widget.itemData?.prescription.createdBy ?? ' ', style: Theme.of(context).textTheme.bodyLarge, maxLines: 3),
         const Divider(height: 24.0),
         Text(LocaleKeys.mainAppoinment.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
@@ -89,10 +85,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
                 children: [
                   TextSpan(text: (drug.drugName), style: Theme.of(context).textTheme.bodyLarge),
                   TextSpan(text: (', '), style: Theme.of(context).textTheme.bodyLarge),
-                  TextSpan(
-                    text: (drug.drugDosage.toString()),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+                  TextSpan(text: (drug.drugDosage.toString()), style: Theme.of(context).textTheme.bodyLarge),
                   if (drug.formOfDrug != null)
                     TextSpan(text: (drug.formOfDrug), style: Theme.of(context).textTheme.bodyLarge),
                 ],
@@ -182,43 +175,33 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       builder: (context) => bsSelectorActions(context, <Widget, dynamic Function()>{
         Text(
           LocaleKeys.commonDone.tr(),
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
           LocaleKeys.commonReschedule.tr(),
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
           _reschedule();
         },
         Text(
           LocaleKeys.commonNotCompleted.tr(),
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
           LocaleKeys.commonEdit.tr(),
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
           widget.onEditedPrescription?.call();
         },
         Text(
           LocaleKeys.commonDelete.tr(),
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
         ): () {
           Navigator.of(context).pop();
         },

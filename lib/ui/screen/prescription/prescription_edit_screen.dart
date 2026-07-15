@@ -18,12 +18,7 @@ import 'package:acits_flutter/ui/widget/loader.dart';
 
 /// Экран создания и редактирования назначений
 class PrescriptionEditScreen extends StatelessWidget {
-  const PrescriptionEditScreen({
-    this.editPrescription,
-    this.editPrescriptionId,
-    this.animal,
-    super.key,
-  });
+  const PrescriptionEditScreen({this.editPrescription, this.editPrescriptionId, this.animal, super.key});
 
   final int? editPrescriptionId;
   final PrescriptionModel? editPrescription;
@@ -51,8 +46,7 @@ class _PrescriptionEditView extends StatefulWidget {
   State<_PrescriptionEditView> createState() => _PrescriptionEditViewState();
 }
 
-class _PrescriptionEditViewState extends State<_PrescriptionEditView>
-    with TickerProviderStateMixin {
+class _PrescriptionEditViewState extends State<_PrescriptionEditView> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   late final NavigatorState _navigator;
@@ -91,9 +85,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
 
     // Синхронизируем комментарий с загруженным назначением (режим правки).
     if (_cubit.isEdit) {
-      _cubit.setEditedState(onComment: (comment) => commentContoroller.text = comment).then((
-        tabIndex,
-      ) {
+      _cubit.setEditedState(onComment: (comment) => commentContoroller.text = comment).then((tabIndex) {
         if (tabIndex != null && mounted) tabController.animateTo(tabIndex);
       });
     }
@@ -158,9 +150,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
               .map<Widget>(
                 (tab) => SizedBox(
                   height: kTextTabBarHeight,
-                  child: Center(
-                    child: Text(tab, style: Theme.of(context).textTheme.titleMedium, maxLines: 2),
-                  ),
+                  child: Center(child: Text(tab, style: Theme.of(context).textTheme.titleMedium, maxLines: 2)),
                 ),
               )
               .toList(),
@@ -207,10 +197,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
               builder: (_, loading) {
                 return VisibleItem(
                   isVisible: loading,
-                  child: SizedBox(
-                    height: 64.0,
-                    child: Center(child: LottieBuilder.asset(LottieRes.dogLoading)),
-                  ),
+                  child: SizedBox(height: 64.0, child: Center(child: LottieBuilder.asset(LottieRes.dogLoading))),
                 );
               },
             ),
@@ -239,10 +226,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
                         _swipeSettleController
                           ..stop()
                           ..value = offset;
-                        _swipeSettleController.animateTo(
-                          .0,
-                          duration: kTabScrollDuration * offset.abs(),
-                        );
+                        _swipeSettleController.animateTo(.0, duration: kTabScrollDuration * offset.abs());
                       }
                     },
                     child: PrescriptionForm(commentContoroller: commentContoroller),
@@ -273,9 +257,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [Expanded(child: _buildAnimalTitle(context, animal))],
-                          ),
+                          child: Row(children: [Expanded(child: _buildAnimalTitle(context, animal))]),
                         ),
                         const Divider(height: 8.0, thickness: 1.0),
                       ],
@@ -305,9 +287,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView>
                 TextSpan(text: ', ', style: Theme.of(context).textTheme.titleMedium),
                 TextSpan(
                   text: animal.id.toString(),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
                 ),
               ],
             ),

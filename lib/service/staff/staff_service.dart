@@ -14,11 +14,7 @@ class StaffService {
   final Openapi _client;
 
   /// Список кураторов
-  Future<List<Curator>> fetchCurators({
-    int limit = 25,
-    int offset = 0,
-    String? searchRequest,
-  }) async {
+  Future<List<Curator>> fetchCurators({int limit = 25, int offset = 0, String? searchRequest}) async {
     Log.debug('Fetch curators: limit=$limit offset=$offset search=$searchRequest');
     final result = await _client.apiV1CuratorsGet(
       limit: limit,
@@ -94,11 +90,7 @@ class StaffService {
   }
 
   /// Список заявителей
-  Future<List<Applicant>> fetchApplicants({
-    int limit = 25,
-    int offset = 0,
-    String? searchRequest,
-  }) async {
+  Future<List<Applicant>> fetchApplicants({int limit = 25, int offset = 0, String? searchRequest}) async {
     Log.debug('Fetch applicants: limit=$limit offset=$offset search=$searchRequest');
     final result = await _client.apiV1ApplicantsGet(
       limit: limit,

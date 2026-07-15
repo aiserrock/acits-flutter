@@ -38,10 +38,7 @@ class _BsDosageState extends State<BsDosage> {
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              Text(
-                '${drug.drug.name}, ${drug.drug.formOfDrugName}',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text('${drug.drug.name}, ${drug.drug.formOfDrugName}', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 16.0),
               TextField(
                 controller: _controller,
@@ -52,10 +49,7 @@ class _BsDosageState extends State<BsDosage> {
                 onEditingComplete: () => _onSubmit(context),
               ),
               const SizedBox(height: 24.0),
-              PrimaryButton(
-                text: LocaleKeys.commonAccept.tr(),
-                onPressed: () => _onSubmit(context),
-              ),
+              PrimaryButton(text: LocaleKeys.commonAccept.tr(), onPressed: () => _onSubmit(context)),
             ],
           ),
         ),

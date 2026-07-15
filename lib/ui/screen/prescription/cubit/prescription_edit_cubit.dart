@@ -35,12 +35,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       _configService = getIt<ConfigService>(),
       _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
       _prescriptionService = getIt<PrescriptionService>(),
-      super(
-        PrescriptionEditState(
-          animal: initAnimal,
-          type: _filteredTypes[_initialTabIndex(editPrescription)],
-        ),
-      );
+      super(PrescriptionEditState(animal: initAnimal, type: _filteredTypes[_initialTabIndex(editPrescription)]));
 
   /// Типы без служебного `swaggerGeneratedUnknown` — в том же порядке, что и
   /// табы на экране (см. [getTypes]).
@@ -75,10 +70,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   ///
   /// Возвращает сохранённое [Prescription] при успехе, либо `null` (ошибка
   /// показана через [state]) — виджет закрывает экран с результатом.
-  Future<PrescriptionModel?> submit({
-    required String description,
-    required BuildContext context,
-  }) async {
+  Future<PrescriptionModel?> submit({required String description, required BuildContext context}) async {
     if (_checkIsLoading) return null;
     Log.debug('PrescriptionEditCubit.submit isEdit=$isEdit');
 
@@ -97,16 +89,13 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       description: description,
       drugs: state.drugs,
       duration:
-          state.type == PrescriptionShortMyTypeEnum.courseOfTreatment &&
-              state.treatmentPeriod == TreatmentPeriod.weekly
+          state.type == PrescriptionShortMyTypeEnum.courseOfTreatment && state.treatmentPeriod == TreatmentPeriod.weekly
           ? DurationEnum.everyWeek
           : DurationEnum.custom,
       executions: [
         ...state.daysList
             .map<Iterable<PrescriptionExecution>>(
-              (day) => state.atTimeList.map(
-                (time) => PrescriptionExecution(executeAt: day.mergeTime(time)),
-              ),
+              (day) => state.atTimeList.map((time) => PrescriptionExecution(executeAt: day.mergeTime(time))),
             )
             .expand((list) => list),
       ],
@@ -191,23 +180,12 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
     final executuons = prescription.executions;
     final days = <DateTime>{}
-      ..addAll(
-        executuons
-            .map((item) => item.executeAt)
-            .map((date) => DateTime(date.year, date.month, date.day)),
-      );
+      ..addAll(executuons.map((item) => item.executeAt).map((date) => DateTime(date.year, date.month, date.day)));
     final times = <TimeOfDay>{}
-      ..addAll(
-        executuons
-            .map((item) => item.executeAt)
-            .map((time) => TimeOfDay(hour: time.hour, minute: time.minute)),
-      );
+      ..addAll(executuons.map((item) => item.executeAt).map((time) => TimeOfDay(hour: time.hour, minute: time.minute)));
 
     if (days.isNotEmpty && times.isNotEmpty) {
-      next = next.copyWith(
-        daysList: days.toList()..sort(),
-        atTimeList: times.toList()..sort(TimeOfDayX.timeSort),
-      );
+      next = next.copyWith(daysList: days.toList()..sort(), atTimeList: times.toList()..sort(TimeOfDayX.timeSort));
     }
 
     final comment = prescription.description;
@@ -246,9 +224,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   Future<void> pickStartDate(BuildContext context) async {
     final now = DateTime.now();
     final dateShift = state.treatmentPeriod == TreatmentPeriod.weekly ? 7 : 1;
-    final initDate = state.daysList.isNotEmpty
-        ? state.daysList.max.add(Duration(days: dateShift))
-        : now;
+    final initDate = state.daysList.isNotEmpty ? state.daysList.max.add(Duration(days: dateShift)) : now;
     final result = await showDatePicker(
       context: context,
       initialDate: initDate,
@@ -341,11 +317,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
         SnackBar(
           content: Row(
             children: [
-              SizedBox(
-                height: 40.0,
-                width: 40.0,
-                child: LottieBuilder.asset(LottieRes.crashScratch),
-              ),
+              SizedBox(height: 40.0, width: 40.0, child: LottieBuilder.asset(LottieRes.crashScratch)),
               Expanded(child: Text(msg)),
             ],
           ),

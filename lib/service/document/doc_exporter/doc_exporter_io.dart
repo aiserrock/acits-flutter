@@ -28,11 +28,7 @@ class DocExporterImpl implements DocExporter {
 
   /// Пишет файл в temp и открывает системным вьювером — оттуда юзер сохранит.
   @override
-  Future<void> download(
-    Uint8List bytes, {
-    required String fileName,
-    String mimeType = 'application/pdf',
-  }) async {
+  Future<void> download(Uint8List bytes, {required String fileName, String mimeType = 'application/pdf'}) async {
     Log.info('DocExporter(io).download: $fileName ${bytes.lengthInBytes}B');
     final dir = await getTemporaryDirectory();
     final path = '${dir.path}/$fileName';

@@ -20,8 +20,7 @@ mixin AnimalPageHolderListener {
 
   void addPageListener(BuildContext context) {
     _pageHolderContext = context;
-    _animalEditPagerHolder = Provider.of<AnimalEditPagerHolder>(context, listen: false)
-      ..addListener(onChangePage);
+    _animalEditPagerHolder = Provider.of<AnimalEditPagerHolder>(context, listen: false)..addListener(onChangePage);
   }
 
   void removePageListener() {

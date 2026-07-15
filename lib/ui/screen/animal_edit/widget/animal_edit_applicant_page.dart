@@ -24,8 +24,7 @@ class AnimalEditApplicantPage extends AnimalEditPage {
   State<AnimalEditApplicantPage> createState() => _AnimalEditApplicantPageState();
 }
 
-class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
-    with AnimalPageHolderListener {
+class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> with AnimalPageHolderListener {
   final _applicantNameController = TextEditingController();
   final _applicantLastNameController = TextEditingController();
   final _applicantPhoneController = TextEditingController();
@@ -67,21 +66,13 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
                   padding: const EdgeInsets.only(right: 16.0),
                   child: CupertinoButton(
                     padding: const EdgeInsets.only(),
-                    child: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 40.0,
-                    ),
+                    child: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary, size: 40.0),
                     onPressed: () => _addEditApplicant(context, applicantId: _applicant?.id),
                   ),
                 ),
               CupertinoButton(
                 padding: const EdgeInsets.only(),
-                child: Icon(
-                  Icons.add_circle_outline_rounded,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 40.0,
-                ),
+                child: Icon(Icons.add_circle_outline_rounded, color: Theme.of(context).colorScheme.primary, size: 40.0),
                 onPressed: () => _addEditApplicant(context),
               ),
               const SizedBox(width: 16.0),
@@ -100,10 +91,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
         EditCardData(
           label: LocaleKeys.animalCuratorName.tr(),
           controller: _applicantNameController,
-          suffix: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
           onPressed: _searchApplicant,
         ),
         if (_applicant != null)
@@ -121,11 +109,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
             enabled: false,
           ),
         if (_applicant != null)
-          EditCardData(
-            label: LocaleKeys.animalSocialLink.tr(),
-            controller: _applicantSocialController,
-            enabled: false,
-          ),
+          EditCardData(label: LocaleKeys.animalSocialLink.tr(), controller: _applicantSocialController, enabled: false),
         if (_applicant != null)
           EditCardData(
             label: LocaleKeys.animalCuratorEmail.tr(),
@@ -156,10 +140,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
       email: _applicantEmailController.text,
       id: _applicant?.id,
     );
-    Provider.of<AnimalEditHolder>(
-      context,
-      listen: false,
-    ).copyWith(applicant: applicant, applicantId: _applicant?.id);
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(applicant: applicant, applicantId: _applicant?.id);
   }
 
   Future<void> _searchApplicant() async {
@@ -176,9 +157,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
 
   Future<void> _addEditApplicant(BuildContext context, {int? applicantId}) async {
     final result = await context.push<Applicant>(
-      applicantId == null
-          ? AppRoutes.applicantEdit
-          : '${AppRoutes.applicantEdit}?applicantId=$applicantId',
+      applicantId == null ? AppRoutes.applicantEdit : '${AppRoutes.applicantEdit}?applicantId=$applicantId',
     );
     if (result != null) {
       setState(() => _applicant = result);

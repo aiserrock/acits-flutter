@@ -63,21 +63,9 @@ class PhoneFrame extends StatelessWidget {
                 // Пятна расставлены по углам/краям — после блюра сливаются в
                 // мягкие цветные переливы вокруг «телефона».
                 _Blob(alignment: const Alignment(-0.9, -0.8), color: accent, size: 460),
-                _Blob(
-                  alignment: const Alignment(0.95, -0.6),
-                  color: accent.withValues(alpha: 0.5),
-                  size: 380,
-                ),
-                _Blob(
-                  alignment: const Alignment(-0.8, 0.9),
-                  color: accent.withValues(alpha: 0.6),
-                  size: 520,
-                ),
-                _Blob(
-                  alignment: const Alignment(0.9, 0.95),
-                  color: accent.withValues(alpha: 0.35),
-                  size: 440,
-                ),
+                _Blob(alignment: const Alignment(0.95, -0.6), color: accent.withValues(alpha: 0.5), size: 380),
+                _Blob(alignment: const Alignment(-0.8, 0.9), color: accent.withValues(alpha: 0.6), size: 520),
+                _Blob(alignment: const Alignment(0.9, 0.95), color: accent.withValues(alpha: 0.35), size: 440),
                 // Сильный блюр превращает пятна в матовое стекло.
                 Positioned.fill(
                   child: BackdropFilter(

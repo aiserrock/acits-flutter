@@ -121,10 +121,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
             ),
             actions: [
               CupertinoButton(
-                child: Icon(
-                  Icons.delete_forever_rounded,
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                child: Icon(Icons.delete_forever_rounded, color: Theme.of(context).colorScheme.error),
                 onPressed: () {
                   context.read<CommentEditCubit>().clearAttachedFile();
                 },
@@ -192,9 +189,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
       Navigator.of(context).pop(comment);
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(LocaleKeys.commonErrorTryAgainMessage.tr())));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(LocaleKeys.commonErrorTryAgainMessage.tr())));
     }
   }
 
@@ -212,6 +207,5 @@ class _CommentEditViewState extends State<_CommentEditView> {
     }
   }
 
-  String? get _sourceFileName =>
-      context.read<CommentEditCubit>().comment?.files?.firstOrNull?.filename;
+  String? get _sourceFileName => context.read<CommentEditCubit>().comment?.files?.firstOrNull?.filename;
 }

@@ -16,14 +16,11 @@ class DrugListItem extends StatelessWidget {
         TextSpan(
           children: [
             TextSpan(text: drug.drug.name, style: Theme.of(context).textTheme.titleMedium),
-            if (drugForm != null)
-              TextSpan(text: ', ', style: Theme.of(context).textTheme.titleMedium),
+            if (drugForm != null) TextSpan(text: ', ', style: Theme.of(context).textTheme.titleMedium),
             if (drugForm != null)
               TextSpan(
                 text: drugForm,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.appColors.textSecondary),
               ),
           ],
         ),

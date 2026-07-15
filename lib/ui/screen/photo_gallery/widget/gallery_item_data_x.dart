@@ -10,11 +10,7 @@ const _thumbDecodeWidth = 512;
 
 extension GalleryIyemDataX on GalleryItemData {
   Widget get widget => network != null
-      ? Image.network(
-          UrlCorsProxy.add(network?.image.medium) ?? '',
-          fit: BoxFit.cover,
-          cacheWidth: _thumbDecodeWidth,
-        )
+      ? Image.network(UrlCorsProxy.add(network?.image.medium) ?? '', fit: BoxFit.cover, cacheWidth: _thumbDecodeWidth)
       : assetPath != null
       ? Padding(
           padding: const EdgeInsets.all(8.0),

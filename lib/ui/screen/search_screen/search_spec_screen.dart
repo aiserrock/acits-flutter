@@ -88,18 +88,12 @@ class _SearchViewState extends State<_SearchView> {
             onTap: _searchController.clear,
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: Assets.icon.close.svg(
-                height: 16.0,
-                width: 16.0,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: Theme.of(context).colorScheme.primary),
             ),
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
         ),
-        style: Theme.of(
-          context,
-        ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
     );
   }
@@ -112,10 +106,7 @@ class _SearchViewState extends State<_SearchView> {
           builder: (context, list) => _buildList(context, list, state),
           loader: (_) => const Center(child: CircularProgressIndicator()),
           errorBuilder: (_, _) => ErrorStubWidget(
-            onPressed: () => context.read<SearchSpecCubit>().loadData(
-              searchRequest: _searchQuery,
-              resetOffset: true,
-            ),
+            onPressed: () => context.read<SearchSpecCubit>().loadData(searchRequest: _searchQuery, resetOffset: true),
           ),
         );
       },
@@ -125,10 +116,7 @@ class _SearchViewState extends State<_SearchView> {
   Widget _buildList(BuildContext context, List<Species> list, SearchSpecState state) {
     return list.isNotEmpty
         ? RefreshIndicator(
-            onRefresh: () => context.read<SearchSpecCubit>().loadData(
-              searchRequest: _searchQuery,
-              resetOffset: true,
-            ),
+            onRefresh: () => context.read<SearchSpecCubit>().loadData(searchRequest: _searchQuery, resetOffset: true),
             child: CustomScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               controller: _scrollController,

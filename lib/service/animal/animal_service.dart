@@ -28,11 +28,7 @@ class AnimalService {
   final Openapi _client;
 
   /// Получить список живолных в приюте
-  Future<PaginatedAnimalReadList?> fetchAnimalList({
-    int limit = 25,
-    int offset = 0,
-    String? searchRequest,
-  }) async {
+  Future<PaginatedAnimalReadList?> fetchAnimalList({int limit = 25, int offset = 0, String? searchRequest}) async {
     Log.debug('Fetch animal list: limit=$limit offset=$offset search=$searchRequest');
     final result = await _client.apiV1AnimalsGet(
       limit: limit,
@@ -53,10 +49,7 @@ class AnimalService {
   /// Получить детальное представление животного по его ID
   Future<AnimalRead> fetchAnimalDetail({required int id}) async {
     Log.debug('Fetch animal detail: id=$id');
-    final result = await _client.apiV1AnimalsIdGet(
-      id: id.toString(),
-      xCurrentShelter: _authService.currentShelterId,
-    );
+    final result = await _client.apiV1AnimalsIdGet(id: id.toString(), xCurrentShelter: _authService.currentShelterId);
 
     if (result.body != null) {
       Log.info('Animal detail: id=${result.body!.id}');
@@ -105,10 +98,7 @@ class AnimalService {
       placeOfRelease: animal.placeOfRelease ?? '',
       deathReason: animal.deathReason ?? '',
     );
-    final result = await _client.apiV1AnimalsPost(
-      xCurrentShelter: _authService.currentShelterId,
-      body: animal,
-    );
+    final result = await _client.apiV1AnimalsPost(xCurrentShelter: _authService.currentShelterId, body: animal);
 
     final data = result.body;
 
@@ -174,9 +164,7 @@ class AnimalService {
             AnimalImageWrite(
               isPrimary: false,
               name: e.assetPath ?? '',
-              image: base64Encode(
-                buffer.asUint8List(fileBytes.offsetInBytes, fileBytes.lengthInBytes),
-              ),
+              image: base64Encode(buffer.asUint8List(fileBytes.offsetInBytes, fileBytes.lengthInBytes)),
             ),
           );
         }),
@@ -199,11 +187,7 @@ class AnimalService {
       }
 
       additional.add(
-        AnimalImageWrite(
-          isPrimary: false,
-          name: e.filePath ?? '',
-          image: base64Encode(image_util.encodePng(image)),
-        ),
+        AnimalImageWrite(isPrimary: false, name: e.filePath ?? '', image: base64Encode(image_util.encodePng(image))),
       );
     });
 
@@ -226,10 +210,7 @@ class AnimalService {
 
   Future<void> deleteAnimal(String id) async {
     Log.debug('Delete animal: id=$id');
-    final result = await _client.apiV1AnimalsIdDelete(
-      id: id,
-      xCurrentShelter: _authService.currentShelterId,
-    );
+    final result = await _client.apiV1AnimalsIdDelete(id: id, xCurrentShelter: _authService.currentShelterId);
 
     if (result.error != null) {
       Log.warning('Delete animal failed: ${result.error}');
@@ -270,12 +251,7 @@ class AnimalService {
     List<PlatformFile>? files,
   }) async {
     Log.debug('Patch animal note: id=$id animalId=$animalId files=${files?.length ?? 0}');
-    final content = PatchedAnimalNote(
-      id: id,
-      animal: animalId,
-      content: text,
-      files: _prepareNoteFiles(files),
-    );
+    final content = PatchedAnimalNote(id: id, animal: animalId, content: text, files: _prepareNoteFiles(files));
     final result = await _client.apiV1AnimalsNotesIdPatch(
       id: id,
       body: content,
@@ -295,10 +271,7 @@ class AnimalService {
 
   Future<bool> deleteAnimalNote({required int id}) async {
     Log.debug('Delete animal note: id=$id');
-    final result = await _client.apiV1AnimalsNotesIdDelete(
-      id: id,
-      xCurrentShelter: _authService.currentShelterId,
-    );
+    final result = await _client.apiV1AnimalsNotesIdDelete(id: id, xCurrentShelter: _authService.currentShelterId);
 
     if (result.error == null) {
       Log.info('Animal note deleted: id=$id');
@@ -309,18 +282,11 @@ class AnimalService {
     }
   }
 
-  Future<AnimalNote?> createAnimalNote({
-    required int animalId,
-    required String text,
-    List<PlatformFile>? files,
-  }) async {
+  Future<AnimalNote?> createAnimalNote({required int animalId, required String text, List<PlatformFile>? files}) async {
     Log.debug('Create animal note: animalId=$animalId files=${files?.length ?? 0}');
     final content = AnimalNote(animal: animalId, content: text, files: _prepareNoteFiles(files));
 
-    final result = await _client.apiV1AnimalsNotesPost(
-      body: content,
-      xCurrentShelter: _authService.currentShelterId,
-    );
+    final result = await _client.apiV1AnimalsNotesPost(body: content, xCurrentShelter: _authService.currentShelterId);
 
     final data = result.body;
 

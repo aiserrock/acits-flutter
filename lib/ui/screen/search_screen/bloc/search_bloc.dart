@@ -32,14 +32,10 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
   final PagingFetchAdapter adapter;
   final int pageLimit;
 
-  SearchBloc({required this.adapter, this.pageLimit = _defaultPageLimit})
-    : super(SearchState.initial()) {
+  SearchBloc({required this.adapter, this.pageLimit = _defaultPageLimit}) : super(SearchState.initial()) {
     on<FetchNextSearchEvent>(_onFetchNext, transformer: _throttleDroppable(_throttleDuration));
     on<ResetFetchSearchEvent>(_onResetFetch, transformer: _throttleDroppable(_throttleDuration));
-    on<ChangeSearchRequestSearchEvent>(
-      _onChangeSearch,
-      transformer: _debounceRestartable(_throttleDuration),
-    );
+    on<ChangeSearchRequestSearchEvent>(_onChangeSearch, transformer: _debounceRestartable(_throttleDuration));
   }
 
   Future<void> _onFetchNext(FetchNextSearchEvent event, Emitter<SearchState<T>> emitter) async {
@@ -92,10 +88,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
         });
   }
 
-  Future<void> _onChangeSearch(
-    ChangeSearchRequestSearchEvent event,
-    Emitter<SearchState<T>> emitter,
-  ) async {
+  Future<void> _onChangeSearch(ChangeSearchRequestSearchEvent event, Emitter<SearchState<T>> emitter) async {
     // Без раннего return по loading: transformer restartable отменяет прошлый
     // обработчик, поэтому актуален всегда последний ввод. Прошлая проверка
     // `status == loading` глушила новый запрос и оставляла устаревшие результаты.
@@ -118,13 +111,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
         })
         .catchError((Object error, StackTrace s) {
           Log.error('SearchBloc.changeSearch failed', error, s);
-          emitter(
-            state.copyWith(
-              status: SearchStatus.failure,
-              error: error,
-              searchRequest: event.searchRequest,
-            ),
-          );
+          emitter(state.copyWith(status: SearchStatus.failure, error: error, searchRequest: event.searchRequest));
         });
   }
 }

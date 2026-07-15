@@ -42,8 +42,7 @@ class _PawLoader extends StatelessWidget {
       LottieRes.pawLoading,
       repeat: true,
       // Если ассет не подгрузился — не ломаем заставку, показываем спиннер.
-      errorBuilder: (_, _, _) =>
-          const Center(child: CircularProgressIndicator(color: Colors.white)),
+      errorBuilder: (_, _, _) => const Center(child: CircularProgressIndicator(color: Colors.white)),
     );
   }
 }

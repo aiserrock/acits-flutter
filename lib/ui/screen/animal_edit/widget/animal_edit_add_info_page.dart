@@ -32,8 +32,7 @@ class AnimalEditAddInfoPage extends AnimalEditPage {
   State<AnimalEditAddInfoPage> createState() => _AnimalEditAddInfoPageState();
 }
 
-class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
-    with AnimalPageHolderListener {
+class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with AnimalPageHolderListener {
   final _ageYearController = TextEditingController();
   final _ageMonthController = TextEditingController();
   final _birthController = TextEditingController();
@@ -93,32 +92,18 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
           EditCardData(
             label: LocaleKeys.animalBirth.tr(),
             controller: _birthController,
-            suffix: Icon(
-              Icons.calendar_today_outlined,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            suffix: Icon(Icons.calendar_today_outlined, color: Theme.of(context).colorScheme.primary),
             onPressed: _setBirthDate,
           ),
         EditCardData(
           label: '${LocaleKeys.animalSex.tr()}*',
           controller: _sexController,
-          suffix: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
           validator: Validator.emptyValidator,
           onPressed: () => _selectGender(context),
         ),
-        EditCardData(
-          label: LocaleKeys.aninmalSize.tr(),
-          controller: _heightController,
-          decimalOnly: true,
-        ),
-        EditCardData(
-          label: LocaleKeys.animalWeight.tr(),
-          controller: _weightController,
-          decimalOnly: true,
-        ),
+        EditCardData(label: LocaleKeys.aninmalSize.tr(), controller: _heightController, decimalOnly: true),
+        EditCardData(label: LocaleKeys.animalWeight.tr(), controller: _weightController, decimalOnly: true),
         EditCardData(label: LocaleKeys.animalColor.tr(), controller: _colorController),
         EditCardData(label: LocaleKeys.animalSpecSigns.tr(), controller: _specController),
         EditCardData(
@@ -218,9 +203,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
 
   void _checkAgeInput() {
     if (_currentAgeTab != 0) return;
-    final months =
-        (int.tryParse(_ageYearController.text) ?? 0) * 12 +
-        (int.tryParse(_ageMonthController.text) ?? 0);
+    final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 + (int.tryParse(_ageMonthController.text) ?? 0);
     _ageYearController.text = (months ~/ 12).toString();
     _ageMonthController.text = (months % 12).toString();
   }
@@ -230,9 +213,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
       (gender) => MapEntry(
         Text(
           gender.value,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         () {
           _sexController.text = gender.value;
@@ -288,9 +269,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
     _colorController.text = value.colorString ?? '';
     _specController.text = value.specialSignsString ?? '';
     _chipController.text = value.chippingCode ?? '';
-    _dateChipController.text = value.dateOfChipping != null
-        ? _dateFormatter.format(value.dateOfChipping!)
-        : '';
+    _dateChipController.text = value.dateOfChipping != null ? _dateFormatter.format(value.dateOfChipping!) : '';
   }
 
   @override
@@ -342,12 +321,8 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage>
         );
       }
     }
-    final months =
-        (int.tryParse(_ageYearController.text) ?? 0) * 12 +
-        (int.tryParse(_ageMonthController.text) ?? 0);
-    final birth = _currentAgeTab == 0
-        ? DateTime.now().subtract(Duration(days: max(months * 30, 1)))
-        : birthDate;
+    final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 + (int.tryParse(_ageMonthController.text) ?? 0);
+    final birth = _currentAgeTab == 0 ? DateTime.now().subtract(Duration(days: max(months * 30, 1))) : birthDate;
 
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
       birthDate: birth,

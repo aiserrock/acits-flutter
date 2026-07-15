@@ -13,9 +13,7 @@ import 'package:acits_flutter/util/logger/log.dart';
 /// сегодня и бизнес-логикой их загрузки. UI-контроллеры и флаги (например,
 /// строка поиска) остаются во [StatefulWidget] экрана.
 class MainCubit extends Cubit<DataState<PaginatedPrescriptionExecutionTodayList?>> {
-  MainCubit()
-    : _prescriptionService = getIt.get<PrescriptionService>(),
-      super(const DataState.loading()) {
+  MainCubit() : _prescriptionService = getIt.get<PrescriptionService>(), super(const DataState.loading()) {
     loadExecutions();
   }
 

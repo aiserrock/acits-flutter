@@ -30,11 +30,7 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
     try {
       final applicant = await _service.fetchApplicantById(id: applicantId!);
       Log.info('ApplicantEditCubit._init ok: id=$applicantId');
-      safeEmit(
-        DataState.content(
-          applicant ?? const Applicant(firstName: '', lastName: '', phoneNumber: ''),
-        ),
-      );
+      safeEmit(DataState.content(applicant ?? const Applicant(firstName: '', lastName: '', phoneNumber: '')));
     } catch (e, s) {
       Log.error('ApplicantEditCubit._init failed: id=$applicantId', e, s);
       safeEmit(DataState.error(e));
@@ -47,8 +43,7 @@ class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
   Future<Applicant?> submit(Applicant draft) async {
     if (state.isLoading) return null;
     Log.debug('ApplicantEditCubit.submit: isEdit=$isEdit id=$applicantId');
-    final previous =
-        state.valueOrNull ?? const Applicant(firstName: '', lastName: '', phoneNumber: '');
+    final previous = state.valueOrNull ?? const Applicant(firstName: '', lastName: '', phoneNumber: '');
     safeEmit(const DataState.loading());
     try {
       final Applicant? result;

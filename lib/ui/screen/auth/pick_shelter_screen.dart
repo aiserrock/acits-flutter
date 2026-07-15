@@ -80,8 +80,7 @@ class _PickShelterViewState extends State<_PickShelterView> {
               builder: (context, state) => DataStateBuilder<Object>(
                 state: state.status,
                 loader: (_) => const LoaderHolderWidget(),
-                errorBuilder: (_, _) =>
-                    ErrorHolderWidget(onPressed: () => context.read<PickShelterCubit>().retry()),
+                errorBuilder: (_, _) => ErrorHolderWidget(onPressed: () => context.read<PickShelterCubit>().retry()),
                 builder: (_, _) => _buildContent(state),
               ),
             ),
@@ -108,10 +107,8 @@ class _PickShelterViewState extends State<_PickShelterView> {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: results.length,
-          itemBuilder: (_, index) =>
-              ListTile(title: Text(results[index].name), onTap: () => _pickShelter(index)),
-          separatorBuilder: (_, _) =>
-              const Divider(indent: 16.0, endIndent: 16.0, height: 2.0, thickness: 2.0),
+          itemBuilder: (_, index) => ListTile(title: Text(results[index].name), onTap: () => _pickShelter(index)),
+          separatorBuilder: (_, _) => const Divider(indent: 16.0, endIndent: 16.0, height: 2.0, thickness: 2.0),
         ),
       ),
     );

@@ -55,10 +55,7 @@ class ErrorHolderWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24.0),
-                PrimaryButton(
-                  onPressed: () => onPressed?.call(),
-                  text: button ?? LocaleKeys.commonReloadBtn.tr(),
-                ),
+                PrimaryButton(onPressed: () => onPressed?.call(), text: button ?? LocaleKeys.commonReloadBtn.tr()),
               ],
             ),
           ),

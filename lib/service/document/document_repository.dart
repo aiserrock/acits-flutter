@@ -37,11 +37,7 @@ class DocumentRepository with PdfDocumentMixin {
   }
 
   /// История назначений животного
-  Future<String> fetchAnimalPrescriptionEditingHistory(
-    int animalId,
-    DateTime from,
-    DateTime to,
-  ) async {
+  Future<String> fetchAnimalPrescriptionEditingHistory(int animalId, DateTime from, DateTime to) async {
     Log.debug('Fetch animal prescription history: animalId=$animalId, from=$from, to=$to');
     final result = await _client.apiV1AnimalsIdPdfTypePdfGet(
       id: animalId,
@@ -57,9 +53,7 @@ class DocumentRepository with PdfDocumentMixin {
       Log.info('Animal prescription history fetched: animalId=$animalId');
       return body;
     } else {
-      Log.warning(
-        'Fetch animal prescription history failed: animalId=$animalId, error=${result.error}',
-      );
+      Log.warning('Fetch animal prescription history failed: animalId=$animalId, error=${result.error}');
       throw MessagedException(error: result.error);
     }
   }

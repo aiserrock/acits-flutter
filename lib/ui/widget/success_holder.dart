@@ -48,10 +48,7 @@ class SuccessHolderWidget extends StatelessWidget {
               if (onSecondPressed != null && secondButton != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: PrimaryButton(
-                    onPressed: () => onSecondPressed?.call(),
-                    text: secondButton,
-                  ),
+                  child: PrimaryButton(onPressed: () => onSecondPressed?.call(), text: secondButton),
                 ),
             ],
           ),
@@ -67,17 +64,9 @@ class SuccessHolderWidget extends StatelessWidget {
         children: [
           Lottie.asset(assetPath ?? LottieRes.success, height: size, width: size),
           const SizedBox(height: 24.0),
-          Text(
-            title ?? '',
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
+          Text(title ?? '', style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
           const SizedBox(height: 16.0),
-          Text(
-            message ?? '',
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
+          Text(message ?? '', style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
         ],
       ),
     );

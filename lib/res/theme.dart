@@ -45,10 +45,7 @@ abstract final class AppTheme {
         // на тёмной — светлые. Живёт в теме, поэтому реагирует на themeMode.
         systemOverlayStyle: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        iconColor: scheme.primary,
-        focusColor: scheme.primary,
-      ),
+      inputDecorationTheme: InputDecorationTheme(iconColor: scheme.primary, focusColor: scheme.primary),
       textSelectionTheme: TextSelectionThemeData(cursorColor: scheme.primary),
       // M3 по умолчанию делает FAB скруглённым квадратом; возвращаем круг (как
       // было на M2) и фиксируем акцентные цвета для всех FAB разом.
@@ -103,11 +100,7 @@ abstract final class AppTheme {
       // 18 / regular / onSurface — бывший StyleRes.mainContent
       bodyLarge: TextStyle(fontSize: 18.0, color: scheme.onSurface),
       // 14 / w400 / textSecondary — бывший StyleRes.content
-      bodyMedium: TextStyle(
-        fontSize: 14.0,
-        fontWeight: FontWeight.w400,
-        color: appColors.textSecondary,
-      ),
+      bodyMedium: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: appColors.textSecondary),
       // 11 / textSecondary — бывший StyleRes.caption
       bodySmall: TextStyle(fontSize: 11.0, color: appColors.textSecondary),
       // 16 / w500 / onPrimary — бывший StyleRes.button (текст на акцентной кнопке)
@@ -159,12 +152,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color textSecondary;
 
   @override
-  AppColors copyWith({
-    Color? indicatorActive,
-    Color? indicatorInactive,
-    Color? inactiveIcon,
-    Color? textSecondary,
-  }) {
+  AppColors copyWith({Color? indicatorActive, Color? indicatorInactive, Color? inactiveIcon, Color? textSecondary}) {
     return AppColors(
       indicatorActive: indicatorActive ?? this.indicatorActive,
       indicatorInactive: indicatorInactive ?? this.indicatorInactive,

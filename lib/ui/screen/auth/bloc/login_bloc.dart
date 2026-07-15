@@ -119,10 +119,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     add(const LoginTryRefreshLastSession());
   }
 
-  Future<void> _tryRefreshLastSession(
-    LoginTryRefreshLastSession event,
-    Emitter<LoginState> emitter,
-  ) async {
+  Future<void> _tryRefreshLastSession(LoginTryRefreshLastSession event, Emitter<LoginState> emitter) async {
     if (state.status.isInProgress) return;
 
     Log.debug('LoginBloc.tryRefreshLastSession');

@@ -103,18 +103,12 @@ class DebugDevService implements DebugService {
   ///
   /// Прокси ставится глобально (`HttpOverrides.global`) при старте процесса —
   /// мягкий рестарт дерева его не применяет, нужен свежий процесс.
-  void showRestartRequired([
-    String message = 'Прокси изменён — перезапустите приложение вручную (закрыть и открыть)',
-  ]) {
+  void showRestartRequired([String message = 'Прокси изменён — перезапустите приложение вручную (закрыть и открыть)']) {
     final messenger = getIt<GlobalKey<ScaffoldMessengerState>>().currentState;
     messenger
       ?..hideCurrentSnackBar()
       ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          duration: const Duration(seconds: 6),
-          behavior: SnackBarBehavior.floating,
-        ),
+        SnackBar(content: Text(message), duration: const Duration(seconds: 6), behavior: SnackBarBehavior.floating),
       );
   }
 }

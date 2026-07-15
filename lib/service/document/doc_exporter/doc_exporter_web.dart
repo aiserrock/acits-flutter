@@ -26,11 +26,7 @@ class DocExporterImpl implements DocExporter {
   }
 
   @override
-  Future<void> download(
-    Uint8List bytes, {
-    required String fileName,
-    String mimeType = 'application/pdf',
-  }) async {
+  Future<void> download(Uint8List bytes, {required String fileName, String mimeType = 'application/pdf'}) async {
     Log.info('[download] $fileName ${bytes.lengthInBytes}B');
     _download(_blobOf(bytes, mimeType), fileName);
   }

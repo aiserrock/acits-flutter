@@ -69,16 +69,12 @@ class _PersonalViewState extends State<_PersonalView> {
           child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          LocaleKeys.personMyData.tr(),
-          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-        ),
+        title: Text(LocaleKeys.personMyData.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         centerTitle: true,
       ),
       floatingActionButton: BlocBuilder<PersonalCubit, PersonalState>(
-        builder: (context, state) => (state.data.isContent && state.fabVisible)
-            ? _buildFab(context)
-            : const SizedBox.shrink(),
+        builder: (context, state) =>
+            (state.data.isContent && state.fabVisible) ? _buildFab(context) : const SizedBox.shrink(),
       ),
       body: BlocBuilder<PersonalCubit, PersonalState>(
         builder: (context, state) => DataStateBuilder<UserSerializers>(
@@ -100,11 +96,7 @@ class _PersonalViewState extends State<_PersonalView> {
             child: Builder(
               builder: (context) {
                 return FormEditCard([
-                  EditCardData(
-                    label: LocaleKeys.loginLoginLabel.tr(),
-                    enabled: false,
-                    initValue: user.username,
-                  ),
+                  EditCardData(label: LocaleKeys.loginLoginLabel.tr(), enabled: false, initValue: user.username),
                   EditCardData(
                     label: LocaleKeys.loginPassLabel.tr(),
                     enabled: false,
