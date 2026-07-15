@@ -20,8 +20,11 @@ class PrescriptionService {
   final AuthService _authService;
   final ConfigService _configService;
 
-  Future<PaginatedPrescriptionExecutionTodayList?> fetchTodayPrescriptionList() async {
-    Log.debug('Fetch today prescription executions');
+  Future<PaginatedPrescriptionExecutionTodayList?> fetchTodayPrescriptionList({
+    String? search,
+    String? ordering,
+  }) async {
+    Log.debug('Fetch today prescription executions: search=$search ordering=$ordering');
     if (_configService.typeValues == null) {
       await _configService.getTypeValues();
     }
@@ -32,6 +35,8 @@ class PrescriptionService {
       xCurrentShelter: _authService.currentShelterId,
       from: from.toIso8601String(),
       to: to.toIso8601String(),
+      search: search,
+      ordering: ordering,
     );
     if (result.body != null) {
       Log.info('Today prescription executions loaded: count=${result.body?.results?.length ?? 0}');
@@ -69,9 +74,7 @@ class PrescriptionService {
       // Дата-фильтр «актуальных» — по локальному дню пользователя.
       // Параметры теперь DateTime (клиент сам сериализует). Берём начало
       // локального дня, чтобы граница не сдвигалась на соседний день вечером.
-      executeAtGte: isActual
-          ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-          : null,
+      executeAtGte: isActual ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day) : null,
       executeAtLt: isOld ? DateTime.now().toUtc() : null,
     );
     if (result.isSuccessful) {
@@ -87,10 +90,7 @@ class PrescriptionService {
   /// получить назначение для животного по ID назначения
   Future<PrescriptionModel?> fetchPrescriptionById(int id) async {
     Log.debug('Fetch prescription by id: id=$id');
-    final result = await _acitsClient.apiV1PrescriptionsIdGet(
-      id: id,
-      xCurrentShelter: _authService.currentShelterId,
-    );
+    final result = await _acitsClient.apiV1PrescriptionsIdGet(id: id, xCurrentShelter: _authService.currentShelterId);
 
     if (result.isSuccessful) {
       final model = PrescriptionModel.fromJson(_decodeBody(result.bodyBytes));
@@ -111,11 +111,7 @@ class PrescriptionService {
     final payload = prescription
         .copyWith(files: prescription.files ?? [], executions: _toUtc(prescription.executions))
         .toJson();
-    final result = await _sendPrescriptionBody(
-      method: 'POST',
-      path: '/api/v1/prescriptions/',
-      body: payload,
-    );
+    final result = await _sendPrescriptionBody(method: 'POST', path: '/api/v1/prescriptions/', body: payload);
 
     if (result.isSuccessful) {
       final model = PrescriptionModel.fromJson(_decodeBody(result.bodyBytes));
@@ -137,11 +133,7 @@ class PrescriptionService {
   }
 
   /// Получить список лекарств
-  Future<PaginatedShelterDrugList?> fetchDrugList({
-    String? searchRequest,
-    int limit = 25,
-    int offset = 0,
-  }) async {
+  Future<PaginatedShelterDrugList?> fetchDrugList({String? searchRequest, int limit = 25, int offset = 0}) async {
     Log.debug('Fetch drug list: search=$searchRequest limit=$limit offset=$offset');
     final result = await _acitsClient.apiV1ShelterDrugsGet(
       xCurrentShelter: _authService.currentShelterId,
@@ -175,9 +167,7 @@ class PrescriptionService {
       Log.info('Prescription updated: id=${model.id}');
       return model;
     } else {
-      Log.warning(
-        'Update prescription failed: id=${prescription.id} ${result.error ?? result.bodyString}',
-      );
+      Log.warning('Update prescription failed: id=${prescription.id} ${result.error ?? result.bodyString}');
       throw MessagedException(error: result.error ?? result.bodyString);
     }
   }
@@ -194,10 +184,7 @@ class PrescriptionService {
       Uri.parse(path),
       _acitsClient.client.baseUrl,
       body: json.encode(body),
-      headers: {
-        'content-type': 'application/json',
-        if (shelter != null) 'x-current-shelter': '$shelter',
-      },
+      headers: {'content-type': 'application/json', if (shelter != null) 'x-current-shelter': '$shelter'},
     );
     return _acitsClient.client.send<dynamic, dynamic>(request);
   }
@@ -212,21 +199,15 @@ class PrescriptionService {
 
   PrescriptionListPage _toLocalList(PrescriptionListPage page) {
     return page.copyWith(
-      results: page.results
-          .map((item) => item.copyWith(executions: _toLocal(item.executions)))
-          .toList(),
+      results: page.results.map((item) => item.copyWith(executions: _toLocal(item.executions))).toList(),
     );
   }
 
-  PaginatedPrescriptionExecutionTodayList? _toLocalExecutionsList(
-    PaginatedPrescriptionExecutionTodayList? utc,
-  ) {
+  PaginatedPrescriptionExecutionTodayList? _toLocalExecutionsList(PaginatedPrescriptionExecutionTodayList? utc) {
     if (utc == null) return null;
 
     return utc.copyWith(
-      results: utc.results
-          ?.map((item) => item.copyWith(executeAt: item.executeAt.toLocal()))
-          .toList(),
+      results: utc.results?.map((item) => item.copyWith(executeAt: item.executeAt.toLocal())).toList(),
     );
   }
 }

@@ -5,7 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:acits_flutter/ui/screen/common/sort/sort_chips_bar.dart';
+import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_cubit.dart';
+import 'package:acits_flutter/ui/screen/main/cubit/main_state.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
@@ -40,7 +43,6 @@ class _MainViewState extends State<_MainView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _searchController = TextEditingController();
   late bool _isSmallScreen;
-  bool _isSearchActive = false;
 
   @override
   void didChangeDependencies() {
@@ -49,34 +51,66 @@ class _MainViewState extends State<_MainView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChange);
+  }
+
+  @override
   void dispose() {
+    _searchController.removeListener(_onSearchChange);
     _searchController.dispose();
     super.dispose();
   }
 
+  void _onSearchChange() {
+    context.read<MainCubit>().onSearchChanged(_searchController.text);
+  }
+
+  /// Выйти из режима поиска: очистить поле без повторного запроса и переключить
+  /// режим — cubit сам перезагрузит список без фильтра.
+  void _exitSearch() {
+    _searchController.removeListener(_onSearchChange);
+    _searchController.clear();
+    _searchController.addListener(_onSearchChange);
+    context.read<MainCubit>().toggleSearch();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        shadowColor: Colors.transparent,
-        leading: Builder(
-          builder: (context) {
-            return GestureDetector(
-              onTap: RootDrawerProvider.of(context)?.openDrawer,
-              onLongPress: () => _openDebug(context),
-              child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
-            );
-          },
-        ),
-        title: _buildTitle(),
-        actions: _buildAppBarActions,
-        centerTitle: true,
-      ),
-      floatingActionButton: _buidFab(context),
-      body: _buildBody(),
+    return BlocBuilder<MainCubit, MainState>(
+      builder: (context, state) {
+        return Scaffold(
+          key: scaffoldKey,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            shadowColor: Colors.transparent,
+            leading: state.isSearchActive
+                ? GestureDetector(
+                    onTap: _exitSearch,
+                    child: Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                : Builder(
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: RootDrawerProvider.of(context)?.openDrawer,
+                        onLongPress: () => _openDebug(context),
+                        child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
+                      );
+                    },
+                  ),
+            title: _buildTitle(state),
+            actions: _buildAppBarActions(state),
+            centerTitle: true,
+          ),
+          floatingActionButton: _buidFab(context),
+          body: _buildBody(state),
+        );
+      },
     );
   }
 
@@ -90,53 +124,70 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
-  List<Widget> get _buildAppBarActions {
+  List<Widget> _buildAppBarActions(MainState state) {
     return [
-      if (!_isSearchActive)
+      if (!state.isSearchActive)
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: GestureDetector(
             child: Icon(Icons.search, color: Theme.of(context).colorScheme.primary),
-            onTap: () => setState(() => _isSearchActive = !_isSearchActive),
+            onTap: () => context.read<MainCubit>().toggleSearch(),
           ),
         ),
     ];
   }
 
-  Widget _buildBody() {
-    return BlocBuilder<MainCubit, DataState<PaginatedPrescriptionExecutionTodayList?>>(
-      builder: (context, state) {
-        return DataStateBuilder<PaginatedPrescriptionExecutionTodayList?>(
-          state: state,
-          loader: (_) => const ScreenLoader(height: 104.0),
-          builder: (_, data) =>
-              _MainScreenContent(data, pullToRefresh: context.read<MainCubit>().loadExecutions),
-          errorBuilder: (_, _) => Column(),
-        );
-      },
+  Widget _buildBody(MainState state) {
+    return Column(
+      children: [
+        SortChipsBar(
+          presets: kTodaySortPresets,
+          activeId: state.activeSort.id,
+          onSelected: (preset) => context.read<MainCubit>().onSortChanged(preset),
+        ),
+        Expanded(
+          child: DataStateBuilder<PaginatedPrescriptionExecutionTodayList?>(
+            state: state.data,
+            loader: (_) => const ScreenLoader(height: 104.0),
+            builder: (_, data) => _MainScreenContent(
+              data,
+              isSearching: state.searchRequest.isNotEmpty,
+              pullToRefresh: context.read<MainCubit>().loadExecutions,
+            ),
+            errorBuilder: (_, _) => Column(),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildTitle() {
-    return _isSearchActive
+  Widget _buildTitle(MainState state) {
+    return state.isSearchActive
         ? SizedBox(
             height: 40.0,
             child: TextField(
               autofocus: true,
               controller: _searchController,
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),
-                suffix: GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Assets.icon.close.svg(
-                      height: 16.0,
-                      width: 16.0,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  onTap: () => setState(() => _isSearchActive = !_isSearchActive),
+                isDense: true,
+                hintText: LocaleKeys.commonSearch.tr(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                prefixIcon: Icon(
+                  Icons.search,
+                  size: 20.0,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
+                prefixIconConstraints: const BoxConstraints(minWidth: 40.0, minHeight: 40.0),
+                suffixIcon: GestureDetector(
+                  onTap: _searchController.clear,
+                  child: Icon(
+                    Icons.close,
+                    size: 18.0,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                suffixIconConstraints: const BoxConstraints(minWidth: 36.0, minHeight: 40.0),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
               style: Theme.of(
@@ -163,9 +214,10 @@ class _MainViewState extends State<_MainView> {
 }
 
 class _MainScreenContent extends StatelessWidget {
-  const _MainScreenContent(this.data, {required this.pullToRefresh});
+  const _MainScreenContent(this.data, {required this.isSearching, required this.pullToRefresh});
 
   final PaginatedPrescriptionExecutionTodayList? data;
+  final bool isSearching;
   final Future<void> Function() pullToRefresh;
 
   @override
@@ -210,7 +262,7 @@ class _MainScreenContent extends StatelessWidget {
                       children: [Assets.common.emptyState.svg()],
                     ),
                     Text(
-                      LocaleKeys.mainEmptyState.tr(),
+                      isSearching ? LocaleKeys.commonNotFound.tr() : LocaleKeys.mainEmptyState.tr(),
                       style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary),
                     ),
                   ],

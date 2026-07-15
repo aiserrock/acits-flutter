@@ -55,6 +55,7 @@ abstract class  LocaleKeys {
   static const animalTransferAct = 'animalTransferAct';
   static const animalUploadAct = 'animalUploadAct';
   static const animalWeight = 'animalWeight';
+  static const animalsEmptyState = 'animalsEmptyState';
   static const aninmalSize = 'aninmalSize';
   static const applicantAdd = 'applicantAdd';
   static const applicantEdit = 'applicantEdit';
@@ -186,6 +187,19 @@ abstract class  LocaleKeys {
   static const regWriteCountry = 'regWriteCountry';
   static const regWriteRegion = 'regWriteRegion';
   static const shelterSelectShelter = 'shelterSelectShelter';
+  static const sortAnimalNameAsc = 'sortAnimalNameAsc';
+  static const sortAnimalNameDesc = 'sortAnimalNameDesc';
+  static const sortAnimalSpec = 'sortAnimalSpec';
+  static const sortNameAsc = 'sortNameAsc';
+  static const sortNameDesc = 'sortNameDesc';
+  static const sortNewest = 'sortNewest';
+  static const sortOld = 'sortOld';
+  static const sortOldest = 'sortOldest';
+  static const sortSpec = 'sortSpec';
+  static const sortStatus = 'sortStatus';
+  static const sortTime = 'sortTime';
+  static const sortTimeDesc = 'sortTimeDesc';
+  static const sortYoung = 'sortYoung';
   static const themeDark = 'themeDark';
   static const themeLight = 'themeLight';
   static const themeSectionTitle = 'themeSectionTitle';
