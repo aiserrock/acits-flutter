@@ -145,7 +145,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       child: CustomScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
-        slivers: [_buildHeader(context, animal), _buildPage(context, (_currentTab + 1) * 5, animal)],
+        slivers: [
+          _buildHeader(context, animal),
+          _buildPage(context, (_currentTab + 1) * 5, animal),
+        ],
       ),
     );
   }
@@ -172,7 +175,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
   }
 
   Widget _buildHeaderTitle(BuildContext context, AnimalRead animal) {
-    final avatar = animal.thumb;
+    // На web URL картинки должен идти через CORS-прокси (как большое фото в
+    // пейджере). Без обёртки браузер блокирует запрос → в кружке заглушка.
+    final avatar = UrlCorsProxy.add(animal.thumb);
     return Column(
       children: [
         DefaultAppBar(
@@ -209,9 +214,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                       const SizedBox(height: 8.0),
                       Text(
                         animal.id.toString(),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleLarge?.copyWith(color: context.appColors.textSecondary, fontSize: 16.0),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: context.appColors.textSecondary,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ],
                   ),
@@ -236,7 +242,13 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: Center(child: Icon(Icons.add_a_photo_outlined, color: Theme.of(context).colorScheme.primary, size: 32.0)),
+      child: Center(
+        child: Icon(
+          Icons.add_a_photo_outlined,
+          color: Theme.of(context).colorScheme.primary,
+          size: 32.0,
+        ),
+      ),
     );
   }
 
@@ -265,13 +277,18 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                     return Stack(
                       children: [
                         Positioned.fill(
-                          child: ShimmerNetworkImage(url: UrlCorsProxy.add(image.image.medium), fit: BoxFit.cover),
+                          child: ShimmerNetworkImage(
+                            url: UrlCorsProxy.add(image.image.medium),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Positioned.fill(
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              splashColor: Theme.of(context).colorScheme.primary.withValues(alpha: .4),
+                              splashColor: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: .4),
                               onTap: () => _onPhotoPressed(context, animal),
                             ),
                           ),
@@ -306,9 +323,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               ),
               child: Text(
                 animal.name ?? '',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontSize: 24.0, color: Theme.of(context).colorScheme.onPrimary),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 24.0,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
                 maxLines: 3,
               ),
             ),
@@ -321,9 +339,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               ),
               child: Text(
                 animal.id.toString(),
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontSize: 16.0, color: Theme.of(context).colorScheme.onPrimary),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: 16.0,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             ),
           ],
