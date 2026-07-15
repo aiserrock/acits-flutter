@@ -8,6 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 
 /// Карточка животного в списке
 class AnimalCardWidget extends StatelessWidget {
@@ -222,13 +223,8 @@ class AnimalCardWidget extends StatelessWidget {
       child: SizedBox(
         height: 80.0,
         width: 80.0,
-        child: thumb == null
-            ? Assets.image.animalStub.image()
-            : CircleAvatar(
-                maxRadius: 80.0,
-                backgroundImage: NetworkImage(thumb),
-                backgroundColor: Theme.of(context).colorScheme.surface,
-              ),
+        // radius 40 = половина стороны 80 → круг; shimmer-плейсхолдер на загрузке.
+        child: ShimmerNetworkImage(url: thumb, width: 80.0, height: 80.0, radius: 40.0),
       ),
     );
   }
