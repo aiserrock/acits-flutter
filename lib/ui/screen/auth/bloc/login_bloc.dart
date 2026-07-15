@@ -115,8 +115,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       _handleDeeplink(initLink);
       return;
     }
-
-    add(const LoginTryRefreshLastSession());
+    // Авто-refresh при старте больше не здесь — им занимается SplashScreen
+    // (initialLocation). LoginScreen открывается только когда refresh невалиден,
+    // поэтому повторный refresh на входе не нужен и лишь мигал бы лоадером.
   }
 
   Future<void> _tryRefreshLastSession(LoginTryRefreshLastSession event, Emitter<LoginState> emitter) async {

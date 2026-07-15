@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/gen/api/openapi.swagger.dart';
-import 'package:acits_flutter/gen/assets.gen.dart';
+import 'package:acits_flutter/ui/widget/app_logo.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_cubit.dart';
 import 'package:acits_flutter/ui/screen/auth/cubit/pick_shelter_state.dart';
-import 'package:acits_flutter/ui/widget/debug_drawer.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/util/data_state.dart';
@@ -62,11 +61,10 @@ class _PickShelterViewState extends State<_PickShelterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      endDrawer: const Drawer(child: DebugDrawerContent()),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
-        leading: Assets.image.logoLeadingBar.svg(),
+        leading: const AppLogoLeading(),
         title: Text(
           LocaleKeys.shelterSelectShelter.tr(),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),

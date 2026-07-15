@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -22,7 +23,14 @@ import 'package:acits_flutter/util/phone_frame.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Держим нативный splash (Android/iOS) поверх дерева до тех пор, пока splash-роут
+  // не решит маршрут (refresh + приют) и не вызовет remove(). Так авторизованный
+  // юзер на холодном старте видит только нативный splash → сразу root, без мелькания
+  // login и без промежуточного Flutter-экрана. На web splash держит DOM (#splash в
+  // index.html), поэтому там preserve — no-op.
+  if (!kIsWeb) FlutterNativeSplash.preserve(widgetsBinding: binding);
 
   // Обычные web-пути (/login вместо /#/login). No-op на мобильных. Требует
   // SPA-fallback на сервере (nginx try_files; для GitHub Pages — 404.html).
@@ -74,7 +82,10 @@ class AcitsApp extends StatelessWidget {
       supportedLocales: L10n.supportedLocales,
       path: L10n.translationsPath,
       fallbackLocale: L10n.fallbackLocale,
-      startLocale: L10n.fallbackLocale,
+      // Без startLocale: он перебивал сохранённую локаль на каждом запуске.
+      // saveLocale по умолчанию true — easy_localization сам персистит выбор в
+      // SharedPreferences и восстанавливает его при старте; первый запуск берёт
+      // fallbackLocale.
       // RestartWidget выше MyApp: dev-инструменты пересоздают всё дерево (и все
       // BlocProvider) после смены окружения/прокси, чтобы виджеты взяли свежие
       // сервисы из getIt, а не держали старые ссылки.

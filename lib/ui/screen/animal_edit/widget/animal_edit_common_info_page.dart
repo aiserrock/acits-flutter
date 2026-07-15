@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
+import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
@@ -71,11 +72,11 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
     return Stack(
       alignment: Alignment.center,
       children: [
-        CircleAvatar(
-          backgroundImage: (widget.isEdit && avatar != null) ? NetworkImage(avatar) : null,
-          foregroundColor: context.appColors.textSecondary,
-          radius: 80.0,
-        ),
+        (widget.isEdit && avatar != null)
+            // ShimmerNetworkImage вместо CircleAvatar(NetworkImage): shimmer на
+            // загрузке + CORS-прокси для web (сырой NetworkImage на web не грузился).
+            ? ShimmerNetworkImage(url: UrlCorsProxy.add(avatar), width: 160.0, height: 160.0, radius: 80.0)
+            : CircleAvatar(foregroundColor: context.appColors.textSecondary, radius: 80.0),
         Positioned.fill(
           child: Center(
             child: ClipRRect(

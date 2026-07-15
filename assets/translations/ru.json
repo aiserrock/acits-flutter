@@ -77,6 +77,7 @@
   "commonErrorStubMsg": "Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз.",
   "commonErrorStubTitle": "Ой, что-то пошло не так...",
   "commonErrorTryAgainMessage": "Произошла ошибка. Попробуйте позже.",
+  "commonLanguage": "Язык",
   "commonLoading": "Загрузка",
   "commonMonth": "месяц",
   "commonNDays": {

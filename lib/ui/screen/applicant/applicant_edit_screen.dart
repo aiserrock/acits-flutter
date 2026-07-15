@@ -66,7 +66,6 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
       builder: (context, state) {
         return Scaffold(
           key: scaffoldKey,
-          drawer: const Drawer(),
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,

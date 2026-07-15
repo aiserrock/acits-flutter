@@ -81,6 +81,7 @@ abstract class LocaleKeys {
   static const commonErrorStubMsg = 'commonErrorStubMsg';
   static const commonErrorStubTitle = 'commonErrorStubTitle';
   static const commonErrorTryAgainMessage = 'commonErrorTryAgainMessage';
+  static const commonLanguage = 'commonLanguage';
   static const commonLoading = 'commonLoading';
   static const commonMonth = 'commonMonth';
   static const commonNDays = 'commonNDays';
