@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
+import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
@@ -25,7 +26,8 @@ class AnimalEditCommonInfoPage extends AnimalEditPage {
   State<AnimalEditCommonInfoPage> createState() => _AnimalEditCommonInfoPageState();
 }
 
-class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> with AnimalPageHolderListener {
+class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
+    with AnimalPageHolderListener {
   final _nameController = TextEditingController();
   final _categoryController = TextEditingController();
   final _familyController = TextEditingController();
@@ -71,11 +73,16 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
     return Stack(
       alignment: Alignment.center,
       children: [
-        CircleAvatar(
-          backgroundImage: (widget.isEdit && avatar != null) ? NetworkImage(avatar) : null,
-          foregroundColor: context.appColors.textSecondary,
-          radius: 80.0,
-        ),
+        (widget.isEdit && avatar != null)
+            // ShimmerNetworkImage вместо CircleAvatar(NetworkImage): shimmer на
+            // загрузке + CORS-прокси для web (сырой NetworkImage на web не грузился).
+            ? ShimmerNetworkImage(
+                url: UrlCorsProxy.add(avatar),
+                width: 160.0,
+                height: 160.0,
+                radius: 80.0,
+              )
+            : CircleAvatar(foregroundColor: context.appColors.textSecondary, radius: 80.0),
         Positioned.fill(
           child: Center(
             child: ClipRRect(
@@ -83,18 +90,28 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
                 filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                 child: Container(
                   padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(color: Colors.white30, borderRadius: BorderRadius.circular(8.0)),
+                  decoration: BoxDecoration(
+                    color: Colors.white30,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
-                        child: Icon(Icons.photo_camera, color: Theme.of(context).colorScheme.primary, size: 32.0),
+                        child: Icon(
+                          Icons.photo_camera,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 32.0,
+                        ),
                         onPressed: () {},
                       ),
                       SizedBox(
                         width: 32.0,
-                        child: Divider(thickness: 2.0, color: Theme.of(context).colorScheme.primary),
+                        child: Divider(
+                          thickness: 2.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
@@ -124,21 +141,30 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
         EditCardData(
           label: '${LocaleKeys.animalCategory.tr()} *',
           controller: _categoryController,
-          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchCategory,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
           label: '${LocaleKeys.animalAnimalFamily.tr()} *',
           controller: _familyController,
-          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchFamily,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
           label: '${LocaleKeys.animalAnimalKind.tr()} *',
           controller: _kindController,
-          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchKind,
           validator: Validator.emptyValidator,
         ),
@@ -213,6 +239,9 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
       'name': _kindController.text,
       'id': _kindSpec?.id ?? widget.animal.idSpec,
     };
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(name: _nameController.text, spec: spec);
+    Provider.of<AnimalEditHolder>(
+      context,
+      listen: false,
+    ).copyWith(name: _nameController.text, spec: spec);
   }
 }

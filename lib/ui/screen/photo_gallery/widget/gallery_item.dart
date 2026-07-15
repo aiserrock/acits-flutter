@@ -43,16 +43,16 @@ class _GalleryItemWidget extends StatelessWidget {
     return Align(
       alignment: Alignment.topLeft,
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(6.0),
         child: Material(
-          color: Colors.black45,
+          color: Colors.black54,
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: onEdit,
             child: const Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Icon(Icons.edit, color: Colors.white, size: 16.0),
+              padding: EdgeInsets.all(9.0),
+              child: Icon(Icons.edit, color: Colors.white, size: 24.0),
             ),
           ),
         ),

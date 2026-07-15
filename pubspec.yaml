@@ -33,7 +33,7 @@ dependencies:
   flutter_slidable: ^4.0.3
   flutter_svg: ^2.2.4
   formz: ^0.8.0
-  crop_your_image: ^2.0.0
+  pro_image_editor: ^11.0.0
   get_it: ^9.2.1
   go_router: ^17.3.0
   image: ^4.8.0

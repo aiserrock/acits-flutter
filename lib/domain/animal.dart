@@ -143,13 +143,20 @@ extension AnimalX on AnimalRead {
       curatorId: curator?.id,
       applicantId: applicant?.id,
       animalAttributes: animalAttributes,
+      canBeShared: canBeShared ?? false,
     );
   }
 
   //ignore: unused_element
   List<AnimalImageWrite>? get _imageWriteList {
     final out = images
-        .map((read) => AnimalImageWrite(image: read.image.large, isPrimary: read.isPrimary, name: read.filename ?? ''))
+        .map(
+          (read) => AnimalImageWrite(
+            image: read.image.large,
+            isPrimary: read.isPrimary,
+            name: read.filename ?? '',
+          ),
+        )
         .toList();
     return out;
   }

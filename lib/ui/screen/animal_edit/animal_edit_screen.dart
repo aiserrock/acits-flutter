@@ -90,7 +90,6 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
         final showFab = mode != AnimalEditScreenMode.success && !state.hasError;
         return Scaffold(
           key: scaffoldKey,
-          drawer: const Drawer(),
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -185,7 +184,8 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
             AnimalEditAddInfoPage(animal: holder.state, isEdit: isEdit, formKey: formKeys[2]),
       ),
       Consumer<AnimalEditHolder>(
-        builder: (context, holder, _) => AnimalEditCuratorPage(animal: holder.state, isEdit: isEdit),
+        builder: (context, holder, _) =>
+            AnimalEditCuratorPage(animal: holder.state, isEdit: isEdit),
       ),
       Consumer<AnimalEditHolder>(
         builder: (context, holder, _) =>

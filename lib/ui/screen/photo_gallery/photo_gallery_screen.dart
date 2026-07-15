@@ -53,7 +53,6 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: const Drawer(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -62,7 +61,10 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
           child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text('Choose the photos', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        title: Text(
+          'Choose the photos',
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
         centerTitle: true,
       ),
       floatingActionButton: BlocBuilder<PhotoGalleryCubit, PhotoGalleryState>(
@@ -85,7 +87,8 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
       builder: (context, state) => DataStateBuilder<List<GalleryItemData>>(
         state: state.data,
         loader: (_) => const LoaderHolderWidget(),
-        errorBuilder: (context, _) => ErrorHolderWidget(onPressed: () => context.read<PhotoGalleryCubit>().reload()),
+        errorBuilder: (context, _) =>
+            ErrorHolderWidget(onPressed: () => context.read<PhotoGalleryCubit>().reload()),
         builder: (_, list) => _buildContent(list),
       ),
     );
@@ -105,14 +108,24 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
       itemBuilder: (context, index) {
         if (index == 0) {
           return _GalleryItemWidget(
-            Icon(Icons.add_a_photo_outlined, size: 48.0, color: Theme.of(context).colorScheme.primary),
-            onPressed: () => cubit.addPhoto(ImageSource.camera, edit: (b) => openPhotoEditor(context, b)),
+            Icon(
+              Icons.add_a_photo_outlined,
+              size: 48.0,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () =>
+                cubit.addPhoto(ImageSource.camera, edit: (b) => openPhotoEditor(context, b)),
           );
         }
         if (index == 1) {
           return _GalleryItemWidget(
-            Icon(Icons.photo_library_outlined, size: 48.0, color: Theme.of(context).colorScheme.primary),
-            onPressed: () => cubit.addPhoto(ImageSource.gallery, edit: (b) => openPhotoEditor(context, b)),
+            Icon(
+              Icons.photo_library_outlined,
+              size: 48.0,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () =>
+                cubit.addPhoto(ImageSource.gallery, edit: (b) => openPhotoEditor(context, b)),
           );
         }
         final e = list[index - controlsCount];
@@ -120,8 +133,12 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
           e.widget,
           onPressed: () => cubit.chooseItem(e),
           isChoosed: e.isChoosed,
-          // Править можно только фото с исходными байтами (не пресеты/сетевые).
-          onEdit: e.bytes != null ? () => cubit.editPhoto(e, edit: (b) => openPhotoEditor(context, b)) : null,
+          // Править можно фото с исходными байтами (с устройства) и уже
+          // загруженные сетевые (оригинал докачивается в editPhoto). Пресеты
+          // (assetPath) не редактируем.
+          onEdit: (e.bytes != null || e.network != null)
+              ? () => cubit.editPhoto(e, edit: (b) => openPhotoEditor(context, b))
+              : null,
         );
       },
     );
@@ -131,9 +148,9 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
     final cubit = context.read<PhotoGalleryCubit>();
     if (cubit.choosedCount > _maxCountImages) {
       final ctx = _scaffoldKey.currentContext ?? context;
-      ScaffoldMessenger.of(
-        ctx,
-      ).showSnackBar(SnackBar(content: Text('${LocaleKeys.animalMaxImagesCountIs.tr()} $_maxCountImages')));
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(content: Text('${LocaleKeys.animalMaxImagesCountIs.tr()} $_maxCountImages')),
+      );
       return;
     }
     final navigator = Navigator.of(context);
