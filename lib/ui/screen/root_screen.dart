@@ -88,10 +88,7 @@ class _RootScreenState extends State<RootScreen> {
           ScaffoldMessenger.of(context)
             ..clearSnackBars()
             ..showSnackBar(
-              SnackBar(
-                content: Text(LocaleKeys.commonDidNotImpl.tr()),
-                duration: const Duration(seconds: 2),
-              ),
+              SnackBar(content: Text(LocaleKeys.commonDidNotImpl.tr()), duration: const Duration(seconds: 2)),
             );
         }
         if (_current != index && index < 2) {

@@ -104,9 +104,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       builder: (context, state) {
         return PrimaryButton(
           onPressed: () => _tapNext(context),
-          text: state.isLast
-              ? LocaleKeys.commonBegin.tr().toUpperCase()
-              : LocaleKeys.commonNext.tr().toUpperCase(),
+          text: state.isLast ? LocaleKeys.commonBegin.tr().toUpperCase() : LocaleKeys.commonNext.tr().toUpperCase(),
         );
       },
     );
@@ -128,17 +126,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: SizedBox.expand(child: data.image.svg(fit: BoxFit.fitWidth)),
               ),
               SizedBox(height: isSmallScreen ? 16.0 : 24.0),
-              Text(
-                data.title,
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.center,
-              ),
+              Text(data.title, style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
               SizedBox(height: isSmallScreen ? 16.0 : 24.0),
-              Text(
-                data.message,
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
+              Text(data.message, style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
             ],
           );
         },
@@ -149,10 +139,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _buildCloseBtn(BuildContext context) {
     return Align(
       alignment: Alignment.topRight,
-      child: CupertinoButton(
-        onPressed: () => _closeScreen(context),
-        child: Assets.icon.close.svg(),
-      ),
+      child: CupertinoButton(onPressed: () => _closeScreen(context), child: Assets.icon.close.svg()),
     );
   }
 
@@ -167,22 +154,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _tapNext(BuildContext context) {
     context.read<OnboardingBloc>().add(OnboardingEventOnNext());
     if (_currentPage < _onboardingData.length - 1) {
-      _controller.animateToPage(
-        _currentPage + 1,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.linear,
-      );
+      _controller.animateToPage(_currentPage + 1, duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }
   }
 
   void _scrollTo(int index) {
     if (index != _currentPage) {
       context.read<OnboardingBloc>().add(OnboardingEventOnPosition(index));
-      _controller.animateToPage(
-        index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.linear,
-      );
+      _controller.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }
   }
 

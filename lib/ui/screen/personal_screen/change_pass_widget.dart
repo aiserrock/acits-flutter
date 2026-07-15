@@ -63,10 +63,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
                     onPressed: Navigator.of(context).pop,
                     child: Text(LocaleKeys.commonCancel.tr()),
                   ),
-                  CupertinoDialogAction(
-                    onPressed: _submit,
-                    child: Text(LocaleKeys.commonEdit.tr()),
-                  ),
+                  CupertinoDialogAction(onPressed: _submit, child: Text(LocaleKeys.commonEdit.tr())),
                 ],
         );
       },
@@ -131,9 +128,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
     final rawError = state is DataError<void> ? state.error : null;
     final error = rawError is MessagedException ? rawError.error : null;
     messenger.showSnackBar(
-      SnackBar(
-        content: Text('${LocaleKeys.personalChangeErrorMsg.tr()}${error is String ? error : ''}'),
-      ),
+      SnackBar(content: Text('${LocaleKeys.personalChangeErrorMsg.tr()}${error is String ? error : ''}')),
     );
   }
 

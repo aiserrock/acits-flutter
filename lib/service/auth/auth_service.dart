@@ -15,12 +15,7 @@ const _shelterListDefaultLenght = 25;
 /// Сервис авторизации / регистрации
 @singleton
 class AuthService extends ChangeNotifier {
-  AuthService(
-    this._acitsClient,
-    @Named('guest') this._acitsGuestClient,
-    this._authRepository,
-    this._confirmRepository,
-  );
+  AuthService(this._acitsClient, @Named('guest') this._acitsGuestClient, this._authRepository, this._confirmRepository);
 
   final Openapi _acitsClient;
   final Openapi _acitsGuestClient;
@@ -119,9 +114,7 @@ class AuthService extends ChangeNotifier {
   Future<bool> tryRefreshLastAuth() async {
     final oldRefresh = _refresh ?? await _authRepository.refresh;
     if (oldRefresh == null) return false;
-    return await refreshToken(
-      refresh: oldRefresh,
-    ).then((value) => value is TokenRefresh).catchError((e) => false);
+    return await refreshToken(refresh: oldRefresh).then((value) => value is TokenRefresh).catchError((e) => false);
   }
 
   /// Список всех доступных приютов
@@ -130,11 +123,7 @@ class AuthService extends ChangeNotifier {
     int offset = 0,
     String? searchRequest,
   }) async {
-    final result = await _acitsGuestClient.apiV1SheltersGet(
-      limit: limit,
-      offset: offset,
-      search: searchRequest,
-    );
+    final result = await _acitsGuestClient.apiV1SheltersGet(limit: limit, offset: offset, search: searchRequest);
 
     if (result.body != null) {
       _shelterList = result.body;
@@ -154,9 +143,7 @@ class AuthService extends ChangeNotifier {
   }
 
   /// Зарегистрировать нового пользователя
-  Future<UserShelterWorkerSerializers?> registrationCustomer(
-    UserShelterWorkerSerializers customer,
-  ) async {
+  Future<UserShelterWorkerSerializers?> registrationCustomer(UserShelterWorkerSerializers customer) async {
     final result = await _acitsGuestClient.apiV1UsersWorkerRegisterPost(body: customer);
 
     if (result.body != null) {

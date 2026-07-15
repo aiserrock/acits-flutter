@@ -81,10 +81,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               _buildDivider(),
               const ThemeSwitcherTile(),
               _buildDivider(),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.0),
-                child: AppVersionLabel(),
-              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 12.0), child: AppVersionLabel()),
             ],
           );
         },

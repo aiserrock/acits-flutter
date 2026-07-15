@@ -50,8 +50,7 @@ class HttpLoggingInterceptorUtf8 implements Interceptor {
     return response;
   }
 
-  String _formatHeaders(Map<String, String> headers) =>
-      headers.entries.map((e) => '${e.key}: ${e.value}').join('\n');
+  String _formatHeaders(Map<String, String> headers) => headers.entries.map((e) => '${e.key}: ${e.value}').join('\n');
 
   /// UTF-8-декод тела; при неудаче возвращает исходную строку.
   String _decode(String body) {
