@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
@@ -87,9 +88,32 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Тот же цвет, что у нативного/DOM splash (#6776E0) — кадр совпадает пиксель
-    // в пиксель, поэтому пока держится системный splash, разницы не видно, а на
-    // web после снятия #splash под ним оказывается ровно такой же фон.
-    return const ColoredBox(color: Color(0xFF6776E0));
+    // Кадр 1-в-1 повторяет нативный/DOM splash: фон #6776E0, белая иконка
+    // (logo_splash) по центру и белый спиннер внизу на ~18% высоты (как #splash
+    // + #loader в web/index.html и нативный splash-image). Совпадение важно на
+    // web: между снятием DOM-#splash и отрисовкой целевого экрана под ним
+    // оказывается этот же кадр — без него мелькал бы голый фиолетовый фон.
+    final size = MediaQuery.sizeOf(context);
+    return ColoredBox(
+      color: const Color(0xFF6776E0),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Center(child: Assets.image.logoSplash.svg(width: 80.0, height: 108.0)),
+          Positioned(
+            bottom: size.height * 0.18,
+            child: const SizedBox(
+              width: 42.0,
+              height: 42.0,
+              child: CircularProgressIndicator(
+                strokeWidth: 4.0,
+                color: Colors.white,
+                backgroundColor: Color(0x59FFFFFF), // rgba(255,255,255,.35) — как web-loader
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
