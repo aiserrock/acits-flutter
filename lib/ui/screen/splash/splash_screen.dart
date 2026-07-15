@@ -42,19 +42,39 @@ class _SplashScreenState extends State<SplashScreen> {
     LottieRes.catsLoading,
   ];
 
+  /// Минимальное время показа splash. Даже если маршрут решён мгновенно,
+  /// пользователь видит splash не меньше этого срока (реальная загрузка дольше —
+  /// ждём её). Держит на splash ровно 2 секунды, ни больше, ни меньше.
+  static const _minSplashDuration = Duration(seconds: 2);
+
   /// Выбранная на этот запуск анимация. Фиксируется в initState, чтобы не
   /// меняться на ребилдах.
-  late final String _loadingAnimation = _loadingAnimations[Random().nextInt(_loadingAnimations.length)];
+  late final String _loadingAnimation =
+      _loadingAnimations[Random().nextInt(_loadingAnimations.length)];
+
+  /// Момент, когда splash смонтирован — от него отсчитываем минимум показа.
+  final Stopwatch _shownFor = Stopwatch();
 
   @override
   void initState() {
     super.initState();
+    _shownFor.start();
     WidgetsBinding.instance.addPostFrameCallback((_) => _decideStartRoute());
   }
 
+  /// Добить показ splash до [_minSplashDuration], если реальная логика решилась
+  /// быстрее. Если она заняла ≥ минимума — не ждём ничего.
+  Future<void> _ensureMinDuration() async {
+    final left = _minSplashDuration - _shownFor.elapsed;
+    if (left > Duration.zero) await Future<void>.delayed(left);
+  }
+
   /// Уйти на [route] и снять splash после отрисовки целевого экрана (следующий
-  /// кадр), чтобы между splash и экраном не мелькнула пустота.
-  void _goAndReveal(String route) {
+  /// кадр), чтобы между splash и экраном не мелькнула пустота. Перед уходом
+  /// гарантируем минимальное время показа splash.
+  Future<void> _goAndReveal(String route) async {
+    await _ensureMinDuration();
+    if (!mounted) return;
     getIt<GoRouter>().go(route);
     WidgetsBinding.instance.addPostFrameCallback((_) => removeSplash());
   }
@@ -65,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (config.isFirstLaunch) {
       Log.info('Splash: first launch → onboarding');
-      _goAndReveal(AppRoutes.onboarding);
+      await _goAndReveal(AppRoutes.onboarding);
       return;
     }
 
@@ -73,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     if (!refreshed) {
       Log.info('Splash: no valid refresh → login');
-      _goAndReveal(AppRoutes.login);
+      await _goAndReveal(AppRoutes.login);
       return;
     }
 
@@ -82,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     if (restored) {
       Log.info('Splash: refresh ok + shelter restored → root');
-      _goAndReveal(AppRoutes.root);
+      await _goAndReveal(AppRoutes.root);
       return;
     }
 
@@ -93,10 +113,15 @@ class _SplashScreenState extends State<SplashScreen> {
       return null;
     });
     if (!mounted) return;
+    await _ensureMinDuration();
+    if (!mounted) return;
     final router = getIt<GoRouter>();
     if (list != null) {
       router.go(AppRoutes.login);
-      router.push(AppRoutes.pickShelter, extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true});
+      router.push(
+        AppRoutes.pickShelter,
+        extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true},
+      );
     } else {
       router.go(AppRoutes.login);
     }
