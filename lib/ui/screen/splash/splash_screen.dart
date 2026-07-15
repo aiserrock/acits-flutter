@@ -49,8 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// Выбранная на этот запуск анимация. Фиксируется в initState, чтобы не
   /// меняться на ребилдах.
-  late final String _loadingAnimation =
-      _loadingAnimations[Random().nextInt(_loadingAnimations.length)];
+  late final String _loadingAnimation = _loadingAnimations[Random().nextInt(_loadingAnimations.length)];
 
   /// Момент, когда splash смонтирован — от него отсчитываем минимум показа.
   final Stopwatch _shownFor = Stopwatch();
@@ -118,10 +117,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final router = getIt<GoRouter>();
     if (list != null) {
       router.go(AppRoutes.login);
-      router.push(
-        AppRoutes.pickShelter,
-        extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true},
-      );
+      router.push(AppRoutes.pickShelter, extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true});
     } else {
       router.go(AppRoutes.login);
     }

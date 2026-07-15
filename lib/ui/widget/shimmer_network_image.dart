@@ -34,10 +34,7 @@ class ShimmerNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(radius);
     if (url == null || url!.isEmpty) {
-      return _wrap(
-        borderRadius,
-        Assets.image.animalStub.image(fit: fit, width: width, height: height),
-      );
+      return _wrap(borderRadius, Assets.image.animalStub.image(fit: fit, width: width, height: height));
     }
     return ClipRRect(
       borderRadius: borderRadius,
@@ -58,8 +55,7 @@ class ShimmerNetworkImage extends StatelessWidget {
             child: height == null ? const SizedBox.expand() : null,
           );
         },
-        errorBuilder: (context, _, _) =>
-            Assets.image.animalStub.image(fit: fit, width: width, height: height),
+        errorBuilder: (context, _, _) => Assets.image.animalStub.image(fit: fit, width: width, height: height),
       ),
     );
   }

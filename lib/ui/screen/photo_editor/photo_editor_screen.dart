@@ -10,10 +10,7 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 /// всё на [Uint8List], без нативных плагинов и dart:io.
 Future<Uint8List?> openPhotoEditor(BuildContext context, Uint8List source) {
   return Navigator.of(context).push<Uint8List>(
-    MaterialPageRoute<Uint8List>(
-      fullscreenDialog: true,
-      builder: (_) => PhotoEditorScreen(source: source),
-    ),
+    MaterialPageRoute<Uint8List>(fullscreenDialog: true, builder: (_) => PhotoEditorScreen(source: source)),
   );
 }
 
