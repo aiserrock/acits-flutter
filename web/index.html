@@ -85,6 +85,21 @@
        читает их через JS-interop (lib/util/web_insets.dart) и применяет
        SafeArea(minimum: bottom) к нав-бару. Проверенный подход из a banking app. -->
   <script src="js/webinsets.min.js"></script>
+
+  <!-- pdf.js для пакета pdfx (просмотр PDF на web). Без этого рендерер бросает
+       «Pdfjs library not loaded». Версия 4.6.82 зафиксирована pdfx 2.9.2
+       (bin/install_web.dart) — при апгрейде pdfx проверить соответствие. -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.min.mjs" type="module"></script>
+  <script type="module">
+    const { pdfjsLib } = globalThis;
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.worker.mjs';
+    globalThis.pdfRenderOptions = {
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/cmaps/',
+      cMapPacked: true,
+    };
+  </script>
+
   <style>
     body { background: #6776E0; }
   </style>

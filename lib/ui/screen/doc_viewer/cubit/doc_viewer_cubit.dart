@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
+import 'package:acits_flutter/service/document/pdfjs_ready/pdfjs_ready.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +26,9 @@ class DocViewerCubit extends Cubit<DataState<Uint8List>> {
     safeEmit(const DataState.loading());
     try {
       final bytes = await _fetcher();
+      // На web дожидаемся pdf.js, иначе рендерер pdfx бросит
+      // «Pdfjs library not loaded». На остальных платформах — no-op.
+      await PdfjsReady.ensure();
       Log.info('DocViewerCubit.fetchData ok: ${bytes.lengthInBytes} bytes');
       safeEmit(DataState.content(bytes));
     } catch (e, s) {

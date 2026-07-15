@@ -62,6 +62,8 @@ class DocExporterImpl implements DocExporter {
     } catch (e) {
       // AbortError — пользователь закрыл share-лист; это успех сценария, не
       // качаем. Отличаем по тексту ошибки (без ненадёжного is-check JS-типов).
+      // Прочие ошибки (NotAllowedError/DataError, share файлов недоступен на
+      // десктопе даже при canShare==true) — фолбэк на скачивание.
       if (e.toString().contains('AbortError')) return true;
       Log.warning('Web share failed, fallback to download: $e');
       return false;
