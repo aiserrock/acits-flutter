@@ -23,9 +23,9 @@ class _GalleryItemWidget extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: Container(color: ColorRes.foreground, child: child),
+                  child: Container(color: Theme.of(context).colorScheme.surface, child: child),
                 ),
-                if (isChoosed) _buildChooseIcon(),
+                if (isChoosed) _buildChooseIcon(context),
               ],
             ),
           ),
@@ -34,7 +34,7 @@ class _GalleryItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildChooseIcon() {
+  Widget _buildChooseIcon(BuildContext context) {
     return Align(
       alignment: Alignment.bottomRight,
       child: LayoutBuilder(
@@ -50,7 +50,11 @@ class _GalleryItemWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(3.0),
                 child: Align(
                   alignment: Alignment.bottomRight,
-                  child: Icon(Icons.done, color: ColorRes.accent, size: maskSize.shortestSide * .6),
+                  child: Icon(
+                    Icons.done,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: maskSize.shortestSide * .6,
+                  ),
                 ),
               ),
             ),

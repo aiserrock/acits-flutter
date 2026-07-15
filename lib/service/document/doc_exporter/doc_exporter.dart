@@ -25,4 +25,11 @@ abstract interface class DocExporter {
     String? text,
     String? subject,
   });
+
+  /// Просто скачать [bytes] в файл [fileName], без share-sheet.
+  Future<void> download(
+    Uint8List bytes, {
+    required String fileName,
+    String mimeType = 'application/pdf',
+  });
 }

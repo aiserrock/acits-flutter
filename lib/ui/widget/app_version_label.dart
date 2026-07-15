@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:acits_flutter/res/color.dart';
+import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/util/app_version.dart';
 
 /// Текстовая метка версии приложения (`v0.7.0 (20)`).
@@ -19,7 +19,7 @@ class AppVersionLabel extends StatelessWidget {
     return Text(
       label,
       textAlign: TextAlign.center,
-      style: style ?? const TextStyle(fontSize: 12.0, color: ColorRes.textSecondary),
+      style: style ?? TextStyle(fontSize: 12.0, color: context.appColors.textSecondary),
     );
   }
 }

@@ -10,8 +10,7 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/onboarding/bloc/onboarding_bloc.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
-import 'package:acits_flutter/res/color.dart';
-import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/ui/screen/onboarding/model/onboarding_data.dart';
 import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/debug_drawer.dart';
@@ -90,9 +89,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       count: _onboardingData.length,
       controller: _controller,
       onDotClicked: _scrollTo,
-      effect: const ExpandingDotsEffect(
-        activeDotColor: ColorRes.indicatorActive,
-        dotColor: ColorRes.indicatorInactive,
+      effect: ExpandingDotsEffect(
+        activeDotColor: context.appColors.indicatorActive,
+        dotColor: context.appColors.indicatorInactive,
         dotHeight: 8.0,
         dotWidth: 8.0,
         strokeWidth: 16.0,
@@ -129,9 +128,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: SizedBox.expand(child: data.image.svg(fit: BoxFit.fitWidth)),
               ),
               SizedBox(height: isSmallScreen ? 16.0 : 24.0),
-              Text(data.title, style: StyleRes.title, textAlign: TextAlign.center),
+              Text(
+                data.title,
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
               SizedBox(height: isSmallScreen ? 16.0 : 24.0),
-              Text(data.message, style: StyleRes.content, textAlign: TextAlign.center),
+              Text(
+                data.message,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
             ],
           );
         },

@@ -60,13 +60,16 @@ class PrescriptionForm extends StatelessWidget {
               ...drugList.mapIndexed<EditCardData>(
                 (index, drug) => EditCardData(
                   initValue: '${drug.drugName}, ${drug.formOfDrug}, ${drug.drugDosage}',
-                  suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
+                  suffix: Icon(
+                    Icons.remove_circle_outline_rounded,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                   onPressed: () => cubit.removeDrug(index),
                 ),
               ),
               EditCardData(
                 label: '${LocaleKeys.prescriptionDrug.tr()}${drugList.isNotEmpty ? '+' : '*'}',
-                suffix: const Icon(Icons.menu_open_rounded, color: ColorRes.accent),
+                suffix: Icon(Icons.menu_open_rounded, color: Theme.of(context).colorScheme.primary),
                 onPressed: () => cubit.pickDrug(context),
                 validator: (_) => drugList.isEmpty ? '' : null,
               ),
@@ -100,21 +103,30 @@ class PrescriptionForm extends StatelessWidget {
               ...daysData.mapIndexed<EditCardData>(
                 (index, date) => EditCardData(
                   initValue: date.toDateShortWeekDay,
-                  suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
+                  suffix: Icon(
+                    Icons.remove_circle_outline_rounded,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                   onPressed: () => cubit.removeDate(index),
                 ),
               ),
               if (cubit.allowMultiDate || daysData.isEmpty)
                 EditCardData(
                   label: '${LocaleKeys.prescriptionDate.tr()}${daysData.isNotEmpty ? '+' : '*'}',
-                  suffix: const Icon(Icons.calendar_today_outlined, color: ColorRes.accent),
+                  suffix: Icon(
+                    Icons.calendar_today_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   onPressed: () => cubit.pickStartDate(context),
                   validator: (_) => daysData.isEmpty ? '' : null,
                 ),
               ...timesData.mapIndexed<EditCardData>(
                 (index, time) => EditCardData(
                   initValue: time.format(context),
-                  suffix: const Icon(Icons.remove_circle_outline_rounded, color: ColorRes.error),
+                  suffix: Icon(
+                    Icons.remove_circle_outline_rounded,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                   onPressed: () => cubit.removeTime(index),
                 ),
               ),
@@ -123,7 +135,10 @@ class PrescriptionForm extends StatelessWidget {
                   label: '${LocaleKeys.prescriptionTime.tr()}${timesData.isNotEmpty ? '+' : '*'}',
                   onPressed: () => cubit.pickAtTime(context, 0),
                   validator: (_) => timesData.isEmpty ? '' : null,
-                  suffix: const Icon(Icons.watch_later_outlined, color: ColorRes.accent),
+                  suffix: Icon(
+                    Icons.watch_later_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               // Ключ по составу дат/времён — форма пересобирается при изменении
               // набора, а не на каждый ребилд (см. пояснение в _buildDrugList).

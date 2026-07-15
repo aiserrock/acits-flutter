@@ -67,15 +67,19 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
                   padding: const EdgeInsets.only(right: 16.0),
                   child: CupertinoButton(
                     padding: const EdgeInsets.only(),
-                    child: const Icon(Icons.edit, color: ColorRes.accent, size: 40.0),
+                    child: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 40.0,
+                    ),
                     onPressed: () => _addEditApplicant(context, applicantId: _applicant?.id),
                   ),
                 ),
               CupertinoButton(
                 padding: const EdgeInsets.only(),
-                child: const Icon(
+                child: Icon(
                   Icons.add_circle_outline_rounded,
-                  color: ColorRes.accent,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 40.0,
                 ),
                 onPressed: () => _addEditApplicant(context),
@@ -96,7 +100,10 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage>
         EditCardData(
           label: LocaleKeys.animalCuratorName.tr(),
           controller: _applicantNameController,
-          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchApplicant,
         ),
         if (_applicant != null)

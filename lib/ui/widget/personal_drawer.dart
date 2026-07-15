@@ -9,6 +9,7 @@ import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/widget/cubit/personal_drawer_cubit.dart';
 import 'package:acits_flutter/ui/widget/skeleton.dart';
 import 'package:acits_flutter/ui/widget/app_version_label.dart';
+import 'package:acits_flutter/ui/widget/theme_switcher_tile.dart';
 
 const Duration _kBaseSettleDuration = Duration(milliseconds: 246);
 
@@ -37,31 +38,30 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
   Widget build(BuildContext context) {
     return Drawer(
       child: BlocBuilder<PersonalDrawerCubit, DataState<UserSerializers>>(
-        builder: (_, state) {
+        builder: (context, state) {
           final isLoading = state.isLoading;
           final hasError = state.hasError;
           final person = state.valueOrNull;
+          final titleStyle = Theme.of(context).textTheme.titleLarge;
+          final secondaryTitleStyle = titleStyle?.copyWith(color: context.appColors.textSecondary);
           return ListView(
             children: [
               _buildHeader(),
               _buildDivider(),
-              if (!hasError) _buildPersonTile(isLoading, person),
+              if (!hasError) _buildPersonTile(context, isLoading, person),
               _buildDivider(),
-              if (!hasError) _buildDataTileWidget(isLoading),
+              if (!hasError) _buildDataTileWidget(context, isLoading),
               ListTile(
-                title: Text(
-                  LocaleKeys.personMyShelters.tr(),
-                  style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
-                ),
+                title: Text(LocaleKeys.personMyShelters.tr(), style: secondaryTitleStyle),
                 // onTap: () {},
               ),
               _buildDivider(),
               ListTile(
-                title: Text(LocaleKeys.personChangePass.tr(), style: StyleRes.title),
+                title: Text(LocaleKeys.personChangePass.tr(), style: titleStyle),
                 onTap: () => _openPersonalScreen(isChangePass: true),
               ),
               ListTile(
-                title: Text(LocaleKeys.personChangeShelter.tr(), style: StyleRes.title),
+                title: Text(LocaleKeys.personChangeShelter.tr(), style: titleStyle),
                 onTap: () async {
                   final shelter = await context.push<ShelterShortSerializers>(
                     AppRoutes.pickShelter,
@@ -71,16 +71,15 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
                 },
               ),
               ListTile(
-                title: Text(
-                  LocaleKeys.personFeedback.tr(),
-                  style: StyleRes.title.copyWith(color: ColorRes.textSecondary),
-                ),
+                title: Text(LocaleKeys.personFeedback.tr(), style: secondaryTitleStyle),
                 // onTap: () {},
               ),
               ListTile(
-                title: Text(LocaleKeys.personLogout.tr(), style: StyleRes.title),
+                title: Text(LocaleKeys.personLogout.tr(), style: titleStyle),
                 onTap: _authService.logout,
               ),
+              _buildDivider(),
+              const ThemeSwitcherTile(),
               _buildDivider(),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 12.0),
@@ -93,20 +92,20 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
     );
   }
 
-  Widget _buildDataTileWidget(bool isLoading) {
+  Widget _buildDataTileWidget(BuildContext context, bool isLoading) {
     return ListTile(
       title: isLoading
           ? _buildSkeleton(156.0)
-          : Text(LocaleKeys.personMyData.tr(), style: StyleRes.title),
+          : Text(LocaleKeys.personMyData.tr(), style: Theme.of(context).textTheme.titleLarge),
       onTap: _openPersonalScreen,
     );
   }
 
-  Widget _buildPersonTile(bool isLoading, UserSerializers? person) {
+  Widget _buildPersonTile(BuildContext context, bool isLoading, UserSerializers? person) {
     return ListTile(
       title: isLoading
           ? _buildSkeleton(156.0)
-          : Text(person?.fullName ?? '', style: StyleRes.title),
+          : Text(person?.fullName ?? '', style: Theme.of(context).textTheme.titleLarge),
       subtitle: isLoading ? null : Text(_authService.shelterRole?.currentShelterUserRole ?? ''),
       // onTap: () {},
     );

@@ -23,92 +23,95 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: ColorRes.foreground,
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTimeAction(),
+          _buildTimeAction(context),
           const SizedBox(height: 4.0),
-          if (widget.itemData?.prescription.myType != null) _buildType(),
+          if (widget.itemData?.prescription.myType != null) _buildType(context),
           const SizedBox(height: 4.0),
-          _buildAnimal(),
+          _buildAnimal(context),
         ],
       ),
     );
   }
 
-  Widget _buildAnimal() {
-    return _isExpanded ? _buildExpanded() : _buildExpandHeader();
+  Widget _buildAnimal(BuildContext context) {
+    return _isExpanded ? _buildExpanded(context) : _buildExpandHeader(context);
   }
 
-  Widget _buildExpanded() {
+  Widget _buildExpanded(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildExpandHeader(),
+        _buildExpandHeader(context),
         const Divider(height: 24.0),
-        Text(LocaleKeys.mainAnimal.tr(), style: StyleRes.content),
+        Text(LocaleKeys.mainAnimal.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         Text.rich(
           TextSpan(
             children: [
               TextSpan(
                 text: (widget.itemData?.prescription.animal.specParentName ?? ''),
-                style: StyleRes.mainContent,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const TextSpan(text: (', '), style: StyleRes.mainContent),
+              TextSpan(text: (', '), style: Theme.of(context).textTheme.bodyLarge),
               TextSpan(
                 text: widget.itemData?.prescription.animal.specName ?? '',
-                style: StyleRes.mainContent,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),
           maxLines: 3,
         ),
         const Divider(height: 24.0),
-        Text(LocaleKeys.mainAppoinmentAuthor.tr(), style: StyleRes.content),
+        Text(LocaleKeys.mainAppoinmentAuthor.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         Text(
           widget.itemData?.prescription.createdBy ?? ' ',
-          style: StyleRes.mainContent,
+          style: Theme.of(context).textTheme.bodyLarge,
           maxLines: 3,
         ),
         const Divider(height: 24.0),
-        Text(LocaleKeys.mainAppoinment.tr(), style: StyleRes.content),
+        Text(LocaleKeys.mainAppoinment.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         if (widget.itemData?.prescription.drugs != null)
           ...widget.itemData!.prescription.drugs.map<Widget>(
             (drug) => Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(text: (drug.drugName), style: StyleRes.mainContent),
-                  const TextSpan(text: (', '), style: StyleRes.mainContent),
-                  TextSpan(text: (drug.drugDosage.toString()), style: StyleRes.mainContent),
+                  TextSpan(text: (drug.drugName), style: Theme.of(context).textTheme.bodyLarge),
+                  TextSpan(text: (', '), style: Theme.of(context).textTheme.bodyLarge),
+                  TextSpan(
+                    text: (drug.drugDosage.toString()),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                   if (drug.formOfDrug != null)
-                    TextSpan(text: (drug.formOfDrug), style: StyleRes.mainContent),
+                    TextSpan(text: (drug.formOfDrug), style: Theme.of(context).textTheme.bodyLarge),
                 ],
               ),
               maxLines: 3,
             ),
           ),
         const Divider(height: 24.0),
-        Text(LocaleKeys.animalComments.tr(), style: StyleRes.content),
+        Text(LocaleKeys.animalComments.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         Text(
           widget.itemData?.prescription.description ?? '',
-          style: StyleRes.mainContent.copyWith(fontSize: 16.0),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16.0),
         ),
       ],
     );
   }
 
-  Widget _buildExpandHeader() {
+  Widget _buildExpandHeader(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -117,15 +120,19 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
               children: [
                 TextSpan(
                   text: (widget.itemData?.prescription.animal.name ?? ''),
-                  style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 TextSpan(
                   text: ' ',
-                  style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
                 ),
                 TextSpan(
                   text: (widget.itemData?.prescription.animal.id ?? '').toString(),
-                  style: StyleRes.content,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
@@ -142,28 +149,28 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       onTap: () => setState(() => _isExpanded = !_isExpanded),
       child: Icon(
         _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-        color: ColorRes.accent,
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }
 
-  Widget _buildType() {
+  Widget _buildType(BuildContext context) {
     return Text(
       widget.itemData?.prescription.typeString ?? '',
-      style: StyleRes.subTitle,
+      style: Theme.of(context).textTheme.titleMedium,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
   }
 
-  Widget _buildTimeAction() {
+  Widget _buildTimeAction(BuildContext context) {
     return Row(
       children: [
         if (widget.itemData?.executeAt != null) Text(_formatter.format(widget.itemData!.executeAt)),
         const Spacer(),
         InkWell(
           onTap: _openBsActions,
-          child: const Icon(Icons.more_horiz, color: ColorRes.accent),
+          child: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primary),
         ),
       ],
     );
@@ -175,33 +182,43 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       builder: (context) => bsSelectorActions(context, <Widget, dynamic Function()>{
         Text(
           LocaleKeys.commonDone.tr(),
-          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
           LocaleKeys.commonReschedule.tr(),
-          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
           _reschedule();
         },
         Text(
           LocaleKeys.commonNotCompleted.tr(),
-          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
           LocaleKeys.commonEdit.tr(),
-          style: StyleRes.mainContent.copyWith(color: ColorRes.accent),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
           widget.onEditedPrescription?.call();
         },
         Text(
           LocaleKeys.commonDelete.tr(),
-          style: StyleRes.mainContent.copyWith(color: ColorRes.error),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
         ): () {
           Navigator.of(context).pop();
         },

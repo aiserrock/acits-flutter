@@ -21,9 +21,9 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: ColorRes.foreground,
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
@@ -34,17 +34,22 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
           if (widget.prescription.executions.isNotEmpty)
             Text(
               _formatter.format(widget.prescription.executions.first.executeAt),
-              style: StyleRes.mainContent,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           const SizedBox(height: 4.0),
-          Text(widget.prescription.myType.typeString ?? '', style: StyleRes.title),
+          Text(
+            widget.prescription.myType.typeString ?? '',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 4.0),
           Row(
             children: [
               Expanded(
                 child: Text(
                   widget.prescription.createdBy ?? '',
-                  style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -54,17 +59,20 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
           ),
           if (_isExpanded) ...[
             const Divider(),
-            Text(LocaleKeys.animalPrescriptions.tr(), style: StyleRes.caption),
+            Text(LocaleKeys.animalPrescriptions.tr(), style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 4.0),
             ...widget.prescription.drugs.map<Widget>(
               (drug) => Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: drug.drugName, style: StyleRes.mainContent),
-                    const TextSpan(text: ', ', style: StyleRes.mainContent),
-                    TextSpan(text: drug.drugDosage.toString(), style: StyleRes.mainContent),
+                    TextSpan(text: drug.drugName, style: Theme.of(context).textTheme.bodyLarge),
+                    TextSpan(text: ', ', style: Theme.of(context).textTheme.bodyLarge),
+                    TextSpan(
+                      text: drug.drugDosage.toString(),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                     if (drug.formOfDrug != null)
-                      TextSpan(text: drug.formOfDrug, style: StyleRes.mainContent),
+                      TextSpan(text: drug.formOfDrug, style: Theme.of(context).textTheme.bodyLarge),
                   ],
                 ),
                 maxLines: 3,
@@ -81,7 +89,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
       onTap: () => setState(() => _isExpanded = !_isExpanded),
       child: Icon(
         _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-        color: ColorRes.accent,
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }

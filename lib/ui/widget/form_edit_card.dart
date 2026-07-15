@@ -1,4 +1,4 @@
-import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/res/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -31,7 +31,7 @@ class FormEditCard extends StatelessWidget {
                 ? [
                     Stack(
                       children: [
-                        _buildField(item),
+                        _buildField(context, item),
                         if (item.onPressed != null)
                           Positioned.fill(child: InkWell(onTap: item.onPressed)),
                       ],
@@ -41,7 +41,7 @@ class FormEditCard extends StatelessWidget {
                     if (item.label != null)
                       Text(
                         item.label!,
-                        style: StyleRes.content,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -54,14 +54,14 @@ class FormEditCard extends StatelessWidget {
       padding: padding ?? const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       margin: margin ?? const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
-        color: background ?? ColorRes.foreground,
+        color: background ?? Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(children: rows),
     );
   }
 
-  Widget _buildField(EditCardData item, {bool enabled = true}) {
+  Widget _buildField(BuildContext context, EditCardData item, {bool enabled = true}) {
     final keyboardType = item.digitsOnly
         ? TextInputType.number
         : item.decimalOnly
@@ -80,7 +80,9 @@ class FormEditCard extends StatelessWidget {
         fillColor: Colors.transparent,
       ),
       maxLength: item.maxLength,
-      style: item.enabled ? null : const TextStyle().copyWith(color: ColorRes.textSecondary),
+      style: item.enabled
+          ? null
+          : const TextStyle().copyWith(color: context.appColors.textSecondary),
       maxLines: item.isObscure ? 1 : 8,
       minLines: 1,
       keyboardType: keyboardType,

@@ -32,17 +32,17 @@ class _EmailConfirmationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
           LocaleKeys.regEmaiConfirmation.tr(),
-          style: const TextStyle(color: ColorRes.textPrimary),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         centerTitle: true,
       ),

@@ -10,10 +10,10 @@ import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:acits_flutter/res/l10n.dart';
-import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/res/strings.dart';
-import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/ui/widget/cubit/theme_cubit.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
 import 'package:acits_flutter/util/app_version.dart';
 import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
@@ -90,38 +90,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: StringConst.commonAppName,
-      theme: ThemeData(
-        useMaterial3: false,
-        colorScheme: const ColorScheme.light(
-          primary: ColorRes.accent,
-          secondary: ColorRes.indicatorActive,
-          surface: ColorRes.background,
-        ),
-        buttonTheme: const ButtonThemeData(
-          buttonColor: ColorRes.primaryButton,
-          textTheme: ButtonTextTheme.primary,
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-        ),
-        textTheme: const TextTheme(labelLarge: StyleRes.button),
-        inputDecorationTheme: const InputDecorationTheme(iconColor: ColorRes.accent),
-        textSelectionTheme: const TextSelectionThemeData(cursorColor: ColorRes.accent),
+    // ThemeCubit стоит выше MaterialApp: BlocBuilder перестраивает приложение
+    // при смене режима, отдавая свежий themeMode. theme/darkTheme — статичные
+    // M3-схемы, Flutter сам выбирает нужную по themeMode.
+    return BlocProvider(
+      create: (_) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp.router(
+            title: StringConst.commonAppName,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeMode,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            color: AppTheme.light.colorScheme.primary,
+            scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
+            routerConfig: getIt<GoRouter>(),
+            // На web-десктопе ограничиваем интерфейс шириной смартфона
+            // (PhoneFrame), затем поверх — необязательный overlayBuilder
+            // (dev-кнопка). Порядок: сначала рамка, потом overlay, чтобы кнопка
+            // была над «телефоном».
+            builder: (context, child) {
+              Widget framed = PhoneFrame(child: child ?? const SizedBox.shrink());
+              if (overlayBuilder != null) framed = overlayBuilder!(context, framed);
+              return framed;
+            },
+          );
+        },
       ),
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      color: ColorRes.accent,
-      scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
-      routerConfig: getIt<GoRouter>(),
-      // На web-десктопе ограничиваем интерфейс шириной смартфона (PhoneFrame),
-      // затем поверх — необязательный overlayBuilder (dev-кнопка). Порядок:
-      // сначала рамка, потом overlay, чтобы кнопка была над «телефоном».
-      builder: (context, child) {
-        Widget framed = PhoneFrame(child: child ?? const SizedBox.shrink());
-        if (overlayBuilder != null) framed = overlayBuilder!(context, framed);
-        return framed;
-      },
     );
   }
 }

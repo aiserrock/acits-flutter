@@ -23,29 +23,29 @@ class DebugScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: CupertinoButton(
           onPressed: Navigator.of(context).pop,
-          child: const Icon(Icons.arrow_back_ios_new, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
         ),
-        title: _buildTitle(),
+        title: _buildTitle(context),
         centerTitle: true,
       ),
       body: _buildBody(context),
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('Debug screen', style: TextStyle(color: ColorRes.textPrimary)),
+        Text('Debug screen', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         Text(
           AppVersion.labelWithMode,
-          style: const TextStyle(fontSize: 11.0, color: ColorRes.textSecondary),
+          style: TextStyle(fontSize: 11.0, color: context.appColors.textSecondary),
         ),
       ],
     );
@@ -81,7 +81,7 @@ class _LogsCard extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              const Text('Логи', style: StyleRes.subTitle),
+              Text('Логи', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
               PrimaryButton(
                 onPressed: () => Navigator.of(context).push(
@@ -118,7 +118,7 @@ class _FirebaseTestCard extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              const Text('Firebase', style: StyleRes.subTitle),
+              Text('Firebase', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
               // Crashlytics существует только на android/ios.
               if (!kIsWeb) ...[
@@ -185,7 +185,7 @@ class _UIKitCard extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 8.0),
-              const Text('UIKit', style: StyleRes.subTitle),
+              Text('UIKit', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
               PrimaryButton(
                 onPressed: () {
@@ -254,7 +254,7 @@ class _ConnectionCardState extends State<_ConnectionCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8.0),
-              const Center(child: Text('Endpoint', style: StyleRes.subTitle)),
+              Center(child: Text('Endpoint', style: Theme.of(context).textTheme.titleMedium)),
               const SizedBox(height: 8.0),
               // Контуры окружений.
               ..._domainUrlList.asMap().entries.map(
@@ -395,7 +395,7 @@ class _ProxyCardState extends State<_ProxyCard> {
               const SizedBox(height: 8.0),
               Row(
                 children: [
-                  const Text('Proxy (Charles)', style: StyleRes.subTitle),
+                  Text('Proxy (Charles)', style: Theme.of(context).textTheme.titleMedium),
                   const Spacer(),
                   Switch(value: _proxyEnabled, onChanged: _onProxyToggled),
                 ],
@@ -450,7 +450,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
         child: Column(
           children: [
             const SizedBox(height: 8.0),
-            const Text('AnimalTypeSelector', style: StyleRes.subTitle),
+            Text('AnimalTypeSelector', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8.0),
             ListTile(
               title: Text(_category?.name ?? '* tap to select'),
