@@ -113,3 +113,7 @@ CLAUDE.md
 doc/backend-handoff.md
 doc/backend-integration-checklist.md
 mockoon/_bodies.json
+
+# Local scratch & planning notes — not part of the project
+tmp/
+docs/design-specs/
