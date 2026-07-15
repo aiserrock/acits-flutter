@@ -7,6 +7,7 @@ import 'package:acits_flutter/ui/widget/button.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdfx/pdfx.dart';
@@ -160,14 +161,36 @@ class _DocViewerViewState extends State<_DocViewerView> {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: PrimaryButton(
-              child: const Text('Share'),
-              onPressed: () => _exporter.share(bytes, fileName: _fileName, subject: widget.title),
-            ),
+            child: PrimaryButton(child: const Text('Share'), onPressed: () => _onShare(bytes)),
           ),
         ),
       ],
     );
+  }
+
+  /// Шаринг с полным трейлом в Talker: клик → размер → исход/ошибка.
+  /// Юзер копирует лог из TalkerScreen и отдаёт для диагностики.
+  Future<void> _onShare(Uint8List bytes) async {
+    Log.info(
+      '[doc_viewer] нажат Share: file=$_fileName size=${bytes.lengthInBytes}B '
+      'title=${widget.title} landscape=$_landscape',
+    );
+    try {
+      await _exporter.share(bytes, fileName: _fileName, subject: widget.title);
+      Log.info('[doc_viewer] share завершён: $_fileName');
+    } catch (e, s) {
+      Log.error('[doc_viewer] share упал: $_fileName', e, s);
+    }
+  }
+
+  Future<void> _onDownload(Uint8List bytes) async {
+    Log.info('[doc_viewer] нажат Download: file=$_fileName size=${bytes.lengthInBytes}B');
+    try {
+      await _exporter.download(bytes, fileName: _fileName);
+      Log.info('[doc_viewer] download завершён: $_fileName');
+    } catch (e, s) {
+      Log.error('[doc_viewer] download упал: $_fileName', e, s);
+    }
   }
 
   Widget _zoomControls(Uint8List bytes) {
@@ -195,7 +218,7 @@ class _DocViewerViewState extends State<_DocViewerView> {
           heroTag: 'download',
           backgroundColor: scheme.surface,
           foregroundColor: scheme.primary,
-          onPressed: () => _exporter.download(bytes, fileName: _fileName),
+          onPressed: () => _onDownload(bytes),
           child: const Icon(Icons.download),
         ),
       ],

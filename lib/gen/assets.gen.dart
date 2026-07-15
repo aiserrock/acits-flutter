@@ -85,6 +85,12 @@ class $AssetsIconGen {
   /// File path: assets/icon/drugs.svg
   SvgGenImage get drugs => const SvgGenImage('assets/icon/drugs.svg');
 
+  /// File path: assets/icon/flag_en.svg
+  SvgGenImage get flagEn => const SvgGenImage('assets/icon/flag_en.svg');
+
+  /// File path: assets/icon/flag_ru.svg
+  SvgGenImage get flagRu => const SvgGenImage('assets/icon/flag_ru.svg');
+
   /// File path: assets/icon/paw.svg
   SvgGenImage get paw => const SvgGenImage('assets/icon/paw.svg');
 
@@ -113,8 +119,14 @@ class $AssetsImageGen {
   /// File path: assets/image/logo_bar.svg
   SvgGenImage get logoBar => const SvgGenImage('assets/image/logo_bar.svg');
 
+  /// File path: assets/image/logo_bar_dark.svg
+  SvgGenImage get logoBarDark => const SvgGenImage('assets/image/logo_bar_dark.svg');
+
   /// File path: assets/image/logo_leading_bar.svg
   SvgGenImage get logoLeadingBar => const SvgGenImage('assets/image/logo_leading_bar.svg');
+
+  /// File path: assets/image/logo_leading_bar_dark.svg
+  SvgGenImage get logoLeadingBarDark => const SvgGenImage('assets/image/logo_leading_bar_dark.svg');
 
   /// File path: assets/image/logo_native.png
   AssetGenImage get logoNative => const AssetGenImage('assets/image/logo_native.png');

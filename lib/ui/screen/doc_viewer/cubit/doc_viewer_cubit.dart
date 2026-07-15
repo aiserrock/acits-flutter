@@ -22,17 +22,18 @@ class DocViewerCubit extends Cubit<DataState<Uint8List>> {
 
   /// Загружает байты документа. Повторно вызывается из UI при ошибке.
   Future<void> fetchData() async {
-    Log.debug('DocViewerCubit.fetchData');
+    Log.info('[doc_viewer] fetchData старт');
     safeEmit(const DataState.loading());
     try {
       final bytes = await _fetcher();
+      Log.info('[doc_viewer] PDF получен: ${bytes.lengthInBytes}B, ждём pdf.js');
       // На web дожидаемся pdf.js, иначе рендерер pdfx бросит
       // «Pdfjs library not loaded». На остальных платформах — no-op.
       await PdfjsReady.ensure();
-      Log.info('DocViewerCubit.fetchData ok: ${bytes.lengthInBytes} bytes');
+      Log.info('[doc_viewer] pdf.js готов, показываем ${bytes.lengthInBytes}B');
       safeEmit(DataState.content(bytes));
     } catch (e, s) {
-      Log.error('DocViewerCubit.fetchData failed', e, s);
+      Log.error('[doc_viewer] fetchData упал (${e.runtimeType})', e, s);
       safeEmit(DataState.error(e));
     }
   }

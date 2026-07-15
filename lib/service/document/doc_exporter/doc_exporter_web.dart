@@ -74,16 +74,21 @@ class DocExporterImpl implements DocExporter {
   }
 
   void _download(web.Blob blob, String fileName) {
-    final url = web.URL.createObjectURL(blob);
-    final anchor = web.HTMLAnchorElement()
-      ..href = url
-      ..download = fileName
-      ..style.display = 'none';
-    web.document.body?.append(anchor);
-    anchor.click();
-    anchor.remove();
-    // Освобождаем blob-URL после клика (файл уже начал скачиваться).
-    web.URL.revokeObjectURL(url);
+    try {
+      final url = web.URL.createObjectURL(blob);
+      final anchor = web.HTMLAnchorElement()
+        ..href = url
+        ..download = fileName
+        ..style.display = 'none';
+      web.document.body?.append(anchor);
+      anchor.click();
+      anchor.remove();
+      // Освобождаем blob-URL после клика (файл уже начал скачиваться).
+      web.URL.revokeObjectURL(url);
+      Log.info('[download] <a download> клик выполнен: $fileName');
+    } catch (e, s) {
+      Log.error('[download] ошибка скачивания через <a>: $fileName', e, s);
+    }
   }
 }
 

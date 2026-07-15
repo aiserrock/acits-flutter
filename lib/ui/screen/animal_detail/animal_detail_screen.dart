@@ -402,58 +402,16 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
         width: double.infinity,
         child: CupertinoSlidingSegmentedControl<int>(
           children: <int, Widget>{
-            0: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Assets.icon.animalFace.svg(
-                height: 28.0,
-                width: 28.0,
-                color: _currentTab == 0
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
-              ),
-            ),
-            1: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Assets.icon.prescription.svg(
-                height: 28.0,
-                width: 28.0,
-                color: _currentTab == 1
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
-              ),
-            ),
-            2: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Assets.icon.curator.svg(
-                height: 28.0,
-                width: 28.0,
-                color: _currentTab == 2
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
-              ),
-            ),
-            3: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Assets.icon.applicant.svg(
-                height: 28.0,
-                width: 28.0,
-                color: _currentTab == 3
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
-              ),
-            ),
-            4: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Assets.icon.comment.svg(
-                height: 28.0,
-                width: 28.0,
-                color: _currentTab == 4
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.55),
-              ),
-            ),
+            0: _buildTabIcon(Assets.icon.animalFace, 0),
+            1: _buildTabIcon(Assets.icon.prescription, 1),
+            2: _buildTabIcon(Assets.icon.curator, 2),
+            3: _buildTabIcon(Assets.icon.applicant, 3),
+            4: _buildTabIcon(Assets.icon.comment, 4),
           },
           groupValue: _currentTab,
+          // thumbColor задан явно: без него Cupertino рисует белый thumb, который
+          // в светлой теме сливался с иконками onPrimary и «перекрывал» их.
+          thumbColor: Theme.of(context).colorScheme.primary,
           backgroundColor: context.appColors.indicatorActive,
           onValueChanged: (int? index) {
             setState(() {
@@ -462,6 +420,22 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
             proceedOnNextFrame(_onScroll);
           },
         ),
+      ),
+    );
+  }
+
+  /// Иконка вкладки сегмент-контрола. Активная — на primary-thumb (`onPrimary`);
+  /// неактивная — на светлой дорожке (`onSurface` с alpha, контраст к
+  /// `indicatorActive`, в отличие от прежнего `onPrimary`, невидимого в светлой теме).
+  Widget _buildTabIcon(SvgGenImage icon, int index) {
+    final scheme = Theme.of(context).colorScheme;
+    final isActive = _currentTab == index;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: icon.svg(
+        height: 28.0,
+        width: 28.0,
+        color: isActive ? scheme.onPrimary : scheme.onSurface.withValues(alpha: 0.6),
       ),
     );
   }
