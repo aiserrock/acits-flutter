@@ -74,7 +74,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
       children: [
         CircleAvatar(
           backgroundImage: (widget.isEdit && avatar != null) ? NetworkImage(avatar) : null,
-          foregroundColor: ColorRes.textSecondary,
+          foregroundColor: context.appColors.textSecondary,
           radius: 80.0,
         ),
         Positioned.fill(
@@ -93,18 +93,25 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
                     children: [
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
-                        child: const Icon(Icons.photo_camera, color: ColorRes.accent, size: 32.0),
+                        child: Icon(
+                          Icons.photo_camera,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 32.0,
+                        ),
                         onPressed: () {},
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 32.0,
-                        child: Divider(thickness: 2.0, color: ColorRes.accent),
+                        child: Divider(
+                          thickness: 2.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
-                        child: const Icon(
+                        child: Icon(
                           Icons.photo_library_outlined,
-                          color: ColorRes.accent,
+                          color: Theme.of(context).colorScheme.primary,
                           size: 32.0,
                         ),
                         onPressed: () {},
@@ -128,21 +135,30 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
         EditCardData(
           label: '${LocaleKeys.animalCategory.tr()} *',
           controller: _categoryController,
-          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchCategory,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
           label: '${LocaleKeys.animalAnimalFamily.tr()} *',
           controller: _familyController,
-          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchFamily,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
           label: '${LocaleKeys.animalAnimalKind.tr()} *',
           controller: _kindController,
-          suffix: const Icon(Icons.keyboard_arrow_down_rounded, color: ColorRes.accent),
+          suffix: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: _searchKind,
           validator: Validator.emptyValidator,
         ),

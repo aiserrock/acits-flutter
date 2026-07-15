@@ -1,14 +1,17 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildCommonInfoPage(AnimalRead animal) {
-  return SliverList(delegate: SliverChildListDelegate(_buildCommonInfoContent(animal)));
+SliverList _buildCommonInfoPage(BuildContext context, AnimalRead animal) {
+  return SliverList(delegate: SliverChildListDelegate(_buildCommonInfoContent(context, animal)));
 }
 
-List<Widget> _buildCommonInfoContent(AnimalRead animal) {
+List<Widget> _buildCommonInfoContent(BuildContext context, AnimalRead animal) {
   return [
     Padding(
       padding: const EdgeInsets.only(top: 24.0, left: 16.0, bottom: 8.0),
-      child: Text(LocaleKeys.animalCommonInfo.tr(), style: StyleRes.title.copyWith(fontSize: 22.0)),
+      child: Text(
+        LocaleKeys.animalCommonInfo.tr(),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22.0),
+      ),
     ),
     AnimalContentCard([
       CardData(

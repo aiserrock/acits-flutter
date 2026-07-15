@@ -65,17 +65,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
         child: Scaffold(
           key: _forms.scaffoldKey,
           appBar: AppBar(
-            backgroundColor: ColorRes.foreground,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             shadowColor: Colors.transparent,
             title: Assets.image.logoBar.svg(),
             centerTitle: true,
             leading: GestureDetector(
-              child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+              child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
               onTap: () => Navigator.of(context).pop(),
             ),
-            bottom: _buildTabs(),
+            bottom: _buildTabs(context),
           ),
-          backgroundColor: ColorRes.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: KeyboardDismissOnTap(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -100,9 +100,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
     );
   }
 
-  PreferredSizeWidget _buildTabs() {
+  PreferredSizeWidget _buildTabs(BuildContext context) {
     return TabBar(
-      indicatorColor: ColorRes.accent,
+      indicatorColor: Theme.of(context).colorScheme.primary,
       indicatorWeight: 4.0,
       tabs: [LocaleKeys.regOrg.tr(), LocaleKeys.regUser.tr()]
           .mapIndexed<Widget>(
@@ -114,8 +114,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
                   child: Center(
                     child: Text(
                       tab,
-                      style: StyleRes.content.copyWith(
-                        color: current == index ? ColorRes.accent : ColorRes.textSecondary,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: current == index
+                            ? Theme.of(context).colorScheme.primary
+                            : context.appColors.textSecondary,
                       ),
                       maxLines: 2,
                     ),
@@ -290,8 +292,8 @@ class RegistrationSubmitBtn extends StatelessWidget {
                 text: LocaleKeys.loginToRegistration.tr().toUpperCase(),
               )
             : Shimmer.fromColors(
-                baseColor: ColorRes.accent,
-                highlightColor: ColorRes.background,
+                baseColor: Theme.of(context).colorScheme.primary,
+                highlightColor: Theme.of(context).colorScheme.surface,
                 child: PrimaryButton(
                   onPressed: () {},
                   text: LocaleKeys.loginToRegistration.tr().toUpperCase(),
@@ -381,7 +383,7 @@ class RegistrationLoginBtn extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 LocaleKeys.loginEntryBtn.tr(),
-                style: const TextStyle(color: ColorRes.accent),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             );
           },
@@ -421,7 +423,7 @@ class RegistrationPersonalData extends StatelessWidget {
                 TextSpan(text: LocaleKeys.regAgreePersonalDataPart0.tr()),
                 TextSpan(
                   text: LocaleKeys.regAgreePersonalDataPart1.tr(),
-                  style: StyleRes.content.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.blue,
                     decoration: TextDecoration.underline,
                   ),
@@ -455,7 +457,7 @@ class RegistrationOrgForm extends StatelessWidget {
           const SizedBox(height: 8.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(LocaleKeys.regAboutYou.tr(), style: StyleRes.title),
+            child: Text(LocaleKeys.regAboutYou.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           Card(
@@ -464,7 +466,7 @@ class RegistrationOrgForm extends StatelessWidget {
           const SizedBox(height: 24.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(LocaleKeys.regAboutOrg.tr(), style: StyleRes.title),
+            child: Text(LocaleKeys.regAboutOrg.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           Card(
@@ -490,7 +492,7 @@ class RegistrationOrgForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(LocaleKeys.regAdminRegMsg.tr(), style: StyleRes.content),
+          Text(LocaleKeys.regAdminRegMsg.tr(), style: Theme.of(context).textTheme.bodyMedium),
           TextFormField(
             controller: forms.orgLoginController,
             decoration: InputDecoration(
@@ -604,7 +606,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           const SizedBox(height: 8.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(LocaleKeys.regAboutYou.tr(), style: StyleRes.title),
+            child: Text(LocaleKeys.regAboutYou.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           Card(
@@ -613,7 +615,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           const SizedBox(height: 24.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(LocaleKeys.regAboutOrg.tr(), style: StyleRes.title),
+            child: Text(LocaleKeys.regAboutOrg.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           _buildCustomerRoleForm(context),
@@ -695,7 +697,7 @@ class RegistrationCustomerForm extends StatelessWidget {
                             CustomerRole.guest: Text(CustomerRole.guest.value),
                           },
                           onValueChanged: context.read<RegistrationCubit>().onCustomerRoleChanged,
-                          backgroundColor: ColorRes.indicatorActive,
+                          backgroundColor: context.appColors.indicatorActive,
                         ),
                       ),
                     ),
@@ -703,7 +705,10 @@ class RegistrationCustomerForm extends StatelessWidget {
                   EditCardData(
                     label: LocaleKeys.shelterSelectShelter.tr(),
                     initValue: state.shelter?.name,
-                    suffix: const Icon(Icons.menu_open_rounded, color: ColorRes.accent),
+                    suffix: Icon(
+                      Icons.menu_open_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     onPressed: () => _pickShelter(context),
                     validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
                   ),

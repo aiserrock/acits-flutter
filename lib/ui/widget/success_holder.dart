@@ -36,7 +36,7 @@ class SuccessHolderWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Expanded(child: _buildCaption(size)),
+              Expanded(child: _buildCaption(context, size)),
               if (onPressed != null && button != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
@@ -60,16 +60,24 @@ class SuccessHolderWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCaption(double size) {
+  Widget _buildCaption(BuildContext context, double size) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Lottie.asset(assetPath ?? LottieRes.success, height: size, width: size),
           const SizedBox(height: 24.0),
-          Text(title ?? '', style: StyleRes.title, textAlign: TextAlign.center),
+          Text(
+            title ?? '',
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 16.0),
-          Text(message ?? '', style: StyleRes.content, textAlign: TextAlign.center),
+          Text(
+            message ?? '',
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

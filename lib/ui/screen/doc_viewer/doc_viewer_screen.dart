@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:acits_flutter/res/color.dart';
 import 'package:acits_flutter/service/document/doc_exporter/doc_exporter.dart';
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:acits_flutter/ui/screen/doc_viewer/cubit/doc_viewer_cubit.dart';
@@ -51,41 +50,52 @@ class _DocViewerViewState extends State<_DocViewerView> {
   PdfControllerPinch? _controller;
   Uint8List? _controllerBytes;
 
-  /// Поворот страницы на экране: 0/1/2/3 четверти (0°/90°/180°/270°). Крутится
-  /// сама страница внутри вьюпорта — экран не вращается. Нужно для альбомных
-  /// PDF, которые иначе показываются мелко по центру.
-  int _quarterTurns = 0;
+  /// Поворот в альбомную ориентацию (toggle 0° ↔ 90°) для широких PDF.
+  bool _landscape = false;
 
-  /// Множитель зума на одно нажатие кнопки +/−.
-  static const _zoomStep = 1.4;
+  static const _zoomStep = 1.4; // множитель на нажатие кнопки +/−
+  static const _minScale = 1.0; // 100% — минимум
+  static const _maxScale = 2.0; // 200% — максимум
+
+  /// Флаг, пока clamp сам меняет матрицу — иначе listener зациклится.
+  bool _clamping = false;
 
   @override
   void dispose() {
+    _controller?.removeListener(_onTransform);
     _controller?.dispose();
     super.dispose();
   }
 
-  void _rotate() => setState(() => _quarterTurns = (_quarterTurns + 1) % 4);
+  /// На любое изменение матрицы (в т.ч. pinch) держим масштаб в пределах.
+  void _onTransform() {
+    if (_clamping) return;
+    _applyScale(1.0); // 1.0 = ничего не множим, только клэмпим текущий
+  }
 
-  /// Масштабирует относительно центра вьюпорта: сдвигаем к центру, множим,
-  /// сдвигаем обратно. Клэмпим в пределах min/max scale просмотрщика.
-  void _zoomBy(double factor) {
+  void _toggleRotate() => setState(() => _landscape = !_landscape);
+
+  void _zoomBy(double factor) => _applyScale(factor);
+
+  /// Множит текущий масштаб на [factor] и клэмпит в [_minScale, _maxScale]
+  /// относительно центра вьюпорта. factor=1.0 — только клэмп без изменения.
+  void _applyScale(double factor) {
     final controller = _controller;
-    if (controller == null) return;
-
     final size = context.size;
-    if (size == null) return;
+    if (controller == null || size == null) return;
     final center = Offset(size.width / 2, size.height / 2);
 
     final current = controller.value.getMaxScaleOnAxis();
-    final target = (current * factor).clamp(1.0, 20.0);
+    final target = (current * factor).clamp(_minScale, _maxScale);
     final applied = target / current;
-    if ((applied - 1).abs() < 0.001) return;
+    if ((applied - 1).abs() < 0.001) return; // уже в пределах — не трогаем
 
+    _clamping = true;
     controller.value = controller.value.clone()
       ..translateByDouble(center.dx, center.dy, 0, 1)
       ..scaleByDouble(applied, applied, 1, 1)
       ..translateByDouble(-center.dx, -center.dy, 0, 1);
+    _clamping = false;
   }
 
   @override
@@ -93,22 +103,25 @@ class _DocViewerViewState extends State<_DocViewerView> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: GestureDetector(
-          child: const Icon(Icons.arrow_back_ios, color: ColorRes.accent),
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
           widget.title ?? 'Doc viewer',
-          style: const TextStyle(color: ColorRes.textPrimary),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.rotate_90_degrees_cw, color: ColorRes.accent),
+            icon: Icon(
+              _landscape ? Icons.rotate_90_degrees_ccw : Icons.rotate_90_degrees_cw,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             tooltip: 'Rotate',
-            onPressed: _rotate,
+            onPressed: _toggleRotate,
           ),
         ],
       ),
@@ -136,16 +149,19 @@ class _DocViewerViewState extends State<_DocViewerView> {
         Expanded(
           child: Stack(
             children: [
-              // RotatedBox поворачивает страницу внутри вьюпорта (не сам экран),
-              // чтобы альбомный PDF занял всю ширину. Pinch-to-zoom — из коробки
-              // PdfViewPinch; кнопки +/− дублируют зум для десктопа без тача.
+              // Поворот страницы внутри вьюпорта (не всего экрана). Pinch-zoom —
+              // из коробки PdfViewPinch; кнопки +/− дублируют его для десктопа.
               Positioned.fill(
                 child: RotatedBox(
-                  quarterTurns: _quarterTurns,
-                  child: PdfViewPinch(controller: controller),
+                  quarterTurns: _landscape ? 1 : 0,
+                  child: PdfViewPinch(
+                    controller: controller,
+                    minScale: _minScale,
+                    maxScale: _maxScale,
+                  ),
                 ),
               ),
-              Positioned(right: 12, bottom: 12, child: _zoomControls()),
+              Positioned(right: 12, bottom: 12, child: _zoomControls(bytes)),
             ],
           ),
         ),
@@ -162,36 +178,45 @@ class _DocViewerViewState extends State<_DocViewerView> {
     );
   }
 
-  Widget _zoomControls() {
+  Widget _zoomControls(Uint8List bytes) {
+    final scheme = Theme.of(context).colorScheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         FloatingActionButton.small(
           heroTag: 'zoom_in',
-          backgroundColor: ColorRes.foreground,
-          foregroundColor: ColorRes.accent,
+          backgroundColor: scheme.surface,
+          foregroundColor: scheme.primary,
           onPressed: () => _zoomBy(_zoomStep),
           child: const Icon(Icons.add),
         ),
         const SizedBox(height: 8),
         FloatingActionButton.small(
           heroTag: 'zoom_out',
-          backgroundColor: ColorRes.foreground,
-          foregroundColor: ColorRes.accent,
+          backgroundColor: scheme.surface,
+          foregroundColor: scheme.primary,
           onPressed: () => _zoomBy(1 / _zoomStep),
           child: const Icon(Icons.remove),
+        ),
+        const SizedBox(height: 8),
+        FloatingActionButton.small(
+          heroTag: 'download',
+          backgroundColor: scheme.surface,
+          foregroundColor: scheme.primary,
+          onPressed: () => _exporter.download(bytes, fileName: _fileName),
+          child: const Icon(Icons.download),
         ),
       ],
     );
   }
 
-  /// Создаёт `PdfControllerPinch` один раз на набор байтов; при смене документа
-  /// старый диспозится. Идентичность — по ссылке на байты (fetcher отдаёт новый
-  /// Uint8List на каждую загрузку), без побайтового хэша на каждый ребилд.
+  /// Контроллер на набор байтов: пересоздаётся при смене документа (по ссылке).
   PdfControllerPinch _controllerFor(Uint8List bytes) {
     if (_controller == null || !identical(_controllerBytes, bytes)) {
+      _controller?.removeListener(_onTransform);
       _controller?.dispose();
-      _controller = PdfControllerPinch(document: PdfDocument.openData(bytes));
+      _controller = PdfControllerPinch(document: PdfDocument.openData(bytes))
+        ..addListener(_onTransform);
       _controllerBytes = bytes;
     }
     return _controller!;

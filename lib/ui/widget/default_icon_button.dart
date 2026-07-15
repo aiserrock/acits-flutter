@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
-import 'package:acits_flutter/export.dart';
+import 'package:flutter/material.dart';
 
 class DefaultIconButton extends StatelessWidget {
   const DefaultIconButton({required this.icon, required this.onPressed, super.key});
@@ -15,7 +14,7 @@ class DefaultIconButton extends StatelessWidget {
       onPressed: onPressed,
       child: Container(
         decoration: BoxDecoration(
-          color: ColorRes.foreground.withValues(alpha: .55),
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: .55),
           borderRadius: BorderRadius.circular(40.0),
         ),
         padding: const EdgeInsets.all(14.0),

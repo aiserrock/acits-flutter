@@ -35,10 +35,14 @@ class AnimalCardWidget extends StatelessWidget {
               padding: const EdgeInsets.only(),
               onPressed: () => _navigateDetail(context),
               child: Container(
-                decoration: const BoxDecoration(color: ColorRes.foreground),
+                decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerLow),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_buildAvatar(), const SizedBox(width: 8.0), _buildContent()],
+                  children: [
+                    _buildAvatar(context),
+                    const SizedBox(width: 8.0),
+                    _buildContent(context),
+                  ],
                 ),
               ),
             ),
@@ -59,7 +63,7 @@ class AnimalCardWidget extends StatelessWidget {
               if (_hasActions)
                 CupertinoButton(
                   padding: const EdgeInsets.only(),
-                  child: const Icon(Icons.more_vert, color: ColorRes.accent),
+                  child: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.primary),
                   onPressed: () {
                     SlidableController? controller = Slidable.of(context);
                     controller?.openEndActionPane();
@@ -69,7 +73,7 @@ class AnimalCardWidget extends StatelessWidget {
                 builder: (context) {
                   return CupertinoButton(
                     padding: const EdgeInsets.only(),
-                    child: const Icon(Icons.download, color: ColorRes.accent),
+                    child: Icon(Icons.download, color: Theme.of(context).colorScheme.primary),
                     onPressed: () {
                       final animalId = itemData?.id;
                       if (animalId == null) return;
@@ -99,15 +103,15 @@ class AnimalCardWidget extends StatelessWidget {
         //TODO: утвердить реализацию (нет в ТЗ)
         // SlidableAction(
         //   onPressed: (_) {},
-        //   backgroundColor: ColorRes.background,
+        //   backgroundColor: Theme.of(context).colorScheme.surface,
         //   icon: IconRes.prescription,
-        //   foregroundColor: ColorRes.accent,
+        //   foregroundColor: Theme.of(context).colorScheme.primary,
         // ),
         // SlidableAction(
         //   onPressed: (_) {},
-        //   backgroundColor: ColorRes.background,
+        //   backgroundColor: Theme.of(context).colorScheme.surface,
         //   icon: IconRes.comment,
-        //   foregroundColor: ColorRes.accent,
+        //   foregroundColor: Theme.of(context).colorScheme.primary,
         // ),
         if (isEditable)
           SlidableAction(
@@ -116,17 +120,17 @@ class AnimalCardWidget extends StatelessWidget {
                   ? AppRoutes.animalEdit
                   : '${AppRoutes.animalEdit}?id=${itemData!.id}',
             ),
-            backgroundColor: ColorRes.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             icon: Icons.edit_outlined,
-            foregroundColor: ColorRes.accent,
+            foregroundColor: Theme.of(context).colorScheme.primary,
           ),
 
-        if (isDeletable) _buildDeleteAction(),
+        if (isDeletable) _buildDeleteAction(context),
       ],
     );
   }
 
-  Widget _buildDeleteAction() {
+  Widget _buildDeleteAction(BuildContext context) {
     return SlidableAction(
       onPressed: (ctx) {
         showDialog(
@@ -140,7 +144,7 @@ class AnimalCardWidget extends StatelessWidget {
                 CupertinoButton(
                   child: Text(
                     LocaleKeys.commonDelete.tr(),
-                    style: const TextStyle(color: ColorRes.error),
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   onPressed: () {
                     Navigator.of(dialogCtx).pop();
@@ -158,13 +162,13 @@ class AnimalCardWidget extends StatelessWidget {
           },
         );
       },
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       icon: Icons.delete_forever,
-      foregroundColor: ColorRes.error,
+      foregroundColor: Theme.of(context).colorScheme.error,
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -176,29 +180,29 @@ class AnimalCardWidget extends StatelessWidget {
               padding: const EdgeInsets.only(right: 28.0),
               child: Text(
                 itemData?.name ?? '',
-                style: StyleRes.title,
+                style: Theme.of(context).textTheme.titleLarge,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Text(
               itemData?.id?.toString() ?? '',
-              style: StyleRes.content.copyWith(fontSize: 16.0),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16.0),
               maxLines: 1,
             ),
             const SizedBox(height: 4.0),
-            Padding(padding: const EdgeInsets.only(right: 28.0), child: _buildSpec()),
+            Padding(padding: const EdgeInsets.only(right: 28.0), child: _buildSpec(context)),
             const SizedBox(height: 8.0),
-            _buildStatus(),
+            _buildStatus(context),
             const SizedBox(height: 4.0),
-            _buildAdmit(),
+            _buildAdmit(context),
           ],
         ),
       ),
     );
   }
 
-  Row _buildStatus() {
+  Row _buildStatus(BuildContext context) {
     return Row(
       children: [
         Container(
@@ -213,14 +217,16 @@ class AnimalCardWidget extends StatelessWidget {
         Expanded(
           child: Text(
             itemData?.statusString ?? '',
-            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(BuildContext context) {
     final thumb = UrlCorsProxy.add(itemData?.thumb);
     return Padding(
       padding: const EdgeInsets.only(left: 12.0, top: 16.0, bottom: 16.0),
@@ -232,21 +238,26 @@ class AnimalCardWidget extends StatelessWidget {
             : CircleAvatar(
                 maxRadius: 80.0,
                 backgroundImage: NetworkImage(thumb),
-                backgroundColor: ColorRes.background,
+                backgroundColor: Theme.of(context).colorScheme.surface,
               ),
       ),
     );
   }
 
-  Widget _buildAdmit() {
+  Widget _buildAdmit(BuildContext context) {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: LocaleKeys.animalAdmitted.tr(), style: StyleRes.content),
-          const TextSpan(text: (': '), style: StyleRes.content),
+          TextSpan(
+            text: LocaleKeys.animalAdmitted.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          TextSpan(text: (': '), style: Theme.of(context).textTheme.bodyMedium),
           TextSpan(
             text: itemData?.dateJoined.toDateShortOnly ?? '',
-            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ],
       ),
@@ -254,18 +265,22 @@ class AnimalCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSpec() {
+  Widget _buildSpec(BuildContext context) {
     return Text.rich(
       TextSpan(
         children: [
           TextSpan(
             text: (itemData?.spec?.parentName ?? ''),
-            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
-          const TextSpan(text: (', '), style: StyleRes.mainContent),
+          TextSpan(text: (', '), style: Theme.of(context).textTheme.bodyLarge),
           TextSpan(
             text: itemData?.spec?.name ?? '',
-            style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ],
       ),

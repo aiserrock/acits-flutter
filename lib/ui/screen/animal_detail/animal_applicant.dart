@@ -1,14 +1,17 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildApplicantPage(AnimalRead animal) {
-  return SliverList(delegate: SliverChildListDelegate(_buildApplicantContent(animal)));
+SliverList _buildApplicantPage(BuildContext context, AnimalRead animal) {
+  return SliverList(delegate: SliverChildListDelegate(_buildApplicantContent(context, animal)));
 }
 
-List<Widget> _buildApplicantContent(AnimalRead animal) {
+List<Widget> _buildApplicantContent(BuildContext context, AnimalRead animal) {
   return <Widget>[
     Padding(
       padding: const EdgeInsets.only(top: 24.0, left: 16.0, bottom: 8.0),
-      child: Text(LocaleKeys.animalApplicant.tr(), style: StyleRes.title.copyWith(fontSize: 22.0)),
+      child: Text(
+        LocaleKeys.animalApplicant.tr(),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22.0),
+      ),
     ),
     AnimalContentCard([
       CardData(
@@ -19,7 +22,7 @@ List<Widget> _buildApplicantContent(AnimalRead animal) {
       CardData(firstCaption: LocaleKeys.animalCuratorEmail.tr(), firstValue: animal.applicantEmail),
       CardData(firstCaption: LocaleKeys.animalSocialLink.tr(), firstValue: null),
       CardData(firstCaption: LocaleKeys.animalTransferAct.tr(), firstValue: null),
-    ], valueStyle: StyleRes.mainContent.copyWith(fontSize: 16.0)),
+    ], valueStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16.0)),
     const SizedBox(height: 64.0),
   ];
 }

@@ -13,8 +13,7 @@ import 'package:acits_flutter/ui/widget/prescription_card.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
-import 'package:acits_flutter/res/color.dart';
-import 'package:acits_flutter/res/style.dart';
+import 'package:acits_flutter/res/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class MainScreen extends StatelessWidget {
@@ -59,16 +58,16 @@ class _MainViewState extends State<_MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: ColorRes.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: ColorRes.foreground,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
         leading: Builder(
           builder: (context) {
             return GestureDetector(
               onTap: RootDrawerProvider.of(context)?.openDrawer,
               onLongPress: () => _openDebug(context),
-              child: const Icon(Icons.menu, color: ColorRes.accent),
+              child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
             );
           },
         ),
@@ -86,8 +85,8 @@ class _MainViewState extends State<_MainView> {
       heroTag: 'MainFab',
       mini: _isSmallScreen,
       onPressed: () => _onFabPressed(context),
-      backgroundColor: ColorRes.accent,
-      child: const Icon(Icons.add, color: ColorRes.foreground),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
     );
   }
 
@@ -97,7 +96,7 @@ class _MainViewState extends State<_MainView> {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: GestureDetector(
-            child: const Icon(Icons.search, color: ColorRes.accent),
+            child: Icon(Icons.search, color: Theme.of(context).colorScheme.primary),
             onTap: () => setState(() => _isSearchActive = !_isSearchActive),
           ),
         ),
@@ -130,16 +129,25 @@ class _MainViewState extends State<_MainView> {
                 suffix: GestureDetector(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 4.0),
-                    child: Assets.icon.close.svg(height: 16.0, width: 16.0, color: ColorRes.accent),
+                    child: Assets.icon.close.svg(
+                      height: 16.0,
+                      width: 16.0,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   onTap: () => setState(() => _isSearchActive = !_isSearchActive),
                 ),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
-              style: StyleRes.content.copyWith(color: ColorRes.textPrimary),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
           )
-        : Text(LocaleKeys.mainTitle.tr(), style: const TextStyle(color: ColorRes.textPrimary));
+        : Text(
+            LocaleKeys.mainTitle.tr(),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          );
   }
 
   void _openDebug(BuildContext context) {
@@ -162,7 +170,7 @@ class _MainScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (data?.results?.isEmpty ?? true) ? _buildEmptyState() : _buildList();
+    return (data?.results?.isEmpty ?? true) ? _buildEmptyState(context) : _buildList();
   }
 
   Widget _buildList() {
@@ -184,7 +192,7 @@ class _MainScreenContent extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return LayoutBuilder(
       builder: (_, cons) {
         return RefreshIndicator(
@@ -203,7 +211,7 @@ class _MainScreenContent extends StatelessWidget {
                     ),
                     Text(
                       LocaleKeys.mainEmptyState.tr(),
-                      style: const TextStyle(fontSize: 16.0, color: ColorRes.textSecondary),
+                      style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary),
                     ),
                   ],
                 ),

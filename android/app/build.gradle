@@ -64,6 +64,17 @@ android {
     }
 
     buildTypes {
+        // debug и profile объявлены явно: при флейворах (dev/prod) и
+        // android.newDsl AGP иначе создаёт эти buildType неявно, и task-граф
+        // profile-сборки может переиспользовать устаревший APK (assemble
+        // считает, что пересобирать нечего). Явные блоки чинят инкрементальную
+        // profile-пересборку. debuggable=true — как в рабочих проектах.
+        debug {
+            debuggable = true
+        }
+        profile {
+            debuggable = true
+        }
         release {
             signingConfig signingConfigs.release
 
