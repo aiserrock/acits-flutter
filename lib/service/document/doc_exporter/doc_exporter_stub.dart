@@ -15,4 +15,13 @@ class DocExporterImpl implements DocExporter {
   }) async {
     throw UnsupportedError('DocExporter is not supported on this platform');
   }
+
+  @override
+  Future<void> download(
+    Uint8List bytes, {
+    required String fileName,
+    String mimeType = 'application/pdf',
+  }) async {
+    throw UnsupportedError('DocExporter is not supported on this platform');
+  }
 }
