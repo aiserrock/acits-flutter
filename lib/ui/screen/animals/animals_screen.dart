@@ -9,6 +9,8 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/ui/screen/animals/cubit/animals_cubit.dart';
 import 'package:acits_flutter/ui/screen/animals/cubit/animals_state.dart';
+import 'package:acits_flutter/ui/screen/common/sort/sort_chips_bar.dart';
+import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/widget/animal_card.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
@@ -37,6 +39,7 @@ class _AnimalsView extends StatefulWidget {
 class _AnimalsViewState extends State<_AnimalsView> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
   late bool _isSmallScreen;
 
   @override
@@ -49,13 +52,30 @@ class _AnimalsViewState extends State<_AnimalsView> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _searchController.addListener(_onSearchChange);
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _searchController.removeListener(_onSearchChange);
+    _searchController.dispose();
     super.dispose();
+  }
+
+  void _onSearchChange() {
+    context.read<AnimalsCubit>().onSearchChanged(_searchController.text);
+  }
+
+  /// Выйти из режима поиска: очистить поле без повторного запроса
+  /// (снимаем listener на время clear) и переключить режим — cubit сам
+  /// перезагрузит список без фильтра.
+  void _exitSearch() {
+    _searchController.removeListener(_onSearchChange);
+    _searchController.clear();
+    _searchController.addListener(_onSearchChange);
+    context.read<AnimalsCubit>().toggleSearch();
   }
 
   @override
@@ -68,10 +88,15 @@ class _AnimalsViewState extends State<_AnimalsView> {
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
             shadowColor: Colors.transparent,
-            leading: GestureDetector(
-              onTap: RootDrawerProvider.of(context)?.openDrawer,
-              child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
-            ),
+            leading: state.isSearchActive
+                ? GestureDetector(
+                    onTap: _exitSearch,
+                    child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
+                  )
+                : GestureDetector(
+                    onTap: RootDrawerProvider.of(context)?.openDrawer,
+                    child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
+                  ),
             title: _buildTitle(state),
             actions: _buildAppBarActions(state),
             centerTitle: true,
@@ -112,14 +137,25 @@ class _AnimalsViewState extends State<_AnimalsView> {
   }
 
   Widget _buildBody(AnimalsState state) {
-    return DataStateBuilder<List<AnimalRead>>(
-      state: state.data,
-      loader: (_) => ScreenLoader(
-        height: 160.0,
-        pullToRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
-      ),
-      builder: (_, data) => _buildScreenContent(state, data),
-      errorBuilder: (_, _) => Column(),
+    return Column(
+      children: [
+        SortChipsBar(
+          presets: kAnimalSortPresets,
+          activeId: state.activeSort.id,
+          onSelected: (preset) => context.read<AnimalsCubit>().onSortChanged(preset),
+        ),
+        Expanded(
+          child: DataStateBuilder<List<AnimalRead>>(
+            state: state.data,
+            loader: (_) => ScreenLoader(
+              height: 160.0,
+              pullToRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
+            ),
+            builder: (_, data) => _buildScreenContent(state, data),
+            errorBuilder: (_, _) => Column(),
+          ),
+        ),
+      ],
     );
   }
 
@@ -129,19 +165,19 @@ class _AnimalsViewState extends State<_AnimalsView> {
             height: 40.0,
             child: TextField(
               autofocus: true,
+              controller: _searchController,
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 16.0, right: 8.0),
-                suffix: GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Assets.icon.close.svg(
-                      height: 16.0,
-                      width: 16.0,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  onTap: () => context.read<AnimalsCubit>().toggleSearch(),
+                isDense: true,
+                hintText: LocaleKeys.commonSearch.tr(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                prefixIcon: Icon(Icons.search, size: 20.0, color: Theme.of(context).colorScheme.primary),
+                prefixIconConstraints: const BoxConstraints(minWidth: 40.0, minHeight: 40.0),
+                suffixIcon: GestureDetector(
+                  onTap: _searchController.clear,
+                  child: Icon(Icons.close, size: 18.0, color: Theme.of(context).colorScheme.primary),
                 ),
+                suffixIconConstraints: const BoxConstraints(minWidth: 36.0, minHeight: 40.0),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
@@ -151,7 +187,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
   }
 
   Widget _buildScreenContent(AnimalsState state, List<AnimalRead> data) {
-    return data.isEmpty ? _buildEmptyState() : _buildList(state, data);
+    return data.isEmpty ? _buildEmptyState(state) : _buildList(state, data);
   }
 
   Widget _buildList(AnimalsState state, List<AnimalRead> data) {
@@ -191,7 +227,9 @@ class _AnimalsViewState extends State<_AnimalsView> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(AnimalsState state) {
+    // При активном поиске пустой список = «ничего не найдено», а не «нет животных».
+    final message = state.searchRequest.isNotEmpty ? LocaleKeys.commonNotFound.tr() : LocaleKeys.animalsEmptyState.tr();
     return RefreshIndicator(
       onRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
       child: SingleChildScrollView(
@@ -201,10 +239,7 @@ class _AnimalsViewState extends State<_AnimalsView> {
           child: Column(
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [Assets.common.emptyState.svg()]),
-              Text(
-                LocaleKeys.mainEmptyState.tr(),
-                style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary),
-              ),
+              Text(message, style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary)),
             ],
           ),
         ),
