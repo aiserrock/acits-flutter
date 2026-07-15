@@ -70,20 +70,14 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
             EditCardData(
               label: '${LocaleKeys.animalDateAdmitt.tr()} *',
               controller: _dateReceiptController,
-              suffix: Icon(
-                Icons.calendar_today_outlined,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              suffix: Icon(Icons.calendar_today_outlined, color: Theme.of(context).colorScheme.primary),
               onPressed: () => _setDate(context),
               validator: Validator.emptyValidator,
             ),
             EditCardData(
               label: '${LocaleKeys.animalAnimalStatus.tr()} *',
               controller: _statusController,
-              suffix: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
               onPressed: () => _setStatus(context),
               validator: Validator.emptyValidator,
             ),
@@ -106,9 +100,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
             (status) => MapEntry(
               Text(
                 status.statusString ?? '',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               () {
                 _statusController.text = status.statusString ?? '';

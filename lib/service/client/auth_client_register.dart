@@ -13,11 +13,7 @@ abstract class ClientRegister {
   // системный лог устройства. Логирование запросов — только в dev-клиенте
   // (см. test/dev/service/client/).
   @prod
-  Openapi createClient(
-    AuthInterceptor authInterceptor,
-    HeaderInterceptor headerInterceptor,
-    Env env,
-  ) {
+  Openapi createClient(AuthInterceptor authInterceptor, HeaderInterceptor headerInterceptor, Env env) {
     final chopper = ChopperClient(
       baseUrl: Uri.parse(env.apiUrl),
       interceptors: [headerInterceptor],
@@ -31,10 +27,7 @@ abstract class ClientRegister {
   @prod
   @Named('guest')
   Openapi createGuestClient(Env env) {
-    final chopper = ChopperClient(
-      baseUrl: Uri.parse(env.apiUrl),
-      converter: $JsonSerializableConverter(),
-    );
+    final chopper = ChopperClient(baseUrl: Uri.parse(env.apiUrl), converter: $JsonSerializableConverter());
     final client = Openapi.create(client: chopper);
     return client;
   }

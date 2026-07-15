@@ -38,11 +38,7 @@ class AnimalCardWidget extends StatelessWidget {
                 decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerLow),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildAvatar(context),
-                    const SizedBox(width: 8.0),
-                    _buildContent(context),
-                  ],
+                  children: [_buildAvatar(context), const SizedBox(width: 8.0), _buildContent(context)],
                 ),
               ),
             ),
@@ -116,9 +112,7 @@ class AnimalCardWidget extends StatelessWidget {
         if (isEditable)
           SlidableAction(
             onPressed: (_) => context.push(
-              itemData?.id == null
-                  ? AppRoutes.animalEdit
-                  : '${AppRoutes.animalEdit}?id=${itemData!.id}',
+              itemData?.id == null ? AppRoutes.animalEdit : '${AppRoutes.animalEdit}?id=${itemData!.id}',
             ),
             backgroundColor: Theme.of(context).colorScheme.surface,
             icon: Icons.edit_outlined,
@@ -208,18 +202,13 @@ class AnimalCardWidget extends StatelessWidget {
         Container(
           height: 16.0,
           width: 16.0,
-          decoration: BoxDecoration(
-            color: itemData?.statusColor,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
+          decoration: BoxDecoration(color: itemData?.statusColor, borderRadius: BorderRadius.circular(8.0)),
         ),
         const SizedBox(width: 8.0),
         Expanded(
           child: Text(
             itemData?.statusString ?? '',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
       ],
@@ -248,16 +237,11 @@ class AnimalCardWidget extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-            text: LocaleKeys.animalAdmitted.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          TextSpan(text: LocaleKeys.animalAdmitted.tr(), style: Theme.of(context).textTheme.bodyMedium),
           TextSpan(text: (': '), style: Theme.of(context).textTheme.bodyMedium),
           TextSpan(
             text: itemData?.dateJoined.toDateShortOnly ?? '',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ],
       ),
@@ -271,16 +255,12 @@ class AnimalCardWidget extends StatelessWidget {
         children: [
           TextSpan(
             text: (itemData?.spec?.parentName ?? ''),
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
           TextSpan(text: (', '), style: Theme.of(context).textTheme.bodyLarge),
           TextSpan(
             text: itemData?.spec?.name ?? '',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ],
       ),

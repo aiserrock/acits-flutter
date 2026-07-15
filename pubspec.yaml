@@ -112,7 +112,7 @@ flutter:
         - asset: assets/font/icomoon.ttf
 
 flutter_gen:
-  line_length: 100
+  line_length: 120
   integrations:
     flutter_svg: true
   assets:

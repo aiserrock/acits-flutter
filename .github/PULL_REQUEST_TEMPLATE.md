@@ -18,7 +18,7 @@ Closes #
 ## Checklist
 
 - [ ] Branched from and targeting `develop` (not `main`)
-- [ ] `fvm flutter format -l 100 .` run
+- [ ] `melos run format` (or `fvm dart format -l 120`) run
 - [ ] `fvm flutter analyze .` passes with no issues
 - [ ] `fvm flutter test` passes
 - [ ] Regenerated code via `fvm flutter pub run build_runner build --delete-conflicting-outputs` if I changed injectable/JsonSerializable/Chopper annotations

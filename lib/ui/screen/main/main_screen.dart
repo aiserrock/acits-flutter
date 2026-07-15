@@ -109,8 +109,7 @@ class _MainViewState extends State<_MainView> {
         return DataStateBuilder<PaginatedPrescriptionExecutionTodayList?>(
           state: state,
           loader: (_) => const ScreenLoader(height: 104.0),
-          builder: (_, data) =>
-              _MainScreenContent(data, pullToRefresh: context.read<MainCubit>().loadExecutions),
+          builder: (_, data) => _MainScreenContent(data, pullToRefresh: context.read<MainCubit>().loadExecutions),
           errorBuilder: (_, _) => Column(),
         );
       },
@@ -139,15 +138,10 @@ class _MainViewState extends State<_MainView> {
                 ),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
               ),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
           )
-        : Text(
-            LocaleKeys.mainTitle.tr(),
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-          );
+        : Text(LocaleKeys.mainTitle.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface));
   }
 
   void _openDebug(BuildContext context) {
@@ -181,10 +175,7 @@ class _MainScreenContent extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
         itemBuilder: (_, index) {
           final item = (data?.results ?? [])[index];
-          return PrescriptionCardWidget(
-            item,
-            onEditedPrescription: () => _onEditPrescriptionPressed(item),
-          );
+          return PrescriptionCardWidget(item, onEditedPrescription: () => _onEditPrescriptionPressed(item));
         },
         itemCount: data?.results?.length ?? 0,
         separatorBuilder: (_, _) => const SizedBox(height: 16.0),
@@ -205,10 +196,7 @@ class _MainScreenContent extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Assets.common.emptyState.svg()],
-                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [Assets.common.emptyState.svg()]),
                     Text(
                       LocaleKeys.mainEmptyState.tr(),
                       style: TextStyle(fontSize: 16.0, color: context.appColors.textSecondary),

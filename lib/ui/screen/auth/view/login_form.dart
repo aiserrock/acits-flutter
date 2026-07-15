@@ -24,9 +24,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listenWhen: (previous, current) =>
-          previous.name != current.name ||
-          previous.password != current.password ||
-          previous.status != current.status,
+          previous.name != current.name || previous.password != current.password || previous.status != current.status,
       listener: (_, state) {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
@@ -88,10 +86,7 @@ class LoginForm extends StatelessWidget {
           child: MaterialButton(
             padding: const EdgeInsets.all(16.0),
             onPressed: () {},
-            child: Text(
-              LocaleKeys.loginForgetPass.tr(),
-              style: TextStyle(color: context.appColors.textSecondary),
-            ),
+            child: Text(LocaleKeys.loginForgetPass.tr(), style: TextStyle(color: context.appColors.textSecondary)),
           ),
         ),
       ],
@@ -136,10 +131,7 @@ class _NameInput extends StatelessWidget {
                   ),
                   errorStyle: const TextStyle(fontSize: 0.0),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 2.0,
-                    ),
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
                   ),
                 ),
                 cursorColor: Theme.of(context).colorScheme.primary,
@@ -198,15 +190,10 @@ class _PasswordInput extends StatelessWidget {
                   errorStyle: const TextStyle(fontSize: 0.0),
                   suffixIcon: CupertinoButton(
                     onPressed: () => context.read<LoginBloc>().add(const LoginPassObscureChanged()),
-                    child: state.passObscured
-                        ? Assets.icon.visible.svg()
-                        : Assets.icon.visibleOff.svg(),
+                    child: state.passObscured ? Assets.icon.visible.svg() : Assets.icon.visibleOff.svg(),
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 2.0,
-                    ),
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
                   ),
                 ),
                 obscureText: state.passObscured,

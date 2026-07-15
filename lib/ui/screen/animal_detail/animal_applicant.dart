@@ -14,10 +14,7 @@ List<Widget> _buildApplicantContent(BuildContext context, AnimalRead animal) {
       ),
     ),
     AnimalContentCard([
-      CardData(
-        firstCaption: LocaleKeys.animalCuratorName.tr(),
-        firstValue: animal.applicantFullName,
-      ),
+      CardData(firstCaption: LocaleKeys.animalCuratorName.tr(), firstValue: animal.applicantFullName),
       CardData(firstCaption: LocaleKeys.animalCuratorPhone.tr(), firstValue: animal.applicantPhone),
       CardData(firstCaption: LocaleKeys.animalCuratorEmail.tr(), firstValue: animal.applicantEmail),
       CardData(firstCaption: LocaleKeys.animalSocialLink.tr(), firstValue: null),

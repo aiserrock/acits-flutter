@@ -11,9 +11,7 @@ import 'package:acits_flutter/util/logger/log.dart';
 /// Держит только состояние отправки запроса ([DataState]). UI-контроллеры
 /// (поля ввода) остаются во виджете. Начальное состояние — [DataState.content].
 class ChangePassCubit extends Cubit<DataState<void>> {
-  ChangePassCubit()
-    : _personalService = getIt<PersonalService>(),
-      super(const DataState.content(null));
+  ChangePassCubit() : _personalService = getIt<PersonalService>(), super(const DataState.content(null));
 
   final PersonalService _personalService;
 

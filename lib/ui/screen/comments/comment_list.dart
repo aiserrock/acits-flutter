@@ -24,12 +24,7 @@ import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 
 class CommentListWidget extends StatelessWidget {
-  const CommentListWidget(
-    this.animalId, {
-    this.scrollController,
-    this.onCreateCommentStream,
-    super.key,
-  });
+  const CommentListWidget(this.animalId, {this.scrollController, this.onCreateCommentStream, super.key});
 
   final int animalId;
   final ScrollController? scrollController;
@@ -38,10 +33,7 @@ class CommentListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CommentListCubit(
-        animalId: animalId,
-        onCreateCommentStream: onCreateCommentStream?.stream,
-      ),
+      create: (_) => CommentListCubit(animalId: animalId, onCreateCommentStream: onCreateCommentStream?.stream),
       child: _CommentListView(animalId: animalId, scrollController: scrollController),
     );
   }
@@ -89,8 +81,7 @@ class _CommentListViewState extends State<_CommentListView> {
       builder: (_, state) {
         return DataStateBuilder<List<AnimalNote>>(
           state: state.data,
-          loader: (_) =>
-              const SliverToBoxAdapter(child: SizedBox(height: 240.0, child: LoaderHolderWidget())),
+          loader: (_) => const SliverToBoxAdapter(child: SizedBox(height: 240.0, child: LoaderHolderWidget())),
           errorBuilder: (_, _) => SliverToBoxAdapter(
             child: SizedBox(
               height: 240.0,
@@ -119,9 +110,7 @@ class _CommentListViewState extends State<_CommentListView> {
             onFilePressed: (file) => _onFilePressed(context, file).catchError((_) {
               _onError(context, LocaleKeys.commonErrorStubMsg.tr());
             }),
-            onMorePressed: comment.isUserCanEditOrDelete ?? false
-                ? (ctx) => _onMorePressed(ctx, comment)
-                : null,
+            onMorePressed: comment.isUserCanEditOrDelete ?? false ? (ctx) => _onMorePressed(ctx, comment) : null,
           );
         }
         if (index == comments.length) return _buildPagingLoader(state);
@@ -133,8 +122,7 @@ class _CommentListViewState extends State<_CommentListView> {
   Widget _buildPagingLoader(CommentListState state) {
     return DataStateBuilder<Object?>(
       state: state.page,
-      loader: (_) =>
-          SizedBox(height: 64.0, child: Center(child: LottieBuilder.asset(LottieRes.dogLoading))),
+      loader: (_) => SizedBox(height: 64.0, child: Center(child: LottieBuilder.asset(LottieRes.dogLoading))),
       errorBuilder: (_, _) => SizedBox(
         height: 64.0,
         child: Padding(
@@ -161,33 +149,22 @@ class _CommentListViewState extends State<_CommentListView> {
     final actions = bsSelectorActions(context, <Widget, dynamic Function()>{
       Text(
         LocaleKeys.commonEdit.tr(),
-        style: Theme.of(
-          context,
-        ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
       ): () async {
-        final result = await context.push<AnimalNote>(
-          AppRoutes.commentEditPath(widget.animalId),
-          extra: comment,
-        );
+        final result = await context.push<AnimalNote>(AppRoutes.commentEditPath(widget.animalId), extra: comment);
         if (result != null) cubit.onCommentEdited(result);
         Navigator.of(context).pop();
       },
       Text(
         LocaleKeys.commonDelete.tr(),
-        style: Theme.of(
-          context,
-        ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
       ): () {
         _deleteComment(context, comment);
         Navigator.of(context).pop();
       },
     });
 
-    showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      builder: (ctx) => actions,
-    );
+    showModalBottomSheet(backgroundColor: Colors.transparent, context: context, builder: (ctx) => actions);
   }
 
   Future<void> _deleteComment(BuildContext context, AnimalNote comment) async {
@@ -399,10 +376,7 @@ class _CommentItemState extends State<_CommentItem> {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-            text: comment.updatedAt?.toDateTimeHuman ?? '',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          TextSpan(text: comment.updatedAt?.toDateTimeHuman ?? '', style: Theme.of(context).textTheme.bodySmall),
           TextSpan(text: ',  ', style: Theme.of(context).textTheme.bodySmall),
           TextSpan(text: comment.updatedBy ?? '', style: Theme.of(context).textTheme.bodySmall),
         ],

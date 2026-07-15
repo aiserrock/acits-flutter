@@ -22,10 +22,7 @@ class PickShelterState extends Equatable {
   /// Приюты, доступные для выбора (пустой список, если данные не загружены).
   List<ShelterShortSerializers> get results => shelters?.results ?? const [];
 
-  PickShelterState copyWith({
-    PaginatedShelterShortSerializersList? shelters,
-    DataState<Object>? status,
-  }) {
+  PickShelterState copyWith({PaginatedShelterShortSerializersList? shelters, DataState<Object>? status}) {
     return PickShelterState(shelters: shelters ?? this.shelters, status: status ?? this.status);
   }
 

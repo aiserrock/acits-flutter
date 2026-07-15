@@ -81,18 +81,13 @@ GoRouter createAppRouter() {
     routes: [
       GoRoute(
         path: AppRoutes.onboarding,
-        builder: (context, state) =>
-            BlocProvider(create: (_) => OnboardingBloc(), child: const OnboardingScreen()),
+        builder: (context, state) => BlocProvider(create: (_) => OnboardingBloc(), child: const OnboardingScreen()),
       ),
       GoRoute(path: AppRoutes.login, builder: (context, state) => const LoginScreen()),
-      GoRoute(
-        path: AppRoutes.registration,
-        builder: (context, state) => const RegistrationScreen(),
-      ),
+      GoRoute(path: AppRoutes.registration, builder: (context, state) => const RegistrationScreen()),
       GoRoute(
         path: AppRoutes.emailConfirmation,
-        builder: (context, state) =>
-            EmailConfirmationScreen(confirmLink: state.uri.queryParameters['link'] ?? ''),
+        builder: (context, state) => EmailConfirmationScreen(confirmLink: state.uri.queryParameters['link'] ?? ''),
       ),
       GoRoute(path: AppRoutes.root, builder: (context, state) => const RootScreen()),
       GoRoute(
@@ -101,20 +96,17 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.animalEdit,
-        builder: (context, state) =>
-            AnimalEditScreen(id: int.tryParse(state.uri.queryParameters['id'] ?? '')),
+        builder: (context, state) => AnimalEditScreen(id: int.tryParse(state.uri.queryParameters['id'] ?? '')),
       ),
       GoRoute(
         path: AppRoutes.applicantEdit,
-        builder: (context, state) => ApplicantEditScreen(
-          applicantId: int.tryParse(state.uri.queryParameters['applicantId'] ?? ''),
-        ),
+        builder: (context, state) =>
+            ApplicantEditScreen(applicantId: int.tryParse(state.uri.queryParameters['applicantId'] ?? '')),
       ),
       GoRoute(
         path: AppRoutes.curatorEdit,
-        builder: (context, state) => CuratorEditScreen(
-          curatorId: int.tryParse(state.uri.queryParameters['curatorId'] ?? ''),
-        ),
+        builder: (context, state) =>
+            CuratorEditScreen(curatorId: int.tryParse(state.uri.queryParameters['curatorId'] ?? '')),
       ),
       GoRoute(
         path: AppRoutes.commentEdit,
@@ -147,13 +139,11 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.photoGallery,
-        builder: (context, state) =>
-            PhotoGalleryScreen(animalId: int.parse(state.pathParameters['animalId']!)),
+        builder: (context, state) => PhotoGalleryScreen(animalId: int.parse(state.pathParameters['animalId']!)),
       ),
       GoRoute(
         path: AppRoutes.personal,
-        builder: (context, state) =>
-            PersonalScreen(isChangePass: state.uri.queryParameters['changePass'] == 'true'),
+        builder: (context, state) => PersonalScreen(isChangePass: state.uri.queryParameters['changePass'] == 'true'),
       ),
       GoRoute(
         path: AppRoutes.pickShelter,
@@ -171,8 +161,7 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.search,
-        builder: (context, state) =>
-            Search.byTypeKey(state.uri.queryParameters['type'] ?? SearchTypeKey.animal),
+        builder: (context, state) => Search.byTypeKey(state.uri.queryParameters['type'] ?? SearchTypeKey.animal),
       ),
     ],
   );

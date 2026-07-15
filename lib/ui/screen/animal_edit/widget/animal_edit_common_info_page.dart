@@ -25,8 +25,7 @@ class AnimalEditCommonInfoPage extends AnimalEditPage {
   State<AnimalEditCommonInfoPage> createState() => _AnimalEditCommonInfoPageState();
 }
 
-class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
-    with AnimalPageHolderListener {
+class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> with AnimalPageHolderListener {
   final _nameController = TextEditingController();
   final _categoryController = TextEditingController();
   final _familyController = TextEditingController();
@@ -84,28 +83,18 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
                 filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                 child: Container(
                   padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white30,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+                  decoration: BoxDecoration(color: Colors.white30, borderRadius: BorderRadius.circular(8.0)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
-                        child: Icon(
-                          Icons.photo_camera,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 32.0,
-                        ),
+                        child: Icon(Icons.photo_camera, color: Theme.of(context).colorScheme.primary, size: 32.0),
                         onPressed: () {},
                       ),
                       SizedBox(
                         width: 32.0,
-                        child: Divider(
-                          thickness: 2.0,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        child: Divider(thickness: 2.0, color: Theme.of(context).colorScheme.primary),
                       ),
                       CupertinoButton(
                         padding: const EdgeInsets.all(4.0),
@@ -135,30 +124,21 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
         EditCardData(
           label: '${LocaleKeys.animalCategory.tr()} *',
           controller: _categoryController,
-          suffix: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
           onPressed: _searchCategory,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
           label: '${LocaleKeys.animalAnimalFamily.tr()} *',
           controller: _familyController,
-          suffix: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
           onPressed: _searchFamily,
           validator: Validator.emptyValidator,
         ),
         EditCardData(
           label: '${LocaleKeys.animalAnimalKind.tr()} *',
           controller: _kindController,
-          suffix: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          suffix: Icon(Icons.keyboard_arrow_down_rounded, color: Theme.of(context).colorScheme.primary),
           onPressed: _searchKind,
           validator: Validator.emptyValidator,
         ),
@@ -233,9 +213,6 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage>
       'name': _kindController.text,
       'id': _kindSpec?.id ?? widget.animal.idSpec,
     };
-    Provider.of<AnimalEditHolder>(
-      context,
-      listen: false,
-    ).copyWith(name: _nameController.text, spec: spec);
+    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(name: _nameController.text, spec: spec);
   }
 }
