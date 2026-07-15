@@ -76,10 +76,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
   /// [edit] — коллбэк редактора (зум/поворот/кроп), вызывается сразу после
   /// выбора. Открывается из UI-слоя (нужен BuildContext), поэтому передаётся
   /// сюда как функция. Вернул `null` (отмена) — фото не добавляем.
-  Future<void> addPhoto(
-    ImageSource source, {
-    required Future<Uint8List?> Function(Uint8List) edit,
-  }) async {
+  Future<void> addPhoto(ImageSource source, {required Future<Uint8List?> Function(Uint8List) edit}) async {
     final currentList = state.data.valueOrNull;
     if (currentList == null) return;
     final xFile = await ImagePicker().pickImage(source: source);
@@ -102,10 +99,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
   /// правки сетевого фото сбрасываем [GalleryItemData.network] в null — при
   /// сабмите оно уйдёт как новое изображение, а старый оригинал исключается из
   /// valid_images (заменяется отредактированным).
-  Future<void> editPhoto(
-    GalleryItemData item, {
-    required Future<Uint8List?> Function(Uint8List) edit,
-  }) async {
+  Future<void> editPhoto(GalleryItemData item, {required Future<Uint8List?> Function(Uint8List) edit}) async {
     final currentList = state.data.valueOrNull;
     if (currentList == null) return;
     final index = currentList.indexOf(item);
@@ -126,11 +120,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
     // остаётся filePath как имя) — так оно перезальётся, а оригинал не попадёт
     // в retain. copyWith не умеет обнулять network, пересобираем явно.
     final replacement = isNetwork
-        ? GalleryItemData(
-            filePath: item.network!.filename ?? 'edited.png',
-            bytes: edited,
-            isChoosed: true,
-          )
+        ? GalleryItemData(filePath: item.network!.filename ?? 'edited.png', bytes: edited, isChoosed: true)
         : item.copyWith(bytes: edited, isChoosed: true);
 
     final updated = List<GalleryItemData>.of(currentList)..[index] = replacement;
@@ -145,10 +135,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
     try {
       // Отдельный «голый» Dio: presigned S3-URL самодостаточен, интерцепторы и
       // API-база основного клиента здесь только помешали бы.
-      final resp = await Dio().get<List<int>>(
-        proxied,
-        options: Options(responseType: ResponseType.bytes),
-      );
+      final resp = await Dio().get<List<int>>(proxied, options: Options(responseType: ResponseType.bytes));
       final data = resp.data;
       if (resp.statusCode != 200 || data == null) {
         Log.warning('Download image failed: ${resp.statusCode} $url');
