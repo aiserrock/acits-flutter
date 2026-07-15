@@ -4,7 +4,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:acits_flutter/ui/screen/auth/login.dart';
 import 'package:acits_flutter/ui/widget/app_logo.dart';
-import 'package:acits_flutter/ui/widget/locale_switcher.dart';
 import 'package:acits_flutter/ui/widget/theme_switcher_tile.dart';
 
 /// Экран входа по логину - паролю
@@ -20,12 +19,6 @@ class LoginScreen extends StatelessWidget {
         leading: const ThemeToggleButton(),
         title: const AppLogoBar(),
         centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 12.0),
-            child: Center(child: LocaleSwitcher()),
-          ),
-        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: KeyboardDismissOnTap(
