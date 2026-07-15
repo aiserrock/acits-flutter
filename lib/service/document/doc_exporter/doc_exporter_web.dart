@@ -26,7 +26,7 @@ class DocExporterImpl implements DocExporter {
 
     final blob = _blobOf(bytes, mimeType);
 
-    if (await _tryNativeShare(blob, fileName, mimeType, text, subject)) return;
+    if (await _tryNativeShare(blob, fileName, mimeType)) return;
 
     // Фолбэк: скачивание файла.
     _download(blob, fileName);
@@ -40,31 +40,38 @@ class DocExporterImpl implements DocExporter {
   /// Пытается поделиться через Web Share API level 2 (файлы). Возвращает true,
   /// если share прошёл; false — если API/поддержки файлов нет (нужен фолбэк).
   /// Отмену пользователем (AbortError) трактуем как «обработано» — не качаем.
-  Future<bool> _tryNativeShare(
-    web.Blob blob,
-    String fileName,
-    String mimeType,
-    String? text,
-    String? subject,
-  ) async {
+  Future<bool> _tryNativeShare(web.Blob blob, String fileName, String mimeType) async {
     final navigator = web.window.navigator;
-    // canShare({files}) — единственная надёжная проверка поддержки share файлов.
-    if (!navigator.has('share') || !navigator.has('canShare')) return false;
+    if (!navigator.has('share') || !navigator.has('canShare')) {
+      Log.debug('Web share: no share/canShare API — fallback to download');
+      return false;
+    }
 
     final file = web.File([blob].toJS, fileName, web.FilePropertyBag(type: mimeType));
-    final data = web.ShareData(files: [file].toJS, text: text ?? '', title: subject ?? fileName);
+    // Важно: при шаринге ФАЙЛА передаём только `files`, без `text`/`title`.
+    // Смешанный share (файл + текст) ломает передачу вложения у некоторых
+    // получателей — Telegram берёт текстовую часть и отвечает «unsupported
+    // attachment», сам PDF теряется. Отдельный ShareData только с файлом.
+    final data = web.ShareData(files: [file].toJS);
 
-    if (!navigator.canShare(data)) return false;
+    if (!navigator.canShare(data)) {
+      Log.debug('Web share: canShare({files}) == false — fallback to download');
+      return false;
+    }
 
     try {
       await navigator.share(data).toDart;
+      Log.info('Web share ok: $fileName');
       return true;
     } catch (e) {
       // AbortError — пользователь закрыл share-лист; это успех сценария, не
       // качаем. Отличаем по тексту ошибки (без ненадёжного is-check JS-типов).
       // Прочие ошибки (NotAllowedError/DataError, share файлов недоступен на
       // десктопе даже при canShare==true) — фолбэк на скачивание.
-      if (e.toString().contains('AbortError')) return true;
+      if (e.toString().contains('AbortError')) {
+        Log.debug('Web share cancelled by user (AbortError)');
+        return true;
+      }
       Log.warning('Web share failed, fallback to download: $e');
       return false;
     }
