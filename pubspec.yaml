@@ -74,6 +74,11 @@ dependencies:
   flutter_alice: 2.0.1
   package_info_plus: ^9.0.1
 
+  # Держит нативный splash до конца auth-решения на splash-роуте (preserve/remove),
+  # чтобы холодный старт авторизованного юзера не мелькал login. Генерация картинок
+  # splash — та же зависимость (flutter_native_splash.yaml), запуск через dart run.
+  flutter_native_splash: ^2.4.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -83,7 +88,6 @@ dev_dependencies:
   chopper_generator: ^8.6.1
   flutter_gen_runner: ^5.14.0
   flutter_lints: ^6.0.0
-  flutter_native_splash: ^2.4.7
   http: ^1.6.0
   injectable_generator: ^3.0.2
   json_serializable: ^6.13.1

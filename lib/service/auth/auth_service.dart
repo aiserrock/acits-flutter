@@ -56,11 +56,18 @@ class AuthService extends ChangeNotifier {
       _shelterList?.results?.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
   Future<TokenRefresh?> refreshToken({String? refresh}) async {
-    final request = TokenRefresh(access: _access, refresh: refresh ?? _refresh);
+    final usedRefresh = refresh ?? _refresh;
+    final request = TokenRefresh(access: _access, refresh: usedRefresh);
     final result = await _acitsClient.apiTokenRefreshPost(body: request);
     if (result.body != null) {
       _access = result.body?.access;
-      _refresh = result.body?.refresh ?? _refresh;
+      // Бэкенд (SimpleJWT без ROTATE_REFRESH_TOKENS) на refresh возвращает
+      // refresh=null — старый токен остаётся валидным. Пишем новый только если
+      // сервер его прислал, иначе сохраняем использованный. Иначе `?? _refresh`
+      // на холодном старте (где _refresh ещё не подтянут из хранилища) затирал
+      // refreshKey в secure storage → автовход работал ровно один раз.
+      final newRefresh = result.body?.refresh ?? usedRefresh;
+      if (newRefresh != null && newRefresh != _refresh) _refresh = newRefresh;
       Log.info('Token refreshed');
       return result.body;
     }
