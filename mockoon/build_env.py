@@ -92,6 +92,12 @@ ERR_400_ANIMAL    = {"spec_id": ["This field is required."], "date_joined": ["Th
 ERR_400_GENERIC   = {"detail": "Некорректные данные запроса.", "non_field_errors": ["Invalid input."]}
 ERR_500           = {"detail": "Внутренняя ошибка сервера."}
 ERR_429           = {"detail": "Request was throttled. Expected available in 30 seconds."}
+# verify/reset-flow (гостевые ссылки из письма) — статусы из frontend_info_status
+ERR_400_INVALID_LINK = {"detail": "Invalid link", "status": "invalid_link"}
+ERR_400_BAD_USER     = {"detail": "Bad user", "status": "bad_user"}
+ERR_400_BAD_SHELTER  = {"detail": "Bad shelter", "status": "bad_shelter"}
+ERR_400_EMAIL        = {"email": ["Enter a valid email address."]}
+ERR_400_RESET        = {"new_password": ["This password is too common."], "token": ["Invalid or expired token."]}
 
 def err(seed, status, obj, label):
     """Неактивный по умолчанию error-response — включается вручную в GUI."""
@@ -136,6 +142,18 @@ def errors_for(seed, kind):
         e += [err(seed, 404, ERR_404, "не найдено"),
               err(seed, 403, ERR_403_SHELTER, "нет x-current-shelter"),
               err(seed, 401, ERR_401_BAD_TOKEN, "битый токен"),
+              err(seed, 500, ERR_500, "server error")]
+    elif kind == "verify_flow":
+        # гостевые ссылки email-подтверждения/верификации работника (без токена/приюта)
+        e += [err(seed, 400, ERR_400_INVALID_LINK, "invalid_link"),
+              err(seed, 400, ERR_400_BAD_USER, "bad_user"),
+              err(seed, 400, ERR_400_BAD_SHELTER, "bad_shelter"),
+              err(seed, 500, ERR_500, "server error")]
+    elif kind == "reset":
+        # запрос сброса пароля / подтверждение сброса
+        e += [err(seed, 400, ERR_400_EMAIL, "невалидный email"),
+              err(seed, 400, ERR_400_RESET, "битый токен/слабый пароль"),
+              err(seed, 429, ERR_429, "throttled"),
               err(seed, 500, ERR_500, "server error")]
     else:  # plain
         e += [err(seed, 401, ERR_401_BAD_TOKEN, "битый токен"),
@@ -185,16 +203,47 @@ def shelter_detail_get(seed, endpoint, detail_key, doc, err_kind="detail_get"):
     responses += errors_for(seed, err_kind)
     routes.append(route(seed, "get", endpoint, responses, doc))
 
+def nested_list_get(seed, endpoint, skey, doc, err_kind="protected_get"):
+    """Вложенный под животным список (/animals/:animal_pk/<sub>/).
+    Данные по животному в моке не фильтруем — отдаём список текущего приюта
+    (правило по x-current-shelter) + default(приют 1) fallback."""
+    responses = []
+    for sid in SHELTER_IDS:
+        responses.append(resp(
+            f"{seed}-sh{sid}", body(SH[sid][skey]), 200,
+            rules=[shelter_rule(sid)], label=f"shelter {sid}",
+        ))
+    responses.append(resp(
+        f"{seed}-default", body(SH[DEFAULT_SID][skey]), 200,
+        default=True, label=f"default (shelter {DEFAULT_SID})",
+    ))
+    responses += errors_for(seed, err_kind)
+    routes.append(route(seed, "get", endpoint, responses, doc))
+
 # соответствие HTTP-метода мутации → набор ошибок
 _MUT_KIND = {"post": "create", "patch": "update", "put": "update", "delete": "delete"}
 
-def stub(seed, method, endpoint, body_obj, doc, status=200):
+def stub(seed, method, endpoint, body_obj, doc, status=200, err_kind=None):
     resps = [resp(f"{seed}-{status}", body(body_obj) if body_obj is not None else "", status, default=True, label="stub")]
-    resps += errors_for(seed, _MUT_KIND.get(method, "plain"))
+    resps += errors_for(seed, err_kind or _MUT_KIND.get(method, "plain"))
     routes.append(route(seed, method, endpoint, resps, doc))
 
 def first_detail(skey):
     return next(iter(SH[DEFAULT_SID][skey].values()))
+
+def nested_detail_get(seed, endpoint, dkey, doc, err_kind="detail_get"):
+    """Detail вложенного ресурса (/animals/:animal_pk/<sub>/:id/) с header-правилом
+    на приют. По id внутри приюта не разветвляем — данных мало, отдаём первый
+    объект приюта; default → приют 1."""
+    responses = []
+    for sid in SHELTER_IDS:
+        vals = SH[sid][dkey]
+        obj = next(iter(vals.values())) if vals else {}
+        responses.append(resp(f"{seed}-sh{sid}", body(obj), 200,
+                              rules=[shelter_rule(sid)], label=f"shelter {sid}"))
+    responses.append(resp(f"{seed}-default", body(first_detail(dkey)), 200, default=True, label="default"))
+    responses += errors_for(seed, err_kind)
+    routes.append(route(seed, "get", endpoint, responses, doc))
 
 # ============================================================
 #  МАРШРУТЫ
@@ -219,6 +268,19 @@ shelter_get("current-shelter", "/api/v1/users/me/shelters/current/", "current_sh
 global_get("available-shelters", "/api/v1/available-shelters/", "available_shelters", "Доступные для входа приюты", err_kind="plain")
 global_get("available-workers", "/api/v1/users/available-workers/", "available_workers", "Доступные работники")
 
+# ---------- PASSWORD RESET / VERIFY (гостевые ссылки из письма) ----------
+# happy-path — пустой 200 / редирект на фронт; ценность в error-вариантах.
+stub("reset-password", "post", "/api/v1/users/reset-password/", {"detail": "Письмо со ссылкой отправлено."},
+     "Запрос сброса пароля (stub). Ошибки: 400 email, 429, 500.", err_kind="reset")
+stub("reset-password-complete", "post", "/api/v1/users/reset-password/complete/", {"detail": "Пароль изменён."},
+     "Завершение сброса пароля (stub). Ошибки: 400 битый токен/слабый пароль.", err_kind="reset")
+stub("reset-password-confirm", "get", "/api/v1/users/reset-password/confirm/:uidb64/:token/", {"status": "email_verified"},
+     "Проверка ссылки сброса (stub). Ошибки: 400 invalid_link/bad_user.", err_kind="verify_flow")
+stub("verify-email", "get", "/api/v1/users/verify-email/:uidb64/:sidb64/:token/", {"status": "email_verified"},
+     "Подтверждение email (stub). Ошибки: 400 invalid_link/bad_user/bad_shelter.", err_kind="verify_flow")
+stub("verify-worker", "get", "/api/v1/users/verify-worker/:uidb64/:sidb64/:token/", {"status": "verified_by_admin"},
+     "Подтверждение работника (stub). Ошибки: 400 invalid_link/bad_shelter.", err_kind="verify_flow")
+
 # ---------- SHELTERS ----------
 global_get("shelters-list", "/api/v1/shelters/", "my_shelters", "Список приютов (short)")
 shelter_get("shelters-detail", "/api/v1/shelters/:id/", "shelter_detail", "Приют — детально (по x-current-shelter)")
@@ -242,6 +304,30 @@ stub("notes-delete", "delete", "/api/v1/animals/notes/:id/", None, "Удалит
 # параметрические маршруты по животному
 stub("animals-files", "get", "/api/v1/animals/:id/files/", [], "Файлы животного (stub)")
 stub("animals-history", "get", "/api/v1/animals/:id/history/", SH[DEFAULT_SID]["animals_list"], "История животного (stub)")
+
+# ---------- ВЛОЖЕННЫЕ ПОД ЖИВОТНЫМ (adoptions / overstays / releases / restore) ----------
+# ВАЖНО: под-пути /animals/:animal_pk/... регистрируем ДО голого /animals/:id/,
+# иначе Mockoon поймает animal_pk как :id и деталка перехватит запрос.
+nested_list_get("adoptions-list", "/api/v1/animals/:id/adoptions/", "adoptions_list", "Усыновления животного (по x-current-shelter)")
+nested_detail_get("adoptions-detail", "/api/v1/animals/:id/adoptions/:id/", "adoptions_detail", "Усыновление — детально")
+stub("adoptions-post", "post", "/api/v1/animals/:id/adoptions/", first_detail("adoptions_detail"), "Создать усыновление (stub)", status=201)
+stub("adoptions-put", "put", "/api/v1/animals/:id/adoptions/:id/", first_detail("adoptions_detail"), "Обновить усыновление (stub)")
+stub("adoptions-patch", "patch", "/api/v1/animals/:id/adoptions/:id/", first_detail("adoptions_detail"), "Обновить усыновление (stub)")
+
+nested_list_get("overstays-list", "/api/v1/animals/:id/overstays/", "overstays_list", "Передержки животного (по x-current-shelter)")
+nested_detail_get("overstays-detail", "/api/v1/animals/:id/overstays/:id/", "overstays_detail", "Передержка — детально")
+stub("overstays-post", "post", "/api/v1/animals/:id/overstays/", first_detail("overstays_detail"), "Создать передержку (stub)", status=201)
+stub("overstays-put", "put", "/api/v1/animals/:id/overstays/:id/", first_detail("overstays_detail"), "Обновить передержку (stub)")
+stub("overstays-patch", "patch", "/api/v1/animals/:id/overstays/:id/", first_detail("overstays_detail"), "Обновить передержку (stub)")
+
+nested_list_get("releases-list", "/api/v1/animals/:id/releases/", "releases_list", "Выпуски животного (по x-current-shelter)")
+nested_detail_get("releases-detail", "/api/v1/animals/:id/releases/:id/", "releases_detail", "Выпуск — детально")
+stub("releases-post", "post", "/api/v1/animals/:id/releases/", first_detail("releases_detail"), "Создать выпуск (stub)", status=201)
+stub("releases-put", "put", "/api/v1/animals/:id/releases/:id/", first_detail("releases_detail"), "Обновить выпуск (stub)")
+stub("releases-patch", "patch", "/api/v1/animals/:id/releases/:id/", first_detail("releases_detail"), "Обновить выпуск (stub)")
+
+stub("animals-restore", "put", "/api/v1/animals/:id/restore/", {"status": "IN_THE_SHELTER"}, "Восстановить животное (stub)")
+
 shelter_detail_get("animals-detail", "/api/v1/animals/:id/", "animals_detail", "Животное — детально (по x-current-shelter)")
 stub("animals-post", "post", "/api/v1/animals/", first_detail("animals_detail"), "Создать животное (stub)", status=201)
 stub("animals-patch", "patch", "/api/v1/animals/:id/", first_detail("animals_detail"), "Обновить животное (stub)")
@@ -264,6 +350,13 @@ stub("applicants-delete", "delete", "/api/v1/applicants/:id/", None, "Удали
 shelter_get("adopters-list", "/api/v1/adopters/", "adopters_list", "Усыновители (по x-current-shelter)")
 shelter_detail_get("adopters-detail", "/api/v1/adopters/:id/", "adopters_detail", "Усыновитель — детально")
 stub("adopters-post", "post", "/api/v1/adopters/", first_detail("adopters_detail"), "Создать усыновителя (stub)", status=201)
+
+# ---------- ANIMAL SITTERS (передержчики) ----------
+shelter_get("sitters-list", "/api/v1/animal_sitters/", "animal_sitters_list", "Передержчики (по x-current-shelter)")
+shelter_detail_get("sitters-detail", "/api/v1/animal_sitters/:id/", "animal_sitters_detail", "Передержчик — детально")
+stub("sitters-post", "post", "/api/v1/animal_sitters/", first_detail("animal_sitters_detail"), "Создать передержчика (stub)", status=201)
+stub("sitters-put", "put", "/api/v1/animal_sitters/:id/", first_detail("animal_sitters_detail"), "Обновить передержчика (stub)")
+stub("sitters-patch", "patch", "/api/v1/animal_sitters/:id/", first_detail("animal_sitters_detail"), "Обновить передержчика (stub)")
 
 # ---------- PRESCRIPTIONS ----------
 # executions/ — литерал, до параметрического /prescriptions/:id/
