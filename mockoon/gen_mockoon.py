@@ -88,6 +88,25 @@ SHELTERS = {
             {"id": 404, "animal": 1001, "content": "Прошёл курс социализации, готов к пристройству."},
             {"id": 405, "animal": 1004, "content": "Очень ласковая, мурлычет при поглаживании."},
         ],
+        # передержчики (animal_sitters) — берут животных на временную передержку
+        "animal_sitters": [
+            {"id": 701, "first_name": "Татьяна", "last_name": "Белова", "email": "belova.t@example.com", "phone_number": "+79161117701", "address": "Москва, ул. Тверская, 5"},
+            {"id": 702, "first_name": "Сергей", "last_name": "Романов", "email": "romanov.s@example.com", "phone_number": "+79161117702", "address": "Москва, ул. Арбат, 20"},
+        ],
+        # усыновления (adoptions): для животных со статусом ATTACHED
+        "adoptions": [
+            dict(id=801, animal=1004, adopter=301, start_date="2024-05-01", end_date=None),
+            dict(id=802, animal=1008, adopter=302, start_date="2024-06-15", end_date=None),
+        ],
+        # передержки (overstays): для животных на передержке
+        "overstays": [
+            dict(id=811, animal=1002, animal_sitter=701, start_date="2024-02-10", end_date="2024-04-10"),
+        ],
+        # выпуски (releases): для готовящихся к выпуску/выпущенных
+        "releases": [
+            dict(id=821, animal=1005, place="Красногорский лесопарк", date="2024-08-01",
+                 vet_name="Дмитрий", vet_surname="Ветров", vet_patronymic="Игоревич"),
+        ],
         # prescriptions строятся ниже фабрикой (одинаковая логика, разные животные)
         "prescriptions": [
             dict(id=601, animal=1003, my_type="COURSE_OF_TREATMENT", description="Курс антибиотиков после операции", duration="EVERYDAY", drug=0, dosage=2.0,
@@ -134,6 +153,20 @@ SHELTERS = {
             {"id": 413, "animal": 2003, "content": "Готовится к выпуску, привит и стерилизован."},
             {"id": 414, "animal": 2005, "content": "На лечении, динамика положительная."},
         ],
+        "animal_sitters": [
+            {"id": 711, "first_name": "Марина", "last_name": "Кораблёва", "email": "korableva.m@example.com", "phone_number": "+79211117711", "address": "СПб, ул. Восстания, 3"},
+            {"id": 712, "first_name": "Алексей", "last_name": "Соловьёв", "email": "solovyov.a@example.com", "phone_number": "+79211117712", "address": "СПб, ул. Садовая, 14"},
+        ],
+        "adoptions": [
+            dict(id=831, animal=2006, adopter=311, start_date="2024-04-20", end_date=None),
+        ],
+        "overstays": [
+            dict(id=841, animal=2002, animal_sitter=711, start_date="2024-05-15", end_date=None),
+        ],
+        "releases": [
+            dict(id=851, animal=2003, place="Всеволожский лес", date="2024-07-20",
+                 vet_name="Виктор", vet_surname="Орлов", vet_patronymic="Петрович"),
+        ],
         "prescriptions": [
             dict(id=611, animal=2005, my_type="COURSE_OF_TREATMENT", description="Курс лечения ЖКТ", duration="EVERYDAY", drug=0, dosage=1.5,
                  execs=[("2026-07-11T10:00:00Z","IN_PROGRESS"),("2026-07-12T10:00:00Z","IN_PROGRESS")]),
@@ -156,6 +189,10 @@ APPLICANTS = SHELTERS[1]["applicants"]
 ADOPTERS = SHELTERS[1]["adopters"]
 ANIMALS = SHELTERS[1]["animals"]
 NOTES = SHELTERS[1]["notes"]
+ANIMAL_SITTERS = SHELTERS[1]["animal_sitters"]
+ADOPTIONS = SHELTERS[1]["adoptions"]
+OVERSTAYS = SHELTERS[1]["overstays"]
+RELEASES = SHELTERS[1]["releases"]
 _ADMIN = SHELTERS[1]["admin"]
 _CURATOR_DEFAULT = SHELTERS[1]["curator_default"]
 
@@ -237,9 +274,9 @@ def animal_read(a, detail=False):
         "applicant": app,
         "animal_attributes": animal_attributes(a),
         "deleted_at": None,
-        "adoption": None,
-        "release": None,
-        "overstay": None,
+        "adoption": adoption_obj(next((x for x in ADOPTIONS if x["animal"] == a["id"]), None)) if any(x["animal"] == a["id"] for x in ADOPTIONS) else None,
+        "release": release_obj(next((x for x in RELEASES if x["animal"] == a["id"]), None)) if any(x["animal"] == a["id"] for x in RELEASES) else None,
+        "overstay": overstay_obj(next((x for x in OVERSTAYS if x["animal"] == a["id"]), None)) if any(x["animal"] == a["id"] for x in OVERSTAYS) else None,
         "can_be_shared": True,
     }
 
@@ -302,6 +339,35 @@ def note_obj(n):
         "is_user_can_edit_or_delete": True,
     }
 
+def animal_sitter_obj(s):
+    return {
+        "id": s["id"], "url": f"/api/v1/animal_sitters/{s['id']}/", "shelter": SHELTER_NAME,
+        "first_name": s["first_name"], "last_name": s["last_name"], "email": s["email"],
+        "phone_number": s["phone_number"], "address": s["address"],
+        "created_by": _ADMIN, "updated_by": _ADMIN,
+        "created_at": "2024-03-01T10:00:00Z", "updated_at": "2024-03-05T12:00:00Z",
+    }
+
+def adoption_obj(a):
+    return {
+        "id": a["id"], "start_date": a.get("start_date"), "end_date": a.get("end_date"),
+        "adopter": a.get("adopter"),
+    }
+
+def overstay_obj(o):
+    return {
+        "id": o["id"], "start_date": o.get("start_date"), "end_date": o.get("end_date"),
+        "animal_sitter": o.get("animal_sitter"),
+    }
+
+def release_obj(r):
+    return {
+        "id": r["id"], "place": r.get("place"), "date": r.get("date"),
+        "veterinarian_name": r.get("vet_name"), "veterinarian_surname": r.get("vet_surname"),
+        "veterinarian_patronymic": r.get("vet_patronymic"),
+        "created_at": "2024-07-01T09:00:00Z", "updated_at": "2024-07-01T09:00:00Z",
+    }
+
 def paginated(results):
     return {"count": len(results), "next": None, "previous": None, "results": results}
 
@@ -362,6 +428,7 @@ def build_shelter_bodies(sid):
     """Тела ответов, зависящие от текущего приюта (x-current-shelter)."""
     # переустанавливаем активный контекст для *_obj функций
     global SHELTER_ID, SHELTER_NAME, CURATORS, APPLICANTS, ADOPTERS, ANIMALS, NOTES, _ADMIN, _CURATOR_DEFAULT
+    global ANIMAL_SITTERS, ADOPTIONS, OVERSTAYS, RELEASES
     s = SHELTERS[sid]
     SHELTER_ID = sid
     SHELTER_NAME = s["name"]
@@ -370,6 +437,10 @@ def build_shelter_bodies(sid):
     ADOPTERS = s["adopters"]
     ANIMALS = s["animals"]
     NOTES = s["notes"]
+    ANIMAL_SITTERS = s["animal_sitters"]
+    ADOPTIONS = s["adoptions"]
+    OVERSTAYS = s["overstays"]
+    RELEASES = s["releases"]
     _ADMIN = s["admin"]
     _CURATOR_DEFAULT = s["curator_default"]
     vet = s["curators"][0]["first_name"] + " " + s["curators"][0]["last_name"]
@@ -403,6 +474,14 @@ def build_shelter_bodies(sid):
         "applicants_detail": {a["id"]: applicant_obj(a) for a in APPLICANTS},
         "notes_list": paginated([note_obj(n) for n in NOTES]),
         "notes_detail": {n["id"]: note_obj(n) for n in NOTES},
+        "animal_sitters_list": paginated([animal_sitter_obj(x) for x in ANIMAL_SITTERS]),
+        "animal_sitters_detail": {x["id"]: animal_sitter_obj(x) for x in ANIMAL_SITTERS},
+        "adoptions_list": paginated([adoption_obj(x) for x in ADOPTIONS]),
+        "adoptions_detail": {x["id"]: adoption_obj(x) for x in ADOPTIONS},
+        "overstays_list": paginated([overstay_obj(x) for x in OVERSTAYS]),
+        "overstays_detail": {x["id"]: overstay_obj(x) for x in OVERSTAYS},
+        "releases_list": paginated([release_obj(x) for x in RELEASES]),
+        "releases_detail": {x["id"]: release_obj(x) for x in RELEASES},
         "prescriptions_list": paginated([prescription_short(p) for p in prescriptions]),
         "prescriptions_detail": {p["id"]: p for p in prescriptions},
         "prescriptions_executions": paginated(exec_today),
@@ -466,4 +545,4 @@ json.dump(OUT, open(os.path.join(_HERE, "_bodies.json"), "w"), ensure_ascii=Fals
 print("global keys:", len(GLOBAL), "| shelters:", list(OUT["shelters"].keys()))
 for sid in SHELTERS:
     sb = OUT["shelters"][str(sid)]
-    print(f"  shelter {sid}: animals={sb['animals_list']['count']} prescriptions={sb['prescriptions_list']['count']} exec_today={sb['prescriptions_executions']['count']} notes={sb['notes_list']['count']}")
+    print(f"  shelter {sid}: animals={sb['animals_list']['count']} prescriptions={sb['prescriptions_list']['count']} exec_today={sb['prescriptions_executions']['count']} notes={sb['notes_list']['count']} sitters={sb['animal_sitters_list']['count']} adoptions={sb['adoptions_list']['count']} overstays={sb['overstays_list']['count']} releases={sb['releases_list']['count']}")
