@@ -1,8 +1,12 @@
+import 'package:acits_core/acits_core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
+import '../../../domain/prescription.dart';
+import '../../../domain/prescription_animal_ref.dart';
+import '../../../domain/prescription_drug.dart';
+import '../../../domain/prescription_type.dart';
+import 'prescription_edit_cubit.dart';
 
 /// Сентинел для copyWith: отличает «параметр не передан» от явного сброса
 /// nullable-поля в null (иначе `animal ?? this.animal` не давал снять выбор).

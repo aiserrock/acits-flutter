@@ -1,18 +1,13 @@
 import 'package:acits_api/acits_api.dart';
-import 'package:acits_flutter/domain/prescription/prescription.dart';
-import 'package:acits_flutter/domain/prescription/prescription_execution.dart';
-import 'package:acits_flutter/domain/prescription/prescription_type.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prescriptions/prescriptions.dart';
 
 class MockPrescriptionApiPort extends Mock implements PrescriptionApiPort {}
 
-class MockAuthService extends Mock implements AuthService {}
+class MockShelterProvider extends Mock implements PrescriptionsShelterProvider {}
 
-class MockConfigService extends Mock implements ConfigService {}
+class MockTypeLabels extends Mock implements PrescriptionTypeLabels {}
 
 PrescriptionDto _dto() => PrescriptionDto(
   id: 11,
@@ -27,8 +22,8 @@ PrescriptionDto _dto() => PrescriptionDto(
 
 void main() {
   late MockPrescriptionApiPort port;
-  late MockAuthService auth;
-  late MockConfigService config;
+  late MockShelterProvider shelter;
+  late MockTypeLabels typeLabels;
   late PrescriptionService service;
 
   setUpAll(() {
@@ -37,11 +32,11 @@ void main() {
 
   setUp(() {
     port = MockPrescriptionApiPort();
-    auth = MockAuthService();
-    config = MockConfigService();
-    when(() => auth.currentShelterId).thenReturn(50);
-    when(() => config.typeValues).thenReturn(<String, dynamic>{'prescription_types': <dynamic>[]});
-    service = PrescriptionService(port, auth, config);
+    shelter = MockShelterProvider();
+    typeLabels = MockTypeLabels();
+    when(() => shelter.shelterId).thenReturn(50);
+    when(() => typeLabels.ensureLoaded()).thenAnswer((_) async {});
+    service = PrescriptionService(port, shelter, typeLabels);
   });
 
   test('fetchPrescriptionListByAnimal maps DTO→entity and localizes executeAt', () async {
@@ -86,8 +81,8 @@ void main() {
     expect(captured.executions.single.executeAt.isUtc, isTrue);
   });
 
-  test('getTypeName delegates to config with the wire string', () {
-    when(() => config.getMyTypeName('COURSE_OF_TREATMENT')).thenReturn('Курс лечения');
+  test('getTypeName delegates to the type-labels port with the wire string', () {
+    when(() => typeLabels.nameForWire('COURSE_OF_TREATMENT')).thenReturn('Курс лечения');
     expect(service.getTypeName(PrescriptionType.courseOfTreatment), 'Курс лечения');
   });
 }

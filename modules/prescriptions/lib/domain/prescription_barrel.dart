@@ -10,3 +10,4 @@ export 'prescription_execution.dart';
 export 'prescription_execution_today.dart';
 export 'prescription_file.dart';
 export 'prescription_type.dart';
+export 'prescription_type_labels_x.dart';

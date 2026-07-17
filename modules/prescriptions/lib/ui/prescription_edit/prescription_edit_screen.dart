@@ -1,24 +1,47 @@
 import 'dart:math';
 
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:acits_flutter/ui/screen/prescription/prescription_form.dart';
-import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
-import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
-import 'package:acits_flutter/ui/widget/visible_item.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/widget/error_holder.dart';
-import 'package:acits_flutter/ui/widget/form_edit_card.dart';
-import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
-import 'package:acits_flutter/ui/widget/loader.dart';
+import '../../data/prescription_service.dart';
+import '../../domain/prescription.dart';
+import '../../domain/prescription_animal_loader.dart';
+import '../../domain/prescription_animal_ref.dart';
+import '../../domain/prescription_type.dart';
+import '../../domain/prescription_type_labels.dart';
+import '../../domain/router/prescriptions_router_service.dart';
+import '../lottie_res.dart';
+import '../prescriptions_l10n_keys.dart';
+import 'cubit/prescription_edit_cubit.dart';
+import 'cubit/prescription_edit_state.dart';
+import 'prescription_form.dart';
 
 /// Экран создания и редактирования назначений
 class PrescriptionEditScreen extends StatelessWidget {
-  const PrescriptionEditScreen({this.editPrescription, this.editPrescriptionId, this.animal, this.animalId, super.key});
+  const PrescriptionEditScreen({
+    required this.service,
+    required this.router,
+    required this.animalLoader,
+    required this.typeLabels,
+    required this.scaffoldMessengerKey,
+    this.editPrescription,
+    this.editPrescriptionId,
+    this.animal,
+    this.animalId,
+    super.key,
+  });
+
+  final PrescriptionService service;
+  final PrescriptionsRouterService router;
+  final PrescriptionAnimalLoader animalLoader;
+  final PrescriptionTypeLabels typeLabels;
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
 
   final int? editPrescriptionId;
   final Prescription? editPrescription;
@@ -26,13 +49,18 @@ class PrescriptionEditScreen extends StatelessWidget {
 
   /// Id preset-животного при создании назначения из карточки (когда сущности
   /// животного нет — карточка мигрирована на модуль animals). Cubit подгрузит
-  /// животное сам через репозиторий.
+  /// животное сам через порт загрузки.
   final int? animalId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => PrescriptionEditCubit(
+        service,
+        router,
+        animalLoader,
+        typeLabels,
+        scaffoldMessengerKey,
         editPrescriptionId: editPrescriptionId,
         editPrescription: editPrescription,
         initAnimal: animal,
@@ -182,7 +210,9 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
 
   Widget _buildTitle(BuildContext context) {
     return Text(
-      _cubit.isEdit ? LocaleKeys.prescriptionTitleEdit.tr() : LocaleKeys.prescriptionTitleAdd.tr(),
+      _cubit.isEdit
+          ? PrescriptionsL10nKeys.prescriptionTitleEdit.tr()
+          : PrescriptionsL10nKeys.prescriptionTitleAdd.tr(),
       style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
     );
   }
@@ -201,7 +231,10 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
               builder: (_, loading) {
                 return VisibleItem(
                   isVisible: loading,
-                  child: SizedBox(height: 64.0, child: Center(child: LottieBuilder.asset(LottieRes.dogLoading))),
+                  child: SizedBox(
+                    height: 64.0,
+                    child: Center(child: LottieBuilder.asset(PrescriptionsLottieRes.dogLoading)),
+                  ),
                 );
               },
             ),
@@ -253,7 +286,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
           onPressed: () => _cubit.onAnimalPressed(context),
           child: FormEditCard([
             EditCardData(
-              label: LocaleKeys.prescriptionAnimal.tr(),
+              label: PrescriptionsL10nKeys.prescriptionAnimal.tr(),
               enabled: false,
               content: animal != null
                   ? Column(

@@ -1,11 +1,16 @@
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/widget/form_edit_card.dart';
-import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
-import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
+import '../../domain/prescription_drug.dart';
+import '../../domain/prescription_type.dart';
+import '../../util/datetime.dart';
+import '../prescriptions_l10n_keys.dart';
+import 'cubit/prescription_edit_cubit.dart';
+import 'cubit/prescription_edit_state.dart';
 
 const _maxCommentLength = 1024;
 
@@ -35,7 +40,7 @@ class PrescriptionForm extends StatelessWidget {
               FormEditCard([
                 EditCardData(
                   controller: commentContoroller,
-                  label: LocaleKeys.prescriptionComment.tr(),
+                  label: PrescriptionsL10nKeys.prescriptionComment.tr(),
                   maxLength: _maxCommentLength,
                 ),
               ]),
@@ -62,7 +67,7 @@ class PrescriptionForm extends StatelessWidget {
               ),
             ),
             EditCardData(
-              label: '${LocaleKeys.prescriptionDrug.tr()}${drugList.isNotEmpty ? '+' : '*'}',
+              label: '${PrescriptionsL10nKeys.prescriptionDrug.tr()}${drugList.isNotEmpty ? '+' : '*'}',
               suffix: Icon(Icons.menu_open_rounded, color: Theme.of(context).colorScheme.primary),
               onPressed: () => cubit.pickDrug(context),
               validator: (_) => drugList.isEmpty ? '' : null,
@@ -96,7 +101,7 @@ class PrescriptionForm extends StatelessWidget {
             ),
             if (cubit.allowMultiDate || daysData.isEmpty)
               EditCardData(
-                label: '${LocaleKeys.prescriptionDate.tr()}${daysData.isNotEmpty ? '+' : '*'}',
+                label: '${PrescriptionsL10nKeys.prescriptionDate.tr()}${daysData.isNotEmpty ? '+' : '*'}',
                 suffix: Icon(Icons.calendar_today_outlined, color: Theme.of(context).colorScheme.primary),
                 onPressed: () => cubit.pickStartDate(context),
                 validator: (_) => daysData.isEmpty ? '' : null,
@@ -110,7 +115,7 @@ class PrescriptionForm extends StatelessWidget {
             ),
             if (cubit.allowMultiTime || timesData.isEmpty)
               EditCardData(
-                label: '${LocaleKeys.prescriptionTime.tr()}${timesData.isNotEmpty ? '+' : '*'}',
+                label: '${PrescriptionsL10nKeys.prescriptionTime.tr()}${timesData.isNotEmpty ? '+' : '*'}',
                 onPressed: () => cubit.pickAtTime(context, 0),
                 validator: (_) => timesData.isEmpty ? '' : null,
                 suffix: Icon(Icons.watch_later_outlined, color: Theme.of(context).colorScheme.primary),
@@ -134,8 +139,8 @@ class PrescriptionForm extends StatelessWidget {
             child: CupertinoSlidingSegmentedControl(
               groupValue: period,
               children: <TreatmentPeriod, Widget>{
-                TreatmentPeriod.daily: Text(LocaleKeys.prescriptionDaily.tr()),
-                TreatmentPeriod.weekly: Text(LocaleKeys.prescriptionWeekly.tr()),
+                TreatmentPeriod.daily: Text(PrescriptionsL10nKeys.prescriptionDaily.tr()),
+                TreatmentPeriod.weekly: Text(PrescriptionsL10nKeys.prescriptionWeekly.tr()),
               },
               onValueChanged: cubit.onTreatmentPeriodChanged,
             ),

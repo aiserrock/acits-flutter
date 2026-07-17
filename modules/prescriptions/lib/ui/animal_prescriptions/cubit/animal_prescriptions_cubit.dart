@@ -1,21 +1,21 @@
 import 'package:acits_core/acits_core.dart';
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/service/prescription/prescription_service.dart';
-import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_prescriptions_state.dart';
-import 'package:acits_flutter/util/bloc_ext.dart';
-import 'package:acits_flutter/util/logger/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/prescription_service.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/log.dart';
+import 'animal_prescriptions_state.dart';
 
 /// Cubit вкладки «Назначения» карточки животного.
 ///
 /// Strangler-остаток: сама карточка животного мигрирована на модуль `animals`
-/// (богатая сущность через репозиторий), а назначения — отдельная фича, ещё на
-/// chopper ([PrescriptionService]). Этот cubit держит ТОЛЬКО загрузку списка
-/// назначений и флаг «актуальные / прошлые». Переедет вместе с фичей назначений.
+/// (богатая сущность через репозиторий), а назначения — отдельная фича
+/// ([PrescriptionService]). Этот cubit держит ТОЛЬКО загрузку списка назначений
+/// и флаг «актуальные / прошлые». Рендерится внутри детального экрана
+/// приложения (тот берёт cubit из барреля модуля).
 class AnimalPrescriptionsCubit extends Cubit<AnimalPrescriptionsState> {
-  AnimalPrescriptionsCubit({required this.animalId})
-    : _prescriptionService = getIt<PrescriptionService>(),
-      super(const AnimalPrescriptionsState()) {
+  AnimalPrescriptionsCubit(this._prescriptionService, {required this.animalId})
+    : super(const AnimalPrescriptionsState()) {
     reloadPrescriptions();
   }
 

@@ -1,11 +1,11 @@
 import 'package:animals/animals.dart';
+import 'package:prescriptions/prescriptions.dart' show DrugsScreen;
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';
-import 'package:acits_flutter/ui/screen/drugs/drugs_screen.dart';
 import 'package:acits_flutter/ui/screen/main/main_screen.dart';
 import 'package:acits_flutter/ui/widget/personal_drawer.dart';
 import 'package:acits_flutter/util/web_insets/web_insets.dart';

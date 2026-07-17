@@ -1,6 +1,7 @@
 import 'package:acits_core/acits_core.dart';
-import 'package:acits_flutter/domain/prescription/prescription.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../domain/prescription.dart';
 
 /// Состояние вкладки «Назначения» карточки животного (chopper-фича).
 ///
