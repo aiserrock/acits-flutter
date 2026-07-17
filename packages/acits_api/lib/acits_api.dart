@@ -12,10 +12,16 @@ export 'adapters/swagger_parser/animal_api_adapter.dart';
 export 'adapters/swagger_parser/animal_notes_api_adapter.dart';
 export 'adapters/swagger_parser/auth_api_adapter.dart';
 export 'adapters/swagger_parser/prescription_api_adapter.dart';
+export 'adapters/swagger_parser/profile_api_adapter.dart';
+export 'adapters/swagger_parser/selection_api_adapter.dart';
+export 'adapters/swagger_parser/staff_api_adapter.dart';
 export 'ports/animal_api_port.dart';
 export 'ports/animal_notes_api_port.dart';
 export 'ports/auth_api_port.dart';
 export 'ports/prescription_api_port.dart';
+export 'ports/profile_api_port.dart';
+export 'ports/selection_api_port.dart';
+export 'ports/staff_api_port.dart';
 export 'ports/dto/dto.dart';
 
 // The generated retrofit [AnimalsClient] is exposed narrowly so the app's DI
@@ -36,3 +42,9 @@ export 'adapters/swagger_parser/generated/clients/shelters_client.dart' show She
 export 'adapters/swagger_parser/generated/clients/token_client.dart' show TokenClient;
 export 'adapters/swagger_parser/generated/clients/users_client.dart' show UsersClient;
 export 'adapters/swagger_parser/generated/clients/users_registration_client.dart' show UsersRegistrationClient;
+
+// The generated retrofit staff clients are exposed narrowly so root DI can
+// construct them over the authed acitsApi Dio and hand them to [StaffApiAdapter].
+// Only the client types leak — generated models stay private.
+export 'adapters/swagger_parser/generated/clients/applicants_client.dart' show ApplicantsClient;
+export 'adapters/swagger_parser/generated/clients/curators_client.dart' show CuratorsClient;

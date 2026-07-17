@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
+import 'package:acits_flutter/domain/user_profile.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/change_pass_widget.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_cubit.dart';
@@ -78,7 +79,7 @@ class _PersonalViewState extends State<_PersonalView> {
             (state.data.isContent && state.fabVisible) ? _buildFab(context) : const SizedBox.shrink(),
       ),
       body: BlocBuilder<PersonalCubit, PersonalState>(
-        builder: (context, state) => DataStateBuilder<UserSerializers>(
+        builder: (context, state) => DataStateBuilder<UserProfile>(
           state: state.data,
           builder: (_, user) => _buildContent(user),
           loader: (_) => const LoaderHolderWidget(),
@@ -88,7 +89,7 @@ class _PersonalViewState extends State<_PersonalView> {
     );
   }
 
-  Widget _buildContent(UserSerializers user) {
+  Widget _buildContent(UserProfile user) {
     return KeyboardDismissOnTap(
       child: SingleChildScrollView(
         child: Padding(
@@ -183,7 +184,7 @@ class _PersonalViewState extends State<_PersonalView> {
     _lastNameController.text = user.lastName;
     _fatherNameController.text = user.fathersName ?? '';
     _phoneController.text = user.phoneNumber ?? '';
-    _emailController.text = user.email ?? '';
+    _emailController.text = user.email;
     if (widget.isChangePass) {
       _onPassChange(context);
     }

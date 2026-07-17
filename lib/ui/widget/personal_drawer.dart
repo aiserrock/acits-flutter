@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/domain/user_profile.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
@@ -38,7 +39,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: BlocBuilder<PersonalDrawerCubit, DataState<UserSerializers>>(
+      child: BlocBuilder<PersonalDrawerCubit, DataState<UserProfile>>(
         builder: (context, state) {
           final isLoading = state.isLoading;
           final hasError = state.hasError;
@@ -82,11 +83,17 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               _buildDivider(),
               const ThemeSwitcherTile(),
               ListTile(
-                title: Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.bodyLarge),
+                title: Text(
+                  LocaleKeys.commonLanguage.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
                 trailing: const LocaleSwitcher(size: 22.0),
               ),
               _buildDivider(),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 12.0), child: AppVersionLabel()),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12.0),
+                child: AppVersionLabel(),
+              ),
             ],
           );
         },
@@ -103,7 +110,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
     );
   }
 
-  Widget _buildPersonTile(BuildContext context, bool isLoading, UserSerializers? person) {
+  Widget _buildPersonTile(BuildContext context, bool isLoading, UserProfile? person) {
     return ListTile(
       title: isLoading
           ? _buildSkeleton(156.0)

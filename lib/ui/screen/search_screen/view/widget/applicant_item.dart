@@ -10,6 +10,6 @@ class ApplicantListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(title: Text(applicant.fullName ?? ''));
+    return ListTile(title: Text(applicant.fullName));
   }
 }

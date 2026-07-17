@@ -1,6 +1,7 @@
 import 'package:animals/animals.dart' as domain;
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart' as gen;
 
 /// STRANGLER SEAM (временный): конверсии домен [domain.Animal] ↔ DTO `AnimalRead`.
 ///
@@ -66,10 +67,10 @@ extension AnimalEditSeam on domain.Animal {
     );
   }
 
-  Curator? get _curator {
+  gen.Curator? get _curator {
     final c = curator;
     if (c == null) return null;
-    return Curator(
+    return gen.Curator(
       id: c.id,
       firstName: c.firstName,
       lastName: c.lastName,
@@ -79,10 +80,10 @@ extension AnimalEditSeam on domain.Animal {
     );
   }
 
-  Applicant? get _applicant {
+  gen.Applicant? get _applicant {
     final a = applicant;
     if (a == null) return null;
-    return Applicant(
+    return gen.Applicant(
       id: a.id,
       firstName: a.firstName,
       lastName: a.lastName,
