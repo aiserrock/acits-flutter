@@ -2,10 +2,7 @@ import 'dart:typed_data';
 
 import 'package:acits_core/acits_core.dart';
 
-import 'animal.dart';
-import 'animal_edit_input.dart';
-import 'animal_list_item.dart';
-import 'animal_species.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Контракт репозитория животных (feature-local). Всё в доменных типах и
 /// [Result]<[Failure], T> — DTO сюда не проникают (остаются в data-слое).

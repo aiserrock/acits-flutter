@@ -4,15 +4,8 @@ import 'package:acits_api/acits_api.dart';
 import 'package:acits_core/acits_core.dart';
 import 'package:dio/dio.dart';
 
-import '../../domain/animal.dart';
-import '../../domain/animal_edit_input.dart';
-import '../../domain/animal_list_item.dart';
-import '../../domain/animal_repository.dart';
-import '../../domain/animal_species.dart';
-import '../data_source/animal_remote_data_source.dart';
-import '../mapper/animal_list_item_mapper.dart';
-import '../mapper/animal_mapper.dart';
-import '../mapper/animal_write_mapper.dart';
+import 'package:animals/data/data.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Реализация [AnimalRepository]. Здесь DTO заканчиваются: вызываем data source,
 /// разворачиваем DTO → сущности мапперами, ловим исключения → типизированный

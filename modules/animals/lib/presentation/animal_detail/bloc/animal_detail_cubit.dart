@@ -1,9 +1,7 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/animal.dart';
-import '../../../domain/animal_repository.dart';
-import '../../../domain/port/current_shelter_provider.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Cubit карточки животного: грузит богатую сущность [Animal] из
 /// [AnimalRepository] (Result, без DTO) в [DataState]. Загрузка назначений

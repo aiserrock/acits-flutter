@@ -4,10 +4,8 @@ import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/animal_list_item.dart';
-import '../../../domain/animal_repository.dart';
-import '../../../domain/port/current_shelter_provider.dart';
-import 'animals_state.dart';
+import 'package:animals/domain/domain.dart';
+import 'package:animals/presentation/animals_list/animals_list.dart';
 
 const _animalPageLength = 25;
 const _searchDebounce = Duration(milliseconds: 300);

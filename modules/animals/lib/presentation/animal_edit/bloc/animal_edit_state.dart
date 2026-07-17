@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/animal.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Режим экрана редактирования животного: заполнение формы или экран успеха.
 enum AnimalEditMode { form, success }

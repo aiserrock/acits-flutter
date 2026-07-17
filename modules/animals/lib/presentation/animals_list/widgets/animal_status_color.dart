@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/animal_status.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Цвет-заглушка для статусов без назначенного цвета. Статус-цвета — это данные
 /// (не chrome темы), поэтому литералы, а не токены темы. Значения перенесены

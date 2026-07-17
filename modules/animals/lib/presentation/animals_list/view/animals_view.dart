@@ -6,14 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../../domain/animal_list_item.dart';
-import '../../../domain/port/animal_permissions.dart';
-import '../../../domain/port/animal_status_labels.dart';
-import '../../../domain/router/animals_router_service.dart';
-import '../animal_sort_presets.dart';
-import '../bloc/animals_cubit.dart';
-import '../bloc/animals_state.dart';
-import '../widgets/animal_card.dart';
+import 'package:animals/domain/domain.dart';
+import 'package:animals/presentation/animals_list/animals_list.dart';
 
 const _scrollTopPadding = 16.0;
 

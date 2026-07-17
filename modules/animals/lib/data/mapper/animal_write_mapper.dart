@@ -1,6 +1,6 @@
 import 'package:acits_api/acits_api.dart';
 
-import '../../domain/animal.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Домен [Animal] (+ входные данные формы редактирования) → [AnimalWriteDto].
 ///
