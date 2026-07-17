@@ -19,11 +19,16 @@ import 'package:acits_flutter/ui/widget/loader.dart';
 
 /// Экран создания и редактирования назначений
 class PrescriptionEditScreen extends StatelessWidget {
-  const PrescriptionEditScreen({this.editPrescription, this.editPrescriptionId, this.animal, super.key});
+  const PrescriptionEditScreen({this.editPrescription, this.editPrescriptionId, this.animal, this.animalId, super.key});
 
   final int? editPrescriptionId;
   final PrescriptionModel? editPrescription;
   final AnimalRead? animal;
+
+  /// Id preset-животного при создании назначения из карточки (когда AnimalRead
+  /// объекта нет — карточка мигрирована на модуль animals). Cubit подгрузит
+  /// AnimalRead сам.
+  final int? animalId;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +37,7 @@ class PrescriptionEditScreen extends StatelessWidget {
         editPrescriptionId: editPrescriptionId,
         editPrescription: editPrescription,
         initAnimal: animal,
+        initAnimalId: animalId,
       ),
       child: _PrescriptionEditView(editPrescription: editPrescription),
     );

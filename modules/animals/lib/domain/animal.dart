@@ -18,8 +18,11 @@ class Animal extends Equatable {
     required this.attributes,
     this.speciesId,
     this.speciesName,
+    this.speciesParentName,
+    this.speciesCategoryName,
     this.birthDate,
     this.dateJoined,
+    this.dateOfChipping,
     this.chippingCode,
     this.height,
     this.weight,
@@ -38,8 +41,11 @@ class Animal extends Equatable {
   final Map<String, String> attributes;
   final int? speciesId;
   final String? speciesName;
+  final String? speciesParentName;
+  final String? speciesCategoryName;
   final DateTime? birthDate;
   final DateTime? dateJoined;
+  final DateTime? dateOfChipping;
   final String? chippingCode;
   final String? height;
   final String? weight;
@@ -71,8 +77,11 @@ class Animal extends Equatable {
     attributes,
     speciesId,
     speciesName,
+    speciesParentName,
+    speciesCategoryName,
     birthDate,
     dateJoined,
+    dateOfChipping,
     chippingCode,
     height,
     weight,

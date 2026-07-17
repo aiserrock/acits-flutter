@@ -18,4 +18,5 @@ export 'domain/port/animal_permissions.dart';
 export 'domain/port/animal_status_labels.dart';
 export 'domain/port/current_shelter_provider.dart';
 export 'domain/router/animals_router_service.dart';
+export 'ui/animal_detail/bloc/animal_detail_cubit.dart';
 export 'ui/animals_list/view/animals_page.dart';
