@@ -1,3 +1,4 @@
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
@@ -5,6 +6,7 @@ import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
 import 'package:acits_flutter/util/validator.dart';
+import 'package:animals/animals.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +29,8 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
   final _dateReceiptController = TextEditingController();
   final _statusController = TextEditingController();
   final _catchController = TextEditingController();
-  Status69fEnum? status;
+  final _statusLabels = getIt<AnimalStatusLabels>();
+  AnimalStatus? status;
   DateTime? date;
 
   @override
@@ -94,17 +97,18 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
 
   Future<void> _setStatus(BuildContext context) async {
     Map<Widget, dynamic Function()> actionsMap(BuildContext ctx) {
-      final entries = Status69fEnum.values
-          .where((status) => status.statusString != null)
+      final entries = AnimalStatus.values
+          .map((status) => (status: status, label: _statusLabels.label(status)))
+          .where((e) => e.label != null)
           .map<MapEntry<Widget, dynamic Function()>>(
-            (status) => MapEntry(
+            (e) => MapEntry(
               Text(
-                status.statusString ?? '',
+                e.label ?? '',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
               ),
               () {
-                _statusController.text = status.statusString ?? '';
-                this.status = status;
+                _statusController.text = e.label ?? '';
+                status = e.status;
                 Navigator.of(ctx).pop();
               },
             ),
@@ -135,9 +139,9 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
     }
   }
 
-  void _setControllers(AnimalRead value) {
-    _dateReceiptController.text = _dateFormatter.format(value.dateJoined);
-    _statusController.text = value.statusString ?? '';
+  void _setControllers(AnimalEditFormState value) {
+    if (value.dateJoined != null) _dateReceiptController.text = _dateFormatter.format(value.dateJoined!);
+    _statusController.text = _statusLabels.label(value.status) ?? '';
     _catchController.text = value.placeOfCatch;
   }
 
@@ -147,6 +151,6 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
     Provider.of<AnimalEditHolder>(
       context,
       listen: false,
-    ).copyWith(dateJoined: date, status: status, placeOfCatch: _catchController.text);
+    ).update((prev) => prev.copyWith(dateJoined: date, status: status, placeOfCatch: _catchController.text));
   }
 }

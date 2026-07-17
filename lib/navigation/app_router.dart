@@ -2,7 +2,7 @@ import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/gen/api/openapi.swagger.dart' show Species;
+import 'package:animals/animals.dart' show AnimalSpecies;
 import 'package:acits_flutter/domain/animal_note/animal_note.dart';
 import 'package:acits_flutter/domain/prescription/prescription.dart';
 import 'package:acits_flutter/domain/prescription/prescription_animal_ref.dart';
@@ -166,7 +166,7 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.searchSpec,
-        builder: (context, state) => SearchScreen(parentSearch: state.extra as Species?),
+        builder: (context, state) => SearchScreen(parentSearch: state.extra as AnimalSpecies?),
       ),
       GoRoute(
         path: AppRoutes.search,

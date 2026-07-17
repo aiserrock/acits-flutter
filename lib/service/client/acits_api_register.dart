@@ -59,7 +59,7 @@ abstract class AcitsApiRegister {
   /// [AnimalApiPort]. Возвращаем как порт, чтобы будущие фичи резолвили
   /// [AnimalApiPort], а не конкретный адаптер.
   @prod
-  AnimalApiPort animalApiPort(AnimalsClient client) => AnimalApiAdapter(client);
+  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) => AnimalApiAdapter(client, dio);
 
   // ── auth slice ─────────────────────────────────────────────────────────────
 

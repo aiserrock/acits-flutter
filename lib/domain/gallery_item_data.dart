@@ -1,16 +1,17 @@
 import 'dart:typed_data';
 
-import 'package:acits_flutter/export.dart';
+import 'package:animals/animals.dart';
 
 class GalleryItemData {
   GalleryItemData({this.network, this.assetPath, this.filePath, this.bytes, this.isChoosed = false})
     : assert(network != null || assetPath != null || filePath != null);
 
-  factory GalleryItemData.fromAnimalImage(AnimalImageRead image) {
+  factory GalleryItemData.fromAnimalImage(AnimalImage image) {
     return GalleryItemData(network: image, isChoosed: true);
   }
 
-  final AnimalImageRead? network;
+  /// Уже загруженное сетевое фото (доменная сущность).
+  final AnimalImage? network;
   final String? assetPath;
 
   /// Путь/URL выбранного с устройства файла. На web это blob-URL — рендерится
@@ -26,7 +27,7 @@ class GalleryItemData {
   final bool isChoosed;
 
   GalleryItemData copyWith({
-    final AnimalImageRead? network,
+    final AnimalImage? network,
     final String? assetPath,
     final String? filePath,
     final Uint8List? bytes,

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 
 abstract class AnimalEditPage extends StatefulWidget {
   const AnimalEditPage({required this.isEdit, required this.animal, this.formKey, super.key});
 
   final bool isEdit;
-  final AnimalRead animal;
+  final AnimalEditFormState animal;
   final GlobalKey<FormState>? formKey;
 }
 

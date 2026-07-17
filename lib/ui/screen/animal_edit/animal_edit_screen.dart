@@ -12,7 +12,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:acits_flutter/ui/widget/success_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_seam.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_add_info_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_applicant_page.dart';
@@ -41,8 +40,8 @@ class AnimalEditScreen extends StatelessWidget {
         create: (_) => AnimalEditHolder(),
         child: BlocProvider<AnimalEditCubit>(
           // Load/submit идут через модульный репозиторий (домен + Result, без
-          // DTO). Форма осталась в корне (strangler-граница): seed из сущности
-          // и сборка входных данных — в animal_edit_seam.dart.
+          // DTO). Форма (мультистраничный UI) работает на доменном состоянии
+          // AnimalEditFormState — chopper/gen из формы полностью убраны.
           create: (_) => AnimalEditCubit(getIt<AnimalRepository>(), getIt<CurrentShelterProvider>(), id: id),
           child: const _AnimalEditView(),
         ),
@@ -87,8 +86,8 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
       listenWhen: (prev, next) => next.valueOrNull?.animal != null,
       listener: (_, state) {
         final animal = state.valueOrNull?.animal;
-        // Seed формы из доменной сущности (strangler-seam: домен → AnimalRead).
-        if (animal != null) context.read<AnimalEditHolder>().init(animal.toReadSeed());
+        // Seed формы напрямую из доменной сущности.
+        if (animal != null) context.read<AnimalEditHolder>().init(animal);
       },
       builder: (context, state) {
         final mode = state.valueOrNull?.mode ?? AnimalEditMode.form;
@@ -246,15 +245,13 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
 
   Future<void> _onSubmit() async {
     setState(() => _isUploadProgress = true);
-    // Отредактированный AnimalRead формы → доменные входные данные (seam), submit
-    // собирает AnimalWriteDto в модульном репозитории.
-    final inputs = readToSubmitInputs(context.read<AnimalEditHolder>().state);
+    // Доменное состояние формы → submit; репозиторий собирает AnimalWriteDto.
+    final form = context.read<AnimalEditHolder>().state;
     await context.read<AnimalEditCubit>().submit(
-      inputs.animal,
-      attributes: inputs.attributes,
-      newImages: inputs.newImages,
-      retainImageIds: inputs.retainImageIds,
-      specId: inputs.specId,
+      form.toAnimal(),
+      attributes: form.attributes,
+      retainImageIds: form.retainImageIds,
+      specId: form.specId,
     );
     if (mounted) setState(() => _isUploadProgress = false);
   }

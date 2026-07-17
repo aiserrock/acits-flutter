@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:acits_flutter/export.dart';
+import 'package:animals/animals.dart';
 import 'package:acits_flutter/domain/env.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/debug/debug_service.dart';
@@ -428,9 +429,9 @@ class _SearchSpeciesCard extends StatefulWidget {
 }
 
 class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
-  Species? _category;
-  Species? _family;
-  Species? _kind;
+  AnimalSpecies? _category;
+  AnimalSpecies? _family;
+  AnimalSpecies? _kind;
 
   @override
   Widget build(BuildContext context) {
@@ -447,7 +448,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               title: Text(_category?.name ?? '* tap to select'),
               subtitle: const Text('category'),
               onTap: () async {
-                final result = await context.push<Species>(AppRoutes.searchSpec);
+                final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec);
                 if (result != null) {
                   setState(() {
                     _category = result;
@@ -462,7 +463,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('family'),
               onTap: () async {
                 if (_category != null) {
-                  final result = await context.push<Species>(AppRoutes.searchSpec, extra: _category);
+                  final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _category);
                   if (result != null) {
                     setState(() {
                       _family = result;
@@ -477,7 +478,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('kind'),
               onTap: () async {
                 if (_family != null) {
-                  final result = await context.push<Species>(AppRoutes.searchSpec, extra: _family);
+                  final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _family);
                   if (result != null) {
                     setState(() {
                       _kind = result;

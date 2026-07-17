@@ -1,4 +1,5 @@
-import 'package:acits_flutter/export.dart';
+import 'package:acits_core/acits_core.dart';
+import 'package:animals/animals.dart';
 import 'package:equatable/equatable.dart';
 
 /// Состояние экрана поиска вида животного.
@@ -15,7 +16,7 @@ class SearchSpecState extends Equatable {
   });
 
   /// Состояние основного списка видов.
-  final DataState<List<Species>> data;
+  final DataState<List<AnimalSpecies>> data;
 
   /// Текущее смещение пагинации (кол-во уже загруженных элементов).
   final int offset;
@@ -27,7 +28,7 @@ class SearchSpecState extends Equatable {
   final Object? pagingError;
 
   SearchSpecState copyWith({
-    DataState<List<Species>>? data,
+    DataState<List<AnimalSpecies>>? data,
     int? offset,
     bool? isPaging,
     Object? Function()? pagingError,
