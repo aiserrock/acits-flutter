@@ -1,5 +1,5 @@
 import 'package:acits_flutter/util/data_state.dart';
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_flutter/domain/animal_note/animal_note.dart';
 import 'package:equatable/equatable.dart';
 
 /// Состояние экрана списка комментариев к животному.

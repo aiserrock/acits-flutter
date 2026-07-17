@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/domain/prescription_model.dart';
 
 /// Виджет карточки назначения животного в детальном представлении
 class AnimalPrescriptionCard extends StatefulWidget {
   const AnimalPrescriptionCard({required this.prescription, super.key});
 
-  final PrescriptionModel prescription;
+  final Prescription prescription;
 
   @override
   State<AnimalPrescriptionCard> createState() => _AnimalPrescriptionCardState();
@@ -37,7 +36,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           const SizedBox(height: 4.0),
-          Text(widget.prescription.myType.typeString ?? '', style: Theme.of(context).textTheme.titleLarge),
+          Text(widget.prescription.typeString ?? '', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 4.0),
           Row(
             children: [

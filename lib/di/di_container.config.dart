@@ -145,6 +145,12 @@ Future<_i174.GetIt> $initGetIt(
     () => acitsApiRegister.usersClient(gh<_i361.Dio>(instanceName: 'acitsApi')),
     registerFor: {_prod},
   );
+  gh.factory<_i101.PrescriptionsClient>(
+    () => acitsApiRegister.prescriptionsClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_prod},
+  );
   gh.factory<_i965.Openapi>(
     () => clientRegister.createClient(
       gh<_i492.AuthInterceptor>(),
@@ -157,6 +163,13 @@ Future<_i174.GetIt> $initGetIt(
     () => _i422.EmailConfirmRepository(gh<_i361.Dio>()),
   );
   gh.factory<_i830.FileRepository>(() => _i830.FileRepository(gh<_i361.Dio>()));
+  gh.factory<_i101.SheltersClient>(
+    () => acitsApiRegister.sheltersClientAuthed(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    instanceName: 'acitsApiSheltersAuthed',
+    registerFor: {_prod},
+  );
   gh.factory<_i101.TokenClient>(
     () => acitsApiRegister.tokenClientAuthed(
       gh<_i361.Dio>(instanceName: 'acitsApi'),
@@ -171,6 +184,21 @@ Future<_i174.GetIt> $initGetIt(
   );
   gh.factory<_i499.FileService>(
     () => _i499.FileService(gh<_i830.FileRepository>()),
+  );
+  gh.factory<_i101.AnimalNotesApiPort>(
+    () => acitsApiRegister.animalNotesApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i101.AnimalsClient>(),
+    ),
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.PrescriptionApiPort>(
+    () => acitsApiRegister.prescriptionApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i101.PrescriptionsClient>(),
+      gh<_i101.SheltersClient>(instanceName: 'acitsApiSheltersAuthed'),
+    ),
+    registerFor: {_prod},
   );
   gh.factory<_i101.AnimalApiPort>(
     () => acitsApiRegister.animalApiPort(gh<_i101.AnimalsClient>()),
@@ -229,17 +257,11 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i616.AnimalPermissions>(
     () => _i434.AuthServiceAnimalPermissions(gh<_i21.AuthService>()),
   );
-  gh.singleton<_i876.AnimalService>(
-    () => _i876.AnimalService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
-  );
   gh.singleton<_i156.StaffService>(
     () => _i156.StaffService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
   );
   gh.factory<_i302.DocumentRepository>(
     () => _i302.DocumentRepository(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
-  );
-  gh.factory<_i616.AnimalsRouterService>(
-    () => _i514.AnimalsRouterServiceImpl(gh<_i876.AnimalService>()),
   );
   gh.singleton<_i701.PersonalService>(
     () => _i701.PersonalService(gh<_i965.Openapi>(), gh<_i21.AuthService>()),
@@ -247,15 +269,25 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i616.AnimalStatusLabels>(
     () => _i434.ConfigServiceAnimalStatusLabels(gh<_i245.ConfigService>()),
   );
+  gh.singleton<_i876.AnimalService>(
+    () => _i876.AnimalService(
+      gh<_i21.AuthService>(),
+      gh<_i965.Openapi>(),
+      gh<_i101.AnimalNotesApiPort>(),
+    ),
+  );
   gh.factory<_i616.CurrentShelterProvider>(
     () => _i434.AuthServiceCurrentShelter(gh<_i21.AuthService>()),
   );
   gh.singleton<_i212.PrescriptionService>(
     () => _i212.PrescriptionService(
-      gh<_i965.Openapi>(),
+      gh<_i101.PrescriptionApiPort>(),
       gh<_i21.AuthService>(),
       gh<_i245.ConfigService>(),
     ),
+  );
+  gh.factory<_i616.AnimalsRouterService>(
+    () => _i514.AnimalsRouterServiceImpl(gh<_i876.AnimalService>()),
   );
   return getIt;
 }

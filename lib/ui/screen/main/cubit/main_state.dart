@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_flutter/domain/prescription/prescription_execution_today.dart';
 import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/util/data_state.dart';
 
@@ -19,7 +19,7 @@ class MainState extends Equatable {
   }) : activeSort = activeSort ?? kTodaySortPresets.first;
 
   /// Состояние загрузки списка исполнений на сегодня.
-  final DataState<PaginatedPrescriptionExecutionTodayList?> data;
+  final DataState<List<PrescriptionExecutionToday>?> data;
 
   /// Активен ли режим поиска в шапке экрана.
   final bool isSearchActive;
@@ -31,7 +31,7 @@ class MainState extends Equatable {
   final SortPreset activeSort;
 
   MainState copyWith({
-    DataState<PaginatedPrescriptionExecutionTodayList?>? data,
+    DataState<List<PrescriptionExecutionToday>?>? data,
     bool? isSearchActive,
     String? searchRequest,
     SortPreset? activeSort,

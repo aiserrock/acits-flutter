@@ -94,4 +94,28 @@ abstract class AcitsApiRegister {
     guestSheltersClient: guestSheltersClient,
     guestRegistrationClient: guestRegistrationClient,
   );
+
+  // ── prescriptions + drugs slice ─────────────────────────────────────────────
+
+  @prod
+  PrescriptionsClient prescriptionsClient(@Named('acitsApi') Dio dio) => PrescriptionsClient(dio);
+
+  /// Каталог лекарств (`/shelter/drugs/`) требует авторизации — в отличие от
+  /// гостевого [SheltersClient] для auth-слайса. Отдельный инстанс на authed Dio.
+  @prod
+  @Named('acitsApiSheltersAuthed')
+  SheltersClient sheltersClientAuthed(@Named('acitsApi') Dio dio) => SheltersClient(dio);
+
+  @prod
+  PrescriptionApiPort prescriptionApiPort(
+    @Named('acitsApi') Dio dio,
+    PrescriptionsClient prescriptionsClient,
+    @Named('acitsApiSheltersAuthed') SheltersClient sheltersClient,
+  ) => PrescriptionApiAdapter(dio, prescriptionsClient, sheltersClient);
+
+  // ── animal notes slice ──────────────────────────────────────────────────────
+
+  @prod
+  AnimalNotesApiPort animalNotesApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
+      AnimalNotesApiAdapter(dio, client);
 }

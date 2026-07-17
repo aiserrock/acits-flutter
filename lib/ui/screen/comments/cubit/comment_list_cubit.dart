@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_flutter/domain/animal_note/animal_note.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_state.dart';
 import 'package:acits_flutter/util/data_state.dart';
@@ -55,8 +55,7 @@ class CommentListCubit extends Cubit<CommentListState> {
     Log.debug('CommentListCubit.init animalId=$animalId');
     safeEmit(state.copyWith(data: const DataState.loading()));
     try {
-      final value = await _animalService.fetchAnimalNotes(animalId);
-      final results = value?.results ?? [];
+      final results = await _animalService.fetchAnimalNotes(animalId);
       Log.info('CommentListCubit.init ok: count=${results.length}');
       safeEmit(state.copyWith(data: DataState.content(_sorted(results))));
     } catch (e, s) {
@@ -73,7 +72,7 @@ class CommentListCubit extends Cubit<CommentListState> {
     safeEmit(state.copyWith(page: const DataState.loading()));
     try {
       final value = await _animalService.fetchAnimalNotes(animalId, offset: current.length);
-      final newList = <AnimalNote>[...current, ...?value?.results];
+      final newList = <AnimalNote>[...current, ...value];
       Log.info('CommentListCubit.loadNextPage ok: count=${newList.length}');
       safeEmit(state.copyWith(data: DataState.content(_sorted(newList)), page: const DataState.content(null)));
     } catch (e, s) {
@@ -89,7 +88,7 @@ class CommentListCubit extends Cubit<CommentListState> {
   Future<bool> deleteComment(AnimalNote comment) async {
     Log.debug('CommentListCubit.deleteComment id=${comment.id}');
     try {
-      await _animalService.deleteAnimalNote(id: comment.id!);
+      await _animalService.deleteAnimalNote(id: comment.id);
       final current = state.data.valueOrNull;
       if (current != null) {
         final newList = List<AnimalNote>.from(current)..remove(comment);

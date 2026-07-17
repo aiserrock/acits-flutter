@@ -1,36 +1,41 @@
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/domain/prescription/prescription.dart';
+import 'package:acits_flutter/domain/prescription/prescription_execution_today.dart';
+import 'package:acits_flutter/domain/prescription/prescription_type.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-extension PrescriptionShortX on PrescriptionShort {
-  String? get typeString {
-    final service = getIt<ConfigService>();
-    return service.getMyTypeName(myType);
-  }
-}
+// Реэкспорт доменных сущностей назначений — экраны/виджеты берут их отсюда
+// (файл уже реэкспортится из export.dart).
+export 'package:acits_flutter/domain/prescription/prescription_barrel.dart';
 
-extension PrescriptionShortMyTypeEnumX on PrescriptionShortMyTypeEnum {
-  String? get typeString {
-    final service = getIt<ConfigService>();
-    return service.getMyTypeName(this);
-  }
+extension PrescriptionTypeX on PrescriptionType {
+  /// Человекочитаемое имя типа назначения (из серверного конфига).
+  String? get typeString => getIt<ConfigService>().getMyTypeName(wire);
 
   String get startDateLabel {
     switch (this) {
-      case PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown:
+      case PrescriptionType.unknown:
         return '';
-      case PrescriptionShortMyTypeEnum.courseOfTreatment:
-      case PrescriptionShortMyTypeEnum.appointment:
-      case PrescriptionShortMyTypeEnum.readmission:
-      case PrescriptionShortMyTypeEnum.removingStitches:
-      case PrescriptionShortMyTypeEnum.woundHealing:
-      case PrescriptionShortMyTypeEnum.analysis:
-      case PrescriptionShortMyTypeEnum.parasitesTreatment:
-      case PrescriptionShortMyTypeEnum.vaccination:
-      case PrescriptionShortMyTypeEnum.other:
+      case PrescriptionType.courseOfTreatment:
+      case PrescriptionType.appointment:
+      case PrescriptionType.readmission:
+      case PrescriptionType.removingStitches:
+      case PrescriptionType.woundHealing:
+      case PrescriptionType.analysis:
+      case PrescriptionType.parasitesTreatment:
+      case PrescriptionType.vaccination:
+      case PrescriptionType.other:
         return LocaleKeys.prescriptionCurrent.tr();
     }
   }
+}
+
+extension PrescriptionX on Prescription {
+  String? get typeString => type.typeString;
+}
+
+extension PrescriptionShortEntityX on PrescriptionShortEntity {
+  String? get typeString => type.typeString;
 }

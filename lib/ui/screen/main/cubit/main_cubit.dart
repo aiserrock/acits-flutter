@@ -51,7 +51,7 @@ class MainCubit extends Cubit<MainState> {
         Log.debug('MainCubit.loadExecutions: stale response gen=$gen cur=$_requestGen, skip');
         return;
       }
-      Log.info('MainCubit.loadExecutions ok: count=${value?.results?.length ?? 0}');
+      Log.info('MainCubit.loadExecutions ok: count=${value.length}');
       safeEmit(state.copyWith(data: DataState.content(value)));
     } catch (e, s) {
       if (gen != _requestGen) return;

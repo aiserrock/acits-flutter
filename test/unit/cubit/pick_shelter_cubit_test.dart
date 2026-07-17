@@ -45,12 +45,7 @@ void main() {
     test('applies shelter + config and returns true on success', () async {
       when(() => auth.shelterList).thenReturn(const []);
       when(() => auth.setCurrentShelter(1)).thenAnswer(
-        (_) async => const CurrentShelterRole(
-          currentShelterId: 1,
-          role: 'ADMIN',
-          canEdit: true,
-          canDelete: true,
-        ),
+        (_) async => const CurrentShelterRole(currentShelterId: 1, role: 'ADMIN', canEdit: true, canDelete: true),
       );
       when(() => config.initConfig(currentShelterId: 1)).thenAnswer((_) async {});
 
@@ -85,19 +80,11 @@ void main() {
     test('auto-selects when exactly one shelter and flag on', () async {
       when(() => auth.shelterList).thenReturn(const []);
       when(() => auth.setCurrentShelter(1)).thenAnswer(
-        (_) async => const CurrentShelterRole(
-          currentShelterId: 1,
-          role: 'ADMIN',
-          canEdit: true,
-          canDelete: true,
-        ),
+        (_) async => const CurrentShelterRole(currentShelterId: 1, role: 'ADMIN', canEdit: true, canDelete: true),
       );
       when(() => config.initConfig(currentShelterId: 1)).thenAnswer((_) async {});
 
-      final cubit = PickShelterCubit(
-        autoSelectSingle: true,
-        shelterList: const [Shelter(id: 1, name: 'Solo')],
-      );
+      final cubit = PickShelterCubit(autoSelectSingle: true, shelterList: const [Shelter(id: 1, name: 'Solo')]);
       expect(await cubit.maybeAutoSelectSingle(), isTrue);
       // Idempotent: second call is a no-op.
       expect(await cubit.maybeAutoSelectSingle(), isFalse);

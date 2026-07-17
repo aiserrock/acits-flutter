@@ -1,4 +1,5 @@
 import 'package:acits_domain/acits_domain.dart' show Shelter;
+import 'package:animals/animals.dart' show AnimalListItem;
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
@@ -7,7 +8,7 @@ import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Экран поиска / выбора для объектов
-/// [Curator], [AnimalRead], [Applicant]
+/// [Curator], [AnimalListItem], [Applicant]
 class Search<T> extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
   Search({required this.adapter, this.tileBuilder, super.key});
@@ -17,14 +18,14 @@ class Search<T> extends StatelessWidget {
 
   /// Собрать [Search] по строковому ключу типа (для go_router `?type=`).
   /// См. [SearchTypeKey]. Возвращаемое значение — объект соответствующего типа
-  /// ([AnimalRead], [Applicant], [Curator], [ShelterDrug],
+  /// ([AnimalListItem], [Applicant], [Curator], [Drug],
   /// [Shelter]); вызывающая сторона кастует результат push.
   static Widget byTypeKey(String typeKey) {
     switch (typeKey) {
       case SearchTypeKey.animal:
-        return Search<AnimalRead>(
-          adapter: AnimalReadFetchAdapter(),
-          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<AnimalRead>(),
+        return Search<AnimalListItem>(
+          adapter: AnimalFetchAdapter(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<AnimalListItem>(),
         );
       case SearchTypeKey.applicant:
         return Search<Applicant>(
@@ -37,9 +38,9 @@ class Search<T> extends StatelessWidget {
           tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<Curator>(),
         );
       case SearchTypeKey.drug:
-        return Search<ShelterDrug>(
+        return Search<Drug>(
           adapter: DrugFetchAdapter(),
-          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<ShelterDrug>(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<Drug>(),
         );
       case SearchTypeKey.shelter:
         return Search<Shelter>(

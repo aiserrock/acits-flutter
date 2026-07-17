@@ -21,12 +21,12 @@ class PrescriptionForm extends StatelessWidget {
     final cubit = context.read<PrescriptionEditCubit>();
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      child: BlocSelector<PrescriptionEditCubit, PrescriptionEditState, PrescriptionShortMyTypeEnum?>(
+      child: BlocSelector<PrescriptionEditCubit, PrescriptionEditState, PrescriptionType?>(
         selector: (state) => state.type,
         builder: (_, type) {
           return Column(
             children: [
-              if (type == PrescriptionShortMyTypeEnum.courseOfTreatment) _buildPeriodSelector(cubit),
+              if (type == PrescriptionType.courseOfTreatment) _buildPeriodSelector(cubit),
               BlocSelector<PrescriptionEditCubit, PrescriptionEditState, TreatmentPeriod>(
                 selector: (state) => state.treatmentPeriod,
                 builder: (_, periodData) => _periodForm(context, cubit, periodData),

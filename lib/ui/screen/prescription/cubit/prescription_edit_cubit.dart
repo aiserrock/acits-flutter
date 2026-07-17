@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:animals/animals.dart' show Animal, AnimalListItem, AnimalRepository;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -13,10 +14,8 @@ import 'package:acits_flutter/ui/screen/prescription/dosage_bs.dart';
 import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
-import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 
 const _shiftFirtsStartDate = Duration(days: 30);
@@ -30,39 +29,39 @@ const _shiftLastStartDate = Duration(days: 120);
 /// bottom-sheet дозировки). UI-контроллеры ([TabController],
 /// [TextEditingController]) остаются во [StatefulWidget] экрана.
 class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
-  PrescriptionEditCubit({this.editPrescriptionId, this.editPrescription, AnimalRead? initAnimal, int? initAnimalId})
-    : _animalService = getIt<AnimalService>(),
-      _configService = getIt<ConfigService>(),
-      _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
-      _prescriptionService = getIt<PrescriptionService>(),
-      super(PrescriptionEditState(animal: initAnimal, type: _filteredTypes[_initialTabIndex(editPrescription)])) {
-    // Strangler-шов: миграция карточки животного на модуль animals больше не
-    // держит AnimalRead. Для preset-животного при создании назначения экран
-    // приходит с id — подгружаем AnimalRead по нему (форма назначений ещё на
-    // chopper). Убрать, когда назначения переедут на модуль.
+  PrescriptionEditCubit({
+    this.editPrescriptionId,
+    this.editPrescription,
+    PrescriptionAnimalRef? initAnimal,
+    int? initAnimalId,
+  }) : _configService = getIt<ConfigService>(),
+       _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
+       _prescriptionService = getIt<PrescriptionService>(),
+       _animalRepository = getIt<AnimalRepository>(),
+       super(PrescriptionEditState(animal: initAnimal, type: _filteredTypes[_initialTabIndex(editPrescription)])) {
+    // Strangler-шов: карточка животного мигрирована на модуль animals. Для
+    // preset-животного при создании назначения экран приходит с id —
+    // подгружаем сущность через репозиторий (не chopper).
     if (initAnimal == null && initAnimalId != null) _loadInitAnimal(initAnimalId);
   }
 
-  /// Типы без служебного `swaggerGeneratedUnknown` — в том же порядке, что и
+  /// Типы без служебного [PrescriptionType.unknown] — в том же порядке, что и
   /// табы на экране (см. [getTypes]).
-  static final List<PrescriptionShortMyTypeEnum> _filteredTypes = PrescriptionShortMyTypeEnum.values
-      .where((type) => type != PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown)
-      .toList();
+  static final List<PrescriptionType> _filteredTypes = PrescriptionType.selectable;
 
   /// Индекс начального типа в ОТФИЛЬТРОВАННОМ списке [_filteredTypes]
-  /// (совпадает с индексом таба). Раньше ошибочно использовался индекс в
-  /// нефильтрованном `PrescriptionShortMyTypeEnum.values`, из-за чего тип съезжал на один.
-  static int _initialTabIndex(PrescriptionModel? editPrescription) {
-    final myType = editPrescription?.myType;
-    if (myType == null) return 0;
-    return max(_filteredTypes.indexOf(myType), 0);
+  /// (совпадает с индексом таба).
+  static int _initialTabIndex(Prescription? editPrescription) {
+    final type = editPrescription?.type;
+    if (type == null) return 0;
+    return max(_filteredTypes.indexOf(type), 0);
   }
 
   final int? editPrescriptionId;
-  final PrescriptionModel? editPrescription;
+  final Prescription? editPrescription;
   final ConfigService _configService;
   final PrescriptionService _prescriptionService;
-  final AnimalService _animalService;
+  final AnimalRepository _animalRepository;
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey;
 
   final dateTimeFormKey = GlobalKey<FormState>();
@@ -76,7 +75,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   ///
   /// Возвращает сохранённое [Prescription] при успехе, либо `null` (ошибка
   /// показана через [state]) — виджет закрывает экран с результатом.
-  Future<PrescriptionModel?> submit({required String description, required BuildContext context}) async {
+  Future<Prescription?> submit({required String description, required BuildContext context}) async {
     if (_checkIsLoading) return null;
     Log.debug('PrescriptionEditCubit.submit isEdit=$isEdit');
 
@@ -88,16 +87,15 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return null;
     if (state.type.hasDrugs && !(drugFormKey.currentState?.validate() ?? false)) return null;
 
-    final data = PrescriptionModel(
+    final data = Prescription(
       id: editPrescription?.id ?? editPrescriptionId,
       animal: animalId,
-      myType: state.type ?? PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown,
+      type: state.type ?? PrescriptionType.unknown,
       description: description,
       drugs: state.drugs,
-      duration:
-          state.type == PrescriptionShortMyTypeEnum.courseOfTreatment && state.treatmentPeriod == TreatmentPeriod.weekly
-          ? DurationEnum.everyWeek
-          : DurationEnum.custom,
+      duration: state.type == PrescriptionType.courseOfTreatment && state.treatmentPeriod == TreatmentPeriod.weekly
+          ? PrescriptionDuration.everyWeek
+          : PrescriptionDuration.custom,
       executions: [
         ...state.daysList
             .map<Iterable<PrescriptionExecution>>(
@@ -112,7 +110,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       final result = isEdit
           ? await _prescriptionService.updatePrescription(data)
           : await _prescriptionService.createPrescription(data);
-      Log.info('PrescriptionEditCubit.submit ok: id=${result?.id}');
+      Log.info('PrescriptionEditCubit.submit ok: id=${result.id}');
       safeEmit(state.copyWith(screen: DataState.content(result)));
       return result;
     } catch (e, s) {
@@ -122,14 +120,10 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     }
   }
 
-  List<PrescriptionShortMyTypeEnum> getTypes() {
-    return PrescriptionShortMyTypeEnum.values
-        .where((type) => type != PrescriptionShortMyTypeEnum.swaggerGeneratedUnknown)
-        .toList();
-  }
+  List<PrescriptionType> getTypes() => _filteredTypes;
 
   List<String> getTabs() {
-    return getTypes().map<String>((type) => _configService.getMyTypeName(type) ?? '').toList();
+    return getTypes().map<String>((type) => _configService.getMyTypeName(type.wire) ?? '').toList();
   }
 
   /// Можно ли установить несколько дат для данного типа назначения.
@@ -147,12 +141,11 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   /// Подгружает preset-животное по id (создание назначения из карточки).
   Future<void> _loadInitAnimal(int animalId) async {
-    try {
-      final animal = await _animalService.fetchAnimalDetail(id: animalId);
-      safeEmit(state.copyWith(animal: animal));
-    } catch (e, s) {
-      Log.error('PrescriptionEditCubit._loadInitAnimal failed: id=$animalId', e, s);
-    }
+    final result = await _animalRepository.getById(animalId, shelterId: _prescriptionServiceShelterId);
+    result.fold(
+      (failure) => Log.error('PrescriptionEditCubit._loadInitAnimal failed: id=$animalId $failure'),
+      (animal) => safeEmit(state.copyWith(animal: _refFromAnimal(animal))),
+    );
   }
 
   /// Загружает назначение (и животное) в режиме редактирования.
@@ -162,7 +155,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   /// колбэк [onComment].
   Future<int?> setEditedState({ValueChanged<String>? onComment}) async {
     Log.debug('PrescriptionEditCubit.setEditedState id=$editPrescriptionId');
-    PrescriptionModel? prescription;
+    Prescription? prescription;
     final id = editPrescriptionId;
     if (editPrescription != null) {
       prescription = editPrescription;
@@ -178,16 +171,17 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     if (prescription == null) return null;
 
     final animalId = prescription.animal;
-    final AnimalRead animal;
-    try {
-      animal = await _animalService.fetchAnimalDetail(id: animalId);
-    } catch (e, s) {
-      Log.error('PrescriptionEditCubit.setEditedState failed', e, s);
-      safeEmit(state.copyWith(screen: DataState.error(e)));
+    final animalResult = await _animalRepository.getById(animalId, shelterId: _prescriptionServiceShelterId);
+    final ref = animalResult.fold((failure) {
+      Log.error('PrescriptionEditCubit.setEditedState failed: $failure');
+      return null;
+    }, _refFromAnimal);
+    if (ref == null) {
+      safeEmit(state.copyWith(screen: const DataState.error('animal load failed')));
       return null;
     }
 
-    var next = state.copyWith(screen: DataState.content(prescription), animal: animal);
+    var next = state.copyWith(screen: DataState.content(prescription), animal: ref);
 
     final drugs = prescription.drugs;
     if (drugs.isNotEmpty) {
@@ -207,15 +201,15 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     final comment = prescription.description;
     if (comment != null) onComment?.call(comment);
 
-    if (prescription.duration == DurationEnum.everyWeek &&
-        prescription.myType == PrescriptionShortMyTypeEnum.courseOfTreatment) {
+    if (prescription.duration == PrescriptionDuration.everyWeek &&
+        prescription.type == PrescriptionType.courseOfTreatment) {
       next = next.copyWith(treatmentPeriod: TreatmentPeriod.weekly);
     }
 
     safeEmit(next);
     Log.info('PrescriptionEditCubit.setEditedState ok: id=${prescription.id}');
 
-    final type = prescription.myType;
+    final type = prescription.type;
     final tabIndex = _filteredTypes.indexOf(type);
     return tabIndex >= 0 ? tabIndex : null;
   }
@@ -225,9 +219,13 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       _showError(LocaleKeys.prescriptionCantChangeAnimalMsg.tr());
       return;
     }
-    context.push<AnimalRead>(AppRoutes.searchPath(SearchTypeKey.animal)).then((animal) {
+    context.push<AnimalListItem>(AppRoutes.searchPath(SearchTypeKey.animal)).then((animal) {
       if (animal != null) {
-        safeEmit(state.copyWith(animal: animal));
+        safeEmit(
+          state.copyWith(
+            animal: PrescriptionAnimalRef(id: animal.id, name: animal.name, thumbUrl: animal.thumbUrl),
+          ),
+        );
       }
     });
   }
@@ -280,7 +278,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   }
 
   Future<void> pickDrug(BuildContext context) async {
-    final drug = await context.push<ShelterDrug>(AppRoutes.searchPath(SearchTypeKey.drug));
+    final drug = await context.push<Drug>(AppRoutes.searchPath(SearchTypeKey.drug));
     if (drug == null) return;
 
     final dosage = await showModalBottomSheet<double>(
@@ -297,12 +295,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       state.copyWith(
         drugs: List<PrescriptionDrug>.from(state.drugs)
           ..add(
-            PrescriptionDrug(
-              drugId: drug.drug.id ?? 0,
-              drugDosage: dosage,
-              drugName: drug.drug.name,
-              formOfDrug: drug.drug.formOfDrugName,
-            ),
+            PrescriptionDrug(drugId: drug.id, drugDosage: dosage, drugName: drug.name, formOfDrug: drug.formOfDrugName),
           ),
       ),
     );
@@ -326,6 +319,13 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     safeEmit(next);
   }
 
+  PrescriptionAnimalRef _refFromAnimal(Animal animal) =>
+      PrescriptionAnimalRef(id: animal.id, name: animal.name, thumbUrl: animal.thumb);
+
+  /// Текущий приют для скоупинга запросов животного. Берётся из сервиса
+  /// назначений, чтобы не тянуть AuthService напрямую в этот cubit.
+  int? get _prescriptionServiceShelterId => _prescriptionService.currentShelterId;
+
   void _showError(String msg) {
     _scaffoldMessengerKey.currentState
       ?..hideCurrentSnackBar()
@@ -343,17 +343,3 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 }
 
 enum TreatmentPeriod { daily, weekly }
-
-extension PrescriptionShortMyTypeEnumX on PrescriptionShortMyTypeEnum? {
-  /// Нужны ли лекарства для данного типа назначения
-  bool get hasDrugs =>
-      this == PrescriptionShortMyTypeEnum.courseOfTreatment ||
-      this == PrescriptionShortMyTypeEnum.removingStitches ||
-      this == PrescriptionShortMyTypeEnum.woundHealing;
-
-  /// Можно ли установить несколько дат для данного типа назначения
-  bool get allowMultiDate => this == PrescriptionShortMyTypeEnum.courseOfTreatment;
-
-  /// Можно ли установить время несколько время для данного типа назначения
-  bool get allowMultiTime => this == PrescriptionShortMyTypeEnum.courseOfTreatment;
-}

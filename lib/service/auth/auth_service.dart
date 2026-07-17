@@ -26,12 +26,7 @@ const _shelterListDefaultLenght = 25;
 /// приложения, чтобы не переписывать catch у вызывающих сторон.
 @singleton
 class AuthService extends ChangeNotifier {
-  AuthService(
-    this._authApi,
-    this._authRepository,
-    this._confirmRepository,
-    this._preferenceStorage,
-  );
+  AuthService(this._authApi, this._authRepository, this._confirmRepository, this._preferenceStorage);
 
   final AuthApiPort _authApi;
   final AuthRepository _authRepository;
@@ -60,8 +55,7 @@ class AuthService extends ChangeNotifier {
 
   int? get currentShelterId => _shelterRole?.currentShelterId;
 
-  Shelter? get currentShelter =>
-      _shelterList.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
+  Shelter? get currentShelter => _shelterList.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
   Future<TokenRefreshDto?> refreshToken({String? refresh}) async {
     final usedRefresh = refresh ?? _refresh;
@@ -163,9 +157,7 @@ class AuthService extends ChangeNotifier {
   Future<bool> tryRefreshLastAuth() async {
     final oldRefresh = _refresh ?? await _authRepository.refresh;
     if (oldRefresh == null) return false;
-    return await refreshToken(
-      refresh: oldRefresh,
-    ).then((value) => value != null).catchError((e) => false);
+    return await refreshToken(refresh: oldRefresh).then((value) => value != null).catchError((e) => false);
   }
 
   /// Список всех доступных приютов
@@ -175,11 +167,7 @@ class AuthService extends ChangeNotifier {
     String? searchRequest,
   }) async {
     try {
-      final result = await _authApi.allShelters(
-        limit: limit,
-        offset: offset,
-        search: searchRequest,
-      );
+      final result = await _authApi.allShelters(limit: limit, offset: offset, search: searchRequest);
       _shelterList = result.map(_toShelter).toList(growable: false);
       return _shelterList;
     } on DioException catch (e) {

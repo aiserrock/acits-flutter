@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cubit.dart';
 
 /// Сентинел для copyWith: отличает «параметр не передан» от явного сброса
@@ -32,13 +31,13 @@ class PrescriptionEditState extends Equatable {
 
   /// Состояние данных назначения (загрузка/контент/ошибка) для режима
   /// редактирования и отправки формы.
-  final DataState<PrescriptionModel?> screen;
+  final DataState<Prescription?> screen;
 
   /// Выбранное животное.
-  final AnimalRead? animal;
+  final PrescriptionAnimalRef? animal;
 
   /// Тип назначения (соответствует выбранной вкладке).
-  final PrescriptionShortMyTypeEnum? type;
+  final PrescriptionType? type;
 
   /// Тип периодичности назначения (ежедневно | еженедельно).
   final TreatmentPeriod treatmentPeriod;
@@ -56,7 +55,7 @@ class PrescriptionEditState extends Equatable {
   final bool loading;
 
   PrescriptionEditState copyWith({
-    DataState<PrescriptionModel?>? screen,
+    DataState<Prescription?>? screen,
     Object? animal = _unset,
     Object? type = _unset,
     TreatmentPeriod? treatmentPeriod,
@@ -69,8 +68,8 @@ class PrescriptionEditState extends Equatable {
       screen: screen ?? this.screen,
       // animal/type: _unset → оставить текущее; иначе заменить (в т.ч. на null,
       // чтобы можно было снять выбранное животное/тип).
-      animal: identical(animal, _unset) ? this.animal : animal as AnimalRead?,
-      type: identical(type, _unset) ? this.type : type as PrescriptionShortMyTypeEnum?,
+      animal: identical(animal, _unset) ? this.animal : animal as PrescriptionAnimalRef?,
+      type: identical(type, _unset) ? this.type : type as PrescriptionType?,
       treatmentPeriod: treatmentPeriod ?? this.treatmentPeriod,
       atTimeList: atTimeList ?? this.atTimeList,
       daysList: daysList ?? this.daysList,
