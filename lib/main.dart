@@ -1,23 +1,19 @@
+import 'package:acits_core/acits_core.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
+import 'package:acits_flutter/bootstrap/app_startup_tasks.dart';
 import 'package:acits_flutter/res/l10n.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/theme.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/ui/widget/cubit/theme_cubit.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
-import 'package:acits_flutter/util/app_version.dart';
-import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/util/phone_frame.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
@@ -36,30 +32,10 @@ Future<void> main() async {
   // SPA-fallback на сервере (nginx try_files; для GitHub Pages — 404.html).
   usePathUrlStrategy();
 
-  // prod-окружение: Firebase-проект acits-prod на android/ios/web (Analytics
-  // везде). dev-сборка (test/dev/main.dart) поднимает свой acits-dev. Crashlytics
-  // существует только на мобильных — на web плагина нет, обработчики под kIsWeb.
-  await Firebase.initializeApp(options: prodFirebaseOptions);
-  if (!kIsWeb) {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
-  }
-
-  // Независимые инициализации — параллельно (ускоряет старт, особенно «белый
-  // экран» на web): локализация, ориентация и версия приложения не зависят
-  // друг от друга. initDi идёт после — часть сервисов может опираться на них.
-  await Future.wait([
-    EasyLocalization.ensureInitialized(),
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
-    AppVersion.load(),
-  ]);
-  await initDi();
-
-  // Логи всех cubit'ов/bloc'ов идут в общий Talker (в prod-release он выключен).
-  Bloc.observer = createAppBlocObserver(getIt<Talker>());
+  // Стартовые фазы (Firebase → параллельная тройка локализация/ориентация/версия
+  // → DI → Bloc.observer) вынесены в упорядоченный пайплайн AppTask (acits_core).
+  // Порядок и параллелизм сохранены 1:1 — см. app_startup_tasks.dart.
+  await AppTaskRunner(appStartupTasks(firebaseOptions: prodFirebaseOptions)).run();
   Log.info('App start · flavor=prod');
 
   runApp(const AcitsApp());

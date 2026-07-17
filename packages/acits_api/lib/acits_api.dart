@@ -11,3 +11,8 @@ library;
 export 'adapters/swagger_parser/animal_api_adapter.dart';
 export 'ports/animal_api_port.dart';
 export 'ports/dto/dto.dart';
+
+// The generated retrofit [AnimalsClient] is exposed narrowly so the app's DI
+// can construct it over the shared acits_core Dio and hand it to
+// [AnimalApiAdapter]. Only the client type leaks — generated models stay private.
+export 'adapters/swagger_parser/generated/clients/animals_client.dart' show AnimalsClient;
