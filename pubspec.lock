@@ -1642,6 +1642,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.1"
+  swagger_parser:
+    dependency: transitive
+    description:
+      name: swagger_parser
+      sha256: "0784fc44664595f95461523e4b351673f22e8a89e582242e446b4c985a52a6ed"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.44.0"
   synchronized:
     dependency: transitive
     description:
