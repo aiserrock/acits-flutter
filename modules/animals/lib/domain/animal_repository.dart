@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:acits_core/acits_core.dart';
 
 import 'animal.dart';
@@ -45,6 +47,28 @@ abstract interface class AnimalRepository {
     String? search,
     int? limit,
     int? offset,
+    int? shelterId,
+  });
+
+  /// Обновляет только набор фотографий животного [id], сохраняя все прочие
+  /// поля. [newImages] — новые фото (base64), [retainImageIds] — id уже
+  /// загруженных, которые надо сохранить.
+  Future<Result<Failure, Animal>> updatePhotos(
+    int id, {
+    required List<AnimalImageInput> newImages,
+    required List<int> retainImageIds,
+    int? shelterId,
+  });
+
+  /// Возвращает сгенерированный PDF-документ животного [id] байтами.
+  /// [pdfType] — `history` / `history-editing` / `history-prescriptions`;
+  /// [from]/[to] задают окно отчёта.
+  Future<Result<Failure, Uint8List>> getAnimalPdf({
+    required int id,
+    required String pdfType,
+    required DateTime from,
+    required DateTime to,
+    String? tz,
     int? shelterId,
   });
 }

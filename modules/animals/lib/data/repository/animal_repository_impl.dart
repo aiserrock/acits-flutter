@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_core/acits_core.dart';
 import 'package:dio/dio.dart';
@@ -104,6 +106,40 @@ class AnimalRepositoryImpl implements AnimalRepository {
       );
       return dtos.map(_mapSpecies).toList(growable: false);
     });
+  }
+
+  @override
+  Future<Result<Failure, Animal>> updatePhotos(
+    int id, {
+    required List<AnimalImageInput> newImages,
+    required List<int> retainImageIds,
+    int? shelterId,
+  }) {
+    return _guard(() async {
+      final dto = await _remote.updatePhotos(
+        id,
+        newImages: newImages
+            .map((i) => AnimalImageWriteDto(name: i.name, image: i.image, isPrimary: i.isPrimary))
+            .toList(growable: false),
+        retainImageIds: retainImageIds,
+        shelterId: shelterId,
+      );
+      return AnimalMapper(dto).toEntity();
+    });
+  }
+
+  @override
+  Future<Result<Failure, Uint8List>> getAnimalPdf({
+    required int id,
+    required String pdfType,
+    required DateTime from,
+    required DateTime to,
+    String? tz,
+    int? shelterId,
+  }) {
+    return _guard(
+      () => _remote.getAnimalPdf(id: id, pdfType: pdfType, from: from, to: to, tz: tz, shelterId: shelterId),
+    );
   }
 
   AnimalWriteDto _buildWriteDto(

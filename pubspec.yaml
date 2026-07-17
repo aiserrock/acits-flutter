@@ -47,7 +47,6 @@ dependencies:
   app_links: ^7.0.0
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
-  chopper: ^8.5.1
   collection: ^1.19.0
   cupertino_icons: ^1.0.9
   dio: ^5.9.2
@@ -113,7 +112,6 @@ dev_dependencies:
 
   bloc_test: ^10.0.0
   build_runner: ^2.13.1
-  chopper_generator: ^8.6.1
   flutter_gen_runner: ^5.14.0
   flutter_lints: ^6.0.0
   http: ^1.6.0
@@ -123,7 +121,6 @@ dev_dependencies:
   melos: ^8.2.2
   mocktail: ^1.0.5
   patrol: ^4.6.1
-  swagger_dart_code_generator: ^4.1.1
 
 flutter:
   uses-material-design: true
@@ -180,7 +177,7 @@ melos:
   scripts:
     # ── Codegen ──────────────────────────────────────────────────────────────
     gen:
-      description: Кодогенерация (build_runner) — swagger, chopper, injectable, assets, json.
+      description: Кодогенерация (build_runner) — injectable, assets, json. API-клиент — отдельно (melos genapi).
       run: fvm dart run build_runner build --delete-conflicting-outputs
 
     gen:watch:

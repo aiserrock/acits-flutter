@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:acits_api/acits_api.dart';
 
 /// Тонкая обёртка над [AnimalApiPort]: только вызовы, никакой логики/маппинга.
@@ -34,4 +36,20 @@ class AnimalRemoteDataSource {
     offset: offset,
     shelterId: shelterId,
   );
+
+  Future<AnimalDto> updatePhotos(
+    int id, {
+    required List<AnimalImageWriteDto> newImages,
+    required List<int> retainImageIds,
+    int? shelterId,
+  }) => _port.updatePhotos(id, newImages: newImages, retainImageIds: retainImageIds, shelterId: shelterId);
+
+  Future<Uint8List> getAnimalPdf({
+    required int id,
+    required String pdfType,
+    required DateTime from,
+    required DateTime to,
+    String? tz,
+    int? shelterId,
+  }) => _port.getAnimalPdf(id: id, pdfType: pdfType, from: from, to: to, tz: tz, shelterId: shelterId);
 }

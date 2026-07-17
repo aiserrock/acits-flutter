@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_core/acits_core.dart';
 import 'package:animals/animals.dart';
@@ -227,6 +229,87 @@ void main() {
       expect(result.valueOrNull, isA<List<AnimalSpecies>>());
       expect(result.valueOrNull!.single.name, 'Кошки');
       expect(result.valueOrNull!.single, isNot(isA<SpeciesDto>()));
+    });
+  });
+
+  group('getAnimalPdf', () {
+    test('success → Ok(bytes) forwarding args to the port', () async {
+      final bytes = Uint8List.fromList([0x25, 0x50, 0x44, 0x46]);
+      final from = DateTime.utc(2024, 1, 1);
+      final to = DateTime.utc(2024, 1, 31);
+      when(
+        () => port.getAnimalPdf(
+          id: any(named: 'id'),
+          pdfType: any(named: 'pdfType'),
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+          tz: any(named: 'tz'),
+          shelterId: any(named: 'shelterId'),
+        ),
+      ).thenAnswer((_) async => bytes);
+
+      final result = await repo.getAnimalPdf(id: 501, pdfType: 'history', from: from, to: to, shelterId: 50);
+
+      expect(result.valueOrNull, bytes);
+      verify(
+        () => port.getAnimalPdf(id: 501, pdfType: 'history', from: from, to: to, tz: null, shelterId: 50),
+      ).called(1);
+    });
+
+    test('DioException 404 → Err(ServerFailure(404))', () async {
+      when(
+        () => port.getAnimalPdf(
+          id: any(named: 'id'),
+          pdfType: any(named: 'pdfType'),
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+          tz: any(named: 'tz'),
+          shelterId: any(named: 'shelterId'),
+        ),
+      ).thenThrow(_dio(DioExceptionType.badResponse, status: 404));
+
+      final result = await repo.getAnimalPdf(
+        id: 1,
+        pdfType: 'history',
+        from: DateTime.utc(2024),
+        to: DateTime.utc(2024),
+      );
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<ServerFailure>());
+    });
+  });
+
+  group('updatePhotos', () {
+    test('success → Ok(Animal) mapping image inputs to write DTOs', () async {
+      when(
+        () => port.updatePhotos(
+          any(),
+          newImages: any(named: 'newImages'),
+          retainImageIds: any(named: 'retainImageIds'),
+          shelterId: any(named: 'shelterId'),
+        ),
+      ).thenAnswer((_) async => fullAnimalDto());
+
+      final result = await repo.updatePhotos(
+        501,
+        newImages: const [AnimalImageInput(name: 'new.png', image: 'B64', isPrimary: false)],
+        retainImageIds: const [9001],
+        shelterId: 50,
+      );
+
+      expect(result.valueOrNull, isA<Animal>());
+      final captured = verify(
+        () => port.updatePhotos(
+          501,
+          newImages: captureAny(named: 'newImages'),
+          retainImageIds: [9001],
+          shelterId: 50,
+        ),
+      ).captured;
+      final sentImages = captured.single as List<AnimalImageWriteDto>;
+      expect(sentImages.single.name, 'new.png');
+      expect(sentImages.single.image, 'B64');
     });
   });
 }
