@@ -1,25 +1,3 @@
-import 'dart:math';
-
-import 'package:acits_flutter/res/lottie.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-
-const _sizePart = .75;
-
-class LoaderHolderWidget extends StatelessWidget {
-  const LoaderHolderWidget({this.assetPath, super.key});
-
-  final String? assetPath;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, cons) {
-        final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
-        return Center(
-          child: Lottie.asset(assetPath ?? LottieRes.loading, height: size, width: size),
-        );
-      },
-    );
-  }
-}
+// [LoaderHolderWidget] переехал в acits_ui_kit (дефолтная lottie резолвится из
+// бандла приложения). Ре-экспорт сохраняет существующие импорты.
+export 'package:acits_ui_kit/acits_ui_kit.dart' show LoaderHolderWidget;

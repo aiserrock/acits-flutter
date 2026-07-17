@@ -1,3 +1,4 @@
+import 'package:acits_ui_kit/acits_ui_kit.dart' as ui_kit;
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/gen/assets.gen.dart';
@@ -7,7 +8,8 @@ import 'package:acits_flutter/gen/assets.gen.dart';
 /// В логотипе жёстко зашиты два цвета (тёмно-синий текст `#101432` + акцент
 /// `#6776E0`), поэтому одноцветная перекраска через `colorFilter` не подходит —
 /// убила бы акцент. Вместо этого держим две версии SVG: обычную и `*_dark`
-/// (тёмная часть → светлая), и выбираем по [Brightness].
+/// (тёмная часть → светлая), и выбираем по [Brightness]. Выбор темы делает
+/// [ui_kit.AppLogo]; сами ассеты остаются в приложении.
 
 /// Полный логотип с текстом (для шапки логина).
 class AppLogoBar extends StatelessWidget {
@@ -18,9 +20,10 @@ class AppLogoBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final asset = isDark ? Assets.image.logoBarDark : Assets.image.logoBar;
-    return asset.svg(width: width, height: height);
+    return ui_kit.AppLogo(
+      light: Assets.image.logoBar.svg(width: width, height: height),
+      dark: Assets.image.logoBarDark.svg(width: width, height: height),
+    );
   }
 }
 
@@ -33,8 +36,9 @@ class AppLogoLeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final asset = isDark ? Assets.image.logoLeadingBarDark : Assets.image.logoLeadingBar;
-    return asset.svg(width: width, height: height);
+    return ui_kit.AppLogo(
+      light: Assets.image.logoLeadingBar.svg(width: width, height: height),
+      dark: Assets.image.logoLeadingBarDark.svg(width: width, height: height),
+    );
   }
 }
