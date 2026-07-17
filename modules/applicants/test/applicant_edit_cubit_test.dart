@@ -9,9 +9,7 @@ class MockStaffService extends Mock implements StaffService {}
 void main() {
   late MockStaffService service;
 
-  setUpAll(
-    () => registerFallbackValue(const Applicant(firstName: '', lastName: '', phoneNumber: '')),
-  );
+  setUpAll(() => registerFallbackValue(const Applicant(firstName: '', lastName: '', phoneNumber: '')));
 
   setUp(() => service = MockStaffService());
 
@@ -28,9 +26,7 @@ void main() {
     });
 
     test('submit creates applicant and returns the saved entity', () async {
-      when(
-        () => service.createApplicant(applicant: any(named: 'applicant')),
-      ).thenAnswer((_) async => draft);
+      when(() => service.createApplicant(applicant: any(named: 'applicant'))).thenAnswer((_) async => draft);
       final cubit = ApplicantEditCubit(service);
 
       final result = await cubit.submit(draft);
@@ -41,9 +37,7 @@ void main() {
     });
 
     test('submit failure emits error and returns null', () async {
-      when(
-        () => service.createApplicant(applicant: any(named: 'applicant')),
-      ).thenThrow(Exception('boom'));
+      when(() => service.createApplicant(applicant: any(named: 'applicant'))).thenThrow(Exception('boom'));
       final cubit = ApplicantEditCubit(service);
 
       final result = await cubit.submit(draft);

@@ -9,27 +9,12 @@ class MockStaffService extends Mock implements StaffService {}
 void main() {
   late MockStaffService service;
 
-  setUpAll(
-    () => registerFallbackValue(
-      const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''),
-    ),
-  );
+  setUpAll(() => registerFallbackValue(const Curator(firstName: '', lastName: '', phoneNumber: '', address: '')));
 
   setUp(() => service = MockStaffService());
 
-  const draft = Curator(
-    firstName: 'Ada',
-    lastName: 'Lovelace',
-    phoneNumber: '+7',
-    address: 'London',
-  );
-  const loaded = Curator(
-    id: 9,
-    firstName: 'Grace',
-    lastName: 'Hopper',
-    phoneNumber: '+1',
-    address: 'NY',
-  );
+  const draft = Curator(firstName: 'Ada', lastName: 'Lovelace', phoneNumber: '+7', address: 'London');
+  const loaded = Curator(id: 9, firstName: 'Grace', lastName: 'Hopper', phoneNumber: '+1', address: 'NY');
 
   group('create mode (no id)', () {
     test('initial state is empty content, no load performed', () {
@@ -41,9 +26,7 @@ void main() {
     });
 
     test('submit creates curator and returns the saved entity', () async {
-      when(
-        () => service.createCurator(curator: any(named: 'curator')),
-      ).thenAnswer((_) async => draft);
+      when(() => service.createCurator(curator: any(named: 'curator'))).thenAnswer((_) async => draft);
       final cubit = CuratorEditCubit(service);
 
       final result = await cubit.submit(draft);
@@ -54,9 +37,7 @@ void main() {
     });
 
     test('submit failure emits error and returns null', () async {
-      when(
-        () => service.createCurator(curator: any(named: 'curator')),
-      ).thenThrow(Exception('boom'));
+      when(() => service.createCurator(curator: any(named: 'curator'))).thenThrow(Exception('boom'));
       final cubit = CuratorEditCubit(service);
 
       final result = await cubit.submit(draft);

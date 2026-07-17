@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search.dart';
+import 'package:media/media.dart' show SearchTypeKey;
 import 'package:acits_flutter/util/splash/splash_control.dart';
 
 /// Реализация навигационного контракта модуля «Авторизация» через go_router и

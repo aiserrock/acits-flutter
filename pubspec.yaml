@@ -22,6 +22,7 @@ workspace:
   - modules/applicants
   - modules/prescriptions
   - modules/personal
+  - modules/media
 
 dependencies:
   flutter:
@@ -69,6 +70,14 @@ dependencies:
   # shell/drawer, the personal screen, and the animal-detail comments tab.
   personal:
     path: modules/personal
+
+  # Feature module: media (photo gallery + editor, PDF doc viewer) and the
+  # generic cross-feature search/picker. Depends on animals/applicants/
+  # prescriptions for the search paging adapters and photo upload; consumed by
+  # the app router, animal-edit applicant/curator pages, and the prescriptions/
+  # auth router services.
+  media:
+    path: modules/media
 
   app_links: ^7.0.0
   bloc: ^9.2.0
