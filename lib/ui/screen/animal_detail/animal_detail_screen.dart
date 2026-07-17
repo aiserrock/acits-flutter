@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:animals/animals.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
@@ -14,8 +15,8 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
-import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_detail_cubit.dart';
-import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_detail_state.dart';
+import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_prescriptions_cubit.dart';
+import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_prescriptions_state.dart';
 import 'package:acits_flutter/ui/widget/animal_prescription_card.dart';
 import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 import 'package:acits_flutter/ui/widget/default_app_bar.dart';
@@ -45,8 +46,17 @@ class AnimalDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AnimalDetailCubit(id: id),
+    // Животное грузится модульным cubit'ом (богатая сущность через репозиторий,
+    // Result — без DTO). Назначения — отдельная фича, ещё на chopper; её cubit
+    // остаётся в корне (strangler-граница). Комментарии — тоже chopper (свой
+    // виджет). См. animal_prescriptions_cubit.dart.
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => AnimalDetailCubit(getIt<AnimalRepository>(), getIt<CurrentShelterProvider>(), id: id),
+        ),
+        BlocProvider(create: (_) => AnimalPrescriptionsCubit(animalId: id)),
+      ],
       child: _AnimalDetailView(id: id),
     );
   }
@@ -81,6 +91,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
   final _titleOpacity = ValueNotifier<double>(.0);
 
   AnimalDetailCubit get _cubit => context.read<AnimalDetailCubit>();
+  AnimalPrescriptionsCubit get _prescriptionsCubit => context.read<AnimalPrescriptionsCubit>();
 
   @override
   void didChangeDependencies() {
@@ -126,11 +137,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
   }
 
   Widget _buildBody() {
-    return BlocBuilder<AnimalDetailCubit, AnimalDetailState>(
-      buildWhen: (prev, next) => prev.animal != next.animal,
+    return BlocBuilder<AnimalDetailCubit, DataState<Animal>>(
       builder: (context, state) {
-        return DataStateBuilder<AnimalRead>(
-          state: state.animal,
+        return DataStateBuilder<Animal>(
+          state: state,
           builder: _buildContent,
           errorBuilder: (_, error) => _AnimalDetailStub(error: error, onRefresh: _cubit.loadAnimal),
           loader: (_) => _AnimalDetailStub(onRefresh: _cubit.loadAnimal),
@@ -139,7 +149,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildContent(BuildContext context, AnimalRead animal) {
+  Widget _buildContent(BuildContext context, Animal animal) {
     return RefreshIndicator(
       onRefresh: _cubit.loadAnimal,
       child: CustomScrollView(
@@ -150,7 +160,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  SliverAppBar _buildHeader(BuildContext context, AnimalRead animal) {
+  SliverAppBar _buildHeader(BuildContext context, Animal animal) {
     return SliverAppBar(
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
@@ -171,7 +181,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildHeaderTitle(BuildContext context, AnimalRead animal) {
+  Widget _buildHeaderTitle(BuildContext context, Animal animal) {
     // На web URL картинки должен идти через CORS-прокси (как большое фото в
     // пейджере). Без обёртки браузер блокирует запрос → в кружке заглушка.
     final avatar = UrlCorsProxy.add(animal.thumb);
@@ -204,7 +214,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        animal.name ?? '',
+                        animal.name,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 24.0),
                         maxLines: 3,
                       ),
@@ -242,7 +252,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildHeaderImagePager(BuildContext context, AnimalRead animal) {
+  Widget _buildHeaderImagePager(BuildContext context, Animal animal) {
     return Stack(
       children: [
         if (animal.images.isEmpty)
@@ -267,7 +277,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                     return Stack(
                       children: [
                         Positioned.fill(
-                          child: ShimmerNetworkImage(url: UrlCorsProxy.add(image.image.medium), fit: BoxFit.cover),
+                          child: ShimmerNetworkImage(url: UrlCorsProxy.add(image.medium), fit: BoxFit.cover),
                         ),
                         Positioned.fill(
                           child: Material(
@@ -291,7 +301,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildHeaderExpandedTitle(BuildContext context, AnimalRead animal) {
+  Widget _buildHeaderExpandedTitle(BuildContext context, Animal animal) {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 116.0),
       child: Align(
@@ -307,7 +317,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
-                animal.name ?? '',
+                animal.name,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyLarge?.copyWith(fontSize: 24.0, color: Theme.of(context).colorScheme.onPrimary),
@@ -334,7 +344,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildHeaderImageIndicator(BuildContext context, AnimalRead animal) {
+  Widget _buildHeaderImageIndicator(BuildContext context, Animal animal) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -377,7 +387,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  Widget _buildPage(BuildContext context, int count, AnimalRead animal) {
+  Widget _buildPage(BuildContext context, int count, Animal animal) {
     switch (_currentTab) {
       case 0:
         return _buildCommonInfoPage(context, animal);
@@ -389,7 +399,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
         return _buildApplicantPage(context, animal);
       default:
         return CommentListWidget(
-          animal.id!,
+          animal.id,
           scrollController: _scrollController,
           onCreateCommentStream: _onCreateCommentStream,
         );
@@ -449,13 +459,10 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     );
   }
 
-  void _onPhotoPressed(BuildContext context, AnimalRead animal) {
-    final id = animal.id;
-    if (id != null) {
-      context.push(AppRoutes.photoGalleryPath(animal.id!)).then((value) {
-        if (value is bool && value) _cubit.loadAnimal();
-      });
-    }
+  void _onPhotoPressed(BuildContext context, Animal animal) {
+    context.push(AppRoutes.photoGalleryPath(animal.id)).then((value) {
+      if (value is bool && value) _cubit.loadAnimal();
+    });
   }
 
   void _onScroll() {
@@ -476,16 +483,14 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       });
     }
     if (_currentTab == 1) {
-      context
-          .push<Prescription>(
-            AppRoutes.prescriptionEdit,
-            extra: <String, Object?>{'prescription': null, 'animal': _cubit.animalOrNull},
-          )
-          .then((value) {
-            if (value != null) {
-              _cubit.reloadPrescriptions();
-            }
-          });
+      // extra→URL: preset-животное передаётся id-ом в query (сериализуемо), а не
+      // объектом AnimalRead в extra. Экран назначений подгрузит AnimalRead сам
+      // (см. PrescriptionEditCubit.initAnimalId) — chopper-фича не тронута.
+      context.push<Prescription>(AppRoutes.prescriptionEditForAnimalPath(widget.id)).then((value) {
+        if (value != null) {
+          _prescriptionsCubit.reloadPrescriptions();
+        }
+      });
     }
   }
 }

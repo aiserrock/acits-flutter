@@ -2,9 +2,7 @@ part of 'animal_detail_screen.dart';
 
 extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
   Widget _buildPrescriptionsPage() {
-    return BlocBuilder<AnimalDetailCubit, AnimalDetailState>(
-      buildWhen: (prev, next) =>
-          prev.prescriptions != next.prescriptions || prev.prescriptionActive != next.prescriptionActive,
+    return BlocBuilder<AnimalPrescriptionsCubit, AnimalPrescriptionsState>(
       builder: (context, state) {
         return SliverList(
           delegate: SliverChildListDelegate([
@@ -23,7 +21,7 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
                   ),
                   Switch(
                     value: state.prescriptionActive,
-                    onChanged: _cubit.togglePrescriptionActive,
+                    onChanged: _prescriptionsCubit.togglePrescriptionActive,
                     activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],
@@ -32,7 +30,7 @@ extension _AnimalPrescriptionsPage on _AnimalDetailViewState {
             if (state.prescriptions.isContent)
               ...?state.prescriptions.valueOrNull?.map<Widget>((item) => AnimalPrescriptionCard(prescription: item)),
             if (state.prescriptions.isLoading) const LoaderHolderWidget(),
-            if (state.prescriptions.hasError) ErrorHolderWidget(onPressed: _cubit.reloadPrescriptions),
+            if (state.prescriptions.hasError) ErrorHolderWidget(onPressed: _prescriptionsCubit.reloadPrescriptions),
             const SizedBox(height: 64.0),
           ]),
         );

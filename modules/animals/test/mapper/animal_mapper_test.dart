@@ -15,7 +15,10 @@ void main() {
       expect(animal.status, AnimalStatus.inTheShelter);
       expect(animal.speciesId, 12);
       expect(animal.speciesName, 'Кошка домашняя');
+      expect(animal.speciesParentName, 'Кошки');
+      expect(animal.speciesCategoryName, 'Млекопитающие');
       expect(animal.chippingCode, '643098100012345');
+      expect(animal.dateOfChipping, DateTime.utc(2024, 2, 1, 9));
       expect(animal.height, '30.5');
       expect(animal.weight, '4.20');
       expect(animal.placeOfCatch, 'ул. Пушкина, д. 10');

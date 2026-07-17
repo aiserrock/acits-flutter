@@ -30,12 +30,18 @@ const _shiftLastStartDate = Duration(days: 120);
 /// bottom-sheet дозировки). UI-контроллеры ([TabController],
 /// [TextEditingController]) остаются во [StatefulWidget] экрана.
 class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
-  PrescriptionEditCubit({this.editPrescriptionId, this.editPrescription, AnimalRead? initAnimal})
+  PrescriptionEditCubit({this.editPrescriptionId, this.editPrescription, AnimalRead? initAnimal, int? initAnimalId})
     : _animalService = getIt<AnimalService>(),
       _configService = getIt<ConfigService>(),
       _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
       _prescriptionService = getIt<PrescriptionService>(),
-      super(PrescriptionEditState(animal: initAnimal, type: _filteredTypes[_initialTabIndex(editPrescription)]));
+      super(PrescriptionEditState(animal: initAnimal, type: _filteredTypes[_initialTabIndex(editPrescription)])) {
+    // Strangler-шов: миграция карточки животного на модуль animals больше не
+    // держит AnimalRead. Для preset-животного при создании назначения экран
+    // приходит с id — подгружаем AnimalRead по нему (форма назначений ещё на
+    // chopper). Убрать, когда назначения переедут на модуль.
+    if (initAnimal == null && initAnimalId != null) _loadInitAnimal(initAnimalId);
+  }
 
   /// Типы без служебного `swaggerGeneratedUnknown` — в том же порядке, что и
   /// табы на экране (см. [getTypes]).
@@ -137,6 +143,16 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
       _showError(LocaleKeys.prescriptionWaitLoadingMsg.tr());
     }
     return state.loading;
+  }
+
+  /// Подгружает preset-животное по id (создание назначения из карточки).
+  Future<void> _loadInitAnimal(int animalId) async {
+    try {
+      final animal = await _animalService.fetchAnimalDetail(id: animalId);
+      safeEmit(state.copyWith(animal: animal));
+    } catch (e, s) {
+      Log.error('PrescriptionEditCubit._loadInitAnimal failed: id=$animalId', e, s);
+    }
   }
 
   /// Загружает назначение (и животное) в режиме редактирования.

@@ -63,6 +63,9 @@ abstract final class AppRoutes {
   /// Построить путь к экрану добавления/редактирования комментария.
   static String commentEditPath(int animalId) => '/comment-edit/$animalId';
 
+  /// Построить путь к созданию назначения для preset-животного [animalId].
+  static String prescriptionEditForAnimalPath(int animalId) => '/prescription-edit?animalId=$animalId';
+
   /// Построить путь к generic-поиску по строковому ключу типа (см. [SearchTypeKey]).
   static String searchPath(String typeKey) => '/search?type=$typeKey';
 }
@@ -123,6 +126,7 @@ GoRouter createAppRouter() {
           final extra = state.extra as Map<String, Object?>?;
           return PrescriptionEditScreen(
             editPrescriptionId: int.tryParse(state.uri.queryParameters['id'] ?? ''),
+            animalId: int.tryParse(state.uri.queryParameters['animalId'] ?? ''),
             editPrescription: extra?['prescription'] as PrescriptionModel?,
             animal: extra?['animal'] as AnimalRead?,
           );
