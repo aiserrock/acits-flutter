@@ -35,6 +35,22 @@ abstract class AcitsApiRegister {
     return dio;
   }
 
+  /// Гостевой Dio для нового клиента: БЕЗ auth-интерцептора (логин/регистрация/
+  /// список всех приютов). Зеркалит chopper `@Named('guest')`. baseUrl — из [Env].
+  @prod
+  @Named('acitsApiGuest')
+  Dio createAcitsApiGuestDio(Env env) {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: env.apiUrl,
+        connectTimeout: const Duration(milliseconds: 30000),
+        receiveTimeout: const Duration(milliseconds: 30000),
+        sendTimeout: const Duration(milliseconds: 30000),
+      ),
+    );
+    return dio;
+  }
+
   /// Сгенерированный retrofit-клиент поверх нового Dio.
   @prod
   AnimalsClient animalsClient(@Named('acitsApi') Dio dio) => AnimalsClient(dio);
@@ -44,4 +60,38 @@ abstract class AcitsApiRegister {
   /// [AnimalApiPort], а не конкретный адаптер.
   @prod
   AnimalApiPort animalApiPort(AnimalsClient client) => AnimalApiAdapter(client);
+
+  // ── auth slice ─────────────────────────────────────────────────────────────
+
+  @prod
+  @Named('acitsApiTokenAuthed')
+  TokenClient tokenClientAuthed(@Named('acitsApi') Dio dio) => TokenClient(dio);
+
+  @prod
+  @Named('acitsApiTokenGuest')
+  TokenClient tokenClientGuest(@Named('acitsApiGuest') Dio dio) => TokenClient(dio);
+
+  @prod
+  UsersClient usersClient(@Named('acitsApi') Dio dio) => UsersClient(dio);
+
+  @prod
+  SheltersClient sheltersClient(@Named('acitsApiGuest') Dio dio) => SheltersClient(dio);
+
+  @prod
+  UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) => UsersRegistrationClient(dio);
+
+  @prod
+  AuthApiPort authApiPort(
+    @Named('acitsApiTokenGuest') TokenClient guestTokenClient,
+    @Named('acitsApiTokenAuthed') TokenClient authedTokenClient,
+    UsersClient usersClient,
+    SheltersClient guestSheltersClient,
+    UsersRegistrationClient guestRegistrationClient,
+  ) => AuthApiAdapter(
+    guestTokenClient: guestTokenClient,
+    authedTokenClient: authedTokenClient,
+    usersClient: usersClient,
+    guestSheltersClient: guestSheltersClient,
+    guestRegistrationClient: guestRegistrationClient,
+  );
 }

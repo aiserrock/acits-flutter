@@ -1,8 +1,9 @@
+import 'package:acits_domain/acits_domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:acits_flutter/util/bloc_ext.dart';
 
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/domain/registration_input.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/registration/cubit/registration_state.dart';
 import 'package:acits_flutter/util/logger/log.dart';
@@ -36,7 +37,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   }
 
   /// Сохранить выбранный пользователем приют.
-  void setShelter(ShelterShortSerializers shelter) {
+  void setShelter(Shelter shelter) {
     safeEmit(state.copyWith(shelter: shelter));
   }
 
@@ -44,14 +45,14 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   ///
   /// Возвращает `true` при успехе, `false` — при ошибке (виджет показывает
   /// snackbar). Бросает исключение наружу для показа сообщения.
-  Future<bool> submitAdmin(UserShelterAdminSerializers admin) async {
+  Future<bool> submitAdmin(AdminRegistrationInput admin) async {
     if (state.submitting) return false;
     Log.debug('RegistrationCubit.submitAdmin email=${admin.email}');
     safeEmit(state.copyWith(submitting: true));
     try {
       final result = await _authService.registrationAdmin(admin);
       Log.info('RegistrationCubit.submitAdmin ok: email=${admin.email}');
-      return result is UserShelterAdminSerializers;
+      return result;
     } catch (e, s) {
       Log.error('RegistrationCubit.submitAdmin failed', e, s);
       rethrow;
@@ -64,14 +65,14 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   ///
   /// Возвращает `true` при успехе, `false` — при ошибке (виджет показывает
   /// snackbar). Бросает исключение наружу для показа сообщения.
-  Future<bool> submitCustomer(UserShelterWorkerSerializers customer) async {
+  Future<bool> submitCustomer(WorkerRegistrationInput customer) async {
     if (state.submitting) return false;
     Log.debug('RegistrationCubit.submitCustomer email=${customer.email}');
     safeEmit(state.copyWith(submitting: true));
     try {
       final result = await _authService.registrationCustomer(customer);
       Log.info('RegistrationCubit.submitCustomer ok: email=${customer.email}');
-      return result is UserShelterWorkerSerializers;
+      return result;
     } catch (e, s) {
       Log.error('RegistrationCubit.submitCustomer failed', e, s);
       rethrow;

@@ -1,4 +1,4 @@
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_domain/acits_domain.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:equatable/equatable.dart';
 
@@ -14,15 +14,15 @@ class PickShelterState extends Equatable {
   static const Object _idle = Object();
 
   /// Список приютов, доступных пользователю.
-  final PaginatedShelterShortSerializersList? shelters;
+  final List<Shelter>? shelters;
 
   /// Состояние применения выбранного приюта.
   final DataState<Object> status;
 
   /// Приюты, доступные для выбора (пустой список, если данные не загружены).
-  List<ShelterShortSerializers> get results => shelters?.results ?? const [];
+  List<Shelter> get results => shelters ?? const [];
 
-  PickShelterState copyWith({PaginatedShelterShortSerializersList? shelters, DataState<Object>? status}) {
+  PickShelterState copyWith({List<Shelter>? shelters, DataState<Object>? status}) {
     return PickShelterState(shelters: shelters ?? this.shelters, status: status ?? this.status);
   }
 

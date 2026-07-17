@@ -1,3 +1,4 @@
+import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/drug_item.dart';
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/shelter_item.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class SearchAdapterTypeFactoryDelegate {
         return CuratorFetchAdapter();
       case const (ShelterDrug):
         return DrugFetchAdapter();
-      case const (ShelterShortSerializers):
+      case const (Shelter):
         return ShelterFetchAdapter();
       default:
         throw UnimplementedError();
@@ -50,7 +51,7 @@ class SearchAdapterTypeFactoryDelegate {
         return CuratorListItem.builder as Widget Function(T);
       case const (ShelterDrug):
         return DrugListItem.builder as Widget Function(T);
-      case const (ShelterShortSerializers):
+      case const (Shelter):
         return ShelterListItem.builder as Widget Function(T);
       default:
         throw UnimplementedError();
@@ -106,13 +107,11 @@ class DrugFetchAdapter extends PagingFetchAdapter<ShelterDrug> {
   }
 }
 
-class ShelterFetchAdapter extends PagingFetchAdapter<ShelterShortSerializers> {
+class ShelterFetchAdapter extends PagingFetchAdapter<Shelter> {
   ShelterFetchAdapter() : super(getIt<AuthService>().getAllShelterList);
 
   @override
-  Future<List<ShelterShortSerializers>> fetch({required int limit, int offset = 0, String? search}) async {
-    return fetcher
-        .call(limit: limit, offset: offset, searchRequest: search)
-        .then((value) => value?.results ?? <ShelterShortSerializers>[]);
+  Future<List<Shelter>> fetch({required int limit, int offset = 0, String? search}) async {
+    return fetcher.call(limit: limit, offset: offset, searchRequest: search).then((value) => value ?? <Shelter>[]);
   }
 }

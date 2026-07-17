@@ -20,25 +20,22 @@ ApplicantDto _$ApplicantDtoFromJson(Map<String, dynamic> json) => ApplicantDto(
   email: json['email'] as String?,
   contactDetails: json['contact_details'] as String?,
   animalId: (json['animal_id'] as num?)?.toInt(),
-  applicantFiles: (json['applicant_files'] as List<dynamic>?)
-      ?.map((e) => e as Map<String, dynamic>)
-      .toList(),
+  applicantFiles: (json['applicant_files'] as List<dynamic>?)?.map((e) => e as Map<String, dynamic>).toList(),
 );
 
-Map<String, dynamic> _$ApplicantDtoToJson(ApplicantDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'url': instance.url,
-      'shelter': instance.shelter,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-      'email': instance.email,
-      'phone_number': instance.phoneNumber,
-      'contact_details': instance.contactDetails,
-      'created_by': instance.createdBy,
-      'updated_by': instance.updatedBy,
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
-      'animal_id': instance.animalId,
-      'applicant_files': instance.applicantFiles,
-    };
+Map<String, dynamic> _$ApplicantDtoToJson(ApplicantDto instance) => <String, dynamic>{
+  'id': instance.id,
+  'url': instance.url,
+  'shelter': instance.shelter,
+  'first_name': instance.firstName,
+  'last_name': instance.lastName,
+  'email': instance.email,
+  'phone_number': instance.phoneNumber,
+  'contact_details': instance.contactDetails,
+  'created_by': instance.createdBy,
+  'updated_by': instance.updatedBy,
+  'created_at': instance.createdAt.toIso8601String(),
+  'updated_at': instance.updatedAt.toIso8601String(),
+  'animal_id': instance.animalId,
+  'applicant_files': instance.applicantFiles,
+};

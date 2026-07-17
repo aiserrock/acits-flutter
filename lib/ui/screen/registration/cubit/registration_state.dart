@@ -1,4 +1,4 @@
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_domain/acits_domain.dart';
 import 'package:equatable/equatable.dart';
 
 /// Роль пользователя при регистрации кастомера
@@ -33,14 +33,14 @@ class RegistrationState extends Equatable {
   final CustomerRole role;
 
   /// Выбранный пользователем приют.
-  final ShelterShortSerializers? shelter;
+  final Shelter? shelter;
 
   RegistrationState copyWith({
     int? tabIndex,
     bool? agreedToPolicy,
     bool? submitting,
     CustomerRole? role,
-    ShelterShortSerializers? shelter,
+    Shelter? shelter,
   }) {
     return RegistrationState(
       tabIndex: tabIndex ?? this.tabIndex,

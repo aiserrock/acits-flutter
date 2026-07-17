@@ -15,12 +15,11 @@ SpeciesDto _$SpeciesDtoFromJson(Map<String, dynamic> json) => SpeciesDto(
   categoryName: json['category_name'] as String?,
 );
 
-Map<String, dynamic> _$SpeciesDtoToJson(SpeciesDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'level': instance.level,
-      'parent_id': instance.parentId,
-      'parent_name': instance.parentName,
-      'category_name': instance.categoryName,
-    };
+Map<String, dynamic> _$SpeciesDtoToJson(SpeciesDto instance) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'level': instance.level,
+  'parent_id': instance.parentId,
+  'parent_name': instance.parentName,
+  'category_name': instance.categoryName,
+};
