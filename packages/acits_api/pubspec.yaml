@@ -1,0 +1,26 @@
+name: acits_api
+description: API layer for ACITS — ports & our freezed DTOs (stable), swagger_parser adapter underneath (replaceable). The ONLY place DTOs and generated code exist.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.9.2
+  json_annotation: ^4.11.0
+  acits_core:
+    path: ../acits_core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.13.1
+  json_serializable: ^6.13.1
+  swagger_parser: ^1.44.0

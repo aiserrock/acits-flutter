@@ -9,6 +9,14 @@ environment:
   sdk: ">=3.9.0 <4.0.0"
   flutter: 3.44.0
 
+# Dart pub workspace — root + foundation packages share one resolution.
+# Feature modules (modules/*) are added lazily as they are migrated.
+workspace:
+  - packages/acits_core
+  - packages/acits_domain
+  - packages/acits_api
+  - packages/acits_ui_kit
+
 dependencies:
   flutter:
     sdk: flutter
@@ -164,6 +172,19 @@ melos:
       description: Очистить кэш build_runner перед rebuild (после правок swagger-DTO).
       run: fvm dart run build_runner clean
 
+    genapi:
+      description: Генерация API-клиента (swagger_parser) в acits_api — изолированно, вне глобального build_runner приложения.
+      run: |
+        cd packages/acits_api
+        fvm dart run swagger_parser
+        fvm dart run build_runner build --delete-conflicting-outputs
+
+    genone:
+      description: build_runner (freezed/injectable/json) для одного пакета. Использование — MELOS_GENONE_PKG=packages/acits_core melos run genone.
+      run: |
+        cd ${MELOS_GENONE_PKG:-.}
+        fvm dart run build_runner build --delete-conflicting-outputs
+
     l10n:
       description: Сгенерировать LocaleKeys из assets/translations (easy_localization).
       run: >
@@ -235,6 +256,17 @@ melos:
         - format:check
         - analyze
         - test
+
+    check-all:
+      description: Гейт качества — формат-чек, строгий анализ (--fatal-infos --fatal-warnings), тесты.
+      steps:
+        - format:check
+        - analyze:strict
+        - test
+
+    analyze:strict:
+      description: Строгий анализ — падает на infos и warnings (CI-гейт).
+      run: fvm flutter analyze --fatal-infos --fatal-warnings
 
     fix:
       description: Приборка перед коммитом — кодоген, l10n, формат.
