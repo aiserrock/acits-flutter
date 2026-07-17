@@ -2,21 +2,29 @@
 
 import 'dart:math';
 
-import 'package:animals/animals.dart' show Animal, AnimalListItem, AnimalRepository;
+import 'package:acits_core/acits_core.dart';
+import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
-import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search.dart';
-import 'package:acits_flutter/ui/screen/prescription/dosage_bs.dart';
-import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/service/prescription/prescription_service.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import '../../../data/prescription_service.dart';
+import '../../../domain/prescription.dart';
+import '../../../domain/prescription_animal_loader.dart';
+import '../../../domain/prescription_animal_ref.dart';
+import '../../../domain/prescription_drug.dart';
+import '../../../domain/prescription_execution.dart';
+import '../../../domain/prescription_type.dart';
+import '../../../domain/prescription_type_labels.dart';
+import '../../../domain/router/prescriptions_router_service.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/datetime.dart';
+import '../../../util/log.dart';
+import '../../lottie_res.dart';
+import '../../prescriptions_l10n_keys.dart';
+import '../dosage_bs.dart';
+import 'prescription_edit_state.dart';
 
 const _shiftFirtsStartDate = Duration(days: 30);
 const _shiftLastStartDate = Duration(days: 120);
@@ -28,20 +36,25 @@ const _shiftLastStartDate = Duration(days: 120);
 /// лекарств, выбор животного/лекарства через поиск, пикеры дат/времени,
 /// bottom-sheet дозировки). UI-контроллеры ([TabController],
 /// [TextEditingController]) остаются во [StatefulWidget] экрана.
+///
+/// Зависимости инъектятся через конструктор: сервис назначений, порт навигации
+/// (поиск животного/препарата), порт загрузки животного (мостится к
+/// `AnimalRepository`), порт имён типов и ключ ScaffoldMessenger приложения.
 class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
-  PrescriptionEditCubit({
+  PrescriptionEditCubit(
+    this._prescriptionService,
+    this._router,
+    this._animalLoader,
+    this._typeLabels,
+    this._scaffoldMessengerKey, {
     this.editPrescriptionId,
     this.editPrescription,
     PrescriptionAnimalRef? initAnimal,
     int? initAnimalId,
-  }) : _configService = getIt<ConfigService>(),
-       _scaffoldMessengerKey = getIt<GlobalKey<ScaffoldMessengerState>>(),
-       _prescriptionService = getIt<PrescriptionService>(),
-       _animalRepository = getIt<AnimalRepository>(),
-       super(PrescriptionEditState(animal: initAnimal, type: _filteredTypes[_initialTabIndex(editPrescription)])) {
+  }) : super(PrescriptionEditState(animal: initAnimal, type: _filteredTypes[_initialTabIndex(editPrescription)])) {
     // Strangler-шов: карточка животного мигрирована на модуль animals. Для
     // preset-животного при создании назначения экран приходит с id —
-    // подгружаем сущность через репозиторий (не chopper).
+    // подгружаем сущность через порт загрузки (не chopper).
     if (initAnimal == null && initAnimalId != null) _loadInitAnimal(initAnimalId);
   }
 
@@ -59,9 +72,10 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   final int? editPrescriptionId;
   final Prescription? editPrescription;
-  final ConfigService _configService;
   final PrescriptionService _prescriptionService;
-  final AnimalRepository _animalRepository;
+  final PrescriptionsRouterService _router;
+  final PrescriptionAnimalLoader _animalLoader;
+  final PrescriptionTypeLabels _typeLabels;
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey;
 
   final dateTimeFormKey = GlobalKey<FormState>();
@@ -81,7 +95,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
     final animalId = state.animal?.id;
     if (animalId == null) {
-      _showError(LocaleKeys.prescriptionPickAnimalMsg.tr());
+      _showError(PrescriptionsL10nKeys.prescriptionPickAnimalMsg.tr());
       return null;
     }
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return null;
@@ -123,7 +137,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   List<PrescriptionType> getTypes() => _filteredTypes;
 
   List<String> getTabs() {
-    return getTypes().map<String>((type) => _configService.getMyTypeName(type.wire) ?? '').toList();
+    return getTypes().map<String>((type) => _typeLabels.nameForWire(type.wire) ?? '').toList();
   }
 
   /// Можно ли установить несколько дат для данного типа назначения.
@@ -134,18 +148,19 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   bool get _checkIsLoading {
     if (state.loading) {
-      _showError(LocaleKeys.prescriptionWaitLoadingMsg.tr());
+      _showError(PrescriptionsL10nKeys.prescriptionWaitLoadingMsg.tr());
     }
     return state.loading;
   }
 
   /// Подгружает preset-животное по id (создание назначения из карточки).
   Future<void> _loadInitAnimal(int animalId) async {
-    final result = await _animalRepository.getById(animalId, shelterId: _prescriptionServiceShelterId);
-    result.fold(
-      (failure) => Log.error('PrescriptionEditCubit._loadInitAnimal failed: id=$animalId $failure'),
-      (animal) => safeEmit(state.copyWith(animal: _refFromAnimal(animal))),
-    );
+    final ref = await _animalLoader.loadById(animalId);
+    if (ref == null) {
+      Log.error('PrescriptionEditCubit._loadInitAnimal failed: id=$animalId');
+      return;
+    }
+    safeEmit(state.copyWith(animal: ref));
   }
 
   /// Загружает назначение (и животное) в режиме редактирования.
@@ -171,12 +186,9 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     if (prescription == null) return null;
 
     final animalId = prescription.animal;
-    final animalResult = await _animalRepository.getById(animalId, shelterId: _prescriptionServiceShelterId);
-    final ref = animalResult.fold((failure) {
-      Log.error('PrescriptionEditCubit.setEditedState failed: $failure');
-      return null;
-    }, _refFromAnimal);
+    final ref = await _animalLoader.loadById(animalId);
     if (ref == null) {
+      Log.error('PrescriptionEditCubit.setEditedState failed: animal load failed id=$animalId');
       safeEmit(state.copyWith(screen: const DataState.error('animal load failed')));
       return null;
     }
@@ -216,16 +228,12 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   void onAnimalPressed(BuildContext context) {
     if (isEdit) {
-      _showError(LocaleKeys.prescriptionCantChangeAnimalMsg.tr());
+      _showError(PrescriptionsL10nKeys.prescriptionCantChangeAnimalMsg.tr());
       return;
     }
-    context.push<AnimalListItem>(AppRoutes.searchPath(SearchTypeKey.animal)).then((animal) {
+    _router.pickAnimal().then((animal) {
       if (animal != null) {
-        safeEmit(
-          state.copyWith(
-            animal: PrescriptionAnimalRef(id: animal.id, name: animal.name, thumbUrl: animal.thumbUrl),
-          ),
-        );
+        safeEmit(state.copyWith(animal: animal));
       }
     });
   }
@@ -278,7 +286,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   }
 
   Future<void> pickDrug(BuildContext context) async {
-    final drug = await context.push<Drug>(AppRoutes.searchPath(SearchTypeKey.drug));
+    final drug = await _router.pickDrug();
     if (drug == null) return;
 
     final dosage = await showModalBottomSheet<double>(
@@ -319,13 +327,6 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     safeEmit(next);
   }
 
-  PrescriptionAnimalRef _refFromAnimal(Animal animal) =>
-      PrescriptionAnimalRef(id: animal.id, name: animal.name, thumbUrl: animal.thumb);
-
-  /// Текущий приют для скоупинга запросов животного. Берётся из сервиса
-  /// назначений, чтобы не тянуть AuthService напрямую в этот cubit.
-  int? get _prescriptionServiceShelterId => _prescriptionService.currentShelterId;
-
   void _showError(String msg) {
     _scaffoldMessengerKey.currentState
       ?..hideCurrentSnackBar()
@@ -333,7 +334,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
         SnackBar(
           content: Row(
             children: [
-              SizedBox(height: 40.0, width: 40.0, child: LottieBuilder.asset(LottieRes.crashScratch)),
+              SizedBox(height: 40.0, width: 40.0, child: LottieBuilder.asset(PrescriptionsLottieRes.crashScratch)),
               Expanded(child: Text(msg)),
             ],
           ),

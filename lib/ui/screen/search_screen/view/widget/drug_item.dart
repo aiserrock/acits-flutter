@@ -1,3 +1,4 @@
+import 'package:prescriptions/prescriptions.dart' show Drug;
 import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 

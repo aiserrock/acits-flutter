@@ -1,44 +1,42 @@
 import 'package:acits_api/acits_api.dart';
+import 'package:acits_domain/acits_domain.dart' show MessagedException;
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/domain/prescription/animal_short.dart';
-import 'package:acits_flutter/domain/prescription/drug.dart';
-import 'package:acits_flutter/domain/prescription/prescription.dart';
-import 'package:acits_flutter/domain/prescription/prescription_drug.dart';
-import 'package:acits_flutter/domain/prescription/prescription_execution.dart';
-import 'package:acits_flutter/domain/prescription/prescription_execution_today.dart';
-import 'package:acits_flutter/domain/prescription/prescription_file.dart';
-import 'package:acits_flutter/domain/prescription/prescription_type.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import '../domain/animal_short.dart';
+import '../domain/drug.dart';
+import '../domain/prescription.dart';
+import '../domain/prescription_drug.dart';
+import '../domain/prescription_execution.dart';
+import '../domain/prescription_execution_today.dart';
+import '../domain/prescription_file.dart';
+import '../domain/prescription_type.dart';
+import '../domain/prescription_type_labels.dart';
+import '../domain/prescriptions_shelter_provider.dart';
+import '../util/log.dart';
 
 /// Сервис назначений.
 ///
 /// Прикладной сервис поверх стабильного [PrescriptionApiPort]: вызывает порт,
 /// разворачивает DTO → доменные сущности, ошибки Dio → [MessagedException]
 /// (внешний контракт для UI сохранён). Порт скрывает полиморфизм назначения и
-/// генератор клиента.
-@singleton
+/// генератор клиента. Скоуп по приюту берётся из [PrescriptionsShelterProvider],
+/// имена типов — из [PrescriptionTypeLabels] (оба мостятся в приложении к
+/// AuthService/ConfigService).
 class PrescriptionService {
-  PrescriptionService(this._port, this._authService, this._configService);
+  PrescriptionService(this._port, this._shelterProvider, this._typeLabels);
 
   final PrescriptionApiPort _port;
-  final AuthService _authService;
-  final ConfigService _configService;
+  final PrescriptionsShelterProvider _shelterProvider;
+  final PrescriptionTypeLabels _typeLabels;
 
   Future<List<PrescriptionExecutionToday>> fetchTodayPrescriptionList({String? search, String? ordering}) async {
     Log.debug('Fetch today prescription executions: search=$search ordering=$ordering');
-    if (_configService.typeValues == null) {
-      await _configService.getTypeValues();
-    }
+    await _typeLabels.ensureLoaded();
     try {
       final dtos = await _port.todayExecutions(
         search: search,
         ordering: ordering,
-        shelterId: _authService.currentShelterId,
+        shelterId: _shelterProvider.shelterId,
       );
       Log.info('Today prescription executions loaded: count=${dtos.length}');
       // executeAt приходит в UTC — переводим в локальное для отображения времени.
@@ -60,9 +58,7 @@ class PrescriptionService {
     Log.debug(
       'Fetch prescriptions by animal: animalId=$animalId limit=$limit offset=$offset isActual=$isActual isOld=$isOld',
     );
-    if (_configService.typeValues == null) {
-      await _configService.getTypeValues();
-    }
+    await _typeLabels.ensureLoaded();
     try {
       final dtos = await _port.listByAnimal(
         animalId,
@@ -70,7 +66,7 @@ class PrescriptionService {
         isOld: isOld,
         limit: limit,
         offset: offset,
-        shelterId: _authService.currentShelterId,
+        shelterId: _shelterProvider.shelterId,
       );
       Log.info('Prescriptions by animal loaded: animalId=$animalId count=${dtos.length}');
       return dtos.map(_mapPrescription).map(_toLocal).toList(growable: false);
@@ -84,7 +80,7 @@ class PrescriptionService {
   Future<Prescription> fetchPrescriptionById(int id) async {
     Log.debug('Fetch prescription by id: id=$id');
     try {
-      final dto = await _port.getById(id, shelterId: _authService.currentShelterId);
+      final dto = await _port.getById(id, shelterId: _shelterProvider.shelterId);
       Log.info('Prescription loaded: id=$id');
       return _toLocal(_mapPrescription(dto));
     } on DioException catch (e) {
@@ -97,7 +93,7 @@ class PrescriptionService {
   Future<Prescription> createPrescription(Prescription prescription) async {
     Log.debug('Create prescription: animalId=${prescription.animal}');
     try {
-      final dto = await _port.create(_toWriteDto(prescription), shelterId: _authService.currentShelterId);
+      final dto = await _port.create(_toWriteDto(prescription), shelterId: _shelterProvider.shelterId);
       final model = _mapPrescription(dto);
       Log.info('Prescription created: id=${model.id}');
       return model;
@@ -113,7 +109,7 @@ class PrescriptionService {
     final id = prescription.id;
     if (id == null) throw MessagedException(error: 'Prescription id is required for update');
     try {
-      final dto = await _port.update(id, _toWriteDto(prescription), shelterId: _authService.currentShelterId);
+      final dto = await _port.update(id, _toWriteDto(prescription), shelterId: _shelterProvider.shelterId);
       final model = _mapPrescription(dto);
       Log.info('Prescription updated: id=${model.id}');
       return model;
@@ -131,7 +127,7 @@ class PrescriptionService {
         search: searchRequest,
         limit: limit,
         offset: offset,
-        shelterId: _authService.currentShelterId,
+        shelterId: _shelterProvider.shelterId,
       );
       Log.info('Drug list loaded: count=${dtos.length}');
       return dtos.map(_mapDrug).toList(growable: false);
@@ -142,10 +138,10 @@ class PrescriptionService {
   }
 
   /// Человекочитаемое имя типа назначения (из серверного конфига).
-  String? getTypeName(PrescriptionType? type) => _configService.getMyTypeName(type?.wire);
+  String? getTypeName(PrescriptionType? type) => _typeLabels.nameForWire(type?.wire);
 
   /// Текущий приют (для скоупинга связанных запросов, напр. животного в форме).
-  int? get currentShelterId => _authService.currentShelterId;
+  int? get currentShelterId => _shelterProvider.shelterId;
 
   // ── DTO → сущность ─────────────────────────────────────────────────────────
 

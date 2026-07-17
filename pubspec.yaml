@@ -20,6 +20,7 @@ workspace:
   - modules/animals
   - modules/auth
   - modules/applicants
+  - modules/prescriptions
 
 dependencies:
   flutter:
@@ -55,6 +56,12 @@ dependencies:
   # also consumed by the app's search paging adapter.
   applicants:
     path: modules/applicants
+
+  # Feature module: prescriptions + drugs. PrescriptionService + domain entities
+  # live here; consumed by the app shell (today executions), animal-detail
+  # prescriptions tab, and the search paging adapter (drug search).
+  prescriptions:
+    path: modules/prescriptions
 
   app_links: ^7.0.0
   bloc: ^9.2.0

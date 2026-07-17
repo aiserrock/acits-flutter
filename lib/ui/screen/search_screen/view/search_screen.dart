@@ -1,5 +1,6 @@
 import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:animals/animals.dart' show AnimalListItem;
+import 'package:prescriptions/prescriptions.dart' show Drug;
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';

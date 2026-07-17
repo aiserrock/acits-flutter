@@ -1,6 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'package:acits_flutter/export.dart';
+import '../../domain/prescription.dart';
+import '../../domain/prescription_type_labels_x.dart';
+import '../prescriptions_l10n_keys.dart';
 
 /// Виджет карточки назначения животного в детальном представлении
 class AnimalPrescriptionCard extends StatefulWidget {
@@ -55,7 +58,7 @@ class _AnimalPrescriptionCardState extends State<AnimalPrescriptionCard> {
           ),
           if (_isExpanded) ...[
             const Divider(),
-            Text(LocaleKeys.animalPrescriptions.tr(), style: Theme.of(context).textTheme.bodySmall),
+            Text(PrescriptionsL10nKeys.animalPrescriptions.tr(), style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 4.0),
             ...widget.prescription.drugs.map<Widget>(
               (drug) => Text.rich(

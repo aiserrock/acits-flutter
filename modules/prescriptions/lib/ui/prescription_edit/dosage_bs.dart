@@ -1,7 +1,10 @@
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/widget/button.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../../domain/drug.dart';
+import '../prescriptions_l10n_keys.dart';
 
 /// BS выбора дозировки лекарства
 class BsDosage extends StatefulWidget {
@@ -49,7 +52,7 @@ class _BsDosageState extends State<BsDosage> {
                 onEditingComplete: () => _onSubmit(context),
               ),
               const SizedBox(height: 24.0),
-              PrimaryButton(text: LocaleKeys.commonAccept.tr(), onPressed: () => _onSubmit(context)),
+              PrimaryButton(text: PrescriptionsL10nKeys.commonAccept.tr(), onPressed: () => _onSubmit(context)),
             ],
           ),
         ),

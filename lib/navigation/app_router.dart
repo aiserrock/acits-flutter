@@ -4,9 +4,16 @@ import 'package:go_router/go_router.dart';
 
 import 'package:animals/animals.dart' show AnimalSpecies;
 import 'package:applicants/applicants.dart';
+import 'package:prescriptions/prescriptions.dart'
+    show
+        Prescription,
+        PrescriptionAnimalLoader,
+        PrescriptionAnimalRef,
+        PrescriptionEditScreen,
+        PrescriptionService,
+        PrescriptionTypeLabels,
+        PrescriptionsRouterService;
 import 'package:acits_flutter/domain/animal_note/animal_note.dart';
-import 'package:acits_flutter/domain/prescription/prescription.dart';
-import 'package:acits_flutter/domain/prescription/prescription_animal_ref.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/auth_screen_bindings.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
@@ -17,7 +24,6 @@ import 'package:acits_flutter/ui/screen/comments/comment_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_screen.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/personal_screen.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_screen.dart';
-import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen.dart';
@@ -121,6 +127,11 @@ GoRouter createAppRouter() {
         builder: (context, state) {
           final extra = state.extra as Map<String, Object?>?;
           return PrescriptionEditScreen(
+            service: getIt<PrescriptionService>(),
+            router: getIt<PrescriptionsRouterService>(),
+            animalLoader: getIt<PrescriptionAnimalLoader>(),
+            typeLabels: getIt<PrescriptionTypeLabels>(),
+            scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
             editPrescriptionId: int.tryParse(state.uri.queryParameters['id'] ?? ''),
             animalId: int.tryParse(state.uri.queryParameters['animalId'] ?? ''),
             editPrescription: extra?['prescription'] as Prescription?,

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prescriptions/prescriptions.dart' show PrescriptionService;
 import 'package:acits_flutter/util/bloc_ext.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_state.dart';
 import 'package:acits_flutter/util/data_state.dart';

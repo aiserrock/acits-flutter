@@ -1,11 +1,7 @@
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/domain/prescription/prescription.dart';
-import 'package:acits_flutter/domain/prescription/prescription_type.dart';
-import 'package:acits_flutter/service/prescription/prescription_service.dart';
-import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_prescriptions_cubit.dart';
-import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_core/acits_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prescriptions/prescriptions.dart';
 
 class MockPrescriptionService extends Mock implements PrescriptionService {}
 
@@ -17,11 +13,6 @@ void main() {
 
   setUp(() {
     service = MockPrescriptionService();
-    getIt.registerFactory<PrescriptionService>(() => service);
-  });
-
-  tearDown(() async {
-    await getIt.reset();
   });
 
   test('loads actual prescriptions on creation', () async {
@@ -33,7 +24,7 @@ void main() {
       ),
     ).thenAnswer((_) async => [_prescription(1)]);
 
-    final cubit = AnimalPrescriptionsCubit(animalId: 501);
+    final cubit = AnimalPrescriptionsCubit(service, animalId: 501);
     await Future<void>.delayed(Duration.zero);
 
     expect(cubit.state.prescriptionActive, isTrue);
@@ -51,7 +42,7 @@ void main() {
       ),
     ).thenThrow(Exception('boom'));
 
-    final cubit = AnimalPrescriptionsCubit(animalId: 501);
+    final cubit = AnimalPrescriptionsCubit(service, animalId: 501);
     await Future<void>.delayed(Duration.zero);
 
     expect(cubit.state.prescriptions, isA<DataError>());
@@ -66,7 +57,7 @@ void main() {
       ),
     ).thenAnswer((_) async => const <Prescription>[]);
 
-    final cubit = AnimalPrescriptionsCubit(animalId: 501);
+    final cubit = AnimalPrescriptionsCubit(service, animalId: 501);
     await Future<void>.delayed(Duration.zero);
 
     cubit.togglePrescriptionActive(false);

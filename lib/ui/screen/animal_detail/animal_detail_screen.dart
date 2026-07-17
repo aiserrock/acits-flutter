@@ -15,9 +15,8 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
-import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_prescriptions_cubit.dart';
-import 'package:acits_flutter/ui/screen/animal_detail/cubit/animal_prescriptions_state.dart';
-import 'package:acits_flutter/ui/widget/animal_prescription_card.dart';
+import 'package:prescriptions/prescriptions.dart'
+    show AnimalPrescriptionCard, AnimalPrescriptionsCubit, AnimalPrescriptionsState, Prescription, PrescriptionService;
 import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 import 'package:acits_flutter/ui/widget/default_app_bar.dart';
 import 'package:acits_flutter/ui/widget/default_icon_button.dart';
@@ -55,7 +54,7 @@ class AnimalDetailScreen extends StatelessWidget {
         BlocProvider(
           create: (_) => AnimalDetailCubit(getIt<AnimalRepository>(), getIt<CurrentShelterProvider>(), id: id),
         ),
-        BlocProvider(create: (_) => AnimalPrescriptionsCubit(animalId: id)),
+        BlocProvider(create: (_) => AnimalPrescriptionsCubit(getIt<PrescriptionService>(), animalId: id)),
       ],
       child: _AnimalDetailView(id: id),
     );
