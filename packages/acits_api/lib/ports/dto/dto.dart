@@ -8,6 +8,8 @@ library;
 export 'animal_attribute_dto.dart';
 export 'animal_dto.dart';
 export 'animal_image_dto.dart';
+export 'animal_image_write_dto.dart';
+export 'animal_write_dto.dart';
 export 'applicant_dto.dart';
 export 'curator_dto.dart';
 export 'image_thumbnails_dto.dart';

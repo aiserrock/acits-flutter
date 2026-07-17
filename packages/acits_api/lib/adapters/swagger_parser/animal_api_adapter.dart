@@ -2,6 +2,8 @@ import '../../ports/animal_api_port.dart';
 import '../../ports/dto/animal_attribute_dto.dart';
 import '../../ports/dto/animal_dto.dart';
 import '../../ports/dto/animal_image_dto.dart';
+import '../../ports/dto/animal_image_write_dto.dart';
+import '../../ports/dto/animal_write_dto.dart';
 import '../../ports/dto/applicant_dto.dart';
 import '../../ports/dto/curator_dto.dart';
 import '../../ports/dto/image_thumbnails_dto.dart';
@@ -9,11 +11,15 @@ import '../../ports/dto/species_dto.dart';
 import 'generated/clients/animals_client.dart';
 import 'generated/models/animal_attribute_value.dart';
 import 'generated/models/animal_image_read.dart';
+import 'generated/models/animal_image_write.dart';
 import 'generated/models/animal_read.dart';
+import 'generated/models/animal_write.dart';
 import 'generated/models/applicant.dart';
 import 'generated/models/curator.dart';
 import 'generated/models/image_thumbnails.dart';
+import 'generated/models/level.dart';
 import 'generated/models/species.dart';
+import 'generated/models/status69f_enum.dart';
 
 /// The ONLY place generated swagger_parser code is touched.
 ///
@@ -34,10 +40,79 @@ class AnimalApiAdapter implements AnimalApiPort {
   }
 
   @override
-  Future<AnimalDto> getById(int id) async {
-    final animal = await _client.v1AnimalsRetrieve(id: id.toString());
+  Future<AnimalDto> getById(int id, {int? shelterId}) async {
+    final animal = await _client.v1AnimalsRetrieve(id: id.toString(), xCurrentShelter: shelterId);
     return _mapAnimal(animal);
   }
+
+  @override
+  Future<AnimalDto> create(AnimalWriteDto body, {int? shelterId}) async {
+    final animal = await _client.v1AnimalsCreate(body: _mapWrite(body), xCurrentShelter: shelterId);
+    return _mapAnimal(animal);
+  }
+
+  @override
+  Future<AnimalDto> update(int id, AnimalWriteDto body, {int? shelterId}) async {
+    final animal = await _client.v1AnimalsUpdate(id: id.toString(), body: _mapWrite(body), xCurrentShelter: shelterId);
+    return _mapAnimal(animal);
+  }
+
+  @override
+  Future<void> delete(int id, {int? shelterId}) =>
+      _client.v1AnimalsDestroy(id: id.toString(), xCurrentShelter: shelterId);
+
+  @override
+  Future<List<SpeciesDto>> listSpecies({
+    required int level,
+    int? parentId,
+    String? search,
+    int? limit,
+    int? offset,
+    int? shelterId,
+  }) async {
+    final page = await _client.v1AnimalsSpeciesList(
+      xCurrentShelter: shelterId,
+      level: Level.fromJson(level),
+      parentId: parentId,
+      search: search,
+      limit: limit,
+      offset: offset,
+    );
+    final results = page.results ?? const <Species>[];
+    return results.map(_mapSpecies).toList(growable: false);
+  }
+
+  // ── OUR DTO → generated (write path) ───────────────────────────────────────
+
+  AnimalWrite _mapWrite(AnimalWriteDto d) => AnimalWrite(
+    name: d.name,
+    images: d.images?.map(_mapImageWrite).toList(growable: false),
+    validImages: d.validImages,
+    specId: d.specId,
+    status: d.status == null ? null : Status69fEnum.fromJson(d.status!),
+    dateJoined: d.dateJoined,
+    birthDate: d.birthDate,
+    deathDate: d.deathDate,
+    deathReason: d.deathReason,
+    defaultImageId: d.defaultImageId,
+    placeOfCatch: d.placeOfCatch,
+    placeOfRelease: d.placeOfRelease,
+    dateOfChipping: d.dateOfChipping,
+    chippingCode: d.chippingCode,
+    height: d.height,
+    weight: d.weight,
+    shelter: d.shelter,
+    curatorId: d.curatorId,
+    applicantId: d.applicantId,
+    animalAttributes: d.animalAttributes.map(_mapAttributeWrite).toList(growable: false),
+    canBeShared: d.canBeShared,
+  );
+
+  AnimalImageWrite _mapImageWrite(AnimalImageWriteDto i) =>
+      AnimalImageWrite(name: i.name, image: i.image, isPrimary: i.isPrimary);
+
+  AnimalAttributeValue _mapAttributeWrite(AnimalAttributeDto a) =>
+      AnimalAttributeValue(attrId: a.attrId, name: a.name, value: a.value, isRequired: a.isRequired);
 
   // ── generated → OUR DTO mapping ────────────────────────────────────────────
 
