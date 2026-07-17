@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/{{entity.snakeCase()}}.dart';
+import 'package:{{module.snakeCase()}}/domain/domain.dart';
 
 /// Body of the {{name.pascalCase()}} screen. Presentational only — renders the
 /// loaded [{{entity.pascalCase()}}]; no data access or navigation logic here.

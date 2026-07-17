@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/{{name.snakeCase()}}.dart';
+import 'package:{{name.snakeCase()}}/domain/domain.dart';
 
 /// List tile for a [{{name.pascalCase()}}] entity. Presentational only — no data
 /// access, no navigation logic (the tap callback is supplied by the view).

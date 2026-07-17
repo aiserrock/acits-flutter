@@ -1,7 +1,7 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/{{name.snakeCase()}}.dart';
+import 'package:{{name.snakeCase()}}/domain/domain.dart';
 
 /// State for the {{screen.pascalCase()}} screen. Holds the list load state as a
 /// [DataState] over domain entities (never DTOs).

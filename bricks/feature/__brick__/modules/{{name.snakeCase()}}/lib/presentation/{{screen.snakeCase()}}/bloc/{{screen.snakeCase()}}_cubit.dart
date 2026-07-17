@@ -1,8 +1,8 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/{{name.snakeCase()}}_repository.dart';
-import '{{screen.snakeCase()}}_state.dart';
+import 'package:{{name.snakeCase()}}/domain/domain.dart';
+import 'package:{{name.snakeCase()}}/presentation/{{screen.snakeCase()}}/{{screen.snakeCase()}}.dart';
 
 /// Cubit for the {{screen.pascalCase()}} screen. Owns the list [DataState]; data
 /// comes from [{{name.pascalCase()}}Repository] as a [Result] (no DTOs).

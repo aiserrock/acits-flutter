@@ -1,7 +1,7 @@
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart' show Transformable;
 
-import '../../domain/{{name.snakeCase()}}.dart';
+import 'package:{{name.snakeCase()}}/domain/domain.dart';
 
 /// DTO → [{{name.pascalCase()}}]. A separate mapper class (Transformable), not a
 /// method on the DTO: the domain does not know about DTOs.
