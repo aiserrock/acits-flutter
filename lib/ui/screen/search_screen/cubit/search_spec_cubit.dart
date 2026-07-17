@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:acits_core/acits_core.dart';
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_state.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
 import 'package:acits_flutter/util/logger/log.dart';
+import 'package:animals/animals.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const _searchBouncePeriod = Duration(milliseconds: 1000);
@@ -13,16 +14,21 @@ const _searchBouncePeriod = Duration(milliseconds: 1000);
 ///
 /// Владеет состоянием списка видов ([DataState]), пагинацией и бизнес-логикой
 /// поиска с дебаунсом. UI-контроллеры ([ScrollController], [TextEditingController])
-/// остаются во [StatefulWidget] экрана.
+/// остаются во [StatefulWidget] экрана. Данные — доменные [AnimalSpecies] через
+/// модульный [AnimalRepository].
 class SearchSpecCubit extends Cubit<SearchSpecState> {
-  SearchSpecCubit({this.parentSearch}) : _service = getIt<AnimalService>(), super(const SearchSpecState()) {
+  SearchSpecCubit({this.parentSearch})
+    : _repository = getIt<AnimalRepository>(),
+      _shelterProvider = getIt<CurrentShelterProvider>(),
+      super(const SearchSpecState()) {
     loadData(searchRequest: null, resetOffset: true);
   }
 
-  final AnimalService _service;
+  final AnimalRepository _repository;
+  final CurrentShelterProvider _shelterProvider;
 
   /// Родительский вид, внутри которого выполняется поиск (или null — верхний уровень).
-  final Species? parentSearch;
+  final AnimalSpecies? parentSearch;
 
   Timer? _bounceTimer;
 
@@ -57,14 +63,17 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
     }
 
     try {
-      final level = _service.getLevel(int.tryParse(parentSearch?.level.toString() ?? '0') ?? 0);
-      final value = await _service.getAnimalSpecies(
+      // Уровень таксономии для запроса = уровень родителя + 1 (верхний = 1).
+      final level = (parentSearch?.level ?? 0) + 1;
+      final result = await _repository.listSpecies(
         level: level,
         parentId: parentSearch?.id,
         offset: state.offset,
-        searchRequest: searchRequest,
+        search: searchRequest,
+        shelterId: _shelterProvider.shelterId,
       );
-      final list = [...(state.data.valueOrNull ?? <Species>[]), ...value];
+      final value = result.fold((failure) => throw failure, (species) => species);
+      final list = [...(state.data.valueOrNull ?? <AnimalSpecies>[]), ...value];
       Log.info('SearchSpecCubit.loadData ok: ${value.length} new, ${list.length} total');
       safeEmit(
         state.copyWith(

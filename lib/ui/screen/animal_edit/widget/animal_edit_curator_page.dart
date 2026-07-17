@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/gen/api/openapi.swagger.dart' as gen;
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
@@ -108,10 +107,10 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> with Anim
     }
   }
 
-  void _setControllers(AnimalRead value) {
+  void _setControllers(AnimalEditFormState value) {
     final seeded = value.curator;
-    if (seeded != null) setState(() => _curator = _fromGen(seeded));
-    _curatorController.text = value.curatorFullName ?? '';
+    if (seeded != null) setState(() => _curator = seeded);
+    _curatorController.text = _curator?.fullName ?? '';
     _phoneController.text = _curator?.phoneNumber ?? '';
     _emailController.text = _curator?.email ?? '';
     _addressController.text = _curator?.address ?? '';
@@ -120,7 +119,7 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> with Anim
   @override
   void onChangePage() {
     if (page != 3) return;
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(curator: _toGen(_curator));
+    Provider.of<AnimalEditHolder>(context, listen: false).update((prev) => prev.copyWith(curator: _curator));
   }
 
   Future<void> _addEditCurator(BuildContext context, {int? curatorId}) async {
@@ -134,28 +133,5 @@ class _AnimalEditCuratorPageState extends State<AnimalEditCuratorPage> with Anim
       _emailController.text = result.email ?? '';
       _addressController.text = result.address ?? '';
     }
-  }
-
-  /// chopper `Curator` из `AnimalRead` (seed формы) → доменная сущность.
-  Curator _fromGen(gen.Curator c) => Curator(
-    id: c.id,
-    firstName: c.firstName,
-    lastName: c.lastName,
-    phoneNumber: c.phoneNumber,
-    email: c.email,
-    address: c.address,
-  );
-
-  /// Доменный `Curator` → chopper-тип для холдера формы (`AnimalRead`).
-  gen.Curator? _toGen(Curator? c) {
-    if (c == null) return null;
-    return gen.Curator(
-      id: c.id,
-      firstName: c.firstName,
-      lastName: c.lastName,
-      phoneNumber: c.phoneNumber,
-      email: c.email,
-      address: c.address ?? '',
-    );
   }
 }

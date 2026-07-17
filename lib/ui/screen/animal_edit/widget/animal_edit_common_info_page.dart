@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:animals/animals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,9 +32,9 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
   final _categoryController = TextEditingController();
   final _familyController = TextEditingController();
   final _kindController = TextEditingController();
-  Species? _categorySpec;
-  Species? _familySpec;
-  Species? _kindSpec;
+  AnimalSpecies? _categorySpec;
+  AnimalSpecies? _familySpec;
+  AnimalSpecies? _kindSpec;
 
   @override
   void initState() {
@@ -148,7 +149,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
   }
 
   Future<void> _searchCategory() async {
-    final result = await context.push<Species>(AppRoutes.searchSpec);
+    final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec);
     if (!mounted) return;
     if (result != null) {
       setState(() {
@@ -169,7 +170,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
     }
     if (!mounted) return;
 
-    final result = await context.push<Species>(AppRoutes.searchSpec, extra: _categorySpec);
+    final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _categorySpec);
     if (!mounted) return;
     if (result != null) {
       setState(() {
@@ -188,7 +189,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
     }
     if (!mounted) return;
 
-    final result = await context.push<Species>(AppRoutes.searchSpec, extra: _familySpec);
+    final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _familySpec);
     if (!mounted) return;
     if (result != null) {
       setState(() {
@@ -198,22 +199,25 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
     }
   }
 
-  void _setControllers(AnimalRead value) {
-    _nameController.text = value.name ?? '';
-    _categoryController.text = value.specCategory ?? '';
-    _familyController.text = value.specFamily ?? '';
-    _kindController.text = value.specKind ?? '';
+  void _setControllers(AnimalEditFormState value) {
+    _nameController.text = value.name;
+    _categoryController.text = value.specCategoryName ?? '';
+    _familyController.text = value.specParentName ?? '';
+    _kindController.text = value.specKindName ?? '';
   }
 
   @override
   void onChangePage() {
     if (page != 0) return;
-    final spec = <String, dynamic>{
-      'category_name': _categoryController.text,
-      'parent_name': _familyController.text,
-      'name': _kindController.text,
-      'id': _kindSpec?.id ?? widget.animal.idSpec,
-    };
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(name: _nameController.text, spec: spec);
+    final specId = _kindSpec?.id ?? widget.animal.specId;
+    Provider.of<AnimalEditHolder>(context, listen: false).update(
+      (prev) => prev.copyWith(
+        name: _nameController.text,
+        specCategoryName: _categoryController.text,
+        specParentName: _familyController.text,
+        specKindName: _kindController.text,
+        specId: specId,
+      ),
+    );
   }
 }

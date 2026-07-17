@@ -1,4 +1,5 @@
 import 'package:acits_flutter/export.dart';
+import 'package:animals/animals.dart';
 import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_cubit.dart';
 import 'package:acits_flutter/ui/screen/search_screen/cubit/search_spec_state.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
@@ -6,11 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Экран поиска вида животного. Возвращает выбранный [Species] через `pop`.
+/// Экран поиска вида животного. Возвращает выбранный [AnimalSpecies] через `pop`.
 class SearchScreen extends StatelessWidget {
   const SearchScreen({this.parentSearch, super.key});
 
-  final Species? parentSearch;
+  final AnimalSpecies? parentSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +102,7 @@ class _SearchViewState extends State<_SearchView> {
   Widget _buildBody() {
     return BlocBuilder<SearchSpecCubit, SearchSpecState>(
       builder: (context, state) {
-        return DataStateBuilder<List<Species>>(
+        return DataStateBuilder<List<AnimalSpecies>>(
           state: state.data,
           builder: (context, list) => _buildList(context, list, state),
           loader: (_) => const Center(child: CircularProgressIndicator()),
@@ -113,7 +114,7 @@ class _SearchViewState extends State<_SearchView> {
     );
   }
 
-  Widget _buildList(BuildContext context, List<Species> list, SearchSpecState state) {
+  Widget _buildList(BuildContext context, List<AnimalSpecies> list, SearchSpecState state) {
     return list.isNotEmpty
         ? RefreshIndicator(
             onRefresh: () => context.read<SearchSpecCubit>().loadData(searchRequest: _searchQuery, resetOffset: true),
@@ -167,7 +168,7 @@ class _SearchViewState extends State<_SearchView> {
 
   String? get _searchQuery => _searchController.text.isNotEmpty ? _searchController.text : null;
 
-  void _onItemPressed(Species item) {
+  void _onItemPressed(AnimalSpecies item) {
     _navigator.pop(item);
   }
 

@@ -12,7 +12,6 @@
 import 'package:acits_api/acits_api.dart' as _i101;
 import 'package:acits_core/acits_core.dart' as _i354;
 import 'package:acits_flutter/domain/env.dart' as _i531;
-import 'package:acits_flutter/export.dart' as _i965;
 import 'package:acits_flutter/navigation/animals_router_service.dart' as _i514;
 import 'package:acits_flutter/service/animal/animal_service.dart' as _i876;
 import 'package:acits_flutter/service/auth/auth_repository.dart' as _i622;
@@ -23,12 +22,8 @@ import 'package:acits_flutter/service/client/acits_api_register.dart' as _i382;
 import 'package:acits_flutter/service/client/animals_port_bridges.dart'
     as _i434;
 import 'package:acits_flutter/service/client/animals_register.dart' as _i286;
-import 'package:acits_flutter/service/client/auth_client_register.dart'
-    as _i363;
-import 'package:acits_flutter/service/client/auth_interceptor.dart' as _i492;
 import 'package:acits_flutter/service/client/auth_port_bridges.dart' as _i350;
 import 'package:acits_flutter/service/client/dio_register.dart' as _i693;
-import 'package:acits_flutter/service/client/header_inteceptor.dart' as _i158;
 import 'package:acits_flutter/service/config/config_service.dart' as _i245;
 import 'package:acits_flutter/service/debug/debug_service.dart' as _i47;
 import 'package:acits_flutter/service/document/document_export_service_bridge.dart'
@@ -75,10 +70,7 @@ Future<_i174.GetIt> $initGetIt(
   final dioRegister = _$DioRegister();
   final envRegistrer = _$EnvRegistrer();
   final acitsApiRegister = _$AcitsApiRegister();
-  final clientRegister = _$ClientRegister();
   final animalsRegister = _$AnimalsRegister();
-  gh.factory<_i492.AuthInterceptor>(() => _i492.AuthInterceptor());
-  gh.factory<_i158.HeaderInterceptor>(() => _i158.HeaderInterceptor());
   gh.factory<_i558.FlutterSecureStorage>(
     () => secureStorageRegister.createSp(),
   );
@@ -131,11 +123,6 @@ Future<_i174.GetIt> $initGetIt(
     instanceName: 'acitsApi',
     registerFor: {_prod},
   );
-  gh.factory<_i965.Openapi>(
-    () => clientRegister.createGuestClient(gh<_i531.Env>()),
-    instanceName: 'guest',
-    registerFor: {_prod},
-  );
   gh.factory<_i101.AnimalsClient>(
     () =>
         acitsApiRegister.animalsClient(gh<_i361.Dio>(instanceName: 'acitsApi')),
@@ -160,14 +147,6 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i101.CuratorsClient>(
     () => acitsApiRegister.curatorsClient(
       gh<_i361.Dio>(instanceName: 'acitsApi'),
-    ),
-    registerFor: {_prod},
-  );
-  gh.factory<_i965.Openapi>(
-    () => clientRegister.createClient(
-      gh<_i492.AuthInterceptor>(),
-      gh<_i158.HeaderInterceptor>(),
-      gh<_i531.Env>(),
     ),
     registerFor: {_prod},
   );
@@ -197,6 +176,13 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i499.FileService>(
     () => _i499.FileService(gh<_i830.FileRepository>()),
   );
+  gh.factory<_i101.AnimalApiPort>(
+    () => acitsApiRegister.animalApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i101.AnimalsClient>(),
+    ),
+    registerFor: {_prod},
+  );
   gh.factory<_i101.AnimalNotesApiPort>(
     () => acitsApiRegister.animalNotesApiPort(
       gh<_i361.Dio>(instanceName: 'acitsApi'),
@@ -211,16 +197,15 @@ Future<_i174.GetIt> $initGetIt(
     ),
     registerFor: {_prod},
   );
+  gh.factory<_i616.AnimalRemoteDataSource>(
+    () => animalsRegister.animalRemoteDataSource(gh<_i101.AnimalApiPort>()),
+  );
   gh.factory<_i101.PrescriptionApiPort>(
     () => acitsApiRegister.prescriptionApiPort(
       gh<_i361.Dio>(instanceName: 'acitsApi'),
       gh<_i101.PrescriptionsClient>(),
       gh<_i101.SheltersClient>(instanceName: 'acitsApiSheltersAuthed'),
     ),
-    registerFor: {_prod},
-  );
-  gh.factory<_i101.AnimalApiPort>(
-    () => acitsApiRegister.animalApiPort(gh<_i101.AnimalsClient>()),
     registerFor: {_prod},
   );
   gh.factory<_i101.TokenClient>(
@@ -249,6 +234,9 @@ Future<_i174.GetIt> $initGetIt(
     ),
     registerFor: {_prod},
   );
+  gh.factory<_i616.AnimalRepository>(
+    () => animalsRegister.animalRepository(gh<_i616.AnimalRemoteDataSource>()),
+  );
   gh.factory<_i101.ProfileApiPort>(
     () => acitsApiRegister.profileApiPort(
       gh<_i361.Dio>(instanceName: 'acitsApi'),
@@ -274,9 +262,6 @@ Future<_i174.GetIt> $initGetIt(
       gh<_i2.PreferenceStorage>(),
     ),
   );
-  gh.factory<_i616.AnimalRemoteDataSource>(
-    () => animalsRegister.animalRemoteDataSource(gh<_i101.AnimalApiPort>()),
-  );
   gh.singleton<_i245.ConfigService>(
     () => _i245.ConfigService(
       gh<_i101.SelectionApiPort>(),
@@ -290,27 +275,14 @@ Future<_i174.GetIt> $initGetIt(
       gh<_i21.AuthService>(),
     ),
   );
-  gh.factory<_i616.AnimalRepository>(
-    () => animalsRegister.animalRepository(gh<_i616.AnimalRemoteDataSource>()),
-  );
   gh.singleton<_i156.StaffService>(
     () => _i156.StaffService(gh<_i21.AuthService>(), gh<_i101.StaffApiPort>()),
   );
   gh.factory<_i616.AnimalPermissions>(
     () => _i434.AuthServiceAnimalPermissions(gh<_i21.AuthService>()),
   );
-  gh.factory<_i302.DocumentRepository>(
-    () => _i302.DocumentRepository(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
-  );
   gh.factory<_i616.AnimalStatusLabels>(
     () => _i434.ConfigServiceAnimalStatusLabels(gh<_i245.ConfigService>()),
-  );
-  gh.singleton<_i876.AnimalService>(
-    () => _i876.AnimalService(
-      gh<_i21.AuthService>(),
-      gh<_i965.Openapi>(),
-      gh<_i101.AnimalNotesApiPort>(),
-    ),
   );
   gh.factory<_i616.CurrentShelterProvider>(
     () => _i434.AuthServiceCurrentShelter(gh<_i21.AuthService>()),
@@ -320,6 +292,18 @@ Future<_i174.GetIt> $initGetIt(
       gh<_i101.PrescriptionApiPort>(),
       gh<_i21.AuthService>(),
       gh<_i245.ConfigService>(),
+    ),
+  );
+  gh.singleton<_i876.AnimalService>(
+    () => _i876.AnimalService(
+      gh<_i21.AuthService>(),
+      gh<_i101.AnimalNotesApiPort>(),
+    ),
+  );
+  gh.factory<_i302.DocumentRepository>(
+    () => _i302.DocumentRepository(
+      gh<_i616.AnimalRepository>(),
+      gh<_i616.CurrentShelterProvider>(),
     ),
   );
   gh.factory<_i616.AnimalsRouterService>(
@@ -339,7 +323,5 @@ class _$DioRegister extends _i693.DioRegister {}
 class _$EnvRegistrer extends _i143.EnvRegistrer {}
 
 class _$AcitsApiRegister extends _i382.AcitsApiRegister {}
-
-class _$ClientRegister extends _i363.ClientRegister {}
 
 class _$AnimalsRegister extends _i286.AnimalsRegister {}

@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+
 import '../../ports/animal_api_port.dart';
 import '../../ports/dto/animal_attribute_dto.dart';
 import '../../ports/dto/animal_dto.dart';
@@ -28,9 +32,13 @@ import 'generated/models/status69f_enum.dart';
 /// generator-agnostic DTOs. Swapping generators = replace this file with a new
 /// adapter implementing [AnimalApiPort]; ports/DTOs/features stay unchanged.
 class AnimalApiAdapter implements AnimalApiPort {
-  const AnimalApiAdapter(this._client);
+  const AnimalApiAdapter(this._client, this._dio);
 
   final AnimalsClient _client;
+
+  /// Raw Dio for the binary PDF path: the generated client streams the body as
+  /// UTF-8 strings, which corrupts non-text PDF bytes. We fetch bytes directly.
+  final Dio _dio;
 
   @override
   Future<List<AnimalDto>> list({int? shelterId, String? search, String? ordering, int? limit, int? offset}) async {
@@ -86,6 +94,74 @@ class AnimalApiAdapter implements AnimalApiPort {
     );
     final results = page.results ?? const <Species>[];
     return results.map(_mapSpecies).toList(growable: false);
+  }
+
+  @override
+  Future<AnimalDto> updatePhotos(
+    int id, {
+    required List<AnimalImageWriteDto> newImages,
+    required List<int> retainImageIds,
+    int? shelterId,
+  }) async {
+    // Читаем текущее животное и переписываем его целиком, меняя только фото —
+    // так сохраняются все поля (атрибуты с attrId, вид, даты, куратор/заявитель),
+    // которые плоская доменная сущность восстановить не может. Зеркалит прежний
+    // chopper-путь `animal.body.write.copyWith(images, validImages)`.
+    final current = await _client.v1AnimalsRetrieve(id: id.toString(), xCurrentShelter: shelterId);
+    final body = _writeFromRead(
+      current,
+      images: newImages.map(_mapImageWrite).toList(growable: false),
+      validImages: retainImageIds,
+    );
+    final updated = await _client.v1AnimalsUpdate(id: id.toString(), body: body, xCurrentShelter: shelterId);
+    return _mapAnimal(updated);
+  }
+
+  /// Собирает [AnimalWrite] из прочитанного [AnimalRead], подставляя новые
+  /// [images]/[validImages]. Прочие поля переносятся 1:1.
+  AnimalWrite _writeFromRead(AnimalRead a, {required List<AnimalImageWrite> images, required List<int> validImages}) =>
+      AnimalWrite(
+        name: a.name,
+        images: images,
+        validImages: validImages,
+        specId: a.spec.id,
+        status: a.status,
+        dateJoined: a.dateJoined,
+        birthDate: a.birthDate,
+        deathDate: a.deathDate,
+        deathReason: a.deathReason,
+        defaultImageId: a.defaultImageId,
+        placeOfCatch: a.placeOfCatch,
+        placeOfRelease: a.placeOfRelease,
+        dateOfChipping: a.dateOfChipping,
+        chippingCode: a.chippingCode,
+        height: a.height,
+        weight: a.weight,
+        shelter: a.shelter,
+        curatorId: a.curator.id,
+        applicantId: a.applicant.id,
+        animalAttributes: a.animalAttributes,
+        canBeShared: a.canBeShared,
+      );
+
+  @override
+  Future<Uint8List> getAnimalPdf({
+    required int id,
+    required String pdfType,
+    required DateTime from,
+    required DateTime to,
+    String? tz,
+    int? shelterId,
+  }) async {
+    final response = await _dio.get<List<int>>(
+      '/api/v1/animals/$id/$pdfType/pdf/',
+      queryParameters: <String, dynamic>{'from': from.toIso8601String(), 'to': to.toIso8601String(), 'tz': ?tz},
+      options: Options(
+        responseType: ResponseType.bytes,
+        headers: shelterId == null ? null : {'x-current-shelter': shelterId},
+      ),
+    );
+    return Uint8List.fromList(response.data ?? const <int>[]);
   }
 
   // ── OUR DTO → generated (write path) ───────────────────────────────────────

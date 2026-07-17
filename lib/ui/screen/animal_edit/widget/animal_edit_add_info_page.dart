@@ -15,6 +15,7 @@ import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/ui/widget/action_bs.dart';
+import 'package:animals/animals.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _chipDateRange = Duration(days: 365 * 50);
@@ -259,78 +260,50 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with Anim
     }
   }
 
-  void _setControllers(AnimalRead value) {
+  void _setControllers(AnimalEditFormState value) {
     _birthController.text = value.birthDate != null ? _dateFormatter.format(value.birthDate!) : '';
     if (value.birthDate != null) setState(() => _currentAgeTab = 1);
 
-    _sexController.text = value.sexString ?? '';
+    _sexController.text = _attr(value, 'sex') ?? '';
     _heightController.text = value.height ?? '';
     _weightController.text = value.weight ?? '';
-    _colorController.text = value.colorString ?? '';
-    _specController.text = value.specialSignsString ?? '';
+    _colorController.text = _attr(value, 'color') ?? '';
+    _specController.text = _attr(value, 'special_signs') ?? '';
     _chipController.text = value.chippingCode ?? '';
     _dateChipController.text = value.dateOfChipping != null ? _dateFormatter.format(value.dateOfChipping!) : '';
   }
 
+  /// Значение атрибута формы по имени (sex/color/special_signs).
+  String? _attr(AnimalEditFormState value, String name) =>
+      value.attributes.firstWhereOrNull((a) => a.name == name)?.value;
+
   @override
   void onChangePage() {
     if (page != 2) return;
-    final attr = <AnimalAttributeValue>[];
-    if (_sexController.text.isNotEmpty) {
-      final sexAttribute = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull(
-        (element) => element.name == 'sex',
-      );
-      if (sexAttribute != null) {
-        attr.add(
-          AnimalAttributeValue(
-            attrId: sexAttribute.id,
-            isRequired: sexAttribute.isRequired,
-            name: sexAttribute.name,
-            value: _sexController.text,
-          ),
-        );
-      }
+    final attr = <AnimalAttributeInput>[];
+    void addAttr(String name, String value) {
+      if (value.isEmpty) return;
+      final def = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull((e) => e.name == name);
+      if (def == null) return;
+      attr.add(AnimalAttributeInput(attrId: def.id, isRequired: def.isRequired ?? false, name: def.name, value: value));
     }
-    if (_colorController.text.isNotEmpty) {
-      final colorAttribute = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull(
-        (element) => element.name == 'color',
-      );
-      if (colorAttribute != null) {
-        attr.add(
-          AnimalAttributeValue(
-            attrId: colorAttribute.id,
-            isRequired: colorAttribute.isRequired,
-            name: colorAttribute.name,
-            value: _colorController.text,
-          ),
-        );
-      }
-    }
-    if (_specController.text.isNotEmpty) {
-      final signAttribute = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull(
-        (element) => element.name == 'special_signs',
-      );
-      if (signAttribute != null) {
-        attr.add(
-          AnimalAttributeValue(
-            attrId: signAttribute.id,
-            isRequired: signAttribute.isRequired,
-            name: signAttribute.name,
-            value: _specController.text,
-          ),
-        );
-      }
-    }
+
+    addAttr('sex', _sexController.text);
+    addAttr('color', _colorController.text);
+    addAttr('special_signs', _specController.text);
+
     final months = (int.tryParse(_ageYearController.text) ?? 0) * 12 + (int.tryParse(_ageMonthController.text) ?? 0);
     final birth = _currentAgeTab == 0 ? DateTime.now().subtract(Duration(days: max(months * 30, 1))) : birthDate;
 
-    Provider.of<AnimalEditHolder>(context, listen: false).copyWith(
-      birthDate: birth,
-      animalAttributes: attr,
-      height: _heightController.text,
-      weight: _weightController.text,
-      chippingCode: _chipController.text,
-      dateOfChipping: chipDate,
+    Provider.of<AnimalEditHolder>(context, listen: false).update(
+      (prev) => prev.copyWith(
+        birthDate: birth,
+        attributes: attr,
+        height: _heightController.text,
+        weight: _weightController.text,
+        chippingCode: _chipController.text,
+        dateOfChipping: chipDate,
+      ),
     );
   }
 }

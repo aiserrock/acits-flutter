@@ -1,3 +1,4 @@
+import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +66,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               ListTile(
                 title: Text(LocaleKeys.personChangeShelter.tr(), style: titleStyle),
                 onTap: () async {
-                  final shelter = await context.push<ShelterShortSerializers>(
+                  final shelter = await context.push<Shelter>(
                     AppRoutes.pickShelter,
                     extra: <String, Object?>{'autoSelectSingle': false, 'shelterList': null},
                   );
@@ -83,17 +84,11 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               _buildDivider(),
               const ThemeSwitcherTile(),
               ListTile(
-                title: Text(
-                  LocaleKeys.commonLanguage.tr(),
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
+                title: Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.bodyLarge),
                 trailing: const LocaleSwitcher(size: 22.0),
               ),
               _buildDivider(),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.0),
-                child: AppVersionLabel(),
-              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 12.0), child: AppVersionLabel()),
             ],
           );
         },

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
@@ -10,229 +9,27 @@ import 'package:dio/dio.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/domain/animal_note/animal_note.dart' as notes;
 import 'package:acits_flutter/domain/animal_note/animal_note_file.dart' as notes;
-import 'package:acits_flutter/domain/gallery_item_data.dart';
-import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/document/document_repository.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/services.dart';
-import 'package:image/image.dart' as image_util;
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 
-const _maxAnimalImageSize = 1024;
 const _notesListLimit = 25;
 
+/// Сервис заметок/комментариев животного + PDF-карточка. Полностью на новом
+/// стеке: заметки через [AnimalNotesApiPort], PDF — через [DocumentRepository]
+/// (модульный `AnimalRepository`). Chopper здесь больше не используется.
 @singleton
 class AnimalService {
-  AnimalService(this._authService, this._client, this._notesPort);
+  AnimalService(this._authService, this._notesPort);
 
   final AuthService _authService;
-  final Openapi _client;
 
-  /// Порт заметок/комментариев (новый стек). Остальные методы AnimalService
-  /// (фото/pdf/виды/CRUD животного) ещё на chopper — задокументированный шов.
+  /// Порт заметок/комментариев.
   final AnimalNotesApiPort _notesPort;
-
-  /// Получить список живолных в приюте
-  Future<PaginatedAnimalReadList?> fetchAnimalList({
-    int limit = 25,
-    int offset = 0,
-    String? searchRequest,
-    String? ordering,
-  }) async {
-    Log.debug('Fetch animal list: limit=$limit offset=$offset search=$searchRequest ordering=$ordering');
-    final result = await _client.apiV1AnimalsGet(
-      limit: limit,
-      offset: offset,
-      xCurrentShelter: _authService.currentShelterId,
-      search: searchRequest,
-      ordering: ordering,
-    );
-
-    if (result.body != null) {
-      Log.info('Animal list: ${result.body?.results?.length ?? 0} items');
-      return result.body;
-    } else {
-      Log.warning('Fetch animal list failed: ${result.error}');
-      throw MessagedException(error: result.error);
-    }
-  }
-
-  /// Получить детальное представление животного по его ID
-  Future<AnimalRead> fetchAnimalDetail({required int id}) async {
-    Log.debug('Fetch animal detail: id=$id');
-    final result = await _client.apiV1AnimalsIdGet(id: id.toString(), xCurrentShelter: _authService.currentShelterId);
-
-    if (result.body != null) {
-      Log.info('Animal detail: id=${result.body!.id}');
-      return result.body!;
-    } else {
-      Log.warning('Fetch animal detail failed: ${result.error}');
-      throw MessagedException(error: result.error);
-    }
-  }
-
-  Future<List<Species>> getAnimalSpecies({
-    required ApiV1AnimalsSpeciesGetLevel level,
-    int limit = 25,
-    int offset = 0,
-    int? parentId,
-    String? searchRequest,
-  }) async {
-    Log.debug(
-      'Fetch animal species: level=$level limit=$limit offset=$offset '
-      'parentId=$parentId search=$searchRequest',
-    );
-    final result = await _client.apiV1AnimalsSpeciesGet(
-      level: level,
-      limit: limit,
-      offset: offset,
-      parentId: parentId,
-      search: searchRequest,
-      xCurrentShelter: _authService.currentShelterId,
-    );
-
-    final data = result.body?.results;
-
-    if (data != null) {
-      Log.info('Animal species: ${data.length} items');
-      return data;
-    } else {
-      Log.warning('Fetch animal species failed: ${result.error}');
-      throw MessagedException(error: result.error);
-    }
-  }
-
-  Future<AnimalRead?> createAnimal(AnimalWrite animal) async {
-    Log.debug('Create animal');
-    animal = animal.copyWith(
-      shelter: _authService.currentShelterId,
-      placeOfRelease: animal.placeOfRelease ?? '',
-      deathReason: animal.deathReason ?? '',
-    );
-    final result = await _client.apiV1AnimalsPost(xCurrentShelter: _authService.currentShelterId, body: animal);
-
-    final data = result.body;
-
-    if (data != null) {
-      Log.info('Animal created: id=${data.id}');
-      return data;
-    } else {
-      Log.warning('Create animal failed: ${result.error}');
-      throw MessagedException(error: result.error);
-    }
-  }
-
-  Future<AnimalRead?> updateAnimal(int id, AnimalWrite animal) async {
-    Log.debug('Update animal: id=$id');
-    animal = animal.copyWith(
-      shelter: _authService.currentShelterId,
-      placeOfRelease: animal.placeOfRelease ?? '',
-      deathReason: animal.deathReason ?? '',
-    );
-    final result = await _client.apiV1AnimalsIdPut(
-      id: id.toString(),
-      xCurrentShelter: _authService.currentShelterId,
-      body: animal,
-    );
-
-    final data = result.body;
-
-    if (data != null) {
-      Log.info('Animal updated: id=${data.id}');
-      return data;
-    } else {
-      Log.warning('Update animal failed: ${result.error}');
-      throw MessagedException(error: result.error);
-    }
-  }
-
-  ApiV1AnimalsSpeciesGetLevel getLevel(int value) {
-    assert(value >= 0);
-    assert(value < ApiV1AnimalsSpeciesGetLevel.values.length - 1);
-    return ApiV1AnimalsSpeciesGetLevel.values[value + 1];
-  }
-
-  Future<AnimalRead> changeAnimalPhotos(int animalId, List<GalleryItemData> images) async {
-    Log.debug('Change animal photos: animalId=$animalId images=${images.length}');
-    final animal = await _client.apiV1AnimalsIdGet(
-      id: animalId.toString(),
-      xCurrentShelter: _authService.currentShelterId,
-    );
-
-    final retainImages = <int>[];
-    images.where((e) => e.network != null).forEach((e) {
-      if (e.isChoosed) retainImages.add(e.network?.id ?? -1);
-    });
-
-    final additional = <AnimalImageWrite>[];
-    final assets = images.where((e) => e.assetPath != null && e.isChoosed);
-    if (assets.isNotEmpty) {
-      await Future.wait(
-        assets.map((e) async {
-          final fileBytes = (await rootBundle.load(e.assetPath!));
-          final buffer = fileBytes.buffer;
-          additional.add(
-            AnimalImageWrite(
-              isPrimary: false,
-              name: e.assetPath ?? '',
-              image: base64Encode(buffer.asUint8List(fileBytes.offsetInBytes, fileBytes.lengthInBytes)),
-            ),
-          );
-        }),
-      );
-    }
-
-    // Байты выбранных с устройства фото читаются кроссплатформенно на этапе
-    // выбора (GalleryItemData.bytes) — File(path).readAsBytesSync() падал бы на
-    // web. Элементы без bytes (старый blob-URL без данных) пропускаем.
-    images.where((e) => e.bytes != null && e.isChoosed).forEach((e) {
-      var image = image_util.decodeImage(e.bytes!);
-      if (image == null) return;
-      if (image.height > _maxAnimalImageSize || image.width > _maxAnimalImageSize) {
-        final ratio = _maxAnimalImageSize / max(image.height, image.width);
-        image = image_util.copyResize(
-          image,
-          height: (image.height * ratio).floor(),
-          width: (image.width * ratio).floor(),
-        );
-      }
-
-      additional.add(
-        AnimalImageWrite(isPrimary: false, name: e.filePath ?? '', image: base64Encode(image_util.encodePng(image))),
-      );
-    });
-
-    final result = await _client.apiV1AnimalsIdPut(
-      xCurrentShelter: _authService.currentShelterId,
-      id: animalId.toString(),
-      body: animal.body?.write.copyWith(images: additional, validImages: retainImages),
-    );
-
-    final data = result.body;
-
-    if (data != null) {
-      Log.info('Animal photos changed: id=${data.id}');
-      return data;
-    } else {
-      Log.warning('Change animal photos failed: ${result.error}');
-      throw MessagedException(error: result.error);
-    }
-  }
-
-  Future<void> deleteAnimal(String id) async {
-    Log.debug('Delete animal: id=$id');
-    final result = await _client.apiV1AnimalsIdDelete(id: id, xCurrentShelter: _authService.currentShelterId);
-
-    if (result.error != null) {
-      Log.warning('Delete animal failed: ${result.error}');
-      throw MessagedException(error: result.error);
-    }
-    Log.info('Animal deleted: id=$id');
-  }
 
   /// Список заметок животного (новые сверху). Возвращает доменные сущности —
   /// маппинг DTO→сущность локальный (порт отдаёт DTO).
@@ -359,16 +156,11 @@ class AnimalService {
     Log.debug('Fetch PDF animal card: animalId=$animalId');
     // TODO: extract to DI
     final repo = getIt<DocumentRepository>();
-    final raw = await repo.fetchAnimalDoc(animalId);
-    final bytes = repo.decodePdfBytes(raw);
-    // Диагностика источника PDF (одним сообщением): длина строки от бэка, длина
-    // после декода и первые байты (у валидного PDF — «%PDF» = 37 80 68 70).
+    final bytes = await repo.fetchAnimalDoc(animalId);
+    // Диагностика источника PDF (одним сообщением): длина в байтах и первые
+    // байты (у валидного PDF — «%PDF» = 37 80 68 70).
     final head = bytes.take(8).toList();
-    Log.info(
-      '[pdf] animalId=$animalId raw.len=${raw.length} '
-      'decoded=${bytes.lengthInBytes}B head=$head '
-      'rawHead="${raw.length > 8 ? raw.substring(0, 8) : raw}"',
-    );
+    Log.info('[pdf] animalId=$animalId decoded=${bytes.lengthInBytes}B head=$head');
     return bytes;
   }
 }

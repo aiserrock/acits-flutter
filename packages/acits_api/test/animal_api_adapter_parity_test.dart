@@ -5,8 +5,11 @@
 // `AnimalRead` is parsed by the generated models here and mapped, field-for-
 // field, onto OUR generator-agnostic `AnimalDto`. Also proves the paginated
 // envelope is unwrapped to its `results` list.
+import 'dart:typed_data';
+
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_api/src/animals_client_barrel.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'fixtures/animals_fixtures.dart';
@@ -26,6 +29,9 @@ class _FakeAnimalsClient implements AnimalsClient {
   int? lastOffset;
   String? lastId;
 
+  /// Last body passed to v1AnimalsUpdate (for updatePhotos assertions).
+  AnimalWrite? lastUpdateBody;
+
   @override
   Future<PaginatedAnimalReadList> v1AnimalsList({
     int? xCurrentShelter,
@@ -44,6 +50,15 @@ class _FakeAnimalsClient implements AnimalsClient {
   @override
   Future<AnimalRead> v1AnimalsRetrieve({required String id, int? xCurrentShelter}) async {
     lastId = id;
+    lastShelterId = xCurrentShelter;
+    return single!;
+  }
+
+  @override
+  Future<AnimalRead> v1AnimalsUpdate({required String id, required AnimalWrite body, int? xCurrentShelter}) async {
+    lastId = id;
+    lastShelterId = xCurrentShelter;
+    lastUpdateBody = body;
     return single!;
   }
 
@@ -52,11 +67,39 @@ class _FakeAnimalsClient implements AnimalsClient {
       throw UnimplementedError('${invocation.memberName} is not used by the read adapter');
 }
 
+/// Fake Dio HTTP adapter: returns fixed [body] bytes and records the last
+/// request options so tests can assert query/header wiring for the PDF path.
+class _BytesHttpAdapter implements HttpClientAdapter {
+  _BytesHttpAdapter(this.body);
+
+  final List<int> body;
+  RequestOptions? lastOptions;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<List<int>>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    lastOptions = options;
+    return ResponseBody.fromBytes(
+      body,
+      200,
+      headers: {
+        Headers.contentTypeHeader: ['application/pdf'],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
 void main() {
   group('AnimalApiAdapter parity — single animal mapping', () {
     test('maps a fully-populated AnimalRead JSON onto AnimalDto field-for-field', () async {
       final single = AnimalRead.fromJson(fullAnimalJson());
-      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single));
+      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single), Dio());
 
       final dto = await adapter.getById(501);
 
@@ -116,7 +159,7 @@ void main() {
 
     test('tolerates a minimal payload (nullable fields absent/null)', () async {
       final single = AnimalRead.fromJson(minimalAnimalJson());
-      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single));
+      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single), Dio());
 
       final dto = await adapter.getById(502);
 
@@ -134,7 +177,7 @@ void main() {
 
     test('preserves an unknown enum wire value as a raw status string', () async {
       final single = AnimalRead.fromJson(unknownStatusAnimalJson());
-      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single));
+      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single), Dio());
 
       final dto = await adapter.getById(503);
 
@@ -146,7 +189,7 @@ void main() {
 
     test('round-trips AnimalDto through toJson/fromJson', () async {
       final single = AnimalRead.fromJson(fullAnimalJson());
-      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single));
+      final adapter = AnimalApiAdapter(_FakeAnimalsClient(single: single), Dio());
 
       final dto = await adapter.getById(501);
       final roundTripped = AnimalDto.fromJson(dto.toJson());
@@ -156,7 +199,7 @@ void main() {
 
     test('converts the numeric id to the string path param the client expects', () async {
       final client = _FakeAnimalsClient(single: AnimalRead.fromJson(minimalAnimalJson()));
-      final adapter = AnimalApiAdapter(client);
+      final adapter = AnimalApiAdapter(client, Dio());
 
       await adapter.getById(502);
 
@@ -167,7 +210,7 @@ void main() {
   group('AnimalApiAdapter parity — pagination unwrapping', () {
     test('unwraps the Paginated…List envelope to its results list', () async {
       final page = PaginatedAnimalReadList.fromJson(paginatedAnimalsJson());
-      final adapter = AnimalApiAdapter(_FakeAnimalsClient(page: page));
+      final adapter = AnimalApiAdapter(_FakeAnimalsClient(page: page), Dio());
 
       final dtos = await adapter.list(shelterId: 50, search: 'Барсик', limit: 2, offset: 0);
 
@@ -178,7 +221,7 @@ void main() {
 
     test('returns an empty list for an empty envelope', () async {
       final page = PaginatedAnimalReadList.fromJson(emptyPaginatedAnimalsJson());
-      final adapter = AnimalApiAdapter(_FakeAnimalsClient(page: page));
+      final adapter = AnimalApiAdapter(_FakeAnimalsClient(page: page), Dio());
 
       final dtos = await adapter.list();
 
@@ -187,7 +230,7 @@ void main() {
 
     test('forwards shelter/search/limit/offset to the generated client', () async {
       final client = _FakeAnimalsClient(page: PaginatedAnimalReadList.fromJson(emptyPaginatedAnimalsJson()));
-      final adapter = AnimalApiAdapter(client);
+      final adapter = AnimalApiAdapter(client, Dio());
 
       await adapter.list(shelterId: 42, search: 'кот', limit: 25, offset: 50);
 
@@ -195,6 +238,67 @@ void main() {
       expect(client.lastSearch, 'кот');
       expect(client.lastLimit, 25);
       expect(client.lastOffset, 50);
+    });
+  });
+
+  group('AnimalApiAdapter — updatePhotos (read→write echo)', () {
+    test('re-writes the animal preserving all fields, swapping only images/valid_images', () async {
+      final single = AnimalRead.fromJson(fullAnimalJson());
+      final client = _FakeAnimalsClient(single: single);
+      final adapter = AnimalApiAdapter(client, Dio());
+
+      final dto = await adapter.updatePhotos(
+        501,
+        newImages: const [AnimalImageWriteDto(name: 'new.png', image: 'BASE64DATA', isPrimary: false)],
+        retainImageIds: const [9001],
+        shelterId: 50,
+      );
+
+      // GET then PUT both hit id 501 with the shelter header.
+      expect(client.lastId, '501');
+      expect(client.lastShelterId, 50);
+
+      final body = client.lastUpdateBody!;
+      // Only images change.
+      expect(body.images, hasLength(1));
+      expect(body.images!.single.name, 'new.png');
+      expect(body.images!.single.image, 'BASE64DATA');
+      expect(body.validImages, [9001]);
+      // Every other field is carried over from the read unchanged.
+      expect(body.name, 'Барсик');
+      expect(body.specId, 12);
+      expect(body.shelter, 50);
+      expect(body.placeOfCatch, 'ул. Пушкина, д. 10');
+      expect(body.chippingCode, '643098100012345');
+      expect(body.curatorId, 77);
+      expect(body.applicantId, 88);
+      expect(body.animalAttributes, hasLength(2));
+      // Returned entity is mapped from the (echoed) read.
+      expect(dto.id, 501);
+    });
+  });
+
+  group('AnimalApiAdapter — PDF bytes', () {
+    test('returns raw PDF bytes 1:1 (binary-safe, no string round-trip)', () async {
+      // Bytes that are NOT valid UTF-8 (0x80, 0xFF) — the generated stream-of-
+      // strings path would corrupt these; the bytes path must preserve them.
+      final pdfBytes = <int>[0x25, 0x50, 0x44, 0x46, 0x80, 0xFF, 0x00, 0x0A];
+      final http = _BytesHttpAdapter(pdfBytes);
+      final dio = Dio(BaseOptions(baseUrl: 'https://api.example.test'))..httpClientAdapter = http;
+      final adapter = AnimalApiAdapter(_FakeAnimalsClient(), dio);
+
+      final from = DateTime.utc(2024, 1, 1);
+      final to = DateTime.utc(2024, 1, 31);
+      final bytes = await adapter.getAnimalPdf(id: 501, pdfType: 'history', from: from, to: to, shelterId: 50);
+
+      expect(bytes, isA<Uint8List>());
+      expect(bytes, orderedEquals(pdfBytes));
+      // Path/query/header parity with the old chopper contract.
+      expect(http.lastOptions!.path, '/api/v1/animals/501/history/pdf/');
+      expect(http.lastOptions!.queryParameters['from'], from.toIso8601String());
+      expect(http.lastOptions!.queryParameters['to'], to.toIso8601String());
+      expect(http.lastOptions!.headers['x-current-shelter'], 50);
+      expect(http.lastOptions!.responseType, ResponseType.bytes);
     });
   });
 }

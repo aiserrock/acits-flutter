@@ -57,7 +57,7 @@ abstract class AcitsApiRegisterDev {
   AnimalsClient animalsClient(@Named('acitsApi') Dio dio) => AnimalsClient(dio);
 
   @dev
-  AnimalApiPort animalApiPort(AnimalsClient client) => AnimalApiAdapter(client);
+  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) => AnimalApiAdapter(client, dio);
 
   @dev
   @Named('acitsApiTokenAuthed')
