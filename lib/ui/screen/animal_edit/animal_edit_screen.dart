@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:animals/animals.dart';
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +11,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:acits_flutter/ui/widget/success_holder.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/cubit/animal_edit_cubit.dart';
-import 'package:acits_flutter/ui/screen/animal_edit/cubit/animal_edit_state.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
+import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_seam.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_add_info_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_applicant_page.dart';
@@ -39,7 +40,10 @@ class AnimalEditScreen extends StatelessWidget {
       child: ChangeNotifierProvider<AnimalEditHolder>(
         create: (_) => AnimalEditHolder(),
         child: BlocProvider<AnimalEditCubit>(
-          create: (_) => AnimalEditCubit(id: id),
+          // Load/submit идут через модульный репозиторий (домен + Result, без
+          // DTO). Форма осталась в корне (strangler-граница): seed из сущности
+          // и сборка входных данных — в animal_edit_seam.dart.
+          create: (_) => AnimalEditCubit(getIt<AnimalRepository>(), getIt<CurrentShelterProvider>(), id: id),
           child: const _AnimalEditView(),
         ),
       ),
@@ -83,11 +87,12 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
       listenWhen: (prev, next) => next.valueOrNull?.animal != null,
       listener: (_, state) {
         final animal = state.valueOrNull?.animal;
-        if (animal != null) context.read<AnimalEditHolder>().init(animal);
+        // Seed формы из доменной сущности (strangler-seam: домен → AnimalRead).
+        if (animal != null) context.read<AnimalEditHolder>().init(animal.toReadSeed());
       },
       builder: (context, state) {
-        final mode = state.valueOrNull?.mode ?? AnimalEditScreenMode.form;
-        final showFab = mode != AnimalEditScreenMode.success && !state.hasError;
+        final mode = state.valueOrNull?.mode ?? AnimalEditMode.form;
+        final showFab = mode != AnimalEditMode.success && !state.hasError;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: Theme.of(context).colorScheme.surface,
@@ -133,7 +138,7 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
           ),
           builder: (context, content) {
             final isEdit = context.read<AnimalEditCubit>().isEdit;
-            return content.mode == AnimalEditScreenMode.form
+            return content.mode == AnimalEditMode.form
                 ? isEdit
                       ? RefreshIndicator(
                           onRefresh: () => context.read<AnimalEditCubit>().reload(),
@@ -220,7 +225,7 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
       context.read<AnimalEditPagerHolder>().set(max(0, page));
       _pageController.nextPage(duration: kTabScrollDuration, curve: Curves.linear);
       final mode = context.read<AnimalEditCubit>().state.valueOrNull?.mode;
-      if (_isLastPage && !_isUploadProgress && mode != AnimalEditScreenMode.success) {
+      if (_isLastPage && !_isUploadProgress && mode != AnimalEditMode.success) {
         _onSubmit();
       }
     }
@@ -241,8 +246,16 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
 
   Future<void> _onSubmit() async {
     setState(() => _isUploadProgress = true);
-    final editedAnimal = context.read<AnimalEditHolder>().state;
-    await context.read<AnimalEditCubit>().submit(editedAnimal);
+    // Отредактированный AnimalRead формы → доменные входные данные (seam), submit
+    // собирает AnimalWriteDto в модульном репозитории.
+    final inputs = readToSubmitInputs(context.read<AnimalEditHolder>().state);
+    await context.read<AnimalEditCubit>().submit(
+      inputs.animal,
+      attributes: inputs.attributes,
+      newImages: inputs.newImages,
+      retainImageIds: inputs.retainImageIds,
+      specId: inputs.specId,
+    );
     if (mounted) setState(() => _isUploadProgress = false);
   }
 }
