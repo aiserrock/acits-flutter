@@ -16,6 +16,7 @@ workspace:
   - packages/acits_domain
   - packages/acits_api
   - packages/acits_ui_kit
+  - packages/acits_navigation
 
 dependencies:
   flutter:
