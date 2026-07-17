@@ -19,6 +19,7 @@ workspace:
   - packages/acits_navigation
   - modules/animals
   - modules/auth
+  - modules/applicants
 
 dependencies:
   flutter:
@@ -49,6 +50,11 @@ dependencies:
   # Session state stays in the app behind AuthSessionApi (implemented by AuthService).
   auth:
     path: modules/auth
+
+  # Feature module: applicants + curators (staff). StaffService lives here and is
+  # also consumed by the app's search paging adapter.
+  applicants:
+    path: modules/applicants
 
   app_links: ^7.0.0
   bloc: ^9.2.0

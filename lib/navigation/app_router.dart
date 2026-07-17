@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:animals/animals.dart' show AnimalSpecies;
+import 'package:applicants/applicants.dart';
 import 'package:acits_flutter/domain/animal_note/animal_note.dart';
 import 'package:acits_flutter/domain/prescription/prescription.dart';
 import 'package:acits_flutter/domain/prescription/prescription_animal_ref.dart';
@@ -12,9 +13,7 @@ import 'package:acits_flutter/navigation/extra_codec.dart';
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
-import 'package:acits_flutter/ui/screen/applicant/applicant_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_edit_screen.dart';
-import 'package:acits_flutter/ui/screen/curator/curator_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_screen.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/personal_screen.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_screen.dart';
@@ -98,13 +97,17 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.applicantEdit,
-        builder: (context, state) =>
-            ApplicantEditScreen(applicantId: int.tryParse(state.uri.queryParameters['applicantId'] ?? '')),
+        builder: (context, state) => ApplicantEditScreen(
+          staffService: getIt<StaffService>(),
+          applicantId: int.tryParse(state.uri.queryParameters['applicantId'] ?? ''),
+        ),
       ),
       GoRoute(
         path: AppRoutes.curatorEdit,
-        builder: (context, state) =>
-            CuratorEditScreen(curatorId: int.tryParse(state.uri.queryParameters['curatorId'] ?? '')),
+        builder: (context, state) => CuratorEditScreen(
+          staffService: getIt<StaffService>(),
+          curatorId: int.tryParse(state.uri.queryParameters['curatorId'] ?? ''),
+        ),
       ),
       GoRoute(
         path: AppRoutes.commentEdit,

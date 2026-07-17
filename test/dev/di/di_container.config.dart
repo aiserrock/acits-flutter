@@ -13,6 +13,8 @@ import 'package:acits_api/acits_api.dart' as _i101;
 import 'package:acits_core/acits_core.dart' as _i354;
 import 'package:acits_flutter/domain/env.dart' as _i531;
 import 'package:acits_flutter/navigation/animals_router_service.dart' as _i514;
+import 'package:acits_flutter/navigation/applicants_router_service.dart'
+    as _i314;
 import 'package:acits_flutter/navigation/auth_router_service.dart' as _i501;
 import 'package:acits_flutter/service/animal/animal_service.dart' as _i876;
 import 'package:acits_flutter/service/auth/auth_repository.dart' as _i622;
@@ -23,6 +25,7 @@ import 'package:acits_flutter/service/client/acits_api_register.dart' as _i382;
 import 'package:acits_flutter/service/client/animals_port_bridges.dart'
     as _i434;
 import 'package:acits_flutter/service/client/animals_register.dart' as _i286;
+import 'package:acits_flutter/service/client/applicants_register.dart' as _i144;
 import 'package:acits_flutter/service/client/auth_port_bridges.dart' as _i350;
 import 'package:acits_flutter/service/client/dio_register.dart' as _i693;
 import 'package:acits_flutter/service/config/config_service.dart' as _i245;
@@ -45,10 +48,10 @@ import 'package:acits_flutter/service/shared_pref/preference_storage.dart'
     as _i2;
 import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart'
     as _i718;
-import 'package:acits_flutter/service/staff/staff_service.dart' as _i156;
 import 'package:acits_flutter/service/theme/theme_storage.dart' as _i924;
 import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
 import 'package:animals/animals.dart' as _i616;
+import 'package:applicants/applicants.dart' as _i20;
 import 'package:auth/auth.dart' as _i662;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
@@ -85,6 +88,7 @@ Future<_i174.GetIt> $initDevGetIt(
   final acitsApiRegisterDev = _$AcitsApiRegisterDev();
   final acitsApiRegister = _$AcitsApiRegister();
   final animalsRegister = _$AnimalsRegister();
+  final applicantsRegister = _$ApplicantsRegister();
   gh.factory<_i558.FlutterSecureStorage>(
     () => secureStorageRegister.createSp(),
   );
@@ -95,6 +99,9 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
   gh.factory<_i662.SplashNavigator>(() => const _i501.SplashNavigatorImpl());
+  gh.factory<_i20.ApplicantsRouterService>(
+    () => const _i314.ApplicantsRouterServiceImpl(),
+  );
   gh.factory<_i354.TokenRefresher>(
     () => const _i350.AuthServiceTokenRefresher(),
   );
@@ -385,11 +392,11 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i21.AuthService>(),
     ),
   );
-  gh.singleton<_i156.StaffService>(
-    () => _i156.StaffService(gh<_i21.AuthService>(), gh<_i101.StaffApiPort>()),
-  );
   gh.factory<_i616.AnimalPermissions>(
     () => _i434.AuthServiceAnimalPermissions(gh<_i21.AuthService>()),
+  );
+  gh.factory<_i20.ApplicantsShelterProvider>(
+    () => _i144.AuthServiceApplicantsShelter(gh<_i21.AuthService>()),
   );
   gh.factory<_i616.AnimalStatusLabels>(
     () => _i434.ConfigServiceAnimalStatusLabels(gh<_i245.ConfigService>()),
@@ -414,6 +421,12 @@ Future<_i174.GetIt> $initDevGetIt(
     () => _i302.DocumentRepository(
       gh<_i616.AnimalRepository>(),
       gh<_i616.CurrentShelterProvider>(),
+    ),
+  );
+  gh.singleton<_i20.StaffService>(
+    () => applicantsRegister.staffService(
+      gh<_i20.ApplicantsShelterProvider>(),
+      gh<_i101.StaffApiPort>(),
     ),
   );
   gh.factory<_i616.AnimalsRouterService>(
@@ -443,3 +456,5 @@ class _$AcitsApiRegisterDev extends _i39.AcitsApiRegisterDev {}
 class _$AcitsApiRegister extends _i382.AcitsApiRegister {}
 
 class _$AnimalsRegister extends _i286.AnimalsRegister {}
+
+class _$ApplicantsRegister extends _i144.ApplicantsRegister {}

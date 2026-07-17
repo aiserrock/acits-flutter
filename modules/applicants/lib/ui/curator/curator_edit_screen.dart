@@ -1,22 +1,27 @@
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/screen/curator/cubit/curator_edit_cubit.dart';
-import 'package:acits_flutter/ui/widget/form_edit_card.dart';
-import 'package:acits_flutter/ui/widget/loader.dart';
-import 'package:acits_flutter/util/validator.dart';
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_domain/acits_domain.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
+import '../../data/staff_service.dart';
+import '../../util/validator.dart';
+import '../applicants_l10n_keys.dart';
+import 'cubit/curator_edit_cubit.dart';
+
 /// Экран создания или редактирования куратора
 class CuratorEditScreen extends StatelessWidget {
-  const CuratorEditScreen({this.curatorId, super.key});
+  const CuratorEditScreen({required this.staffService, this.curatorId, super.key});
 
+  final StaffService staffService;
   final int? curatorId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CuratorEditCubit(curatorId: curatorId),
+      create: (_) => CuratorEditCubit(staffService, curatorId: curatorId),
       child: const _CuratorEditView(),
     );
   }
@@ -66,7 +71,7 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
           onTap: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          cubit.isEdit ? LocaleKeys.curatorEdit.tr() : LocaleKeys.curatorAdd.tr(),
+          cubit.isEdit ? ApplicantsL10nKeys.curatorEdit.tr() : ApplicantsL10nKeys.curatorAdd.tr(),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -109,18 +114,18 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
           key: formKey,
           child: FormEditCard([
             EditCardData(
-              label: '${LocaleKeys.animalCuratorName.tr()} *',
+              label: '${ApplicantsL10nKeys.animalCuratorName.tr()} *',
               controller: _nameController,
               validator: Validator.emptyValidator,
             ),
-            EditCardData(label: LocaleKeys.animalCuratorLastName.tr(), controller: _lastNameController),
+            EditCardData(label: ApplicantsL10nKeys.animalCuratorLastName.tr(), controller: _lastNameController),
             EditCardData(
-              label: '${LocaleKeys.animalCuratorPhone.tr()} *',
+              label: '${ApplicantsL10nKeys.animalCuratorPhone.tr()} *',
               controller: _phoneController,
               validator: Validator.emptyValidator,
             ),
-            EditCardData(label: LocaleKeys.animalCuratorEmail.tr(), controller: _emailController),
-            EditCardData(label: LocaleKeys.animalCuratorAddress.tr(), controller: _addressController),
+            EditCardData(label: ApplicantsL10nKeys.animalCuratorEmail.tr(), controller: _emailController),
+            EditCardData(label: ApplicantsL10nKeys.animalCuratorAddress.tr(), controller: _addressController),
           ]),
         ),
       ],
