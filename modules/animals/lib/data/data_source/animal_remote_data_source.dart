@@ -7,8 +7,8 @@ class AnimalRemoteDataSource {
 
   final AnimalApiPort _port;
 
-  Future<List<AnimalDto>> list({int? shelterId, String? search, int? limit, int? offset}) =>
-      _port.list(shelterId: shelterId, search: search, limit: limit, offset: offset);
+  Future<List<AnimalDto>> list({int? shelterId, String? search, String? ordering, int? limit, int? offset}) =>
+      _port.list(shelterId: shelterId, search: search, ordering: ordering, limit: limit, offset: offset);
 
   Future<AnimalDto> getById(int id, {int? shelterId}) => _port.getById(id, shelterId: shelterId);
 

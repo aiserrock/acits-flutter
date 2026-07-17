@@ -14,4 +14,7 @@ export 'src/platform/document_export_service.dart';
 export 'src/platform/photo_upload_service.dart';
 export 'src/platform/platform_ports.dart';
 export 'src/result/result.dart';
+export 'src/state/data_state.dart';
 export 'src/task/app_task.dart';
+export 'src/util/datetime_format.dart';
+export 'src/util/url_cors_proxy.dart';

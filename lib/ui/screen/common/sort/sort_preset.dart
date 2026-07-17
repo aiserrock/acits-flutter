@@ -1,29 +1,11 @@
-import 'package:equatable/equatable.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
 
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 
-/// Пресет сортировки для ленты чипсов.
-///
-/// Один чипс = целый готовый режим сортировки: подпись ([labelKey]) + значение
-/// серверного параметра `ordering` ([ordering]). Пресеты взаимоисключающие —
-/// активен ровно один. [id] — стабильный ключ для сравнения активного пресета
-/// (не завязан на локализованную подпись).
-class SortPreset extends Equatable {
-  const SortPreset({required this.id, required this.labelKey, required this.ordering});
-
-  /// Стабильный идентификатор пресета (для `selected`/сравнения).
-  final String id;
-
-  /// Ключ локализации подписи чипса ([LocaleKeys]).
-  final String labelKey;
-
-  /// Значение query-параметра `ordering` для API. Префикс `-` — убывание.
-  /// Вложенные поля — через `__` (DRF): напр. `prescription__animal__name`.
-  final String ordering;
-
-  @override
-  List<Object?> get props => [id, labelKey, ordering];
-}
+/// [SortPreset] переехал в acits_ui_kit (generic). Ре-экспортируем, чтобы
+/// существующие импорты работали; пресеты приложения (с ключами [LocaleKeys])
+/// остаются здесь — ui_kit про конкретные экраны/локали не знает.
+export 'package:acits_ui_kit/acits_ui_kit.dart' show SortPreset;
 
 /// Пресеты сортировки списка животных (модель `AnimalRead`).
 ///

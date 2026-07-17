@@ -1,7 +1,9 @@
+import 'package:animals/animals.dart';
+
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/theme.dart';
-import 'package:acits_flutter/ui/screen/animals/animals_screen.dart';
 import 'package:acits_flutter/ui/screen/calendar/calendar_screen.dart';
 import 'package:acits_flutter/ui/screen/drugs/drugs_screen.dart';
 import 'package:acits_flutter/ui/screen/main/main_screen.dart';
@@ -51,7 +53,7 @@ class _RootScreenState extends State<RootScreen> {
 
   /// Индексы вкладок, которые уже были показаны хотя бы раз. Вкладку строим
   /// (и поднимаем её cubit) лениво — только после первого перехода на неё,
-  /// а не все четыре с первого кадра. AnimalsScreen не грузит список, пока
+  /// а не все четыре с первого кадра. AnimalsPage не грузит список, пока
   /// пользователь не откроет вкладку «Животные».
   final _visited = <int>{0};
 
@@ -79,6 +81,22 @@ class _RootScreenState extends State<RootScreen> {
     super.dispose();
   }
 
+  /// Собрать мигрированный экран списка животных (модуль `animals`), прокинув
+  /// зависимости из DI, drawer приложения и app-ассеты (заглушки/иллюстрации),
+  /// которыми модуль не владеет.
+  Widget _buildAnimalsPage(BuildContext context) {
+    return AnimalsPage(
+      repository: getIt<AnimalRepository>(),
+      shelterProvider: getIt<CurrentShelterProvider>(),
+      router: getIt<AnimalsRouterService>(),
+      permissions: getIt<AnimalPermissions>(),
+      statusLabels: getIt<AnimalStatusLabels>(),
+      onMenuPressed: RootDrawerProvider.of(context)?.openDrawer,
+      emptyStateIllustration: Assets.common.emptyState.svg(),
+      avatarFallback: Assets.image.animalStub.image(fit: BoxFit.cover, width: 80.0, height: 80.0),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bottomNav = BottomNavigationBar(
@@ -88,7 +106,10 @@ class _RootScreenState extends State<RootScreen> {
           ScaffoldMessenger.of(context)
             ..clearSnackBars()
             ..showSnackBar(
-              SnackBar(content: Text(LocaleKeys.commonDidNotImpl.tr()), duration: const Duration(seconds: 2)),
+              SnackBar(
+                content: Text(LocaleKeys.commonDidNotImpl.tr()),
+                duration: const Duration(seconds: 2),
+              ),
             );
         }
         if (_current != index && index < 2) {
@@ -129,7 +150,7 @@ class _RootScreenState extends State<RootScreen> {
           index: _current,
           children: [
             _visited.contains(0) ? const MainScreen() : const SizedBox.shrink(),
-            _visited.contains(1) ? const AnimalsScreen() : const SizedBox.shrink(),
+            _visited.contains(1) ? _buildAnimalsPage(context) : const SizedBox.shrink(),
             const CalendarScreen(),
             const DrugsScreen(),
           ],

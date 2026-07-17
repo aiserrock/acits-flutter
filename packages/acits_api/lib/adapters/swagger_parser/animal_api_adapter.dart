@@ -33,8 +33,14 @@ class AnimalApiAdapter implements AnimalApiPort {
   final AnimalsClient _client;
 
   @override
-  Future<List<AnimalDto>> list({int? shelterId, String? search, int? limit, int? offset}) async {
-    final page = await _client.v1AnimalsList(xCurrentShelter: shelterId, search: search, limit: limit, offset: offset);
+  Future<List<AnimalDto>> list({int? shelterId, String? search, String? ordering, int? limit, int? offset}) async {
+    final page = await _client.v1AnimalsList(
+      xCurrentShelter: shelterId,
+      search: search,
+      ordering: ordering,
+      limit: limit,
+      offset: offset,
+    );
     final results = page.results ?? const <AnimalRead>[];
     return results.map(_mapAnimal).toList(growable: false);
   }

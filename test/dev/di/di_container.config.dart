@@ -13,12 +13,16 @@ import 'package:acits_api/acits_api.dart' as _i101;
 import 'package:acits_core/acits_core.dart' as _i354;
 import 'package:acits_flutter/domain/env.dart' as _i531;
 import 'package:acits_flutter/export.dart' as _i965;
+import 'package:acits_flutter/navigation/animals_router_service.dart' as _i514;
 import 'package:acits_flutter/service/animal/animal_service.dart' as _i876;
 import 'package:acits_flutter/service/auth/auth_repository.dart' as _i622;
 import 'package:acits_flutter/service/auth/auth_service.dart' as _i21;
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart'
     as _i422;
 import 'package:acits_flutter/service/client/acits_api_register.dart' as _i382;
+import 'package:acits_flutter/service/client/animals_port_bridges.dart'
+    as _i434;
+import 'package:acits_flutter/service/client/animals_register.dart' as _i286;
 import 'package:acits_flutter/service/client/auth_client_register.dart'
     as _i363;
 import 'package:acits_flutter/service/client/auth_interceptor.dart' as _i492;
@@ -48,6 +52,7 @@ import 'package:acits_flutter/service/shared_pref/shared_pref_register.dart'
 import 'package:acits_flutter/service/staff/staff_service.dart' as _i156;
 import 'package:acits_flutter/service/theme/theme_storage.dart' as _i924;
 import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
+import 'package:animals/animals.dart' as _i616;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
@@ -83,6 +88,7 @@ Future<_i174.GetIt> $initDevGetIt(
   final clientRegisterDev = _$ClientRegisterDev();
   final clientRegister = _$ClientRegister();
   final acitsApiRegister = _$AcitsApiRegister();
+  final animalsRegister = _$AnimalsRegister();
   gh.factory<_i492.AuthInterceptor>(() => _i492.AuthInterceptor());
   gh.factory<_i158.HeaderInterceptor>(() => _i158.HeaderInterceptor());
   gh.factory<_i558.FlutterSecureStorage>(
@@ -186,6 +192,9 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i2.PreferenceStorage>(),
     ),
   );
+  gh.factory<_i616.AnimalPermissions>(
+    () => _i434.AuthServiceAnimalPermissions(gh<_i21.AuthService>()),
+  );
   gh.factory<_i354.SessionInvalidator>(
     () => _i350.AuthServiceSessionInvalidator(gh<_i21.AuthService>()),
   );
@@ -201,11 +210,20 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.factory<_i302.DocumentRepository>(
     () => _i302.DocumentRepository(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
   );
+  gh.factory<_i616.AnimalsRouterService>(
+    () => _i514.AnimalsRouterServiceImpl(gh<_i876.AnimalService>()),
+  );
   gh.singleton<_i701.PersonalService>(
     () => _i701.PersonalService(gh<_i965.Openapi>(), gh<_i21.AuthService>()),
   );
   gh.factory<_i354.LocaleProvider>(
     () => _i350.ConfigServiceLocaleProvider(gh<_i245.ConfigService>()),
+  );
+  gh.factory<_i616.AnimalStatusLabels>(
+    () => _i434.ConfigServiceAnimalStatusLabels(gh<_i245.ConfigService>()),
+  );
+  gh.factory<_i616.CurrentShelterProvider>(
+    () => _i434.AuthServiceCurrentShelter(gh<_i21.AuthService>()),
   );
   gh.singleton<_i212.PrescriptionService>(
     () => _i212.PrescriptionService(
@@ -237,6 +255,12 @@ Future<_i174.GetIt> $initDevGetIt(
     () => acitsApiRegister.animalApiPort(gh<_i101.AnimalsClient>()),
     registerFor: {_prod},
   );
+  gh.factory<_i616.AnimalRemoteDataSource>(
+    () => animalsRegister.animalRemoteDataSource(gh<_i101.AnimalApiPort>()),
+  );
+  gh.factory<_i616.AnimalRepository>(
+    () => animalsRegister.animalRepository(gh<_i616.AnimalRemoteDataSource>()),
+  );
   return getIt;
 }
 
@@ -261,3 +285,5 @@ class _$ClientRegisterDev extends _i913.ClientRegisterDev {}
 class _$ClientRegister extends _i363.ClientRegister {}
 
 class _$AcitsApiRegister extends _i382.AcitsApiRegister {}
+
+class _$AnimalsRegister extends _i286.AnimalsRegister {}

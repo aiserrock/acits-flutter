@@ -10,9 +10,10 @@ import 'dto/species_dto.dart';
 /// interface, with zero changes to ports, DTOs, repositories, or features.
 abstract interface class AnimalApiPort {
   /// Lists animals, optionally scoped to a shelter and/or filtered by a free
-  /// text [search], with [limit]/[offset] pagination. Returns the unwrapped
+  /// text [search], sorted by [ordering] (DRF `ordering` query, e.g.
+  /// `-date_joined`), with [limit]/[offset] pagination. Returns the unwrapped
   /// `results` list (pagination envelope is handled by the adapter).
-  Future<List<AnimalDto>> list({int? shelterId, String? search, int? limit, int? offset});
+  Future<List<AnimalDto>> list({int? shelterId, String? search, String? ordering, int? limit, int? offset});
 
   /// Fetches a single animal by its numeric [id].
   Future<AnimalDto> getById(int id, {int? shelterId});

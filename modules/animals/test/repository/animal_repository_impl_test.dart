@@ -136,9 +136,7 @@ void main() {
 
   group('getById', () {
     test('success → Ok(Animal)', () async {
-      when(
-        () => port.getById(501, shelterId: any(named: 'shelterId')),
-      ).thenAnswer((_) async => fullAnimalDto());
+      when(() => port.getById(501, shelterId: any(named: 'shelterId'))).thenAnswer((_) async => fullAnimalDto());
 
       final result = await repo.getById(501, shelterId: 50);
 
@@ -179,22 +177,17 @@ void main() {
     final animal = _editAnimal();
 
     test('create success maps write inputs and returns Animal', () async {
-      when(
-        () => port.create(any(), shelterId: any(named: 'shelterId')),
-      ).thenAnswer((_) async => fullAnimalDto());
+      when(() => port.create(any(), shelterId: any(named: 'shelterId'))).thenAnswer((_) async => fullAnimalDto());
 
       final result = await repo.create(
         animal,
-        attributes: const [
-          AnimalAttributeInput(attrId: 1, name: 'sex', value: 'Самец', isRequired: true),
-        ],
+        attributes: const [AnimalAttributeInput(attrId: 1, name: 'sex', value: 'Самец', isRequired: true)],
         newImages: const [AnimalImageInput(name: 'p.jpg', image: 'base64==', isPrimary: true)],
         shelterId: 50,
       );
 
       expect(result.valueOrNull, isA<Animal>());
-      final captured =
-          verify(() => port.create(captureAny(), shelterId: 50)).captured.single as AnimalWriteDto;
+      final captured = verify(() => port.create(captureAny(), shelterId: 50)).captured.single as AnimalWriteDto;
       expect(captured.specId, 12);
       expect(captured.placeOfCatch, 'ул. Пушкина, д. 10');
       expect(captured.shelter, 50);
@@ -208,18 +201,10 @@ void main() {
         () => port.update(any(), any(), shelterId: any(named: 'shelterId')),
       ).thenAnswer((_) async => fullAnimalDto());
 
-      final result = await repo.update(
-        501,
-        animal,
-        attributes: const [],
-        retainImageIds: const [9001],
-        shelterId: 50,
-      );
+      final result = await repo.update(501, animal, attributes: const [], retainImageIds: const [9001], shelterId: 50);
 
       expect(result.valueOrNull, isA<Animal>());
-      final captured =
-          verify(() => port.update(501, captureAny(), shelterId: 50)).captured.single
-              as AnimalWriteDto;
+      final captured = verify(() => port.update(501, captureAny(), shelterId: 50)).captured.single as AnimalWriteDto;
       expect(captured.validImages, [9001]);
     });
   });

@@ -19,7 +19,9 @@ class AnimalListItemMapper implements Transformable<AnimalListItem> {
       name: _dto.name ?? '',
       status: AnimalStatus.fromWire(_dto.status),
       thumbUrl: avatar == null ? null : _thumb(avatar.image),
+      speciesParentName: _dto.spec?.parentName,
       speciesName: _dto.spec?.name,
+      dateJoined: _dto.dateJoined,
     );
   }
 

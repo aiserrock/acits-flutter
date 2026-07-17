@@ -1,13 +1,11 @@
+import 'package:acits_ui_kit/acits_ui_kit.dart' as ui_kit;
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/gen/assets.gen.dart';
-import 'package:acits_flutter/ui/widget/skeleton.dart';
 
-/// Сетевая картинка с shimmer-плейсхолдером на время загрузки.
-///
-/// Пока байты грузятся — показывает [Skeleton] (shimmer), при ошибке — заглушку
-/// `animalStub`. Заменяет «голый» `Image.network`/`NetworkImage`, которые
-/// оставляли пустое место до прихода картинки.
+/// App-обёртка над [ui_kit.ShimmerNetworkImage]: подставляет фирменную заглушку
+/// `animalStub` (ui_kit не владеет ассетами приложения). Тонкий адаптер — вся
+/// логика загрузки/shimmer живёт в ui_kit.
 class ShimmerNetworkImage extends StatelessWidget {
   const ShimmerNetworkImage({
     required this.url,
@@ -32,35 +30,14 @@ class ShimmerNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(radius);
-    if (url == null || url!.isEmpty) {
-      return _wrap(borderRadius, Assets.image.animalStub.image(fit: fit, width: width, height: height));
-    }
-    return ClipRRect(
-      borderRadius: borderRadius,
-      child: Image.network(
-        url!,
-        fit: fit,
-        width: width,
-        height: height,
-        cacheWidth: cacheWidth,
-        loadingBuilder: (context, child, progress) {
-          if (progress == null) return child; // загрузка завершена
-          // Skeleton требует child или height. При height==null (картинка тянется
-          // по родителю через fit) отдаём растягивающийся child, иначе ассерт падает.
-          return Skeleton(
-            width: width,
-            height: height,
-            radius: radius,
-            child: height == null ? const SizedBox.expand() : null,
-          );
-        },
-        errorBuilder: (context, _, _) => Assets.image.animalStub.image(fit: fit, width: width, height: height),
-      ),
+    return ui_kit.ShimmerNetworkImage(
+      url: url,
+      fit: fit,
+      width: width,
+      height: height,
+      radius: radius,
+      cacheWidth: cacheWidth,
+      fallback: Assets.image.animalStub.image(fit: fit, width: width, height: height),
     );
-  }
-
-  Widget _wrap(BorderRadius borderRadius, Widget child) {
-    return ClipRRect(borderRadius: borderRadius, child: child);
   }
 }

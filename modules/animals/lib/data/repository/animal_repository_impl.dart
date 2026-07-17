@@ -24,6 +24,7 @@ class AnimalRepositoryImpl implements AnimalRepository {
   Future<Result<Failure, List<AnimalListItem>>> list({
     int? shelterId,
     String? search,
+    String? ordering,
     int? limit,
     int? offset,
   }) {
@@ -31,6 +32,7 @@ class AnimalRepositoryImpl implements AnimalRepository {
       final dtos = await _remote.list(
         shelterId: shelterId,
         search: search,
+        ordering: ordering,
         limit: limit,
         offset: offset,
       );
@@ -113,14 +115,7 @@ class AnimalRepositoryImpl implements AnimalRepository {
     return animalToWriteDto(
       animal,
       attributes: attributes
-          .map(
-            (a) => AnimalAttributeDto(
-              attrId: a.attrId,
-              name: a.name,
-              value: a.value,
-              isRequired: a.isRequired,
-            ),
-          )
+          .map((a) => AnimalAttributeDto(attrId: a.attrId, name: a.name, value: a.value, isRequired: a.isRequired))
           .toList(growable: false),
       newImages: newImages
           .map((i) => AnimalImageWriteDto(name: i.name, image: i.image, isPrimary: i.isPrimary))

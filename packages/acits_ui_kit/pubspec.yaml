@@ -12,6 +12,9 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  easy_localization: ^3.0.8
+  equatable: ^2.0.8
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
