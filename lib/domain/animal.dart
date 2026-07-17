@@ -11,7 +11,7 @@ const Color _fallbackStatusColor = Color(0xFF9395A7);
 extension AnimalX on AnimalRead {
   String? get statusString {
     final service = getIt<ConfigService>();
-    return service.getStatus131Name(status);
+    return service.getStatus131Name(status?.value);
   }
 
   String? get sexString {
@@ -189,12 +189,6 @@ extension StatusX on Status69fEnum {
 
   String? get statusString {
     final service = getIt<ConfigService>();
-    return service.getStatus131Name(this);
-  }
-}
-
-extension CuratorX on Curator {
-  String? get fullName {
-    return '$firstName $lastName';
+    return service.getStatus131Name(value);
   }
 }

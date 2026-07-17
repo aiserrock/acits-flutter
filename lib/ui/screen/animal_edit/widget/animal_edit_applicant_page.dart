@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart' as gen;
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
@@ -121,7 +122,8 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> with 
   }
 
   void _setControllers(AnimalRead value) {
-    if (value.applicant != null) setState(() => _applicant = value.applicant);
+    final seeded = value.applicant;
+    if (seeded != null) setState(() => _applicant = _fromGen(seeded));
     _applicantNameController.text = _applicant?.firstName ?? '';
     _applicantLastNameController.text = _applicant?.lastName ?? '';
     _applicantPhoneController.text = _applicant?.phoneNumber ?? '';
@@ -132,7 +134,7 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> with 
   @override
   void onChangePage() {
     if (page != 4) return;
-    final applicant = Applicant(
+    final applicant = gen.Applicant(
       firstName: _applicantNameController.text,
       lastName: _applicantLastNameController.text,
       phoneNumber: _applicantPhoneController.text,
@@ -142,6 +144,16 @@ class _AnimalEditApplicantPageState extends State<AnimalEditApplicantPage> with 
     );
     Provider.of<AnimalEditHolder>(context, listen: false).copyWith(applicant: applicant, applicantId: _applicant?.id);
   }
+
+  /// chopper `Applicant` из `AnimalRead` (seed формы) → доменная сущность.
+  Applicant _fromGen(gen.Applicant a) => Applicant(
+    id: a.id,
+    firstName: a.firstName,
+    lastName: a.lastName,
+    phoneNumber: a.phoneNumber,
+    email: a.email,
+    contactDetails: a.contactDetails,
+  );
 
   Future<void> _searchApplicant() async {
     final result = await context.push<Applicant>(AppRoutes.searchPath(SearchTypeKey.applicant));

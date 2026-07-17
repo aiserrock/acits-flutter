@@ -10,6 +10,6 @@ class CuratorListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(title: Text(curator.fullName ?? ''));
+    return ListTile(title: Text(curator.fullName));
   }
 }

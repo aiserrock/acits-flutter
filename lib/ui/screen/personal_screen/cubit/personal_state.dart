@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/domain/user_profile.dart';
+import 'package:acits_flutter/util/data_state.dart';
 
 /// Состояние экрана личного кабинета: данные пользователя ([data]) и признак
 /// видимости кнопки сохранения ([fabVisible]).
@@ -9,10 +10,10 @@ class PersonalState extends Equatable {
 
   const PersonalState.loading() : this(data: const DataState.loading());
 
-  final DataState<UserSerializers> data;
+  final DataState<UserProfile> data;
   final bool fabVisible;
 
-  PersonalState copyWith({DataState<UserSerializers>? data, bool? fabVisible}) {
+  PersonalState copyWith({DataState<UserProfile>? data, bool? fabVisible}) {
     return PersonalState(data: data ?? this.data, fabVisible: fabVisible ?? this.fabVisible);
   }
 

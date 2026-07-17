@@ -118,4 +118,28 @@ abstract class AcitsApiRegister {
   @prod
   AnimalNotesApiPort animalNotesApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
       AnimalNotesApiAdapter(dio, client);
+
+  // ── staff slice (applicants + curators) ─────────────────────────────────────
+
+  @prod
+  ApplicantsClient applicantsClient(@Named('acitsApi') Dio dio) => ApplicantsClient(dio);
+
+  @prod
+  CuratorsClient curatorsClient(@Named('acitsApi') Dio dio) => CuratorsClient(dio);
+
+  @prod
+  StaffApiPort staffApiPort(ApplicantsClient applicants, CuratorsClient curators) =>
+      StaffApiAdapter(applicants, curators);
+
+  // ── profile slice (/users/me/) ──────────────────────────────────────────────
+
+  @prod
+  ProfileApiPort profileApiPort(@Named('acitsApi') Dio dio, UsersClient usersClient) =>
+      ProfileApiAdapter(dio, usersClient);
+
+  // ── config slice (values-for-selection + animal attributes) ─────────────────
+
+  @prod
+  SelectionApiPort selectionApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
+      SelectionApiAdapter(dio, client);
 }

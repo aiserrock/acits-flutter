@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/domain/user_profile.dart';
 import 'package:acits_flutter/service/personal/personal_service.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_state.dart';
+import 'package:acits_flutter/util/bloc_ext.dart';
+import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 
 /// Cubit экрана личного кабинета. Загружает данные пользователя и сохраняет
@@ -15,7 +17,7 @@ class PersonalCubit extends Cubit<PersonalState> {
 
   /// Загрузить данные пользователя. Возвращает загруженного пользователя,
   /// чтобы виджет мог проинициализировать контроллеры полей.
-  Future<UserSerializers?> load() async {
+  Future<UserProfile?> load() async {
     Log.debug('PersonalCubit.load');
     safeEmit(state.copyWith(data: const DataState.loading(), fabVisible: false));
     try {

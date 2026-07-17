@@ -1,32 +1,38 @@
-import 'dart:convert';
-
-import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
+import 'package:acits_api/acits_api.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 
-/// Сервис конфигурации
+/// Сервис конфигурации.
+///
+/// Инфраструктурный сервис поверх стабильного [SelectionApiPort]: тянет
+/// selection-значения (имена статусов/типов) и каталог атрибутов животного,
+/// кеширует их и отдаёт остальному приложению через lookup-методы. Внешний
+/// контракт (`getStatus131Name`/`getMyTypeName`/`animalAttributes`/…) сохранён;
+/// имена статусов/типов резолвятся по wire-строке, без gen/api.
 @singleton
 class ConfigService {
-  ConfigService(this._acitsClient, this._authService, this._preferenceStorage);
+  ConfigService(this._port, this._authService, this._preferenceStorage);
 
-  final Openapi _acitsClient;
+  final SelectionApiPort _port;
   final AuthService _authService;
   final PreferenceStorage _preferenceStorage;
 
   Map<String, dynamic>? _typeValues;
 
-  final _prescriptionTypeNames = <PrescriptionShortMyTypeEnum, String?>{};
-  final _animalStatusNames = <Status69fEnum, String?>{};
-  List<AnimalAttribute>? _animalAttributes;
+  final _prescriptionTypeNames = <String, String?>{};
+  final _animalStatusNames = <String, String?>{};
+  List<AttributeDto>? _animalAttributes;
   int? _animalAttributesShelterId;
 
   Map<String, dynamic>? get typeValues => _typeValues != null ? Map<String, dynamic>.from(_typeValues!) : null;
 
-  List<AnimalAttribute>? get animalAttributes => _animalAttributes;
+  List<AttributeDto>? get animalAttributes => _animalAttributes;
 
   Future<void> initConfig({int? currentShelterId}) async {
     await Future.wait([
@@ -35,56 +41,55 @@ class ConfigService {
     ]);
   }
 
-  Future<ValuesForSelection?> getTypeValues({int? currentShelterId}) async {
-    Log.debug('Get type values: shelterId=${currentShelterId ?? _authService.currentShelterId}');
-    final result = await _acitsClient.apiV1ValuesForSelectionGet(
-      xCurrentShelter: currentShelterId ?? _authService.currentShelterId,
-    );
-    if (result.body != null) {
-      _typeValues = json.decode(utf8.decode(result.bodyBytes));
+  Future<Map<String, dynamic>?> getTypeValues({int? currentShelterId}) async {
+    final shelterId = currentShelterId ?? _authService.currentShelterId;
+    Log.debug('Get type values: shelterId=$shelterId');
+    try {
+      final result = await _port.valuesForSelection(shelterId: shelterId);
+      _typeValues = Map<String, dynamic>.from(result.values);
+      // Инвалидируем кеши имён — они лениво перечитают новые значения.
+      _prescriptionTypeNames.clear();
+      _animalStatusNames.clear();
       Log.info('Type values loaded: keys=${_typeValues?.length ?? 0}');
-      return result.body;
-    } else {
-      Log.warning('Get type values failed: ${result.error}');
-      throw MessagedException(error: result.error);
+      return _typeValues;
+    } on DioException catch (e) {
+      Log.warning('Get type values failed: ${_errorText(e)}');
+      throw MessagedException(error: _errorText(e));
     }
   }
 
-  Future<List<AnimalAttribute>> getAnimalAttr({int? currentShelterId}) async {
+  Future<List<AttributeDto>> getAnimalAttr({int? currentShelterId}) async {
     final shelterId = currentShelterId ?? _authService.currentShelterId;
     Log.debug('Get animal attributes: shelterId=$shelterId');
     if (_animalAttributes != null && _animalAttributesShelterId == shelterId) {
       Log.debug('Animal attributes returned from cache: count=${_animalAttributes!.length}');
       return _animalAttributes!;
     }
-    final result = await _acitsClient.apiV1AnimalsAttributesGet(xCurrentShelter: shelterId);
-    if (result.body != null) {
-      _animalAttributes = result.body!;
+    try {
+      final result = await _port.animalAttributes(shelterId: shelterId);
+      _animalAttributes = result;
       _animalAttributesShelterId = shelterId;
       Log.info('Animal attributes loaded: count=${_animalAttributes!.length}');
       return _animalAttributes!;
-    } else {
-      Log.warning('Get animal attributes failed: ${result.error}');
-      throw MessagedException(error: result.error);
+    } on DioException catch (e) {
+      Log.warning('Get animal attributes failed: ${_errorText(e)}');
+      throw MessagedException(error: _errorText(e));
     }
   }
 
-  /// После изменений в схеме API тип приходит как в виде MyTypeEnum, так и строки. Сделал
-  /// обобщение и резолвинг типа внутри метода.
-  String? getMyTypeName(Object? type) {
-    if (type == null) return null;
-    if (!(type is String || type is PrescriptionShortMyTypeEnum)) return null;
+  /// Человекочитаемое имя типа назначения по его wire-значению (из серверного
+  /// конфига). Принимает wire-строку — enum'ы генератора здесь больше не нужны.
+  String? getMyTypeName(String? wire) {
+    if (wire == null) return null;
     if (_prescriptionTypeNames.isEmpty) _parsePrescriptionTypes();
-    final resolvedType = (type is PrescriptionShortMyTypeEnum)
-        ? type
-        : prescriptionShortMyTypeEnumFromJson(type as String);
-    return _prescriptionTypeNames[resolvedType];
+    return _prescriptionTypeNames[wire];
   }
 
-  String? getStatus131Name(Status69fEnum? type) {
-    if (type == null) return null;
+  /// Человекочитаемое имя статуса животного по его wire-значению.
+  String? getStatus131Name(String? wire) {
+    if (wire == null) return null;
     if (_animalStatusNames.isEmpty) _parseAnimalStatusTypes();
-    return _animalStatusNames[type];
+    return _animalStatusNames[wire];
   }
 
   void _parseAnimalStatusTypes() {
@@ -93,8 +98,7 @@ class ConfigService {
       for (final item in raw) {
         if (item is Map) {
           final key = item['value'];
-          final type = Status69fEnum.values.firstWhereOrNull((element) => element.value == key);
-          if (type != null) _animalStatusNames[type] = item['display_name'];
+          if (key is String) _animalStatusNames[key] = item['display_name'] as String?;
         }
       }
     }
@@ -106,8 +110,7 @@ class ConfigService {
       for (final item in raw) {
         if (item is Map) {
           final key = item['value'];
-          final type = PrescriptionShortMyTypeEnum.values.firstWhereOrNull((element) => element.value == key);
-          if (type != null) _prescriptionTypeNames[type] = item['display_name'];
+          if (key is String) _prescriptionTypeNames[key] = item['display_name'] as String?;
         }
       }
     }
@@ -121,4 +124,6 @@ class ConfigService {
 
   /// Текущая локаль приложения в формате ru-RU
   String get local => Intl.getCurrentLocale().replaceAll('_', '-');
+
+  String _errorText(DioException e) => e.response?.data?.toString() ?? e.message ?? e.toString();
 }

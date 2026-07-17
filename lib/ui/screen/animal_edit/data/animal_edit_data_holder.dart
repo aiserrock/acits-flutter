@@ -1,4 +1,5 @@
 import 'package:acits_flutter/export.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart' as gen;
 import 'package:flutter/material.dart';
 
 class AnimalEditHolder extends ChangeNotifier {
@@ -45,8 +46,8 @@ class AnimalEditHolder extends ChangeNotifier {
     String? weight,
     bool? hasDocuments,
     int? shelter,
-    Curator? curator,
-    Applicant? applicant,
+    gen.Curator? curator,
+    gen.Applicant? applicant,
     int? applicantId,
     List<AnimalAttributeValue>? animalAttributes,
     DateTime? deletedAt,

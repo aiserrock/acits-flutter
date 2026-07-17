@@ -283,7 +283,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with Anim
       if (sexAttribute != null) {
         attr.add(
           AnimalAttributeValue(
-            attrId: sexAttribute.id ?? 0,
+            attrId: sexAttribute.id,
             isRequired: sexAttribute.isRequired,
             name: sexAttribute.name,
             value: _sexController.text,
@@ -298,7 +298,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with Anim
       if (colorAttribute != null) {
         attr.add(
           AnimalAttributeValue(
-            attrId: colorAttribute.id ?? 0,
+            attrId: colorAttribute.id,
             isRequired: colorAttribute.isRequired,
             name: colorAttribute.name,
             value: _colorController.text,
@@ -313,7 +313,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with Anim
       if (signAttribute != null) {
         attr.add(
           AnimalAttributeValue(
-            attrId: signAttribute.id ?? 0,
+            attrId: signAttribute.id,
             isRequired: signAttribute.isRequired,
             name: signAttribute.name,
             value: _specController.text,
