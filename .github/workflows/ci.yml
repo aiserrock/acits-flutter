@@ -62,11 +62,13 @@ jobs:
 
       # Share the exact post-codegen output with every downstream job instead
       # of each re-running build_runner (generator patch versions can drift).
-      # Only lib/, test/ and pubspec.lock actually change from codegen —
-      # archiving the whole tree would pull in multi-GB caches full of files
-      # that mutate mid-read and make tar fail.
+      # lib/, test/ and pubspec.lock change from codegen; packages/ and modules/
+      # carry the workspace code + their own tests (needed by the Test job and
+      # by the package/module test loop). The untar overlays on the checkout, so
+      # this is purely additive. The whole tree is not archived — that would
+      # pull in multi-GB caches full of files that mutate mid-read and fail tar.
       - name: Archive workspace
-        run: tar -czf workspace.tar.gz lib test pubspec.lock
+        run: tar -czf workspace.tar.gz lib test packages modules pubspec.lock
 
       - uses: actions/upload-artifact@v7
         with:
@@ -142,8 +144,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # Strict gate: infos and warnings fail the build, matching
+      # `melos analyze:strict` / `melos check-all` used locally.
       - name: Analyse
-        run: flutter analyze
+        run: flutter analyze --fatal-infos --fatal-warnings
 
   ##### test #####
   test:
@@ -170,8 +174,19 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # Root app tests plus every package/module that ships a test/ folder.
+      # Packages without tests are skipped so the loop stays robust as modules
+      # come and go.
       - name: Run tests
-        run: flutter test
+        run: |
+          flutter test
+          for p in packages/* modules/*; do
+            if [ -d "$p/test" ]; then
+              echo "::group::flutter test ($p)"
+              (cd "$p" && flutter test)
+              echo "::endgroup::"
+            fi
+          done
 
   ##### build #####
   # PR builds the dev flavor; a v* tag builds prod. Both are signed release

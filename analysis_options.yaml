@@ -18,6 +18,9 @@ analyzer:
     - "lib/gen/**"
     - "test/integration_test/**"
     - "build.yaml"
+      # mason brick templates are mustache (*.dart with `{{ }}` vars), not valid
+      # Dart until rendered — exclude them from the analyzer.
+    - "bricks/**"
 
 linter:
   # The lint rules applied to this project can be customized in the
