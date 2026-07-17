@@ -16,6 +16,7 @@ import 'package:acits_flutter/navigation/animals_router_service.dart' as _i514;
 import 'package:acits_flutter/navigation/applicants_router_service.dart'
     as _i314;
 import 'package:acits_flutter/navigation/auth_router_service.dart' as _i501;
+import 'package:acits_flutter/navigation/media_router_service.dart' as _i561;
 import 'package:acits_flutter/navigation/personal_router_service.dart' as _i176;
 import 'package:acits_flutter/navigation/prescriptions_router_service.dart'
     as _i338;
@@ -31,6 +32,7 @@ import 'package:acits_flutter/service/client/animals_register.dart' as _i286;
 import 'package:acits_flutter/service/client/applicants_register.dart' as _i144;
 import 'package:acits_flutter/service/client/auth_port_bridges.dart' as _i350;
 import 'package:acits_flutter/service/client/dio_register.dart' as _i693;
+import 'package:acits_flutter/service/client/media_register.dart' as _i466;
 import 'package:acits_flutter/service/client/personal_register.dart' as _i220;
 import 'package:acits_flutter/service/client/prescriptions_register.dart'
     as _i71;
@@ -38,8 +40,6 @@ import 'package:acits_flutter/service/config/config_service.dart' as _i245;
 import 'package:acits_flutter/service/debug/debug_service.dart' as _i47;
 import 'package:acits_flutter/service/document/document_export_service_bridge.dart'
     as _i109;
-import 'package:acits_flutter/service/document/document_repository.dart'
-    as _i302;
 import 'package:acits_flutter/service/env/env_register.dart' as _i143;
 import 'package:acits_flutter/service/file/file_repository.dart' as _i830;
 import 'package:acits_flutter/service/file/file_service.dart' as _i499;
@@ -60,6 +60,7 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:media/media.dart' as _i249;
 import 'package:personal/personal.dart' as _i1007;
 import 'package:prescriptions/prescriptions.dart' as _i857;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -94,6 +95,7 @@ Future<_i174.GetIt> $initDevGetIt(
   final acitsApiRegister = _$AcitsApiRegister();
   final animalsRegister = _$AnimalsRegister();
   final personalRegister = _$PersonalRegister();
+  final mediaRegister = _$MediaRegister();
   final applicantsRegister = _$ApplicantsRegister();
   final prescriptionsRegister = _$PrescriptionsRegister();
   gh.factory<_i558.FlutterSecureStorage>(
@@ -106,6 +108,8 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.singleton<_i876.AnimalService>(() => _i876.AnimalService());
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
+  gh.factory<_i249.PdfjsReadyPort>(() => const _i466.AppPdfjsReady());
+  gh.factory<_i249.DocExporterPort>(() => _i466.AppDocExporter());
   gh.factory<_i1007.PersonalRouterService>(
     () => const _i176.PersonalRouterServiceImpl(),
   );
@@ -144,6 +148,9 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.factory<_i354.TokenStore>(() => const _i350.AuthServiceTokenStore());
   gh.factory<_i354.LocaleProvider>(
     () => const _i350.ConfigServiceLocaleProvider(),
+  );
+  gh.factory<_i249.MediaRouterService>(
+    () => const _i561.MediaRouterServiceImpl(),
   );
   gh.singleton<_i47.DebugService>(
     () => _i218.DebugDevService(gh<_i1058.DebugPreferenceStorage>()),
@@ -412,6 +419,9 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.factory<_i857.PrescriptionTypeLabels>(
     () => _i71.ConfigServicePrescriptionTypeLabels(gh<_i245.ConfigService>()),
   );
+  gh.factory<_i249.MediaShelterProvider>(
+    () => _i466.AuthServiceMediaShelter(gh<_i21.AuthService>()),
+  );
   gh.factory<_i857.PrescriptionAnimalLoader>(
     () => _i71.AnimalRepositoryPrescriptionAnimalLoader(
       gh<_i616.AnimalRepository>(),
@@ -445,8 +455,8 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i1007.PersonalShelterProvider>(),
     ),
   );
-  gh.factory<_i302.DocumentRepository>(
-    () => _i302.DocumentRepository(
+  gh.factory<_i249.DocumentRepository>(
+    () => mediaRegister.documentRepository(
       gh<_i616.AnimalRepository>(),
       gh<_i616.CurrentShelterProvider>(),
     ),
@@ -462,6 +472,14 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i101.PrescriptionApiPort>(),
       gh<_i857.PrescriptionsShelterProvider>(),
       gh<_i857.PrescriptionTypeLabels>(),
+    ),
+  );
+  gh.factory<_i249.SearchDeps>(
+    () => mediaRegister.searchDeps(
+      gh<_i616.AnimalRepository>(),
+      gh<_i20.StaffService>(),
+      gh<_i857.PrescriptionService>(),
+      gh<_i249.MediaShelterProvider>(),
     ),
   );
   return getIt;
@@ -490,6 +508,8 @@ class _$AcitsApiRegister extends _i382.AcitsApiRegister {}
 class _$AnimalsRegister extends _i286.AnimalsRegister {}
 
 class _$PersonalRegister extends _i220.PersonalRegister {}
+
+class _$MediaRegister extends _i466.MediaRegister {}
 
 class _$ApplicantsRegister extends _i144.ApplicantsRegister {}
 

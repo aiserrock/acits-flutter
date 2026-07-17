@@ -1,0 +1,254 @@
+import 'dart:typed_data';
+
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pdfx/pdfx.dart';
+
+import '../../domain/pdf_doc_mixin.dart';
+import '../../domain/port/doc_exporter_port.dart';
+import '../../domain/port/pdfjs_ready_port.dart';
+import '../../util/log.dart';
+import 'cubit/doc_viewer_cubit.dart';
+
+/// Экран просмотра PDF-документа с кнопкой «Поделиться». Работает на всех
+/// платформах: PDF рендерится из байтов (`PdfDocument.openData`), шаринг —
+/// через кроссплатформенный [DocExporterPort].
+class DocViewerScreen extends StatelessWidget {
+  const DocViewerScreen(
+    this.fetcher, {
+    required this.exporter,
+    required this.pdfjsReady,
+    this.title,
+    this.fileName,
+    super.key,
+  });
+
+  final PdfDocFetcher fetcher;
+
+  final DocExporterPort exporter;
+  final PdfjsReadyPort pdfjsReady;
+
+  final String? title;
+
+  /// Имя файла для «Поделиться»/скачивания (например, «animal_42.pdf»).
+  final String? fileName;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => DocViewerCubit(fetcher, pdfjsReady),
+      child: _DocViewerView(title: title, fileName: fileName, exporter: exporter),
+    );
+  }
+}
+
+class _DocViewerView extends StatefulWidget {
+  const _DocViewerView({required this.exporter, this.title, this.fileName});
+
+  final DocExporterPort exporter;
+  final String? title;
+  final String? fileName;
+
+  @override
+  State<_DocViewerView> createState() => _DocViewerViewState();
+}
+
+class _DocViewerViewState extends State<_DocViewerView> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  PdfControllerPinch? _controller;
+  Uint8List? _controllerBytes;
+
+  /// Поворот в альбомную ориентацию (toggle 0° ↔ 90°) для широких PDF.
+  bool _landscape = false;
+
+  static const _zoomStep = 1.4; // множитель на нажатие кнопки +/−
+  static const _minScale = 1.0; // 100% — минимум
+  static const _maxScale = 2.0; // 200% — максимум
+
+  /// Флаг, пока clamp сам меняет матрицу — иначе listener зациклится.
+  bool _clamping = false;
+
+  DocExporterPort get _exporter => widget.exporter;
+
+  @override
+  void dispose() {
+    _controller?.removeListener(_onTransform);
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  /// На любое изменение матрицы (в т.ч. pinch) держим масштаб в пределах.
+  void _onTransform() {
+    if (_clamping) return;
+    _applyScale(1.0); // 1.0 = ничего не множим, только клэмпим текущий
+  }
+
+  void _toggleRotate() => setState(() => _landscape = !_landscape);
+
+  void _zoomBy(double factor) => _applyScale(factor);
+
+  /// Множит текущий масштаб на [factor] и клэмпит в [_minScale, _maxScale]
+  /// относительно центра вьюпорта. factor=1.0 — только клэмп без изменения.
+  void _applyScale(double factor) {
+    final controller = _controller;
+    final size = context.size;
+    if (controller == null || size == null) return;
+    final center = Offset(size.width / 2, size.height / 2);
+
+    final current = controller.value.getMaxScaleOnAxis();
+    final target = (current * factor).clamp(_minScale, _maxScale);
+    final applied = target / current;
+    if ((applied - 1).abs() < 0.001) return; // уже в пределах — не трогаем
+
+    _clamping = true;
+    controller.value = controller.value.clone()
+      ..translateByDouble(center.dx, center.dy, 0, 1)
+      ..scaleByDouble(applied, applied, 1, 1)
+      ..translateByDouble(-center.dx, -center.dy, 0, 1);
+    _clamping = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        shadowColor: Colors.transparent,
+        leading: GestureDetector(
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
+          onTap: () => Navigator.of(context).pop(),
+        ),
+        title: Text(widget.title ?? 'Doc viewer', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              _landscape ? Icons.rotate_90_degrees_ccw : Icons.rotate_90_degrees_cw,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            tooltip: 'Rotate',
+            onPressed: _toggleRotate,
+          ),
+        ],
+      ),
+      body: BlocBuilder<DocViewerCubit, DataState<Uint8List>>(
+        builder: (context, state) => DataStateBuilder<Uint8List>(
+          state: state,
+          loader: (_) => const LoaderHolderWidget(),
+          errorBuilder: (_, e) => ErrorHolderWidget(error: e, onPressed: context.read<DocViewerCubit>().fetchData),
+          builder: (_, bytes) => _buildContent(bytes),
+        ),
+      ),
+    );
+  }
+
+  String get _fileName {
+    final name = widget.fileName ?? widget.title ?? 'document';
+    return name.toLowerCase().endsWith('.pdf') ? name : '$name.pdf';
+  }
+
+  Widget _buildContent(Uint8List bytes) {
+    final controller = _controllerFor(bytes);
+    return Column(
+      children: [
+        Expanded(
+          child: Stack(
+            children: [
+              // Поворот страницы внутри вьюпорта (не всего экрана). Pinch-zoom —
+              // из коробки PdfViewPinch; кнопки +/− дублируют его для десктопа.
+              Positioned.fill(
+                child: RotatedBox(
+                  quarterTurns: _landscape ? 1 : 0,
+                  child: PdfViewPinch(controller: controller, minScale: _minScale, maxScale: _maxScale),
+                ),
+              ),
+              Positioned(right: 12, bottom: 12, child: _zoomControls(bytes)),
+            ],
+          ),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: PrimaryButton(child: const Text('Share'), onPressed: () => _onShare(bytes)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Шаринг с полным трейлом в Talker: клик → размер → исход/ошибка.
+  /// Юзер копирует лог из TalkerScreen и отдаёт для диагностики.
+  Future<void> _onShare(Uint8List bytes) async {
+    Log.info(
+      '[doc_viewer] нажат Share: file=$_fileName size=${bytes.lengthInBytes}B '
+      'title=${widget.title} landscape=$_landscape',
+    );
+    try {
+      await _exporter.share(bytes, fileName: _fileName, subject: widget.title);
+      Log.info('[doc_viewer] share завершён: $_fileName');
+    } catch (e, s) {
+      Log.error('[doc_viewer] share упал: $_fileName', e, s);
+    }
+  }
+
+  Future<void> _onDownload(Uint8List bytes) async {
+    Log.info('[doc_viewer] нажат Download: file=$_fileName size=${bytes.lengthInBytes}B');
+    try {
+      await _exporter.download(bytes, fileName: _fileName);
+      Log.info('[doc_viewer] download завершён: $_fileName');
+    } catch (e, s) {
+      Log.error('[doc_viewer] download упал: $_fileName', e, s);
+    }
+  }
+
+  Widget _zoomControls(Uint8List bytes) {
+    final scheme = Theme.of(context).colorScheme;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FloatingActionButton.small(
+          heroTag: 'zoom_in',
+          backgroundColor: scheme.surface,
+          foregroundColor: scheme.primary,
+          onPressed: () => _zoomBy(_zoomStep),
+          child: const Icon(Icons.add),
+        ),
+        const SizedBox(height: 8),
+        FloatingActionButton.small(
+          heroTag: 'zoom_out',
+          backgroundColor: scheme.surface,
+          foregroundColor: scheme.primary,
+          onPressed: () => _zoomBy(1 / _zoomStep),
+          child: const Icon(Icons.remove),
+        ),
+        const SizedBox(height: 8),
+        FloatingActionButton.small(
+          heroTag: 'download',
+          backgroundColor: scheme.surface,
+          foregroundColor: scheme.primary,
+          onPressed: () => _onDownload(bytes),
+          child: const Icon(Icons.download),
+        ),
+      ],
+    );
+  }
+
+  /// Контроллер на набор байтов: пересоздаётся при смене документа (по ссылке).
+  PdfControllerPinch _controllerFor(Uint8List bytes) {
+    if (_controller == null || !identical(_controllerBytes, bytes)) {
+      _controller?.removeListener(_onTransform);
+      _controller?.dispose();
+      // ВАЖНО: на web pdfx передаёт буфер в pdf.js как transferable — исходный
+      // Uint8List становится detached (length=0). Отдаём КОПИЮ, чтобы `bytes`
+      // остался целым для share/download.
+      _controller = PdfControllerPinch(document: PdfDocument.openData(Uint8List.fromList(bytes)))
+        ..addListener(_onTransform);
+      _controllerBytes = bytes;
+    }
+    return _controller!;
+  }
+}

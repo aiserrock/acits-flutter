@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search.dart';
+import 'package:media/media.dart' show SearchTypeKey;
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';

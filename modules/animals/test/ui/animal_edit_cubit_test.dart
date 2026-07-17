@@ -34,9 +34,7 @@ void main() {
   setUp(() => repo = _MockRepo());
 
   void stubGetById(Result<Failure, Animal> result) {
-    when(
-      () => repo.getById(any(), shelterId: any(named: 'shelterId')),
-    ).thenAnswer((_) async => result);
+    when(() => repo.getById(any(), shelterId: any(named: 'shelterId'))).thenAnswer((_) async => result);
   }
 
   void stubCreate(Result<Failure, Animal> result) {
@@ -104,9 +102,7 @@ void main() {
       build: () => AnimalEditCubit(repo, shelter),
       act: (cubit) => cubit.submit(
         _animal(id: 0, speciesId: null),
-        attributes: const [
-          AnimalAttributeInput(attrId: 3, name: 'sex', value: 'male', isRequired: true),
-        ],
+        attributes: const [AnimalAttributeInput(attrId: 3, name: 'sex', value: 'male', isRequired: true)],
         specId: 7,
       ),
       wait: const Duration(milliseconds: 10),

@@ -5,7 +5,7 @@ import 'package:prescriptions/prescriptions.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/ui/screen/search_screen/model/paging_fetch_adapter.dart';
+import 'package:media/media.dart' show SearchTypeKey;
 
 /// Реализация навигационного контракта модуля «Назначения» через go_router и
 /// generic-поиск приложения. Модуль зависит только от абстракции

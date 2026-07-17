@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/service/document/document_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:media/media.dart' show DocumentRepository;
 
 import 'package:acits_flutter/util/logger/log.dart';
 

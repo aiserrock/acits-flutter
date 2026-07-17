@@ -2,8 +2,9 @@ import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:animals/animals.dart' show AnimalSpecies;
+import 'package:animals/animals.dart' show AnimalRepository, AnimalSpecies, CurrentShelterProvider;
 import 'package:applicants/applicants.dart';
+import 'package:media/media.dart';
 import 'package:prescriptions/prescriptions.dart'
     show
         Prescription,
@@ -18,14 +19,9 @@ import 'package:personal/personal.dart'
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/auth_screen_bindings.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
-import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
-import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_screen.dart';
-import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_screen.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search.dart';
-import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen.dart';
 
 /// Пути и имена роутов приложения.
 ///
@@ -145,6 +141,8 @@ GoRouter createAppRouter() {
           final extra = state.extra as Map<String, Object?>?;
           return DocViewerScreen(
             extra?['fetcher'] as PdfDocFetcher,
+            exporter: getIt<DocExporterPort>(),
+            pdfjsReady: getIt<PdfjsReadyPort>(),
             title: extra?['title'] as String?,
             fileName: extra?['fileName'] as String?,
           );
@@ -152,7 +150,11 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.photoGallery,
-        builder: (context, state) => PhotoGalleryScreen(animalId: int.parse(state.pathParameters['animalId']!)),
+        builder: (context, state) => PhotoGalleryScreen(
+          animalId: int.parse(state.pathParameters['animalId']!),
+          repository: getIt<AnimalRepository>(),
+          shelterProvider: getIt<CurrentShelterProvider>(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.personal,
@@ -173,11 +175,16 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.searchSpec,
-        builder: (context, state) => SearchScreen(parentSearch: state.extra as AnimalSpecies?),
+        builder: (context, state) => SearchScreen(
+          repository: getIt<AnimalRepository>(),
+          shelterProvider: getIt<CurrentShelterProvider>(),
+          parentSearch: state.extra as AnimalSpecies?,
+        ),
       ),
       GoRoute(
         path: AppRoutes.search,
-        builder: (context, state) => Search.byTypeKey(state.uri.queryParameters['type'] ?? SearchTypeKey.animal),
+        builder: (context, state) =>
+            Search.byTypeKey(state.uri.queryParameters['type'] ?? SearchTypeKey.animal, getIt<SearchDeps>()),
       ),
     ],
   );
