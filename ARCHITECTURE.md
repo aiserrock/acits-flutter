@@ -18,10 +18,21 @@ workspace`). Dependencies point strictly **downward**; feature modules never
 import each other.
 
 - **Root app** (`lib/`) — entrypoints, the `AppTask` startup pipeline, DI
-  composition, and the `MaterialApp.router` shell. It depends on everything and
+  composition, the `MaterialApp.router` shell (`root_screen`/`main` + the
+  `animal_detail`/`animal_edit` composition screens where cross-feature tabs
+  meet), and app-level infra (`AuthService` session state, `ConfigService`,
+  `FileService`, the cross-platform doc-exporter). It depends on everything and
   is the only place that wires ports to adapters and assembles the router tree.
+  It imports each feature only through its **barrel** (`package:<feature>/<feature>.dart`).
 - **`packages/`** — shared layers and SDK/infra wrappers (business-agnostic).
-- **`modules/`** — feature packages, each internally layered `data / domain / ui`.
+- **`modules/`** — six feature packages, each internally layered `data / domain / ui`
+  and free of any `package:acits_flutter` (app) import: `animals`, `auth`,
+  `applicants`, `prescriptions`, `personal`, `media`. Cross-feature needs are
+  met through ports (implemented in the app) or a downward barrel dependency on
+  another leaf module — never a cycle. The `animal_detail`/`animal_edit` screens
+  stay in the app precisely because they compose `prescriptions` + `personal`
+  (comments) + `media` tabs, and `media` already depends on `animals` — hosting
+  them in `modules/animals` would form an `animals → media → animals` cycle.
 
 ## Package DAG
 
@@ -31,27 +42,28 @@ is DTO-free, and DTO→entity mapping lives in each feature's `data` layer.
 
 ```mermaid
 graph TD
-    app["app (root)<br/>entrypoints · AppTask · DI · router tree"]
-    animals["modules/animals<br/>data · domain · ui"]
+    app["app (root)<br/>shell · AppTask · DI · router tree · session/infra"]
+    features["modules/*<br/>animals · auth · applicants ·<br/>prescriptions · personal · media<br/>(each: data · domain · ui)"]
     core["acits_core<br/>Result/Failure · Dio · AppTask · platform ports"]
     domain["acits_domain<br/>entities · repo ifaces · Transformable&lt;T&gt;"]
     api["acits_api<br/>ports + our DTOs / adapters"]
-    uikit["acits_ui_kit<br/>tokens · breakpoints · AdaptiveScaffold"]
+    uikit["acits_ui_kit<br/>tokens · breakpoints · AdaptiveScaffold · shared widgets"]
     nav["acits_navigation<br/>route constants · codecs · guards"]
     gen["swagger_parser generated client<br/>(private, inside acits_api/adapters)"]
 
-    app --> animals
+    app --> features
     app --> core
     app --> domain
     app --> uikit
     app --> nav
     app --> api
 
-    animals --> core
-    animals --> domain
-    animals --> uikit
-    animals --> nav
-    animals -->|data layer only| api
+    features --> core
+    features --> domain
+    features --> uikit
+    features --> nav
+    features -->|data layer only| api
+    features -.->|leaf→leaf barrel, no cycle<br/>e.g. media→animals for photo upload/search| features
 
     domain --> core
     api --> core
