@@ -10,7 +10,8 @@ import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_cubit.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_state.dart';
 import 'package:acits_flutter/ui/widget/screen_loader.dart';
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_flutter/domain/prescription/prescription.dart';
+import 'package:acits_flutter/domain/prescription/prescription_execution_today.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/ui/widget/prescription_card.dart';
 import 'package:acits_flutter/util/data_state.dart';
@@ -143,7 +144,7 @@ class _MainViewState extends State<_MainView> {
           onSelected: (preset) => context.read<MainCubit>().onSortChanged(preset),
         ),
         Expanded(
-          child: DataStateBuilder<PaginatedPrescriptionExecutionTodayList?>(
+          child: DataStateBuilder<List<PrescriptionExecutionToday>?>(
             state: state.data,
             loader: (_) => const ScreenLoader(height: 104.0),
             builder: (_, data) => _MainScreenContent(
@@ -200,13 +201,13 @@ class _MainViewState extends State<_MainView> {
 class _MainScreenContent extends StatelessWidget {
   const _MainScreenContent(this.data, {required this.isSearching, required this.pullToRefresh});
 
-  final PaginatedPrescriptionExecutionTodayList? data;
+  final List<PrescriptionExecutionToday>? data;
   final bool isSearching;
   final Future<void> Function() pullToRefresh;
 
   @override
   Widget build(BuildContext context) {
-    return (data?.results?.isEmpty ?? true) ? _buildEmptyState(context) : _buildList();
+    return (data?.isEmpty ?? true) ? _buildEmptyState(context) : _buildList();
   }
 
   Widget _buildList() {
@@ -216,10 +217,10 @@ class _MainScreenContent extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
         itemBuilder: (_, index) {
-          final item = (data?.results ?? [])[index];
+          final item = (data ?? [])[index];
           return PrescriptionCardWidget(item, onEditedPrescription: () => _onEditPrescriptionPressed(item));
         },
-        itemCount: data?.results?.length ?? 0,
+        itemCount: data?.length ?? 0,
         separatorBuilder: (_, _) => const SizedBox(height: 16.0),
       ),
     );

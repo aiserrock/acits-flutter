@@ -4,7 +4,12 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:acits_api/acits_api.dart'
+    show AnimalNotesApiPort, AnimalNoteWriteDto, AnimalNoteFileWriteDto, AnimalNoteDto, AnimalNoteFileDto;
+import 'package:dio/dio.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/domain/animal_note/animal_note.dart' as notes;
+import 'package:acits_flutter/domain/animal_note/animal_note_file.dart' as notes;
 import 'package:acits_flutter/domain/gallery_item_data.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/document/document_repository.dart';
@@ -22,10 +27,14 @@ const _notesListLimit = 25;
 
 @singleton
 class AnimalService {
-  AnimalService(this._authService, this._client);
+  AnimalService(this._authService, this._client, this._notesPort);
 
   final AuthService _authService;
   final Openapi _client;
+
+  /// Порт заметок/комментариев (новый стек). Остальные методы AnimalService
+  /// (фото/pdf/виды/CRUD животного) ещё на chopper — задокументированный шов.
+  final AnimalNotesApiPort _notesPort;
 
   /// Получить список живолных в приюте
   Future<PaginatedAnimalReadList?> fetchAnimalList({
@@ -225,105 +234,114 @@ class AnimalService {
     Log.info('Animal deleted: id=$id');
   }
 
-  Future<PaginatedAnimalNoteList?> fetchAnimalNotes(
-    int animalId, {
-    int limit = _notesListLimit,
-    int? offset = 0,
-  }) async {
+  /// Список заметок животного (новые сверху). Возвращает доменные сущности —
+  /// маппинг DTO→сущность локальный (порт отдаёт DTO).
+  Future<List<notes.AnimalNote>> fetchAnimalNotes(int animalId, {int limit = _notesListLimit, int? offset = 0}) async {
     Log.debug('Fetch animal notes: animalId=$animalId limit=$limit offset=$offset');
-    final result = await _client.apiV1AnimalsNotesGet(
-      animal: animalId,
-      limit: limit,
-      offset: offset,
-      ordering: '-created_at',
-      xCurrentShelter: _authService.currentShelterId,
-    );
-
-    final data = result.body;
-
-    if (data != null) {
-      Log.info('Animal notes: ${data.results?.length ?? 0} items');
-      return data;
-    } else {
-      Log.warning('Fetch animal notes failed: ${result.error}');
-      throw MessagedException(error: result.error);
+    try {
+      final dtos = await _notesPort.listByAnimal(
+        animalId,
+        limit: limit,
+        offset: offset,
+        shelterId: _authService.currentShelterId,
+      );
+      Log.info('Animal notes: ${dtos.length} items');
+      return dtos.map(_mapNote).toList(growable: false);
+    } on DioException catch (e) {
+      Log.warning('Fetch animal notes failed: ${_noteErrorText(e)}');
+      throw MessagedException(error: _noteErrorText(e));
     }
   }
 
-  Future<AnimalNote?> patchAnimalNote({
+  Future<notes.AnimalNote?> patchAnimalNote({
     required int id,
     required int animalId,
     required String text,
     List<PlatformFile>? files,
   }) async {
     Log.debug('Patch animal note: id=$id animalId=$animalId files=${files?.length ?? 0}');
-    final content = PatchedAnimalNote(id: id, animal: animalId, content: text, files: _prepareNoteFiles(files));
-    final result = await _client.apiV1AnimalsNotesIdPatch(
-      id: id,
-      body: content,
-      xCurrentShelter: _authService.currentShelterId,
-    );
-
-    final data = result.body;
-
-    if (data != null) {
-      Log.info('Animal note patched: id=${data.id}');
-      return data;
-    } else {
-      Log.warning('Patch animal note failed: ${result.error}');
-      throw MessagedException(error: result.error);
+    try {
+      final dto = await _notesPort.patch(
+        id,
+        AnimalNoteWriteDto(id: id, animal: animalId, content: text, files: _prepareNoteFiles(files)),
+        shelterId: _authService.currentShelterId,
+      );
+      Log.info('Animal note patched: id=${dto.id}');
+      return _mapNote(dto);
+    } on DioException catch (e) {
+      Log.warning('Patch animal note failed: ${_noteErrorText(e)}');
+      throw MessagedException(error: _noteErrorText(e));
     }
   }
 
   Future<bool> deleteAnimalNote({required int id}) async {
     Log.debug('Delete animal note: id=$id');
-    final result = await _client.apiV1AnimalsNotesIdDelete(id: id, xCurrentShelter: _authService.currentShelterId);
-
-    if (result.error == null) {
+    try {
+      await _notesPort.delete(id, shelterId: _authService.currentShelterId);
       Log.info('Animal note deleted: id=$id');
       return true;
-    } else {
-      Log.warning('Delete animal note failed: ${result.error}');
-      throw MessagedException(error: result.error);
+    } on DioException catch (e) {
+      Log.warning('Delete animal note failed: ${_noteErrorText(e)}');
+      throw MessagedException(error: _noteErrorText(e));
     }
   }
 
-  Future<AnimalNote?> createAnimalNote({required int animalId, required String text, List<PlatformFile>? files}) async {
+  Future<notes.AnimalNote?> createAnimalNote({
+    required int animalId,
+    required String text,
+    List<PlatformFile>? files,
+  }) async {
     Log.debug('Create animal note: animalId=$animalId files=${files?.length ?? 0}');
-    final content = AnimalNote(animal: animalId, content: text, files: _prepareNoteFiles(files));
-
-    final result = await _client.apiV1AnimalsNotesPost(body: content, xCurrentShelter: _authService.currentShelterId);
-
-    final data = result.body;
-
-    if (data != null) {
-      Log.info('Animal note created: id=${data.id}');
-      return data;
-    } else {
-      Log.warning('Create animal note failed: ${result.error}');
-      throw MessagedException(error: result.error);
+    try {
+      final dto = await _notesPort.create(
+        AnimalNoteWriteDto(animal: animalId, content: text, files: _prepareNoteFiles(files)),
+        shelterId: _authService.currentShelterId,
+      );
+      Log.info('Animal note created: id=${dto.id}');
+      return _mapNote(dto);
+    } on DioException catch (e) {
+      Log.warning('Create animal note failed: ${_noteErrorText(e)}');
+      throw MessagedException(error: _noteErrorText(e));
     }
   }
 
-  List<AnimalNoteFile>? _prepareNoteFiles(List<PlatformFile>? files) {
+  List<AnimalNoteFileWriteDto>? _prepareNoteFiles(List<PlatformFile>? files) {
     // Байты берём кроссплатформенно: file_picker на web кладёт содержимое в
     // PlatformFile.bytes (path == null), на нативе — читаем с ФС по path.
     // Раньше фильтр `path != null` молча выкидывал ВСЕ файлы в web.
     final preparedfiles = files
-        ?.map<AnimalNoteFile?>((file) {
+        ?.map<AnimalNoteFileWriteDto?>((file) {
           final bytes = _readPlatformFileBytes(file);
           if (bytes == null) return null;
           int indexOfExtSplit = file.name.lastIndexOf('.');
           if (indexOfExtSplit < 0) indexOfExtSplit = file.name.length;
-          return AnimalNoteFile(
+          return AnimalNoteFileWriteDto(
             name: file.name.substring(0, indexOfExtSplit),
             file: 'data:application/${file.extension};base64,${base64Encode(bytes)}',
           );
         })
-        .whereType<AnimalNoteFile>()
+        .whereType<AnimalNoteFileWriteDto>()
         .toList();
     return preparedfiles;
   }
+
+  notes.AnimalNote _mapNote(AnimalNoteDto d) => notes.AnimalNote(
+    id: d.id,
+    url: d.url,
+    animal: d.animal,
+    content: d.content,
+    files: d.files?.map(_mapNoteFile).toList(growable: false),
+    createdAt: d.createdAt,
+    updatedAt: d.updatedAt,
+    createdBy: d.createdBy,
+    updatedBy: d.updatedBy,
+    isUserCanEditOrDelete: d.isUserCanEditOrDelete,
+  );
+
+  notes.AnimalNoteFile _mapNoteFile(AnimalNoteFileDto f) =>
+      notes.AnimalNoteFile(id: f.id, file: f.file, name: f.name, filename: f.filename, createdAt: f.createdAt);
+
+  String _noteErrorText(DioException e) => e.response?.data?.toString() ?? e.message ?? e.toString();
 
   /// Читает байты выбранного файла кроссплатформенно: из памяти (web/при
   /// withData) либо с ФС по пути (натив). Возвращает null, если ни то ни другое

@@ -104,7 +104,7 @@ class _CommentListViewState extends State<_CommentListView> {
         if (index < comments.length) {
           final comment = comments[index];
           return _CommentItem(
-            key: ValueKey(comment.id ?? index),
+            key: ValueKey(comment.id),
             comment: comment,
             onUrlPressed: _onUrlPressed,
             onFilePressed: (file) => _onFilePressed(context, file).catchError((_) {
@@ -185,8 +185,6 @@ class _CommentListViewState extends State<_CommentListView> {
   Future<void> _onFilePressed(BuildContext context, AnimalNoteFile file) async {
     final url = file.file;
     final fileName = file.filename;
-
-    if (fileName == null) return;
 
     // На web нет доступа к файловой системе (path_provider) и open_filex —
     // открываем файл по URL, браузер сам скачает/покажет.
@@ -359,7 +357,7 @@ class _CommentItemState extends State<_CommentItem> {
                   padding: const EdgeInsets.only(top: 8.0),
                   onPressed: () => widget.onFilePressed(file),
                   child: Text(
-                    file.filename ?? '',
+                    file.filename,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       decoration: TextDecoration.underline,

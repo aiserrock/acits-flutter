@@ -11,7 +11,6 @@ import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_cub
 import 'package:acits_flutter/ui/screen/prescription/cubit/prescription_edit_state.dart';
 import 'package:acits_flutter/ui/widget/visible_item.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/domain/prescription_model.dart';
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
@@ -22,12 +21,12 @@ class PrescriptionEditScreen extends StatelessWidget {
   const PrescriptionEditScreen({this.editPrescription, this.editPrescriptionId, this.animal, this.animalId, super.key});
 
   final int? editPrescriptionId;
-  final PrescriptionModel? editPrescription;
-  final AnimalRead? animal;
+  final Prescription? editPrescription;
+  final PrescriptionAnimalRef? animal;
 
-  /// Id preset-животного при создании назначения из карточки (когда AnimalRead
-  /// объекта нет — карточка мигрирована на модуль animals). Cubit подгрузит
-  /// AnimalRead сам.
+  /// Id preset-животного при создании назначения из карточки (когда сущности
+  /// животного нет — карточка мигрирована на модуль animals). Cubit подгрузит
+  /// животное сам через репозиторий.
   final int? animalId;
 
   @override
@@ -47,7 +46,7 @@ class PrescriptionEditScreen extends StatelessWidget {
 class _PrescriptionEditView extends StatefulWidget {
   const _PrescriptionEditView({this.editPrescription});
 
-  final PrescriptionModel? editPrescription;
+  final Prescription? editPrescription;
 
   @override
   State<_PrescriptionEditView> createState() => _PrescriptionEditViewState();
@@ -79,10 +78,8 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
     super.initState();
     final editPrescription = widget.editPrescription;
     tabController = TabController(
-      initialIndex: editPrescription != null
-          ? max(PrescriptionShortMyTypeEnum.values.indexOf(editPrescription.myType), 0)
-          : 0,
-      length: PrescriptionShortMyTypeEnum.values.length - 1,
+      initialIndex: editPrescription != null ? max(PrescriptionType.selectable.indexOf(editPrescription.type), 0) : 0,
+      length: PrescriptionType.selectable.length,
       vsync: this,
     );
     tabController.addListener(_onTabChanged);
@@ -248,7 +245,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
   }
 
   Widget _buildAnimalField() {
-    return BlocSelector<PrescriptionEditCubit, PrescriptionEditState, AnimalRead?>(
+    return BlocSelector<PrescriptionEditCubit, PrescriptionEditState, PrescriptionAnimalRef?>(
       selector: (state) => state.animal,
       builder: (context, animal) {
         return CupertinoButton(
@@ -277,8 +274,8 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
     );
   }
 
-  Widget _buildAnimalTitle(BuildContext context, AnimalRead animal) {
-    final avatarUrl = UrlCorsProxy.add(animal.avatar?.image.small);
+  Widget _buildAnimalTitle(BuildContext context, PrescriptionAnimalRef animal) {
+    final avatarUrl = UrlCorsProxy.add(animal.thumbUrl);
     return Row(
       children: [
         if (avatarUrl != null)

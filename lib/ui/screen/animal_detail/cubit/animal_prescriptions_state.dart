@@ -1,5 +1,5 @@
 import 'package:acits_core/acits_core.dart';
-import 'package:acits_flutter/domain/prescription_model.dart';
+import 'package:acits_flutter/domain/prescription/prescription.dart';
 import 'package:equatable/equatable.dart';
 
 /// Состояние вкладки «Назначения» карточки животного (chopper-фича).
@@ -11,12 +11,12 @@ class AnimalPrescriptionsState extends Equatable {
   const AnimalPrescriptionsState({this.prescriptions = const DataState.loading(), this.prescriptionActive = true});
 
   /// Состояние загрузки списка назначений.
-  final DataState<List<PrescriptionModel>?> prescriptions;
+  final DataState<List<Prescription>?> prescriptions;
 
   /// Показывать ли актуальные назначения (иначе — прошлые).
   final bool prescriptionActive;
 
-  AnimalPrescriptionsState copyWith({DataState<List<PrescriptionModel>?>? prescriptions, bool? prescriptionActive}) {
+  AnimalPrescriptionsState copyWith({DataState<List<Prescription>?>? prescriptions, bool? prescriptionActive}) {
     return AnimalPrescriptionsState(
       prescriptions: prescriptions ?? this.prescriptions,
       prescriptionActive: prescriptionActive ?? this.prescriptionActive,

@@ -34,7 +34,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
         children: [
           _buildTimeAction(context),
           const SizedBox(height: 4.0),
-          if (widget.itemData?.prescription.myType != null) _buildType(context),
+          if (widget.itemData?.prescription.type != PrescriptionType.unknown) _buildType(context),
           const SizedBox(height: 4.0),
           _buildAnimal(context),
         ],

@@ -71,9 +71,7 @@ void main() {
 
   group('login', () {
     test('stores tokens and returns pair on success', () async {
-      when(
-        () => api.login('u', 'p'),
-      ).thenAnswer((_) async => const TokenPairDto(access: 'a', refresh: 'r'));
+      when(() => api.login('u', 'p')).thenAnswer((_) async => const TokenPairDto(access: 'a', refresh: 'r'));
       final result = await service.login('u', 'p');
       expect(result?.access, 'a');
       expect(service.access, 'a');
@@ -92,12 +90,9 @@ void main() {
 
   group('getShelterList', () {
     test('maps ShelterShortDto list to Shelter entities and caches them', () async {
-      when(() => api.myShelters()).thenAnswer(
-        (_) async => const [
-          ShelterShortDto(id: 1, name: 'Alpha'),
-          ShelterShortDto(id: 2, name: 'Beta'),
-        ],
-      );
+      when(
+        () => api.myShelters(),
+      ).thenAnswer((_) async => const [ShelterShortDto(id: 1, name: 'Alpha'), ShelterShortDto(id: 2, name: 'Beta')]);
       final result = await service.getShelterList();
       expect(result, const [Shelter(id: 1, name: 'Alpha'), Shelter(id: 2, name: 'Beta')]);
       expect(service.shelterList, result);
@@ -115,15 +110,7 @@ void main() {
         ),
       );
       final role = await service.setCurrentShelter(5);
-      expect(
-        role,
-        const CurrentShelterRole(
-          currentShelterId: 5,
-          role: 'WORKER',
-          canEdit: true,
-          canDelete: false,
-        ),
-      );
+      expect(role, const CurrentShelterRole(currentShelterId: 5, role: 'WORKER', canEdit: true, canDelete: false));
       expect(service.currentShelterId, 5);
       verify(() => prefs.currentShelterId = 5).called(1);
     });
@@ -131,9 +118,7 @@ void main() {
 
   group('currentShelter', () {
     test('resolves the current shelter entity from the cached list', () async {
-      when(
-        () => api.myShelters(),
-      ).thenAnswer((_) async => const [ShelterShortDto(id: 5, name: 'Cur')]);
+      when(() => api.myShelters()).thenAnswer((_) async => const [ShelterShortDto(id: 5, name: 'Cur')]);
       when(() => api.setCurrentShelter(5)).thenAnswer(
         (_) async => const CurrentShelterDto(
           currentShelter: 5,
@@ -151,13 +136,7 @@ void main() {
   group('registration', () {
     test('registrationAdmin maps input to a write DTO and returns true', () async {
       when(() => api.registerAdmin(any())).thenAnswer(
-        (_) async => const UserAdminDto(
-          id: 1,
-          firstName: 'A',
-          lastName: 'B',
-          email: 'a@b.c',
-          isOfferSigned: true,
-        ),
+        (_) async => const UserAdminDto(id: 1, firstName: 'A', lastName: 'B', email: 'a@b.c', isOfferSigned: true),
       );
       final ok = await service.registrationAdmin(
         const AdminRegistrationInput(
@@ -172,8 +151,7 @@ void main() {
       );
       expect(ok, isTrue);
 
-      final captured =
-          verify(() => api.registerAdmin(captureAny())).captured.single as UserAdminWriteDto;
+      final captured = verify(() => api.registerAdmin(captureAny())).captured.single as UserAdminWriteDto;
       expect(captured.email, 'a@b.c');
       expect(captured.rePassword, 'p');
       expect(captured.shelter.name, 'S');
@@ -181,13 +159,8 @@ void main() {
 
     test('registrationCustomer maps role and shelter id onto the write DTO', () async {
       when(() => api.registerWorker(any())).thenAnswer(
-        (_) async => const UserWorkerDto(
-          firstName: 'A',
-          lastName: 'B',
-          email: 'a@b.c',
-          role: 'WORKER',
-          isOfferSigned: true,
-        ),
+        (_) async =>
+            const UserWorkerDto(firstName: 'A', lastName: 'B', email: 'a@b.c', role: 'WORKER', isOfferSigned: true),
       );
       final ok = await service.registrationCustomer(
         const WorkerRegistrationInput(
@@ -201,8 +174,7 @@ void main() {
       );
       expect(ok, isTrue);
 
-      final captured =
-          verify(() => api.registerWorker(captureAny())).captured.single as UserWorkerWriteDto;
+      final captured = verify(() => api.registerWorker(captureAny())).captured.single as UserWorkerWriteDto;
       expect(captured.role, 'WORKER');
       expect(captured.shelter, 3);
     });

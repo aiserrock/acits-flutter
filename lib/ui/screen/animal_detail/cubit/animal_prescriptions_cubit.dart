@@ -48,7 +48,7 @@ class AnimalPrescriptionsCubit extends Cubit<AnimalPrescriptionsState> {
         Log.debug('AnimalPrescriptionsCubit.reload: stale filter, skip');
         return;
       }
-      safeEmit(state.copyWith(prescriptions: DataState.content(value?.results)));
+      safeEmit(state.copyWith(prescriptions: DataState.content(value)));
     } catch (e, s) {
       if (requestedActive != state.prescriptionActive) return;
       Log.error('AnimalPrescriptionsCubit.reload failed: id=$animalId', e, s);

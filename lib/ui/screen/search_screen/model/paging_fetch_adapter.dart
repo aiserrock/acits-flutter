@@ -1,11 +1,11 @@
 import 'package:acits_domain/acits_domain.dart' show Shelter;
+import 'package:animals/animals.dart' show AnimalListItem, AnimalRepository;
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/drug_item.dart';
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/shelter_item.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
 import 'package:acits_flutter/service/staff/staff_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
@@ -26,13 +26,13 @@ abstract final class SearchTypeKey {
 class SearchAdapterTypeFactoryDelegate {
   static PagingFetchAdapter adapter(Type type) {
     switch (type) {
-      case const (AnimalRead):
-        return AnimalReadFetchAdapter();
+      case const (AnimalListItem):
+        return AnimalFetchAdapter();
       case const (Applicant):
         return ApplicantFetchAdapter();
       case const (Curator):
         return CuratorFetchAdapter();
-      case const (ShelterDrug):
+      case const (Drug):
         return DrugFetchAdapter();
       case const (Shelter):
         return ShelterFetchAdapter();
@@ -43,13 +43,13 @@ class SearchAdapterTypeFactoryDelegate {
 
   static Widget Function(T) tileBuilder<T>() {
     switch (T) {
-      case const (AnimalRead):
-        return AnimalListItem.builder as Widget Function(T);
+      case const (AnimalListItem):
+        return AnimalSearchItem.builder as Widget Function(T);
       case const (Applicant):
         return ApplicantListItem.builder as Widget Function(T);
       case const (Curator):
         return CuratorListItem.builder as Widget Function(T);
-      case const (ShelterDrug):
+      case const (Drug):
         return DrugListItem.builder as Widget Function(T);
       case const (Shelter):
         return ShelterListItem.builder as Widget Function(T);
@@ -67,14 +67,24 @@ abstract class PagingFetchAdapter<R> {
   Future<List<R>> fetch({required int limit, int offset = 0, String? search});
 }
 
-class AnimalReadFetchAdapter extends PagingFetchAdapter<AnimalRead> {
-  AnimalReadFetchAdapter() : super(getIt<AnimalService>().fetchAnimalList);
+class AnimalFetchAdapter extends PagingFetchAdapter<AnimalListItem> {
+  // fetcher не используется (репозиторий возвращает Result, а не paginated) —
+  // передаём заглушку, чтобы удовлетворить базовый конструктор.
+  AnimalFetchAdapter() : _repository = getIt<AnimalRepository>(), super(_unusedFetcher);
+
+  final AnimalRepository _repository;
+
+  static Future<dynamic> _unusedFetcher({int limit = 25, int offset = 0, String? searchRequest}) async => null;
 
   @override
-  Future<List<AnimalRead>> fetch({required int limit, int offset = 0, String? search}) async {
-    return fetcher
-        .call(limit: limit, offset: offset, searchRequest: search)
-        .then((value) => value?.results ?? <AnimalRead>[]);
+  Future<List<AnimalListItem>> fetch({required int limit, int offset = 0, String? search}) async {
+    final result = await _repository.list(
+      shelterId: getIt<AuthService>().currentShelterId,
+      search: search,
+      limit: limit,
+      offset: offset,
+    );
+    return result.fold((_) => <AnimalListItem>[], (items) => items);
   }
 }
 
@@ -96,14 +106,12 @@ class CuratorFetchAdapter extends PagingFetchAdapter<Curator> {
   }
 }
 
-class DrugFetchAdapter extends PagingFetchAdapter<ShelterDrug> {
+class DrugFetchAdapter extends PagingFetchAdapter<Drug> {
   DrugFetchAdapter() : super(getIt<PrescriptionService>().fetchDrugList);
 
   @override
-  Future<List<ShelterDrug>> fetch({required int limit, int offset = 0, String? search}) async {
-    return fetcher
-        .call(limit: limit, offset: offset, searchRequest: search)
-        .then((value) => value?.results ?? <ShelterDrug>[]);
+  Future<List<Drug>> fetch({required int limit, int offset = 0, String? search}) async {
+    return getIt<PrescriptionService>().fetchDrugList(limit: limit, offset: offset, searchRequest: search);
   }
 }
 

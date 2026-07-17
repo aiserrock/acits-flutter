@@ -2,8 +2,10 @@ import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
-import 'package:acits_flutter/domain/prescription_model.dart';
+import 'package:acits_flutter/gen/api/openapi.swagger.dart' show Species;
+import 'package:acits_flutter/domain/animal_note/animal_note.dart';
+import 'package:acits_flutter/domain/prescription/prescription.dart';
+import 'package:acits_flutter/domain/prescription/prescription_animal_ref.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
@@ -128,8 +130,8 @@ GoRouter createAppRouter() {
           return PrescriptionEditScreen(
             editPrescriptionId: int.tryParse(state.uri.queryParameters['id'] ?? ''),
             animalId: int.tryParse(state.uri.queryParameters['animalId'] ?? ''),
-            editPrescription: extra?['prescription'] as PrescriptionModel?,
-            animal: extra?['animal'] as AnimalRead?,
+            editPrescription: extra?['prescription'] as Prescription?,
+            animal: extra?['animal'] as PrescriptionAnimalRef?,
           );
         },
       ),
