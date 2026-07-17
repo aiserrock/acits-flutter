@@ -1,11 +1,11 @@
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../media_assets.dart';
-import '../../media_l10n_keys.dart';
 import '../search.dart';
 
 class SearchContent<T> extends StatefulWidget {
@@ -156,7 +156,7 @@ class _EmptyStub extends StatelessWidget {
         children: [
           SizedBox(height: 120.0, width: 120.0, child: MediaAssets.emptyStateSvg()),
           const SizedBox(height: 32.0),
-          Text(MediaL10nKeys.commonNotFound.tr(), style: Theme.of(context).textTheme.titleLarge),
+          Text(LocaleKeys.commonNotFound.tr(), style: Theme.of(context).textTheme.titleLarge),
         ],
       ),
     );
@@ -173,7 +173,7 @@ class _ListEnding<T> extends StatelessWidget {
         return state.isLoading
             ? const SizedBox(height: 64.0, child: Center(child: CircularProgressIndicator()))
             : state.hasError
-            ? SizedBox(height: 64.0, child: Center(child: Text(MediaL10nKeys.commonError.tr())))
+            ? SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr())))
             : const SizedBox(height: 16.0);
       },
     );

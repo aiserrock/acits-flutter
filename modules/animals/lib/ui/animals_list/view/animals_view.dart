@@ -1,5 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,6 @@ import '../../../domain/port/animal_permissions.dart';
 import '../../../domain/port/animal_status_labels.dart';
 import '../../../domain/router/animals_router_service.dart';
 import '../animal_sort_presets.dart';
-import '../animals_l10n_keys.dart';
 import '../bloc/animals_cubit.dart';
 import '../bloc/animals_state.dart';
 import '../widgets/animal_card.dart';
@@ -152,7 +152,7 @@ class _AnimalsViewState extends State<AnimalsView> {
         SortChipsBar(
           presets: kAnimalSortPresets,
           activeId: state.activeSort.id,
-          labelKey: AnimalsL10nKeys.commonSort,
+          labelKey: LocaleKeys.commonSort,
           onSelected: (preset) => context.read<AnimalsCubit>().onSortChanged(preset),
         ),
         Expanded(
@@ -178,7 +178,7 @@ class _AnimalsViewState extends State<AnimalsView> {
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 isDense: true,
-                hintText: AnimalsL10nKeys.commonSearch.tr(),
+                hintText: LocaleKeys.commonSearch.tr(),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 prefixIcon: Icon(Icons.search, size: 20.0, color: Theme.of(context).colorScheme.primary),
                 prefixIconConstraints: const BoxConstraints(minWidth: 40.0, minHeight: 40.0),
@@ -192,7 +192,7 @@ class _AnimalsViewState extends State<AnimalsView> {
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
           )
-        : Text(AnimalsL10nKeys.commonAnimals.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface));
+        : Text(LocaleKeys.commonAnimals.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface));
   }
 
   Widget _buildScreenContent(AnimalsState state, List<AnimalListItem> data) {
@@ -236,15 +236,13 @@ class _AnimalsViewState extends State<AnimalsView> {
       state: state.page,
       builder: (_, _) => const SizedBox(height: 16.0),
       loader: (_) => const SizedBox(height: 48.0, child: Center(child: CircularProgressIndicator())),
-      errorBuilder: (_, _) => SizedBox(height: 64.0, child: Center(child: Text(AnimalsL10nKeys.commonError.tr()))),
+      errorBuilder: (_, _) => SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr()))),
     );
   }
 
   Widget _buildEmptyState(AnimalsState state) {
     // При активном поиске пустой список = «ничего не найдено», а не «нет животных».
-    final message = state.searchRequest.isNotEmpty
-        ? AnimalsL10nKeys.commonNotFound.tr()
-        : AnimalsL10nKeys.animalsEmptyState.tr();
+    final message = state.searchRequest.isNotEmpty ? LocaleKeys.commonNotFound.tr() : LocaleKeys.animalsEmptyState.tr();
     return RefreshIndicator(
       onRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
       child: SingleChildScrollView(
@@ -274,7 +272,7 @@ class _AnimalsViewState extends State<AnimalsView> {
     final messenger = ScaffoldMessenger.of(context);
     final success = await context.read<AnimalsCubit>().deleteAnimal(item);
     if (!success) {
-      messenger.showSnackBar(SnackBar(content: Text(AnimalsL10nKeys.errorDefaultMsg.tr())));
+      messenger.showSnackBar(SnackBar(content: Text(LocaleKeys.errorDefaultMsg.tr())));
     }
   }
 }

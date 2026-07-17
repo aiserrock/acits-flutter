@@ -1,5 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import '../../data/personal_service.dart';
 import '../../domain/user_profile.dart';
 import '../locale_switcher.dart';
-import '../personal_l10n_keys.dart';
 import 'change_pass_widget.dart';
 import 'cubit/personal_cubit.dart';
 import 'cubit/personal_state.dart';
@@ -74,10 +74,7 @@ class _PersonalViewState extends State<_PersonalView> {
           child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          PersonalL10nKeys.personMyData.tr(),
-          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-        ),
+        title: Text(LocaleKeys.personMyData.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         centerTitle: true,
       ),
       floatingActionButton: BlocBuilder<PersonalCubit, PersonalState>(
@@ -107,40 +104,36 @@ class _PersonalViewState extends State<_PersonalView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     FormEditCard([
+                      EditCardData(label: LocaleKeys.loginLoginLabel.tr(), enabled: false, initValue: user.username),
                       EditCardData(
-                        label: PersonalL10nKeys.loginLoginLabel.tr(),
-                        enabled: false,
-                        initValue: user.username,
-                      ),
-                      EditCardData(
-                        label: PersonalL10nKeys.loginPassLabel.tr(),
+                        label: LocaleKeys.loginPassLabel.tr(),
                         enabled: false,
                         initValue: '••••••••',
                         suffix: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
                         onPressed: () => _onPassChange(context),
                       ),
                       EditCardData(
-                        label: PersonalL10nKeys.animalCuratorName.tr(),
+                        label: LocaleKeys.animalCuratorName.tr(),
                         controller: _firstNameController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: PersonalL10nKeys.animalCuratorLastName.tr(),
+                        label: LocaleKeys.animalCuratorLastName.tr(),
                         controller: _lastNameController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: PersonalL10nKeys.regFathersName.tr(),
+                        label: LocaleKeys.regFathersName.tr(),
                         controller: _fatherNameController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: PersonalL10nKeys.animalCuratorPhone.tr(),
+                        label: LocaleKeys.animalCuratorPhone.tr(),
                         controller: _phoneController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: PersonalL10nKeys.animalCuratorEmail.tr(),
+                        label: LocaleKeys.animalCuratorEmail.tr(),
                         controller: _emailController,
                         onChanged: _onFieldChanged,
                       ),
@@ -150,7 +143,7 @@ class _PersonalViewState extends State<_PersonalView> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(PersonalL10nKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.titleMedium),
+                          Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.titleMedium),
                           const LocaleSwitcher(),
                         ],
                       ),

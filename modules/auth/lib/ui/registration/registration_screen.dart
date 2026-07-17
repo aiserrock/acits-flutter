@@ -1,5 +1,6 @@
 import 'package:acits_domain/acits_domain.dart' show Shelter, MessagedException;
 import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,6 @@ import '../../domain/auth_router_service.dart';
 import '../../domain/auth_session_api.dart';
 import '../../domain/registration_input.dart';
 import '../../util/validator.dart';
-import '../auth_l10n_keys.dart';
 import 'cubit/registration_cubit.dart';
 import 'cubit/registration_state.dart';
 
@@ -118,7 +118,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
     return TabBar(
       indicatorColor: Theme.of(context).colorScheme.primary,
       indicatorWeight: 4.0,
-      tabs: [AuthL10nKeys.regOrg.tr(), AuthL10nKeys.regUser.tr()]
+      tabs: [LocaleKeys.regOrg.tr(), LocaleKeys.regUser.tr()]
           .mapIndexed<Widget>(
             (index, tab) => BlocSelector<RegistrationCubit, RegistrationState, int>(
               selector: (state) => state.tabIndex,
@@ -309,12 +309,12 @@ class RegistrationSubmitBtn extends StatelessWidget {
         return !isLoading
             ? PrimaryButton(
                 onPressed: () => _onSubmit(context),
-                text: AuthL10nKeys.loginToRegistration.tr().toUpperCase(),
+                text: LocaleKeys.loginToRegistration.tr().toUpperCase(),
               )
             : Shimmer.fromColors(
                 baseColor: Theme.of(context).colorScheme.primary,
                 highlightColor: Theme.of(context).colorScheme.surface,
-                child: PrimaryButton(onPressed: () {}, text: AuthL10nKeys.loginToRegistration.tr().toUpperCase()),
+                child: PrimaryButton(onPressed: () {}, text: LocaleKeys.loginToRegistration.tr().toUpperCase()),
               );
       },
     );
@@ -339,7 +339,7 @@ class RegistrationSubmitBtn extends StatelessWidget {
     }
 
     if (!state.agreedToPolicy) {
-      _showSnack(forms, AuthL10nKeys.regNeedConfirmPolicy.tr());
+      _showSnack(forms, LocaleKeys.regNeedConfirmPolicy.tr());
       return;
     }
 
@@ -364,9 +364,9 @@ class RegistrationSubmitBtn extends StatelessWidget {
           body: SafeArea(
             child: SuccessHolderWidget(
               onPressed: navigator.pop,
-              title: AuthL10nKeys.regTUPtitle.tr(),
-              message: AuthL10nKeys.regTUPmsg.tr(),
-              button: AuthL10nKeys.commonClose.tr().toUpperCase(),
+              title: LocaleKeys.regTUPtitle.tr(),
+              message: LocaleKeys.regTUPmsg.tr(),
+              button: LocaleKeys.commonClose.tr().toUpperCase(),
             ),
           ),
         ),
@@ -391,13 +391,13 @@ class RegistrationLoginBtn extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(AuthL10nKeys.regHaveAccount.tr()),
+        Text(LocaleKeys.regHaveAccount.tr()),
         Builder(
           builder: (context) {
             return MaterialButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                AuthL10nKeys.loginEntryBtn.tr(),
+                LocaleKeys.loginEntryBtn.tr(),
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             );
@@ -436,9 +436,9 @@ class RegistrationPersonalData extends StatelessWidget {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: AuthL10nKeys.regAgreePersonalDataPart0.tr()),
+                TextSpan(text: LocaleKeys.regAgreePersonalDataPart0.tr()),
                 TextSpan(
-                  text: AuthL10nKeys.regAgreePersonalDataPart1.tr(),
+                  text: LocaleKeys.regAgreePersonalDataPart1.tr(),
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: Colors.blue, decoration: TextDecoration.underline),
@@ -472,7 +472,7 @@ class RegistrationOrgForm extends StatelessWidget {
           const SizedBox(height: 8.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(AuthL10nKeys.regAboutYou.tr(), style: Theme.of(context).textTheme.titleLarge),
+            child: Text(LocaleKeys.regAboutYou.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           Card(
@@ -481,7 +481,7 @@ class RegistrationOrgForm extends StatelessWidget {
           const SizedBox(height: 24.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(AuthL10nKeys.regAboutOrg.tr(), style: Theme.of(context).textTheme.titleLarge),
+            child: Text(LocaleKeys.regAboutOrg.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           Card(
@@ -494,7 +494,7 @@ class RegistrationOrgForm extends StatelessWidget {
           const SizedBox(height: 16.0),
           const RegistrationLoginBtn(),
           const SizedBox(height: 16.0),
-          Text(AuthL10nKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
+          Text(LocaleKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
         ],
       ),
     );
@@ -507,24 +507,24 @@ class RegistrationOrgForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(AuthL10nKeys.regAdminRegMsg.tr(), style: Theme.of(context).textTheme.bodyMedium),
+          Text(LocaleKeys.regAdminRegMsg.tr(), style: Theme.of(context).textTheme.bodyMedium),
           TextFormField(
             controller: forms.orgLoginController,
             decoration: InputDecoration(
-              labelText: '${AuthL10nKeys.loginLoginLabel.tr()} *',
-              hintText: AuthL10nKeys.regPassSymbols.tr(),
+              labelText: '${LocaleKeys.loginLoginLabel.tr()} *',
+              hintText: LocaleKeys.regPassSymbols.tr(),
             ),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.orgPassController,
-            decoration: InputDecoration(labelText: '${AuthL10nKeys.loginPassLabel.tr()} *'),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regLeast8Symbols.tr()),
+            decoration: InputDecoration(labelText: '${LocaleKeys.loginPassLabel.tr()} *'),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regLeast8Symbols.tr()),
           ),
           TextFormField(
             controller: forms.orgEmailController,
             decoration: InputDecoration(
-              labelText: '${AuthL10nKeys.animalCuratorEmail.tr()} *',
+              labelText: '${LocaleKeys.animalCuratorEmail.tr()} *',
               hintText: 'example@mail.ru',
             ),
             validator: Validator.emailValidator,
@@ -533,25 +533,25 @@ class RegistrationOrgForm extends StatelessWidget {
           TextFormField(
             controller: forms.orgPhoneController,
             decoration: InputDecoration(
-              labelText: AuthL10nKeys.animalCuratorPhone.tr(),
-              hintText: AuthL10nKeys.regPhoneMask.tr(),
+              labelText: LocaleKeys.animalCuratorPhone.tr(),
+              hintText: LocaleKeys.regPhoneMask.tr(),
             ),
             keyboardType: TextInputType.phone,
             inputFormatters: [forms.phoneFormatter],
           ),
           TextFormField(
             controller: forms.orgSNameController,
-            decoration: InputDecoration(labelText: '${AuthL10nKeys.animalCuratorLastName.tr()} *', hintText: 'Иванов'),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorLastName.tr()} *', hintText: 'Иванов'),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.orgNameController,
-            decoration: InputDecoration(labelText: '${AuthL10nKeys.animalCuratorName.tr()} *', hintText: 'Иван'),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorName.tr()} *', hintText: 'Иван'),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.orgMNameController,
-            decoration: InputDecoration(labelText: AuthL10nKeys.regFathersName.tr(), hintText: 'Иванович'),
+            decoration: InputDecoration(labelText: LocaleKeys.regFathersName.tr(), hintText: 'Иванович'),
           ),
         ],
       ),
@@ -567,28 +567,25 @@ class RegistrationOrgForm extends StatelessWidget {
         children: [
           TextFormField(
             controller: forms.orgLoginController,
-            decoration: InputDecoration(labelText: AuthL10nKeys.regOrgName.tr()),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            decoration: InputDecoration(labelText: LocaleKeys.regOrgName.tr()),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.orgCountryNameController,
             decoration: InputDecoration(
-              labelText: AuthL10nKeys.regCountry.tr(),
-              hintText: AuthL10nKeys.regWriteCountry.tr(),
+              labelText: LocaleKeys.regCountry.tr(),
+              hintText: LocaleKeys.regWriteCountry.tr(),
             ),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.orgRegionNameController,
-            decoration: InputDecoration(
-              labelText: AuthL10nKeys.regRegion.tr(),
-              hintText: AuthL10nKeys.regWriteRegion.tr(),
-            ),
+            decoration: InputDecoration(labelText: LocaleKeys.regRegion.tr(), hintText: LocaleKeys.regWriteRegion.tr()),
           ),
           TextFormField(
             controller: forms.orgCityNameController,
-            decoration: InputDecoration(labelText: AuthL10nKeys.regCity.tr(), hintText: AuthL10nKeys.regWriteCity.tr()),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            decoration: InputDecoration(labelText: LocaleKeys.regCity.tr(), hintText: LocaleKeys.regWriteCity.tr()),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
         ],
       ),
@@ -609,7 +606,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           const SizedBox(height: 8.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(AuthL10nKeys.regAboutYou.tr(), style: Theme.of(context).textTheme.titleLarge),
+            child: Text(LocaleKeys.regAboutYou.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           Card(
@@ -618,7 +615,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           const SizedBox(height: 24.0),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(AuthL10nKeys.regAboutOrg.tr(), style: Theme.of(context).textTheme.titleLarge),
+            child: Text(LocaleKeys.regAboutOrg.tr(), style: Theme.of(context).textTheme.titleLarge),
           ),
           const SizedBox(height: 16.0),
           _buildCustomerRoleForm(context),
@@ -629,7 +626,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           const SizedBox(height: 16.0),
           const RegistrationLoginBtn(),
           const SizedBox(height: 16.0),
-          Text(AuthL10nKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
+          Text(LocaleKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
         ],
       ),
     );
@@ -645,7 +642,7 @@ class RegistrationCustomerForm extends StatelessWidget {
           TextFormField(
             controller: forms.customerEmailController,
             decoration: InputDecoration(
-              labelText: '${AuthL10nKeys.animalCuratorEmail.tr()} *',
+              labelText: '${LocaleKeys.animalCuratorEmail.tr()} *',
               hintText: 'example@mail.ru',
             ),
             validator: Validator.emailValidator,
@@ -653,18 +650,18 @@ class RegistrationCustomerForm extends StatelessWidget {
           ),
           TextFormField(
             controller: forms.customerPassController,
-            decoration: InputDecoration(labelText: '${AuthL10nKeys.loginPassLabel.tr()} *'),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            decoration: InputDecoration(labelText: '${LocaleKeys.loginPassLabel.tr()} *'),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.customerSNameController,
-            decoration: InputDecoration(labelText: '${AuthL10nKeys.animalCuratorLastName.tr()} *', hintText: 'Иванов'),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorLastName.tr()} *', hintText: 'Иванов'),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
           TextFormField(
             controller: forms.customerNameController,
-            decoration: InputDecoration(labelText: '${AuthL10nKeys.animalCuratorName.tr()} *', hintText: 'Иван'),
-            validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+            decoration: InputDecoration(labelText: '${LocaleKeys.animalCuratorName.tr()} *', hintText: 'Иван'),
+            validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
           ),
         ],
       ),
@@ -682,7 +679,7 @@ class RegistrationCustomerForm extends StatelessWidget {
               return FormEditCard(
                 [
                   EditCardData(
-                    label: AuthL10nKeys.regUserRole.tr(),
+                    label: LocaleKeys.regUserRole.tr(),
                     content: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: SizedBox(
@@ -700,11 +697,11 @@ class RegistrationCustomerForm extends StatelessWidget {
                     ),
                   ),
                   EditCardData(
-                    label: AuthL10nKeys.shelterSelectShelter.tr(),
+                    label: LocaleKeys.shelterSelectShelter.tr(),
                     initValue: state.shelter?.name,
                     suffix: Icon(Icons.menu_open_rounded, color: Theme.of(context).colorScheme.primary),
                     onPressed: () => _pickShelter(context),
-                    validator: Validator.emptyValidatorMsg(AuthL10nKeys.regFieldEmptyError.tr()),
+                    validator: Validator.emptyValidatorMsg(LocaleKeys.regFieldEmptyError.tr()),
                   ),
                 ],
                 key: UniqueKey(),
@@ -727,7 +724,7 @@ class RegistrationCustomerForm extends StatelessWidget {
 }
 
 extension CustomerRoleX on CustomerRole {
-  String get value => this == CustomerRole.employer ? AuthL10nKeys.regEmployee.tr() : AuthL10nKeys.regGuest.tr();
+  String get value => this == CustomerRole.employer ? LocaleKeys.regEmployee.tr() : LocaleKeys.regGuest.tr();
 }
 
 extension _MessagedExceptionX on MessagedException {
@@ -736,6 +733,6 @@ extension _MessagedExceptionX on MessagedException {
     if (msg != null) return msg;
     final errMsg = error;
     if (errMsg is String) return errMsg;
-    return AuthL10nKeys.errorDefaultMsg.tr();
+    return LocaleKeys.errorDefaultMsg.tr();
   }
 }

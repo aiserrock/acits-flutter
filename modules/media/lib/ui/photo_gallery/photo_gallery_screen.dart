@@ -1,5 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:animals/animals.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../domain/gallery_item_data.dart';
-import '../media_l10n_keys.dart';
 import '../photo_editor/photo_editor_screen.dart';
 import 'cubit/photo_gallery_cubit.dart';
 import 'cubit/photo_gallery_state.dart';
@@ -145,7 +145,7 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
       final ctx = _scaffoldKey.currentContext ?? context;
       ScaffoldMessenger.of(
         ctx,
-      ).showSnackBar(SnackBar(content: Text('${MediaL10nKeys.animalMaxImagesCountIs.tr()} $_maxCountImages')));
+      ).showSnackBar(SnackBar(content: Text('${LocaleKeys.animalMaxImagesCountIs.tr()} $_maxCountImages')));
       return;
     }
     final navigator = Navigator.of(context);

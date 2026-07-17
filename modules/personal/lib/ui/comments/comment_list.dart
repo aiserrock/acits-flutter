@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'package:acits_l10n/acits_l10n.dart';
 
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
@@ -21,7 +22,6 @@ import '../../domain/comment_file_opener.dart';
 import '../../domain/router/personal_router_service.dart';
 import '../../util/datetime.dart';
 import '../../util/url_matcher.dart';
-import '../personal_l10n_keys.dart';
 import '../personal_lottie_res.dart';
 import 'cubit/comment_list_cubit.dart';
 import 'cubit/comment_list_state.dart';
@@ -133,7 +133,7 @@ class _CommentListViewState extends State<_CommentListView> {
             comment: comment,
             onUrlPressed: _onUrlPressed,
             onFilePressed: (file) => _onFilePressed(context, file).catchError((_) {
-              _onError(context, PersonalL10nKeys.commonErrorStubMsg.tr());
+              _onError(context, LocaleKeys.commonErrorStubMsg.tr());
             }),
             onMorePressed: comment.isUserCanEditOrDelete ?? false ? (ctx) => _onMorePressed(ctx, comment) : null,
           );
@@ -158,7 +158,7 @@ class _CommentListViewState extends State<_CommentListView> {
               Expanded(
                 child: PrimaryButton(
                   onPressed: () => context.read<CommentListCubit>().loadNextPage(),
-                  child: Text(PersonalL10nKeys.commonReloadBtn.tr()),
+                  child: Text(LocaleKeys.commonReloadBtn.tr()),
                 ),
               ),
             ],
@@ -173,7 +173,7 @@ class _CommentListViewState extends State<_CommentListView> {
     final cubit = context.read<CommentListCubit>();
     final actions = bsSelectorActions(context, <Widget, dynamic Function()>{
       Text(
-        PersonalL10nKeys.commonEdit.tr(),
+        LocaleKeys.commonEdit.tr(),
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
       ): () async {
         final result = await widget.router.openCommentEdit(widget.animalId, comment: comment);
@@ -181,7 +181,7 @@ class _CommentListViewState extends State<_CommentListView> {
         Navigator.of(context).pop();
       },
       Text(
-        PersonalL10nKeys.commonDelete.tr(),
+        LocaleKeys.commonDelete.tr(),
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
       ): () {
         _deleteComment(context, comment);
@@ -196,7 +196,7 @@ class _CommentListViewState extends State<_CommentListView> {
     final messenger = ScaffoldMessenger.of(context);
     final success = await context.read<CommentListCubit>().deleteComment(comment);
     if (!success) {
-      messenger.showSnackBar(SnackBar(content: Text(PersonalL10nKeys.commentDeletingFail.tr())));
+      messenger.showSnackBar(SnackBar(content: Text(LocaleKeys.commentDeletingFail.tr())));
     }
   }
 
@@ -226,7 +226,7 @@ class _CommentListViewState extends State<_CommentListView> {
       }
     }();
     if (localFile == null) {
-      _onError(context, PersonalL10nKeys.commentDeletingFail.tr());
+      _onError(context, LocaleKeys.commentDeletingFail.tr());
       return;
     }
 
@@ -234,10 +234,10 @@ class _CommentListViewState extends State<_CommentListView> {
     String errorMsg = '';
     switch (openResult.type) {
       case ResultType.noAppToOpen:
-        errorMsg = PersonalL10nKeys.commonNoAppToOpenFileMsg.tr();
+        errorMsg = LocaleKeys.commonNoAppToOpenFileMsg.tr();
         break;
       case ResultType.error:
-        errorMsg = PersonalL10nKeys.commonErrorTryAgainMessage.tr();
+        errorMsg = LocaleKeys.commonErrorTryAgainMessage.tr();
         break;
       default:
     }

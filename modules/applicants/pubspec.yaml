@@ -22,6 +22,8 @@ dependencies:
   talker_flutter: ^5.1.16
   acits_core:
     path: ../../packages/acits_core
+  acits_l10n:
+    path: ../../packages/acits_l10n
   acits_domain:
     path: ../../packages/acits_domain
   acits_api:
