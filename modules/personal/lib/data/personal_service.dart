@@ -1,25 +1,25 @@
 import 'package:acits_api/acits_api.dart';
+import 'package:acits_domain/acits_domain.dart' show MessagedException;
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/domain/user_profile.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import '../domain/personal_shelter_provider.dart';
+import '../domain/user_profile.dart';
+import '../util/log.dart';
 
 /// Сервис профиля текущего пользователя.
 ///
 /// Прикладной сервис поверх стабильного [ProfileApiPort]: вызывает порт,
 /// разворачивает DTO → доменную сущность [UserProfile], ошибки Dio →
-/// [MessagedException] (внешний контракт для UI сохранён).
-@singleton
+/// [MessagedException] (внешний контракт для UI сохранён). Скоуп по приюту и
+/// сигнал разлогина (для сброса кеша) берутся из [PersonalShelterProvider]
+/// (мостится в приложении к AuthService).
 class PersonalService {
-  PersonalService(this._port, this._authService) {
-    _authService.addListener(_onLogout);
+  PersonalService(this._port, this._shelterProvider) {
+    _shelterProvider.addLogoutListener(_onLogout);
   }
 
   final ProfileApiPort _port;
-  final AuthService _authService;
+  final PersonalShelterProvider _shelterProvider;
 
   UserProfile? _person;
 
@@ -32,7 +32,7 @@ class PersonalService {
     }
 
     try {
-      final dto = await _port.me(shelterId: _authService.currentShelterId);
+      final dto = await _port.me(shelterId: _shelterProvider.shelterId);
       final user = _mapUser(dto);
       _person = user;
       Log.info('Personal loaded: id=${user.id}');
@@ -47,7 +47,7 @@ class PersonalService {
   Future<UserProfile> changePersonal(UserProfile data) async {
     Log.debug('Change personal: id=${data.id}');
     try {
-      final dto = await _port.updateMe(_toWrite(data), shelterId: _authService.currentShelterId);
+      final dto = await _port.updateMe(_toWrite(data), shelterId: _shelterProvider.shelterId);
       final user = _mapUser(dto);
       _person = user;
       Log.info('Personal updated: id=${user.id}');
@@ -67,7 +67,7 @@ class PersonalService {
   Future<void> changePass(String oldPass, String newPass) async {
     Log.debug('Change password attempt');
     try {
-      await _port.changePassword(oldPass, newPass, shelterId: _authService.currentShelterId);
+      await _port.changePassword(oldPass, newPass, shelterId: _shelterProvider.shelterId);
       Log.info('Change password success');
     } on DioException catch (e) {
       Log.warning('Change password failed: ${_errorText(e)}');

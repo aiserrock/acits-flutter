@@ -1,10 +1,7 @@
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/domain/user_profile.dart';
-import 'package:acits_flutter/service/personal/personal_service.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_cubit.dart';
-import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_core/acits_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:personal/personal.dart';
 
 class MockPersonalService extends Mock implements PersonalService {}
 
@@ -28,17 +25,12 @@ void main() {
 
   setUp(() {
     service = MockPersonalService();
-    getIt.registerFactory<PersonalService>(() => service);
-  });
-
-  tearDown(() async {
-    await getIt.reset();
   });
 
   test('load emits content and returns the loaded user', () async {
     when(() => service.fetchPersonal(force: any(named: 'force'))).thenAnswer((_) async => _profile());
 
-    final cubit = PersonalCubit();
+    final cubit = PersonalCubit(service);
     final user = await cubit.load();
 
     expect(user?.id, 1);
@@ -50,7 +42,7 @@ void main() {
   test('load emits error and returns null on failure', () async {
     when(() => service.fetchPersonal(force: any(named: 'force'))).thenThrow(Exception('boom'));
 
-    final cubit = PersonalCubit();
+    final cubit = PersonalCubit(service);
     final user = await cubit.load();
 
     expect(user, isNull);
@@ -62,7 +54,7 @@ void main() {
     when(() => service.fetchPersonal(force: any(named: 'force'))).thenAnswer((_) async => _profile());
     when(() => service.changePersonal(any())).thenAnswer((_) async => _profile().copyWith(firstName: 'Ada'));
 
-    final cubit = PersonalCubit();
+    final cubit = PersonalCubit(service);
     await cubit.load();
 
     await cubit.submit(firstName: 'Ada', lastName: 'Hopper', fathersName: '', phoneNumber: '+7', email: 'g@n.mil');

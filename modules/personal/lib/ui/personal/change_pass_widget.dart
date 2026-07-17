@@ -1,20 +1,27 @@
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_domain/acits_domain.dart' show MessagedException;
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/cubit/change_pass_cubit.dart';
-import 'package:acits_flutter/ui/widget/form_edit_card.dart';
-import 'package:acits_flutter/util/validator.dart';
+import '../../data/personal_service.dart';
+import '../../util/validator.dart';
+import '../personal_assets.dart';
+import '../personal_l10n_keys.dart';
+import '../personal_lottie_res.dart';
+import 'cubit/change_pass_cubit.dart';
 
 class ChangePassWidget extends StatelessWidget {
-  const ChangePassWidget({super.key});
+  const ChangePassWidget({required this.service, super.key});
+
+  final PersonalService service;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => ChangePassCubit(), child: const _ChangePassView());
+    return BlocProvider(create: (_) => ChangePassCubit(service), child: const _ChangePassView());
   }
 }
 
@@ -43,7 +50,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
     return BlocBuilder<ChangePassCubit, DataState<void>>(
       builder: (context, state) {
         return CupertinoAlertDialog(
-          title: Text(LocaleKeys.personalChangePass.tr()),
+          title: Text(PersonalL10nKeys.personalChangePass.tr()),
           content: SizedBox(
             width: double.infinity,
             child: Material(
@@ -51,7 +58,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
               child: DataStateBuilder<void>(
                 state: state,
                 builder: (_, _) => _buildForm(),
-                loader: (_) => Center(child: Lottie.asset(LottieRes.loading)),
+                loader: (_) => Center(child: Lottie.asset(PersonalLottieRes.loading)),
                 errorBuilder: (_, _) => _buildForm(),
               ),
             ),
@@ -61,9 +68,9 @@ class _ChangePassViewState extends State<_ChangePassView> {
               : [
                   CupertinoDialogAction(
                     onPressed: Navigator.of(context).pop,
-                    child: Text(LocaleKeys.commonCancel.tr()),
+                    child: Text(PersonalL10nKeys.commonCancel.tr()),
                   ),
-                  CupertinoDialogAction(onPressed: _submit, child: Text(LocaleKeys.commonEdit.tr())),
+                  CupertinoDialogAction(onPressed: _submit, child: Text(PersonalL10nKeys.commonEdit.tr())),
                 ],
         );
       },
@@ -76,24 +83,24 @@ class _ChangePassViewState extends State<_ChangePassView> {
       child: FormEditCard(
         [
           EditCardData(
-            label: LocaleKeys.personalOldPass.tr(),
+            label: PersonalL10nKeys.personalOldPass.tr(),
             controller: _oldPassController,
             isObscure: true,
             validator: Validator.emptyValidator,
           ),
           EditCardData(
-            label: LocaleKeys.personalNewPass.tr(),
+            label: PersonalL10nKeys.personalNewPass.tr(),
             controller: _newPassController,
             suffix: CupertinoButton(
               onPressed: () => setState(() => _isObscure = !_isObscure),
-              child: _isObscure ? Assets.icon.visible.svg() : Assets.icon.visibleOff.svg(),
+              child: _isObscure ? PersonalAssets.visible() : PersonalAssets.visibleOff(),
             ),
             isObscure: _isObscure,
             validator: Validator.emptyValidator,
           ),
           if (_isObscure)
             EditCardData(
-              label: LocaleKeys.personalRePass.tr(),
+              label: PersonalL10nKeys.personalRePass.tr(),
               isObscure: _isObscure,
               validator: (value) => _newPassController.text != value ? '' : null,
             ),
@@ -107,7 +114,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
 
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
-      _showMessage(LocaleKeys.personalEmptyFieldErrorMsg.tr());
+      _showMessage(PersonalL10nKeys.personalEmptyFieldErrorMsg.tr());
       return;
     }
 
@@ -119,7 +126,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
     if (!mounted) return;
 
     if (success) {
-      messenger.showSnackBar(SnackBar(content: Text(LocaleKeys.personalPassChanged.tr())));
+      messenger.showSnackBar(SnackBar(content: Text(PersonalL10nKeys.personalPassChanged.tr())));
       navigator.pop();
       return;
     }
@@ -128,7 +135,7 @@ class _ChangePassViewState extends State<_ChangePassView> {
     final rawError = state is DataError<void> ? state.error : null;
     final error = rawError is MessagedException ? rawError.error : null;
     messenger.showSnackBar(
-      SnackBar(content: Text('${LocaleKeys.personalChangeErrorMsg.tr()}${error is String ? error : ''}')),
+      SnackBar(content: Text('${PersonalL10nKeys.personalChangeErrorMsg.tr()}${error is String ? error : ''}')),
     );
   }
 

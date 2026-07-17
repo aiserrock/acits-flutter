@@ -1,15 +1,13 @@
 import 'package:acits_api/acits_api.dart';
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/domain/user_profile.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/service/personal/personal_service.dart';
+import 'package:acits_domain/acits_domain.dart' show MessagedException;
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:personal/personal.dart';
 
 class MockProfileApiPort extends Mock implements ProfileApiPort {}
 
-class MockAuthService extends Mock implements AuthService {}
+class MockShelterProvider extends Mock implements PersonalShelterProvider {}
 
 UserDto _dto() => UserDto(
   id: 1,
@@ -48,7 +46,7 @@ DioException _dioError() => DioException(
 
 void main() {
   late MockProfileApiPort port;
-  late MockAuthService auth;
+  late MockShelterProvider shelter;
   late PersonalService service;
 
   setUpAll(() {
@@ -68,9 +66,11 @@ void main() {
 
   setUp(() {
     port = MockProfileApiPort();
-    auth = MockAuthService();
-    when(() => auth.currentShelterId).thenReturn(50);
-    service = PersonalService(port, auth);
+    shelter = MockShelterProvider();
+    when(() => shelter.shelterId).thenReturn(50);
+    when(() => shelter.addLogoutListener(any())).thenReturn(null);
+    when(() => shelter.removeLogoutListener(any())).thenReturn(null);
+    service = PersonalService(port, shelter);
   });
 
   test('fetchPersonal maps DTO→UserProfile and caches it', () async {

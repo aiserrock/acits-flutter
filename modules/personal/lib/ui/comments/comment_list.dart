@@ -2,6 +2,9 @@
 
 import 'dart:async';
 
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -9,40 +12,64 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/service/file/file_service.dart';
-import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_cubit.dart';
-import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_state.dart';
-import 'package:acits_flutter/ui/widget/action_bs.dart';
-import 'package:acits_flutter/ui/widget/button.dart';
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/widget/error_holder.dart';
-import 'package:acits_flutter/ui/widget/loader.dart';
+import '../../data/comments_service.dart';
+import '../../domain/animal_note.dart';
+import '../../domain/animal_note_file.dart';
+import '../../domain/comment_file_opener.dart';
+import '../../domain/router/personal_router_service.dart';
+import '../../util/datetime.dart';
+import '../../util/url_matcher.dart';
+import '../personal_l10n_keys.dart';
+import '../personal_lottie_res.dart';
+import 'cubit/comment_list_cubit.dart';
+import 'cubit/comment_list_state.dart';
 
 class CommentListWidget extends StatelessWidget {
-  const CommentListWidget(this.animalId, {this.scrollController, this.onCreateCommentStream, super.key});
+  const CommentListWidget(
+    this.animalId, {
+    required this.service,
+    required this.router,
+    required this.fileOpener,
+    this.scrollController,
+    this.onCreateCommentStream,
+    super.key,
+  });
 
   final int animalId;
+  final CommentsService service;
+  final PersonalRouterService router;
+  final CommentFileOpener fileOpener;
   final ScrollController? scrollController;
   final StreamController<AnimalNote>? onCreateCommentStream;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CommentListCubit(animalId: animalId, onCreateCommentStream: onCreateCommentStream?.stream),
-      child: _CommentListView(animalId: animalId, scrollController: scrollController),
+      create: (_) =>
+          CommentListCubit(service: service, animalId: animalId, onCreateCommentStream: onCreateCommentStream?.stream),
+      child: _CommentListView(
+        animalId: animalId,
+        router: router,
+        fileOpener: fileOpener,
+        scrollController: scrollController,
+      ),
     );
   }
 }
 
 class _CommentListView extends StatefulWidget {
-  const _CommentListView({required this.animalId, this.scrollController});
+  const _CommentListView({
+    required this.animalId,
+    required this.router,
+    required this.fileOpener,
+    this.scrollController,
+  });
 
   final int animalId;
+  final PersonalRouterService router;
+  final CommentFileOpener fileOpener;
   final ScrollController? scrollController;
 
   @override
@@ -50,8 +77,6 @@ class _CommentListView extends StatefulWidget {
 }
 
 class _CommentListViewState extends State<_CommentListView> {
-  final FileService _fileService = getIt<FileService>();
-
   late final ScrollController _scrollController;
   bool _ownsScrollController = false;
 
@@ -108,7 +133,7 @@ class _CommentListViewState extends State<_CommentListView> {
             comment: comment,
             onUrlPressed: _onUrlPressed,
             onFilePressed: (file) => _onFilePressed(context, file).catchError((_) {
-              _onError(context, LocaleKeys.commonErrorStubMsg.tr());
+              _onError(context, PersonalL10nKeys.commonErrorStubMsg.tr());
             }),
             onMorePressed: comment.isUserCanEditOrDelete ?? false ? (ctx) => _onMorePressed(ctx, comment) : null,
           );
@@ -122,18 +147,18 @@ class _CommentListViewState extends State<_CommentListView> {
   Widget _buildPagingLoader(CommentListState state) {
     return DataStateBuilder<Object?>(
       state: state.page,
-      loader: (_) => SizedBox(height: 64.0, child: Center(child: LottieBuilder.asset(LottieRes.dogLoading))),
+      loader: (_) => SizedBox(height: 64.0, child: Center(child: LottieBuilder.asset(PersonalLottieRes.dogLoading))),
       errorBuilder: (_, _) => SizedBox(
         height: 64.0,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
-              Expanded(child: LottieBuilder.asset(LottieRes.crashScratch)),
+              Expanded(child: LottieBuilder.asset(PersonalLottieRes.crashScratch)),
               Expanded(
                 child: PrimaryButton(
                   onPressed: () => context.read<CommentListCubit>().loadNextPage(),
-                  child: Text(LocaleKeys.commonReloadBtn.tr()),
+                  child: Text(PersonalL10nKeys.commonReloadBtn.tr()),
                 ),
               ),
             ],
@@ -148,15 +173,15 @@ class _CommentListViewState extends State<_CommentListView> {
     final cubit = context.read<CommentListCubit>();
     final actions = bsSelectorActions(context, <Widget, dynamic Function()>{
       Text(
-        LocaleKeys.commonEdit.tr(),
+        PersonalL10nKeys.commonEdit.tr(),
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
       ): () async {
-        final result = await context.push<AnimalNote>(AppRoutes.commentEditPath(widget.animalId), extra: comment);
+        final result = await widget.router.openCommentEdit(widget.animalId, comment: comment);
         if (result != null) cubit.onCommentEdited(result);
         Navigator.of(context).pop();
       },
       Text(
-        LocaleKeys.commonDelete.tr(),
+        PersonalL10nKeys.commonDelete.tr(),
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
       ): () {
         _deleteComment(context, comment);
@@ -171,7 +196,7 @@ class _CommentListViewState extends State<_CommentListView> {
     final messenger = ScaffoldMessenger.of(context);
     final success = await context.read<CommentListCubit>().deleteComment(comment);
     if (!success) {
-      messenger.showSnackBar(SnackBar(content: Text(LocaleKeys.commentDeletingFail.tr())));
+      messenger.showSnackBar(SnackBar(content: Text(PersonalL10nKeys.commentDeletingFail.tr())));
     }
   }
 
@@ -195,13 +220,13 @@ class _CommentListViewState extends State<_CommentListView> {
 
     final localFile = await () async {
       try {
-        return await _fileService.loadFile(url, fileName);
+        return await widget.fileOpener.loadFile(url, fileName);
       } catch (_) {
         return null;
       }
     }();
     if (localFile == null) {
-      _onError(context, LocaleKeys.commentDeletingFail.tr());
+      _onError(context, PersonalL10nKeys.commentDeletingFail.tr());
       return;
     }
 
@@ -209,10 +234,10 @@ class _CommentListViewState extends State<_CommentListView> {
     String errorMsg = '';
     switch (openResult.type) {
       case ResultType.noAppToOpen:
-        errorMsg = LocaleKeys.commonNoAppToOpenFileMsg.tr();
+        errorMsg = PersonalL10nKeys.commonNoAppToOpenFileMsg.tr();
         break;
       case ResultType.error:
-        errorMsg = LocaleKeys.commonErrorTryAgainMessage.tr();
+        errorMsg = PersonalL10nKeys.commonErrorTryAgainMessage.tr();
         break;
       default:
     }

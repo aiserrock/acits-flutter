@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:animals/animals.dart';
-import 'package:acits_flutter/ui/screen/comments/comment_list.dart';
+import 'package:personal/personal.dart'
+    show AnimalNote, CommentFileOpener, CommentListWidget, CommentsService, PersonalRouterService;
 import 'package:acits_flutter/ui/widget/error_holder.dart';
 import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
@@ -399,6 +400,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       default:
         return CommentListWidget(
           animal.id,
+          service: getIt<CommentsService>(),
+          router: getIt<PersonalRouterService>(),
+          fileOpener: getIt<CommentFileOpener>(),
           scrollController: _scrollController,
           onCreateCommentStream: _onCreateCommentStream,
         );
