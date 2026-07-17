@@ -1,7 +1,7 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/{{entity.snakeCase()}}.dart';
+import 'package:{{module.snakeCase()}}/domain/domain.dart';
 
 /// State for the {{name.pascalCase()}} screen. Load state as a [DataState] over a
 /// domain entity (never a DTO).

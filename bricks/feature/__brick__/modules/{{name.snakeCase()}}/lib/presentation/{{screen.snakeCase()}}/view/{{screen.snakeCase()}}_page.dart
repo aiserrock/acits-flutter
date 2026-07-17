@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/{{name.snakeCase()}}_repository.dart';
-import '../../../domain/router/{{name.snakeCase()}}_router_service.dart';
-import '../bloc/{{screen.snakeCase()}}_cubit.dart';
-import '{{screen.snakeCase()}}_view.dart';
+import 'package:{{name.snakeCase()}}/domain/domain.dart';
+import 'package:{{name.snakeCase()}}/presentation/{{screen.snakeCase()}}/{{screen.snakeCase()}}.dart';
 
 /// Entry point of the {{screen.pascalCase()}} screen. Raises the cubit
 /// (repository) and hands the router contract to the view. Dependencies come

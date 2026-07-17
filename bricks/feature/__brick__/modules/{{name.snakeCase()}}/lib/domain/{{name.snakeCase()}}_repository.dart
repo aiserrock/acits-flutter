@@ -1,6 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 
-import '{{name.snakeCase()}}.dart';
+import 'package:{{name.snakeCase()}}/domain/domain.dart';
 
 /// Repository contract for {{name.pascalCase()}} (feature-local). Everything in
 /// domain types and Result<Failure, T> — DTOs never reach here (they stop in

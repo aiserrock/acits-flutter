@@ -1,8 +1,8 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/{{module.snakeCase()}}_repository.dart';
-import '{{name.snakeCase()}}_state.dart';
+import 'package:{{module.snakeCase()}}/domain/domain.dart';
+import 'package:{{module.snakeCase()}}/presentation/{{name.snakeCase()}}/{{name.snakeCase()}}.dart';
 
 /// Cubit for the {{name.pascalCase()}} screen. Loads a single {{entity.pascalCase()}}
 /// by id from the module repository; data arrives as a [Result] (no DTOs).

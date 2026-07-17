@@ -1,9 +1,11 @@
 name: screen
 description: >-
   Scaffolds a screen inside an existing ACITS module:
-  modules/{{module}}/lib/ui/{{name}}/ with bloc/ (cubit + state), view/
-  ({{name}}_page BlocProvider + {{name}}_view), and widgets/. Modelled on
-  modules/animals/lib/ui/animals_list.
+  modules/{{module}}/lib/presentation/{{name}}/ with a screen barrel and bloc/
+  (cubit + state), view/ ({{name}}_page BlocProvider + {{name}}_view), and
+  widgets/ (each with its own barrel). Modelled on
+  modules/animals/lib/presentation/animals_list. After generating, export the
+  new screen from the module's presentation/presentation.dart manually.
 version: 0.1.0
 
 environment:

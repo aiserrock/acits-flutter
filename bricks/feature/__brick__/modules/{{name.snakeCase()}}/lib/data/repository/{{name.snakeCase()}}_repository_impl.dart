@@ -1,10 +1,8 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:dio/dio.dart';
 
-import '../../domain/{{name.snakeCase()}}.dart';
-import '../../domain/{{name.snakeCase()}}_repository.dart';
-import '../data_source/{{name.snakeCase()}}_remote_data_source.dart';
-import '../mapper/{{name.snakeCase()}}_mapper.dart';
+import 'package:{{name.snakeCase()}}/data/data.dart';
+import 'package:{{name.snakeCase()}}/domain/domain.dart';
 
 /// Implementation of [{{name.pascalCase()}}Repository]. Here DTOs end: call the data
 /// source, unwrap DTO → entity via mappers, catch exceptions → typed [Failure].

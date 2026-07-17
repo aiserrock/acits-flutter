@@ -5,18 +5,27 @@
 
 ## Layering
 
+Every folder has a barrel (`<folder>/<folder>.dart`) that re-exports its files
+and subfolder barrels; the root `{{name.snakeCase()}}.dart` exports the three
+layer barrels. Intra-module logic imports go through `package:{{name.snakeCase()}}/<barrel>.dart`
+(never relative). Barrel files themselves use relative exports.
+
 ```
 lib/
-├── {{name.snakeCase()}}.dart            # barrel (public API; DTOs stay internal)
+├── {{name.snakeCase()}}.dart            # root barrel → data/domain/presentation
 ├── data/
-│   ├── data_source/         # thin wrapper over acits_api {{name.pascalCase()}}ApiPort
-│   ├── mapper/              # {{name.pascalCase()}}Mapper implements Transformable<{{name.pascalCase()}}>
-│   └── repository/          # {{name.pascalCase()}}RepositoryImpl → Result<Failure, T>; DTOs stop here
+│   ├── data.dart            # barrel → data_source / mapper / repository
+│   ├── data_source/         # thin wrapper over acits_api {{name.pascalCase()}}ApiPort (+ barrel)
+│   ├── mapper/              # {{name.pascalCase()}}Mapper implements Transformable<{{name.pascalCase()}}> (+ barrel)
+│   └── repository/          # {{name.pascalCase()}}RepositoryImpl → Result<Failure, T>; DTOs stop here (+ barrel)
 ├── domain/
+│   ├── domain.dart          # barrel → entity + repository interface + router
 │   ├── {{name.snakeCase()}}.dart        # feature-local entity
 │   ├── {{name.snakeCase()}}_repository.dart  # repository interface (Result)
-│   └── router/              # {{name.pascalCase()}}RouterService — nav contract (impl in root)
-└── ui/{{screen.snakeCase()}}/           # bloc / view / widgets
+│   └── router/              # {{name.pascalCase()}}RouterService — nav contract (impl in root) (+ barrel)
+└── presentation/
+    ├── presentation.dart    # barrel → each screen barrel
+    └── {{screen.snakeCase()}}/          # screen barrel + bloc / view / widgets (each with a barrel)
 ```
 
 ## Wiring checklist (after scaffolding)

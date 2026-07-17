@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/{{module.snakeCase()}}_repository.dart';
-import '../bloc/{{name.snakeCase()}}_cubit.dart';
-import '{{name.snakeCase()}}_view.dart';
+import 'package:{{module.snakeCase()}}/domain/domain.dart';
+import 'package:{{module.snakeCase()}}/presentation/{{name.snakeCase()}}/{{name.snakeCase()}}.dart';
 
 /// Entry point of the {{name.pascalCase()}} screen. Raises the cubit for a given
 /// [id]; dependencies come from the root (DI). Identity comes from the URL, not

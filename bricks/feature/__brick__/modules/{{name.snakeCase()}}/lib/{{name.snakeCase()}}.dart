@@ -5,9 +5,6 @@
 /// app to wire.
 library;
 
-export 'domain/{{name.snakeCase()}}.dart';
-export 'domain/{{name.snakeCase()}}_repository.dart';
-export 'domain/router/{{name.snakeCase()}}_router_service.dart';
-export 'data/repository/{{name.snakeCase()}}_repository_impl.dart';
-export 'data/data_source/{{name.snakeCase()}}_remote_data_source.dart';
-export 'ui/{{screen.snakeCase()}}/view/{{screen.snakeCase()}}_page.dart';
+export 'data/data.dart';
+export 'domain/domain.dart';
+export 'presentation/presentation.dart';

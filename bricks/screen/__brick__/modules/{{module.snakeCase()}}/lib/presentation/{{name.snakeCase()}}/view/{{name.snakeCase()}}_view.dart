@@ -2,10 +2,8 @@ import 'package:acits_core/acits_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/{{entity.snakeCase()}}.dart';
-import '../bloc/{{name.snakeCase()}}_cubit.dart';
-import '../bloc/{{name.snakeCase()}}_state.dart';
-import '../widgets/{{name.snakeCase()}}_body.dart';
+import 'package:{{module.snakeCase()}}/domain/domain.dart';
+import 'package:{{module.snakeCase()}}/presentation/{{name.snakeCase()}}/{{name.snakeCase()}}.dart';
 
 /// {{name.pascalCase()}} screen. The cubit is raised by [{{name.pascalCase()}}Page].
 class {{name.pascalCase()}}View extends StatelessWidget {
