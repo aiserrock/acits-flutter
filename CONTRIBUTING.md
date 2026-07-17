@@ -17,6 +17,7 @@ Repository: [github.com/aiserrock/acits-flutter](https://github.com/aiserrock/ac
 - [Branching model](#branching-model)
 - [Commit messages](#commit-messages)
 - [Coding standards](#coding-standards)
+- [Codegen rituals](#codegen-rituals)
 - [Localisation](#localisation)
 - [Testing](#testing)
 - [Pre-PR checklist](#pre-pr-checklist)
@@ -86,11 +87,19 @@ A working Android and/or iOS toolchain (Android Studio / Xcode) is also required
 
    > The `key.properties.example` under `android/keystore/` follows the same pattern if you need signing configured locally.
 
-5. **Generate code.** The project uses code generation for DI (injectable), JSON serialisation, and Chopper:
+5. **Generate code.** Two independent codegen passes, kept apart on purpose:
 
    ```bash
+   # App-level: injectable DI, flutter_gen assets, json_serializable DTOs.
    fvm dart run build_runner build --delete-conflicting-outputs
+
+   # API client: swagger_parser, isolated inside packages/acits_api — runs its
+   # own preprocess + swagger_parser + build_runner. Only needed when the
+   # OpenAPI spec (doc/api/openapi.json) changes; the generated client is committed.
+   melos genapi
    ```
+
+   The two are separate so the rarely-changing API client is **not** regenerated on every app `build_runner`. See the [codegen rituals](#codegen-rituals) below.
 
 6. **Run the app.** Two flavours exist, each with its own entry point:
 
@@ -159,21 +168,23 @@ docs: update contributing guide for FVM 3.44
 
 ## Coding standards
 
-- **Line length is 100** (not the Dart default of 80). Format every change:
+- **Line length is 120** (not the Dart default of 80). Format every change (`melos format` applies the same exclusions across the workspace):
 
   ```bash
-  fvm dart format -l 100 lib test
+  fvm dart format -l 120 lib test
   ```
 
-- **State management uses `flutter_bloc` Cubits** together with a sealed `DataState<T>` (`lib/util/data_state.dart`) rendered through `DataStateBuilder`. Cubits emit via `safeEmit` (`lib/util/bloc_ext.dart`) to avoid emitting after close. Form inputs use `formz`; models use `equatable`.
+- **State management uses `flutter_bloc`** with the shared `DataState<T>` from `acits_core`. Cubits guard against emit-after-close (`isClosed` / a `_safeEmit` helper). Form inputs use `formz`; models use `equatable`.
 
 - **Events and states are sealed classes.** Where a full BLoC is used, define its events and states as sealed classes attached to the bloc file. Prefer a Cubit with `DataState<T>` for straightforward request/response screens.
 
-- **Navigation uses `go_router`** (`lib/navigation/app_router.dart`). Routes are declared as constants in `AppRoutes`; complex objects are passed through `extra` and encoded via `AppExtraCodec`. Do not use imperative `Navigator` calls or named routes.
+- **Navigation uses `go_router`** with per-feature `RouterService` interfaces (a feature never imports go_router or app routes — the root implements its contract and injects it). Routes carry identity through **path/query params, not `extra`** (a browser reload / shared URL must reconstruct the screen). `extra` is allowed only as an optional in-memory cache hint with an `id`-based fallback load. Do not use imperative `Navigator` calls or named-route strings.
 
-- **Dependency injection uses `get_it` + `injectable` 3.** `initDi()` is called in `main` before `runApp`. Re-run `build_runner` after touching any `@injectable` annotation. **Do not register Cubits/BLoCs in DI** — provide them via `BlocProvider` at the screen widget and pull their dependencies from `getIt` in the constructor.
+- **Dependency injection uses `get_it` + `injectable` 3.** `initDi()` runs inside the `AppTask` startup pipeline before `runApp`. Re-run `build_runner` after touching any `@injectable` annotation. **Do not register Cubits/BLoCs in DI** — provide them via `BlocProvider` at the screen widget and pull their dependencies from `getIt` in the constructor.
 
-- **Networking uses Chopper + Dio,** generated from the OpenAPI spec under `doc/api/` into `lib/gen/api/`. Never hand-edit generated files (`*.g.dart`, `*.chopper.dart`, `*.swagger.dart`). For hand-written DTOs use `@JsonSerializable` with `part '<name>.g.dart';`.
+- **Networking uses a single dio client behind a ports-and-adapters API layer** in `packages/acits_api`. Features and repositories depend on stable `abstract <Feature>ApiPort` interfaces speaking OUR DTOs (`packages/acits_api/lib/ports/dto/`); the generated `swagger_parser` client lives only in `packages/acits_api/lib/adapters/` and never leaks upward. **DTO containment rule:** DTOs exist only inside `acits_api` and repository implementations — repositories map DTO → domain entity via a `Transformable<T>` mapper and return `Result<Failure, T>`. There is no chopper. Never hand-edit generated files. For hand-written DTOs use `@JsonSerializable` with `part '<name>.g.dart';`.
+
+- **State returns `Result<Failure, T>`** (`acits_core`) from repositories. Use **Bloc + freezed state** when a screen has ≥2 event sources or a non-trivial flow; otherwise **Cubit + Equatable** (with the shared `DataState<T>` from `acits_core`). Prefer `copyWith` over hand-rolled sealed states when the state has many fields.
 
 - **Storage** goes through the wrappers in `lib/service/` around `flutter_secure_storage` and `shared_preferences`. Do not call `SharedPreferences.getInstance()` directly from features.
 
@@ -183,24 +194,63 @@ docs: update contributing guide for FVM 3.44
 
 ### Project layout
 
+The repo is a melos **workspace** — a thin root app plus packages and feature modules. Each package ships its own `README.md` describing its purpose and dependency rule.
+
 ```text
-lib/
-├── di/            # get_it + injectable container (di_container.config.dart is
-│                  #   generated here too — injectable hardcodes it next to
-│                  #   its @InjectableInit source, it cannot live in lib/gen/)
-├── domain/        # plain Dart domain models
-├── gen/           # ALL other generated code (do not edit) — Chopper/OpenAPI
-│                  #   client (gen/api/), LocaleKeys (gen/l10n/), flutter_gen
-│                  #   assets/fonts accessors
-├── navigation/    # go_router configuration (app_router.dart, AppRoutes)
-├── res/           # design tokens (colour, style, icons, l10n config)
-├── service/       # injectable services grouped by concern
-├── ui/
-│   ├── screen/<feature>/   # bloc-or-cubit / view / model per screen
-│   └── widget/             # app-wide shared widgets
-├── util/          # helpers, DataState, bloc_ext
-└── export.dart    # project-wide barrel
+acits_flutter/
+├── lib/                  # root app shell: main/bootstrap, AppTask pipeline, DI composition, router tree
+│   ├── di/               #   get_it + injectable container (config lives next to its @InjectableInit source)
+│   └── gen/              #   app-owned generated code (LocaleKeys, flutter_gen assets) — do not edit
+├── packages/
+│   ├── acits_core/       # Result/Failure, dio client + interceptors, AppTask, platform ports
+│   ├── acits_domain/     # shared entities, repository interfaces, Transformable<T> — DTO-free
+│   ├── acits_api/        # <Feature>ApiPort + our DTOs (ports/); swagger_parser adapter (adapters/)
+│   ├── acits_ui_kit/     # Material 3 tokens, breakpoints, AdaptiveScaffold, components
+│   └── acits_navigation/ # route constants, param codecs, guards (no feature imports)
+└── modules/
+    └── animals/          # reference feature: data/ (data_source, mapper, repository_impl)
+                          #                     domain/ (entities, repository iface, router contract)
+                          #                     ui/<screen>/ (bloc|cubit / view / widgets)
 ```
+
+A new feature module is scaffolded with `mason make feature --name <feature>`; a new screen inside an existing module with `mason make screen --name <screen>` (see [Scaffolding with mason](#scaffolding-with-mason)).
+
+---
+
+## Codegen rituals
+
+Two generators, deliberately separated:
+
+| Command | Generates | When to run |
+| --- | --- | --- |
+| `fvm dart run build_runner build --delete-conflicting-outputs` (or `melos gen`) | injectable DI, flutter_gen assets, json_serializable `*.g.dart` | after touching `@injectable`, `@JsonSerializable`, or adding assets |
+| `melos genapi` | the `swagger_parser` API client + models inside `acits_api` | **only** when `doc/api/openapi.json` changes |
+| `melos genone` (`MELOS_GENONE_PKG=packages/<pkg> melos run genone`) | build_runner for a single package | when regenerating one package in isolation |
+
+Skipping `genapi` after a spec change leaves a stale client (missing DTO fields, `InvalidType` at build). See [docs/GOTCHAS.md](docs/GOTCHAS.md).
+
+### Scaffolding with mason
+
+Bricks live under `bricks/` and are registered in `mason.yaml`. Install once, then scaffold:
+
+```bash
+dart pub global activate mason_cli
+mason get                                   # resolve bricks from mason.yaml
+mason make feature --name prescriptions     # new modules/prescriptions/ skeleton
+mason make screen  --name prescription_detail --module prescriptions   # new screen in a module
+```
+
+After scaffolding a feature/screen, run `build_runner` (DI/json) and wire the new port/adapter/router in the root DI composition.
+
+### Adding a feature or endpoint
+
+The endpoint ritual is mechanical (details in [CLAUDE.md](CLAUDE.md)):
+
+1. Add the method to the feature's `abstract <Feature>ApiPort` (in terms of our DTOs).
+2. Add/extend the DTO under `acits_api/lib/ports/dto/` (`@JsonSerializable`).
+3. Implement it in the `swagger_parser` adapter (map generated model → our DTO). Run `melos genapi` if the spec changed.
+4. Expose it on the feature repository interface (`domain/`) returning `Result<Failure, T>`; implement in `data/repository/` mapping DTO → entity.
+5. Consume it from the cubit/bloc, then the screen. DTOs never leave the data layer.
 
 ---
 
@@ -230,10 +280,16 @@ To add a string:
 
 ## Testing
 
-- **Unit and BLoC/Cubit tests** live in `test/unit/` and use `mocktail` + `bloc_test`:
+- **Unit and BLoC/Cubit tests** use `mocktail` + `bloc_test`. The root app's tests live in `test/`; each package/module ships its own `test/` (e.g. `modules/animals/test/` has mapper, repository, and cubit tests). Run the root suite with:
 
   ```bash
   fvm flutter test
+  ```
+
+  Run the whole workspace (root + every package/module) with:
+
+  ```bash
+  for p in . packages/* modules/*; do [ -d "$p/test" ] && (cd "$p" && fvm flutter test); done
   ```
 
   Run a single file or match by name:
@@ -257,10 +313,10 @@ New features should ship with tests. Bug fixes should include a regression test 
 
 Before opening a pull request, confirm every item below:
 
-- [ ] Code is formatted: `fvm dart format -l 100 lib test`.
-- [ ] Static analysis is clean: `fvm flutter analyze`.
-- [ ] All tests pass: `fvm flutter test`.
-- [ ] Generated code is regenerated if any `@injectable` / `@JsonSerializable` / Chopper annotation changed: `fvm dart run build_runner build --delete-conflicting-outputs`.
+- [ ] Code is formatted: `fvm dart format -l 120 lib test` (or `melos format`).
+- [ ] Static analysis is clean under the strict gate: `melos analyze:strict` (`flutter analyze --fatal-infos --fatal-warnings`).
+- [ ] All tests pass — root **and** touched packages/modules (`melos check-all` runs format → strict analyze → test).
+- [ ] Generated code is regenerated if any `@injectable` / `@JsonSerializable` annotation changed: `fvm dart run build_runner build --delete-conflicting-outputs`; if the OpenAPI spec changed, `melos genapi` too.
 - [ ] New localisation keys were added to **both** `en.json` and `ru.json`, and `LocaleKeys` was regenerated.
 - [ ] No hardcoded user-facing strings remain in the UI.
 - [ ] Commits follow Conventional Commits.
@@ -278,11 +334,11 @@ Commit any regenerated files — the generated files committed to the repository
    git push -u origin feature/short-descriptive-name
    ```
 
-2. Open a pull request **against `develop`** on the upstream repository.
+2. Open a pull request **against `develop`** on the upstream repository. **The PR title must be a semantic-commit line** (`feat|fix|docs|ci|refactor|chore|test|build|perf|style|revert`, optional scope) — a `Semantic PR` check enforces it (`.github/workflows/semantic-pr.yml`), e.g. `feat(animals): add PDF export`.
 
 3. Fill in the PR description: what changed, why, and how it was tested. **Link the related issue** (e.g. `Closes #123`) so it is tracked and auto-closed on merge.
 
-4. Ensure **CI is green.** The workflow at `.github/workflows/ci.yml` runs analyse + test, an Android dev APK build, and an unsigned iOS build.
+4. Ensure **CI is green.** The workflow at `.github/workflows/ci.yml` runs the strict analyse (`--fatal-infos --fatal-warnings`) + tests (root and packages/modules), an Android dev APK build, and an unsigned iOS build.
 
 5. Address review feedback by pushing additional commits to the same branch.
 

@@ -1,0 +1,25 @@
+name: screen
+description: >-
+  Scaffolds a screen inside an existing ACITS module:
+  modules/{{module}}/lib/ui/{{name}}/ with bloc/ (cubit + state), view/
+  ({{name}}_page BlocProvider + {{name}}_view), and widgets/. Modelled on
+  modules/animals/lib/ui/animals_list.
+version: 0.1.0
+
+environment:
+  mason: ">=0.1.0 <1.0.0"
+
+vars:
+  name:
+    type: string
+    description: Screen name (snake_case, e.g. animal_detail).
+    prompt: Screen name (snake_case)?
+  module:
+    type: string
+    description: Existing module the screen belongs to (snake_case, e.g. animals).
+    prompt: Module name (snake_case)?
+  entity:
+    type: string
+    description: Domain entity the screen lists/shows (pascalCase source, snake_case file).
+    default: item
+    prompt: Primary domain entity (snake_case, e.g. animal)?

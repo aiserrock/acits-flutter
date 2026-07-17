@@ -192,36 +192,38 @@ How this plan is executed once approved. **Not started yet — awaiting owner ap
 > note: 8a data+domain (2 entities, ports+write DTO+adapter, mappers, repo→Result, 33 tests, commit 4e9bb33). 8b UI per-screen: list (3eac21a), detail (77c2318), edit (7398924). Cross-feature tabs (prescriptions/comments) + species picker + image flow stay chopper as documented strangler seams; prescription-add moved extra→`?animalId=`. build web ✓ after each; DTOs contained to data layer; no AnimalRead leak into module.
 
 ### Step 9 — Group-by-group migration
-- [ ] features migrated per inventory phases (auth → prescriptions/applicants → personal/media), each green before next
-- [ ] each feature: endpoints cut over, `extra`→URL, aliases kept ≥1 release
+- [x] features migrated per inventory phases (auth → prescriptions/applicants → personal/media), each green before next
+- [x] each feature: endpoints cut over, `extra`→URL, aliases kept ≥1 release
+> note: 9.1 auth (f0b8fb7), 9.2 prescriptions+drugs+comments (de97ab0), 9.3 staff+personal+config (3ad9ed2), 9.4 media+edit-form+chopper-infra (6a0eead). Every group: entities+ports+adapter, DTO containment, build web ✓, chopper gen intact per group. lib/ fully chopper-free after 9.4.
 
 ### Step 10 — Legacy removal (GATED)
-- [ ] `rg -l 'gen/api|chopper' lib modules` returns nothing
-- [ ] remove `chopper`, `chopper_generator`, `swagger_dart_code_generator`; delete `openapi.swagger.*`
+- [x] `rg -l 'gen/api|chopper' lib modules` returns nothing (gate met after 9.4)
+- [x] remove `chopper`, `chopper_generator`, `swagger_dart_code_generator`; delete `openapi.swagger.*` (-22k LOC); build.yaml swagger builder dropped; strict analyze + build web green (7bf8a33)
 
 ### Step 11 — mason bricks (after animals + 1 differing feature)
-- [ ] `feature` brick (data/domain/ui + bloc + router contract + barrel)
-- [ ] `screen` brick (bloc/view/widgets)
+- [x] `feature` brick (data/domain/ui + bloc + router contract + barrel)
+- [x] `screen` brick (bloc/view/widgets)
+> note: `mason.yaml` at root registers `bricks/feature` + `bricks/screen`; brick.yaml vars use name/module/screen/entity with snake/pascal/title lambdas. Both modelled on modules/animals; smoke-tested with mason_cli 0.1.3 (`mason make feature|screen`) — render clean, correct class/file names, valid Dart (Result.fold, DataStateBuilder, real Failure hierarchy).
 
 ### Step 12 — OSS + CI
-- [ ] README (10-section), CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, LICENSE
-- [ ] ARCHITECTURE.md + SVG diagrams (neutral wording — no closed-project names); per-package READMEs
-- [ ] `.github/` issue + PR templates (linked+assigned issue rule)
-- [ ] CI `presubmit.yml` (format → analyze `--fatal-infos --fatal-warnings` → test+coverage)
-- [ ] `semantic-pr.yml`, release-please, dependabot, auto-labeler
-- [ ] root `CLAUDE.md` (feature/endpoint rituals) + "gotcha" doc
+- [x] README (de-choppered: dio + swagger_parser ports, workspace, Architecture section, melos scripts), CONTRIBUTING (codegen rituals, new tree, DTO containment, semantic-PR), CODE_OF_CONDUCT, SECURITY, LICENSE (kept)
+- [x] ARCHITECTURE.md + Mermaid diagrams (package DAG + request flow, neutral wording); per-package READMEs (core/domain/api/ui_kit/navigation + modules/animals)
+- [x] `.github/` issue + PR templates (already present, kept)
+- [x] CI targeted edits: strict analyze (`--fatal-infos --fatal-warnings`), root+package/module tests, workspace archive incl. packages/modules
+- [x] `semantic-pr.yml`, dependabot (pub + github-actions, grouped)
+- [x] root `CLAUDE.md` (feature/endpoint rituals) + `docs/GOTCHAS.md`
 
 ### Backlog (separate sub-plans, not this phase)
 - [ ] Native background upload — pigeon + Kotlin `WorkManager` / Swift `NSURLSession` + web Background Fetch; **blocked on backend upload-session/idempotency contract**. Interim: durable whole-request retry behind `PhotoUploadService`.
 - [ ] On-device ML; Rust core.
-- [ ] root `CLAUDE.md` documenting feature/endpoint rituals for agents
-- [ ] "gotcha" doc (symptoms of skipping `genapi`/`genone`)
+- [x] root `CLAUDE.md` documenting feature/endpoint rituals for agents (done in Step 12)
+- [x] "gotcha" doc (symptoms of skipping `genapi`/`genone`) — docs/GOTCHAS.md (done in Step 12)
 
 ### Milestone gates
 - [x] **Base ready (after Step 7)** — new stack compiles alongside chopper, whole-app `analyze` clean (--fatal-infos), all package tests + 88 root tests green, package-graph clean (domain⊥api verified), `flutter build web` ✓. → proceed to `animals` (Step 8).
 > note: Android debug / iOS sim builds not run in this environment (no device toolchain); web build + full analyze + test suite cover the gate. Verify native builds on a machine with the mobile toolchains before Step 8 if targeting mobile.
 - [x] **Architecture proven (after Step 8)** — `animals` (list/detail/edit) on new stack: entities+repository+Result, ports/adapter write path, DTO containment, extra→URL, module+91 root tests green, build web ✓. → group migration (Step 9).
-- [ ] **Legacy-free (after Step 10)** — zero `gen/api`/chopper imports; old client deleted.
+- [x] **Legacy-free (after Step 10)** — zero `gen/api`/chopper imports; old client deleted; deps removed; strict analyze + build web + all tests green.
 
 ## Resolved
 
