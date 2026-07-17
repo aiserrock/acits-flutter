@@ -9,6 +9,8 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:acits_api/acits_api.dart' as _i101;
+import 'package:acits_core/acits_core.dart' as _i354;
 import 'package:acits_flutter/domain/env.dart' as _i531;
 import 'package:acits_flutter/export.dart' as _i965;
 import 'package:acits_flutter/service/animal/animal_service.dart' as _i876;
@@ -16,13 +18,17 @@ import 'package:acits_flutter/service/auth/auth_repository.dart' as _i622;
 import 'package:acits_flutter/service/auth/auth_service.dart' as _i21;
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart'
     as _i422;
+import 'package:acits_flutter/service/client/acits_api_register.dart' as _i382;
 import 'package:acits_flutter/service/client/auth_client_register.dart'
     as _i363;
 import 'package:acits_flutter/service/client/auth_interceptor.dart' as _i492;
+import 'package:acits_flutter/service/client/auth_port_bridges.dart' as _i350;
 import 'package:acits_flutter/service/client/dio_register.dart' as _i693;
 import 'package:acits_flutter/service/client/header_inteceptor.dart' as _i158;
 import 'package:acits_flutter/service/config/config_service.dart' as _i245;
 import 'package:acits_flutter/service/debug/debug_service.dart' as _i47;
+import 'package:acits_flutter/service/document/document_export_service_bridge.dart'
+    as _i109;
 import 'package:acits_flutter/service/document/document_repository.dart'
     as _i302;
 import 'package:acits_flutter/service/env/env_register.dart' as _i143;
@@ -76,6 +82,7 @@ Future<_i174.GetIt> $initDevGetIt(
   final envRegistrer = _$EnvRegistrer();
   final clientRegisterDev = _$ClientRegisterDev();
   final clientRegister = _$ClientRegister();
+  final acitsApiRegister = _$AcitsApiRegister();
   gh.factory<_i492.AuthInterceptor>(() => _i492.AuthInterceptor());
   gh.factory<_i158.HeaderInterceptor>(() => _i158.HeaderInterceptor());
   gh.factory<_i558.FlutterSecureStorage>(
@@ -99,6 +106,9 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.singleton<_i207.Talker>(
     () => loggerRegisterDev.talker(),
     registerFor: {_dev},
+  );
+  gh.factory<_i354.DocumentExportService>(
+    () => _i109.DocumentExportServiceBridge(),
   );
   gh.singleton<_i47.DebugService>(
     () => _i218.DebugDevService(gh<_i1058.DebugPreferenceStorage>()),
@@ -176,6 +186,12 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i2.PreferenceStorage>(),
     ),
   );
+  gh.factory<_i354.SessionInvalidator>(
+    () => _i350.AuthServiceSessionInvalidator(gh<_i21.AuthService>()),
+  );
+  gh.factory<_i354.TokenStore>(
+    () => _i350.AuthServiceTokenStore(gh<_i21.AuthService>()),
+  );
   gh.singleton<_i876.AnimalService>(
     () => _i876.AnimalService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
   );
@@ -188,12 +204,38 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.singleton<_i701.PersonalService>(
     () => _i701.PersonalService(gh<_i965.Openapi>(), gh<_i21.AuthService>()),
   );
+  gh.factory<_i354.LocaleProvider>(
+    () => _i350.ConfigServiceLocaleProvider(gh<_i245.ConfigService>()),
+  );
   gh.singleton<_i212.PrescriptionService>(
     () => _i212.PrescriptionService(
       gh<_i965.Openapi>(),
       gh<_i21.AuthService>(),
       gh<_i245.ConfigService>(),
     ),
+  );
+  gh.factory<_i354.TokenRefresher>(
+    () => _i350.AuthServiceTokenRefresher(gh<_i21.AuthService>()),
+  );
+  gh.factory<_i361.Dio>(
+    () => acitsApiRegister.createAcitsApiDio(
+      gh<_i354.TokenStore>(),
+      gh<_i354.TokenRefresher>(),
+      gh<_i354.SessionInvalidator>(),
+      gh<_i354.LocaleProvider>(),
+      gh<_i531.Env>(),
+    ),
+    instanceName: 'acitsApi',
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.AnimalsClient>(
+    () =>
+        acitsApiRegister.animalsClient(gh<_i361.Dio>(instanceName: 'acitsApi')),
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.AnimalApiPort>(
+    () => acitsApiRegister.animalApiPort(gh<_i101.AnimalsClient>()),
+    registerFor: {_prod},
   );
   return getIt;
 }
@@ -217,3 +259,5 @@ class _$EnvRegistrer extends _i143.EnvRegistrer {}
 class _$ClientRegisterDev extends _i913.ClientRegisterDev {}
 
 class _$ClientRegister extends _i363.ClientRegister {}
+
+class _$AcitsApiRegister extends _i382.AcitsApiRegister {}

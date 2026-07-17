@@ -26,6 +26,19 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
+  # Foundation packages (workspace members). Wired into the app in Step 7
+  # alongside chopper — additive, no feature migrated yet.
+  acits_core:
+    path: packages/acits_core
+  acits_domain:
+    path: packages/acits_domain
+  acits_api:
+    path: packages/acits_api
+  acits_ui_kit:
+    path: packages/acits_ui_kit
+  acits_navigation:
+    path: packages/acits_navigation
+
   app_links: ^7.0.0
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
