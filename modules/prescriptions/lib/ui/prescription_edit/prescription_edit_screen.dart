@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:acits_core/acits_core.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +18,6 @@ import '../../domain/prescription_type.dart';
 import '../../domain/prescription_type_labels.dart';
 import '../../domain/router/prescriptions_router_service.dart';
 import '../lottie_res.dart';
-import '../prescriptions_l10n_keys.dart';
 import 'cubit/prescription_edit_cubit.dart';
 import 'cubit/prescription_edit_state.dart';
 import 'prescription_form.dart';
@@ -210,9 +210,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
 
   Widget _buildTitle(BuildContext context) {
     return Text(
-      _cubit.isEdit
-          ? PrescriptionsL10nKeys.prescriptionTitleEdit.tr()
-          : PrescriptionsL10nKeys.prescriptionTitleAdd.tr(),
+      _cubit.isEdit ? LocaleKeys.prescriptionTitleEdit.tr() : LocaleKeys.prescriptionTitleAdd.tr(),
       style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
     );
   }
@@ -286,7 +284,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
           onPressed: () => _cubit.onAnimalPressed(context),
           child: FormEditCard([
             EditCardData(
-              label: PrescriptionsL10nKeys.prescriptionAnimal.tr(),
+              label: LocaleKeys.prescriptionAnimal.tr(),
               enabled: false,
               content: animal != null
                   ? Column(

@@ -1,5 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:animals/animals.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../media_assets.dart';
-import '../media_l10n_keys.dart';
 import 'cubit/search_spec_cubit.dart';
 import 'cubit/search_spec_state.dart';
 
@@ -157,7 +157,7 @@ class _SearchViewState extends State<_SearchView> {
               children: [
                 SizedBox(height: 120.0, width: 120.0, child: MediaAssets.emptyStateSvg()),
                 const SizedBox(height: 32.0),
-                Text(MediaL10nKeys.commonNotFound.tr(), style: Theme.of(context).textTheme.titleLarge),
+                Text(LocaleKeys.commonNotFound.tr(), style: Theme.of(context).textTheme.titleLarge),
               ],
             ),
           );
@@ -168,7 +168,7 @@ class _SearchViewState extends State<_SearchView> {
       return const SizedBox(height: 64.0, child: Center(child: CircularProgressIndicator()));
     }
     if (state.pagingError != null) {
-      return SizedBox(height: 64.0, child: Center(child: Text(MediaL10nKeys.commonError.tr())));
+      return SizedBox(height: 64.0, child: Center(child: Text(LocaleKeys.commonError.tr())));
     }
     return const SizedBox(height: 16.0);
   }

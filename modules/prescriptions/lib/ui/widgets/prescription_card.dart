@@ -1,11 +1,11 @@
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/prescription_execution_today.dart';
 import '../../domain/prescription_type.dart';
 import '../../domain/prescription_type_labels_x.dart';
-import '../prescriptions_l10n_keys.dart';
 
 const _reschedulePeriod = Duration(days: 90);
 
@@ -57,7 +57,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       children: [
         _buildExpandHeader(context),
         const Divider(height: 24.0),
-        Text(PrescriptionsL10nKeys.mainAnimal.tr(), style: Theme.of(context).textTheme.bodyMedium),
+        Text(LocaleKeys.mainAnimal.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         Text.rich(
           TextSpan(
@@ -76,11 +76,11 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
           maxLines: 3,
         ),
         const Divider(height: 24.0),
-        Text(PrescriptionsL10nKeys.mainAppoinmentAuthor.tr(), style: Theme.of(context).textTheme.bodyMedium),
+        Text(LocaleKeys.mainAppoinmentAuthor.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         Text(widget.itemData?.prescription.createdBy ?? ' ', style: Theme.of(context).textTheme.bodyLarge, maxLines: 3),
         const Divider(height: 24.0),
-        Text(PrescriptionsL10nKeys.mainAppoinment.tr(), style: Theme.of(context).textTheme.bodyMedium),
+        Text(LocaleKeys.mainAppoinment.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         if (widget.itemData?.prescription.drugs != null)
           ...widget.itemData!.prescription.drugs.map<Widget>(
@@ -98,7 +98,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
             ),
           ),
         const Divider(height: 24.0),
-        Text(PrescriptionsL10nKeys.animalComments.tr(), style: Theme.of(context).textTheme.bodyMedium),
+        Text(LocaleKeys.animalComments.tr(), style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 4.0),
         Text(
           widget.itemData?.prescription.description ?? '',
@@ -178,33 +178,33 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
       context: context,
       builder: (context) => bsSelectorActions(context, <Widget, dynamic Function()>{
         Text(
-          PrescriptionsL10nKeys.commonDone.tr(),
+          LocaleKeys.commonDone.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
-          PrescriptionsL10nKeys.commonReschedule.tr(),
+          LocaleKeys.commonReschedule.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
           _reschedule();
         },
         Text(
-          PrescriptionsL10nKeys.commonNotCompleted.tr(),
+          LocaleKeys.commonNotCompleted.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
         },
         Text(
-          PrescriptionsL10nKeys.commonEdit.tr(),
+          LocaleKeys.commonEdit.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
         ): () {
           Navigator.of(context).pop();
           widget.onEditedPrescription?.call();
         },
         Text(
-          PrescriptionsL10nKeys.commonDelete.tr(),
+          LocaleKeys.commonDelete.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
         ): () {
           Navigator.of(context).pop();

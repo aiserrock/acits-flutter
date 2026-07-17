@@ -1,5 +1,6 @@
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +9,6 @@ import 'package:formz/formz.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../domain/auth_router_service.dart';
-import '../../auth_l10n_keys.dart';
 import '../login.dart';
 
 class LoginForm extends StatelessWidget {
@@ -38,7 +38,7 @@ class LoginForm extends StatelessWidget {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(AuthL10nKeys.loginAuthorizeError.tr())));
+            ..showSnackBar(SnackBar(content: Text(LocaleKeys.loginAuthorizeError.tr())));
         }
       },
       child: SizedBox(
@@ -54,7 +54,7 @@ class LoginForm extends StatelessWidget {
               MaterialButton(
                 onPressed: () => _onRegistration(context),
                 child: Text(
-                  AuthL10nKeys.loginToRegistration.tr(),
+                  LocaleKeys.loginToRegistration.tr(),
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
@@ -63,7 +63,7 @@ class LoginForm extends StatelessWidget {
               const SizedBox(height: 16.0),
               const Spacer(),
               Text(
-                AuthL10nKeys.loginDescribeMsg.tr(),
+                LocaleKeys.loginDescribeMsg.tr(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
@@ -101,7 +101,7 @@ class LoginForm extends StatelessWidget {
           child: MaterialButton(
             padding: const EdgeInsets.all(16.0),
             onPressed: () {},
-            child: Text(AuthL10nKeys.loginForgetPass.tr(), style: TextStyle(color: context.appColors.textSecondary)),
+            child: Text(LocaleKeys.loginForgetPass.tr(), style: TextStyle(color: context.appColors.textSecondary)),
           ),
         ),
       ],
@@ -137,8 +137,8 @@ class _NameInput extends StatelessWidget {
                 autofillHints: const [AutofillHints.email],
                 decoration: InputDecoration(
                   errorText: state.name.isNotValid ? '' : null,
-                  hintText: AuthL10nKeys.loginLoginHint.tr(),
-                  labelText: AuthL10nKeys.loginLoginLabel.tr(),
+                  hintText: LocaleKeys.loginLoginHint.tr(),
+                  labelText: LocaleKeys.loginLoginLabel.tr(),
                   floatingLabelStyle: TextStyle(
                     color: state.focusTarget.isName
                         ? Theme.of(context).colorScheme.primary
@@ -197,7 +197,7 @@ class _PasswordInput extends StatelessWidget {
                 focusNode: passNode,
                 autofillHints: const [AutofillHints.password],
                 decoration: InputDecoration(
-                  labelText: AuthL10nKeys.loginPassLabel.tr(),
+                  labelText: LocaleKeys.loginPassLabel.tr(),
                   errorText: state.password.isNotValid ? '' : null,
                   floatingLabelStyle: TextStyle(
                     color: state.focusTarget.isPassword
@@ -259,7 +259,7 @@ class _SubmitButton extends StatelessWidget {
     return PrimaryButton(
       onPressed: () => context.read<LoginBloc>().add(const LoginSubmitted()),
       onLongPress: () => context.read<LoginBloc>().add(const LoginOnDebug()),
-      text: AuthL10nKeys.loginEntryBtn.tr().toUpperCase(),
+      text: LocaleKeys.loginEntryBtn.tr().toUpperCase(),
     );
   }
 }

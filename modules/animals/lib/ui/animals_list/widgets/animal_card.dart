@@ -1,5 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import '../../../domain/animal_list_item.dart';
 import '../../../domain/port/animal_permissions.dart';
 import '../../../domain/port/animal_status_labels.dart';
 import '../../../domain/router/animals_router_service.dart';
-import '../animals_l10n_keys.dart';
 import 'animal_status_color.dart';
 
 /// Карточка животного в списке.
@@ -113,14 +113,14 @@ class AnimalCardWidget extends StatelessWidget {
         showDialog(
           context: ctx,
           builder: (dialogCtx) {
-            final msg = '${AnimalsL10nKeys.animalDeleteAcceptMsg.tr()} ${itemData.name}?';
+            final msg = '${LocaleKeys.animalDeleteAcceptMsg.tr()} ${itemData.name}?';
             return CupertinoAlertDialog(
-              title: Text(AnimalsL10nKeys.commonWarning.tr()),
+              title: Text(LocaleKeys.commonWarning.tr()),
               content: Padding(padding: const EdgeInsets.only(top: 16.0), child: Text(msg)),
               actions: [
                 CupertinoButton(
                   child: Text(
-                    AnimalsL10nKeys.commonDelete.tr(),
+                    LocaleKeys.commonDelete.tr(),
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   onPressed: () {
@@ -129,7 +129,7 @@ class AnimalCardWidget extends StatelessWidget {
                   },
                 ),
                 CupertinoButton(
-                  child: Text(AnimalsL10nKeys.commonCancel.tr()),
+                  child: Text(LocaleKeys.commonCancel.tr()),
                   onPressed: () => Navigator.of(dialogCtx).pop(),
                 ),
               ],
@@ -213,7 +213,7 @@ class AnimalCardWidget extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: AnimalsL10nKeys.animalAdmitted.tr(), style: Theme.of(context).textTheme.bodyMedium),
+          TextSpan(text: LocaleKeys.animalAdmitted.tr(), style: Theme.of(context).textTheme.bodyMedium),
           TextSpan(text: ': ', style: Theme.of(context).textTheme.bodyMedium),
           TextSpan(
             text: itemData.dateJoined?.toDateShortOnly ?? '',

@@ -1,5 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_domain/acits_domain.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/auth_ports.dart';
 import '../../domain/auth_router_service.dart';
 import '../../domain/auth_session_api.dart';
-import '../auth_l10n_keys.dart';
 import 'cubit/pick_shelter_cubit.dart';
 import 'cubit/pick_shelter_state.dart';
 
@@ -84,7 +84,7 @@ class _PickShelterViewState extends State<_PickShelterView> {
         shadowColor: Colors.transparent,
         leading: widget.appLogoLeading,
         title: Text(
-          AuthL10nKeys.shelterSelectShelter.tr(),
+          LocaleKeys.shelterSelectShelter.tr(),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
         centerTitle: true,
@@ -103,7 +103,7 @@ class _PickShelterViewState extends State<_PickShelterView> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 40.0),
-            child: Text(AuthL10nKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
+            child: Text(LocaleKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
           ),
         ],
       ),

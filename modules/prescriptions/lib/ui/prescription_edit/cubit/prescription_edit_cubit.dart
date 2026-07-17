@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math';
+import 'package:acits_l10n/acits_l10n.dart';
 
 import 'package:acits_core/acits_core.dart';
 import 'package:collection/collection.dart';
@@ -22,7 +23,6 @@ import '../../../util/bloc_ext.dart';
 import '../../../util/datetime.dart';
 import '../../../util/log.dart';
 import '../../lottie_res.dart';
-import '../../prescriptions_l10n_keys.dart';
 import '../dosage_bs.dart';
 import 'prescription_edit_state.dart';
 
@@ -95,7 +95,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
     final animalId = state.animal?.id;
     if (animalId == null) {
-      _showError(PrescriptionsL10nKeys.prescriptionPickAnimalMsg.tr());
+      _showError(LocaleKeys.prescriptionPickAnimalMsg.tr());
       return null;
     }
     if (!(dateTimeFormKey.currentState?.validate() ?? false)) return null;
@@ -148,7 +148,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   bool get _checkIsLoading {
     if (state.loading) {
-      _showError(PrescriptionsL10nKeys.prescriptionWaitLoadingMsg.tr());
+      _showError(LocaleKeys.prescriptionWaitLoadingMsg.tr());
     }
     return state.loading;
   }
@@ -228,7 +228,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   void onAnimalPressed(BuildContext context) {
     if (isEdit) {
-      _showError(PrescriptionsL10nKeys.prescriptionCantChangeAnimalMsg.tr());
+      _showError(LocaleKeys.prescriptionCantChangeAnimalMsg.tr());
       return;
     }
     _router.pickAnimal().then((animal) {

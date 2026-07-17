@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../domain/auth_router_service.dart';
-import '../auth_l10n_keys.dart';
 import 'bloc/onboarding_bloc.dart';
 import 'model/onboarding_data.dart';
 
@@ -108,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       builder: (context, state) {
         return PrimaryButton(
           onPressed: () => _tapNext(context),
-          text: state.isLast ? AuthL10nKeys.commonBegin.tr().toUpperCase() : AuthL10nKeys.commonNext.tr().toUpperCase(),
+          text: state.isLast ? LocaleKeys.commonBegin.tr().toUpperCase() : LocaleKeys.commonNext.tr().toUpperCase(),
         );
       },
     );

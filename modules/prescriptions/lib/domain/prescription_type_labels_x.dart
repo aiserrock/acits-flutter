@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get_it/get_it.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 
-import '../ui/prescriptions_l10n_keys.dart';
 import 'prescription.dart';
 import 'prescription_execution_today.dart';
 import 'prescription_type.dart';
@@ -33,7 +33,7 @@ extension PrescriptionTypeX on PrescriptionType {
       case PrescriptionType.parasitesTreatment:
       case PrescriptionType.vaccination:
       case PrescriptionType.other:
-        return PrescriptionsL10nKeys.prescriptionCurrent.tr();
+        return LocaleKeys.prescriptionCurrent.tr();
     }
   }
 }

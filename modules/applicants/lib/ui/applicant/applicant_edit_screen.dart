@@ -1,5 +1,6 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:acits_domain/acits_domain.dart';
+import 'package:acits_l10n/acits_l10n.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../../data/staff_service.dart';
 import '../../util/validator.dart';
-import '../applicants_l10n_keys.dart';
 import 'cubit/applicant_edit_cubit.dart';
 
 /// Экран создания или редактирования куратора
@@ -79,7 +79,7 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
               onTap: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              cubit.isEdit ? ApplicantsL10nKeys.applicantEdit.tr() : ApplicantsL10nKeys.applicantAdd.tr(),
+              cubit.isEdit ? LocaleKeys.applicantEdit.tr() : LocaleKeys.applicantAdd.tr(),
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
             centerTitle: true,
@@ -117,23 +117,23 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
           key: formKey,
           child: FormEditCard([
             EditCardData(
-              label: '${ApplicantsL10nKeys.animalCuratorName.tr()} *',
+              label: '${LocaleKeys.animalCuratorName.tr()} *',
               controller: _nameController,
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: '${ApplicantsL10nKeys.animalCuratorLastName.tr()} *',
+              label: '${LocaleKeys.animalCuratorLastName.tr()} *',
               controller: _lastNameController,
               validator: Validator.emptyValidator,
             ),
             EditCardData(
-              label: '${ApplicantsL10nKeys.animalCuratorPhone.tr()} *',
+              label: '${LocaleKeys.animalCuratorPhone.tr()} *',
               controller: _phoneController,
               validator: Validator.emptyValidator,
             ),
-            EditCardData(label: ApplicantsL10nKeys.animalSocialLink.tr(), controller: _socialController),
+            EditCardData(label: LocaleKeys.animalSocialLink.tr(), controller: _socialController),
             EditCardData(
-              label: ApplicantsL10nKeys.animalCuratorEmail.tr(),
+              label: LocaleKeys.animalCuratorEmail.tr(),
               controller: _emailController,
               validator: Validator.emailOrEmptyValidator,
             ),

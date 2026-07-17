@@ -19,6 +19,8 @@ dependencies:
   flutter_slidable: ^4.0.3
   acits_core:
     path: ../../packages/acits_core
+  acits_l10n:
+    path: ../../packages/acits_l10n
   acits_domain:
     path: ../../packages/acits_domain
   acits_api:
