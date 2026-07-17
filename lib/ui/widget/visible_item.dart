@@ -1,19 +1,3 @@
-import 'package:flutter/material.dart';
-
-// @immutable
-class VisibleItem extends StatelessWidget {
-  const VisibleItem({required this.isVisible, required this.child, super.key});
-
-  final bool isVisible;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      duration: kThemeAnimationDuration,
-      crossFadeState: isVisible ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      firstChild: const SizedBox(),
-      secondChild: child,
-    );
-  }
-}
+// [VisibleItem] переехал в acits_ui_kit. Ре-экспорт сохраняет существующие
+// импорты `package:acits_flutter/ui/widget/visible_item.dart` рабочими.
+export 'package:acits_ui_kit/acits_ui_kit.dart' show VisibleItem;
