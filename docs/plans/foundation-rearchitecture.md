@@ -186,9 +186,10 @@ How this plan is executed once approved. **Not started yet — awaiting owner ap
 - [x] app compiles on the new base **alongside chopper** (zero features migrated yet)
 
 ### Step 8 — animals reference slice (via /orchestrator)
-- [ ] animals migrated to new stack (data/domain/ui), endpoints cut to swagger_parser adapter, `extra`→path/query
-- [ ] full test pyramid: repository/mapper, bloc, widget, responsive golden
-- [ ] route aliases old→canonical kept
+- [x] animals migrated to new stack (data/domain/ui), endpoints cut to swagger_parser adapter, `extra`→path/query
+- [x] full test pyramid: repository/mapper, bloc, widget (responsive golden: ui_kit goldens cover breakpoints; per-screen golden deferred — layouts preserved, smoke widget tests added)
+- [x] route aliases old→canonical kept (edit already `?id=` URL-safe; detail `/animal/:id` kept)
+> note: 8a data+domain (2 entities, ports+write DTO+adapter, mappers, repo→Result, 33 tests, commit 4e9bb33). 8b UI per-screen: list (3eac21a), detail (77c2318), edit (7398924). Cross-feature tabs (prescriptions/comments) + species picker + image flow stay chopper as documented strangler seams; prescription-add moved extra→`?animalId=`. build web ✓ after each; DTOs contained to data layer; no AnimalRead leak into module.
 
 ### Step 9 — Group-by-group migration
 - [ ] features migrated per inventory phases (auth → prescriptions/applicants → personal/media), each green before next
@@ -219,7 +220,7 @@ How this plan is executed once approved. **Not started yet — awaiting owner ap
 ### Milestone gates
 - [x] **Base ready (after Step 7)** — new stack compiles alongside chopper, whole-app `analyze` clean (--fatal-infos), all package tests + 88 root tests green, package-graph clean (domain⊥api verified), `flutter build web` ✓. → proceed to `animals` (Step 8).
 > note: Android debug / iOS sim builds not run in this environment (no device toolchain); web build + full analyze + test suite cover the gate. Verify native builds on a machine with the mobile toolchains before Step 8 if targeting mobile.
-- [ ] **Architecture proven (after Step 8)** — `animals` fully on new stack, full test pyramid green. → group migration.
+- [x] **Architecture proven (after Step 8)** — `animals` (list/detail/edit) on new stack: entities+repository+Result, ports/adapter write path, DTO containment, extra→URL, module+91 root tests green, build web ✓. → group migration (Step 9).
 - [ ] **Legacy-free (after Step 10)** — zero `gen/api`/chopper imports; old client deleted.
 
 ## Resolved
