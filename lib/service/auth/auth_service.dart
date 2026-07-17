@@ -1,5 +1,6 @@
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart';
+import 'package:auth/auth.dart' show AuthSessionApi, AdminRegistrationInput, WorkerRegistrationInput, WorkerRole;
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,10 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/domain/registration_input.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
 import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
-import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 
 const _shelterListDefaultLenght = 25;
@@ -25,7 +24,7 @@ const _shelterListDefaultLenght = 25;
 /// ([Shelter]/[CurrentShelterRole]); ошибки маппит в существующие исключения
 /// приложения, чтобы не переписывать catch у вызывающих сторон.
 @singleton
-class AuthService extends ChangeNotifier {
+class AuthService extends ChangeNotifier implements AuthSessionApi {
   AuthService(this._authApi, this._authRepository, this._confirmRepository, this._preferenceStorage);
 
   final AuthApiPort _authApi;
@@ -49,6 +48,7 @@ class AuthService extends ChangeNotifier {
 
   String? get access => _access;
 
+  @override
   List<Shelter> get shelterList => _shelterList;
 
   CurrentShelterRole? get shelterRole => _shelterRole;
@@ -77,6 +77,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  @override
   Future<TokenPairDto?> login(String? login, String? pass) async {
     Log.info('Login attempt: username=$login');
     try {
@@ -97,6 +98,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  @override
   Future<List<Shelter>> getShelterList() async {
     try {
       final result = await _authApi.myShelters();
@@ -107,6 +109,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  @override
   Future<CurrentShelterRole?> setCurrentShelter(int shelterId) async {
     Log.info('Set current shelter: id=$shelterId');
     try {
@@ -125,6 +128,7 @@ class AuthService extends ChangeNotifier {
   /// Возвращает true, если сохранённый id есть и роль по нему успешно получена.
   /// При ошибке (приют удалён/недоступен) — false, вызывающая сторона уходит на
   /// экран выбора приюта, а не падает.
+  @override
   Future<bool> restoreShelter() async {
     final savedId = _preferenceStorage.currentShelterId;
     if (savedId == null) {
@@ -154,6 +158,7 @@ class AuthService extends ChangeNotifier {
 
   /// Попробовать обновить авторизацию из прошлой сессии если срок
   /// действия токена не истек
+  @override
   Future<bool> tryRefreshLastAuth() async {
     final oldRefresh = _refresh ?? await _authRepository.refresh;
     if (oldRefresh == null) return false;
@@ -176,6 +181,7 @@ class AuthService extends ChangeNotifier {
   }
 
   /// Зарегистрировать новый приют и админа в нем
+  @override
   Future<bool> registrationAdmin(AdminRegistrationInput input) async {
     try {
       await _authApi.registerAdmin(
@@ -204,6 +210,7 @@ class AuthService extends ChangeNotifier {
   }
 
   /// Зарегистрировать нового пользователя
+  @override
   Future<bool> registrationCustomer(WorkerRegistrationInput input) async {
     try {
       await _authApi.registerWorker(
@@ -228,6 +235,7 @@ class AuthService extends ChangeNotifier {
   }
 
   /// Подтвердить электронную почту при регистрации
+  @override
   Future<void> confirmEmail(String email) => _confirmRepository.confirmEmail(email);
 
   Shelter _toShelter(ShelterShortDto d) => Shelter(id: d.id, name: d.name);

@@ -13,6 +13,7 @@ import 'package:acits_api/acits_api.dart' as _i101;
 import 'package:acits_core/acits_core.dart' as _i354;
 import 'package:acits_flutter/domain/env.dart' as _i531;
 import 'package:acits_flutter/navigation/animals_router_service.dart' as _i514;
+import 'package:acits_flutter/navigation/auth_router_service.dart' as _i501;
 import 'package:acits_flutter/service/animal/animal_service.dart' as _i876;
 import 'package:acits_flutter/service/auth/auth_repository.dart' as _i622;
 import 'package:acits_flutter/service/auth/auth_service.dart' as _i21;
@@ -48,6 +49,7 @@ import 'package:acits_flutter/service/staff/staff_service.dart' as _i156;
 import 'package:acits_flutter/service/theme/theme_storage.dart' as _i924;
 import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
 import 'package:animals/animals.dart' as _i616;
+import 'package:auth/auth.dart' as _i662;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
@@ -92,6 +94,7 @@ Future<_i174.GetIt> $initDevGetIt(
     preResolve: true,
   );
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
+  gh.factory<_i662.SplashNavigator>(() => const _i501.SplashNavigatorImpl());
   gh.factory<_i354.TokenRefresher>(
     () => const _i350.AuthServiceTokenRefresher(),
   );
@@ -113,6 +116,9 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i354.SessionInvalidator>(
     () => const _i350.AuthServiceSessionInvalidator(),
+  );
+  gh.factory<_i662.AuthRouterService>(
+    () => const _i501.AuthRouterServiceImpl(),
   );
   gh.factory<_i354.TokenStore>(() => const _i350.AuthServiceTokenStore());
   gh.factory<_i354.LocaleProvider>(

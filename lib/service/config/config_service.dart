@@ -1,4 +1,5 @@
 import 'package:acits_api/acits_api.dart';
+import 'package:auth/auth.dart' show AuthConfigInitializer;
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
@@ -16,7 +17,7 @@ import 'package:acits_flutter/util/logger/log.dart';
 /// контракт (`getStatus131Name`/`getMyTypeName`/`animalAttributes`/…) сохранён;
 /// имена статусов/типов резолвятся по wire-строке, без gen/api.
 @singleton
-class ConfigService {
+class ConfigService implements AuthConfigInitializer {
   ConfigService(this._port, this._authService, this._preferenceStorage);
 
   final SelectionApiPort _port;
@@ -34,6 +35,7 @@ class ConfigService {
 
   List<AttributeDto>? get animalAttributes => _animalAttributes;
 
+  @override
   Future<void> initConfig({int? currentShelterId}) async {
     await Future.wait([
       getTypeValues(currentShelterId: currentShelterId),
@@ -117,9 +119,11 @@ class ConfigService {
   }
 
   /// Первый ли запуск приложения
+  @override
   bool get isFirstLaunch => _preferenceStorage.isFirstLaunch ?? true;
 
   /// Первый ли запуск приложения
+  @override
   void setFirstLaunch({bool value = false}) => _preferenceStorage.isFirstLaunch = value;
 
   /// Текущая локаль приложения в формате ru-RU

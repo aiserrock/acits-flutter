@@ -7,28 +7,21 @@ import 'package:acits_flutter/domain/animal_note/animal_note.dart';
 import 'package:acits_flutter/domain/prescription/prescription.dart';
 import 'package:acits_flutter/domain/prescription/prescription_animal_ref.dart';
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/navigation/auth_screen_bindings.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/applicant/applicant_edit_screen.dart';
-import 'package:acits_flutter/ui/screen/auth/pick_shelter_screen.dart';
-import 'package:acits_flutter/ui/screen/auth/view/login_screen.dart';
 import 'package:acits_flutter/ui/screen/comments/comment_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/curator/curator_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_screen.dart';
-import 'package:acits_flutter/ui/screen/onboarding/bloc/onboarding_bloc.dart';
-import 'package:acits_flutter/ui/screen/onboarding/view/onboarding_screen.dart';
-import 'package:acits_flutter/ui/screen/splash/splash_screen.dart';
 import 'package:acits_flutter/ui/screen/personal_screen/personal_screen.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_screen.dart';
 import 'package:acits_flutter/ui/screen/prescription/prescription_edit_screen.dart';
-import 'package:acits_flutter/ui/screen/registration/email_confirmation_screen.dart';
-import 'package:acits_flutter/ui/screen/registration/registration_screen.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search_spec_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Пути и имена роутов приложения.
 ///
@@ -86,16 +79,13 @@ GoRouter createAppRouter() {
     initialLocation: AppRoutes.splash,
     extraCodec: const AppExtraCodec(),
     routes: [
-      GoRoute(path: AppRoutes.splash, builder: (context, state) => const SplashScreen()),
-      GoRoute(
-        path: AppRoutes.onboarding,
-        builder: (context, state) => BlocProvider(create: (_) => OnboardingBloc(), child: const OnboardingScreen()),
-      ),
-      GoRoute(path: AppRoutes.login, builder: (context, state) => const LoginScreen()),
-      GoRoute(path: AppRoutes.registration, builder: (context, state) => const RegistrationScreen()),
+      GoRoute(path: AppRoutes.splash, builder: (context, state) => AuthScreenBindings.splash()),
+      GoRoute(path: AppRoutes.onboarding, builder: (context, state) => AuthScreenBindings.onboarding()),
+      GoRoute(path: AppRoutes.login, builder: (context, state) => AuthScreenBindings.login()),
+      GoRoute(path: AppRoutes.registration, builder: (context, state) => AuthScreenBindings.registration()),
       GoRoute(
         path: AppRoutes.emailConfirmation,
-        builder: (context, state) => EmailConfirmationScreen(confirmLink: state.uri.queryParameters['link'] ?? ''),
+        builder: (context, state) => AuthScreenBindings.emailConfirmation(state.uri.queryParameters['link'] ?? ''),
       ),
       GoRoute(path: AppRoutes.root, builder: (context, state) => const RootScreen()),
       GoRoute(
@@ -158,7 +148,7 @@ GoRouter createAppRouter() {
         path: AppRoutes.pickShelter,
         builder: (context, state) {
           final extra = state.extra as Map<String, Object?>?;
-          return PickShelterScreen(
+          return AuthScreenBindings.pickShelter(
             autoSelectSingle: extra?['autoSelectSingle'] as bool? ?? true,
             shelterList: extra?['shelterList'] as List<Shelter>?,
           );
