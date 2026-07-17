@@ -176,6 +176,7 @@ melos:
       description: Генерация API-клиента (swagger_parser) в acits_api — изолированно, вне глобального build_runner приложения.
       run: |
         cd packages/acits_api
+        fvm dart run tool/preprocess_openapi.dart
         fvm dart run swagger_parser
         fvm dart run build_runner build --delete-conflicting-outputs
 

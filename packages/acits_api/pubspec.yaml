@@ -13,7 +13,10 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^5.9.2
-  json_annotation: ^4.11.0
+  json_annotation: ^4.12.0
+  # Runtime annotations for the swagger_parser-generated Retrofit clients.
+  # Isolated to the adapter layer — ports/DTOs never touch retrofit.
+  retrofit: ^4.4.1
   acits_core:
     path: ../acits_core
 
@@ -23,4 +26,6 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.13.1
   json_serializable: ^6.13.1
+  # Generator for the Retrofit client .g.dart files (adapters/swagger_parser/generated).
+  retrofit_generator: ^10.0.1
   swagger_parser: ^1.44.0
