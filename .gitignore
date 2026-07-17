@@ -36,6 +36,11 @@
 .pub-cache/
 .pub/
 /build/
+# Workspace package build/tool artifacts (each package builds under its own dir).
+packages/*/build/
+packages/*/.dart_tool/
+modules/*/build/
+modules/*/.dart_tool/
 .fvm/
 
 # Web related
