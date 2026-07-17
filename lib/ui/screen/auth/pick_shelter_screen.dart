@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_domain/acits_domain.dart';
 import 'package:acits_flutter/ui/widget/app_logo.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
@@ -18,7 +18,7 @@ import 'package:easy_localization/easy_localization.dart';
 class PickShelterScreen extends StatelessWidget {
   const PickShelterScreen({required this.autoSelectSingle, this.shelterList, super.key});
 
-  final PaginatedShelterShortSerializersList? shelterList;
+  final List<Shelter>? shelterList;
   final bool autoSelectSingle;
 
   @override

@@ -1,31 +1,39 @@
+import 'package:acits_api/acits_api.dart';
+import 'package:acits_domain/acits_domain.dart';
+import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/domain/registration_input.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
 import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
 import 'package:acits_flutter/domain/exception.dart';
 import 'package:acits_flutter/util/logger/log.dart';
-import 'package:acits_flutter/export.dart';
 
 const _shelterListDefaultLenght = 25;
 
-/// Сервис авторизации / регистрации
+/// Сервис авторизации / регистрации.
+///
+/// Сессионный держатель приложения: токены, список приютов, текущая роль. API
+/// вызовы идут через стабильный [AuthApiPort] (acits_api) — сгенерированные
+/// chopper/retrofit типы сюда не протекают. Наружу отдаёт доменные сущности
+/// ([Shelter]/[CurrentShelterRole]); ошибки маппит в существующие исключения
+/// приложения, чтобы не переписывать catch у вызывающих сторон.
 @singleton
 class AuthService extends ChangeNotifier {
   AuthService(
-    this._acitsClient,
-    @Named('guest') this._acitsGuestClient,
+    this._authApi,
     this._authRepository,
     this._confirmRepository,
     this._preferenceStorage,
   );
 
-  final Openapi _acitsClient;
-  final Openapi _acitsGuestClient;
+  final AuthApiPort _authApi;
   final AuthRepository _authRepository;
   final EmailConfirmRepository _confirmRepository;
   final PreferenceStorage _preferenceStorage;
@@ -40,82 +48,82 @@ class AuthService extends ChangeNotifier {
     _authRepository.setRefresh(token);
   }
 
-  PaginatedShelterShortSerializersList? _shelterList;
+  List<Shelter> _shelterList = const [];
 
-  UserCurrentShelterSerializers? _shelterRole;
+  CurrentShelterRole? _shelterRole;
 
   String? get access => _access;
 
-  PaginatedShelterShortSerializersList? get shelterList => _shelterList;
+  List<Shelter> get shelterList => _shelterList;
 
-  UserCurrentShelterSerializers? get shelterRole => _shelterRole;
+  CurrentShelterRole? get shelterRole => _shelterRole;
 
-  int? get currentShelterId => _shelterRole?.currentShelter;
+  int? get currentShelterId => _shelterRole?.currentShelterId;
 
-  ShelterShortSerializers? get currentShelter =>
-      _shelterList?.results?.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
+  Shelter? get currentShelter =>
+      _shelterList.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
-  Future<TokenRefresh?> refreshToken({String? refresh}) async {
+  Future<TokenRefreshDto?> refreshToken({String? refresh}) async {
     final usedRefresh = refresh ?? _refresh;
-    final request = TokenRefresh(access: _access, refresh: usedRefresh);
-    final result = await _acitsClient.apiTokenRefreshPost(body: request);
-    if (result.body != null) {
-      _access = result.body?.access;
+    try {
+      final result = await _authApi.refresh(usedRefresh, _access);
+      _access = result.access;
       // Бэкенд (SimpleJWT без ROTATE_REFRESH_TOKENS) на refresh возвращает
       // refresh=null — старый токен остаётся валидным. Пишем новый только если
       // сервер его прислал, иначе сохраняем использованный. Иначе `?? _refresh`
       // на холодном старте (где _refresh ещё не подтянут из хранилища) затирал
       // refreshKey в secure storage → автовход работал ровно один раз.
-      final newRefresh = result.body?.refresh ?? usedRefresh;
+      final newRefresh = result.refresh ?? usedRefresh;
       if (newRefresh != null && newRefresh != _refresh) _refresh = newRefresh;
       Log.info('Token refreshed');
-      return result.body;
+      return result;
+    } on DioException catch (e) {
+      Log.warning('Token refresh failed (status=${e.response?.statusCode})');
+      return null;
     }
-    Log.warning('Token refresh failed (status=${result.base.statusCode})');
-    return null;
   }
 
-  Future<TokenObtainPair?> login(String? login, String? pass) async {
+  Future<TokenPairDto?> login(String? login, String? pass) async {
     Log.info('Login attempt: username=$login');
-    final request = TokenObtainPair(username: login, password: pass);
-    final result = await _acitsGuestClient.apiTokenPost(body: request);
-    if (result.body != null) {
-      _access = result.body?.access;
-      _refresh = result.body?.refresh;
+    try {
+      final result = await _authApi.login(login ?? '', pass ?? '');
+      _access = result.access;
+      _refresh = result.refresh;
       Log.info('Login success: username=$login');
-      return result.body;
-    }
-    if (result.error != null) {
-      Log.warning('Login failed (status=${result.base.statusCode}): username=$login');
-      switch (result.base.statusCode) {
+      return result;
+    } on DioException catch (e) {
+      Log.warning('Login failed (status=${e.response?.statusCode}): username=$login');
+      final message = _errorBody(e)?.toString();
+      switch (e.response?.statusCode) {
         case 401:
-          throw NotAuthorizedException(message: result.error.toString());
+          throw NotAuthorizedException(message: message);
         default:
-          throw MessagedException(message: result.error.toString());
+          throw MessagedException(message: message);
       }
     }
-    return null;
   }
 
-  Future<PaginatedShelterShortSerializersList?> getShelterList() async {
-    final result = await _acitsClient.apiV1UsersMeSheltersGet();
-    if (result.body != null) {
-      _shelterList = result.body;
+  Future<List<Shelter>> getShelterList() async {
+    try {
+      final result = await _authApi.myShelters();
+      _shelterList = result.map(_toShelter).toList(growable: false);
       return _shelterList;
+    } on DioException catch (e) {
+      throw MessagedException(error: _errorBody(e));
     }
-    throw MessagedException(error: result.error);
   }
 
-  Future<UserCurrentShelterSerializers?> setCurrentShelter(int shelterId) async {
+  Future<CurrentShelterRole?> setCurrentShelter(int shelterId) async {
     Log.info('Set current shelter: id=$shelterId');
-    final result = await _acitsClient.apiV1UsersMeSheltersCurrentGet(xCurrentShelter: shelterId);
-    if (result.body != null) {
-      _shelterRole = result.body;
+    try {
+      final result = await _authApi.setCurrentShelter(shelterId);
+      _shelterRole = _toRole(result);
       // Запоминаем приют для автовхода без экрана выбора при следующем старте.
       _preferenceStorage.currentShelterId = shelterId;
       return _shelterRole;
+    } on DioException catch (e) {
+      throw MessagedException(error: _errorBody(e));
     }
-    throw MessagedException(error: result.error);
   }
 
   /// Восстановить ранее выбранный приют из хранилища (для автовхода).
@@ -141,7 +149,9 @@ class AuthService extends ChangeNotifier {
 
   void logout() {
     Log.info('Logout');
-    _access = _refresh = _shelterList = _shelterRole = null;
+    _access = _refresh = null;
+    _shelterList = const [];
+    _shelterRole = null;
     _authRepository.clearRefresh();
     _preferenceStorage.currentShelterId = null;
     notifyListeners();
@@ -153,44 +163,94 @@ class AuthService extends ChangeNotifier {
   Future<bool> tryRefreshLastAuth() async {
     final oldRefresh = _refresh ?? await _authRepository.refresh;
     if (oldRefresh == null) return false;
-    return await refreshToken(refresh: oldRefresh).then((value) => value is TokenRefresh).catchError((e) => false);
+    return await refreshToken(
+      refresh: oldRefresh,
+    ).then((value) => value != null).catchError((e) => false);
   }
 
   /// Список всех доступных приютов
-  Future<PaginatedShelterShortSerializersList?> getAllShelterList({
+  Future<List<Shelter>> getAllShelterList({
     int limit = _shelterListDefaultLenght,
     int offset = 0,
     String? searchRequest,
   }) async {
-    final result = await _acitsGuestClient.apiV1SheltersGet(limit: limit, offset: offset, search: searchRequest);
-
-    if (result.body != null) {
-      _shelterList = result.body;
+    try {
+      final result = await _authApi.allShelters(
+        limit: limit,
+        offset: offset,
+        search: searchRequest,
+      );
+      _shelterList = result.map(_toShelter).toList(growable: false);
       return _shelterList;
+    } on DioException catch (e) {
+      throw MessagedException(error: _errorBody(e));
     }
-    throw MessagedException(error: result.error ?? result.bodyString);
   }
 
   /// Зарегистрировать новый приют и админа в нем
-  Future<UserShelterAdminSerializers?> registrationAdmin(UserShelterAdminSerializers admin) async {
-    final result = await _acitsGuestClient.apiV1UsersAdminRegisterPost(body: admin);
-
-    if (result.body != null) {
-      return result.body;
+  Future<bool> registrationAdmin(AdminRegistrationInput input) async {
+    try {
+      await _authApi.registerAdmin(
+        UserAdminWriteDto(
+          email: input.email,
+          password: input.password,
+          rePassword: input.password,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          fathersName: input.fathersName,
+          phoneNumber: input.phoneNumber,
+          address: '',
+          isOfferSigned: true,
+          shelter: ShelterWriteDto(
+            name: input.shelterName,
+            country: input.country,
+            city: input.city,
+            region: input.region,
+          ),
+        ),
+      );
+      return true;
+    } on DioException catch (e) {
+      throw MessagedException(error: _errorBody(e));
     }
-    throw MessagedException(error: result.error ?? result.bodyString);
   }
 
   /// Зарегистрировать нового пользователя
-  Future<UserShelterWorkerSerializers?> registrationCustomer(UserShelterWorkerSerializers customer) async {
-    final result = await _acitsGuestClient.apiV1UsersWorkerRegisterPost(body: customer);
-
-    if (result.body != null) {
-      return result.body;
+  Future<bool> registrationCustomer(WorkerRegistrationInput input) async {
+    try {
+      await _authApi.registerWorker(
+        UserWorkerWriteDto(
+          shelter: input.shelterId,
+          email: input.email,
+          password: input.password,
+          rePassword: input.password,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          fathersName: '',
+          phoneNumber: '',
+          address: '',
+          isOfferSigned: true,
+          role: input.role == WorkerRole.worker ? 'WORKER' : 'GUEST',
+        ),
+      );
+      return true;
+    } on DioException catch (e) {
+      throw MessagedException(error: _errorBody(e));
     }
-    throw MessagedException(error: result.error ?? result.bodyString);
   }
 
   /// Подтвердить электронную почту при регистрации
   Future<void> confirmEmail(String email) => _confirmRepository.confirmEmail(email);
+
+  Shelter _toShelter(ShelterShortDto d) => Shelter(id: d.id, name: d.name);
+
+  CurrentShelterRole _toRole(CurrentShelterDto d) => CurrentShelterRole(
+    currentShelterId: d.currentShelter,
+    role: d.currentShelterUserRole,
+    canEdit: d.isUserCanEdit,
+    canDelete: d.isUserCanDelete,
+  );
+
+  /// Тело ответа-ошибки dio в человекочитаемом виде (как раньше `result.error`).
+  Object? _errorBody(DioException e) => e.response?.data ?? e.message;
 }

@@ -1,4 +1,4 @@
-import 'package:acits_flutter/gen/api/openapi.swagger.dart';
+import 'package:acits_domain/acits_domain.dart';
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
@@ -15,7 +15,7 @@ import 'package:acits_flutter/util/bloc_ext.dart';
 /// приюта выполняется ровно один раз (защита от повторного входа). Навигацию к
 /// корню после успешного выбора делает виджет по возвращённому `true`.
 class PickShelterCubit extends Cubit<PickShelterState> {
-  PickShelterCubit({required this.autoSelectSingle, PaginatedShelterShortSerializersList? shelterList})
+  PickShelterCubit({required this.autoSelectSingle, List<Shelter>? shelterList})
     : super(PickShelterState(shelters: shelterList ?? getIt<AuthService>().shelterList));
 
   final AuthService _authService = getIt<AuthService>();
@@ -53,7 +53,7 @@ class PickShelterCubit extends Cubit<PickShelterState> {
     Log.debug('PickShelterCubit.pickShelter: index=$index id=${shelter.id}');
     safeEmit(state.copyWith(status: const DataState.loading()));
     try {
-      await _authService.setCurrentShelter(shelter.id!);
+      await _authService.setCurrentShelter(shelter.id);
       await _configService.initConfig(currentShelterId: shelter.id);
       Log.info('PickShelterCubit.pickShelter ok: id=${shelter.id}');
       return true;

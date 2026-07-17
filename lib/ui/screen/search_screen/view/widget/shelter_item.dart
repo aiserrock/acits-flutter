@@ -1,12 +1,13 @@
+import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:acits_flutter/export.dart';
 import 'package:flutter/material.dart';
 
 class ShelterListItem extends StatelessWidget {
   const ShelterListItem({required this.shelter, super.key});
 
-  final ShelterShortSerializers shelter;
+  final Shelter shelter;
 
-  static Widget builder(ShelterShortSerializers shelter) => ShelterListItem(shelter: shelter);
+  static Widget builder(Shelter shelter) => ShelterListItem(shelter: shelter);
 
   @override
   Widget build(BuildContext context) {

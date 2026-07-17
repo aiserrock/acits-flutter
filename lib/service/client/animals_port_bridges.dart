@@ -29,10 +29,10 @@ class AuthServiceAnimalPermissions implements AnimalPermissions {
   final AuthService _authService;
 
   @override
-  bool get canEdit => _authService.shelterRole?.isUserCanEdit ?? false;
+  bool get canEdit => _authService.shelterRole?.canEdit ?? false;
 
   @override
-  bool get canDelete => _authService.shelterRole?.isUserCanDelete ?? false;
+  bool get canDelete => _authService.shelterRole?.canDelete ?? false;
 }
 
 /// Человекочитаемые названия статусов из серверного конфига ([ConfigService]).

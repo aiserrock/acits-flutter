@@ -1,3 +1,4 @@
+import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -157,7 +158,7 @@ GoRouter createAppRouter() {
           final extra = state.extra as Map<String, Object?>?;
           return PickShelterScreen(
             autoSelectSingle: extra?['autoSelectSingle'] as bool? ?? true,
-            shelterList: extra?['shelterList'] as PaginatedShelterShortSerializersList?,
+            shelterList: extra?['shelterList'] as List<Shelter>?,
           );
         },
       ),

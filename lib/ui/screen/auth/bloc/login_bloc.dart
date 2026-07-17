@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -136,16 +137,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _pickShelter() async {
     Log.debug('LoginBloc.pickShelter: fetching shelter list');
-    final list = await _authService.getShelterList().catchError((error, stack) {
+    final List<Shelter>? list;
+    try {
+      list = await _authService.getShelterList();
+    } catch (error, stack) {
       Log.error('LoginBloc.pickShelter failed to load shelter list', error, stack);
-      return null;
-    });
-    if (list != null) {
-      Log.info('LoginBloc.pickShelter ok: navigating to pick shelter');
-      getIt<GoRouter>().push(
-        AppRoutes.pickShelter,
-        extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true},
-      );
+      return;
     }
+    Log.info('LoginBloc.pickShelter ok: navigating to pick shelter');
+    getIt<GoRouter>().push(
+      AppRoutes.pickShelter,
+      extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true},
+    );
   }
 }

@@ -11,10 +11,7 @@ AnimalDto _$AnimalDtoFromJson(Map<String, dynamic> json) => AnimalDto(
   uuid: json['uuid'] as String,
   url: json['url'] as String,
   images:
-      (json['images'] as List<dynamic>?)
-          ?.map((e) => AnimalImageDto.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      [],
+      (json['images'] as List<dynamic>?)?.map((e) => AnimalImageDto.fromJson(e as Map<String, dynamic>)).toList() ?? [],
   dateJoined: DateTime.parse(json['date_joined'] as String),
   placeOfCatch: json['place_of_catch'] as String,
   shelter: (json['shelter'] as num).toInt(),
@@ -24,35 +21,21 @@ AnimalDto _$AnimalDtoFromJson(Map<String, dynamic> json) => AnimalDto(
           .toList() ??
       [],
   name: json['name'] as String?,
-  spec: json['spec'] == null
-      ? null
-      : SpeciesDto.fromJson(json['spec'] as Map<String, dynamic>),
+  spec: json['spec'] == null ? null : SpeciesDto.fromJson(json['spec'] as Map<String, dynamic>),
   status: json['status'] as String?,
-  birthDate: json['birth_date'] == null
-      ? null
-      : DateTime.parse(json['birth_date'] as String),
-  deathDate: json['death_date'] == null
-      ? null
-      : DateTime.parse(json['death_date'] as String),
+  birthDate: json['birth_date'] == null ? null : DateTime.parse(json['birth_date'] as String),
+  deathDate: json['death_date'] == null ? null : DateTime.parse(json['death_date'] as String),
   deathReason: json['death_reason'] as String?,
   defaultImageId: (json['default_image_id'] as num?)?.toInt(),
   placeOfRelease: json['place_of_release'] as String?,
-  dateOfChipping: json['date_of_chipping'] == null
-      ? null
-      : DateTime.parse(json['date_of_chipping'] as String),
+  dateOfChipping: json['date_of_chipping'] == null ? null : DateTime.parse(json['date_of_chipping'] as String),
   chippingCode: json['chipping_code'] as String?,
   height: json['height'] as String?,
   weight: json['weight'] as String?,
   hasDocuments: json['has_documents'] as bool?,
-  curator: json['curator'] == null
-      ? null
-      : CuratorDto.fromJson(json['curator'] as Map<String, dynamic>),
-  applicant: json['applicant'] == null
-      ? null
-      : ApplicantDto.fromJson(json['applicant'] as Map<String, dynamic>),
-  deletedAt: json['deleted_at'] == null
-      ? null
-      : DateTime.parse(json['deleted_at'] as String),
+  curator: json['curator'] == null ? null : CuratorDto.fromJson(json['curator'] as Map<String, dynamic>),
+  applicant: json['applicant'] == null ? null : ApplicantDto.fromJson(json['applicant'] as Map<String, dynamic>),
+  deletedAt: json['deleted_at'] == null ? null : DateTime.parse(json['deleted_at'] as String),
   adoption: json['adoption'] as String?,
   release: json['release'] as String?,
   overstay: json['overstay'] as String?,
@@ -82,9 +65,7 @@ Map<String, dynamic> _$AnimalDtoToJson(AnimalDto instance) => <String, dynamic>{
   'shelter': instance.shelter,
   'curator': instance.curator?.toJson(),
   'applicant': instance.applicant?.toJson(),
-  'animal_attributes': instance.animalAttributes
-      .map((e) => e.toJson())
-      .toList(),
+  'animal_attributes': instance.animalAttributes.map((e) => e.toJson()).toList(),
   'deleted_at': instance.deletedAt?.toIso8601String(),
   'adoption': instance.adoption,
   'release': instance.release,

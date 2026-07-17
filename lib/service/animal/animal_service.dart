@@ -100,7 +100,7 @@ class AnimalService {
   Future<AnimalRead?> createAnimal(AnimalWrite animal) async {
     Log.debug('Create animal');
     animal = animal.copyWith(
-      shelter: _authService.shelterRole?.currentShelter,
+      shelter: _authService.currentShelterId,
       placeOfRelease: animal.placeOfRelease ?? '',
       deathReason: animal.deathReason ?? '',
     );
@@ -120,7 +120,7 @@ class AnimalService {
   Future<AnimalRead?> updateAnimal(int id, AnimalWrite animal) async {
     Log.debug('Update animal: id=$id');
     animal = animal.copyWith(
-      shelter: _authService.shelterRole?.currentShelter,
+      shelter: _authService.currentShelterId,
       placeOfRelease: animal.placeOfRelease ?? '',
       deathReason: animal.deathReason ?? '',
     );

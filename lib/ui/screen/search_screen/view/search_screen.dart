@@ -1,3 +1,4 @@
+import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/export.dart';
@@ -17,7 +18,7 @@ class Search<T> extends StatelessWidget {
   /// Собрать [Search] по строковому ключу типа (для go_router `?type=`).
   /// См. [SearchTypeKey]. Возвращаемое значение — объект соответствующего типа
   /// ([AnimalRead], [Applicant], [Curator], [ShelterDrug],
-  /// [ShelterShortSerializers]); вызывающая сторона кастует результат push.
+  /// [Shelter]); вызывающая сторона кастует результат push.
   static Widget byTypeKey(String typeKey) {
     switch (typeKey) {
       case SearchTypeKey.animal:
@@ -41,9 +42,9 @@ class Search<T> extends StatelessWidget {
           tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<ShelterDrug>(),
         );
       case SearchTypeKey.shelter:
-        return Search<ShelterShortSerializers>(
+        return Search<Shelter>(
           adapter: ShelterFetchAdapter(),
-          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<ShelterShortSerializers>(),
+          tileBuilder: SearchAdapterTypeFactoryDelegate.tileBuilder<Shelter>(),
         );
       default:
         throw ArgumentError('Unknown search type key: $typeKey');

@@ -108,7 +108,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
       title: isLoading
           ? _buildSkeleton(156.0)
           : Text(person?.fullName ?? '', style: Theme.of(context).textTheme.titleLarge),
-      subtitle: isLoading ? null : Text(_authService.shelterRole?.currentShelterUserRole ?? ''),
+      subtitle: isLoading ? null : Text(_authService.shelterRole?.role ?? ''),
       // onTap: () {},
     );
   }

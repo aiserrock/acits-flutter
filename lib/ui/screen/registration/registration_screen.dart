@@ -8,7 +8,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'package:acits_domain/acits_domain.dart' show Shelter;
+
 import 'package:acits_flutter/domain/exception.dart';
+import 'package:acits_flutter/domain/registration_input.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/registration/cubit/registration_cubit.dart';
@@ -218,41 +221,31 @@ class RegistrationFormControllers {
     customerNameController.dispose();
   }
 
-  /// Собрать модель администратора из введённых данных.
-  UserShelterAdminSerializers buildAdmin() {
-    return UserShelterAdminSerializers(
+  /// Собрать ввод администратора из введённых данных.
+  AdminRegistrationInput buildAdmin() {
+    return AdminRegistrationInput(
       email: orgEmailController.text,
       password: orgPassController.text,
-      rePassword: orgPassController.text,
       firstName: orgNameController.text,
       lastName: orgSNameController.text,
       fathersName: orgMNameController.text,
       phoneNumber: orgPhoneController.text,
-      address: '',
-      isOfferSigned: true,
-      shelter: ShelterSerializers(
-        name: orgShelterNameController.text,
-        country: orgCountryNameController.text,
-        city: orgCityNameController.text,
-        region: orgRegionNameController.text,
-      ),
+      shelterName: orgShelterNameController.text,
+      country: orgCountryNameController.text,
+      city: orgCityNameController.text,
+      region: orgRegionNameController.text,
     );
   }
 
-  /// Собрать модель кастомера из введённых данных.
-  UserShelterWorkerSerializers buildCustomer({required ShelterShortSerializers? shelter, required CustomerRole role}) {
-    return UserShelterWorkerSerializers(
-      shelter: shelter?.id,
+  /// Собрать ввод кастомера из введённых данных.
+  WorkerRegistrationInput buildCustomer({required Shelter? shelter, required CustomerRole role}) {
+    return WorkerRegistrationInput(
+      shelterId: shelter?.id,
       email: customerEmailController.text,
       password: customerPassController.text,
-      rePassword: customerPassController.text,
       firstName: customerNameController.text,
       lastName: customerSNameController.text,
-      fathersName: '',
-      phoneNumber: '',
-      address: '',
-      isOfferSigned: true,
-      role: role == CustomerRole.employer ? RoleEnum.worker : RoleEnum.guest,
+      role: role == CustomerRole.employer ? WorkerRole.worker : WorkerRole.guest,
     );
   }
 }
@@ -692,7 +685,7 @@ class RegistrationCustomerForm extends StatelessWidget {
 
   Future<void> _pickShelter(BuildContext context) async {
     final cubit = context.read<RegistrationCubit>();
-    final shelter = await context.push<ShelterShortSerializers>(AppRoutes.searchPath(SearchTypeKey.shelter));
+    final shelter = await context.push<Shelter>(AppRoutes.searchPath(SearchTypeKey.shelter));
     if (shelter != null) cubit.setShelter(shelter);
   }
 }

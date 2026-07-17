@@ -1,22 +1,23 @@
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_core/acits_core.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_alice/alice.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/env.dart';
 
-/// DI-модуль НОВОГО API-стека (acits_core Dio + acits_api адаптер).
+import '../../di/di_container.dart';
+import '../shared_pref/debug_preference_storage.dart';
+
+/// Dev-вариант нового API-стека (acits_core Dio + acits_api адаптеры).
 ///
-/// Регистрируется рядом с chopper и пока никем не потребляется — фичи не
-/// мигрированы. Цель Step 7: базис существует и резолвится в get_it до того, как
-/// его начнут использовать. Именованный инстанс `@Named('acitsApi')` не
-/// конфликтует с существующим `@prod Dio` (см. dio_register.dart).
+/// Зеркалит [AcitsApiRegister] (prod), но: baseUrl оборачивается в CORS-прокси
+/// (web) и debug-baseUrl из настроек, а трафик виден в Alice. Сетевой прокси
+/// (Charles) покрыт глобальным `HttpOverrides.global` (dev main.dart), поэтому
+/// явный IOClient тут не нужен — dio его подхватывает автоматически.
 @module
-abstract class AcitsApiRegister {
-  /// Единый сконфигурированный Dio для нового клиента: интерцепторы
-  /// auth/header из acits_core, порты — мосты к AuthService/ConfigService
-  /// (см. auth_port_bridges.dart). baseUrl берём из того же [Env], что и chopper.
-  @prod
+abstract class AcitsApiRegisterDev {
+  @dev
   @Named('acitsApi')
   Dio createAcitsApiDio(
     TokenStore tokenStore,
@@ -24,6 +25,7 @@ abstract class AcitsApiRegister {
     SessionInvalidator sessionInvalidator,
     LocaleProvider localeProvider,
     Env env,
+    DebugPreferenceStorage ps,
   ) {
     final dio = createDio(
       tokenStore: tokenStore,
@@ -31,56 +33,50 @@ abstract class AcitsApiRegister {
       sessionInvalidator: sessionInvalidator,
       localeProvider: localeProvider,
     );
-    dio.options.baseUrl = env.apiUrl;
+    dio.options.baseUrl = UrlCorsProxy.wrapBase(ps.baseUrl ?? env.apiUrl);
+    dio.interceptors.add(getIt<Alice>().getDioInterceptor());
     return dio;
   }
 
-  /// Гостевой Dio для нового клиента: БЕЗ auth-интерцептора (логин/регистрация/
-  /// список всех приютов). Зеркалит chopper `@Named('guest')`. baseUrl — из [Env].
-  @prod
+  @dev
   @Named('acitsApiGuest')
-  Dio createAcitsApiGuestDio(Env env) {
+  Dio createAcitsApiGuestDio(Env env, DebugPreferenceStorage ps) {
     final dio = Dio(
       BaseOptions(
-        baseUrl: env.apiUrl,
+        baseUrl: UrlCorsProxy.wrapBase(ps.baseUrl ?? env.apiUrl),
         connectTimeout: const Duration(milliseconds: 30000),
         receiveTimeout: const Duration(milliseconds: 30000),
         sendTimeout: const Duration(milliseconds: 30000),
       ),
     );
+    dio.interceptors.add(getIt<Alice>().getDioInterceptor());
     return dio;
   }
 
-  /// Сгенерированный retrofit-клиент поверх нового Dio.
-  @prod
+  @dev
   AnimalsClient animalsClient(@Named('acitsApi') Dio dio) => AnimalsClient(dio);
 
-  /// Адаптер поверх сгенерированного клиента — реализует стабильный порт
-  /// [AnimalApiPort]. Возвращаем как порт, чтобы будущие фичи резолвили
-  /// [AnimalApiPort], а не конкретный адаптер.
-  @prod
+  @dev
   AnimalApiPort animalApiPort(AnimalsClient client) => AnimalApiAdapter(client);
 
-  // ── auth slice ─────────────────────────────────────────────────────────────
-
-  @prod
+  @dev
   @Named('acitsApiTokenAuthed')
   TokenClient tokenClientAuthed(@Named('acitsApi') Dio dio) => TokenClient(dio);
 
-  @prod
+  @dev
   @Named('acitsApiTokenGuest')
   TokenClient tokenClientGuest(@Named('acitsApiGuest') Dio dio) => TokenClient(dio);
 
-  @prod
+  @dev
   UsersClient usersClient(@Named('acitsApi') Dio dio) => UsersClient(dio);
 
-  @prod
+  @dev
   SheltersClient sheltersClient(@Named('acitsApiGuest') Dio dio) => SheltersClient(dio);
 
-  @prod
+  @dev
   UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) => UsersRegistrationClient(dio);
 
-  @prod
+  @dev
   AuthApiPort authApiPort(
     @Named('acitsApiTokenGuest') TokenClient guestTokenClient,
     @Named('acitsApiTokenAuthed') TokenClient authedTokenClient,

@@ -61,6 +61,7 @@ import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import 'package:talker_flutter/talker_flutter.dart' as _i207;
 
 import '../env/env_register.dart' as _i962;
+import '../service/client/acits_api_register.dart' as _i39;
 import '../service/client/client_register.dart' as _i913;
 import '../service/client/dio_register.dart' as _i230;
 import '../service/debug/debug_dev_service.dart' as _i218;
@@ -86,8 +87,9 @@ Future<_i174.GetIt> $initDevGetIt(
   final dioRegister = _$DioRegister();
   final envRegistrer = _$EnvRegistrer();
   final clientRegisterDev = _$ClientRegisterDev();
-  final clientRegister = _$ClientRegister();
+  final acitsApiRegisterDev = _$AcitsApiRegisterDev();
   final acitsApiRegister = _$AcitsApiRegister();
+  final clientRegister = _$ClientRegister();
   final animalsRegister = _$AnimalsRegister();
   gh.factory<_i492.AuthInterceptor>(() => _i492.AuthInterceptor());
   gh.factory<_i158.HeaderInterceptor>(() => _i158.HeaderInterceptor());
@@ -100,6 +102,9 @@ Future<_i174.GetIt> $initDevGetIt(
     preResolve: true,
   );
   gh.singleton<_i705.DeepLinkService>(() => _i705.DeepLinkService());
+  gh.factory<_i354.TokenRefresher>(
+    () => const _i350.AuthServiceTokenRefresher(),
+  );
   gh.factory<_i531.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i361.Dio>(
     () => dioRegisterDev.createDioClient(),
@@ -115,6 +120,13 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i354.DocumentExportService>(
     () => _i109.DocumentExportServiceBridge(),
+  );
+  gh.factory<_i354.SessionInvalidator>(
+    () => const _i350.AuthServiceSessionInvalidator(),
+  );
+  gh.factory<_i354.TokenStore>(() => const _i350.AuthServiceTokenStore());
+  gh.factory<_i354.LocaleProvider>(
+    () => const _i350.ConfigServiceLocaleProvider(),
   );
   gh.singleton<_i47.DebugService>(
     () => _i218.DebugDevService(gh<_i1058.DebugPreferenceStorage>()),
@@ -147,6 +159,56 @@ Future<_i174.GetIt> $initDevGetIt(
     instanceName: 'guest',
     registerFor: {_dev},
   );
+  gh.factory<_i361.Dio>(
+    () => acitsApiRegisterDev.createAcitsApiDio(
+      gh<_i354.TokenStore>(),
+      gh<_i354.TokenRefresher>(),
+      gh<_i354.SessionInvalidator>(),
+      gh<_i354.LocaleProvider>(),
+      gh<_i531.Env>(),
+      gh<_i1058.DebugPreferenceStorage>(),
+    ),
+    instanceName: 'acitsApi',
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.AnimalsClient>(
+    () => acitsApiRegisterDev.animalsClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.UsersClient>(
+    () => acitsApiRegisterDev.usersClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i361.Dio>(
+    () => acitsApiRegisterDev.createAcitsApiGuestDio(
+      gh<_i531.Env>(),
+      gh<_i1058.DebugPreferenceStorage>(),
+    ),
+    instanceName: 'acitsApiGuest',
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.TokenClient>(
+    () => acitsApiRegisterDev.tokenClientAuthed(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    instanceName: 'acitsApiTokenAuthed',
+    registerFor: {_dev},
+  );
+  gh.factory<_i361.Dio>(
+    () => acitsApiRegister.createAcitsApiDio(
+      gh<_i354.TokenStore>(),
+      gh<_i354.TokenRefresher>(),
+      gh<_i354.SessionInvalidator>(),
+      gh<_i354.LocaleProvider>(),
+      gh<_i531.Env>(),
+    ),
+    instanceName: 'acitsApi',
+    registerFor: {_prod},
+  );
   gh.factory<_i965.Openapi>(
     () => clientRegister.createGuestClient(gh<_i531.Env>()),
     instanceName: 'guest',
@@ -161,6 +223,19 @@ Future<_i174.GetIt> $initDevGetIt(
     ),
     registerFor: {_dev},
   );
+  gh.factory<_i101.AnimalApiPort>(
+    () => acitsApiRegisterDev.animalApiPort(gh<_i101.AnimalsClient>()),
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.AnimalsClient>(
+    () =>
+        acitsApiRegister.animalsClient(gh<_i361.Dio>(instanceName: 'acitsApi')),
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.UsersClient>(
+    () => acitsApiRegister.usersClient(gh<_i361.Dio>(instanceName: 'acitsApi')),
+    registerFor: {_prod},
+  );
   gh.factory<_i965.Openapi>(
     () => clientRegister.createClient(
       gh<_i492.AuthInterceptor>(),
@@ -173,17 +248,96 @@ Future<_i174.GetIt> $initDevGetIt(
     () => _i422.EmailConfirmRepository(gh<_i361.Dio>()),
   );
   gh.factory<_i830.FileRepository>(() => _i830.FileRepository(gh<_i361.Dio>()));
+  gh.factory<_i101.TokenClient>(
+    () => acitsApiRegister.tokenClientAuthed(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    instanceName: 'acitsApiTokenAuthed',
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.TokenClient>(
+    () => acitsApiRegisterDev.tokenClientGuest(
+      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
+    ),
+    instanceName: 'acitsApiTokenGuest',
+    registerFor: {_dev},
+  );
+  gh.factory<_i361.Dio>(
+    () => acitsApiRegister.createAcitsApiGuestDio(gh<_i531.Env>()),
+    instanceName: 'acitsApiGuest',
+    registerFor: {_prod},
+  );
   gh.factory<_i499.FileService>(
     () => _i499.FileService(gh<_i830.FileRepository>()),
   );
+  gh.factory<_i101.SheltersClient>(
+    () => acitsApiRegisterDev.sheltersClient(
+      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.UsersRegistrationClient>(
+    () => acitsApiRegisterDev.usersRegistrationClient(
+      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.AnimalApiPort>(
+    () => acitsApiRegister.animalApiPort(gh<_i101.AnimalsClient>()),
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.TokenClient>(
+    () => acitsApiRegister.tokenClientGuest(
+      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
+    ),
+    instanceName: 'acitsApiTokenGuest',
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.AuthApiPort>(
+    () => acitsApiRegisterDev.authApiPort(
+      gh<_i101.TokenClient>(instanceName: 'acitsApiTokenGuest'),
+      gh<_i101.TokenClient>(instanceName: 'acitsApiTokenAuthed'),
+      gh<_i101.UsersClient>(),
+      gh<_i101.SheltersClient>(),
+      gh<_i101.UsersRegistrationClient>(),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.SheltersClient>(
+    () => acitsApiRegister.sheltersClient(
+      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
+    ),
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.UsersRegistrationClient>(
+    () => acitsApiRegister.usersRegistrationClient(
+      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
+    ),
+    registerFor: {_prod},
+  );
+  gh.factory<_i101.AuthApiPort>(
+    () => acitsApiRegister.authApiPort(
+      gh<_i101.TokenClient>(instanceName: 'acitsApiTokenGuest'),
+      gh<_i101.TokenClient>(instanceName: 'acitsApiTokenAuthed'),
+      gh<_i101.UsersClient>(),
+      gh<_i101.SheltersClient>(),
+      gh<_i101.UsersRegistrationClient>(),
+    ),
+    registerFor: {_prod},
+  );
   gh.singleton<_i21.AuthService>(
     () => _i21.AuthService(
-      gh<_i965.Openapi>(),
-      gh<_i965.Openapi>(instanceName: 'guest'),
+      gh<_i101.AuthApiPort>(),
       gh<_i622.AuthRepository>(),
       gh<_i422.EmailConfirmRepository>(),
       gh<_i2.PreferenceStorage>(),
     ),
+  );
+  gh.factory<_i616.AnimalRemoteDataSource>(
+    () => animalsRegister.animalRemoteDataSource(gh<_i101.AnimalApiPort>()),
+  );
+  gh.factory<_i616.AnimalRepository>(
+    () => animalsRegister.animalRepository(gh<_i616.AnimalRemoteDataSource>()),
   );
   gh.singleton<_i245.ConfigService>(
     () => _i245.ConfigService(
@@ -194,12 +348,6 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i616.AnimalPermissions>(
     () => _i434.AuthServiceAnimalPermissions(gh<_i21.AuthService>()),
-  );
-  gh.factory<_i354.SessionInvalidator>(
-    () => _i350.AuthServiceSessionInvalidator(gh<_i21.AuthService>()),
-  );
-  gh.factory<_i354.TokenStore>(
-    () => _i350.AuthServiceTokenStore(gh<_i21.AuthService>()),
   );
   gh.singleton<_i876.AnimalService>(
     () => _i876.AnimalService(gh<_i21.AuthService>(), gh<_i965.Openapi>()),
@@ -216,9 +364,6 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.singleton<_i701.PersonalService>(
     () => _i701.PersonalService(gh<_i965.Openapi>(), gh<_i21.AuthService>()),
   );
-  gh.factory<_i354.LocaleProvider>(
-    () => _i350.ConfigServiceLocaleProvider(gh<_i245.ConfigService>()),
-  );
   gh.factory<_i616.AnimalStatusLabels>(
     () => _i434.ConfigServiceAnimalStatusLabels(gh<_i245.ConfigService>()),
   );
@@ -231,35 +376,6 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i21.AuthService>(),
       gh<_i245.ConfigService>(),
     ),
-  );
-  gh.factory<_i354.TokenRefresher>(
-    () => _i350.AuthServiceTokenRefresher(gh<_i21.AuthService>()),
-  );
-  gh.factory<_i361.Dio>(
-    () => acitsApiRegister.createAcitsApiDio(
-      gh<_i354.TokenStore>(),
-      gh<_i354.TokenRefresher>(),
-      gh<_i354.SessionInvalidator>(),
-      gh<_i354.LocaleProvider>(),
-      gh<_i531.Env>(),
-    ),
-    instanceName: 'acitsApi',
-    registerFor: {_prod},
-  );
-  gh.factory<_i101.AnimalsClient>(
-    () =>
-        acitsApiRegister.animalsClient(gh<_i361.Dio>(instanceName: 'acitsApi')),
-    registerFor: {_prod},
-  );
-  gh.factory<_i101.AnimalApiPort>(
-    () => acitsApiRegister.animalApiPort(gh<_i101.AnimalsClient>()),
-    registerFor: {_prod},
-  );
-  gh.factory<_i616.AnimalRemoteDataSource>(
-    () => animalsRegister.animalRemoteDataSource(gh<_i101.AnimalApiPort>()),
-  );
-  gh.factory<_i616.AnimalRepository>(
-    () => animalsRegister.animalRepository(gh<_i616.AnimalRemoteDataSource>()),
   );
   return getIt;
 }
@@ -282,8 +398,10 @@ class _$EnvRegistrer extends _i143.EnvRegistrer {}
 
 class _$ClientRegisterDev extends _i913.ClientRegisterDev {}
 
-class _$ClientRegister extends _i363.ClientRegister {}
+class _$AcitsApiRegisterDev extends _i39.AcitsApiRegisterDev {}
 
 class _$AcitsApiRegister extends _i382.AcitsApiRegister {}
+
+class _$ClientRegister extends _i363.ClientRegister {}
 
 class _$AnimalsRegister extends _i286.AnimalsRegister {}

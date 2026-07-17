@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:acits_domain/acits_domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -107,20 +108,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Приют не запомнен/недоступен — уходим на выбор приюта.
     Log.info('Splash: refresh ok, no shelter → pick shelter');
-    final list = await auth.getShelterList().catchError((Object e, StackTrace s) {
+    final List<Shelter>? list;
+    try {
+      list = await auth.getShelterList();
+    } catch (e, s) {
       Log.error('Splash: shelter list load failed', e, s);
-      return null;
-    });
+      if (!mounted) return;
+      await _ensureMinDuration();
+      if (!mounted) return;
+      getIt<GoRouter>().go(AppRoutes.login);
+      WidgetsBinding.instance.addPostFrameCallback((_) => removeSplash());
+      return;
+    }
     if (!mounted) return;
     await _ensureMinDuration();
     if (!mounted) return;
     final router = getIt<GoRouter>();
-    if (list != null) {
-      router.go(AppRoutes.login);
-      router.push(AppRoutes.pickShelter, extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true});
-    } else {
-      router.go(AppRoutes.login);
-    }
+    router.go(AppRoutes.login);
+    router.push(AppRoutes.pickShelter, extra: <String, Object?>{'shelterList': list, 'autoSelectSingle': true});
     WidgetsBinding.instance.addPostFrameCallback((_) => removeSplash());
   }
 
