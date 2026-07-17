@@ -200,16 +200,13 @@ patrol:
   ios:
     bundle_id: ru.acits.dev
 
-# Melos как task-runner для single-package проекта.
+# Melos — task-runner для монорепо. Скрипты живут здесь (melos 8.x читает
+# `melos:` из pubspec.yaml; отдельный melos.yaml он не использует). Пакеты
+# монорепо melos берёт из dart pub `workspace:` выше — отдельный `packages:`
+# не нужен.
 #
-# Не монорепо — один пакет (useRootAsPackage: true). Melos заменяет разрозненные
-# `fvm flutter ...` команды единым набором `melos run <script>`. Этот блок —
-# источник истины по частым командам проекта.
-#
-# Установка: `dart pub global activate melos`. Запуск: `melos run <name>`
-# (или `fvm dart run melos run <name>` через локальную dev-зависимость).
+# Установка: `dart pub global activate melos`. Запуск: `fvm dart run melos run <name>`.
 melos:
-  useRootAsPackage: true
   sdkPath: .fvm/flutter_sdk
 
   scripts:
@@ -251,6 +248,10 @@ melos:
       description: Статический анализ (flutter analyze).
       run: fvm flutter analyze
 
+    analyze:strict:
+      description: Строгий анализ — падает на infos и warnings (CI-гейт).
+      run: fvm flutter analyze --fatal-infos --fatal-warnings
+
     format:
       description: Форматирование hand-written кода (line length 120), генерённые файлы исключены.
       run: |
@@ -258,7 +259,6 @@ melos:
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
-          ! -name '*.chopper.dart' \
           ! -name '*.gen.dart' \
           ! -name 'locale_keys.g.dart' \
           ! -name 'firebase_options.dart')
@@ -271,7 +271,6 @@ melos:
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
-          ! -name '*.chopper.dart' \
           ! -name '*.gen.dart' \
           ! -name 'locale_keys.g.dart' \
           ! -name 'firebase_options.dart')
@@ -318,10 +317,6 @@ melos:
         - format:check
         - analyze:strict
         - test
-
-    analyze:strict:
-      description: Строгий анализ — падает на infos и warnings (CI-гейт).
-      run: fvm flutter analyze --fatal-infos --fatal-warnings
 
     fix:
       description: Приборка перед коммитом — кодоген, l10n, формат.
