@@ -1,15 +1,13 @@
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart';
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/service/staff/staff_service.dart';
+import 'package:applicants/applicants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockStaffApiPort extends Mock implements StaffApiPort {}
 
-class MockAuthService extends Mock implements AuthService {}
+class MockShelterProvider extends Mock implements ApplicantsShelterProvider {}
 
 ApplicantDto _applicantDto() => ApplicantDto(
   id: 7,
@@ -52,7 +50,7 @@ DioException _dioError() => DioException(
 
 void main() {
   late MockStaffApiPort port;
-  late MockAuthService auth;
+  late MockShelterProvider shelter;
   late StaffService service;
 
   setUpAll(() {
@@ -62,9 +60,9 @@ void main() {
 
   setUp(() {
     port = MockStaffApiPort();
-    auth = MockAuthService();
-    when(() => auth.currentShelterId).thenReturn(50);
-    service = StaffService(auth, port);
+    shelter = MockShelterProvider();
+    when(() => shelter.shelterId).thenReturn(50);
+    service = StaffService(shelter, port);
   });
 
   group('applicants', () {

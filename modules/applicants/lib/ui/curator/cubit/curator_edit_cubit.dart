@@ -1,17 +1,18 @@
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/staff/staff_service.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_domain/acits_domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/staff_service.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/log.dart';
 
 /// Cubit экрана создания/редактирования куратора.
 ///
 /// Владеет состоянием загрузки [DataState]<[Curator]> и бизнес-логикой
 /// (загрузка по id, создание, обновление). UI-контроллеры остаются в виджете.
 class CuratorEditCubit extends Cubit<DataState<Curator>> {
-  CuratorEditCubit({this.curatorId})
-    : _service = getIt<StaffService>(),
-      super(DataState.content(const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''))) {
+  CuratorEditCubit(this._service, {this.curatorId})
+    : super(DataState.content(const Curator(firstName: '', lastName: '', phoneNumber: '', address: ''))) {
     _init();
   }
 

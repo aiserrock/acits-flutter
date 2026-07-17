@@ -4,9 +4,9 @@ import 'package:acits_flutter/ui/screen/search_screen/view/widget/drug_item.dart
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/shelter_item.dart';
 import 'package:flutter/material.dart';
 
+import 'package:applicants/applicants.dart' show StaffService;
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/staff/staff_service.dart';
 import 'package:acits_flutter/service/prescription/prescription_service.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/screen/search_screen/view/widget/animal_item.dart';

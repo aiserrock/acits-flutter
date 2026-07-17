@@ -1,8 +1,10 @@
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/staff/staff_service.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_domain/acits_domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/staff_service.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/log.dart';
 
 /// Cubit экрана создания/редактирования заявителя.
 ///
@@ -10,9 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// создание, обновление). UI-контроллеры ([TextEditingController]) остаются
 /// во [StatefulWidget] экрана.
 class ApplicantEditCubit extends Cubit<DataState<Applicant>> {
-  ApplicantEditCubit({this.applicantId})
-    : _service = getIt<StaffService>(),
-      super(DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: ''))) {
+  ApplicantEditCubit(this._service, {this.applicantId})
+    : super(DataState.content(const Applicant(firstName: '', lastName: '', phoneNumber: ''))) {
     _init();
   }
 

@@ -1,10 +1,9 @@
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart';
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import '../domain/applicants_shelter_provider.dart';
+import '../util/log.dart';
 
 /// Сервис сотрудников (заявители + кураторы).
 ///
@@ -12,11 +11,10 @@ import 'package:acits_flutter/util/logger/log.dart';
 /// разворачивает DTO → доменные сущности [Applicant]/[Curator], ошибки Dio →
 /// [MessagedException] (внешний контракт для UI сохранён). Порт скрывает
 /// генератор клиента.
-@singleton
 class StaffService {
-  StaffService(this._authService, this._port);
+  StaffService(this._shelterProvider, this._port);
 
-  final AuthService _authService;
+  final ApplicantsShelterProvider _shelterProvider;
   final StaffApiPort _port;
 
   /// Список кураторов
@@ -175,7 +173,7 @@ class StaffService {
     address: c.address ?? '',
   );
 
-  int? get _currentShelterInt => _authService.currentShelterId;
+  int? get _currentShelterInt => _shelterProvider.shelterId;
 
   String? get _currentShelterStr => _currentShelterInt?.toString();
 

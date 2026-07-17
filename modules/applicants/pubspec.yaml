@@ -1,0 +1,39 @@
+name: applicants
+description: Applicants + curators (staff) feature module — edit screens, their cubits, and the StaffService application service on top of the stable StaffApiPort.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  bloc: ^9.2.0
+  equatable: ^2.0.8
+  easy_localization: ^3.0.8
+  flutter_keyboard_visibility: ^6.0.0
+  dio: ^5.9.2
+  get_it: ^9.2.1
+  talker_flutter: ^5.1.16
+  acits_core:
+    path: ../../packages/acits_core
+  acits_domain:
+    path: ../../packages/acits_domain
+  acits_api:
+    path: ../../packages/acits_api
+  acits_ui_kit:
+    path: ../../packages/acits_ui_kit
+  acits_navigation:
+    path: ../../packages/acits_navigation
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.5
