@@ -21,17 +21,18 @@ CuratorDto _$CuratorDtoFromJson(Map<String, dynamic> json) => CuratorDto(
   email: json['email'] as String?,
 );
 
-Map<String, dynamic> _$CuratorDtoToJson(CuratorDto instance) => <String, dynamic>{
-  'id': instance.id,
-  'url': instance.url,
-  'shelter': instance.shelter,
-  'first_name': instance.firstName,
-  'last_name': instance.lastName,
-  'email': instance.email,
-  'phone_number': instance.phoneNumber,
-  'address': instance.address,
-  'created_by': instance.createdBy,
-  'updated_by': instance.updatedBy,
-  'created_at': instance.createdAt.toIso8601String(),
-  'updated_at': instance.updatedAt.toIso8601String(),
-};
+Map<String, dynamic> _$CuratorDtoToJson(CuratorDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'url': instance.url,
+      'shelter': instance.shelter,
+      'first_name': instance.firstName,
+      'last_name': instance.lastName,
+      'email': instance.email,
+      'phone_number': instance.phoneNumber,
+      'address': instance.address,
+      'created_by': instance.createdBy,
+      'updated_by': instance.updatedBy,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+    };

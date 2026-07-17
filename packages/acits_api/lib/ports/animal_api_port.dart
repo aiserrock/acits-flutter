@@ -1,6 +1,8 @@
 import 'dto/animal_dto.dart';
+import 'dto/animal_write_dto.dart';
+import 'dto/species_dto.dart';
 
-/// Stable port for reading animals — expressed entirely in OUR DTOs.
+/// Stable port for the animals slice — expressed entirely in OUR DTOs.
 ///
 /// This is the contract the app depends on. It never mentions the generated
 /// swagger_parser types; swapping the underlying generator (retrofit →
@@ -13,5 +15,25 @@ abstract interface class AnimalApiPort {
   Future<List<AnimalDto>> list({int? shelterId, String? search, int? limit, int? offset});
 
   /// Fetches a single animal by its numeric [id].
-  Future<AnimalDto> getById(int id);
+  Future<AnimalDto> getById(int id, {int? shelterId});
+
+  /// Creates an animal from [body]; returns the created (read) animal.
+  Future<AnimalDto> create(AnimalWriteDto body, {int? shelterId});
+
+  /// Replaces the animal [id] with [body]; returns the updated (read) animal.
+  Future<AnimalDto> update(int id, AnimalWriteDto body, {int? shelterId});
+
+  /// Deletes the animal [id].
+  Future<void> delete(int id, {int? shelterId});
+
+  /// Lists species at the given taxonomy [level] (1/2/3), optionally scoped to
+  /// a [parentId], filtered by [search], with [limit]/[offset] pagination.
+  Future<List<SpeciesDto>> listSpecies({
+    required int level,
+    int? parentId,
+    String? search,
+    int? limit,
+    int? offset,
+    int? shelterId,
+  });
 }
