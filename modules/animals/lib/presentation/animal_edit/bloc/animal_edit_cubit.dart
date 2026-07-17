@@ -1,11 +1,8 @@
 import 'package:acits_core/acits_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/animal.dart';
-import '../../../domain/animal_edit_input.dart';
-import '../../../domain/animal_repository.dart';
-import '../../../domain/port/current_shelter_provider.dart';
-import 'animal_edit_state.dart';
+import 'package:animals/domain/domain.dart';
+import 'package:animals/presentation/animal_edit/animal_edit.dart';
 
 /// Cubit экрана создания/редактирования животного.
 ///

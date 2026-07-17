@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'animal_status.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Лёгкая сущность для строки списка: ровно то, что рисует карточка списка
 /// (имя, id, вид «семейство, вид», статус, дата поступления, превью-фото).

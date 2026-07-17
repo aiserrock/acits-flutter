@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'animal_contact.dart';
-import 'animal_image.dart';
-import 'animal_status.dart';
+import 'package:animals/domain/domain.dart';
 
 /// Полная сущность животного для карточки/редактирования.
 ///

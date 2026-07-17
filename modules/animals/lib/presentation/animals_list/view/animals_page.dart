@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/animal_repository.dart';
-import '../../../domain/port/animal_permissions.dart';
-import '../../../domain/port/animal_status_labels.dart';
-import '../../../domain/port/current_shelter_provider.dart';
-import '../../../domain/router/animals_router_service.dart';
-import '../bloc/animals_cubit.dart';
-import 'animals_view.dart';
+import 'package:animals/domain/domain.dart';
+import 'package:animals/presentation/animals_list/animals_list.dart';
 
 /// Точка входа фичи «Список животных». Поднимает [AnimalsCubit] (репозиторий +
 /// текущий приют) и отдаёт его во [AnimalsView]. Зависимости приходят от корня

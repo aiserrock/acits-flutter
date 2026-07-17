@@ -2,8 +2,8 @@ import 'package:acits_core/acits_core.dart';
 import 'package:acits_ui_kit/acits_ui_kit.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/animal_list_item.dart';
-import '../animal_sort_presets.dart';
+import 'package:animals/domain/domain.dart';
+import 'package:animals/presentation/animals_list/animals_list.dart';
 
 /// Состояние экрана списка животных.
 ///

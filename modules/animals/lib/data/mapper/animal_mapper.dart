@@ -1,10 +1,7 @@
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart' show Transformable;
 
-import '../../domain/animal.dart';
-import '../../domain/animal_contact.dart';
-import '../../domain/animal_image.dart';
-import '../../domain/animal_status.dart';
+import 'package:animals/domain/domain.dart';
 
 /// DTO → доменный [Animal] (богатая карточка). Строковые атрибуты API
 /// (sex/color/special_signs и пр.) разворачиваются в [Animal.attributes]

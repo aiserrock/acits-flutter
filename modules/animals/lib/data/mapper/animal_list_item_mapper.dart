@@ -1,8 +1,7 @@
 import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart' show Transformable;
 
-import '../../domain/animal_list_item.dart';
-import '../../domain/animal_status.dart';
+import 'package:animals/domain/domain.dart';
 
 /// DTO → [AnimalListItem]. Отдельный класс-маппер (Transformable), а не метод на
 /// DTO: домен про DTO не знает. Превью берём с приоритетного (или первого) фото.

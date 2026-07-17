@@ -1,5 +1,4 @@
 import 'package:animals/animals.dart';
-import 'package:animals/data/mapper/animal_mapper.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../fixtures/animal_dto_fixtures.dart';
