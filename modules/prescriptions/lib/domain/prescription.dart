@@ -1,7 +1,4 @@
-import 'prescription_drug.dart';
-import 'prescription_execution.dart';
-import 'prescription_file.dart';
-import 'prescription_type.dart';
+import 'package:prescriptions/domain/domain.dart';
 
 /// Доменная модель назначения (рецепта).
 ///

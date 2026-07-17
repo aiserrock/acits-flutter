@@ -1,0 +1,205 @@
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:acits_l10n/acits_l10n.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+
+import 'package:personal/data/data.dart';
+import 'package:personal/domain/domain.dart';
+import 'package:personal/presentation/presentation.dart';
+
+/// Экран личного кабинета пользователя
+class PersonalScreen extends StatelessWidget {
+  const PersonalScreen({required this.service, required this.isChangePass, super.key});
+
+  final PersonalService service;
+  final bool isChangePass;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => PersonalCubit(service),
+      child: _PersonalView(service: service, isChangePass: isChangePass),
+    );
+  }
+}
+
+class _PersonalView extends StatefulWidget {
+  const _PersonalView({required this.service, required this.isChangePass});
+
+  final PersonalService service;
+  final bool isChangePass;
+
+  @override
+  State<_PersonalView> createState() => _PersonalViewState();
+}
+
+class _PersonalViewState extends State<_PersonalView> {
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _fatherNameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _fatherNameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        shadowColor: Colors.transparent,
+        leading: GestureDetector(
+          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
+          onTap: () => Navigator.of(context).pop(),
+        ),
+        title: Text(LocaleKeys.personMyData.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        centerTitle: true,
+      ),
+      floatingActionButton: BlocBuilder<PersonalCubit, PersonalState>(
+        builder: (context, state) =>
+            (state.data.isContent && state.fabVisible) ? _buildFab(context) : const SizedBox.shrink(),
+      ),
+      body: BlocBuilder<PersonalCubit, PersonalState>(
+        builder: (context, state) => DataStateBuilder<UserProfile>(
+          state: state.data,
+          builder: (_, user) => _buildContent(user),
+          loader: (_) => const LoaderHolderWidget(),
+          errorBuilder: (_, e) => ErrorHolderWidget(error: e, onPressed: _init),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent(UserProfile user) {
+    return KeyboardDismissOnTap(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16.0, bottom: 64.0),
+          child: Form(
+            child: Builder(
+              builder: (context) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FormEditCard([
+                      EditCardData(label: LocaleKeys.loginLoginLabel.tr(), enabled: false, initValue: user.username),
+                      EditCardData(
+                        label: LocaleKeys.loginPassLabel.tr(),
+                        enabled: false,
+                        initValue: '••••••••',
+                        suffix: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
+                        onPressed: () => _onPassChange(context),
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorName.tr(),
+                        controller: _firstNameController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorLastName.tr(),
+                        controller: _lastNameController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.regFathersName.tr(),
+                        controller: _fatherNameController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorPhone.tr(),
+                        controller: _phoneController,
+                        onChanged: _onFieldChanged,
+                      ),
+                      EditCardData(
+                        label: LocaleKeys.animalCuratorEmail.tr(),
+                        controller: _emailController,
+                        onChanged: _onFieldChanged,
+                      ),
+                    ]),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.titleMedium),
+                          const LocaleSwitcher(),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFab(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: _submit,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      child: Icon(Icons.done_all, color: Theme.of(context).colorScheme.onPrimary),
+    );
+  }
+
+  void _onFieldChanged(String value) {
+    context.read<PersonalCubit>().onFieldsChanged(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      fathersName: _fatherNameController.text,
+      phoneNumber: _phoneController.text,
+      email: _emailController.text,
+    );
+  }
+
+  void _onPassChange(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => ChangePassWidget(service: widget.service),
+    );
+  }
+
+  Future<void> _init() async {
+    final user = await context.read<PersonalCubit>().load();
+    if (!mounted || user == null) return;
+    _firstNameController.text = user.firstName;
+    _lastNameController.text = user.lastName;
+    _fatherNameController.text = user.fathersName ?? '';
+    _phoneController.text = user.phoneNumber ?? '';
+    _emailController.text = user.email;
+    if (widget.isChangePass) {
+      _onPassChange(context);
+    }
+  }
+
+  void _submit() {
+    context.read<PersonalCubit>().submit(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      fathersName: _fatherNameController.text,
+      phoneNumber: _phoneController.text,
+      email: _emailController.text,
+    );
+  }
+}

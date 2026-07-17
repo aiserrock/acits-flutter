@@ -9,16 +9,6 @@
 /// wire.
 library;
 
-export 'data/prescription_service.dart';
-export 'domain/prescription_animal_loader.dart';
-export 'domain/prescription_barrel.dart';
-export 'domain/prescription_type_labels.dart';
-export 'domain/prescriptions_shelter_provider.dart';
-export 'domain/router/prescriptions_router_service.dart';
-export 'ui/animal_prescriptions/cubit/animal_prescriptions_cubit.dart';
-export 'ui/animal_prescriptions/cubit/animal_prescriptions_state.dart';
-export 'ui/drugs/drugs_screen.dart';
-export 'ui/prescription_edit/cubit/prescription_edit_cubit.dart' show PrescriptionEditCubit, TreatmentPeriod;
-export 'ui/prescription_edit/prescription_edit_screen.dart';
-export 'ui/widgets/animal_prescription_card.dart';
-export 'ui/widgets/prescription_card.dart';
+export 'data/data.dart';
+export 'domain/domain.dart';
+export 'presentation/presentation.dart';

@@ -1,7 +1,6 @@
 import 'package:acits_domain/acits_domain.dart';
 
-import '../drug.dart';
-import '../prescription_animal_ref.dart';
+import 'package:prescriptions/domain/domain.dart';
 
 /// Навигационный контракт фичи «Назначения». Реализация (знающая go_router-пути
 /// приложения) живёт в корневом навигационном слое и инъектится в модуль — так
