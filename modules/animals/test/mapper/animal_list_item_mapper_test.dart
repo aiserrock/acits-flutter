@@ -12,7 +12,9 @@ void main() {
       expect(item.id, 501);
       expect(item.name, 'Барсик');
       expect(item.status, AnimalStatus.inTheShelter);
+      expect(item.speciesParentName, 'Кошки');
       expect(item.speciesName, 'Кошка домашняя');
+      expect(item.dateJoined, DateTime.utc(2024, 1, 15, 10, 30));
       // primary — второе фото (id 9001) → его small
       expect(item.thumbUrl, 'https://cdn.acits.ru/501/small.jpg');
     });
@@ -26,7 +28,10 @@ void main() {
       final item = AnimalListItemMapper(minimalAnimalDto()).toEntity();
       expect(item.thumbUrl, isNull);
       expect(item.name, '');
+      expect(item.speciesParentName, isNull);
       expect(item.speciesName, isNull);
+      // dateJoined всегда присутствует в DTO (required) — маппится напрямую.
+      expect(item.dateJoined, DateTime.utc(2024, 3, 20));
     });
 
     test('null status wire → AnimalStatus.unknown', () {

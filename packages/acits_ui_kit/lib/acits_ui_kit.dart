@@ -11,3 +11,7 @@ export 'src/components/app_bar.dart';
 export 'src/components/text_field.dart';
 export 'src/components/chip.dart';
 export 'src/components/bottom_sheet.dart';
+export 'src/widgets/shimmer_network_image.dart';
+export 'src/widgets/skeleton.dart';
+export 'src/widgets/sort_chips_bar.dart';
+export 'src/widgets/sort_preset.dart';

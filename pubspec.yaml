@@ -40,6 +40,10 @@ dependencies:
   acits_navigation:
     path: packages/acits_navigation
 
+  # Feature module: animals list migrated onto the new stack (Step 8b).
+  animals:
+    path: modules/animals
+
   app_links: ^7.0.0
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0

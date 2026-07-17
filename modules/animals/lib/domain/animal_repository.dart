@@ -8,7 +8,13 @@ import 'animal_species.dart';
 /// Контракт репозитория животных (feature-local). Всё в доменных типах и
 /// [Result]<[Failure], T> — DTO сюда не проникают (остаются в data-слое).
 abstract interface class AnimalRepository {
-  Future<Result<Failure, List<AnimalListItem>>> list({int? shelterId, String? search, int? limit, int? offset});
+  Future<Result<Failure, List<AnimalListItem>>> list({
+    int? shelterId,
+    String? search,
+    String? ordering,
+    int? limit,
+    int? offset,
+  });
 
   Future<Result<Failure, Animal>> getById(int id, {int? shelterId});
 
