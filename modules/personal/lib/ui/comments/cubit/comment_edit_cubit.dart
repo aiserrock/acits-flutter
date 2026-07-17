@@ -1,21 +1,22 @@
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
-import 'package:acits_flutter/ui/screen/comments/cubit/comment_edit_state.dart';
-import 'package:acits_flutter/util/logger/log.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../data/comments_service.dart';
+import '../../../domain/animal_note.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/log.dart';
+import 'comment_edit_state.dart';
 
 /// Cubit экрана добавления/редактирования комментария к животному.
 ///
 /// Управляет прикреплённым файлом и жизненным циклом отправки. Текст
 /// комментария остаётся в [TextEditingController] на стороне виджета.
 class CommentEditCubit extends Cubit<CommentEditState> {
-  CommentEditCubit({required this.animalId, this.comment})
-    : _animalService = getIt<AnimalService>(),
+  CommentEditCubit({required CommentsService service, required this.animalId, this.comment})
+    : _service = service,
       super(const CommentEditState());
 
-  final AnimalService _animalService;
+  final CommentsService _service;
 
   /// ID животного, к которому относится комментарий.
   final int animalId;
@@ -48,8 +49,8 @@ class CommentEditCubit extends Cubit<CommentEditState> {
     final source = comment;
     try {
       final result = source != null
-          ? await _animalService.patchAnimalNote(id: source.id, animalId: source.animal, text: text, files: files)
-          : await _animalService.createAnimalNote(animalId: animalId, text: text, files: files);
+          ? await _service.patchAnimalNote(id: source.id, animalId: source.animal, text: text, files: files)
+          : await _service.createAnimalNote(animalId: animalId, text: text, files: files);
       Log.info('CommentEditCubit.submit ok: id=${result?.id}');
       return result;
     } catch (e, s) {

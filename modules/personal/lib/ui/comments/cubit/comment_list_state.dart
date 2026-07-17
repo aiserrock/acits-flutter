@@ -1,6 +1,7 @@
-import 'package:acits_flutter/util/data_state.dart';
-import 'package:acits_flutter/domain/animal_note/animal_note.dart';
+import 'package:acits_core/acits_core.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../domain/animal_note.dart';
 
 /// Состояние экрана списка комментариев к животному.
 ///

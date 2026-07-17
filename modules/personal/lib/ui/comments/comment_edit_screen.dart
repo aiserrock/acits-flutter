@@ -1,25 +1,31 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/screen/comments/cubit/comment_edit_cubit.dart';
-import 'package:acits_flutter/ui/screen/comments/cubit/comment_edit_state.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/comments_service.dart';
+import '../../domain/animal_note.dart';
+import '../personal_l10n_keys.dart';
+import 'cubit/comment_edit_cubit.dart';
+import 'cubit/comment_edit_state.dart';
+
 const _allowedFileAttachExtensions = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
 
 class CommentEditScreen extends StatelessWidget {
-  const CommentEditScreen({required this.animalId, this.comment, super.key});
+  const CommentEditScreen({required this.service, required this.animalId, this.comment, super.key});
 
+  final CommentsService service;
   final int animalId;
   final AnimalNote? comment;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CommentEditCubit(animalId: animalId, comment: comment),
+      create: (_) => CommentEditCubit(service: service, animalId: animalId, comment: comment),
       child: const _CommentEditView(),
     );
   }
@@ -71,7 +77,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
         onTap: () => Navigator.of(context).pop(),
       ),
       title: Text(
-        cubit.isEdit ? LocaleKeys.commentTitleEdit.tr() : LocaleKeys.commentTitleNew.tr(),
+        cubit.isEdit ? PersonalL10nKeys.commentTitleEdit.tr() : PersonalL10nKeys.commentTitleNew.tr(),
         style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
       ),
       centerTitle: true,
@@ -189,7 +195,9 @@ class _CommentEditViewState extends State<_CommentEditView> {
       Navigator.of(context).pop(comment);
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(LocaleKeys.commonErrorTryAgainMessage.tr())));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(PersonalL10nKeys.commonErrorTryAgainMessage.tr())));
     }
   }
 

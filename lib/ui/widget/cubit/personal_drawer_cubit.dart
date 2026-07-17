@@ -1,8 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/personal.dart' show PersonalService, UserProfile;
 
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/domain/user_profile.dart';
-import 'package:acits_flutter/service/personal/personal_service.dart';
 import 'package:acits_flutter/util/bloc_ext.dart';
 import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/util/logger/log.dart';

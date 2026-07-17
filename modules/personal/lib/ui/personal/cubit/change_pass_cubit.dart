@@ -1,17 +1,16 @@
+import 'package:acits_core/acits_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:acits_flutter/util/bloc_ext.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/service/personal/personal_service.dart';
-import 'package:acits_flutter/util/data_state.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import '../../../data/personal_service.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/log.dart';
 
 /// Cubit смены пароля пользователя.
 ///
 /// Держит только состояние отправки запроса ([DataState]). UI-контроллеры
 /// (поля ввода) остаются во виджете. Начальное состояние — [DataState.content].
 class ChangePassCubit extends Cubit<DataState<void>> {
-  ChangePassCubit() : _personalService = getIt<PersonalService>(), super(const DataState.content(null));
+  ChangePassCubit(this._personalService) : super(const DataState.content(null));
 
   final PersonalService _personalService;
 

@@ -1,36 +1,39 @@
+import 'package:acits_core/acits_core.dart';
+import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-import 'package:acits_flutter/domain/user_profile.dart';
-import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/change_pass_widget.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_cubit.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_state.dart';
-import 'package:acits_flutter/ui/widget/error_holder.dart';
-import 'package:acits_flutter/ui/widget/form_edit_card.dart';
-import 'package:acits_flutter/ui/widget/locale_switcher.dart';
-import 'package:acits_flutter/ui/widget/loader.dart';
+import '../../data/personal_service.dart';
+import '../../domain/user_profile.dart';
+import '../locale_switcher.dart';
+import '../personal_l10n_keys.dart';
+import 'change_pass_widget.dart';
+import 'cubit/personal_cubit.dart';
+import 'cubit/personal_state.dart';
 
 /// Экран личного кабинета пользователя
 class PersonalScreen extends StatelessWidget {
-  const PersonalScreen({required this.isChangePass, super.key});
+  const PersonalScreen({required this.service, required this.isChangePass, super.key});
 
+  final PersonalService service;
   final bool isChangePass;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PersonalCubit(),
-      child: _PersonalView(isChangePass: isChangePass),
+      create: (_) => PersonalCubit(service),
+      child: _PersonalView(service: service, isChangePass: isChangePass),
     );
   }
 }
 
 class _PersonalView extends StatefulWidget {
-  const _PersonalView({required this.isChangePass});
+  const _PersonalView({required this.service, required this.isChangePass});
 
+  final PersonalService service;
   final bool isChangePass;
 
   @override
@@ -71,7 +74,10 @@ class _PersonalViewState extends State<_PersonalView> {
           child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text(LocaleKeys.personMyData.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        title: Text(
+          PersonalL10nKeys.personMyData.tr(),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
         centerTitle: true,
       ),
       floatingActionButton: BlocBuilder<PersonalCubit, PersonalState>(
@@ -101,36 +107,40 @@ class _PersonalViewState extends State<_PersonalView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     FormEditCard([
-                      EditCardData(label: LocaleKeys.loginLoginLabel.tr(), enabled: false, initValue: user.username),
                       EditCardData(
-                        label: LocaleKeys.loginPassLabel.tr(),
+                        label: PersonalL10nKeys.loginLoginLabel.tr(),
+                        enabled: false,
+                        initValue: user.username,
+                      ),
+                      EditCardData(
+                        label: PersonalL10nKeys.loginPassLabel.tr(),
                         enabled: false,
                         initValue: '••••••••',
                         suffix: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
                         onPressed: () => _onPassChange(context),
                       ),
                       EditCardData(
-                        label: LocaleKeys.animalCuratorName.tr(),
+                        label: PersonalL10nKeys.animalCuratorName.tr(),
                         controller: _firstNameController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: LocaleKeys.animalCuratorLastName.tr(),
+                        label: PersonalL10nKeys.animalCuratorLastName.tr(),
                         controller: _lastNameController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: LocaleKeys.regFathersName.tr(),
+                        label: PersonalL10nKeys.regFathersName.tr(),
                         controller: _fatherNameController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: LocaleKeys.animalCuratorPhone.tr(),
+                        label: PersonalL10nKeys.animalCuratorPhone.tr(),
                         controller: _phoneController,
                         onChanged: _onFieldChanged,
                       ),
                       EditCardData(
-                        label: LocaleKeys.animalCuratorEmail.tr(),
+                        label: PersonalL10nKeys.animalCuratorEmail.tr(),
                         controller: _emailController,
                         onChanged: _onFieldChanged,
                       ),
@@ -140,7 +150,7 @@ class _PersonalViewState extends State<_PersonalView> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.titleMedium),
+                          Text(PersonalL10nKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.titleMedium),
                           const LocaleSwitcher(),
                         ],
                       ),
@@ -174,7 +184,10 @@ class _PersonalViewState extends State<_PersonalView> {
   }
 
   void _onPassChange(BuildContext context) {
-    showCupertinoDialog(context: context, builder: (_) => const ChangePassWidget());
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => ChangePassWidget(service: widget.service),
+    );
   }
 
   Future<void> _init() async {

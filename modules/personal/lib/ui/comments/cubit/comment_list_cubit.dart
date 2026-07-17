@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/domain/animal_note/animal_note.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
-import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_state.dart';
-import 'package:acits_flutter/util/data_state.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import 'package:acits_core/acits_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:acits_flutter/util/bloc_ext.dart';
+
+import '../../../data/comments_service.dart';
+import '../../../domain/animal_note.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/log.dart';
+import 'comment_list_state.dart';
 
 /// Cubit экрана списка комментариев к животному.
 ///
@@ -18,14 +18,17 @@ import 'package:acits_flutter/util/bloc_ext.dart';
 /// закрытый subject после dispose. ScrollController остаётся во
 /// [StatefulWidget] экрана.
 class CommentListCubit extends Cubit<CommentListState> {
-  CommentListCubit({required this.animalId, Stream<AnimalNote>? onCreateCommentStream})
-    : _animalService = getIt<AnimalService>(),
-      super(const CommentListState()) {
+  CommentListCubit({
+    required CommentsService service,
+    required this.animalId,
+    Stream<AnimalNote>? onCreateCommentStream,
+  }) : _service = service,
+       super(const CommentListState()) {
     _createCommentSub = onCreateCommentStream?.listen(_onCreateComment);
     _init();
   }
 
-  final AnimalService _animalService;
+  final CommentsService _service;
 
   /// ID животного, к которому относятся комментарии.
   final int animalId;
@@ -55,7 +58,7 @@ class CommentListCubit extends Cubit<CommentListState> {
     Log.debug('CommentListCubit.init animalId=$animalId');
     safeEmit(state.copyWith(data: const DataState.loading()));
     try {
-      final results = await _animalService.fetchAnimalNotes(animalId);
+      final results = await _service.fetchAnimalNotes(animalId);
       Log.info('CommentListCubit.init ok: count=${results.length}');
       safeEmit(state.copyWith(data: DataState.content(_sorted(results))));
     } catch (e, s) {
@@ -71,7 +74,7 @@ class CommentListCubit extends Cubit<CommentListState> {
     Log.debug('CommentListCubit.loadNextPage animalId=$animalId offset=${current.length}');
     safeEmit(state.copyWith(page: const DataState.loading()));
     try {
-      final value = await _animalService.fetchAnimalNotes(animalId, offset: current.length);
+      final value = await _service.fetchAnimalNotes(animalId, offset: current.length);
       final newList = <AnimalNote>[...current, ...value];
       Log.info('CommentListCubit.loadNextPage ok: count=${newList.length}');
       safeEmit(state.copyWith(data: DataState.content(_sorted(newList)), page: const DataState.content(null)));
@@ -88,7 +91,7 @@ class CommentListCubit extends Cubit<CommentListState> {
   Future<bool> deleteComment(AnimalNote comment) async {
     Log.debug('CommentListCubit.deleteComment id=${comment.id}');
     try {
-      await _animalService.deleteAnimalNote(id: comment.id);
+      await _service.deleteAnimalNote(id: comment.id);
       final current = state.data.valueOrNull;
       if (current != null) {
         final newList = List<AnimalNote>.from(current)..remove(comment);

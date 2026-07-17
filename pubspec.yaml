@@ -21,6 +21,7 @@ workspace:
   - modules/auth
   - modules/applicants
   - modules/prescriptions
+  - modules/personal
 
 dependencies:
   flutter:
@@ -62,6 +63,12 @@ dependencies:
   # prescriptions tab, and the search paging adapter (drug search).
   prescriptions:
     path: modules/prescriptions
+
+  # Feature module: personal cabinet + calendar + animal comments. PersonalService
+  # (profile) and CommentsService (animal notes) live here; consumed by the app
+  # shell/drawer, the personal screen, and the animal-detail comments tab.
+  personal:
+    path: modules/personal
 
   app_links: ^7.0.0
   bloc: ^9.2.0

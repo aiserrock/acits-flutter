@@ -1,26 +1,18 @@
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/domain/animal_note/animal_note.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
-import 'package:acits_flutter/ui/screen/comments/cubit/comment_list_cubit.dart';
-import 'package:acits_flutter/util/data_state.dart';
+import 'package:acits_core/acits_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:personal/personal.dart';
 
-class MockAnimalService extends Mock implements AnimalService {}
+class MockCommentsService extends Mock implements CommentsService {}
 
 AnimalNote _note(int id, {DateTime? createdAt}) =>
     AnimalNote(id: id, animal: 501, content: 'c$id', createdAt: createdAt ?? DateTime.utc(2024, 5, id));
 
 void main() {
-  late MockAnimalService service;
+  late MockCommentsService service;
 
   setUp(() {
-    service = MockAnimalService();
-    getIt.registerFactory<AnimalService>(() => service);
-  });
-
-  tearDown(() async {
-    await getIt.reset();
+    service = MockCommentsService();
   });
 
   test('init loads notes sorted newest-first', () async {
@@ -32,7 +24,7 @@ void main() {
       ),
     ).thenAnswer((_) async => [_note(1), _note(3), _note(2)]);
 
-    final cubit = CommentListCubit(animalId: 501);
+    final cubit = CommentListCubit(service: service, animalId: 501);
     await Future<void>.delayed(Duration.zero);
 
     final data = cubit.state.data.valueOrNull;
@@ -50,7 +42,7 @@ void main() {
       ),
     ).thenThrow(Exception('boom'));
 
-    final cubit = CommentListCubit(animalId: 501);
+    final cubit = CommentListCubit(service: service, animalId: 501);
     await Future<void>.delayed(Duration.zero);
 
     expect(cubit.state.data, isA<DataError>());
@@ -66,7 +58,7 @@ void main() {
     ).thenAnswer((_) async => [_note(1), _note(2)]);
     when(() => service.deleteAnimalNote(id: any(named: 'id'))).thenAnswer((_) async => true);
 
-    final cubit = CommentListCubit(animalId: 501);
+    final cubit = CommentListCubit(service: service, animalId: 501);
     await Future<void>.delayed(Duration.zero);
 
     final ok = await cubit.deleteComment(_note(2));

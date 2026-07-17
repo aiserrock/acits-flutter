@@ -1,17 +1,16 @@
+import 'package:acits_core/acits_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/domain/user_profile.dart';
-import 'package:acits_flutter/service/personal/personal_service.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/cubit/personal_state.dart';
-import 'package:acits_flutter/util/bloc_ext.dart';
-import 'package:acits_flutter/util/data_state.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import '../../../data/personal_service.dart';
+import '../../../domain/user_profile.dart';
+import '../../../util/bloc_ext.dart';
+import '../../../util/log.dart';
+import 'personal_state.dart';
 
 /// Cubit экрана личного кабинета. Загружает данные пользователя и сохраняет
 /// изменённые поля. UI-контроллеры (TextEditingController) живут в виджете.
 class PersonalCubit extends Cubit<PersonalState> {
-  PersonalCubit() : _personalService = getIt<PersonalService>(), super(const PersonalState.loading());
+  PersonalCubit(this._personalService) : super(const PersonalState.loading());
 
   final PersonalService _personalService;
 

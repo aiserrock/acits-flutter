@@ -13,16 +13,15 @@ import 'package:prescriptions/prescriptions.dart'
         PrescriptionService,
         PrescriptionTypeLabels,
         PrescriptionsRouterService;
-import 'package:acits_flutter/domain/animal_note/animal_note.dart';
+import 'package:personal/personal.dart'
+    show AnimalNote, CommentEditScreen, CommentsService, PersonalScreen, PersonalService;
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/auth_screen_bindings.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
 import 'package:acits_flutter/service/document/pdf_doc_mixin.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/animal_edit_screen.dart';
-import 'package:acits_flutter/ui/screen/comments/comment_edit_screen.dart';
 import 'package:acits_flutter/ui/screen/doc_viewer/doc_viewer_screen.dart';
-import 'package:acits_flutter/ui/screen/personal_screen/personal_screen.dart';
 import 'package:acits_flutter/ui/screen/photo_gallery/photo_gallery_screen.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
 import 'package:acits_flutter/ui/screen/search_screen/search.dart';
@@ -118,6 +117,7 @@ GoRouter createAppRouter() {
       GoRoute(
         path: AppRoutes.commentEdit,
         builder: (context, state) => CommentEditScreen(
+          service: getIt<CommentsService>(),
           animalId: int.parse(state.pathParameters['animalId']!),
           comment: state.extra as AnimalNote?,
         ),
@@ -156,7 +156,10 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.personal,
-        builder: (context, state) => PersonalScreen(isChangePass: state.uri.queryParameters['changePass'] == 'true'),
+        builder: (context, state) => PersonalScreen(
+          service: getIt<PersonalService>(),
+          isChangePass: state.uri.queryParameters['changePass'] == 'true',
+        ),
       ),
       GoRoute(
         path: AppRoutes.pickShelter,
