@@ -6,6 +6,7 @@ library;
 
 export 'src/entity/animal.dart';
 export 'src/entity/animal_sex.dart';
+export 'src/exception/exception.dart';
 export 'src/entity/applicant.dart';
 export 'src/entity/current_shelter_role.dart';
 export 'src/entity/curator.dart';

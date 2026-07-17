@@ -18,6 +18,7 @@ workspace:
   - packages/acits_ui_kit
   - packages/acits_navigation
   - modules/animals
+  - modules/auth
 
 dependencies:
   flutter:
@@ -43,6 +44,11 @@ dependencies:
   # Feature module: animals list migrated onto the new stack (Step 8b).
   animals:
     path: modules/animals
+
+  # Feature module: auth (login/registration/splash/onboarding/pick-shelter).
+  # Session state stays in the app behind AuthSessionApi (implemented by AuthService).
+  auth:
+    path: modules/auth
 
   app_links: ^7.0.0
   bloc: ^9.2.0
