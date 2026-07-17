@@ -10,23 +10,6 @@
 /// to wire.
 library;
 
-export 'data/comments_service.dart';
-export 'data/personal_service.dart';
-export 'domain/animal_note.dart';
-export 'domain/animal_note_file.dart';
-export 'domain/comment_file_opener.dart';
-export 'domain/personal_shelter_provider.dart';
-export 'domain/router/personal_router_service.dart';
-export 'domain/user_profile.dart';
-export 'ui/calendar/calendar_screen.dart';
-export 'ui/comments/comment_edit_screen.dart';
-export 'ui/comments/comment_list.dart';
-export 'ui/comments/cubit/comment_edit_cubit.dart';
-export 'ui/comments/cubit/comment_edit_state.dart';
-export 'ui/comments/cubit/comment_list_cubit.dart';
-export 'ui/comments/cubit/comment_list_state.dart';
-export 'ui/personal/change_pass_widget.dart';
-export 'ui/personal/cubit/change_pass_cubit.dart';
-export 'ui/personal/cubit/personal_cubit.dart';
-export 'ui/personal/cubit/personal_state.dart';
-export 'ui/personal/personal_screen.dart';
+export 'data/data.dart';
+export 'domain/domain.dart';
+export 'presentation/presentation.dart';

@@ -7,10 +7,6 @@
 /// contracts are exported for the root app to wire.
 library;
 
-export 'data/staff_service.dart';
-export 'domain/applicants_router_service.dart';
-export 'domain/applicants_shelter_provider.dart';
-export 'ui/applicant/applicant_edit_screen.dart';
-export 'ui/applicant/cubit/applicant_edit_cubit.dart';
-export 'ui/curator/cubit/curator_edit_cubit.dart';
-export 'ui/curator/curator_edit_screen.dart';
+export 'data/data.dart';
+export 'domain/domain.dart';
+export 'presentation/presentation.dart';

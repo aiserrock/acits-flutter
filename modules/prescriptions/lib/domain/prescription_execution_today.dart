@@ -1,6 +1,4 @@
-import 'animal_short.dart';
-import 'prescription_drug.dart';
-import 'prescription_type.dart';
+import 'package:prescriptions/domain/domain.dart';
 
 /// Компактное назначение внутри исполнения «на сегодня» (главный экран).
 ///

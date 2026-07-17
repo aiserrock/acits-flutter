@@ -1,4 +1,4 @@
-import 'prescription_animal_ref.dart';
+import 'package:prescriptions/domain/domain.dart';
 
 /// Порт загрузки животного для экрана редактора назначения.
 ///

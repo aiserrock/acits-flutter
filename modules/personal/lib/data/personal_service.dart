@@ -2,9 +2,8 @@ import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart' show MessagedException;
 import 'package:dio/dio.dart';
 
-import '../domain/personal_shelter_provider.dart';
-import '../domain/user_profile.dart';
-import '../util/log.dart';
+import 'package:personal/domain/domain.dart';
+import 'package:personal/util/util.dart';
 
 /// Сервис профиля текущего пользователя.
 ///

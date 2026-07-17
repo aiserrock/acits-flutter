@@ -1,9 +1,9 @@
 import 'package:acits_domain/acits_domain.dart';
 import 'package:animals/animals.dart' show AnimalSpecies;
 
-import '../pdf_doc_mixin.dart' show PdfDocFetcher;
+import 'package:media/domain/domain.dart' show PdfDocFetcher;
 
-export '../pdf_doc_mixin.dart' show PdfDocFetcher;
+export 'package:media/domain/domain.dart' show PdfDocFetcher;
 
 /// Навигационный контракт медиа-фичи. Реализация (знающая go_router-пути
 /// приложения) живёт в корневом навигационном слое и инъектится потребителям —

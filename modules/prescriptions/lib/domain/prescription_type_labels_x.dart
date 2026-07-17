@@ -2,10 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get_it/get_it.dart';
 import 'package:acits_l10n/acits_l10n.dart';
 
-import 'prescription.dart';
-import 'prescription_execution_today.dart';
-import 'prescription_type.dart';
-import 'prescription_type_labels.dart';
+import 'package:prescriptions/domain/domain.dart';
 
 /// UI-расширения для человекочитаемого имени типа назначения.
 ///

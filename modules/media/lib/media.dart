@@ -11,27 +11,6 @@
 /// cycle: those modules do not import media.
 library;
 
-// Data
-export 'data/document_repository.dart';
-
-// Domain: ports + router contract + pdf fetcher typedef
-export 'domain/pdf_doc_mixin.dart' show PdfDocFetcher, PdfDocumentMixin;
-export 'domain/port/doc_exporter_port.dart';
-export 'domain/port/media_shelter_provider.dart';
-export 'domain/port/pdfjs_ready_port.dart';
-export 'domain/router/media_router_service.dart';
-
-// Domain: photo gallery item model (consumed by cubit; exported for tests)
-export 'domain/gallery_item_data.dart';
-
-// UI: screens
-export 'ui/doc_viewer/cubit/doc_viewer_cubit.dart';
-export 'ui/doc_viewer/doc_viewer_screen.dart';
-export 'ui/photo_editor/photo_editor_screen.dart';
-export 'ui/photo_gallery/cubit/photo_gallery_cubit.dart';
-export 'ui/photo_gallery/cubit/photo_gallery_state.dart';
-export 'ui/photo_gallery/photo_gallery_screen.dart';
-export 'ui/search/cubit/search_spec_cubit.dart';
-export 'ui/search/cubit/search_spec_state.dart';
-export 'ui/search/search.dart' show Search, SearchTypeKey, SearchDeps, PagingFetchAdapter;
-export 'ui/search/search_spec_screen.dart';
+export 'data/data.dart';
+export 'domain/domain.dart';
+export 'presentation/presentation.dart';

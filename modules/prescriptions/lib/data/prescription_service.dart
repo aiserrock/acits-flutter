@@ -2,17 +2,8 @@ import 'package:acits_api/acits_api.dart';
 import 'package:acits_domain/acits_domain.dart' show MessagedException;
 import 'package:dio/dio.dart';
 
-import '../domain/animal_short.dart';
-import '../domain/drug.dart';
-import '../domain/prescription.dart';
-import '../domain/prescription_drug.dart';
-import '../domain/prescription_execution.dart';
-import '../domain/prescription_execution_today.dart';
-import '../domain/prescription_file.dart';
-import '../domain/prescription_type.dart';
-import '../domain/prescription_type_labels.dart';
-import '../domain/prescriptions_shelter_provider.dart';
-import '../util/log.dart';
+import 'package:prescriptions/domain/domain.dart';
+import 'package:prescriptions/util/util.dart';
 
 /// Сервис назначений.
 ///

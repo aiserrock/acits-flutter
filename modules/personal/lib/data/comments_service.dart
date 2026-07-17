@@ -8,10 +8,8 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 
-import '../domain/animal_note.dart';
-import '../domain/animal_note_file.dart';
-import '../domain/personal_shelter_provider.dart';
-import '../util/log.dart';
+import 'package:personal/domain/domain.dart';
+import 'package:personal/util/util.dart';
 
 const _notesListLimit = 25;
 
