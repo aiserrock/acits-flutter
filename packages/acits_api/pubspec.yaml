@@ -17,8 +17,8 @@ dependencies:
   # Runtime annotations for the swagger_parser-generated Retrofit clients.
   # Isolated to the adapter layer — ports/DTOs never touch retrofit.
   retrofit: ^4.4.1
-  acits_core:
-    path: ../acits_core
+  base:
+    path: ../../modules/base
 
 dev_dependencies:
   flutter_test:

@@ -50,7 +50,7 @@ class AuthInterceptor extends Interceptor {
   final SessionInvalidator _sessionInvalidator;
   final RefreshCoordinator _coordinator;
 
-  static const _retriedFlag = 'acits_core.auth_retried';
+  static const _retriedFlag = 'base.auth_retried';
 
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {

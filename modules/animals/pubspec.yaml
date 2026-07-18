@@ -17,8 +17,8 @@ dependencies:
   dio: ^5.9.2
   easy_localization: ^3.0.8
   flutter_slidable: ^4.0.3
-  acits_core:
-    path: ../../packages/acits_core
+  base:
+    path: ../base
   l10n:
     path: ../l10n
   acits_domain:

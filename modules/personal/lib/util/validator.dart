@@ -1,7 +1,3 @@
-/// Валидаторы форм модуля «Личный кабинет».
-///
-/// Перенесены из app `util/validator.dart` (только используемое подмножество —
-/// смена пароля), чтобы модуль не тянул приложение.
-abstract class Validator {
-  static String? emptyValidator(String? value) => (value?.isNotEmpty ?? false) ? null : '';
-}
+// Каноничная версия — в base (супермножество). Ре-экспорт сохраняет импорты
+// `package:<module>/util/validator.dart` рабочими и убирает дублирование.
+export 'package:base/base.dart' show Validator;

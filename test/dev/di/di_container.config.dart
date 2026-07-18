@@ -10,7 +10,6 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:acits_api/acits_api.dart' as _i101;
-import 'package:acits_core/acits_core.dart' as _i354;
 import 'package:acits_flutter/domain/env.dart' as _i531;
 import 'package:acits_flutter/navigation/animals_router_service.dart' as _i514;
 import 'package:acits_flutter/navigation/applicants_router_service.dart'
@@ -56,6 +55,7 @@ import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
 import 'package:animals/animals.dart' as _i616;
 import 'package:applicants/applicants.dart' as _i20;
 import 'package:auth/auth.dart' as _i662;
+import 'package:base/base.dart' as _i905;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
@@ -94,9 +94,9 @@ Future<_i174.GetIt> $initDevGetIt(
   final acitsApiRegisterDev = _$AcitsApiRegisterDev();
   final acitsApiRegister = _$AcitsApiRegister();
   final animalsRegister = _$AnimalsRegister();
+  final applicantsRegister = _$ApplicantsRegister();
   final personalRegister = _$PersonalRegister();
   final mediaRegister = _$MediaRegister();
-  final applicantsRegister = _$ApplicantsRegister();
   final prescriptionsRegister = _$PrescriptionsRegister();
   gh.factory<_i558.FlutterSecureStorage>(
     () => secureStorageRegister.createSp(),
@@ -114,12 +114,16 @@ Future<_i174.GetIt> $initDevGetIt(
     () => const _i176.PersonalRouterServiceImpl(),
   );
   gh.factory<_i662.SplashNavigator>(() => const _i501.SplashNavigatorImpl());
+  gh.factory<_i905.SessionInvalidator>(
+    () => const _i350.AuthServiceSessionInvalidator(),
+  );
   gh.factory<_i20.ApplicantsRouterService>(
     () => const _i314.ApplicantsRouterServiceImpl(),
   );
-  gh.factory<_i354.TokenRefresher>(
-    () => const _i350.AuthServiceTokenRefresher(),
+  gh.factory<_i905.LocaleProvider>(
+    () => const _i350.ConfigServiceLocaleProvider(),
   );
+  gh.factory<_i905.TokenStore>(() => const _i350.AuthServiceTokenStore());
   gh.factory<_i531.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i361.Dio>(
     () => dioRegisterDev.createDioClient(),
@@ -136,18 +140,14 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.factory<_i616.AnimalsRouterService>(
     () => _i514.AnimalsRouterServiceImpl(gh<_i876.AnimalService>()),
   );
-  gh.factory<_i354.DocumentExportService>(
+  gh.factory<_i905.DocumentExportService>(
     () => _i109.DocumentExportServiceBridge(),
-  );
-  gh.factory<_i354.SessionInvalidator>(
-    () => const _i350.AuthServiceSessionInvalidator(),
   );
   gh.factory<_i662.AuthRouterService>(
     () => const _i501.AuthRouterServiceImpl(),
   );
-  gh.factory<_i354.TokenStore>(() => const _i350.AuthServiceTokenStore());
-  gh.factory<_i354.LocaleProvider>(
-    () => const _i350.ConfigServiceLocaleProvider(),
+  gh.factory<_i905.TokenRefresher>(
+    () => const _i350.AuthServiceTokenRefresher(),
   );
   gh.factory<_i249.MediaRouterService>(
     () => const _i561.MediaRouterServiceImpl(),
@@ -179,35 +179,23 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i531.Env>(() => envRegistrer.createEnv(), registerFor: {_prod});
   gh.factory<_i361.Dio>(
-    () => acitsApiRegisterDev.createAcitsApiDio(
-      gh<_i354.TokenStore>(),
-      gh<_i354.TokenRefresher>(),
-      gh<_i354.SessionInvalidator>(),
-      gh<_i354.LocaleProvider>(),
-      gh<_i531.Env>(),
-      gh<_i1058.DebugPreferenceStorage>(),
-    ),
-    instanceName: 'acitsApi',
-    registerFor: {_dev},
-  );
-  gh.factory<_i101.AnimalsClient>(
-    () => acitsApiRegisterDev.animalsClient(
-      gh<_i361.Dio>(instanceName: 'acitsApi'),
-    ),
-    registerFor: {_dev},
-  );
-  gh.factory<_i101.UsersClient>(
-    () => acitsApiRegisterDev.usersClient(
-      gh<_i361.Dio>(instanceName: 'acitsApi'),
-    ),
-    registerFor: {_dev},
-  );
-  gh.factory<_i361.Dio>(
     () => acitsApiRegisterDev.createAcitsApiGuestDio(
       gh<_i531.Env>(),
       gh<_i1058.DebugPreferenceStorage>(),
     ),
     instanceName: 'acitsApiGuest',
+    registerFor: {_dev},
+  );
+  gh.factory<_i361.Dio>(
+    () => acitsApiRegisterDev.createAcitsApiDio(
+      gh<_i905.TokenStore>(),
+      gh<_i905.TokenRefresher>(),
+      gh<_i905.SessionInvalidator>(),
+      gh<_i905.LocaleProvider>(),
+      gh<_i531.Env>(),
+      gh<_i1058.DebugPreferenceStorage>(),
+    ),
+    instanceName: 'acitsApi',
     registerFor: {_dev},
   );
   gh.factory<_i101.TokenClient>(
@@ -219,21 +207,14 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i361.Dio>(
     () => acitsApiRegister.createAcitsApiDio(
-      gh<_i354.TokenStore>(),
-      gh<_i354.TokenRefresher>(),
-      gh<_i354.SessionInvalidator>(),
-      gh<_i354.LocaleProvider>(),
+      gh<_i905.TokenStore>(),
+      gh<_i905.TokenRefresher>(),
+      gh<_i905.SessionInvalidator>(),
+      gh<_i905.LocaleProvider>(),
       gh<_i531.Env>(),
     ),
     instanceName: 'acitsApi',
     registerFor: {_prod},
-  );
-  gh.factory<_i101.AnimalApiPort>(
-    () => acitsApiRegisterDev.animalApiPort(
-      gh<_i361.Dio>(instanceName: 'acitsApi'),
-      gh<_i101.AnimalsClient>(),
-    ),
-    registerFor: {_dev},
   );
   gh.factory<_i101.AnimalsClient>(
     () =>
@@ -328,11 +309,20 @@ Future<_i174.GetIt> $initDevGetIt(
     ),
     registerFor: {_prod},
   );
-  gh.factory<_i616.AnimalRemoteDataSource>(
-    () => animalsRegister.animalRemoteDataSource(gh<_i101.AnimalApiPort>()),
-  );
   gh.factory<_i1007.CommentFileOpener>(
     () => _i220.FileServiceCommentFileOpener(gh<_i499.FileService>()),
+  );
+  gh.factory<_i101.AnimalsClient>(
+    () => acitsApiRegisterDev.animalsClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i101.UsersClient>(
+    () => acitsApiRegisterDev.usersClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_dev},
   );
   gh.factory<_i101.PrescriptionApiPort>(
     () => acitsApiRegister.prescriptionApiPort(
@@ -378,8 +368,12 @@ Future<_i174.GetIt> $initDevGetIt(
     ),
     registerFor: {_prod},
   );
-  gh.factory<_i616.AnimalRepository>(
-    () => animalsRegister.animalRepository(gh<_i616.AnimalRemoteDataSource>()),
+  gh.factory<_i101.AnimalApiPort>(
+    () => acitsApiRegisterDev.animalApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i101.AnimalsClient>(),
+    ),
+    registerFor: {_dev},
   );
   gh.factory<_i101.ProfileApiPort>(
     () => acitsApiRegister.profileApiPort(
@@ -406,11 +400,23 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i2.PreferenceStorage>(),
     ),
   );
+  gh.factory<_i616.AnimalRemoteDataSource>(
+    () => animalsRegister.animalRemoteDataSource(gh<_i101.AnimalApiPort>()),
+  );
   gh.singleton<_i245.ConfigService>(
     () => _i245.ConfigService(
       gh<_i101.SelectionApiPort>(),
       gh<_i21.AuthService>(),
       gh<_i2.PreferenceStorage>(),
+    ),
+  );
+  gh.factory<_i616.AnimalRepository>(
+    () => animalsRegister.animalRepository(gh<_i616.AnimalRemoteDataSource>()),
+  );
+  gh.factory<_i857.PrescriptionAnimalLoader>(
+    () => _i71.AnimalRepositoryPrescriptionAnimalLoader(
+      gh<_i616.AnimalRepository>(),
+      gh<_i21.AuthService>(),
     ),
   );
   gh.factory<_i616.AnimalPermissions>(
@@ -421,12 +427,6 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i249.MediaShelterProvider>(
     () => _i466.AuthServiceMediaShelter(gh<_i21.AuthService>()),
-  );
-  gh.factory<_i857.PrescriptionAnimalLoader>(
-    () => _i71.AnimalRepositoryPrescriptionAnimalLoader(
-      gh<_i616.AnimalRepository>(),
-      gh<_i21.AuthService>(),
-    ),
   );
   gh.factory<_i857.PrescriptionsShelterProvider>(
     () => _i71.AuthServicePrescriptionsShelter(gh<_i21.AuthService>()),
@@ -440,6 +440,12 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.factory<_i616.CurrentShelterProvider>(
     () => _i434.AuthServiceCurrentShelter(gh<_i21.AuthService>()),
   );
+  gh.singleton<_i20.StaffService>(
+    () => applicantsRegister.staffService(
+      gh<_i20.ApplicantsShelterProvider>(),
+      gh<_i101.StaffApiPort>(),
+    ),
+  );
   gh.factory<_i1007.PersonalShelterProvider>(
     () => _i220.AuthServicePersonalShelter(gh<_i21.AuthService>()),
   );
@@ -449,22 +455,10 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i1007.PersonalShelterProvider>(),
     ),
   );
-  gh.singleton<_i1007.PersonalService>(
-    () => personalRegister.personalService(
-      gh<_i101.ProfileApiPort>(),
-      gh<_i1007.PersonalShelterProvider>(),
-    ),
-  );
   gh.factory<_i249.DocumentRepository>(
     () => mediaRegister.documentRepository(
       gh<_i616.AnimalRepository>(),
       gh<_i616.CurrentShelterProvider>(),
-    ),
-  );
-  gh.singleton<_i20.StaffService>(
-    () => applicantsRegister.staffService(
-      gh<_i20.ApplicantsShelterProvider>(),
-      gh<_i101.StaffApiPort>(),
     ),
   );
   gh.singleton<_i857.PrescriptionService>(
@@ -472,6 +466,12 @@ Future<_i174.GetIt> $initDevGetIt(
       gh<_i101.PrescriptionApiPort>(),
       gh<_i857.PrescriptionsShelterProvider>(),
       gh<_i857.PrescriptionTypeLabels>(),
+    ),
+  );
+  gh.singleton<_i1007.PersonalService>(
+    () => personalRegister.personalService(
+      gh<_i101.ProfileApiPort>(),
+      gh<_i1007.PersonalShelterProvider>(),
     ),
   );
   gh.factory<_i249.SearchDeps>(
@@ -507,10 +507,10 @@ class _$AcitsApiRegister extends _i382.AcitsApiRegister {}
 
 class _$AnimalsRegister extends _i286.AnimalsRegister {}
 
+class _$ApplicantsRegister extends _i144.ApplicantsRegister {}
+
 class _$PersonalRegister extends _i220.PersonalRegister {}
 
 class _$MediaRegister extends _i466.MediaRegister {}
-
-class _$ApplicantsRegister extends _i144.ApplicantsRegister {}
 
 class _$PrescriptionsRegister extends _i71.PrescriptionsRegister {}

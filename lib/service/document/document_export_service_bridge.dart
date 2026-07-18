@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/service/document/doc_exporter/doc_exporter.dart';
@@ -8,7 +8,7 @@ import 'package:acits_flutter/service/document/share_text/share_text_stub.dart'
     if (dart.library.js_interop) 'package:acits_flutter/service/document/share_text/share_text_web.dart'
     if (dart.library.io) 'package:acits_flutter/service/document/share_text/share_text_io.dart';
 
-/// Реализация порта [DocumentExportService] (acits_core) поверх существующего
+/// Реализация порта [DocumentExportService] (base) поверх существующего
 /// [DocExporter] приложения (io/web conditional import уже внутри него).
 ///
 /// Регистрируется в DI рядом с текущим стеком; фичи пока используют [DocExporter]

@@ -13,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   equatable: ^2.0.8
-  acits_core:
-    path: ../acits_core
+  base:
+    path: ../../modules/base
 
 dev_dependencies:
   flutter_test:

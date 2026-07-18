@@ -16,8 +16,8 @@ dependencies:
   equatable: ^2.0.8
   dio: ^5.9.2
   easy_localization: ^3.0.8
-  acits_core:
-    path: ../../packages/acits_core
+  base:
+    path: ../../base
   acits_domain:
     path: ../../packages/acits_domain
   acits_api:

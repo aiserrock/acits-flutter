@@ -1,4 +1,4 @@
-// Порты, от которых зависят интерцепторы. Инъектятся снаружи — сам acits_core
+// Порты, от которых зависят интерцепторы. Инъектятся снаружи — сам base
 // не тянет GetIt/injectable и не знает про конкретный AuthService.
 
 abstract interface class TokenStore {

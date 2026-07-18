@@ -27,8 +27,8 @@ dependencies:
   pdfx: ^2.9.2
   image: ^4.8.0
   image_picker: ^1.2.1
-  acits_core:
-    path: ../../packages/acits_core
+  base:
+    path: ../base
   l10n:
     path: ../l10n
   acits_domain:

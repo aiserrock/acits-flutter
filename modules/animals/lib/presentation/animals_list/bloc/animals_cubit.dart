@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:ui_kit/acits_ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
