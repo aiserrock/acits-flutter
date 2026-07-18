@@ -17,13 +17,17 @@ dependencies:
   dio: ^5.9.2
   easy_localization: ^3.0.8
   util:
-    path: ../../util
+    path: ../base/util
+  network:
+    path: ../base/network
   core:
-    path: ../../modules/core
-  acits_ui_kit:
-    path: ../../packages/acits_ui_kit
-  acits_navigation:
-    path: ../../packages/acits_navigation
+    path: ../base/core
+  navigation:
+    path: ../base/navigation
+  localization:
+    path: ../base/localization
+  ui_kit:
+    path: ../ui_kit
 
 dev_dependencies:
   flutter_test:
