@@ -68,6 +68,8 @@ class _Frame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: SizedBox(width: 360.0, height: 440.0, child: child));
+    // Ширина ограничена (Lottie сайзится как min(h,w)*0.75 → от ширины), высота
+    // с запасом, чтобы non-scrollable Column виджета не переполнялась.
+    return Center(child: SizedBox(width: 360.0, height: 560.0, child: child));
   }
 }

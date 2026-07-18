@@ -11,6 +11,9 @@
 /// dependency's injectables. NO dependency on `package:acits_flutter/...`.
 library;
 
+// App composition root (MaterialApp.router + theme + localization + phone frame).
+export 'app_scaffold.dart';
+
 // Navigation surface.
 export 'navigation/navigation.dart';
 

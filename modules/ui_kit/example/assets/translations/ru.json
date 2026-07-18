@@ -1,0 +1,17 @@
+{
+  "commonCancel": "Отмена",
+  "commonError": "Ошибка",
+  "commonErrorStubMsg": "Не удалось загрузить данные.\nПожалуйста, попробуйте еще раз.",
+  "commonErrorStubTitle": "Ой, что-то пошло не так...",
+  "commonReloadBtn": "Обновить",
+  "commonRepeat": "Повторить",
+  "commonSort": "Сортировка",
+  "sortByName": "По имени",
+  "sortByNameDesc": "По имени ↓",
+  "sortNewest": "Сначала новые",
+  "sortOldest": "Сначала старые",
+  "sortByAge": "По возрасту",
+  "errorDefaultMsg": "Что-то пошло не так, попробуйте еще раз позже",
+  "errorInternetFail": "Нет интернета :(",
+  "errorInternetFailMsg": "Неустойчивое соединение, попробуйте еще раз позже"
+}
