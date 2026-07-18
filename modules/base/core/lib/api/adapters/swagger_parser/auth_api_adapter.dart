@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../ports/auth_api_port.dart';
 import '../../ports/dto/current_shelter_dto.dart';
 import '../../ports/dto/shelter_short_dto.dart';
@@ -14,7 +16,6 @@ import 'generated/clients/users_registration_client.dart';
 import 'generated/models/role_enum.dart';
 import 'generated/models/shelter_serializers.dart';
 import 'generated/models/shelter_short_serializers.dart';
-import 'generated/models/token_obtain_pair.dart';
 import 'generated/models/token_refresh.dart';
 import 'generated/models/user_shelter_admin_serializers.dart';
 import 'generated/models/user_shelter_worker_serializers.dart';
@@ -32,18 +33,18 @@ import 'generated/models/user_shelter_worker_serializers.dart';
 /// implementing [AuthApiPort]; ports/DTOs/AuthService stay unchanged.
 class AuthApiAdapter implements AuthApiPort {
   const AuthApiAdapter({
-    required TokenClient guestTokenClient,
+    required Dio guestDio,
     required TokenClient authedTokenClient,
     required UsersClient usersClient,
     required SheltersClient guestSheltersClient,
     required UsersRegistrationClient guestRegistrationClient,
-  }) : _guestTokenClient = guestTokenClient,
+  }) : _guestDio = guestDio,
        _authedTokenClient = authedTokenClient,
        _usersClient = usersClient,
        _guestSheltersClient = guestSheltersClient,
        _guestRegistrationClient = guestRegistrationClient;
 
-  final TokenClient _guestTokenClient;
+  final Dio _guestDio;
   final TokenClient _authedTokenClient;
   final UsersClient _usersClient;
   final SheltersClient _guestSheltersClient;
@@ -51,13 +52,19 @@ class AuthApiAdapter implements AuthApiPort {
 
   @override
   Future<TokenPairDto> login(String username, String password) async {
-    // The generated request model requires access/refresh (response fields);
-    // DRF's TokenObtainPairSerializer treats them as read-only, so the empty
-    // values are ignored server-side — the wire request stays username/password.
-    final result = await _guestTokenClient.tokenCreate(
-      body: TokenObtainPair(username: username, password: password, access: '', refresh: ''),
+    // Raw POST вместо генерённого tokenCreate: ответ `/api/token/` содержит
+    // только access/refresh, а генерённый TokenObtainPair.fromJson требует
+    // non-null username/password (write-only поля запроса) → падал на касте
+    // `null as String`. Парсим ответ напрямую.
+    final response = await _guestDio.post<Map<String, dynamic>>(
+      '/api/token/',
+      data: <String, dynamic>{'username': username, 'password': password},
     );
-    return TokenPairDto(access: result.access, refresh: result.refresh);
+    final data = response.data ?? const <String, dynamic>{};
+    return TokenPairDto(
+      access: (data['access'] as String?) ?? '',
+      refresh: (data['refresh'] as String?) ?? '',
+    );
   }
 
   @override
@@ -91,14 +98,20 @@ class AuthApiAdapter implements AuthApiPort {
 
   @override
   Future<List<ShelterShortDto>> allShelters({int? limit, int? offset, String? search}) async {
-    final page = await _guestSheltersClient.v1SheltersList(limit: limit, offset: offset, search: search);
+    final page = await _guestSheltersClient.v1SheltersList(
+      limit: limit,
+      offset: offset,
+      search: search,
+    );
     final results = page.results ?? const <ShelterShortSerializers>[];
     return results.map(_mapShelter).toList(growable: false);
   }
 
   @override
   Future<UserAdminDto> registerAdmin(UserAdminWriteDto body) async {
-    final result = await _guestRegistrationClient.v1UsersAdminRegisterCreate(body: _mapAdminWrite(body));
+    final result = await _guestRegistrationClient.v1UsersAdminRegisterCreate(
+      body: _mapAdminWrite(body),
+    );
     return UserAdminDto(
       id: result.id,
       firstName: result.firstName,
@@ -114,7 +127,9 @@ class AuthApiAdapter implements AuthApiPort {
 
   @override
   Future<UserWorkerDto> registerWorker(UserWorkerWriteDto body) async {
-    final result = await _guestRegistrationClient.v1UsersWorkerRegisterCreate(body: _mapWorkerWrite(body));
+    final result = await _guestRegistrationClient.v1UsersWorkerRegisterCreate(
+      body: _mapWorkerWrite(body),
+    );
     return UserWorkerDto(
       firstName: result.firstName,
       lastName: result.lastName,
@@ -155,17 +170,18 @@ class AuthApiAdapter implements AuthApiPort {
     ),
   );
 
-  UserShelterWorkerSerializers _mapWorkerWrite(UserWorkerWriteDto d) => UserShelterWorkerSerializers(
-    firstName: d.firstName,
-    lastName: d.lastName,
-    fathersName: d.fathersName,
-    email: d.email,
-    phoneNumber: d.phoneNumber,
-    address: d.address,
-    password: d.password,
-    rePassword: d.rePassword,
-    shelter: d.shelter ?? 0,
-    role: RoleEnum.fromJson(d.role),
-    isOfferSigned: d.isOfferSigned,
-  );
+  UserShelterWorkerSerializers _mapWorkerWrite(UserWorkerWriteDto d) =>
+      UserShelterWorkerSerializers(
+        firstName: d.firstName,
+        lastName: d.lastName,
+        fathersName: d.fathersName,
+        email: d.email,
+        phoneNumber: d.phoneNumber,
+        address: d.address,
+        password: d.password,
+        rePassword: d.rePassword,
+        shelter: d.shelter ?? 0,
+        role: RoleEnum.fromJson(d.role),
+        isOfferSigned: d.isOfferSigned,
+      );
 }
