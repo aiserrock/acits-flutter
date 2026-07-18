@@ -28,15 +28,15 @@ dependencies:
   image: ^4.8.0
   image_picker: ^1.2.1
   util:
-    path: ../util
-  l10n:
-    path: ../l10n
+    path: ../base/util
+  localization:
+    path: ../base/localization
   core:
-    path: ../core
+    path: ../base/core
   ui_kit:
     path: ../ui_kit
   navigation:
-    path: ../navigation
+    path: ../base/navigation
   animals:
     path: ../animals
   applicants:

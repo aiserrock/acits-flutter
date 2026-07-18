@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get_it/get_it.dart';
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 
 import 'package:prescriptions/domain/domain.dart';
 

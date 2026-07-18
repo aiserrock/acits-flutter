@@ -22,7 +22,7 @@ export 'package:util/util.dart'
         SafeEmit,
         UrlCorsProxy;
 // Shared LocaleKeys (single source for app + feature modules) lives in `l10n`.
-export 'package:l10n/l10n.dart';
+export 'package:localization/localization.dart';
 // Заметки/комментарии животного — доменные сущности из модуля personal.
 export 'package:personal/personal.dart' show AnimalNote, AnimalNoteFile;
 // Theme lives in ui_kit; AppColors/AppColorsX must be ONE type across app +

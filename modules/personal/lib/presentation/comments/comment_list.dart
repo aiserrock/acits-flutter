@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 
 import 'package:util/util.dart';
 import 'package:ui_kit/ui_kit.dart';

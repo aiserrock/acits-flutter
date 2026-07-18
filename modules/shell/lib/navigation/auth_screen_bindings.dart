@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:di/di.dart';
 import 'package:shell/gen/assets.gen.dart';
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 import 'package:shell/res/lottie.dart';
 import 'package:app_services/app_services.dart';
 import 'package:shell/widget/app_logo.dart';

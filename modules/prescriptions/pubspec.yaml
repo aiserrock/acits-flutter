@@ -24,15 +24,15 @@ dependencies:
   get_it: ^9.2.1
   talker_flutter: ^5.1.16
   util:
-    path: ../util
-  l10n:
-    path: ../l10n
+    path: ../base/util
+  localization:
+    path: ../base/localization
   core:
-    path: ../core
+    path: ../base/core
   ui_kit:
     path: ../ui_kit
   navigation:
-    path: ../navigation
+    path: ../base/navigation
 
 dev_dependencies:
   flutter_test:

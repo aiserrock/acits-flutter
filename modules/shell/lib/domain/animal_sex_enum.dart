@@ -1,4 +1,4 @@
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 enum AnimalGender { male, female, middle, genderless, undefined }

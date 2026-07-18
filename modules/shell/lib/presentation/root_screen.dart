@@ -4,7 +4,7 @@ import 'package:personal/personal.dart' show CalendarScreen;
 
 import 'package:di/di.dart';
 import 'package:shell/gen/assets.gen.dart';
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:shell/presentation/main/main_screen.dart';
 import 'package:shell/widget/personal_drawer.dart';

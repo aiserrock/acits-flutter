@@ -15,19 +15,19 @@ dependencies:
 
   # Foundation packages.
   util:
-    path: ../util
+    path: ../base/util
   network:
-    path: ../network
+    path: ../base/network
   core:
-    path: ../core
+    path: ../base/core
   ui_kit:
     path: ../ui_kit
   navigation:
-    path: ../navigation
-  l10n:
-    path: ../l10n
+    path: ../base/navigation
+  localization:
+    path: ../base/localization
   di:
-    path: ../di
+    path: ../base/di
 
   # Feature modules whose screens/router contracts the shell composes.
   animals:
