@@ -15,8 +15,7 @@ import 'package:util/util.dart';
 
 import 'package:acits_flutter/main.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
-import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import 'package:app_services/app_services.dart' show Log;
 import 'di/di_container.dart';
 import 'service/shared_pref/debug_preference_storage.dart';
 import 'service/client/proxy_http_overrides.dart';

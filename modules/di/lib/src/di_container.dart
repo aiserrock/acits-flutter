@@ -1,9 +1,10 @@
-import 'package:acits_flutter/di/di_container.config.dart';
 import 'package:app_services/app_services.dart';
-import 'package:di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shell/shell.dart';
+
+import 'di_container.config.dart';
+import 'get_it.dart';
 
 final _navigatorKey = GlobalKey<NavigatorState>();
 final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();

@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:app_services/app_services.dart';
-import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
+import 'package:util/util.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
 
 import '../../di/di_container.dart';

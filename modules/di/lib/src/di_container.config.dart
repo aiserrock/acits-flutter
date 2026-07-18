@@ -9,8 +9,8 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
 import 'package:app_services/app_services.dart' as _i579;
+import 'package:di/src/app_logger.dart' as _i867;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shell/shell.dart' as _i889;
@@ -35,4 +35,4 @@ Future<_i174.GetIt> $initGetIt(
   return getIt;
 }
 
-class _$AppLoggerModule extends _i197.AppLoggerModule {}
+class _$AppLoggerModule extends _i867.AppLoggerModule {}

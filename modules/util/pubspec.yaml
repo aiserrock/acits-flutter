@@ -17,6 +17,12 @@ dependencies:
   intl: ^0.20.2
   package_info_plus: ^9.0.1
 
+  # Logger infra (shared Talker factory + formatter/observer, bloc observer).
+  # Crashlytics-плагина на web нет — observer под guard kIsWeb.
+  talker_flutter: ^5.1.16
+  talker_bloc_logger: ^5.1.17
+  firebase_crashlytics: ^5.2.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
