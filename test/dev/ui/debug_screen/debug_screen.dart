@@ -2,9 +2,8 @@
 
 import 'package:acits_flutter/export.dart';
 import 'package:animals/animals.dart';
-import 'package:acits_flutter/domain/env.dart';
+import 'package:app_services/app_services.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/service/debug/debug_service.dart';
 import 'package:ui_kit/ui_kit.dart' show PrimaryButton;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';

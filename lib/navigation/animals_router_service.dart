@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:di/di.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
+import 'package:app_services/app_services.dart';
 
 /// Реализация навигационного контракта модуля «Животные» через go_router и
 /// [AppRoutes] приложения. Модуль зависит только от абстракции

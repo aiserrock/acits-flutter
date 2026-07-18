@@ -10,7 +10,7 @@ import 'package:ui_kit/ui_kit.dart' show FormEditCard, EditCardData, bsSelectorA
 import 'package:di/di.dart';
 import 'package:acits_flutter/domain/animal_sex_enum.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
+import 'package:app_services/app_services.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';

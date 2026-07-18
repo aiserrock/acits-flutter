@@ -9,7 +9,7 @@ import 'package:personal/personal.dart' show UserProfile;
 import 'package:di/di.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
+import 'package:app_services/app_services.dart';
 import 'package:acits_flutter/ui/widget/cubit/personal_drawer_cubit.dart';
 import 'package:acits_flutter/ui/widget/app_version_label.dart';
 import 'package:acits_flutter/ui/widget/locale_switcher.dart';
