@@ -19,15 +19,16 @@ abstract final class MediaAssets {
     Assets.gallery.avatarMouse.keyName,
   ];
 
-  static Widget closeIconSvg({double? width, double? height, Color? color}) => Assets.icon.close.svg(
-    width: width,
-    height: height,
-    colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
-  );
+  static Widget closeIconSvg({double? width, double? height, Color? color}) =>
+      Assets.icon.close.svg(
+        width: width,
+        height: height,
+        colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      );
 
   static Widget emptyStateSvg() => Assets.common.emptyState.svg();
 
-  static Widget errorStubSvg() => Assets.image.errorStub.svg();
+  static Widget errorStubSvg() => Assets.icon.errorStub.svg();
 
   static Widget animalStubImage({BoxFit? fit, double? width, double? height}) =>
       Assets.image.animalStub.image(fit: fit, width: width, height: height);

@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 
 final _dateOnlyFormat = DateFormat('yyyy-MM-dd');
 
+/// Форматтеры/утилиты дат для UI и обмена с бэкендом. Держим отдельно от
+/// доменных типов — это чисто презентационная/сериализационная утилита,
+/// переиспользуемая фичами.
 extension DateTimeX on DateTime {
   /// yyyy-MM-dd
   String toIsoDateOnly() {

@@ -25,14 +25,20 @@ abstract final class AuthScreenBindings {
       authService: getIt<AuthService>(),
       configService: getIt<ConfigService>(),
       navigator: getIt<SplashNavigator>(),
-      logo: Assets.image.logoSplash.svg(width: 80.0, height: 108.0),
-      loadingAnimations: [LottieRes.loading, LottieRes.pawLoading, LottieRes.dogLoading, LottieRes.catsLoading],
+      logo: Assets.icon.logoSplash.svg(width: 80.0, height: 108.0),
+      loadingAnimations: [
+        LottieRes.loading,
+        LottieRes.pawLoading,
+        LottieRes.dogLoading,
+        LottieRes.catsLoading,
+      ],
     );
   }
 
   static Widget onboarding() {
     return BlocProvider(
-      create: (_) => OnboardingBloc(configService: getIt<ConfigService>(), onboardingData: _onboardingData()),
+      create: (_) =>
+          OnboardingBloc(configService: getIt<ConfigService>(), onboardingData: _onboardingData()),
       child: OnboardingScreen(
         router: getIt<AuthRouterService>(),
         closeIcon: Assets.icon.close.svg(),

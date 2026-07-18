@@ -17,6 +17,7 @@ export 'src/state/data_state.dart';
 export 'src/task/app_task.dart';
 export 'src/util/app_version.dart';
 export 'src/util/bloc_ext.dart';
-export 'src/util/datetime_format.dart';
+export 'src/util/datetime.dart';
 export 'src/util/url_cors_proxy.dart';
+export 'src/util/url_matcher.dart';
 export 'src/util/validator.dart';

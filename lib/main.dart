@@ -13,8 +13,6 @@ import 'package:di/di.dart';
 import 'package:shell/shell.dart';
 import 'package:ui_kit/ui_kit.dart' show AppTheme;
 import 'package:acits_flutter/firebase/firebase_config.dart';
-import 'package:acits_flutter/util/phone_frame.dart';
-import 'package:acits_flutter/util/restart_widget.dart';
 
 Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();

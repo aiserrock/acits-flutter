@@ -11,5 +11,7 @@ export 'debug_drawer.dart';
 export 'error_stub.dart';
 export 'locale_switcher.dart';
 export 'personal_drawer.dart';
+export 'phone_frame.dart';
+export 'restart_widget.dart';
 export 'shimmer_network_image.dart';
 export 'theme_switcher_tile.dart';

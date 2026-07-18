@@ -18,7 +18,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:personal/data/data.dart';
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/presentation.dart';
-import 'package:personal/util/util.dart';
 
 class CommentListWidget extends StatelessWidget {
   const CommentListWidget(
