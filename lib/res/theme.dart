@@ -3,4 +3,4 @@
 // AppColors/AppColorsX ОДНИМ типом для приложения и мигрированных модулей,
 // поэтому `context.appColors` резолвит одну и ту же зарегистрированную
 // ThemeExtension из любого слоя.
-export 'package:acits_ui_kit/acits_ui_kit.dart' show AppTheme, AppColors, AppColorsX;
+export 'package:ui_kit/acits_ui_kit.dart' show AppTheme, AppColors, AppColorsX;

@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math';
-import 'package:acits_l10n/acits_l10n.dart';
+import 'package:l10n/acits_l10n.dart';
 
 import 'package:acits_core/acits_core.dart';
 import 'package:collection/collection.dart';

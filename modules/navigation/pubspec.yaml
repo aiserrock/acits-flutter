@@ -1,4 +1,4 @@
-name: acits_navigation
+name: navigation
 description: Navigation primitives for ACITS — route path constants, typed param codecs, guards. NO feature/screen imports (breaks the app→nav→screen cycle).
 publish_to: "none"
 version: 0.1.0

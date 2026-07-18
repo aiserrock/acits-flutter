@@ -1,4 +1,4 @@
-name: acits_l10n
+name: l10n
 description: Generated easy_localization LocaleKeys for ACITS — single source of translation keys shared by the app and all feature modules.
 publish_to: "none"
 version: 0.1.0
