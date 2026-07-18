@@ -1,5 +1,5 @@
 import 'package:base/base.dart';
-import 'package:ui_kit/acits_ui_kit.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:media/domain/domain.dart';

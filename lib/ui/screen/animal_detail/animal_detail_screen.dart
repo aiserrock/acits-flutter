@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:ui_kit/acits_ui_kit.dart'
+import 'package:ui_kit/ui_kit.dart'
     show DefaultAppBar, DefaultIconButton, ErrorHolderWidget, LoaderHolderWidget, Skeleton;
 
 import 'package:acits_flutter/di/di_container.dart';

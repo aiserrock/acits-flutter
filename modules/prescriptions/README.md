@@ -8,7 +8,7 @@ stack.
 ## PrescriptionService + entities live here
 
 `PrescriptionService` (application service over the stable `PrescriptionApiPort`
-from `acits_api`, mapping DTOs → the module's domain entities) and all
+from `core/api`, mapping DTOs → the module's domain entities) and all
 prescription domain entities (`Prescription`, `PrescriptionType`, `Drug`,
 `PrescriptionExecutionToday`, …) move into this module and are exported from the
 barrel. It is consumed by:
@@ -44,6 +44,6 @@ App → module (downward) is allowed; those consumers import from
   bundle, mirroring app `res/lottie.dart`.
 - Shared widgets (`FormEditCard`/`EditCardData`, `VisibleItem`,
   `LoaderHolderWidget`, `ErrorHolderWidget`, `ShimmerNetworkImage`,
-  `bsSelectorActions`, `PrimaryButton`) come from `package:acits_ui_kit`;
-  `DataState` from `acits_core`; `UrlCorsProxy` from `acits_core`;
-  `MessagedException` from `acits_domain`.
+  `bsSelectorActions`, `PrimaryButton`) come from `package:ui_kit/acits_ui_kit.dart`;
+  `DataState` from `base`; `UrlCorsProxy` from `base`;
+  `MessagedException` from `core/domain`.

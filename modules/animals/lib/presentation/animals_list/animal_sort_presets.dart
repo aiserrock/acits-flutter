@@ -1,5 +1,5 @@
-import 'package:l10n/acits_l10n.dart';
-import 'package:ui_kit/acits_ui_kit.dart';
+import 'package:l10n/l10n.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 /// Пресеты сортировки списка животных. Первый — дефолт: «Сначала новые».
 /// `ordering` — значение DRF-параметра сортировки для API.

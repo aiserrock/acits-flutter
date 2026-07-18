@@ -1,11 +1,11 @@
-import 'package:ui_kit/acits_ui_kit.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 
 /// [SortPreset] переехал в acits_ui_kit (generic). Ре-экспортируем, чтобы
 /// существующие импорты работали; пресеты приложения (с ключами [LocaleKeys])
 /// остаются здесь — ui_kit про конкретные экраны/локали не знает.
-export 'package:ui_kit/acits_ui_kit.dart' show SortPreset;
+export 'package:ui_kit/ui_kit.dart' show SortPreset;
 
 /// Пресеты сортировки списка животных (модель `AnimalRead`).
 ///

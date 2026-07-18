@@ -1,7 +1,8 @@
-# acits_core
+# base
 
-Cross-cutting core for ACITS: the primitives every other layer builds on. This
-is the lowest package in the graph — it depends on no other workspace package.
+Cross-cutting infrastructure for ACITS: the primitives every other layer builds
+on. This is the lowest package in the graph — it depends on no other workspace
+package.
 
 ## Exports
 
@@ -25,6 +26,6 @@ is the lowest package in the graph — it depends on no other workspace package.
 ## Dependency rule
 
 May import: `dio`, `equatable`, `flutter_bloc`, `intl`, Flutter SDK. **May NOT
-import** any other `acits_*` package or any feature — everything depends on
-`acits_core`, so it must stay dependency-free within the workspace. No DTOs, no
+import** any other workspace module or any feature — everything depends on
+`base`, so it must stay dependency-free within the workspace. No DTOs, no
 generated API code, no go_router here.

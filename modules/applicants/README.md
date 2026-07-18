@@ -6,7 +6,7 @@ their cubits, and the `StaffService` application service on the new stack.
 ## StaffService lives here
 
 `StaffService` (application service over the stable `StaffApiPort` from
-`acits_api`, mapping DTOs → domain `Applicant`/`Curator`) is used by both edit
+`core/api`, mapping DTOs → domain `Applicant`/`Curator`) is used by both edit
 screens **and** the app's search paging adapter
 (`search_screen/model/paging_fetch_adapter.dart`, media group, not yet
 extracted). It moves into this module (`data/staff_service.dart`) and is exported
@@ -22,7 +22,7 @@ staff search.
   `AuthService.currentShelterId` (mirrors animals_port_bridges.dart), so the
   module never imports the app.
 - `ApplicantsRouterService` — feature navigation marker (extends
-  `acits_domain` `RouterService`). Edit screens return their saved entity via
+  `core/domain` `RouterService`). Edit screens return their saved entity via
   `Navigator.pop(result)` (framework nav, no app-route knowledge), so the
   contract declares no extra transitions today. `ApplicantsRouterServiceImpl`
   lives in the app nav layer.
@@ -32,6 +32,6 @@ staff search.
 - Localization: literal `.tr()` keys via `ApplicantsL10nKeys` (key == value in
   the app translation bundle), same pattern as `modules/auth` / `modules/animals`.
 - Shared widgets (`FormEditCard`/`EditCardData`, `LoaderHolderWidget`,
-  `ErrorHolderWidget`) come from `package:acits_ui_kit`; `DataState`/
-  `DataStateBuilder` from `acits_core`; `Applicant`/`Curator`/`MessagedException`
-  from `acits_domain`.
+  `ErrorHolderWidget`) come from `package:ui_kit/acits_ui_kit.dart`; `DataState`/
+  `DataStateBuilder` from `base`; `Applicant`/`Curator`/`MessagedException`
+  from `core/domain`.

@@ -36,17 +36,17 @@ The codebase is a layered melos **workspace**: a thin root app plus versioned pa
 
 ```
 acits_flutter/           # root app: entrypoints, AppTask startup, DI wiring, MaterialApp.router
-├── packages/            # SDK/infra + shared layers
-│   ├── acits_core/      #   Result/Failure, dio client + interceptors, AppTask, platform ports
-│   ├── acits_domain/    #   shared entities, repository interfaces, Transformable<T> (DTO-free)
-│   ├── acits_api/       #   stable <Feature>ApiPort + OUR DTOs; generated adapter underneath
-│   ├── acits_ui_kit/    #   Material 3 tokens, breakpoints, AdaptiveScaffold, components
-│   └── acits_navigation/#   route constants, param codecs, guards (no feature imports)
-└── modules/             # feature packages (data / domain / ui)
-    └── animals/         #   reference slice — the template every feature follows
+├── packages/            # reserved for forks of external libs + truly generic reusable libs (currently empty)
+└── modules/             # all project code
+    ├── base/            #   Result/Failure, dio client + interceptors, AppTask, platform ports
+    ├── core/            #   domain/ (shared entities, repo ifaces, Transformable<T>) + api/ (ports, OUR DTOs, adapter)
+    ├── ui_kit/          #   Material 3 tokens, breakpoints, AdaptiveScaffold, components
+    ├── navigation/      #   route constants, param codecs, guards (no feature imports)
+    ├── l10n/            #   generated LocaleKeys
+    └── animals/ · …     #   feature packages (data / domain / presentation); animals is the reference slice
 ```
 
-The generated HTTP client lives **only** inside `acits_api/adapters/`, behind stable ports speaking our own DTOs — so swapping the generator (retrofit, openapi-generator, …) touches one package, not the app. See **[ARCHITECTURE.md](ARCHITECTURE.md)** for the full package DAG, the ports-and-adapters boundary, and the request flow.
+The generated HTTP client lives **only** inside `core/lib/api/adapters/`, behind stable ports speaking our own DTOs — so swapping the generator (retrofit, openapi-generator, …) touches one package, not the app. See **[ARCHITECTURE.md](ARCHITECTURE.md)** for the full package DAG, the ports-and-adapters boundary, and the request flow.
 
 ## Quick start
 
@@ -55,7 +55,7 @@ git clone https://github.com/aiserrock/acits-flutter.git
 cd acits-flutter
 fvm install && fvm flutter pub get      # resolves the whole workspace
 fvm dart run build_runner build --delete-conflicting-outputs   # app DI / json / assets
-melos genapi                            # API client (swagger_parser, isolated in acits_api)
+melos genapi                            # API client (swagger_parser, isolated in modules/core)
 fvm flutter run -t test/dev/main.dart --flavor dev
 ```
 

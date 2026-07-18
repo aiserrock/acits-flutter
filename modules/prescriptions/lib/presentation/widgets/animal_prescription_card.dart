@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:l10n/acits_l10n.dart';
+import 'package:l10n/l10n.dart';
 
 import 'package:prescriptions/domain/domain.dart';
 
