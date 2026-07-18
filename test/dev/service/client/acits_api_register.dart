@@ -65,10 +65,6 @@ abstract class AcitsApiRegisterDev {
   TokenClient tokenClientAuthed(@Named('acitsApi') Dio dio) => TokenClient(dio);
 
   @dev
-  @Named('acitsApiTokenGuest')
-  TokenClient tokenClientGuest(@Named('acitsApiGuest') Dio dio) => TokenClient(dio);
-
-  @dev
   UsersClient usersClient(@Named('acitsApi') Dio dio) => UsersClient(dio);
 
   @dev
@@ -80,13 +76,13 @@ abstract class AcitsApiRegisterDev {
 
   @dev
   AuthApiPort authApiPort(
-    @Named('acitsApiTokenGuest') TokenClient guestTokenClient,
+    @Named('acitsApiGuest') Dio guestDio,
     @Named('acitsApiTokenAuthed') TokenClient authedTokenClient,
     UsersClient usersClient,
     SheltersClient guestSheltersClient,
     UsersRegistrationClient guestRegistrationClient,
   ) => AuthApiAdapter(
-    guestTokenClient: guestTokenClient,
+    guestDio: guestDio,
     authedTokenClient: authedTokenClient,
     usersClient: usersClient,
     guestSheltersClient: guestSheltersClient,

@@ -3,6 +3,11 @@ import 'package:ui_kit/ui_kit.dart';
 
 /// Растровые и иллюстративные ассеты: `image/` (PNG), `gallery/` (PNG-аватары),
 /// `onboarding/` (SVG), `common/` (SVG). Все перебираются через `.values`.
+///
+/// Раскладка — ровный [GridView] карточек (по аналогии с Icons): у каждого
+/// ассета своя [Card] с фоном `surfaceContainerLow`, рамкой `outlineVariant` и
+/// подписью-именем файла. Секции разделены на группы через `SliverList`-подобный
+/// `CustomScrollView` из sliver-сеток.
 class ImagesPage extends StatelessWidget {
   const ImagesPage({super.key});
 
@@ -10,97 +15,109 @@ class ImagesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Images')),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          _Section('Assets.image — PNG (${Assets.image.values.length})'),
-          Wrap(
-            spacing: 12.0,
-            runSpacing: 12.0,
-            children: [
-              for (final img in Assets.image.values)
-                _Tile(
-                  label: img.path.split('/').last,
-                  child: img.image(height: 72.0, fit: BoxFit.contain),
-                ),
-            ],
-          ),
-          const Divider(height: 40.0),
-          _Section('Assets.gallery — PNG (${Assets.gallery.values.length})'),
-          Wrap(
-            spacing: 12.0,
-            runSpacing: 12.0,
-            children: [
-              for (final img in Assets.gallery.values)
-                _Tile(
-                  label: img.path.split('/').last,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40.0),
-                    child: img.image(height: 64.0, width: 64.0, fit: BoxFit.cover),
-                  ),
-                ),
-            ],
-          ),
-          const Divider(height: 40.0),
-          _Section('Assets.onboarding — SVG (${Assets.onboarding.values.length})'),
-          Wrap(
-            spacing: 12.0,
-            runSpacing: 12.0,
-            children: [
-              for (final svg in Assets.onboarding.values)
-                _Tile(label: svg.path.split('/').last, child: svg.svg(height: 96.0)),
-            ],
-          ),
-          const Divider(height: 40.0),
-          _Section('Assets.common — SVG (${Assets.common.values.length})'),
-          Wrap(
-            spacing: 12.0,
-            runSpacing: 12.0,
-            children: [
-              for (final svg in Assets.common.values)
-                _Tile(label: svg.path.split('/').last, child: svg.svg(height: 96.0)),
-            ],
-          ),
+      body: CustomScrollView(
+        slivers: [
+          _header(context, 'Assets.image — PNG (${Assets.image.values.length})'),
+          _grid([
+            for (final img in Assets.image.values)
+              _Cell(
+                label: img.path.split('/').last,
+                child: img.image(fit: BoxFit.contain),
+              ),
+          ]),
+          _header(context, 'Assets.gallery — PNG (${Assets.gallery.values.length})'),
+          _grid([
+            for (final img in Assets.gallery.values)
+              _Cell(
+                label: img.path.split('/').last,
+                clip: true,
+                child: ClipOval(child: img.image(fit: BoxFit.cover)),
+              ),
+          ]),
+          _header(context, 'Assets.onboarding — SVG (${Assets.onboarding.values.length})'),
+          _grid([
+            for (final svg in Assets.onboarding.values)
+              _Cell(
+                label: svg.path.split('/').last,
+                child: svg.svg(fit: BoxFit.contain),
+              ),
+          ]),
+          _header(context, 'Assets.common — SVG (${Assets.common.values.length})'),
+          _grid([
+            for (final svg in Assets.common.values)
+              _Cell(
+                label: svg.path.split('/').last,
+                child: svg.svg(fit: BoxFit.contain),
+              ),
+          ]),
+          const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
         ],
       ),
     );
   }
-}
 
-class _Section extends StatelessWidget {
-  const _Section(this.title);
+  Widget _header(BuildContext context, String title) => SliverToBoxAdapter(
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 12.0),
+      child: Text(title, style: Theme.of(context).textTheme.titleMedium),
+    ),
+  );
 
-  final String title;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 12.0),
-    child: Text(title, style: Theme.of(context).textTheme.titleMedium),
+  Widget _grid(List<Widget> cells) => SliverPadding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    sliver: SliverGrid(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 160.0,
+        mainAxisSpacing: 12.0,
+        crossAxisSpacing: 12.0,
+        childAspectRatio: 0.82,
+      ),
+      delegate: SliverChildListDelegate(cells),
+    ),
   );
 }
 
-class _Tile extends StatelessWidget {
-  const _Tile({required this.label, required this.child});
+/// Ячейка сетки: карточка с превью ассета и подписью-именем файла.
+class _Cell extends StatelessWidget {
+  const _Cell({required this.label, required this.child, this.clip = false});
 
   final String label;
   final Widget child;
 
+  /// `true` для круглых аватаров — превью само обрезано (ClipOval), карточке
+  /// незачем добавлять внутренний отступ вокруг него.
+  final bool clip;
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 100.0, child: Center(child: child)),
-          const SizedBox(height: 4.0),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-          ),
-        ],
+    final scheme = Theme.of(context).colorScheme;
+    return Card(
+      margin: EdgeInsets.zero,
+      elevation: 0.0,
+      color: scheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: BorderSide(color: scheme.outlineVariant),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Padding(padding: EdgeInsets.all(clip ? 0.0 : 8.0), child: child),
+              ),
+            ),
+            const SizedBox(height: 6.0),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelSmall,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

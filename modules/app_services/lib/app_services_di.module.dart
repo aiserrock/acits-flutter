@@ -68,8 +68,8 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
     final envRegistrer = _$EnvRegistrer();
     final acitsApiRegister = _$AcitsApiRegister();
     final animalsRegister = _$AnimalsRegister();
-    final personalRegister = _$PersonalRegister();
     final applicantsRegister = _$ApplicantsRegister();
+    final personalRegister = _$PersonalRegister();
     final mediaRegister = _$MediaRegister();
     final prescriptionsRegister = _$PrescriptionsRegister();
     gh.factory<_i558.FlutterSecureStorage>(
@@ -126,12 +126,6 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
         gh<_i417.Env>(),
       ),
       instanceName: 'acitsApi',
-      registerFor: {_prod},
-    );
-    gh.factory<_i995.TokenClient>(
-      () => acitsApiRegister
-          .tokenClientGuest(gh<_i361.Dio>(instanceName: 'acitsApiGuest')),
-      instanceName: 'acitsApiTokenGuest',
       registerFor: {_prod},
     );
     gh.factory<_i589.FileService>(
@@ -234,7 +228,7 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
     );
     gh.factory<_i995.AuthApiPort>(
       () => acitsApiRegister.authApiPort(
-        gh<_i995.TokenClient>(instanceName: 'acitsApiTokenGuest'),
+        gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
         gh<_i995.TokenClient>(instanceName: 'acitsApiTokenAuthed'),
         gh<_i995.UsersClient>(),
         gh<_i995.SheltersClient>(),
@@ -248,31 +242,23 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
           gh<_i672.EmailConfirmRepository>(),
           gh<_i614.PreferenceStorage>(),
         ));
-    gh.factory<_i1007.PersonalShelterProvider>(
-        () => _i118.AuthServicePersonalShelter(gh<_i397.AuthService>()));
-    gh.factory<_i616.CurrentShelterProvider>(
-        () => _i694.AuthServiceCurrentShelter(gh<_i397.AuthService>()));
-    gh.factory<_i616.AnimalPermissions>(
-        () => _i694.AuthServiceAnimalPermissions(gh<_i397.AuthService>()));
-    gh.factory<_i857.PrescriptionsShelterProvider>(
-        () => _i68.AuthServicePrescriptionsShelter(gh<_i397.AuthService>()));
-    gh.factory<_i20.ApplicantsShelterProvider>(
-        () => _i14.AuthServiceApplicantsShelter(gh<_i397.AuthService>()));
-    gh.factory<_i249.MediaShelterProvider>(
-        () => _i428.AuthServiceMediaShelter(gh<_i397.AuthService>()));
-    gh.singleton<_i1007.CommentsService>(() => personalRegister.commentsService(
-          gh<_i995.AnimalNotesApiPort>(),
-          gh<_i1007.PersonalShelterProvider>(),
-        ));
     gh.singleton<_i277.ConfigService>(() => _i277.ConfigService(
           gh<_i995.SelectionApiPort>(),
           gh<_i397.AuthService>(),
           gh<_i614.PreferenceStorage>(),
         ));
+    gh.factory<_i20.ApplicantsShelterProvider>(
+        () => _i14.AuthServiceApplicantsShelter(gh<_i397.AuthService>()));
     gh.singleton<_i20.StaffService>(() => applicantsRegister.staffService(
           gh<_i20.ApplicantsShelterProvider>(),
           gh<_i995.StaffApiPort>(),
         ));
+    gh.factory<_i249.MediaShelterProvider>(
+        () => _i428.AuthServiceMediaShelter(gh<_i397.AuthService>()));
+    gh.factory<_i1007.PersonalShelterProvider>(
+        () => _i118.AuthServicePersonalShelter(gh<_i397.AuthService>()));
+    gh.factory<_i616.CurrentShelterProvider>(
+        () => _i694.AuthServiceCurrentShelter(gh<_i397.AuthService>()));
     gh.factory<_i857.PrescriptionAnimalLoader>(
         () => _i68.AnimalRepositoryPrescriptionAnimalLoader(
               gh<_i616.AnimalRepository>(),
@@ -282,20 +268,28 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
           gh<_i995.ProfileApiPort>(),
           gh<_i1007.PersonalShelterProvider>(),
         ));
-    gh.factory<_i857.PrescriptionTypeLabels>(() =>
-        _i68.ConfigServicePrescriptionTypeLabels(gh<_i277.ConfigService>()));
-    gh.factory<_i616.AnimalStatusLabels>(
-        () => _i694.ConfigServiceAnimalStatusLabels(gh<_i277.ConfigService>()));
+    gh.factory<_i857.PrescriptionsShelterProvider>(
+        () => _i68.AuthServicePrescriptionsShelter(gh<_i397.AuthService>()));
+    gh.factory<_i616.AnimalPermissions>(
+        () => _i694.AuthServiceAnimalPermissions(gh<_i397.AuthService>()));
     gh.factory<_i249.DocumentRepository>(() => mediaRegister.documentRepository(
           gh<_i616.AnimalRepository>(),
           gh<_i616.CurrentShelterProvider>(),
         ));
+    gh.factory<_i857.PrescriptionTypeLabels>(() =>
+        _i68.ConfigServicePrescriptionTypeLabels(gh<_i277.ConfigService>()));
+    gh.factory<_i616.AnimalStatusLabels>(
+        () => _i694.ConfigServiceAnimalStatusLabels(gh<_i277.ConfigService>()));
     gh.singleton<_i857.PrescriptionService>(
         () => prescriptionsRegister.prescriptionService(
               gh<_i995.PrescriptionApiPort>(),
               gh<_i857.PrescriptionsShelterProvider>(),
               gh<_i857.PrescriptionTypeLabels>(),
             ));
+    gh.singleton<_i1007.CommentsService>(() => personalRegister.commentsService(
+          gh<_i995.AnimalNotesApiPort>(),
+          gh<_i1007.PersonalShelterProvider>(),
+        ));
     gh.factory<_i249.SearchDeps>(() => mediaRegister.searchDeps(
           gh<_i616.AnimalRepository>(),
           gh<_i20.StaffService>(),
@@ -317,9 +311,9 @@ class _$AcitsApiRegister extends _i472.AcitsApiRegister {}
 
 class _$AnimalsRegister extends _i121.AnimalsRegister {}
 
-class _$PersonalRegister extends _i118.PersonalRegister {}
-
 class _$ApplicantsRegister extends _i14.ApplicantsRegister {}
+
+class _$PersonalRegister extends _i118.PersonalRegister {}
 
 class _$MediaRegister extends _i428.MediaRegister {}
 

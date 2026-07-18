@@ -75,13 +75,6 @@ Future<_i174.GetIt> $initDevGetIt(
     instanceName: 'acitsApi',
     registerFor: {_dev},
   );
-  gh.factory<_i995.TokenClient>(
-    () => acitsApiRegisterDev.tokenClientGuest(
-      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
-    ),
-    instanceName: 'acitsApiTokenGuest',
-    registerFor: {_dev},
-  );
   gh.factory<_i995.SheltersClient>(
     () => acitsApiRegisterDev.sheltersClient(
       gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
@@ -183,7 +176,7 @@ Future<_i174.GetIt> $initDevGetIt(
   );
   gh.factory<_i995.AuthApiPort>(
     () => acitsApiRegisterDev.authApiPort(
-      gh<_i995.TokenClient>(instanceName: 'acitsApiTokenGuest'),
+      gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
       gh<_i995.TokenClient>(instanceName: 'acitsApiTokenAuthed'),
       gh<_i995.UsersClient>(),
       gh<_i995.SheltersClient>(),

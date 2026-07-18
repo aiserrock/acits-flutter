@@ -59,7 +59,8 @@ abstract class AcitsApiRegister {
   /// [AnimalApiPort]. Возвращаем как порт, чтобы будущие фичи резолвили
   /// [AnimalApiPort], а не конкретный адаптер.
   @prod
-  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) => AnimalApiAdapter(client, dio);
+  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
+      AnimalApiAdapter(client, dio);
 
   // ── auth slice ─────────────────────────────────────────────────────────────
 
@@ -68,27 +69,24 @@ abstract class AcitsApiRegister {
   TokenClient tokenClientAuthed(@Named('acitsApi') Dio dio) => TokenClient(dio);
 
   @prod
-  @Named('acitsApiTokenGuest')
-  TokenClient tokenClientGuest(@Named('acitsApiGuest') Dio dio) => TokenClient(dio);
-
-  @prod
   UsersClient usersClient(@Named('acitsApi') Dio dio) => UsersClient(dio);
 
   @prod
   SheltersClient sheltersClient(@Named('acitsApiGuest') Dio dio) => SheltersClient(dio);
 
   @prod
-  UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) => UsersRegistrationClient(dio);
+  UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) =>
+      UsersRegistrationClient(dio);
 
   @prod
   AuthApiPort authApiPort(
-    @Named('acitsApiTokenGuest') TokenClient guestTokenClient,
+    @Named('acitsApiGuest') Dio guestDio,
     @Named('acitsApiTokenAuthed') TokenClient authedTokenClient,
     UsersClient usersClient,
     SheltersClient guestSheltersClient,
     UsersRegistrationClient guestRegistrationClient,
   ) => AuthApiAdapter(
-    guestTokenClient: guestTokenClient,
+    guestDio: guestDio,
     authedTokenClient: authedTokenClient,
     usersClient: usersClient,
     guestSheltersClient: guestSheltersClient,
