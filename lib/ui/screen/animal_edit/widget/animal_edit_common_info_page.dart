@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:animals/animals.dart';
-import 'package:base/base.dart' show Validator;
+import 'package:util/util.dart' show Validator;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

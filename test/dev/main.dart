@@ -11,7 +11,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:logging/logging.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 
 import 'package:acits_flutter/main.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';

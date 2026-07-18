@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:animals/animals.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:core/domain.dart' show EmailConfirmException;
 import 'package:l10n/l10n.dart';
 import 'package:ui_kit/ui_kit.dart';

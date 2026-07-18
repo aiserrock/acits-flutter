@@ -1,5 +1,5 @@
 import 'package:core/api.dart';
-import 'package:base/base.dart';
+import 'package:network/network.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 

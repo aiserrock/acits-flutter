@@ -1,0 +1,5 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    no_logic_in_create_state: false

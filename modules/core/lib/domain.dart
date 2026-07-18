@@ -18,4 +18,4 @@ export 'domain/repository/prescription_repository.dart';
 export 'domain/router/router_service.dart';
 
 // Re-export Result/Failure so features get them from the domain barrel.
-export 'package:base/base.dart' show Result, Ok, Err, Failure;
+export 'package:util/util.dart' show Result, Ok, Err, Failure;

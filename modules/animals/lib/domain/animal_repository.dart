@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 
 import 'package:animals/domain/domain.dart';
 

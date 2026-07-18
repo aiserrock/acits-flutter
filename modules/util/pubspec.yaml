@@ -1,5 +1,5 @@
-name: base
-description: Cross-cutting core for ACITS — Result/Failure, Dio client + interceptors, AppTask pipeline, platform-service ports.
+name: util
+description: Pure cross-cutting utilities for ACITS — Result/Failure, AppTask pipeline, DataState, platform-service ports, and small shared helpers (validators, safe-emit, app version, date/URL).
 publish_to: "none"
 version: 0.1.0
 
@@ -12,7 +12,6 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  dio: ^5.9.2
   equatable: ^2.0.8
   flutter_bloc: ^9.1.1
   intl: ^0.20.2

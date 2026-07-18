@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:l10n/l10n.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';

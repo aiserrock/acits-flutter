@@ -1,5 +1,6 @@
 import 'package:core/api.dart';
-import 'package:base/base.dart';
+import 'package:network/network.dart';
+import 'package:util/util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_alice/alice.dart';
 import 'package:injectable/injectable.dart';
@@ -57,7 +58,8 @@ abstract class AcitsApiRegisterDev {
   AnimalsClient animalsClient(@Named('acitsApi') Dio dio) => AnimalsClient(dio);
 
   @dev
-  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) => AnimalApiAdapter(client, dio);
+  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
+      AnimalApiAdapter(client, dio);
 
   @dev
   @Named('acitsApiTokenAuthed')
@@ -74,7 +76,8 @@ abstract class AcitsApiRegisterDev {
   SheltersClient sheltersClient(@Named('acitsApiGuest') Dio dio) => SheltersClient(dio);
 
   @dev
-  UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) => UsersRegistrationClient(dio);
+  UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) =>
+      UsersRegistrationClient(dio);
 
   @dev
   AuthApiPort authApiPort(

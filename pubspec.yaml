@@ -13,7 +13,8 @@ environment:
 # Feature modules (modules/*) are added lazily as they are migrated.
 workspace:
   - modules/l10n
-  - modules/base
+  - modules/util
+  - modules/network
   - modules/core
   - modules/ui_kit
   - modules/navigation
@@ -36,8 +37,10 @@ dependencies:
   # alongside chopper — additive, no feature migrated yet.
   l10n:
     path: modules/l10n
-  base:
-    path: modules/base
+  util:
+    path: modules/util
+  network:
+    path: modules/network
   core:
     path: modules/core
   ui_kit:
