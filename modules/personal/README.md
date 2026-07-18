@@ -14,11 +14,11 @@ screen imports the comments widgets from `package:personal/personal.dart`.
 ## Services + entities live here
 
 - `PersonalService` — application service over the stable `ProfileApiPort`
-  (`acits_api`), mapping `UserDto` → the module's `UserProfile` entity. Consumed
+  (`core/api`), mapping `UserDto` → the module's `UserProfile` entity. Consumed
   by the personal screen, the change-password dialog, and the app's
   `PersonalDrawer` shell.
 - `CommentsService` — application service over the stable `AnimalNotesApiPort`
-  (`acits_api`), mapping `AnimalNoteDto` → the module's `AnimalNote` /
+  (`core/api`), mapping `AnimalNoteDto` → the module's `AnimalNote` /
   `AnimalNoteFile` entities. The notes logic (incl. cross-platform file byte
   prep) moved out of the app's `AnimalService` into this module.
 
@@ -46,5 +46,5 @@ from the barrel.
   `LocaleSwitcher`, resolved from the app bundle (`assets/icon/*.svg`).
 - Shared widgets (`FormEditCard`/`EditCardData`, `LoaderHolderWidget`,
   `ErrorHolderWidget`, `bsSelectorActions`, `PrimaryButton`, `context.appColors`)
-  come from `package:acits_ui_kit`; `DataState`/`DataStateBuilder` from
-  `acits_core`; `MessagedException` from `acits_domain`.
+  come from `package:ui_kit/acits_ui_kit.dart`; `DataState`/`DataStateBuilder` from
+  `base`; `MessagedException` from `core/domain`.

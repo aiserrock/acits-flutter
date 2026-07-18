@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:base/base.dart';
-import 'package:ui_kit/acits_ui_kit.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdfx/pdfx.dart';

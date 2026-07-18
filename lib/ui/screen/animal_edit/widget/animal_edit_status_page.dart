@@ -2,7 +2,7 @@ import 'package:animals/animals.dart';
 import 'package:base/base.dart' show Validator;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ui_kit/acits_ui_kit.dart' show FormEditCard, EditCardData, bsSelectorActions;
+import 'package:ui_kit/ui_kit.dart' show FormEditCard, EditCardData, bsSelectorActions;
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';

@@ -2,7 +2,7 @@ import 'package:core/domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ui_kit/acits_ui_kit.dart' show Skeleton;
+import 'package:ui_kit/ui_kit.dart' show Skeleton;
 
 import 'package:personal/personal.dart' show UserProfile;
 

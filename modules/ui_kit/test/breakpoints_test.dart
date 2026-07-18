@@ -1,4 +1,4 @@
-import 'package:ui_kit/acits_ui_kit.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

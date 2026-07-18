@@ -1,4 +1,4 @@
-import 'package:navigation/acits_navigation.dart';
+import 'package:navigation/navigation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

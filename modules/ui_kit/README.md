@@ -1,4 +1,4 @@
-# acits_ui_kit
+# ui_kit
 
 Design system for ACITS: Material 3 tokens (`AppTheme`/`AppColors`), breakpoints,
 `AdaptiveScaffold`, and token-driven base components.
@@ -24,6 +24,7 @@ package regardless of the consuming app.
 
 ## Dependency rule
 
-May import: `acits_core`, Flutter SDK, leaf UI packages. **May NOT import**
-`acits_api`, `acits_domain`, `acits_navigation`, or any feature — the design
-system is presentation-only and knows nothing about DTOs, entities, or routes.
+May import: `base`, Flutter SDK, leaf UI packages. **May NOT import**
+`core` (neither `core/api` nor `core/domain`), `navigation`, or any feature —
+the design system is presentation-only and knows nothing about DTOs, entities,
+or routes.

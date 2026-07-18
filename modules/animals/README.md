@@ -8,17 +8,17 @@ model the `feature` / `screen` mason bricks are cut from.
 
 ```
 modules/animals/lib/
-├── animals.dart                 # barrel: exports domain + ui + router contract (DTOs stay internal)
+├── animals.dart                 # barrel: exports data + domain + presentation (DTOs stay internal)
 ├── data/
-│   ├── data_source/             # thin wrapper over acits_api <Feature>ApiPort — calls only, no logic
+│   ├── data_source/             # thin wrapper over core/api <Feature>ApiPort — calls only, no logic
 │   ├── mapper/                  # AnimalMapper implements Transformable<Animal> (DTO → entity)
 │   └── repository/              # AnimalRepositoryImpl → Result<Failure, T>; DTOs stop here
 ├── domain/
-│   ├── *.dart                   # feature-local entities/enums (shared ones live in acits_domain)
+│   ├── *.dart                   # feature-local entities/enums (shared ones live in core/domain)
 │   ├── animal_repository.dart   # repository interface (domain types + Result)
 │   ├── port/                    # inbound ports the app supplies (permissions, status labels, shelter)
 │   └── router/                  # AnimalsRouterService — nav contract (impl lives in the root)
-└── ui/
+└── presentation/
     └── <screen>/                # one folder per screen
         ├── bloc/                #   cubit (+ state) or bloc
         ├── view/                #   <screen>_page.dart (BlocProvider) + <screen>_view.dart
@@ -27,11 +27,11 @@ modules/animals/lib/
 
 ## Dependency rule
 
-May import: `acits_core`, `acits_domain`, `acits_api` (**data layer only**),
-`acits_ui_kit`, `acits_navigation`, and leaf UI packages (`flutter_bloc`,
+May import: `base`, `core/domain`, `core/api` (**data layer only**),
+`ui_kit`, `navigation`, `l10n`, and leaf UI packages (`flutter_bloc`,
 `easy_localization`, …). **May NOT import another feature module** — features
-meet only through `acits_domain` contracts and the root's router. DTOs from
-`acits_api` are confined to `data/`; nothing above the repository sees them.
+meet only through `core/domain` contracts and the root's router. DTOs from
+`core/api` are confined to `data/`; nothing above the repository sees them.
 
 ## What it exports
 
