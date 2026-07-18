@@ -126,3 +126,7 @@ tmp/
 docs/design-specs/
 modules/ui_kit/example/build/
 modules/ui_kit/example/.dart_tool/
+
+# Mason local cache (absolute paths, machine-specific)
+.mason/
+mason-lock.json
