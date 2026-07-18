@@ -7,8 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 import 'package:di/di.dart';
 
 /// Стартовый пайплайн приложения как упорядоченный список [AppTask]

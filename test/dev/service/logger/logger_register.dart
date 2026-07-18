@@ -1,7 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-
-import 'package:acits_flutter/util/logger/app_logger.dart';
+import 'package:util/util.dart';
 
 /// Talker для DEV-флейвора: включён ВСЕГДА, в том числе в release-web на
 /// GitHub Pages — это сборка для разработчиков, логи и debug-меню должны

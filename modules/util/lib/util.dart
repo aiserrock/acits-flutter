@@ -7,6 +7,8 @@
 library;
 
 export 'src/failure/failure.dart';
+export 'src/logger/app_bloc_observer.dart';
+export 'src/logger/app_talker.dart';
 export 'src/platform/document_export_service.dart';
 export 'src/platform/photo_upload_service.dart';
 export 'src/platform/platform_ports.dart';
