@@ -16,7 +16,7 @@ import 'package:prescriptions/prescriptions.dart'
         PrescriptionsRouterService;
 import 'package:personal/personal.dart'
     show AnimalNote, CommentEditScreen, CommentsService, PersonalScreen, PersonalService;
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/navigation/auth_screen_bindings.dart';
 import 'package:acits_flutter/navigation/extra_codec.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_detail_screen.dart';

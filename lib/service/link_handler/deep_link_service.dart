@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 

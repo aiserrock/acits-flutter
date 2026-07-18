@@ -18,6 +18,7 @@ workspace:
   - modules/core
   - modules/ui_kit
   - modules/navigation
+  - modules/di
   - modules/animals
   - modules/auth
   - modules/applicants
@@ -47,6 +48,12 @@ dependencies:
     path: modules/ui_kit
   navigation:
     path: modules/navigation
+
+  # DI container: owns the shared get_it instance (GetIt.instance) for the whole
+  # app. The @InjectableInit bootstrap itself stays in the app (lib/di) so it can
+  # scan lib/service/* app-composition classes — a package can't scan its consumer.
+  di:
+    path: modules/di
 
   # Feature module: animals list migrated onto the new stack (Step 8b).
   animals:
@@ -232,7 +239,7 @@ melos:
         fvm dart run build_runner build --delete-conflicting-outputs
 
     genone:
-      description: build_runner (freezed/injectable/json) для одного пакета. Использование — MELOS_GENONE_PKG=modules/base melos run genone.
+      description: build_runner (freezed/injectable/json) для одного пакета. Использование — MELOS_GENONE_PKG=modules/di melos run genone.
       run: |
         cd ${MELOS_GENONE_PKG:-.}
         fvm dart run build_runner build --delete-conflicting-outputs

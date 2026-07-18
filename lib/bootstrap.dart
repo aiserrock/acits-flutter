@@ -9,6 +9,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
+import 'package:di/di.dart';
 
 /// Стартовый пайплайн приложения как упорядоченный список [AppTask]
 /// (base). Обёртка над теми же фазами инициализации, что раньше жили

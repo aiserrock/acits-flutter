@@ -1,6 +1,6 @@
 import 'package:talker_flutter/talker_flutter.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 
 /// Тонкий фасад над Talker для бизнес-кода: `Log.info(...)`, `Log.error(...)`.
 ///

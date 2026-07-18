@@ -12,7 +12,7 @@ import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_cubit.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_state.dart';
 import 'package:prescriptions/prescriptions.dart' show Prescription, PrescriptionCardWidget, PrescriptionExecutionToday;
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/theme.dart';

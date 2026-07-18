@@ -2,7 +2,7 @@ import 'package:animals/animals.dart';
 import 'package:prescriptions/prescriptions.dart' show DrugsScreen;
 import 'package:personal/personal.dart' show CalendarScreen;
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/theme.dart';
