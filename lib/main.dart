@@ -1,108 +1,23 @@
-import 'package:util/util.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:go_router/go_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:util/util.dart';
 
-import 'package:acits_flutter/bootstrap.dart';
 import 'package:app_services/app_services.dart' show Log;
 import 'package:di/di.dart';
-import 'package:shell/shell.dart';
-import 'package:ui_kit/ui_kit.dart' show AppTheme;
+
+import 'package:acits_flutter/bootstrap.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
+import 'package:acits_flutter/run_app.dart';
 
-Future<void> main() async {
-  final binding = WidgetsFlutterBinding.ensureInitialized();
+/// PROD-энтрипоинт. Тонкий: подготовка (bootstrap) и запуск (runApp) вынесены —
+/// см. `bootstrap.dart` (подготовительные фазы) и `run_app.dart` (runApp).
+Future<void> main() => runAppWith(bootstrap: _bootstrapProd);
 
-  // Держим нативный splash (Android/iOS) поверх дерева до тех пор, пока splash-роут
-  // не решит маршрут (refresh + приют) и не вызовет remove(). Так авторизованный
-  // юзер на холодном старте видит только нативный splash → сразу root, без мелькания
-  // login и без промежуточного Flutter-экрана. На web splash держит DOM (#splash в
-  // index.html), поэтому там preserve — no-op.
-  if (!kIsWeb) FlutterNativeSplash.preserve(widgetsBinding: binding);
-
-  // Обычные web-пути (/login вместо /#/login). No-op на мобильных. Требует
-  // SPA-fallback на сервере (nginx try_files; для GitHub Pages — 404.html).
-  usePathUrlStrategy();
-
-  // Стартовые фазы (Firebase → параллельная тройка локализация/ориентация/версия
-  // → DI → Bloc.observer) вынесены в упорядоченный пайплайн AppTask (base).
-  // Порядок и параллелизм сохранены 1:1 — см. app_startup_tasks.dart.
+/// Подготовительный пайплайн prod-флейвора: Firebase(prod) → локализация/
+/// ориентация/версия → DI → Bloc.observer. Порядок и параллелизм — в
+/// [appStartupTasks].
+Future<void> _bootstrapProd() async {
   await AppTaskRunner(appStartupTasks(firebaseOptions: prodFirebaseOptions)).run();
+  Bloc.observer = createAppBlocObserver(getIt<Talker>());
   Log.info('App start · flavor=prod');
-
-  runApp(const AcitsApp());
-}
-
-/// Корневой виджет приложения. Оборачивает [MyApp] в [EasyLocalization],
-/// который должен стоять выше [MaterialApp] в дереве.
-///
-/// [overlayBuilder] — необязательная обёртка над деревом MaterialApp (передаётся
-/// в её `builder:`). dev-сборка использует её для плавающей debug-кнопки; в prod
-/// не задаётся.
-class AcitsApp extends StatelessWidget {
-  const AcitsApp({super.key, this.overlayBuilder});
-
-  final TransitionBuilder? overlayBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    return EasyLocalization(
-      supportedLocales: L10n.supportedLocales,
-      path: L10n.translationsPath,
-      fallbackLocale: L10n.fallbackLocale,
-      // Без startLocale: он перебивал сохранённую локаль на каждом запуске.
-      // saveLocale по умолчанию true — easy_localization сам персистит выбор в
-      // SharedPreferences и восстанавливает его при старте; первый запуск берёт
-      // fallbackLocale.
-      // RestartWidget выше MyApp: dev-инструменты пересоздают всё дерево (и все
-      // BlocProvider) после смены окружения/прокси, чтобы виджеты взяли свежие
-      // сервисы из getIt, а не держали старые ссылки.
-      child: RestartWidget(child: MyApp(overlayBuilder: overlayBuilder)),
-    );
-  }
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key, this.overlayBuilder});
-
-  final TransitionBuilder? overlayBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    // ThemeCubit стоит выше MaterialApp: BlocBuilder перестраивает приложение
-    // при смене режима, отдавая свежий themeMode. theme/darkTheme — статичные
-    // M3-схемы, Flutter сам выбирает нужную по themeMode.
-    return BlocProvider(
-      create: (_) => ThemeCubit(),
-      child: BlocBuilder<ThemeCubit, ThemeMode>(
-        builder: (context, themeMode) {
-          return MaterialApp.router(
-            title: StringConst.commonAppName,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: themeMode,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            color: AppTheme.light.colorScheme.primary,
-            scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
-            routerConfig: getIt<GoRouter>(),
-            // На web-десктопе ограничиваем интерфейс шириной смартфона
-            // (PhoneFrame), затем поверх — необязательный overlayBuilder
-            // (dev-кнопка). Порядок: сначала рамка, потом overlay, чтобы кнопка
-            // была над «телефоном».
-            builder: (context, child) {
-              Widget framed = PhoneFrame(child: child ?? const SizedBox.shrink());
-              if (overlayBuilder != null) framed = overlayBuilder!(context, framed);
-              return framed;
-            },
-          );
-        },
-      ),
-    );
-  }
 }

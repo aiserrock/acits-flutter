@@ -14,12 +14,23 @@ import 'package:example/page/misc.dart';
 import 'package:example/page/sort_chips.dart';
 import 'package:example/page/text_field.dart';
 import 'package:example/page/typography.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:storybook_flutter/storybook_flutter.dart';
 import 'package:ui_kit/ui_kit.dart';
 
-void main() => runApp(const UiKitStorybookApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('ru'), Locale('en')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('ru'),
+      child: const UiKitStorybookApp(),
+    ),
+  );
+}
 
 /// Standalone storybook для дизайн-системы ACITS (ui_kit).
 ///
@@ -44,12 +55,11 @@ Widget _wrapper(BuildContext context, Widget? child) => MaterialApp(
   debugShowCheckedModeBanner: false,
   theme: AppTheme.light,
   darkTheme: AppTheme.dark,
-  localizationsDelegates: const [
-    GlobalMaterialLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-  ],
-  supportedLocales: const [Locale('ru'), Locale('en')],
+  // easy_localization прокидывает делегаты и текущую локаль (+ Material/Cupertino
+  // делегаты для системных виджетов). Так `.tr()` в ui_kit-виджетах резолвится.
+  localizationsDelegates: context.localizationDelegates,
+  supportedLocales: context.supportedLocales,
+  locale: context.locale,
   home: child,
 );
 
