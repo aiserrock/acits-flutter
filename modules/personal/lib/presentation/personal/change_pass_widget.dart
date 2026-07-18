@@ -1,4 +1,4 @@
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:acits_domain/acits_domain.dart' show MessagedException;
 import 'package:l10n/acits_l10n.dart';
 import 'package:ui_kit/acits_ui_kit.dart';
@@ -10,7 +10,6 @@ import 'package:lottie/lottie.dart';
 
 import 'package:personal/data/data.dart';
 import 'package:personal/presentation/presentation.dart';
-import 'package:personal/util/util.dart';
 
 class ChangePassWidget extends StatelessWidget {
   const ChangePassWidget({required this.service, super.key});

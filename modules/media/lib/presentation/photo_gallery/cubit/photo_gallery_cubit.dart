@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:acits_domain/acits_domain.dart' show MessagedException;
 import 'package:animals/animals.dart';
 import 'package:dio/dio.dart';

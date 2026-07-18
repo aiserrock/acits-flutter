@@ -1,5 +1,5 @@
 import 'package:acits_api/acits_api.dart';
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_alice/alice.dart';
 import 'package:injectable/injectable.dart';
@@ -9,7 +9,7 @@ import 'package:acits_flutter/domain/env.dart';
 import '../../di/di_container.dart';
 import '../shared_pref/debug_preference_storage.dart';
 
-/// Dev-вариант нового API-стека (acits_core Dio + acits_api адаптеры).
+/// Dev-вариант нового API-стека (base Dio + acits_api адаптеры).
 ///
 /// Зеркалит [AcitsApiRegister] (prod), но: baseUrl оборачивается в CORS-прокси
 /// (web) и debug-baseUrl из настроек, а трафик виден в Alice. Сетевой прокси

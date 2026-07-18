@@ -13,7 +13,7 @@ environment:
 # Feature modules (modules/*) are added lazily as they are migrated.
 workspace:
   - modules/l10n
-  - packages/acits_core
+  - modules/base
   - packages/acits_domain
   - packages/acits_api
   - modules/ui_kit
@@ -37,8 +37,8 @@ dependencies:
   # alongside chopper — additive, no feature migrated yet.
   l10n:
     path: modules/l10n
-  acits_core:
-    path: packages/acits_core
+  base:
+    path: modules/base
   acits_domain:
     path: packages/acits_domain
   acits_api:
@@ -232,7 +232,7 @@ melos:
         fvm dart run build_runner build --delete-conflicting-outputs
 
     genone:
-      description: build_runner (freezed/injectable/json) для одного пакета. Использование — MELOS_GENONE_PKG=packages/acits_core melos run genone.
+      description: build_runner (freezed/injectable/json) для одного пакета. Использование — MELOS_GENONE_PKG=modules/base melos run genone.
       run: |
         cd ${MELOS_GENONE_PKG:-.}
         fvm dart run build_runner build --delete-conflicting-outputs

@@ -1,12 +1,12 @@
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 
-/// Мосты между портами acits_core (сеть/интерцепторы) и существующими
-/// сервисами приложения. acits_core не знает про [AuthService]/[ConfigService];
+/// Мосты между портами base (сеть/интерцепторы) и существующими
+/// сервисами приложения. base не знает про [AuthService]/[ConfigService];
 /// эти адаптеры инъектятся в новый Dio (Step 7).
 ///
 /// [AuthService] резолвится ЛЕНИВО через `getIt`, а не конструктором: authed

@@ -1,11 +1,11 @@
 import 'package:acits_api/acits_api.dart';
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/domain/env.dart';
 
-/// DI-модуль НОВОГО API-стека (acits_core Dio + acits_api адаптер).
+/// DI-модуль НОВОГО API-стека (base Dio + acits_api адаптер).
 ///
 /// Регистрируется рядом с chopper и пока никем не потребляется — фичи не
 /// мигрированы. Цель Step 7: базис существует и резолвится в get_it до того, как
@@ -14,7 +14,7 @@ import 'package:acits_flutter/domain/env.dart';
 @module
 abstract class AcitsApiRegister {
   /// Единый сконфигурированный Dio для нового клиента: интерцепторы
-  /// auth/header из acits_core, порты — мосты к AuthService/ConfigService
+  /// auth/header из base, порты — мосты к AuthService/ConfigService
   /// (см. auth_port_bridges.dart). baseUrl берём из того же [Env], что и chopper.
   @prod
   @Named('acitsApi')

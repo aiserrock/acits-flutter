@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:l10n/acits_l10n.dart';
 
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:ui_kit/acits_ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';

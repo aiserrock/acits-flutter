@@ -18,4 +18,4 @@ export 'src/repository/prescription_repository.dart';
 export 'src/router/router_service.dart';
 
 // Re-export Result/Failure so features get them from the domain barrel.
-export 'package:acits_core/acits_core.dart' show Result, Ok, Err, Failure;
+export 'package:base/base.dart' show Result, Ok, Err, Failure;

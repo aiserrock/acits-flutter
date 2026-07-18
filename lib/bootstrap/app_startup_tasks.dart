@@ -1,4 +1,4 @@
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -8,11 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/util/app_version.dart';
 import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 
 /// Стартовый пайплайн приложения как упорядоченный список [AppTask]
-/// (acits_core). Обёртка над теми же фазами инициализации, что раньше жили
+/// (base). Обёртка над теми же фазами инициализации, что раньше жили
 /// прямо в `main()` — поведение и порядок сохранены 1:1.
 ///
 /// Порядок:

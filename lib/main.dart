@@ -1,4 +1,4 @@
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ Future<void> main() async {
   usePathUrlStrategy();
 
   // Стартовые фазы (Firebase → параллельная тройка локализация/ориентация/версия
-  // → DI → Bloc.observer) вынесены в упорядоченный пайплайн AppTask (acits_core).
+  // → DI → Bloc.observer) вынесены в упорядоченный пайплайн AppTask (base).
   // Порядок и параллелизм сохранены 1:1 — см. app_startup_tasks.dart.
   await AppTaskRunner(appStartupTasks(firebaseOptions: prodFirebaseOptions)).run();
   Log.info('App start · flavor=prod');

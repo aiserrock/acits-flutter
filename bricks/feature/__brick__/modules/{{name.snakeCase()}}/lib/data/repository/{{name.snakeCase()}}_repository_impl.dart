@@ -1,4 +1,4 @@
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 import 'package:dio/dio.dart';
 
 import 'package:{{name.snakeCase()}}/data/data.dart';

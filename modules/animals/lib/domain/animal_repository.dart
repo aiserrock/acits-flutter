@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:acits_core/acits_core.dart';
+import 'package:base/base.dart';
 
 import 'package:animals/domain/domain.dart';
 

@@ -28,7 +28,7 @@ import 'generated/models/status69f_enum.dart';
 /// The ONLY place generated swagger_parser code is touched.
 ///
 /// Wraps the generated [AnimalsClient] (retrofit over the shared `Dio` from
-/// acits_core, injected in Step 7) and maps generated models onto OUR
+/// base, injected in Step 7) and maps generated models onto OUR
 /// generator-agnostic DTOs. Swapping generators = replace this file with a new
 /// adapter implementing [AnimalApiPort]; ports/DTOs/features stay unchanged.
 class AnimalApiAdapter implements AnimalApiPort {
