@@ -106,6 +106,31 @@ Future<_i174.GetIt> $initDevGetIt(
     ),
     registerFor: {_dev},
   );
+  gh.factory<_i995.PrescriptionsClient>(
+    () => acitsApiRegisterDev.prescriptionsClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i995.ApplicantsClient>(
+    () => acitsApiRegisterDev.applicantsClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i995.CuratorsClient>(
+    () => acitsApiRegisterDev.curatorsClient(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i995.ProfileApiPort>(
+    () => acitsApiRegisterDev.profileApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i995.UsersClient>(),
+    ),
+    registerFor: {_dev},
+  );
   gh.factory<_i995.TokenClient>(
     () => acitsApiRegisterDev.tokenClientAuthed(
       gh<_i361.Dio>(instanceName: 'acitsApi'),
@@ -113,10 +138,46 @@ Future<_i174.GetIt> $initDevGetIt(
     instanceName: 'acitsApiTokenAuthed',
     registerFor: {_dev},
   );
+  gh.factory<_i995.SheltersClient>(
+    () => acitsApiRegisterDev.sheltersClientAuthed(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+    ),
+    instanceName: 'acitsApiSheltersAuthed',
+    registerFor: {_dev},
+  );
+  gh.factory<_i995.StaffApiPort>(
+    () => acitsApiRegisterDev.staffApiPort(
+      gh<_i995.ApplicantsClient>(),
+      gh<_i995.CuratorsClient>(),
+    ),
+    registerFor: {_dev},
+  );
   gh.factory<_i995.AnimalApiPort>(
     () => acitsApiRegisterDev.animalApiPort(
       gh<_i361.Dio>(instanceName: 'acitsApi'),
       gh<_i995.AnimalsClient>(),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i995.AnimalNotesApiPort>(
+    () => acitsApiRegisterDev.animalNotesApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i995.AnimalsClient>(),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i995.SelectionApiPort>(
+    () => acitsApiRegisterDev.selectionApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i995.AnimalsClient>(),
+    ),
+    registerFor: {_dev},
+  );
+  gh.factory<_i995.PrescriptionApiPort>(
+    () => acitsApiRegisterDev.prescriptionApiPort(
+      gh<_i361.Dio>(instanceName: 'acitsApi'),
+      gh<_i995.PrescriptionsClient>(),
+      gh<_i995.SheltersClient>(instanceName: 'acitsApiSheltersAuthed'),
     ),
     registerFor: {_dev},
   );

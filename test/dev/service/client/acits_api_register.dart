@@ -57,7 +57,8 @@ abstract class AcitsApiRegisterDev {
   AnimalsClient animalsClient(@Named('acitsApi') Dio dio) => AnimalsClient(dio);
 
   @dev
-  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) => AnimalApiAdapter(client, dio);
+  AnimalApiPort animalApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
+      AnimalApiAdapter(client, dio);
 
   @dev
   @Named('acitsApiTokenAuthed')
@@ -74,7 +75,8 @@ abstract class AcitsApiRegisterDev {
   SheltersClient sheltersClient(@Named('acitsApiGuest') Dio dio) => SheltersClient(dio);
 
   @dev
-  UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) => UsersRegistrationClient(dio);
+  UsersRegistrationClient usersRegistrationClient(@Named('acitsApiGuest') Dio dio) =>
+      UsersRegistrationClient(dio);
 
   @dev
   AuthApiPort authApiPort(
@@ -90,4 +92,50 @@ abstract class AcitsApiRegisterDev {
     guestSheltersClient: guestSheltersClient,
     guestRegistrationClient: guestRegistrationClient,
   );
+
+  // ── prescriptions + drugs slice ─────────────────────────────────────────────
+
+  @dev
+  PrescriptionsClient prescriptionsClient(@Named('acitsApi') Dio dio) => PrescriptionsClient(dio);
+
+  @dev
+  @Named('acitsApiSheltersAuthed')
+  SheltersClient sheltersClientAuthed(@Named('acitsApi') Dio dio) => SheltersClient(dio);
+
+  @dev
+  PrescriptionApiPort prescriptionApiPort(
+    @Named('acitsApi') Dio dio,
+    PrescriptionsClient prescriptionsClient,
+    @Named('acitsApiSheltersAuthed') SheltersClient sheltersClient,
+  ) => PrescriptionApiAdapter(dio, prescriptionsClient, sheltersClient);
+
+  // ── animal notes slice ──────────────────────────────────────────────────────
+
+  @dev
+  AnimalNotesApiPort animalNotesApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
+      AnimalNotesApiAdapter(dio, client);
+
+  // ── staff slice (applicants + curators) ─────────────────────────────────────
+
+  @dev
+  ApplicantsClient applicantsClient(@Named('acitsApi') Dio dio) => ApplicantsClient(dio);
+
+  @dev
+  CuratorsClient curatorsClient(@Named('acitsApi') Dio dio) => CuratorsClient(dio);
+
+  @dev
+  StaffApiPort staffApiPort(ApplicantsClient applicants, CuratorsClient curators) =>
+      StaffApiAdapter(applicants, curators);
+
+  // ── profile slice (/users/me/) ──────────────────────────────────────────────
+
+  @dev
+  ProfileApiPort profileApiPort(@Named('acitsApi') Dio dio, UsersClient usersClient) =>
+      ProfileApiAdapter(dio, usersClient);
+
+  // ── config slice (values-for-selection + animal attributes) ─────────────────
+
+  @dev
+  SelectionApiPort selectionApiPort(@Named('acitsApi') Dio dio, AnimalsClient client) =>
+      SelectionApiAdapter(dio, client);
 }
