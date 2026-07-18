@@ -1,33 +1,27 @@
+// dart format width=120
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
 /// *****************************************************
-library;
 
-// ignore_for_file: directives_ordering,unnecessary_import
+// coverage:ignore-file
+// ignore_for_file: type=lint
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
-
-class $AssetsCertGen {
-  const $AssetsCertGen();
-
-  /// File path: assets/cert/ssl_charles_mac2013.pem
-  String get sslCharlesMac2013 => 'assets/cert/ssl_charles_mac2013.pem';
-
-  /// File path: assets/cert/ssl_charles_macair13.pem
-  String get sslCharlesMacair13 => 'assets/cert/ssl_charles_macair13.pem';
-
-  /// File path: assets/cert/ssl_charles_macpro13.pem
-  String get sslCharlesMacpro13 => 'assets/cert/ssl_charles_macpro13.pem';
-}
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
 class $AssetsCommonGen {
   const $AssetsCommonGen();
 
   /// File path: assets/common/empty_state.svg
   SvgGenImage get emptyState => const SvgGenImage('assets/common/empty_state.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [emptyState];
 }
 
 class $AssetsGalleryGen {
@@ -53,6 +47,17 @@ class $AssetsGalleryGen {
 
   /// File path: assets/gallery/avatar_mouse.png
   AssetGenImage get avatarMouse => const AssetGenImage('assets/gallery/avatar_mouse.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+    avatarAlpaka,
+    avatarCat0,
+    avatarCat1,
+    avatarDog,
+    avatarDolphin,
+    avatarEagle,
+    avatarMouse,
+  ];
 }
 
 class $AssetsIconGen {
@@ -105,6 +110,26 @@ class $AssetsIconGen {
 
   /// File path: assets/icon/visible_off.svg
   SvgGenImage get visibleOff => const SvgGenImage('assets/icon/visible_off.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+    animalFace,
+    applicant,
+    calendar,
+    checkOff,
+    checkOn,
+    close,
+    comment,
+    curator,
+    drugs,
+    flagEn,
+    flagRu,
+    paw,
+    prescription,
+    today,
+    visible,
+    visibleOff,
+  ];
 }
 
 class $AssetsImageGen {
@@ -133,31 +158,46 @@ class $AssetsImageGen {
 
   /// File path: assets/image/logo_splash.svg
   SvgGenImage get logoSplash => const SvgGenImage('assets/image/logo_splash.svg');
+
+  /// List of all assets
+  List<dynamic> get values => [
+    animalStub,
+    errorStub,
+    logoBar,
+    logoBarDark,
+    logoLeadingBar,
+    logoLeadingBarDark,
+    logoNative,
+    logoSplash,
+  ];
 }
 
 class $AssetsLottieGen {
   const $AssetsLottieGen();
 
   /// File path: assets/lottie/cats_loading.json
-  String get catsLoading => 'assets/lottie/cats_loading.json';
+  String get catsLoading => 'packages/ui_kit/assets/lottie/cats_loading.json';
 
   /// File path: assets/lottie/crash.json
-  String get crash => 'assets/lottie/crash.json';
+  String get crash => 'packages/ui_kit/assets/lottie/crash.json';
 
   /// File path: assets/lottie/crash_1.json
-  String get crash1 => 'assets/lottie/crash_1.json';
+  String get crash1 => 'packages/ui_kit/assets/lottie/crash_1.json';
 
   /// File path: assets/lottie/dog_loading.json
-  String get dogLoading => 'assets/lottie/dog_loading.json';
+  String get dogLoading => 'packages/ui_kit/assets/lottie/dog_loading.json';
 
   /// File path: assets/lottie/loading.json
-  String get loading => 'assets/lottie/loading.json';
+  String get loading => 'packages/ui_kit/assets/lottie/loading.json';
 
   /// File path: assets/lottie/paw_loading.json
-  String get pawLoading => 'assets/lottie/paw_loading.json';
+  String get pawLoading => 'packages/ui_kit/assets/lottie/paw_loading.json';
 
   /// File path: assets/lottie/success.json
-  String get success => 'assets/lottie/success.json';
+  String get success => 'packages/ui_kit/assets/lottie/success.json';
+
+  /// List of all assets
+  List<String> get values => [catsLoading, crash, crash1, dogLoading, loading, pawLoading, success];
 }
 
 class $AssetsOnboardingGen {
@@ -174,12 +214,16 @@ class $AssetsOnboardingGen {
 
   /// File path: assets/onboarding/plan.svg
   SvgGenImage get plan => const SvgGenImage('assets/onboarding/plan.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [drugs, free, news, plan];
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
-  static const $AssetsCertGen cert = $AssetsCertGen();
+  static const String package = 'ui_kit';
+
   static const $AssetsCommonGen common = $AssetsCommonGen();
   static const $AssetsGalleryGen gallery = $AssetsGalleryGen();
   static const $AssetsIconGen icon = $AssetsIconGen();
@@ -188,40 +232,55 @@ class Assets {
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
 }
 
-class AssetGenImage extends AssetImage {
-  const AssetGenImage(super.assetName);
+class AssetGenImage {
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}, this.animation});
+
+  final String _assetName;
+
+  static const String package = 'ui_kit';
+
+  final Size? size;
+  final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
+    AssetBundle? bundle,
     ImageFrameBuilder? frameBuilder,
-    ImageLoadingBuilder? loadingBuilder,
     ImageErrorWidgetBuilder? errorBuilder,
     String? semanticLabel,
     bool excludeFromSemantics = false,
+    double? scale,
     double? width,
     double? height,
     Color? color,
+    Animation<double>? opacity,
     BlendMode? colorBlendMode,
     BoxFit? fit,
     AlignmentGeometry alignment = Alignment.center,
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
-    FilterQuality filterQuality = FilterQuality.low,
+    @Deprecated('Do not specify package for a generated library asset') String? package = package,
+    FilterQuality filterQuality = FilterQuality.medium,
+    int? cacheWidth,
+    int? cacheHeight,
   }) {
-    return Image(
+    return Image.asset(
+      _assetName,
       key: key,
-      image: this,
+      bundle: bundle,
       frameBuilder: frameBuilder,
-      loadingBuilder: loadingBuilder,
       errorBuilder: errorBuilder,
       semanticLabel: semanticLabel,
       excludeFromSemantics: excludeFromSemantics,
+      scale: scale,
       width: width,
       height: height,
       color: color,
+      opacity: opacity,
       colorBlendMode: colorBlendMode,
       fit: fit,
       alignment: alignment,
@@ -230,54 +289,97 @@ class AssetGenImage extends AssetImage {
       matchTextDirection: matchTextDirection,
       gaplessPlayback: gaplessPlayback,
       isAntiAlias: isAntiAlias,
+      package: package,
       filterQuality: filterQuality,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
     );
   }
 
-  String get path => assetName;
+  ImageProvider provider({
+    AssetBundle? bundle,
+    @Deprecated('Do not specify package for a generated library asset') String? package = package,
+  }) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
+  }
+
+  String get path => _assetName;
+
+  String get keyName => 'packages/ui_kit/$_assetName';
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({required this.isAnimation, required this.duration, required this.frames});
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }
 
 class SvgGenImage {
-  const SvgGenImage(this._assetName);
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}}) : _isVecFormat = false;
+
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}}) : _isVecFormat = true;
 
   final String _assetName;
+  final Size? size;
+  final Set<String> flavors;
+  final bool _isVecFormat;
 
-  SvgPicture svg({
+  static const String package = 'ui_kit';
+
+  _svg.SvgPicture svg({
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package,
+    @Deprecated('Do not specify package for a generated library asset') String? package = package,
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,
     AlignmentGeometry alignment = Alignment.center,
     bool allowDrawingOutsideViewBox = false,
     WidgetBuilder? placeholderBuilder,
-    Color? color,
-    BlendMode colorBlendMode = BlendMode.srcIn,
     String? semanticsLabel,
     bool excludeFromSemantics = false,
+    _svg.SvgTheme? theme,
+    _svg.ColorMapper? colorMapper,
+    ColorFilter? colorFilter,
     Clip clipBehavior = Clip.hardEdge,
+    @deprecated Color? color,
+    @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated bool cacheColorFilter = false,
   }) {
-    return SvgPicture.asset(
-      _assetName,
+    final _svg.BytesLoader loader;
+    if (_isVecFormat) {
+      loader = _vg.AssetBytesLoader(_assetName, assetBundle: bundle, packageName: package);
+    } else {
+      loader = _svg.SvgAssetLoader(
+        _assetName,
+        assetBundle: bundle,
+        packageName: package,
+        theme: theme,
+        colorMapper: colorMapper,
+      );
+    }
+    return _svg.SvgPicture(
+      loader,
       key: key,
       matchTextDirection: matchTextDirection,
-      bundle: bundle,
-      package: package,
       width: width,
       height: height,
       fit: fit,
       alignment: alignment,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholderBuilder: placeholderBuilder,
-      color: color,
-      colorBlendMode: colorBlendMode,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
+      colorFilter: colorFilter ?? (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
+      cacheColorFilter: cacheColorFilter,
     );
   }
 
   String get path => _assetName;
+
+  String get keyName => 'packages/ui_kit/$_assetName';
 }

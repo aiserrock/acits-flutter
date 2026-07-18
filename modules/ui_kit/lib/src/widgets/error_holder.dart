@@ -6,11 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../gen/assets.gen.dart';
 import '../components/primary_button.dart';
-
-/// Дефолтная lottie-анимация ошибки. Путь резолвится из бандла приложения
-/// (`rootBundle`), поэтому ui_kit не обязан владеть самим ассетом.
-const _kDefaultCrashAsset = 'assets/lottie/crash_1.json';
 
 const _sizePart = .75;
 
@@ -43,7 +40,7 @@ class ErrorHolderWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Lottie.asset(assetPath ?? _kDefaultCrashAsset, height: size, width: size),
+                Lottie.asset(assetPath ?? Assets.lottie.crash1, height: size, width: size),
                 const SizedBox(height: 24.0),
                 Text(
                   title ?? error?.title ?? '',

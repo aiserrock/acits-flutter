@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:di/di.dart';
-import 'package:shell/gen/assets.gen.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:localization/localization.dart';
 import 'package:shell/res/lottie.dart';
 import 'package:app_services/app_services.dart';
@@ -26,7 +26,7 @@ abstract final class AuthScreenBindings {
       configService: getIt<ConfigService>(),
       navigator: getIt<SplashNavigator>(),
       logo: Assets.image.logoSplash.svg(width: 80.0, height: 108.0),
-      loadingAnimations: const [LottieRes.loading, LottieRes.pawLoading, LottieRes.dogLoading, LottieRes.catsLoading],
+      loadingAnimations: [LottieRes.loading, LottieRes.pawLoading, LottieRes.dogLoading, LottieRes.catsLoading],
     );
   }
 

@@ -3,9 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-/// Дефолтная lottie-анимация загрузки. Путь резолвится из бандла приложения
-/// (`rootBundle`), поэтому ui_kit не обязан владеть самим ассетом.
-const _kDefaultLoadingAsset = 'assets/lottie/loading.json';
+import '../../gen/assets.gen.dart';
 
 const _sizePart = .75;
 
@@ -20,7 +18,7 @@ class LoaderHolderWidget extends StatelessWidget {
       builder: (_, cons) {
         final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
         return Center(
-          child: Lottie.asset(assetPath ?? _kDefaultLoadingAsset, height: size, width: size),
+          child: Lottie.asset(assetPath ?? Assets.lottie.loading, height: size, width: size),
         );
       },
     );

@@ -124,3 +124,5 @@ mockoon/_bodies.json
 # Local scratch & planning notes — not part of the project
 tmp/
 docs/design-specs/
+modules/ui_kit/example/build/
+modules/ui_kit/example/.dart_tool/
