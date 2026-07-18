@@ -25,6 +25,7 @@ workspace:
   - modules/prescriptions
   - modules/personal
   - modules/media
+  - modules/app_services
 
 dependencies:
   flutter:
@@ -88,6 +89,13 @@ dependencies:
   # auth router services.
   media:
     path: modules/media
+
+  # App-composition services (session/config/animal, storage + client register
+  # modules, port bridges, document/share platform code). Extracted from
+  # lib/service so the shell + DI depend on their types without an app edge; its
+  # injectables are pulled into DI as a micro-package (externalPackageModules).
+  app_services:
+    path: modules/app_services
 
   app_links: ^7.0.0
   bloc: ^9.2.0

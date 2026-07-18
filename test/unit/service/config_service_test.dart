@@ -1,7 +1,5 @@
 import 'package:core/api.dart';
-import 'package:acits_flutter/service/auth/auth_service.dart';
-import 'package:acits_flutter/service/config/config_service.dart';
-import 'package:acits_flutter/service/shared_pref/preference_storage.dart';
+import 'package:app_services/app_services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

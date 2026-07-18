@@ -14,7 +14,7 @@ import 'package:ui_kit/ui_kit.dart'
 import 'package:di/di.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
-import 'package:acits_flutter/service/animal/animal_service.dart';
+import 'package:app_services/app_services.dart';
 import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
 import 'package:prescriptions/prescriptions.dart'
     show AnimalPrescriptionCard, AnimalPrescriptionsCubit, AnimalPrescriptionsState, Prescription, PrescriptionService;

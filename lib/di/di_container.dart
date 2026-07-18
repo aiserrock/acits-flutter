@@ -1,6 +1,6 @@
 import 'package:acits_flutter/di/di_container.config.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:app_services/app_services.dart';
 import 'package:di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -13,6 +13,7 @@ final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   preferRelativeImports: false,
   asExtension: false,
   ignoreUnregisteredTypes: [DebugService],
+  externalPackageModulesAfter: [ExternalModule(AppServicesPackageModule)],
 )
 Future<void> initDi() async {
   await $initGetIt(getIt, environmentFilter: NoEnvOrContains(Environment.prod));

@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:di/di.dart';
-import 'package:acits_flutter/service/theme/theme_storage.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import 'package:app_services/app_services.dart';
 
 /// Держит текущий [ThemeMode] приложения (System/Light/Dark) и персистит выбор.
 ///

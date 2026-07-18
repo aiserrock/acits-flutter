@@ -1,5 +1,5 @@
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:app_services/app_services.dart';
 import 'package:di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alice/alice.dart';
@@ -20,6 +20,7 @@ final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   preferRelativeImports: true,
   asExtension: false,
   ignoreUnregisteredTypes: [DebugService, Alice],
+  externalPackageModulesAfter: [ExternalModule(AppServicesPackageModule)],
 )
 Future<void> initDevDi() async {
   getIt.registerSingleton(_navigatorKey);

@@ -6,7 +6,7 @@ import 'package:ui_kit/ui_kit.dart' show ScreenLoader;
 
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
-import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:app_services/app_services.dart';
 import 'package:acits_flutter/ui/screen/common/sort/sort_chips_bar.dart';
 import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_cubit.dart';
