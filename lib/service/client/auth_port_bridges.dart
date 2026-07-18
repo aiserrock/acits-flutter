@@ -1,7 +1,7 @@
 import 'package:network/network.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 

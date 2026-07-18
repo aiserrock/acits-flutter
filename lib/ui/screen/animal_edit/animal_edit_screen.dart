@@ -8,7 +8,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:ui_kit/ui_kit.dart' show ErrorHolderWidget, LoaderHolderWidget, SuccessHolderWidget;
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_add_info_page.dart';

@@ -4,7 +4,7 @@ import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prescriptions/prescriptions.dart' show PrescriptionService;
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_state.dart';
 import 'package:acits_flutter/util/logger/log.dart';

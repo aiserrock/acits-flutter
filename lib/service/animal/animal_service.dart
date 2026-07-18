@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:injectable/injectable.dart';
 import 'package:media/media.dart' show DocumentRepository;
 

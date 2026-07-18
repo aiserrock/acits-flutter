@@ -6,7 +6,7 @@ import 'package:ui_kit/ui_kit.dart' show Skeleton;
 
 import 'package:personal/personal.dart' show UserProfile;
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';

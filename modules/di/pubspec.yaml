@@ -1,0 +1,21 @@
+name: di
+description: Dependency-injection container for ACITS — owns the shared get_it instance and the app's @InjectableInit bootstrap wiring together every module + app service.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get_it: ^9.2.1
+  injectable: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

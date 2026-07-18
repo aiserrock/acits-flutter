@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_kit/ui_kit.dart' show FormEditCard, EditCardData, bsSelectorActions;
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/domain/animal_sex_enum.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/config/config_service.dart';

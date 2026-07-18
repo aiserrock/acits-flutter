@@ -11,7 +11,7 @@ import 'package:acits_flutter/bootstrap.dart';
 import 'package:acits_flutter/res/l10n.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/theme.dart';
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/ui/widget/cubit/theme_cubit.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
 import 'package:acits_flutter/util/logger/log.dart';

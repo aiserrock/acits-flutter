@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:personal/personal.dart';
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
 
 /// Реализация навигационного контракта модуля «Личный кабинет / комментарии»

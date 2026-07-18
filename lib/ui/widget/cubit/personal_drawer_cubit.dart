@@ -2,7 +2,7 @@ import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/personal.dart' show PersonalService, UserProfile;
 
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 
 /// Загружает данные пользователя для бокового меню [PersonalDrawerWidget].
