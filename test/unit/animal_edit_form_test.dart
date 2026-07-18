@@ -1,5 +1,5 @@
 import 'package:core/domain.dart' show Applicant, Curator;
-import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
+import 'package:shell/presentation/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:animals/animals.dart';
 import 'package:flutter_test/flutter_test.dart';
 

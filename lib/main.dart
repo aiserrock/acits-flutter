@@ -8,13 +8,11 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:acits_flutter/bootstrap.dart';
-import 'package:acits_flutter/res/l10n.dart';
-import 'package:acits_flutter/res/strings.dart';
-import 'package:acits_flutter/res/theme.dart';
+import 'package:app_services/app_services.dart' show Log;
 import 'package:di/di.dart';
-import 'package:acits_flutter/ui/widget/cubit/theme_cubit.dart';
+import 'package:shell/shell.dart';
+import 'package:ui_kit/ui_kit.dart' show AppTheme;
 import 'package:acits_flutter/firebase/firebase_config.dart';
-import 'package:acits_flutter/util/logger/log.dart';
 import 'package:acits_flutter/util/phone_frame.dart';
 import 'package:acits_flutter/util/restart_widget.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:acits_flutter/res/lottie.dart';
+import 'package:shell/res/lottie.dart';
 
 /// Полноэкранная заставка «Применение…» на тёмном фоне с Lottie-лоадером.
 ///
