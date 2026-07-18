@@ -26,6 +26,7 @@ workspace:
   - modules/personal
   - modules/media
   - modules/app_services
+  - modules/shell
 
 dependencies:
   flutter:
@@ -96,6 +97,15 @@ dependencies:
   # injectables are pulled into DI as a micro-package (externalPackageModules).
   app_services:
     path: modules/app_services
+
+  # App shell: composition screens (root/main/animal detail+edit) + navigation
+  # tree (GoRouter factory, extra codec, auth bindings, the six feature router
+  # services). The app builds MaterialApp.router with the shell's router and
+  # top-level ThemeCubit; the shell's router-service injectables are pulled into
+  # DI as a micro-package (externalPackageModules). Owns the app's flutter_gen
+  # assets accessor for now (moves to ui_kit in a later step).
+  shell:
+    path: modules/shell
 
   app_links: ^7.0.0
   bloc: ^9.2.0

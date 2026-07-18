@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:acits_flutter/export.dart';
 import 'package:animals/animals.dart';
 import 'package:app_services/app_services.dart';
-import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:ui_kit/ui_kit.dart' show PrimaryButton;
+import 'package:shell/shell.dart';
+import 'package:ui_kit/ui_kit.dart' show PrimaryButton, AppColorsX;
+import 'package:util/util.dart' show AppVersion;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
