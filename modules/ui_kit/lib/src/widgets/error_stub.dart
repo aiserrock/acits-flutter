@@ -4,13 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../components/primary_button.dart';
 
 class ErrorStubWidget extends StatelessWidget {
-  const ErrorStubWidget({
-    required this.onPressed,
-    this.showImage = true,
-    this.height,
-    this.image,
-    super.key,
-  });
+  const ErrorStubWidget({required this.onPressed, this.showImage = true, this.height, this.image, super.key});
 
   final double? height;
   final VoidCallback onPressed;

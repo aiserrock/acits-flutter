@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart' show Curator;
+import 'package:core/domain.dart' show Curator;
 import 'package:flutter/material.dart';
 
 class CuratorListItem extends StatelessWidget {

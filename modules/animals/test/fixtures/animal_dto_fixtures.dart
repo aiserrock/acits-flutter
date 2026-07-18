@@ -1,7 +1,7 @@
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 
 /// Реалистичные AnimalDto для тестов data-слоя. Формы позаимствованы у
-/// packages/acits_api/test/fixtures/animals_fixtures.dart, но собраны сразу в
+/// modules/core/test/fixtures/animals_fixtures.dart, но собраны сразу в
 /// DTO (маппер/репозиторий работают с DTO, не с сырым JSON).
 
 ImageThumbnailsDto _thumbs(String base) =>

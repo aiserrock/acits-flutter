@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart' show Applicant;
+import 'package:core/domain.dart' show Applicant;
 import 'package:flutter/material.dart';
 
 class ApplicantListItem extends StatelessWidget {

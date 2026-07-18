@@ -1,4 +1,4 @@
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 import 'package:auth/auth.dart' show AuthConfigInitializer;
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';

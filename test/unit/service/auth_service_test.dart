@@ -1,5 +1,4 @@
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_domain/acits_domain.dart';
+import 'package:core/core.dart';
 import 'package:acits_flutter/domain/registration_input.dart';
 import 'package:acits_flutter/service/auth/auth_repository.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';

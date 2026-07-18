@@ -7,8 +7,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_api/src/animal_notes_client_barrel.dart';
+import 'package:core/api.dart';
+import 'package:core/api/src/animal_notes_client_barrel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -24,10 +24,8 @@ dependencies:
     path: ../base
   l10n:
     path: ../l10n
-  acits_domain:
-    path: ../../packages/acits_domain
-  acits_api:
-    path: ../../packages/acits_api
+  core:
+    path: ../core
   ui_kit:
     path: ../ui_kit
   navigation:

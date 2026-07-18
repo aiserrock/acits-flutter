@@ -3,8 +3,8 @@
 // Both resources map onto the typed generated clients. These tests prove the
 // adapter unwraps the paginated list, maps generated → OUR DTO, and builds the
 // write body (with shelter scoping) that the app historically posted.
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_api/src/staff_client_barrel.dart';
+import 'package:core/api.dart';
+import 'package:core/api/src/staff_client_barrel.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _FakeApplicantsClient implements ApplicantsClient {

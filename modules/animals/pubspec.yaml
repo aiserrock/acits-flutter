@@ -1,5 +1,5 @@
 name: animals
-description: Animals feature module (reference slice) — list / detail / edit on the new stack. data/domain/ui, DTO-contained via acits_api ports.
+description: Animals feature module (reference slice) — list / detail / edit on the new stack. data/domain/ui, DTO-contained via core api ports.
 publish_to: "none"
 version: 0.1.0
 
@@ -21,10 +21,8 @@ dependencies:
     path: ../base
   l10n:
     path: ../l10n
-  acits_domain:
-    path: ../../packages/acits_domain
-  acits_api:
-    path: ../../packages/acits_api
+  core:
+    path: ../core
   ui_kit:
     path: ../ui_kit
   navigation:

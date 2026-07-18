@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 
 /// Тонкая обёртка над [AnimalApiPort]: только вызовы, никакой логики/маппинга.
 /// Возвращает DTO — их разворачивает в сущности репозиторий (там DTO и стоп).

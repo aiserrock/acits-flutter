@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:base/base.dart';
-import 'package:acits_domain/acits_domain.dart' show MessagedException;
+import 'package:core/domain.dart' show MessagedException;
 import 'package:animals/animals.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';

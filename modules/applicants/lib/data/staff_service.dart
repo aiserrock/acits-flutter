@@ -1,5 +1,4 @@
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_domain/acits_domain.dart';
+import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 
 import 'package:applicants/domain/domain.dart';
@@ -18,11 +17,7 @@ class StaffService {
   final StaffApiPort _port;
 
   /// Список кураторов
-  Future<List<Curator>> fetchCurators({
-    int limit = 25,
-    int offset = 0,
-    String? searchRequest,
-  }) async {
+  Future<List<Curator>> fetchCurators({int limit = 25, int offset = 0, String? searchRequest}) async {
     Log.debug('Fetch curators: limit=$limit offset=$offset search=$searchRequest');
     try {
       final dtos = await _port.listCurators(
@@ -56,11 +51,7 @@ class StaffService {
   Future<Curator?> updateCurator({required int id, required Curator curator}) async {
     Log.debug('Update curator: id=$id');
     try {
-      final dto = await _port.updateCurator(
-        id,
-        _curatorWrite(curator),
-        shelterId: _currentShelterInt,
-      );
+      final dto = await _port.updateCurator(id, _curatorWrite(curator), shelterId: _currentShelterInt);
       Log.info('Curator updated: id=${dto.id}');
       return _mapCurator(dto);
     } on DioException catch (e) {
@@ -83,11 +74,7 @@ class StaffService {
   }
 
   /// Список заявителей
-  Future<List<Applicant>> fetchApplicants({
-    int limit = 25,
-    int offset = 0,
-    String? searchRequest,
-  }) async {
+  Future<List<Applicant>> fetchApplicants({int limit = 25, int offset = 0, String? searchRequest}) async {
     Log.debug('Fetch applicants: limit=$limit offset=$offset search=$searchRequest');
     try {
       final dtos = await _port.listApplicants(
@@ -121,11 +108,7 @@ class StaffService {
   Future<Applicant?> updateApplicant({required int id, required Applicant applicant}) async {
     Log.debug('Update applicant: id=$id');
     try {
-      final dto = await _port.updateApplicant(
-        id,
-        _applicantWrite(applicant),
-        shelterId: _currentShelterInt,
-      );
+      final dto = await _port.updateApplicant(id, _applicantWrite(applicant), shelterId: _currentShelterInt);
       Log.info('Applicant updated: id=${dto.id}');
       return _mapApplicant(dto);
     } on DioException catch (e) {
@@ -138,10 +121,7 @@ class StaffService {
   Future<Applicant?> createApplicant({required Applicant applicant}) async {
     Log.debug('Create applicant');
     try {
-      final dto = await _port.createApplicant(
-        _applicantWrite(applicant),
-        shelterId: _currentShelterInt,
-      );
+      final dto = await _port.createApplicant(_applicantWrite(applicant), shelterId: _currentShelterInt);
       Log.info('Applicant created: id=${dto.id}');
       return _mapApplicant(dto);
     } on DioException catch (e) {

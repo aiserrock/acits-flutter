@@ -4,7 +4,7 @@
 /// comments list/edit screens with their [CommentsService] (over the stable
 /// `AnimalNotesApiPort`).
 ///
-/// Public API barrel. DTOs stay in acits_api; domain entities, the services
+/// Public API barrel. DTOs stay in core (api ports); domain entities, the services
 /// (also used by the app shell / drawer, detail screen, and router), the port /
 /// router contracts, cubits, widgets and screens are exported for the root app
 /// to wire.

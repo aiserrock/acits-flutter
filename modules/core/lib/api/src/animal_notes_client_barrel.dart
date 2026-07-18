@@ -1,6 +1,6 @@
 /// Test-only re-export of the generated animal-notes types.
 ///
-/// The public `acits_api` barrel hides the generated swagger_parser models —
+/// The public `core` api barrel hides the generated swagger_parser models —
 /// only the adapter reaches into them. The notes parity tests need the
 /// generated client + models to build fixtures that prove the adapter's
 /// mapping matches the app's wire shape. This narrow barrel exposes exactly

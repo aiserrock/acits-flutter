@@ -1,5 +1,5 @@
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_domain/acits_domain.dart' show MessagedException;
+import 'package:core/api.dart';
+import 'package:core/domain.dart' show MessagedException;
 import 'package:dio/dio.dart';
 
 import 'package:prescriptions/domain/domain.dart';
@@ -20,7 +20,10 @@ class PrescriptionService {
   final PrescriptionsShelterProvider _shelterProvider;
   final PrescriptionTypeLabels _typeLabels;
 
-  Future<List<PrescriptionExecutionToday>> fetchTodayPrescriptionList({String? search, String? ordering}) async {
+  Future<List<PrescriptionExecutionToday>> fetchTodayPrescriptionList({
+    String? search,
+    String? ordering,
+  }) async {
     Log.debug('Fetch today prescription executions: search=$search ordering=$ordering');
     await _typeLabels.ensureLoaded();
     try {
@@ -84,7 +87,10 @@ class PrescriptionService {
   Future<Prescription> createPrescription(Prescription prescription) async {
     Log.debug('Create prescription: animalId=${prescription.animal}');
     try {
-      final dto = await _port.create(_toWriteDto(prescription), shelterId: _shelterProvider.shelterId);
+      final dto = await _port.create(
+        _toWriteDto(prescription),
+        shelterId: _shelterProvider.shelterId,
+      );
       final model = _mapPrescription(dto);
       Log.info('Prescription created: id=${model.id}');
       return model;
@@ -100,7 +106,11 @@ class PrescriptionService {
     final id = prescription.id;
     if (id == null) throw MessagedException(error: 'Prescription id is required for update');
     try {
-      final dto = await _port.update(id, _toWriteDto(prescription), shelterId: _shelterProvider.shelterId);
+      final dto = await _port.update(
+        id,
+        _toWriteDto(prescription),
+        shelterId: _shelterProvider.shelterId,
+      );
       final model = _mapPrescription(dto);
       Log.info('Prescription updated: id=${model.id}');
       return model;
@@ -162,8 +172,13 @@ class PrescriptionService {
   PrescriptionExecution _mapExecution(PrescriptionExecutionDto e) =>
       PrescriptionExecution(id: e.id, executeAt: e.executeAt, status: e.status);
 
-  PrescriptionFile _mapFile(PrescriptionFileDto f) =>
-      PrescriptionFile(id: f.id, file: f.file, name: f.name, filename: f.filename, createdAt: f.createdAt);
+  PrescriptionFile _mapFile(PrescriptionFileDto f) => PrescriptionFile(
+    id: f.id,
+    file: f.file,
+    name: f.name,
+    filename: f.filename,
+    createdAt: f.createdAt,
+  );
 
   Drug _mapDrug(DrugDto d) => Drug(
     id: d.id,
@@ -174,20 +189,21 @@ class PrescriptionService {
     drugResiduesCount: d.drugResiduesCount,
   );
 
-  PrescriptionExecutionToday _mapExecutionToday(PrescriptionExecutionTodayDto d) => PrescriptionExecutionToday(
-    id: d.id,
-    executeAt: d.executeAt.toLocal(),
-    prescription: PrescriptionShortEntity(
-      id: d.prescription.id,
-      type: PrescriptionType.fromWire(d.prescription.myType),
-      description: d.prescription.description,
-      animal: _mapAnimalShort(d.prescription.animal),
-      drugs: d.prescription.drugs.map(_mapDrugLine).toList(growable: false),
-      createdBy: d.prescription.createdBy,
-      updatedBy: d.prescription.updatedBy,
-      extraTypeAttributes: d.prescription.extraTypeAttributes,
-    ),
-  );
+  PrescriptionExecutionToday _mapExecutionToday(PrescriptionExecutionTodayDto d) =>
+      PrescriptionExecutionToday(
+        id: d.id,
+        executeAt: d.executeAt.toLocal(),
+        prescription: PrescriptionShortEntity(
+          id: d.prescription.id,
+          type: PrescriptionType.fromWire(d.prescription.myType),
+          description: d.prescription.description,
+          animal: _mapAnimalShort(d.prescription.animal),
+          drugs: d.prescription.drugs.map(_mapDrugLine).toList(growable: false),
+          createdBy: d.prescription.createdBy,
+          updatedBy: d.prescription.updatedBy,
+          extraTypeAttributes: d.prescription.extraTypeAttributes,
+        ),
+      );
 
   AnimalShort _mapAnimalShort(AnimalShortDto a) => AnimalShort(
     id: a.id,
@@ -220,12 +236,20 @@ class PrescriptionService {
         .toList(growable: false),
     // executeAt шлём в UTC (сервер ждёт UTC), как и прежний chopper-код.
     executions: p.executions
-        .map((e) => PrescriptionExecutionDto(id: e.id, executeAt: e.executeAt.toUtc(), status: e.status))
+        .map(
+          (e) =>
+              PrescriptionExecutionDto(id: e.id, executeAt: e.executeAt.toUtc(), status: e.status),
+        )
         .toList(growable: false),
     files: (p.files ?? const <PrescriptionFile>[])
         .map(
-          (f) =>
-              PrescriptionFileDto(id: f.id, file: f.file, name: f.name, filename: f.filename, createdAt: f.createdAt),
+          (f) => PrescriptionFileDto(
+            id: f.id,
+            file: f.file,
+            name: f.name,
+            filename: f.filename,
+            createdAt: f.createdAt,
+          ),
         )
         .toList(growable: false),
     extraTypeAttributes: p.extraTypeAttributes,
@@ -234,7 +258,9 @@ class PrescriptionService {
   // ── UTC → локальное время исполнений ────────────────────────────────────────
 
   Prescription _toLocal(Prescription p) => p.copyWith(
-    executions: p.executions.map((e) => e.copyWith(executeAt: e.executeAt.toLocal())).toList(growable: false),
+    executions: p.executions
+        .map((e) => e.copyWith(executeAt: e.executeAt.toLocal()))
+        .toList(growable: false),
   );
 
   String _errorText(DioException e) => e.response?.data?.toString() ?? e.message ?? e.toString();

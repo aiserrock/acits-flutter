@@ -14,8 +14,7 @@ environment:
 workspace:
   - modules/l10n
   - modules/base
-  - packages/acits_domain
-  - packages/acits_api
+  - modules/core
   - modules/ui_kit
   - modules/navigation
   - modules/animals
@@ -39,10 +38,8 @@ dependencies:
     path: modules/l10n
   base:
     path: modules/base
-  acits_domain:
-    path: packages/acits_domain
-  acits_api:
-    path: packages/acits_api
+  core:
+    path: modules/core
   ui_kit:
     path: modules/ui_kit
   navigation:
@@ -224,9 +221,9 @@ melos:
       run: fvm dart run build_runner clean
 
     genapi:
-      description: Генерация API-клиента (swagger_parser) в acits_api — изолированно, вне глобального build_runner приложения.
+      description: Генерация API-клиента (swagger_parser) в core (api-слой) — изолированно, вне глобального build_runner приложения.
       run: |
-        cd packages/acits_api
+        cd modules/core
         fvm dart run tool/preprocess_openapi.dart
         fvm dart run swagger_parser
         fvm dart run build_runner build --delete-conflicting-outputs
