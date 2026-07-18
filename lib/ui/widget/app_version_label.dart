@@ -1,7 +1,7 @@
+import 'package:base/base.dart';
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/res/theme.dart';
-import 'package:acits_flutter/util/app_version.dart';
 
 /// Текстовая метка версии приложения (`v0.7.0 (20)`).
 ///

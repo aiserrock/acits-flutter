@@ -1,16 +1,14 @@
 import 'dart:math';
 
 import 'package:animals/animals.dart';
-import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/ui/widget/error_holder.dart';
-import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:ui_kit/acits_ui_kit.dart' show ErrorHolderWidget, LoaderHolderWidget, SuccessHolderWidget;
 
-import 'package:acits_flutter/ui/widget/success_holder.dart';
+import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_pager_holder.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_add_info_page.dart';

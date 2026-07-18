@@ -7,7 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:acits_flutter/bootstrap/app_startup_tasks.dart';
+import 'package:acits_flutter/bootstrap.dart';
 import 'package:acits_flutter/res/l10n.dart';
 import 'package:acits_flutter/res/strings.dart';
 import 'package:acits_flutter/res/theme.dart';

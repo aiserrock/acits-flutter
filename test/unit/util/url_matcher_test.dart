@@ -1,4 +1,4 @@
-import 'package:acits_flutter/util/url_cors_proxy.dart';
+import 'package:base/base.dart';
 import 'package:acits_flutter/util/url_matcher.dart';
 import 'package:flutter_test/flutter_test.dart';
 

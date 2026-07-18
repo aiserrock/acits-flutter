@@ -1,18 +1,18 @@
 import 'dart:ui';
 
 import 'package:animals/animals.dart';
+import 'package:base/base.dart' show Validator;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ui_kit/acits_ui_kit.dart' show FormEditCard, EditCardData;
 
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
-import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/util/validator.dart';
 import 'package:go_router/go_router.dart';
 
 class AnimalEditCommonInfoPage extends AnimalEditPage {
