@@ -1,5 +1,5 @@
 import 'package:core/core.dart';
-import 'package:acits_flutter/domain/registration_input.dart';
+import 'package:auth/auth.dart';
 import 'package:app_services/app_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
