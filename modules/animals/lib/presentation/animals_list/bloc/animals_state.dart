@@ -1,5 +1,5 @@
 import 'package:acits_core/acits_core.dart';
-import 'package:acits_ui_kit/acits_ui_kit.dart';
+import 'package:ui_kit/acits_ui_kit.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:animals/domain/domain.dart';

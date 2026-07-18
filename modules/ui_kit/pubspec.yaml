@@ -1,4 +1,4 @@
-name: acits_ui_kit
+name: ui_kit
 description: Design system for ACITS — Material 3 tokens (AppTheme/AppColors), breakpoints, adaptive scaffold, base components, generated assets.
 publish_to: "none"
 version: 0.1.0

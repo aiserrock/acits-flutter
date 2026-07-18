@@ -29,16 +29,16 @@ dependencies:
   image_picker: ^1.2.1
   acits_core:
     path: ../../packages/acits_core
-  acits_l10n:
-    path: ../../packages/acits_l10n
+  l10n:
+    path: ../l10n
   acits_domain:
     path: ../../packages/acits_domain
   acits_api:
     path: ../../packages/acits_api
-  acits_ui_kit:
-    path: ../../packages/acits_ui_kit
-  acits_navigation:
-    path: ../../packages/acits_navigation
+  ui_kit:
+    path: ../ui_kit
+  navigation:
+    path: ../navigation
   animals:
     path: ../animals
   applicants:

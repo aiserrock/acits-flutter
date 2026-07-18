@@ -12,12 +12,12 @@ environment:
 # Dart pub workspace — root + foundation packages share one resolution.
 # Feature modules (modules/*) are added lazily as they are migrated.
 workspace:
-  - packages/acits_l10n
+  - modules/l10n
   - packages/acits_core
   - packages/acits_domain
   - packages/acits_api
-  - packages/acits_ui_kit
-  - packages/acits_navigation
+  - modules/ui_kit
+  - modules/navigation
   - modules/animals
   - modules/auth
   - modules/applicants
@@ -35,18 +35,18 @@ dependencies:
 
   # Foundation packages (workspace members). Wired into the app in Step 7
   # alongside chopper — additive, no feature migrated yet.
-  acits_l10n:
-    path: packages/acits_l10n
+  l10n:
+    path: modules/l10n
   acits_core:
     path: packages/acits_core
   acits_domain:
     path: packages/acits_domain
   acits_api:
     path: packages/acits_api
-  acits_ui_kit:
-    path: packages/acits_ui_kit
-  acits_navigation:
-    path: packages/acits_navigation
+  ui_kit:
+    path: modules/ui_kit
+  navigation:
+    path: modules/navigation
 
   # Feature module: animals list migrated onto the new stack (Step 8b).
   animals:
@@ -238,10 +238,10 @@ melos:
         fvm dart run build_runner build --delete-conflicting-outputs
 
     l10n:
-      description: Сгенерировать общий LocaleKeys (пакет acits_l10n) из assets/translations.
+      description: Сгенерировать общий LocaleKeys (пакет l10n) из assets/translations.
       run: >
         fvm dart run easy_localization:generate
-        -S assets/translations -O packages/acits_l10n/lib/src -o locale_keys.g.dart -f keys
+        -S assets/translations -O modules/l10n/lib/src -o locale_keys.g.dart -f keys
 
     # ── Качество кода ────────────────────────────────────────────────────────
     analyze:

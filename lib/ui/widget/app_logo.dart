@@ -1,4 +1,4 @@
-import 'package:acits_ui_kit/acits_ui_kit.dart' as ui_kit;
+import 'package:ui_kit/acits_ui_kit.dart' as ui_kit;
 import 'package:flutter/material.dart';
 
 import 'package:acits_flutter/gen/assets.gen.dart';
