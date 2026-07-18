@@ -20,8 +20,8 @@ class AppLogoBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ui_kit.AppLogo(
-      light: ui_kit.Assets.image.logoBar.svg(width: width, height: height),
-      dark: ui_kit.Assets.image.logoBarDark.svg(width: width, height: height),
+      light: ui_kit.Assets.icon.logoBar.svg(width: width, height: height),
+      dark: ui_kit.Assets.icon.logoBarDark.svg(width: width, height: height),
     );
   }
 }
@@ -36,8 +36,8 @@ class AppLogoLeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ui_kit.AppLogo(
-      light: ui_kit.Assets.image.logoLeadingBar.svg(width: width, height: height),
-      dark: ui_kit.Assets.image.logoLeadingBarDark.svg(width: width, height: height),
+      light: ui_kit.Assets.icon.logoLeadingBar.svg(width: width, height: height),
+      dark: ui_kit.Assets.icon.logoLeadingBarDark.svg(width: width, height: height),
     );
   }
 }

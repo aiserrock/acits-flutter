@@ -90,11 +90,29 @@ class $AssetsIconGen {
   /// File path: assets/icon/drugs.svg
   SvgGenImage get drugs => const SvgGenImage('assets/icon/drugs.svg');
 
+  /// File path: assets/icon/error_stub.svg
+  SvgGenImage get errorStub => const SvgGenImage('assets/icon/error_stub.svg');
+
   /// File path: assets/icon/flag_en.svg
   SvgGenImage get flagEn => const SvgGenImage('assets/icon/flag_en.svg');
 
   /// File path: assets/icon/flag_ru.svg
   SvgGenImage get flagRu => const SvgGenImage('assets/icon/flag_ru.svg');
+
+  /// File path: assets/icon/logo_bar.svg
+  SvgGenImage get logoBar => const SvgGenImage('assets/icon/logo_bar.svg');
+
+  /// File path: assets/icon/logo_bar_dark.svg
+  SvgGenImage get logoBarDark => const SvgGenImage('assets/icon/logo_bar_dark.svg');
+
+  /// File path: assets/icon/logo_leading_bar.svg
+  SvgGenImage get logoLeadingBar => const SvgGenImage('assets/icon/logo_leading_bar.svg');
+
+  /// File path: assets/icon/logo_leading_bar_dark.svg
+  SvgGenImage get logoLeadingBarDark => const SvgGenImage('assets/icon/logo_leading_bar_dark.svg');
+
+  /// File path: assets/icon/logo_splash.svg
+  SvgGenImage get logoSplash => const SvgGenImage('assets/icon/logo_splash.svg');
 
   /// File path: assets/icon/paw.svg
   SvgGenImage get paw => const SvgGenImage('assets/icon/paw.svg');
@@ -122,8 +140,14 @@ class $AssetsIconGen {
     comment,
     curator,
     drugs,
+    errorStub,
     flagEn,
     flagRu,
+    logoBar,
+    logoBarDark,
+    logoLeadingBar,
+    logoLeadingBarDark,
+    logoSplash,
     paw,
     prescription,
     today,
@@ -138,38 +162,11 @@ class $AssetsImageGen {
   /// File path: assets/image/animal_stub.png
   AssetGenImage get animalStub => const AssetGenImage('assets/image/animal_stub.png');
 
-  /// File path: assets/image/error_stub.svg
-  SvgGenImage get errorStub => const SvgGenImage('assets/image/error_stub.svg');
-
-  /// File path: assets/image/logo_bar.svg
-  SvgGenImage get logoBar => const SvgGenImage('assets/image/logo_bar.svg');
-
-  /// File path: assets/image/logo_bar_dark.svg
-  SvgGenImage get logoBarDark => const SvgGenImage('assets/image/logo_bar_dark.svg');
-
-  /// File path: assets/image/logo_leading_bar.svg
-  SvgGenImage get logoLeadingBar => const SvgGenImage('assets/image/logo_leading_bar.svg');
-
-  /// File path: assets/image/logo_leading_bar_dark.svg
-  SvgGenImage get logoLeadingBarDark => const SvgGenImage('assets/image/logo_leading_bar_dark.svg');
-
   /// File path: assets/image/logo_native.png
   AssetGenImage get logoNative => const AssetGenImage('assets/image/logo_native.png');
 
-  /// File path: assets/image/logo_splash.svg
-  SvgGenImage get logoSplash => const SvgGenImage('assets/image/logo_splash.svg');
-
   /// List of all assets
-  List<dynamic> get values => [
-    animalStub,
-    errorStub,
-    logoBar,
-    logoBarDark,
-    logoLeadingBar,
-    logoLeadingBarDark,
-    logoNative,
-    logoSplash,
-  ];
+  List<AssetGenImage> get values => [animalStub, logoNative];
 }
 
 class $AssetsLottieGen {

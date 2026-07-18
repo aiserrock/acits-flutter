@@ -16,7 +16,7 @@ class ErrorStubWidget extends StatelessWidget {
       onPressed: onPressed,
       showImage: showImage,
       height: height,
-      image: ui_kit.Assets.image.errorStub.svg(),
+      image: ui_kit.Assets.icon.errorStub.svg(),
     );
   }
 }
