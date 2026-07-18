@@ -130,3 +130,6 @@ modules/ui_kit/example/.dart_tool/
 # Mason local cache (absolute paths, machine-specific)
 .mason/
 mason-lock.json
+
+# Root flutter_gen output — unused (design assets live in ui_kit); regenerated but not needed
+lib/gen/
