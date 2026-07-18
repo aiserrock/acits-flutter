@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

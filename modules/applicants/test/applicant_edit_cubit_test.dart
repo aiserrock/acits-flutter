@@ -1,4 +1,4 @@
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:core/domain.dart';
 import 'package:applicants/applicants.dart';
 import 'package:flutter_test/flutter_test.dart';

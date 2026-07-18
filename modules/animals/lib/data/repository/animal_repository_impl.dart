@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:core/api.dart';
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:dio/dio.dart';
 
 import 'package:animals/data/data.dart';

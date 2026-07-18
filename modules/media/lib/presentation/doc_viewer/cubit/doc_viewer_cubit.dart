@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:media/domain/domain.dart';

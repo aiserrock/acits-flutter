@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:core/api.dart';
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:animals/animals.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart' hide Timeout;

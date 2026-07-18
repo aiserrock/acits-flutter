@@ -27,8 +27,8 @@ dependencies:
   pdfx: ^2.9.2
   image: ^4.8.0
   image_picker: ^1.2.1
-  base:
-    path: ../base
+  util:
+    path: ../util
   l10n:
     path: ../l10n
   core:

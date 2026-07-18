@@ -27,8 +27,8 @@ dependencies:
   mask_text_input_formatter: ^2.9.0
   get_it: ^9.2.1
   talker_flutter: ^5.1.16
-  base:
-    path: ../base
+  util:
+    path: ../util
   l10n:
     path: ../l10n
   core:

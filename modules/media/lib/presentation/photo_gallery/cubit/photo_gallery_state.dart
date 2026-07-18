@@ -1,4 +1,4 @@
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:media/domain/domain.dart';

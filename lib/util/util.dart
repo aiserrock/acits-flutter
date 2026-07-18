@@ -1,4 +1,4 @@
-export 'package:base/base.dart'
+export 'package:util/util.dart'
     show
         AppVersion,
         DataState,

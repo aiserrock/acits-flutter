@@ -16,8 +16,8 @@ dependencies:
   equatable: ^2.0.8
   dio: ^5.9.2
   easy_localization: ^3.0.8
-  base:
-    path: ../../base
+  util:
+    path: ../../util
   core:
     path: ../../modules/core
   acits_ui_kit:

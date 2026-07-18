@@ -1,4 +1,4 @@
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 

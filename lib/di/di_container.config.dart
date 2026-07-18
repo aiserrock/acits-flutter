@@ -54,7 +54,6 @@ import 'package:acits_flutter/util/logger/app_logger.dart' as _i197;
 import 'package:animals/animals.dart' as _i616;
 import 'package:applicants/applicants.dart' as _i20;
 import 'package:auth/auth.dart' as _i662;
-import 'package:base/base.dart' as _i905;
 import 'package:core/api.dart' as _i995;
 import 'package:core/core.dart' as _i494;
 import 'package:dio/dio.dart' as _i361;
@@ -62,10 +61,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:media/media.dart' as _i249;
+import 'package:network/network.dart' as _i372;
 import 'package:personal/personal.dart' as _i1007;
 import 'package:prescriptions/prescriptions.dart' as _i857;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import 'package:talker_flutter/talker_flutter.dart' as _i207;
+import 'package:util/util.dart' as _i609;
 
 const String _prod = 'prod';
 
@@ -103,27 +104,27 @@ Future<_i174.GetIt> $initGetIt(
     () => const _i176.PersonalRouterServiceImpl(),
   );
   gh.factory<_i662.SplashNavigator>(() => const _i501.SplashNavigatorImpl());
-  gh.factory<_i905.SessionInvalidator>(
-    () => const _i350.AuthServiceSessionInvalidator(),
-  );
   gh.factory<_i20.ApplicantsRouterService>(
     () => const _i314.ApplicantsRouterServiceImpl(),
   );
-  gh.factory<_i905.LocaleProvider>(
+  gh.factory<_i609.DocumentExportService>(
+    () => _i109.DocumentExportServiceBridge(),
+  );
+  gh.factory<_i372.TokenRefresher>(
+    () => const _i350.AuthServiceTokenRefresher(),
+  );
+  gh.factory<_i372.LocaleProvider>(
     () => const _i350.ConfigServiceLocaleProvider(),
   );
-  gh.factory<_i905.TokenStore>(() => const _i350.AuthServiceTokenStore());
+  gh.factory<_i372.SessionInvalidator>(
+    () => const _i350.AuthServiceSessionInvalidator(),
+  );
   gh.factory<_i616.AnimalsRouterService>(
     () => _i514.AnimalsRouterServiceImpl(gh<_i876.AnimalService>()),
   );
-  gh.factory<_i905.DocumentExportService>(
-    () => _i109.DocumentExportServiceBridge(),
-  );
+  gh.factory<_i372.TokenStore>(() => const _i350.AuthServiceTokenStore());
   gh.factory<_i662.AuthRouterService>(
     () => const _i501.AuthRouterServiceImpl(),
-  );
-  gh.factory<_i905.TokenRefresher>(
-    () => const _i350.AuthServiceTokenRefresher(),
   );
   gh.factory<_i249.MediaRouterService>(
     () => const _i561.MediaRouterServiceImpl(),
@@ -152,10 +153,10 @@ Future<_i174.GetIt> $initGetIt(
   gh.factory<_i531.Env>(() => envRegistrer.createEnv(), registerFor: {_prod});
   gh.factory<_i361.Dio>(
     () => acitsApiRegister.createAcitsApiDio(
-      gh<_i905.TokenStore>(),
-      gh<_i905.TokenRefresher>(),
-      gh<_i905.SessionInvalidator>(),
-      gh<_i905.LocaleProvider>(),
+      gh<_i372.TokenStore>(),
+      gh<_i372.TokenRefresher>(),
+      gh<_i372.SessionInvalidator>(),
+      gh<_i372.LocaleProvider>(),
       gh<_i531.Env>(),
     ),
     instanceName: 'acitsApi',

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:base/base.dart';
+import 'package:util/util.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/service/document/doc_exporter/doc_exporter.dart';

@@ -1,17 +1,12 @@
-/// Low-level infra shared across the app: [Result]/[Failure], Dio client +
-/// interceptors, AppTask startup pipeline, platform-service ports, [DataState],
-/// and pure shared utilities (validators, safe-emit, app version, date/URL).
+/// Pure cross-cutting utilities shared across the app: [Result]/[Failure],
+/// [AppTask] startup pipeline, platform-service ports, [DataState], and pure
+/// shared utilities (validators, safe-emit, app version, date/URL).
 ///
-/// This barrel is the public API of the package. `base` depends on nothing
+/// This barrel is the public API of the package. `util` depends on nothing
 /// internal — everything (api/domain/features) may depend on it.
 library;
 
 export 'src/failure/failure.dart';
-export 'src/network/auth_interceptor.dart';
-export 'src/network/dio_factory.dart';
-export 'src/network/header_interceptor.dart';
-export 'src/network/ports.dart';
-export 'src/network/seams.dart';
 export 'src/platform/document_export_service.dart';
 export 'src/platform/photo_upload_service.dart';
 export 'src/platform/platform_ports.dart';
