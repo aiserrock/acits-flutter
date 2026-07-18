@@ -1,7 +1,10 @@
 /// Design system: Material 3 tokens ([AppTheme]/[AppColors]), breakpoints,
-/// the adaptive scaffold, and token-driven base components.
+/// the adaptive scaffold, token-driven base components, and the package-scoped
+/// generated [Assets] (icons/images/lottie/onboarding/gallery ship inside the
+/// package and resolve as `packages/ui_kit/...`).
 library;
 
+export 'gen/assets.gen.dart';
 export 'src/theme/theme.dart';
 export 'src/theme/icons.dart';
 export 'src/layout/breakpoints.dart';

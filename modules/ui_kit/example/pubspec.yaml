@@ -1,0 +1,32 @@
+name: example
+description: "Standalone storybook app for the ACITS ui_kit design system."
+publish_to: "none"
+version: 1.0.0+1
+
+# NB: This app is intentionally NOT a Dart workspace member — it resolves its
+# own dependencies (`cd modules/ui_kit/example && fvm flutter pub get`) so the
+# main app build is unaffected. It depends on ui_kit via a path dependency and
+# renders one Story per exported component.
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.9
+  storybook_flutter: ^0.14.0
+  flutter_svg: ^2.2.4
+  lottie: ^3.3.3
+
+  ui_kit:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

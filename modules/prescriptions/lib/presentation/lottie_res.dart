@@ -1,9 +1,10 @@
+import 'package:ui_kit/ui_kit.dart';
+
 /// Пути к lottie-анимациям, которые использует UI модуля «Назначения».
 ///
-/// Ассеты физически лежат в бандле приложения (`assets/lottie/*.json`); модуль
-/// ссылается на них строковыми путями (как `.tr()` резолвит переводы из бандла
-/// приложения). Значения совпадают с app `res/lottie.dart`.
+/// Ассеты живут в дизайн-системе (ui_kit) и резолвятся как
+/// `packages/ui_kit/assets/lottie/...` через package-scoped [Assets.lottie].
 abstract final class PrescriptionsLottieRes {
-  static const dogLoading = 'assets/lottie/dog_loading.json';
-  static const crashScratch = 'assets/lottie/crash.json';
+  static final dogLoading = Assets.lottie.dogLoading;
+  static final crashScratch = Assets.lottie.crash;
 }

@@ -3,7 +3,6 @@ import 'package:prescriptions/prescriptions.dart' show DrugsScreen;
 import 'package:personal/personal.dart' show CalendarScreen;
 
 import 'package:di/di.dart';
-import 'package:shell/gen/assets.gen.dart';
 import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:shell/presentation/main/main_screen.dart';
@@ -18,23 +17,25 @@ List<BottomNavigationBarItem> _buildBottomNavItems(BuildContext context) {
   final accent = Theme.of(context).colorScheme.primary;
   return <BottomNavigationBarItem>[
     BottomNavigationBarItem(
-      icon: Assets.icon.today.svg(color: inactiveIcon),
-      activeIcon: Assets.icon.today.svg(color: accent),
+      icon: Assets.icon.today.svg(colorFilter: ColorFilter.mode(inactiveIcon, BlendMode.srcIn)),
+      activeIcon: Assets.icon.today.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
       label: LocaleKeys.commonToday.tr(),
     ),
     BottomNavigationBarItem(
-      icon: Assets.icon.paw.svg(color: inactiveIcon),
-      activeIcon: Assets.icon.paw.svg(color: accent),
+      icon: Assets.icon.paw.svg(colorFilter: ColorFilter.mode(inactiveIcon, BlendMode.srcIn)),
+      activeIcon: Assets.icon.paw.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
       label: LocaleKeys.commonAnimals.tr(),
     ),
     BottomNavigationBarItem(
-      icon: Assets.icon.calendar.svg(color: inactiveIcon.withValues(alpha: .5)),
-      activeIcon: Assets.icon.calendar.svg(color: accent),
+      icon: Assets.icon.calendar.svg(
+        colorFilter: ColorFilter.mode(inactiveIcon.withValues(alpha: .5), BlendMode.srcIn),
+      ),
+      activeIcon: Assets.icon.calendar.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
       label: LocaleKeys.commonCalendar.tr(),
     ),
     BottomNavigationBarItem(
-      icon: Assets.icon.drugs.svg(color: inactiveIcon.withValues(alpha: .5)),
-      activeIcon: Assets.icon.drugs.svg(color: accent),
+      icon: Assets.icon.drugs.svg(colorFilter: ColorFilter.mode(inactiveIcon.withValues(alpha: .5), BlendMode.srcIn)),
+      activeIcon: Assets.icon.drugs.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
       label: LocaleKeys.commonDrugs.tr(),
     ),
   ];

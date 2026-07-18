@@ -1,20 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 /// Поддерживаемые языки приложения с флагами (для переключателя локали).
 ///
 /// Перенесено из app `domain/app_locale.dart` (подмножество, нужное экрану
-/// личного кабинета). Флаги — SVG из бандла приложения (`assets/icon/*.svg`),
-/// резолвятся по пути через [SvgPicture.asset]. Значения совпадают с исходными.
+/// личного кабинета). Флаги — SVG из дизайн-системы (package-scoped [Assets]).
 enum _AppLocale {
-  ru(locale: Locale('ru'), flagAsset: 'assets/icon/flag_ru.svg'),
-  en(locale: Locale('en'), flagAsset: 'assets/icon/flag_en.svg');
+  ru(locale: Locale('ru'), flag: SvgGenImage('assets/icon/flag_ru.svg')),
+  en(locale: Locale('en'), flag: SvgGenImage('assets/icon/flag_en.svg'));
 
-  const _AppLocale({required this.locale, required this.flagAsset});
+  const _AppLocale({required this.locale, required this.flag});
 
   final Locale locale;
-  final String flagAsset;
+  final SvgGenImage flag;
 
   static _AppLocale fromLanguageCode(String? code) {
     return _AppLocale.values.firstWhere(
@@ -73,7 +72,7 @@ class _FlagButton extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(color: selected ? scheme.primary : Colors.transparent, width: 1.5),
           ),
-          child: SvgPicture.asset(item.flagAsset, width: size, height: size),
+          child: item.flag.svg(width: size, height: size),
         ),
       ),
     );

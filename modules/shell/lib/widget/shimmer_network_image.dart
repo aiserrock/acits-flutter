@@ -1,11 +1,9 @@
 import 'package:ui_kit/ui_kit.dart' as ui_kit;
 import 'package:flutter/material.dart';
 
-import 'package:shell/gen/assets.gen.dart';
-
 /// App-обёртка над [ui_kit.ShimmerNetworkImage]: подставляет фирменную заглушку
-/// `animalStub` (ui_kit не владеет ассетами приложения). Тонкий адаптер — вся
-/// логика загрузки/shimmer живёт в ui_kit.
+/// `animalStub` из дизайн-системы (package-scoped [ui_kit.Assets]). Тонкий
+/// адаптер — вся логика загрузки/shimmer живёт в ui_kit.
 class ShimmerNetworkImage extends StatelessWidget {
   const ShimmerNetworkImage({
     required this.url,
@@ -37,7 +35,7 @@ class ShimmerNetworkImage extends StatelessWidget {
       height: height,
       radius: radius,
       cacheWidth: cacheWidth,
-      fallback: Assets.image.animalStub.image(fit: fit, width: width, height: height),
+      fallback: ui_kit.Assets.image.animalStub.image(fit: fit, width: width, height: height),
     );
   }
 }

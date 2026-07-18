@@ -455,7 +455,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: icon.svg(height: 28.0, width: 28.0, color: color),
+      child: icon.svg(height: 28.0, width: 28.0, colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
     );
   }
 

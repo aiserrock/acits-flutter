@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../gen/assets.gen.dart';
 import '../components/primary_button.dart';
-
-/// Дефолтная lottie-анимация успеха. Путь резолвится из бандла приложения
-/// (`rootBundle`), поэтому ui_kit не обязан владеть самим ассетом.
-const _kDefaultSuccessAsset = 'assets/lottie/success.json';
 
 const _sizePart = .75;
 
@@ -64,7 +61,7 @@ class SuccessHolderWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.asset(assetPath ?? _kDefaultSuccessAsset, height: size, width: size),
+          Lottie.asset(assetPath ?? Assets.lottie.success, height: size, width: size),
           const SizedBox(height: 24.0),
           Text(title ?? '', style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
           const SizedBox(height: 16.0),

@@ -11,7 +11,6 @@ import 'package:shell/presentation/main/cubit/main_cubit.dart';
 import 'package:shell/presentation/main/cubit/main_state.dart';
 import 'package:prescriptions/prescriptions.dart' show Prescription, PrescriptionCardWidget, PrescriptionExecutionToday;
 import 'package:di/di.dart';
-import 'package:shell/gen/assets.gen.dart';
 import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';

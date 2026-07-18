@@ -188,33 +188,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  # Дизайн-ассеты (иконки, картинки, шрифт icomoon, lottie, онбординг,
+  # галерея) переехали в пакет ui_kit и резолвятся как `packages/ui_kit/...`.
+  # Приложение оставляет себе только локализацию и runtime-сертификат.
   assets:
     - assets/translations/
-    - assets/image/
-    - assets/icon/
-    - assets/onboarding/
-    - assets/common/
-    - assets/lottie/
     - assets/cert/
-    - assets/gallery/
-
-  fonts:
-    - family: icomoon
-      fonts:
-        - asset: assets/font/icomoon.ttf
-
-flutter_gen:
-  line_length: 120
-  integrations:
-    flutter_svg: true
-  assets:
-    inputs:
-      - assets/image/
-      - assets/icon/
-      - assets/onboarding/
-      - assets/common/
-      - assets/lottie/
-      - assets/gallery/
 
 # Patrol integration/e2e tests (industry-standard native UI automation).
 # Tests live in integration_test/. Run with: patrol test --flavor dev

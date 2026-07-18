@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:shell/gen/assets.gen.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 /// Поддерживаемые языки приложения с флагами (для переключателя локали).
 ///
