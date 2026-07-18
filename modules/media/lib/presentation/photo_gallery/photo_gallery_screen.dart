@@ -1,6 +1,6 @@
 import 'package:util/util.dart';
 import 'package:ui_kit/ui_kit.dart';
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 import 'package:animals/animals.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';

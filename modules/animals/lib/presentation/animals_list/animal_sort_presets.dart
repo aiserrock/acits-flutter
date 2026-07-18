@@ -1,4 +1,4 @@
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 /// Пресеты сортировки списка животных. Первый — дефолт: «Сначала новые».

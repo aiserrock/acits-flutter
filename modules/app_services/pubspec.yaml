@@ -15,15 +15,15 @@ dependencies:
 
   # Foundation packages.
   util:
-    path: ../util
+    path: ../base/util
   network:
-    path: ../network
+    path: ../base/network
   core:
-    path: ../core
+    path: ../base/core
   di:
-    path: ../di
+    path: ../base/di
   navigation:
-    path: ../navigation
+    path: ../base/navigation
 
   # Feature modules whose data/services these registers + bridges compose.
   animals:

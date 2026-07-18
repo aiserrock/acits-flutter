@@ -24,9 +24,9 @@ dependencies:
   # (Environment/NoEnvOrContains from injectable, createAppRouter from shell,
   # DebugService from app_services). The generated config pulls these into getIt.
   app_services:
-    path: ../app_services
+    path: ../../app_services
   shell:
-    path: ../shell
+    path: ../../shell
 
 dev_dependencies:
   flutter_test:

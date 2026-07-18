@@ -1,6 +1,6 @@
 import 'package:util/util.dart';
 import 'package:core/domain.dart' show EmailConfirmException;
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';

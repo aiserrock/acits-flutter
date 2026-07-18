@@ -1,6 +1,6 @@
 import 'package:ui_kit/ui_kit.dart';
 
-import 'package:l10n/l10n.dart';
+import 'package:localization/localization.dart';
 
 /// [SortPreset] переехал в acits_ui_kit (generic). Ре-экспортируем, чтобы
 /// существующие импорты работали; пресеты приложения (с ключами [LocaleKeys])

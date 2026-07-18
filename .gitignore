@@ -41,6 +41,8 @@ packages/*/build/
 packages/*/.dart_tool/
 modules/*/build/
 modules/*/.dart_tool/
+modules/*/*/build/
+modules/*/*/.dart_tool/
 .fvm/
 
 # Web related
