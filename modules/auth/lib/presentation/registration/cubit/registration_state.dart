@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart';
+import 'package:core/domain.dart';
 import 'package:equatable/equatable.dart';
 
 /// Роль пользователя при регистрации кастомера

@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart' show Shelter;
+import 'package:core/domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

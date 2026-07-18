@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:acits_domain/acits_domain.dart' show Shelter;
+import 'package:core/domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

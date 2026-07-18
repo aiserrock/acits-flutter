@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 import 'package:base/base.dart';
 import 'package:animals/animals.dart';
 import 'package:dio/dio.dart';

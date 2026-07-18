@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:acits_api/acits_api.dart'
-    show AnimalNotesApiPort, AnimalNoteWriteDto, AnimalNoteFileWriteDto, AnimalNoteDto, AnimalNoteFileDto;
-import 'package:acits_domain/acits_domain.dart' show MessagedException;
+import 'package:core/api.dart'
+    show
+        AnimalNotesApiPort,
+        AnimalNoteWriteDto,
+        AnimalNoteFileWriteDto,
+        AnimalNoteDto,
+        AnimalNoteFileDto;
+import 'package:core/domain.dart' show MessagedException;
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -28,7 +33,11 @@ class CommentsService {
 
   /// Список заметок животного (новые сверху). Возвращает доменные сущности —
   /// маппинг DTO→сущность локальный (порт отдаёт DTO).
-  Future<List<AnimalNote>> fetchAnimalNotes(int animalId, {int limit = _notesListLimit, int? offset = 0}) async {
+  Future<List<AnimalNote>> fetchAnimalNotes(
+    int animalId, {
+    int limit = _notesListLimit,
+    int? offset = 0,
+  }) async {
     Log.debug('Fetch animal notes: animalId=$animalId limit=$limit offset=$offset');
     try {
       final dtos = await _notesPort.listByAnimal(
@@ -55,7 +64,12 @@ class CommentsService {
     try {
       final dto = await _notesPort.patch(
         id,
-        AnimalNoteWriteDto(id: id, animal: animalId, content: text, files: _prepareNoteFiles(files)),
+        AnimalNoteWriteDto(
+          id: id,
+          animal: animalId,
+          content: text,
+          files: _prepareNoteFiles(files),
+        ),
         shelterId: _shelterProvider.shelterId,
       );
       Log.info('Animal note patched: id=${dto.id}');
@@ -78,7 +92,11 @@ class CommentsService {
     }
   }
 
-  Future<AnimalNote?> createAnimalNote({required int animalId, required String text, List<PlatformFile>? files}) async {
+  Future<AnimalNote?> createAnimalNote({
+    required int animalId,
+    required String text,
+    List<PlatformFile>? files,
+  }) async {
     Log.debug('Create animal note: animalId=$animalId files=${files?.length ?? 0}');
     try {
       final dto = await _notesPort.create(
@@ -135,8 +153,14 @@ class CommentsService {
     isUserCanEditOrDelete: d.isUserCanEditOrDelete,
   );
 
-  AnimalNoteFile _mapNoteFile(AnimalNoteFileDto f) =>
-      AnimalNoteFile(id: f.id, file: f.file, name: f.name, filename: f.filename, createdAt: f.createdAt);
+  AnimalNoteFile _mapNoteFile(AnimalNoteFileDto f) => AnimalNoteFile(
+    id: f.id,
+    file: f.file,
+    name: f.name,
+    filename: f.filename,
+    createdAt: f.createdAt,
+  );
 
-  String _noteErrorText(DioException e) => e.response?.data?.toString() ?? e.message ?? e.toString();
+  String _noteErrorText(DioException e) =>
+      e.response?.data?.toString() ?? e.message ?? e.toString();
 }

@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart' show Shelter;
+import 'package:core/domain.dart' show Shelter;
 import 'package:ui_kit/acits_ui_kit.dart';
 import 'package:flutter/material.dart';
 

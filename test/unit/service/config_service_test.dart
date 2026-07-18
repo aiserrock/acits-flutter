@@ -1,4 +1,4 @@
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/service/config/config_service.dart';
 import 'package:acits_flutter/service/shared_pref/preference_storage.dart';

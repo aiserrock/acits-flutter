@@ -1,4 +1,4 @@
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 import 'package:applicants/applicants.dart';
 import 'package:injectable/injectable.dart';
 

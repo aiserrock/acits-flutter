@@ -1,4 +1,4 @@
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 
 // After scaffolding: add `{{name.pascalCase()}}ApiPort` + `{{name.pascalCase()}}Dto` to
 // packages/acits_api (ports/ + ports/dto/) and its swagger_parser adapter, then

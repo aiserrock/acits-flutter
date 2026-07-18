@@ -1,5 +1,4 @@
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_domain/acits_domain.dart';
+import 'package:core/core.dart';
 import 'package:auth/auth.dart' show AuthSessionApi, AdminRegistrationInput, WorkerRegistrationInput, WorkerRole;
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -19,7 +18,7 @@ const _shelterListDefaultLenght = 25;
 /// Сервис авторизации / регистрации.
 ///
 /// Сессионный держатель приложения: токены, список приютов, текущая роль. API
-/// вызовы идут через стабильный [AuthApiPort] (acits_api) — сгенерированные
+/// вызовы идут через стабильный [AuthApiPort] (core api) — сгенерированные
 /// chopper/retrofit типы сюда не протекают. Наружу отдаёт доменные сущности
 /// ([Shelter]/[CurrentShelterRole]); ошибки маппит в существующие исключения
 /// приложения, чтобы не переписывать catch у вызывающих сторон.

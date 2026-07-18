@@ -1,5 +1,5 @@
 # App-level build_runner config. The API client generator (swagger_parser) is
-# isolated in packages/acits_api (run via `melos genapi`), NOT in this pass —
+# isolated in modules/core (api layer, run via `melos genapi`), NOT in this pass —
 # here build_runner only runs injectable / flutter_gen / json_serializable.
 targets:
   $default:

@@ -1,9 +1,0 @@
-include: package:flutter_lints/flutter.yaml
-
-analyzer:
-  exclude:
-    - "lib/adapters/swagger_parser/generated/**"
-
-linter:
-  rules:
-    no_logic_in_create_state: false

@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart' show Applicant, Curator, Shelter;
+import 'package:core/domain.dart' show Applicant, Curator, Shelter;
 import 'package:animals/animals.dart' show AnimalListItem, AnimalRepository;
 import 'package:applicants/applicants.dart' show StaffService;
 import 'package:flutter/material.dart';

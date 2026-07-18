@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:acits_domain/acits_domain.dart' show Shelter;
+import 'package:core/domain.dart' show Shelter;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';

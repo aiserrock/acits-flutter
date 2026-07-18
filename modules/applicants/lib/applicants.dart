@@ -1,6 +1,6 @@
 /// Applicants + curators (staff) feature module: edit screens + their cubits,
 /// and the [StaffService] application service on top of the stable
-/// `StaffApiPort` (acits_api).
+/// `StaffApiPort` (core api).
 ///
 /// Public API barrel. DTOs stay in the data layer; UI screens, [StaffService]
 /// (also used by the app's search paging adapter), and the port/router

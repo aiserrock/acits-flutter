@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart';
+import 'package:core/domain.dart';
 
 /// Navigation contract for the {{name.pascalCase()}} feature. The implementation
 /// (which knows the app's go_router paths) lives in the root navigation layer

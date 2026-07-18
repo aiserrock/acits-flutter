@@ -2,7 +2,7 @@ export 'package:acits_flutter/util/util.dart';
 // Заметки/комментарии животного — доменные сущности переехали в модуль personal.
 export 'package:personal/personal.dart' show AnimalNote, AnimalNoteFile;
 // Заявители/кураторы — доменные сущности.
-export 'package:acits_domain/acits_domain.dart' show Applicant, Curator;
+export 'package:core/domain.dart' show Applicant, Curator;
 export 'package:acits_flutter/gen/assets.gen.dart';
 export 'package:acits_flutter/res/theme.dart';
 export 'package:acits_flutter/res/icon.dart';

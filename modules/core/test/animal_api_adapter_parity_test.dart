@@ -7,8 +7,8 @@
 // envelope is unwrapped to its `results` list.
 import 'dart:typed_data';
 
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_api/src/animals_client_barrel.dart';
+import 'package:core/api.dart';
+import 'package:core/api/src/animals_client_barrel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -6,8 +6,8 @@
 // field-for-field, onto OUR generator-agnostic auth DTOs. Also proves paginated
 // shelter envelopes are unwrapped to their `results` list and that our write
 // DTOs serialise onto the generated write models.
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_api/src/auth_client_barrel.dart';
+import 'package:core/api.dart';
+import 'package:core/api/src/auth_client_barrel.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Fake generated token client — returns models parsed from wire fixtures.

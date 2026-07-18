@@ -1,5 +1,5 @@
-import 'package:acits_api/acits_api.dart';
-import 'package:acits_domain/acits_domain.dart' show Transformable;
+import 'package:core/api.dart';
+import 'package:core/domain.dart' show Transformable;
 
 import 'package:{{name.snakeCase()}}/domain/domain.dart';
 

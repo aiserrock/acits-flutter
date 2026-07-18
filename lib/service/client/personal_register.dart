@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:acits_api/acits_api.dart';
+import 'package:core/api.dart';
 import 'package:injectable/injectable.dart';
 import 'package:personal/personal.dart';
 

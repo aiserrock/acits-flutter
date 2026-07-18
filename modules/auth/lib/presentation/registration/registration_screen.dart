@@ -1,4 +1,4 @@
-import 'package:acits_domain/acits_domain.dart' show Shelter, MessagedException;
+import 'package:core/domain.dart' show Shelter, MessagedException;
 import 'package:ui_kit/acits_ui_kit.dart';
 import 'package:l10n/acits_l10n.dart';
 import 'package:collection/collection.dart';

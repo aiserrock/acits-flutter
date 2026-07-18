@@ -1,5 +1,5 @@
-name: acits_api
-description: API layer for ACITS — ports & our freezed DTOs (stable), swagger_parser adapter underneath (replaceable). The ONLY place DTOs and generated code exist.
+name: core
+description: Core module for ACITS — domain (entities, repository interfaces, Transformable mapper contract, RouterService base) + api (ports, our DTOs, swagger_parser adapter binding, generated client). Depends on base only.
 publish_to: "none"
 version: 0.1.0
 
@@ -12,13 +12,14 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  equatable: ^2.0.8
   dio: ^5.9.2
   json_annotation: ^4.12.0
   # Runtime annotations for the swagger_parser-generated Retrofit clients.
   # Isolated to the adapter layer — ports/DTOs never touch retrofit.
   retrofit: ^4.4.1
   base:
-    path: ../../modules/base
+    path: ../base
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +27,6 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.13.1
   json_serializable: ^6.13.1
-  # Generator for the Retrofit client .g.dart files (adapters/swagger_parser/generated).
+  # Generator for the Retrofit client .g.dart files (api/adapters/swagger_parser/generated).
   retrofit_generator: ^10.0.1
   swagger_parser: ^1.44.0

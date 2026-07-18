@@ -18,10 +18,8 @@ dependencies:
   easy_localization: ^3.0.8
   base:
     path: ../../base
-  acits_domain:
-    path: ../../packages/acits_domain
-  acits_api:
-    path: ../../packages/acits_api
+  core:
+    path: ../../modules/core
   acits_ui_kit:
     path: ../../packages/acits_ui_kit
   acits_navigation:

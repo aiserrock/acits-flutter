@@ -1,5 +1,5 @@
 import 'package:base/base.dart';
-import 'package:acits_domain/acits_domain.dart' show EmailConfirmException;
+import 'package:core/domain.dart' show EmailConfirmException;
 import 'package:l10n/acits_l10n.dart';
 import 'package:ui_kit/acits_ui_kit.dart';
 import 'package:dio/dio.dart';
