@@ -2,6 +2,7 @@ import 'package:core/domain.dart' show Shelter;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui_kit/acits_ui_kit.dart' show Skeleton;
 
 import 'package:personal/personal.dart' show UserProfile;
 
@@ -10,7 +11,6 @@ import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/service/auth/auth_service.dart';
 import 'package:acits_flutter/ui/widget/cubit/personal_drawer_cubit.dart';
-import 'package:acits_flutter/ui/widget/skeleton.dart';
 import 'package:acits_flutter/ui/widget/app_version_label.dart';
 import 'package:acits_flutter/ui/widget/locale_switcher.dart';
 import 'package:acits_flutter/ui/widget/theme_switcher_tile.dart';

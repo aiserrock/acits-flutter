@@ -1,8 +1,8 @@
+import 'package:base/base.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:acits_flutter/util/logger/log.dart';
-import 'package:acits_flutter/util/url_cors_proxy.dart';
 
 /// Репозиторий для загрузки и сохранения файлов
 @injectable

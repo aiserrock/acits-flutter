@@ -1,14 +1,14 @@
+import 'package:animals/animals.dart';
+import 'package:base/base.dart' show Validator;
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ui_kit/acits_ui_kit.dart' show FormEditCard, EditCardData, bsSelectorActions;
+
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/export.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/data/animal_edit_data_holder.dart';
-import 'package:acits_flutter/ui/widget/form_edit_card.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/animal_edit_page.dart';
 import 'package:acits_flutter/ui/screen/animal_edit/widget/subtitle_widget.dart';
-import 'package:acits_flutter/ui/widget/action_bs.dart';
-import 'package:acits_flutter/util/validator.dart';
-import 'package:animals/animals.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _receipeDateRange = Duration(days: 365);
@@ -140,7 +140,9 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
   }
 
   void _setControllers(AnimalEditFormState value) {
-    if (value.dateJoined != null) _dateReceiptController.text = _dateFormatter.format(value.dateJoined!);
+    if (value.dateJoined != null) {
+      _dateReceiptController.text = _dateFormatter.format(value.dateJoined!);
+    }
     _statusController.text = _statusLabels.label(value.status) ?? '';
     _catchController.text = value.placeOfCatch;
   }

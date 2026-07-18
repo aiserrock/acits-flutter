@@ -11,9 +11,10 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:logging/logging.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+import 'package:base/base.dart';
+
 import 'package:acits_flutter/main.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
-import 'package:acits_flutter/util/app_version.dart';
 import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
 import 'package:acits_flutter/util/logger/log.dart';
 import 'di/di_container.dart';

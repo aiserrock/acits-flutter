@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:animals/animals.dart';
 import 'package:personal/personal.dart'
     show AnimalNote, CommentFileOpener, CommentListWidget, CommentsService, PersonalRouterService;
-import 'package:acits_flutter/ui/widget/error_holder.dart';
-import 'package:acits_flutter/ui/widget/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:ui_kit/acits_ui_kit.dart'
+    show DefaultAppBar, DefaultIconButton, ErrorHolderWidget, LoaderHolderWidget, Skeleton;
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/navigation/app_router.dart';
@@ -19,10 +19,7 @@ import 'package:acits_flutter/ui/screen/animal_detail/animal_content_card.dart';
 import 'package:prescriptions/prescriptions.dart'
     show AnimalPrescriptionCard, AnimalPrescriptionsCubit, AnimalPrescriptionsState, Prescription, PrescriptionService;
 import 'package:acits_flutter/ui/widget/shimmer_network_image.dart';
-import 'package:acits_flutter/ui/widget/default_app_bar.dart';
-import 'package:acits_flutter/ui/widget/default_icon_button.dart';
 import 'package:acits_flutter/ui/widget/error_stub.dart';
-import 'package:acits_flutter/ui/widget/skeleton.dart';
 
 part 'animal_common_info.dart';
 part 'animal_prescriptions.dart';

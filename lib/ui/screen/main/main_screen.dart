@@ -1,6 +1,8 @@
+import 'package:base/base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui_kit/acits_ui_kit.dart' show ScreenLoader;
 
 import 'package:acits_flutter/navigation/app_router.dart';
 import 'package:acits_flutter/ui/screen/root_screen.dart';
@@ -9,10 +11,8 @@ import 'package:acits_flutter/ui/screen/common/sort/sort_chips_bar.dart';
 import 'package:acits_flutter/ui/screen/common/sort/sort_preset.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_cubit.dart';
 import 'package:acits_flutter/ui/screen/main/cubit/main_state.dart';
-import 'package:acits_flutter/ui/widget/screen_loader.dart';
 import 'package:prescriptions/prescriptions.dart' show Prescription, PrescriptionCardWidget, PrescriptionExecutionToday;
 import 'package:acits_flutter/di/di_container.dart';
-import 'package:acits_flutter/util/data_state.dart';
 import 'package:acits_flutter/gen/assets.gen.dart';
 import 'package:acits_flutter/gen/l10n/locale_keys.g.dart';
 import 'package:acits_flutter/res/theme.dart';
