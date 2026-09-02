@@ -26,17 +26,31 @@ Regenerate the `Assets` accessor after changing assets:
 cd modules/ui_kit && fvm dart run build_runner build
 ```
 
-## Storybook example
+## Gallery
 
-A standalone Flutter app under `example/` renders one story per component using
-`storybook_flutter`. It is NOT a workspace member — it resolves independently, so
-it never affects the main app build.
+`lib/gallery/` holds the component catalog: one `GalleryEntry` (section, name,
+`WidgetBuilder`) per page, plus the pages themselves under `gallery/pages/`. The
+catalog imports no gallery tool of its own, so pulling it in never drags a dev
+dependency into the production graph. It is exported from the separate
+`package:ui_kit/ui_kit_gallery.dart` barrel — code that only wants components
+imports `ui_kit.dart` and leaves the pages out of its bundle.
 
-```sh
-cd modules/ui_kit/example
-fvm flutter pub get
-fvm flutter run -d chrome
-```
+Two hosts render the same catalog through `widgetbook`, each converting
+`galleryEntries` into a widgetbook tree:
+
+- **Standalone app** — `example/`, branded «ACITS UI Kit». NOT a workspace
+  member: it resolves independently, so it never affects the main app build.
+
+  ```sh
+  cd modules/ui_kit/example
+  fvm flutter pub get
+  fvm flutter run -d chrome
+  ```
+
+- **Debug screen in the app** — `/debug/gallery`, reachable from the UI Kit
+  Gallery card on the dev debug screen. The route is registered only when
+  `DebugService.isDevFlavor` is true, so it is available in the dev flavor in any
+  build mode, and the prod bundle carries neither widgetbook nor the pages.
 
 ## Exports
 

@@ -10,7 +10,6 @@ import 'package:shell/res/lottie.dart';
 import 'package:app_services/app_services.dart';
 import 'package:shell/widget/app_logo.dart';
 import 'package:shell/widget/app_version_label.dart';
-import 'package:shell/widget/debug_drawer.dart';
 import 'package:shell/widget/locale_switcher.dart';
 import 'package:shell/widget/theme_switcher_tile.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -26,24 +25,14 @@ abstract final class AuthScreenBindings {
       configService: getIt<ConfigService>(),
       navigator: getIt<SplashNavigator>(),
       logo: Assets.icon.logoSplash.svg(width: 80.0, height: 108.0),
-      loadingAnimations: [
-        LottieRes.loading,
-        LottieRes.pawLoading,
-        LottieRes.dogLoading,
-        LottieRes.catsLoading,
-      ],
+      loadingAnimations: [LottieRes.loading, LottieRes.pawLoading, LottieRes.dogLoading, LottieRes.catsLoading],
     );
   }
 
   static Widget onboarding() {
     return BlocProvider(
-      create: (_) =>
-          OnboardingBloc(configService: getIt<ConfigService>(), onboardingData: _onboardingData()),
-      child: OnboardingScreen(
-        router: getIt<AuthRouterService>(),
-        closeIcon: Assets.icon.close.svg(),
-        debugDrawer: const DebugDrawerContent(),
-      ),
+      create: (_) => OnboardingBloc(configService: getIt<ConfigService>(), onboardingData: _onboardingData()),
+      child: OnboardingScreen(router: getIt<AuthRouterService>(), closeIcon: Assets.icon.close.svg()),
     );
   }
 

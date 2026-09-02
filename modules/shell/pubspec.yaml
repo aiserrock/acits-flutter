@@ -12,6 +12,9 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  # Material/Widgets/Cupertino delegates для LocalizationAddon в debug-галерее.
+  flutter_localizations:
+    sdk: flutter
 
   # Foundation packages.
   util:
@@ -57,6 +60,9 @@ dependencies:
   flutter_bloc: ^9.1.1
   provider: ^6.1.5
   easy_localization: ^3.0.8
+  # Debug-only: гостит ту же ui_kit-галерею, что и standalone example.
+  # Экран под kDebugMode → в release-сборку код не попадает (tree-shaken).
+  widgetbook: ^3.25.0
   smooth_page_indicator: ^2.0.1
   flutter_slidable: ^4.0.3
   flutter_keyboard_visibility: ^6.0.0

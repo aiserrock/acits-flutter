@@ -22,7 +22,7 @@
   - `animal_edit` — многошаговая форма (composition аналогично).
   - `main`/`root_screen` — навигационный хост (bottom-nav / drawer), переключает фичи.
   - `common/` — общий sort-бар и пр.
-- **`widget/`** — виджеты уровня оболочки: `personal_drawer`, `debug_drawer`,
+- **`widget/`** — виджеты уровня оболочки: `personal_drawer`,
   `theme_switcher_tile`, `phone_frame`, `restart_widget`, `ThemeCubit` и т.п.
 - **`src/shell_di.dart`** — injectable micro-package (`ShellPackageModule`),
   через который DI приложения (`modules/base/di`) регистрирует router-service impls

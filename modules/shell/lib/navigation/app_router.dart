@@ -16,11 +16,13 @@ import 'package:prescriptions/prescriptions.dart'
         PrescriptionsRouterService;
 import 'package:personal/personal.dart'
     show AnimalNote, CommentEditScreen, CommentsService, PersonalScreen, PersonalService;
+import 'package:app_services/app_services.dart' show DebugService;
 import 'package:di/di.dart';
 import 'package:shell/navigation/auth_screen_bindings.dart';
 import 'package:shell/navigation/extra_codec.dart';
 import 'package:shell/presentation/animal_detail/animal_detail_screen.dart';
 import 'package:shell/presentation/animal_edit/animal_edit_screen.dart';
+import 'package:shell/presentation/gallery/gallery_screen.dart';
 import 'package:shell/presentation/root_screen.dart';
 
 /// Пути и имена роутов приложения.
@@ -49,6 +51,9 @@ abstract final class AppRoutes {
   static const pickShelter = '/pick-shelter';
   static const searchSpec = '/search-spec';
   static const search = '/search';
+
+  /// Debug-галерея дизайн-системы (только dev-флейвор, любой build-режим).
+  static const gallery = '/debug/gallery';
 
   /// Построить путь к экрану деталей животного.
   static String animalDetailPath(int id) => '/animal/$id';
@@ -186,6 +191,12 @@ GoRouter createAppRouter() {
         builder: (context, state) =>
             Search.byTypeKey(state.uri.queryParameters['type'] ?? SearchTypeKey.animal, getIt<SearchDeps>()),
       ),
+      // Debug-галерея дизайн-системы: та же ui_kit-витрина, что и standalone
+      // example. Гейт по dev-флейвору (а не kDebugMode), поэтому доступна в dev
+      // в ЛЮБОМ build-режиме (debug/profile/release). В prod-флейворе
+      // `isDevFlavor == false` → роут не регистрируется.
+      if (getIt<DebugService>().isDevFlavor)
+        GoRoute(path: AppRoutes.gallery, builder: (context, state) => const GalleryScreen()),
     ],
   );
 }

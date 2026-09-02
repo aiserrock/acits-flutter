@@ -44,10 +44,7 @@ class HoldersPage extends StatelessWidget {
           const Divider(height: 40.0),
           _label(context, 'ErrorStubWidget'),
           _Frame(
-            child: ErrorStubWidget(
-              onPressed: () {},
-              image: Assets.icon.errorStub.svg(height: 120.0),
-            ),
+            child: ErrorStubWidget(onPressed: () {}, image: Assets.icon.errorStub.svg(height: 120.0)),
           ),
         ],
       ),

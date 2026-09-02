@@ -22,6 +22,10 @@ class DebugDevService implements DebugService {
 
   final DebugPreferenceStorage _storage;
 
+  /// dev-флейвор — галерея и прочие dev-фичи доступны в любом build-режиме.
+  @override
+  bool get isDevFlavor => true;
+
   /// Видимость плавающей debug-кнопки (по образцу a production app):
   /// скрывается на время открытого debug-экрана и по long-press на кнопке.
   final _buttonVisibility = StreamController<bool>.broadcast();

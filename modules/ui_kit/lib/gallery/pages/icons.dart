@@ -47,10 +47,7 @@ class IconsPage extends StatelessWidget {
             ],
           ),
           const Divider(height: 40.0),
-          Text(
-            'Assets.icon — SVG (${Assets.icon.values.length})',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text('Assets.icon — SVG (${Assets.icon.values.length})', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 12.0),
           Wrap(
             spacing: 12.0,
@@ -81,12 +78,7 @@ class _Tile extends StatelessWidget {
         children: [
           SizedBox(height: 40.0, child: Center(child: child)),
           const SizedBox(height: 4.0),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-          ),
+          Text(label, style: Theme.of(context).textTheme.labelSmall, textAlign: TextAlign.center, maxLines: 2),
         ],
       ),
     );
