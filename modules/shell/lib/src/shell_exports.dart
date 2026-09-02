@@ -29,8 +29,7 @@ export 'package:personal/personal.dart' show AnimalNote, AnimalNoteFile;
 // migrated modules so `context.appColors` resolves the same ThemeExtension.
 // Design assets (package-scoped [Assets]) + the icomoon [IconRes] also live in
 // ui_kit now.
-export 'package:ui_kit/ui_kit.dart'
-    show AppTheme, AppColors, AppColorsX, Assets, SvgGenImage, AssetGenImage, IconRes;
+export 'package:ui_kit/ui_kit.dart' show AppTheme, AppColors, AppColorsX, Assets, SvgGenImage, AssetGenImage, IconRes;
 
 // App-internal resources (lottie paths) still live in the shell.
 export '../res/lottie.dart';

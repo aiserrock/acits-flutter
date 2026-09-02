@@ -16,21 +16,8 @@ PrescriptionDto _dto() => PrescriptionDto(
   duration: 'EVERY_WEEK',
   description: 'desc',
   createdBy: 'Иванов И.',
-  drugs: const [
-    PrescriptionDrugDto(
-      drugId: 7,
-      drugName: 'Амоксициллин',
-      drugDosage: 2.5,
-      formOfDrug: 'Таблетка',
-    ),
-  ],
-  executions: [
-    PrescriptionExecutionDto(
-      id: 100,
-      executeAt: DateTime.utc(2024, 5, 1, 9),
-      status: 'IN_PROGRESS',
-    ),
-  ],
+  drugs: const [PrescriptionDrugDto(drugId: 7, drugName: 'Амоксициллин', drugDosage: 2.5, formOfDrug: 'Таблетка')],
+  executions: [PrescriptionExecutionDto(id: 100, executeAt: DateTime.utc(2024, 5, 1, 9), status: 'IN_PROGRESS')],
 );
 
 void main() {
@@ -40,9 +27,7 @@ void main() {
   late PrescriptionService service;
 
   setUpAll(() {
-    registerFallbackValue(
-      const PrescriptionWriteDto(animal: 0, myType: '', drugs: [], executions: []),
-    );
+    registerFallbackValue(const PrescriptionWriteDto(animal: 0, myType: '', drugs: [], executions: []));
   });
 
   setUp(() {
@@ -79,9 +64,7 @@ void main() {
   });
 
   test('createPrescription assembles a write DTO with UTC executions', () async {
-    when(
-      () => port.create(any(), shelterId: any(named: 'shelterId')),
-    ).thenAnswer((_) async => _dto());
+    when(() => port.create(any(), shelterId: any(named: 'shelterId'))).thenAnswer((_) async => _dto());
 
     final entity = Prescription(
       animal: 501,
@@ -92,9 +75,7 @@ void main() {
     );
     await service.createPrescription(entity);
 
-    final captured =
-        verify(() => port.create(captureAny(), shelterId: 50)).captured.single
-            as PrescriptionWriteDto;
+    final captured = verify(() => port.create(captureAny(), shelterId: 50)).captured.single as PrescriptionWriteDto;
     expect(captured.animal, 501);
     expect(captured.myType, 'COURSE_OF_TREATMENT');
     expect(captured.executions.single.executeAt.isUtc, isTrue);
