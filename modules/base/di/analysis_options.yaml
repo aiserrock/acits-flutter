@@ -7,10 +7,5 @@ formatter:
 
 analyzer:
   exclude:
-    # flutter_gen output (app assets accessor moved here from lib/gen). Generated
-    # code — excluded from analysis exactly as the root app excludes lib/gen/**.
-    - "lib/gen/**"
-
-linter:
-  rules:
-    no_logic_in_create_state: false
+    # injectable output — генератор кладёт его рядом с @InjectableInit-источником.
+    - "lib/src/di_container.config.dart"

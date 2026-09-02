@@ -9,6 +9,11 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+# Ширина строки проекта. Без этой секции IDE и голый `dart format` берут дефолт
+# 80 и переформатируют файлы, расходясь с `-l 120` в melos/CI.
+formatter:
+  page_width: 120
+
 analyzer:
   exclude:
       # ignore generated files — all code generators output under lib/gen/,

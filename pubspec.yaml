@@ -195,9 +195,18 @@ flutter:
     - assets/cert/
 
 # Patrol integration/e2e tests (industry-standard native UI automation).
-# Tests live in integration_test/. Run with: patrol test --flavor dev
+# Tests live in integration_test/. Прогон на реальном устройстве/эмуляторе:
+#   dart pub global activate patrol_cli 4.4.0   # ← парная к пакету patrol 4.6.1
+#   patrol test --target integration_test/auth_login_test.dart --flavor dev \
+#     --dart-define=ACITS_TEST_LOGIN=test_user_2 --dart-define=ACITS_TEST_PASSWORD=user10000
+# Android-обвязка: android/app/src/androidTest/.../MainActivityTest.java +
+# testInstrumentationRunner/testOptions в android/app/build.gradle.
 patrol:
   app_name: ACITS
+  # Тесты живут в integration_test/ (стандартный каталог Flutter), а не в
+  # дефолтном для patrol_cli patrol_test/ — иначе CLI генерирует битые импорты
+  # в test_bundle.dart (абсолютные пути) и Gradle-сборка падает.
+  test_directory: integration_test
   android:
     package_name: ru.acits.dev
   ios:
@@ -255,34 +264,52 @@ melos:
       description: Строгий анализ — падает на infos и warnings (CI-гейт).
       run: fvm flutter analyze --fatal-infos --fatal-warnings
 
+    # Ширина строки закреплена в analysis_options.yaml (formatter.page_width),
+    # чтобы IDE форматировала так же; `-l 120` здесь оставлен как явный дубль
+    # для запусков вне контекста пакета.
     format:
-      description: Форматирование hand-written кода (line length 120), генерённые файлы исключены.
+      description: Форматирование hand-written кода (line length 120) в корне и модулях, генерённые файлы исключены.
       run: |
-        files=$(find lib test -name '*.dart' \
+        find lib test modules -name '*.dart' \
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
           ! -name '*.gen.dart' \
           ! -name 'locale_keys.g.dart' \
-          ! -name 'firebase_options.dart')
-        fvm dart format -l 120 $files
+          ! -name 'firebase_options.dart' \
+          ! -path '*/generated/*' \
+          ! -path '*/.dart_tool/*' \
+          ! -path '*/build/*' \
+          -print0 | xargs -0 fvm dart format -l 120
 
     format:check:
       description: Проверка форматирования без правок (CI/pre-commit), падает при расхождении.
       run: |
-        files=$(find lib test -name '*.dart' \
+        find lib test modules -name '*.dart' \
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
           ! -name '*.gen.dart' \
           ! -name 'locale_keys.g.dart' \
-          ! -name 'firebase_options.dart')
-        fvm dart format --output=none --set-exit-if-changed -l 120 $files
+          ! -name 'firebase_options.dart' \
+          ! -path '*/generated/*' \
+          ! -path '*/.dart_tool/*' \
+          ! -path '*/build/*' \
+          -print0 | xargs -0 fvm dart format --output=none --set-exit-if-changed -l 120
 
     # ── Тесты ────────────────────────────────────────────────────────────────
+    # `modules/base/*` — контейнер, пакеты лежат на уровень глубже, поэтому
+    # обходятся отдельной маской (иначе 100+ тестов молча не гоняются).
     test:
-      description: Юнит- и виджет-тесты.
-      run: fvm flutter test
+      description: Юнит- и виджет-тесты корня и каждого пакета воркспейса с test/.
+      run: |
+        fvm flutter test
+        for p in packages/* modules/* modules/base/*; do
+          if [ -d "$p/test" ]; then
+            echo "── flutter test ($p)"
+            (cd "$p" && fvm flutter test) || exit 1
+          fi
+        done
 
     test:coverage:
       description: Тесты со сбором покрытия (coverage/lcov.info).

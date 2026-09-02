@@ -1,5 +1,10 @@
 include: package:flutter_lints/flutter.yaml
 
+# Ширина строки проекта (см. корневой analysis_options.yaml). Пакеты воркспейса
+# не наследуют корневой конфиг, поэтому секция дублируется в каждом модуле.
+formatter:
+  page_width: 120
+
 analyzer:
   exclude:
     # Generated LocaleKeys — easy_localization output, not hand-maintained.
