@@ -130,3 +130,9 @@ modules/ui_kit/example/.dart_tool/
 # Mason local cache (absolute paths, machine-specific)
 .mason/
 mason-lock.json
+
+# Patrol: сгенерированный тест-бандл (регенерится на каждый `patrol test`).
+# integration_test/ — наш каталог (patrol.test_directory); patrol_test/ — дефолт
+# CLI, куда bundle попадает, если test_directory не задан.
+integration_test/test_bundle.dart
+patrol_test/
