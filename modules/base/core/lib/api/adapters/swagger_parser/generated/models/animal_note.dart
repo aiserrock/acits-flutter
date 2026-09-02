@@ -12,37 +12,37 @@ part 'animal_note.g.dart';
 @JsonSerializable()
 class AnimalNote {
   const AnimalNote({
-    required this.id,
-    required this.url,
-    required this.animal,
-    required this.content,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.isUserCanEditOrDelete,
+    this.id,
+    this.url,
+    this.animal,
+    this.content,
     this.files,
+    this.createdAt,
+    this.updatedAt,
+    this.createdBy,
+    this.updatedBy,
+    this.isUserCanEditOrDelete,
   });
   
   factory AnimalNote.fromJson(Map<String, Object?> json) => _$AnimalNoteFromJson(json);
   
-  final int id;
-  final String url;
-  final int animal;
-  final String content;
+  final int? id;
+  final String? url;
+  final int? animal;
+  final String? content;
   final List<AnimalNoteFile>? files;
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
   @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
   @JsonKey(name: 'created_by')
-  final String createdBy;
+  final String? createdBy;
   @JsonKey(name: 'updated_by')
-  final String updatedBy;
+  final String? updatedBy;
 
   /// SerializerMethodField method.
   @JsonKey(name: 'is_user_can_edit_or_delete')
-  final bool isUserCanEditOrDelete;
+  final bool? isUserCanEditOrDelete;
 
   Map<String, Object?> toJson() => _$AnimalNoteToJson(this);
 }

@@ -9,8 +9,8 @@ part of 'values_for_selection_item.dart';
 ValuesForSelectionItem _$ValuesForSelectionItemFromJson(
   Map<String, dynamic> json,
 ) => ValuesForSelectionItem(
-  displayName: json['display_name'] as String,
-  value: json['value'] as String,
+  displayName: json['display_name'] as String?,
+  value: json['value'] as String?,
 );
 
 Map<String, dynamic> _$ValuesForSelectionItemToJson(

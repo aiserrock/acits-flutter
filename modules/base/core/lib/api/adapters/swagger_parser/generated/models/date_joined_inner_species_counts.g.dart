@@ -9,9 +9,9 @@ part of 'date_joined_inner_species_counts.dart';
 DateJoinedInnerSpeciesCounts _$DateJoinedInnerSpeciesCountsFromJson(
   Map<String, dynamic> json,
 ) => DateJoinedInnerSpeciesCounts(
-  id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
-  count: (json['count'] as num).toInt(),
+  id: (json['id'] as num?)?.toInt(),
+  name: json['name'] as String?,
+  count: (json['count'] as num?)?.toInt(),
   breeds: (json['breeds'] as List<dynamic>?)
       ?.map((e) => BreedsSpeciesStatsItem.fromJson(e as Map<String, dynamic>))
       .toList(),

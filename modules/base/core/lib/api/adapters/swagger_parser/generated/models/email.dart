@@ -10,12 +10,12 @@ part 'email.g.dart';
 @JsonSerializable()
 class Email {
   const Email({
-    required this.email,
+    this.email,
   });
   
   factory Email.fromJson(Map<String, Object?> json) => _$EmailFromJson(json);
   
-  final String email;
+  final String? email;
 
   Map<String, Object?> toJson() => _$EmailToJson(this);
 }

@@ -11,13 +11,13 @@ part 'values_for_selection.g.dart';
 @JsonSerializable()
 class ValuesForSelection {
   const ValuesForSelection({
-    required this.choicesName,
+    this.choicesName,
   });
   
   factory ValuesForSelection.fromJson(Map<String, Object?> json) => _$ValuesForSelectionFromJson(json);
   
   @JsonKey(name: 'choices_name')
-  final List<ValuesForSelectionItem> choicesName;
+  final List<ValuesForSelectionItem>? choicesName;
 
   Map<String, Object?> toJson() => _$ValuesForSelectionToJson(this);
 }

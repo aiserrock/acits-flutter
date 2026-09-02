@@ -10,27 +10,27 @@ part 'prescription_drug.g.dart';
 @JsonSerializable()
 class PrescriptionDrug {
   const PrescriptionDrug({
-    required this.drugId,
-    required this.drugName,
-    required this.usageInstruction,
-    required this.formOfDrug,
-    required this.drugDosage,
+    this.drugId,
+    this.drugName,
+    this.usageInstruction,
+    this.formOfDrug,
+    this.drugDosage,
   });
   
   factory PrescriptionDrug.fromJson(Map<String, Object?> json) => _$PrescriptionDrugFromJson(json);
   
   @JsonKey(name: 'drug_id')
-  final int drugId;
+  final int? drugId;
   @JsonKey(name: 'drug_name')
-  final String drugName;
+  final String? drugName;
   @JsonKey(name: 'usage_instruction')
-  final String usageInstruction;
+  final String? usageInstruction;
 
   /// Form of drug (pills/syrop/e.t.c.)
   @JsonKey(name: 'form_of_drug')
-  final String formOfDrug;
+  final String? formOfDrug;
   @JsonKey(name: 'drug_dosage')
-  final double drugDosage;
+  final double? drugDosage;
 
   Map<String, Object?> toJson() => _$PrescriptionDrugToJson(this);
 }

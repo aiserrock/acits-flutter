@@ -17,47 +17,47 @@ part 'animal_read.g.dart';
 @JsonSerializable()
 class AnimalRead {
   const AnimalRead({
-    required this.id,
-    required this.uuid,
-    required this.url,
-    required this.images,
-    required this.spec,
-    required this.dateJoined,
-    required this.placeOfCatch,
-    required this.hasDocuments,
-    required this.shelter,
-    required this.curator,
-    required this.applicant,
-    required this.animalAttributes,
-    required this.deletedAt,
-    required this.adoption,
-    required this.release,
-    required this.overstay,
+    this.id,
+    this.uuid,
+    this.url,
     this.name,
+    this.images,
+    this.spec,
     this.status,
+    this.dateJoined,
     this.birthDate,
     this.deathDate,
     this.deathReason,
     this.defaultImageId,
+    this.placeOfCatch,
     this.placeOfRelease,
     this.dateOfChipping,
     this.chippingCode,
     this.height,
     this.weight,
+    this.hasDocuments,
+    this.shelter,
+    this.curator,
+    this.applicant,
+    this.animalAttributes,
+    this.deletedAt,
+    this.adoption,
+    this.release,
+    this.overstay,
     this.canBeShared,
   });
   
   factory AnimalRead.fromJson(Map<String, Object?> json) => _$AnimalReadFromJson(json);
   
-  final int id;
-  final String uuid;
-  final String url;
+  final int? id;
+  final String? uuid;
+  final String? url;
   final String? name;
-  final List<AnimalImageRead> images;
-  final Species spec;
+  final List<AnimalImageRead>? images;
+  final Species? spec;
   final Status69fEnum? status;
   @JsonKey(name: 'date_joined')
-  final DateTime dateJoined;
+  final DateTime? dateJoined;
   @JsonKey(name: 'birth_date')
   final DateTime? birthDate;
   @JsonKey(name: 'death_date')
@@ -67,7 +67,7 @@ class AnimalRead {
   @JsonKey(name: 'default_image_id')
   final int? defaultImageId;
   @JsonKey(name: 'place_of_catch')
-  final String placeOfCatch;
+  final String? placeOfCatch;
   @JsonKey(name: 'place_of_release')
   final String? placeOfRelease;
   @JsonKey(name: 'date_of_chipping')
@@ -77,12 +77,12 @@ class AnimalRead {
   final String? height;
   final String? weight;
   @JsonKey(name: 'has_documents')
-  final bool hasDocuments;
-  final int shelter;
-  final Curator curator;
-  final Applicant applicant;
+  final bool? hasDocuments;
+  final int? shelter;
+  final Curator? curator;
+  final Applicant? applicant;
   @JsonKey(name: 'animal_attributes')
-  final List<AnimalAttributeValue> animalAttributes;
+  final List<AnimalAttributeValue>? animalAttributes;
   @JsonKey(name: 'deleted_at')
   final DateTime? deletedAt;
   final String? adoption;

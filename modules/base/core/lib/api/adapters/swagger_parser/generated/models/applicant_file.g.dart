@@ -8,11 +8,13 @@ part of 'applicant_file.dart';
 
 ApplicantFile _$ApplicantFileFromJson(Map<String, dynamic> json) =>
     ApplicantFile(
-      id: (json['id'] as num).toInt(),
-      file: json['file'] as String,
-      name: json['name'] as String,
-      filename: json['filename'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      id: (json['id'] as num?)?.toInt(),
+      file: json['file'] as String?,
+      name: json['name'] as String?,
+      filename: json['filename'] as String?,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
     );
 
 Map<String, dynamic> _$ApplicantFileToJson(ApplicantFile instance) =>
@@ -21,5 +23,5 @@ Map<String, dynamic> _$ApplicantFileToJson(ApplicantFile instance) =>
       'file': instance.file,
       'name': instance.name,
       'filename': instance.filename,
-      'created_at': instance.createdAt.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
     };

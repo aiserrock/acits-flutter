@@ -10,14 +10,14 @@ part 'shelter_short_serializers.g.dart';
 @JsonSerializable()
 class ShelterShortSerializers {
   const ShelterShortSerializers({
-    required this.id,
-    required this.name,
+    this.id,
+    this.name,
   });
   
   factory ShelterShortSerializers.fromJson(Map<String, Object?> json) => _$ShelterShortSerializersFromJson(json);
   
-  final int id;
-  final String name;
+  final int? id;
+  final String? name;
 
   Map<String, Object?> toJson() => _$ShelterShortSerializersToJson(this);
 }

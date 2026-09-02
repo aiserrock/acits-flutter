@@ -10,17 +10,17 @@ part 'user_reset_password_complete.g.dart';
 @JsonSerializable()
 class UserResetPasswordComplete {
   const UserResetPasswordComplete({
-    required this.uidb64,
-    required this.token,
-    required this.newPassword,
+    this.uidb64,
+    this.token,
+    this.newPassword,
   });
   
   factory UserResetPasswordComplete.fromJson(Map<String, Object?> json) => _$UserResetPasswordCompleteFromJson(json);
   
-  final String uidb64;
-  final String token;
+  final String? uidb64;
+  final String? token;
   @JsonKey(name: 'new_password')
-  final String newPassword;
+  final String? newPassword;
 
   Map<String, Object?> toJson() => _$UserResetPasswordCompleteToJson(this);
 }

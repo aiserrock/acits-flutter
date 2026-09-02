@@ -8,8 +8,8 @@ part of 'values_for_selection.dart';
 
 ValuesForSelection _$ValuesForSelectionFromJson(Map<String, dynamic> json) =>
     ValuesForSelection(
-      choicesName: (json['choices_name'] as List<dynamic>)
-          .map(
+      choicesName: (json['choices_name'] as List<dynamic>?)
+          ?.map(
             (e) => ValuesForSelectionItem.fromJson(e as Map<String, dynamic>),
           )
           .toList(),

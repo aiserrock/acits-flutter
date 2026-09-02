@@ -9,14 +9,14 @@ part 'token_refresh.g.dart';
 @JsonSerializable()
 class TokenRefresh {
   const TokenRefresh({
-    required this.access,
-    required this.refresh,
+    this.access,
+    this.refresh,
   });
   
   factory TokenRefresh.fromJson(Map<String, Object?> json) => _$TokenRefreshFromJson(json);
   
-  final String access;
-  final String refresh;
+  final String? access;
+  final String? refresh;
 
   Map<String, Object?> toJson() => _$TokenRefreshToJson(this);
 }

@@ -32,7 +32,9 @@ import 'dart:convert';
 import 'dart:io';
 
 // Single source of truth is the app spec at the repo root — no duplicated copy.
-const _sourcePath = '../../doc/api/openapi.json';
+// Path is relative to this package (modules/base/core), the cwd `melos genapi`
+// cd's into before running.
+const _sourcePath = '../../../doc/api/openapi.json';
 const _outputPath = '.gen/openapi.preprocessed.json';
 
 void main() {
@@ -44,6 +46,7 @@ void main() {
 
   final spec = jsonDecode(source.readAsStringSync()) as Map<String, dynamic>;
   final droppedVariants = _stripNonJsonRequestBodies(spec);
+  final relaxedFields = _relaxOverstatedNonNull(spec);
 
   final outFile = File(_outputPath);
   outFile.parent.createSync(recursive: true);
@@ -51,8 +54,84 @@ void main() {
 
   stdout.writeln(
     'preprocess_openapi: wrote $_outputPath '
-    '(dropped $droppedVariants non-JSON request-body content variants).',
+    '(dropped $droppedVariants non-JSON request-body content variants, '
+    'relaxed $relaxedFields overstated non-null fields).',
   );
+}
+
+/// The ACITS OpenAPI spec (auto-generated from DRF) marks almost every field
+/// `required` + non-nullable, but the backend actually serializes many of them
+/// as `null`: an animal with no assigned curator/applicant, blank audit fields
+/// (`created_by`), SimpleJWT's `refresh: null` on token refresh, nested file
+/// lists, etc. swagger_parser follows the spec strictly and emits `as String` /
+/// `as Map<String,dynamic>` casts, so a `null` throws
+/// `type 'Null' is not a subtype of type 'String'` inside `fromJson` and the
+/// WHOLE response fails to parse (surfaces as a silent UnknownFailure — an empty
+/// screen). The old chopper generator was lenient about this; the new one is not.
+///
+/// Rather than patch schemas one-by-one (56 of ~101 response schemas are
+/// affected — a whack-a-mole across every nested type), we relax the ENTIRE spec
+/// in one pass: every `required` scalar / nested-object property that isn't
+/// already `nullable` is made `nullable: true` and dropped from `required`. This
+/// mirrors the old chopper client's global null-tolerance. Domain mappers apply
+/// their own fallbacks (`?? ''`) where a non-null value is still needed.
+///
+/// SCOPE: response schemas only. `*Write` request DTOs and `writeOnly` fields
+/// are left untouched — there a non-null field is a real send-side contract, and
+/// masking it as nullable would hide genuine request bugs.
+///
+/// We patch the preprocessed copy — NOT `doc/api/openapi.json` — so the fix
+/// survives every `melos genapi`. The real fix belongs on the backend (mark
+/// these actually-nullable in the OpenAPI schema); a companion PR tracks that.
+
+/// Property types whose generated `as T` cast throws on a `null` value. Scalars
+/// plus nested objects (`$ref` / `allOf`) and arrays. Enums are `$ref` strings,
+/// also covered.
+bool _isCastRiskyProp(Map<String, dynamic> prop) {
+  if (prop.containsKey(r'$ref') || prop.containsKey('allOf')) return true;
+  const riskyTypes = {'string', 'integer', 'number', 'boolean', 'array', 'object'};
+  final type = prop['type'];
+  return type is String && riskyTypes.contains(type);
+}
+
+/// One-pass global relax: for every response schema, mark each `required`
+/// cast-risky property `nullable: true` and drop it from `required`. Skips
+/// `*Write` request schemas whole (send-side contracts). Returns the number of
+/// fields relaxed.
+int _relaxOverstatedNonNull(Map<String, dynamic> spec) {
+  var relaxed = 0;
+  final schemas = (spec['components'] as Map<String, dynamic>?)?['schemas'];
+  if (schemas is! Map<String, dynamic>) return relaxed;
+
+  schemas.forEach((schemaName, schema) {
+    if (schema is! Map<String, dynamic>) return;
+    // Leave request/write DTOs strict — non-null there is a real send contract.
+    if (schemaName.endsWith('Write')) return;
+    final props = schema['properties'];
+    if (props is! Map<String, dynamic>) return;
+
+    final required = (schema['required'] as List?)?.cast<String>().toList() ?? <String>[];
+    if (required.isEmpty) return;
+
+    for (final field in required.toList()) {
+      final prop = props[field];
+      if (prop is! Map<String, dynamic>) continue;
+      if (prop['nullable'] == true) {
+        required.remove(field);
+        continue;
+      }
+      // NOTE: we do NOT skip `writeOnly` fields here. We already skip whole
+      // `*Write` schemas above; a `writeOnly` field left inside a READ schema
+      // (a DRF quirk — e.g. ApplicantFile.name) is never serialized into the
+      // response, so the backend sends `null` there. Relaxing it is required.
+      if (!_isCastRiskyProp(prop)) continue;
+      prop['nullable'] = true;
+      required.remove(field);
+      relaxed++;
+    }
+    schema['required'] = required;
+  });
+  return relaxed;
 }
 
 /// For every request body that offers `application/json`, remove sibling

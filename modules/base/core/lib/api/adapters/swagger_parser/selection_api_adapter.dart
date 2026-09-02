@@ -37,5 +37,6 @@ class SelectionApiAdapter implements SelectionApiPort {
     return result.map(_mapAttribute).toList(growable: false);
   }
 
-  AttributeDto _mapAttribute(AnimalAttribute a) => AttributeDto(id: a.id, name: a.name, isRequired: a.isRequired);
+  AttributeDto _mapAttribute(AnimalAttribute a) =>
+      AttributeDto(id: a.id ?? 0, name: a.name ?? '', isRequired: a.isRequired);
 }

@@ -12,19 +12,19 @@ part 'animal_image_read.g.dart';
 @JsonSerializable()
 class AnimalImageRead {
   const AnimalImageRead({
-    required this.id,
-    required this.filename,
-    required this.image,
+    this.id,
     this.isPrimary,
+    this.filename,
+    this.image,
   });
   
   factory AnimalImageRead.fromJson(Map<String, Object?> json) => _$AnimalImageReadFromJson(json);
   
-  final int id;
+  final int? id;
   @JsonKey(name: 'is_primary')
   final bool? isPrimary;
-  final String filename;
-  final ImageThumbnails image;
+  final String? filename;
+  final ImageThumbnails? image;
 
   Map<String, Object?> toJson() => _$AnimalImageReadToJson(this);
 }

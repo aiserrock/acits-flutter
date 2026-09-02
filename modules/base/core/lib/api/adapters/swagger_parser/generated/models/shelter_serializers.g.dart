@@ -8,10 +8,10 @@ part of 'shelter_serializers.dart';
 
 ShelterSerializers _$ShelterSerializersFromJson(Map<String, dynamic> json) =>
     ShelterSerializers(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      country: json['country'] as String,
-      city: json['city'] as String,
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+      country: json['country'] as String?,
+      city: json['city'] as String?,
       state: json['state'] as String?,
       region: json['region'] as String?,
       street: json['street'] as String?,

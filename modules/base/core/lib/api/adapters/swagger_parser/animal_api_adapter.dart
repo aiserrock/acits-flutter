@@ -40,6 +40,11 @@ class AnimalApiAdapter implements AnimalApiPort {
   /// UTF-8 strings, which corrupts non-text PDF bytes. We fetch bytes directly.
   final Dio _dio;
 
+  /// Placeholder for the rare case where a read model omits a wire-required
+  /// non-null `DateTime` (the relaxed generated models now type these nullable).
+  /// Real payloads always carry the date; this only guards deserialization.
+  static final _epoch = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+
   @override
   Future<List<AnimalDto>> list({int? shelterId, String? search, String? ordering, int? limit, int? offset}) async {
     final page = await _client.v1AnimalsList(
@@ -124,23 +129,23 @@ class AnimalApiAdapter implements AnimalApiPort {
         name: a.name,
         images: images,
         validImages: validImages,
-        specId: a.spec.id,
+        specId: a.spec?.id ?? 0,
         status: a.status,
-        dateJoined: a.dateJoined,
+        dateJoined: a.dateJoined ?? _epoch,
         birthDate: a.birthDate,
         deathDate: a.deathDate,
         deathReason: a.deathReason,
         defaultImageId: a.defaultImageId,
-        placeOfCatch: a.placeOfCatch,
+        placeOfCatch: a.placeOfCatch ?? '',
         placeOfRelease: a.placeOfRelease,
         dateOfChipping: a.dateOfChipping,
         chippingCode: a.chippingCode,
         height: a.height,
         weight: a.weight,
-        shelter: a.shelter,
-        curatorId: a.curator.id,
-        applicantId: a.applicant.id,
-        animalAttributes: a.animalAttributes,
+        shelter: a.shelter ?? 0,
+        curatorId: a.curator?.id,
+        applicantId: a.applicant?.id,
+        animalAttributes: a.animalAttributes ?? const [],
         canBeShared: a.canBeShared,
       );
 
@@ -199,29 +204,29 @@ class AnimalApiAdapter implements AnimalApiPort {
   // ── generated → OUR DTO mapping ────────────────────────────────────────────
 
   AnimalDto _mapAnimal(AnimalRead a) => AnimalDto(
-    id: a.id,
-    uuid: a.uuid,
-    url: a.url,
+    id: a.id ?? 0,
+    uuid: a.uuid ?? '',
+    url: a.url ?? '',
     name: a.name,
-    images: a.images.map(_mapImage).toList(growable: false),
-    spec: _mapSpecies(a.spec),
+    images: (a.images ?? const []).map(_mapImage).toList(growable: false),
+    spec: a.spec == null ? null : _mapSpecies(a.spec!),
     status: a.status?.json,
-    dateJoined: a.dateJoined,
+    dateJoined: a.dateJoined ?? _epoch,
     birthDate: a.birthDate,
     deathDate: a.deathDate,
     deathReason: a.deathReason,
     defaultImageId: a.defaultImageId,
-    placeOfCatch: a.placeOfCatch,
+    placeOfCatch: a.placeOfCatch ?? '',
     placeOfRelease: a.placeOfRelease,
     dateOfChipping: a.dateOfChipping,
     chippingCode: a.chippingCode,
     height: a.height,
     weight: a.weight,
     hasDocuments: a.hasDocuments,
-    shelter: a.shelter,
+    shelter: a.shelter ?? 0,
     curator: _mapCurator(a.curator),
     applicant: _mapApplicant(a.applicant),
-    animalAttributes: a.animalAttributes.map(_mapAttribute).toList(growable: false),
+    animalAttributes: (a.animalAttributes ?? const []).map(_mapAttribute).toList(growable: false),
     deletedAt: a.deletedAt,
     adoption: a.adoption,
     release: a.release,
@@ -230,52 +235,60 @@ class AnimalApiAdapter implements AnimalApiPort {
   );
 
   AnimalImageDto _mapImage(AnimalImageRead i) =>
-      AnimalImageDto(id: i.id, filename: i.filename, image: _mapThumbnails(i.image), isPrimary: i.isPrimary);
+      AnimalImageDto(id: i.id ?? 0, filename: i.filename ?? '', image: _mapThumbnails(i.image), isPrimary: i.isPrimary);
 
-  ImageThumbnailsDto _mapThumbnails(ImageThumbnails t) =>
-      ImageThumbnailsDto(large: t.large, medium: t.medium, small: t.small);
+  ImageThumbnailsDto _mapThumbnails(ImageThumbnails? t) =>
+      ImageThumbnailsDto(large: t?.large ?? '', medium: t?.medium ?? '', small: t?.small ?? '');
 
   SpeciesDto _mapSpecies(Species s) => SpeciesDto(
-    id: s.id,
-    name: s.name,
-    level: s.level.json ?? 0,
+    id: s.id ?? 0,
+    name: s.name ?? '',
+    level: s.level?.json ?? 0,
     parentId: s.parentId,
     parentName: s.parentName,
     categoryName: s.categoryName,
   );
 
-  CuratorDto _mapCurator(Curator c) => CuratorDto(
-    id: c.id,
-    url: c.url,
-    shelter: c.shelter,
-    firstName: c.firstName,
-    lastName: c.lastName,
-    email: c.email,
-    phoneNumber: c.phoneNumber,
-    address: c.address,
-    createdBy: c.createdBy,
-    updatedBy: c.updatedBy,
-    createdAt: c.createdAt,
-    updatedAt: c.updatedAt,
-  );
+  CuratorDto? _mapCurator(Curator? c) => c == null
+      ? null
+      : CuratorDto(
+          id: c.id ?? 0,
+          url: c.url,
+          shelter: c.shelter,
+          firstName: c.firstName,
+          lastName: c.lastName,
+          email: c.email,
+          phoneNumber: c.phoneNumber,
+          address: c.address,
+          createdBy: c.createdBy,
+          updatedBy: c.updatedBy,
+          createdAt: c.createdAt,
+          updatedAt: c.updatedAt,
+        );
 
-  ApplicantDto _mapApplicant(Applicant a) => ApplicantDto(
-    id: a.id,
-    url: a.url,
-    shelter: a.shelter,
-    firstName: a.firstName,
-    lastName: a.lastName,
-    email: a.email,
-    phoneNumber: a.phoneNumber,
-    contactDetails: a.contactDetails,
-    createdBy: a.createdBy,
-    updatedBy: a.updatedBy,
-    createdAt: a.createdAt,
-    updatedAt: a.updatedAt,
-    animalId: a.animalId,
-    applicantFiles: a.applicantFiles?.map((f) => Map<String, dynamic>.from(f.toJson())).toList(growable: false),
-  );
+  ApplicantDto? _mapApplicant(Applicant? a) => a == null
+      ? null
+      : ApplicantDto(
+          id: a.id ?? 0,
+          url: a.url,
+          shelter: a.shelter,
+          firstName: a.firstName,
+          lastName: a.lastName,
+          email: a.email,
+          phoneNumber: a.phoneNumber,
+          contactDetails: a.contactDetails,
+          createdBy: a.createdBy,
+          updatedBy: a.updatedBy,
+          createdAt: a.createdAt,
+          updatedAt: a.updatedAt,
+          animalId: a.animalId,
+          applicantFiles: a.applicantFiles?.map((f) => Map<String, dynamic>.from(f.toJson())).toList(growable: false),
+        );
 
-  AnimalAttributeDto _mapAttribute(AnimalAttributeValue v) =>
-      AnimalAttributeDto(attrId: v.attrId, name: v.name, value: v.value, isRequired: v.isRequired);
+  AnimalAttributeDto _mapAttribute(AnimalAttributeValue v) => AnimalAttributeDto(
+    attrId: v.attrId ?? 0,
+    name: v.name ?? '',
+    value: v.value ?? '',
+    isRequired: v.isRequired ?? false,
+  );
 }

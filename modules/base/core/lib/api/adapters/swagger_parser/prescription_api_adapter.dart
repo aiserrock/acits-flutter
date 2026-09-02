@@ -134,8 +134,15 @@ class PrescriptionApiAdapter implements PrescriptionApiPort {
 
   // ── generated → OUR DTO mapping ────────────────────────────────────────────
 
-  PrescriptionExecutionTodayDto _mapExecutionToday(PrescriptionExecutionToday e) =>
-      PrescriptionExecutionTodayDto(id: e.id, prescription: _mapShort(e.prescription), executeAt: e.executeAt);
+  /// Placeholder for the wire-required non-null `execute_at` that the relaxed
+  /// generated model now types nullable. Real executions always carry it.
+  static final _epoch = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+
+  PrescriptionExecutionTodayDto _mapExecutionToday(PrescriptionExecutionToday e) => PrescriptionExecutionTodayDto(
+    id: e.id,
+    prescription: _mapShort(e.prescription!),
+    executeAt: e.executeAt ?? _epoch,
+  );
 
   PrescriptionShortDto _mapShort(PrescriptionShort s) => PrescriptionShortDto(
     id: s.id,
@@ -144,38 +151,38 @@ class PrescriptionApiAdapter implements PrescriptionApiPort {
         ? s.extraTypeAttributes as Map<String, dynamic>
         : null,
     description: s.description,
-    animal: _mapAnimalShort(s.animal),
-    drugs: s.drugs.map(_mapDrugLine).toList(growable: false),
+    animal: _mapAnimalShort(s.animal!),
+    drugs: (s.drugs ?? const []).map(_mapDrugLine).toList(growable: false),
     createdBy: s.createdBy,
     updatedBy: s.updatedBy,
   );
 
   AnimalShortDto _mapAnimalShort(AnimalShort a) => AnimalShortDto(
-    id: a.id,
-    uuid: a.uuid,
+    id: a.id ?? 0,
+    uuid: a.uuid ?? '',
     name: a.name,
-    specName: a.specName,
+    specName: a.specName ?? '',
     specParentName: a.specParentName,
     avatar: a.avatar,
     defaultImageId: a.defaultImageId,
   );
 
   PrescriptionDrugDto _mapDrugLine(PrescriptionDrug d) => PrescriptionDrugDto(
-    drugId: d.drugId,
-    drugName: d.drugName,
-    drugDosage: d.drugDosage,
+    drugId: d.drugId ?? 0,
+    drugName: d.drugName ?? '',
+    drugDosage: d.drugDosage ?? 0,
     usageInstruction: d.usageInstruction,
     formOfDrug: d.formOfDrug,
   );
 
   DrugDto _mapDrug(ShelterDrug s) {
-    final Drug drug = s.drug;
+    final Drug? drug = s.drug;
     return DrugDto(
-      id: drug.id,
-      name: drug.name,
-      usageInstruction: drug.usageInstruction,
-      formOfDrug: drug.formOfDrug,
-      formOfDrugName: drug.formOfDrugName,
+      id: drug?.id ?? 0,
+      name: drug?.name ?? '',
+      usageInstruction: drug?.usageInstruction,
+      formOfDrug: drug?.formOfDrug ?? 0,
+      formOfDrugName: drug?.formOfDrugName ?? '',
       drugResiduesCount: s.drugResiduesCount,
     );
   }

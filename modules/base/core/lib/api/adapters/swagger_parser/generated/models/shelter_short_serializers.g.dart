@@ -9,8 +9,8 @@ part of 'shelter_short_serializers.dart';
 ShelterShortSerializers _$ShelterShortSerializersFromJson(
   Map<String, dynamic> json,
 ) => ShelterShortSerializers(
-  id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
+  id: (json['id'] as num?)?.toInt(),
+  name: json['name'] as String?,
 );
 
 Map<String, dynamic> _$ShelterShortSerializersToJson(

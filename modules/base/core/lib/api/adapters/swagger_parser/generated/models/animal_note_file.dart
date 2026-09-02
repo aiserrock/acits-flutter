@@ -10,21 +10,21 @@ part 'animal_note_file.g.dart';
 @JsonSerializable()
 class AnimalNoteFile {
   const AnimalNoteFile({
-    required this.id,
-    required this.file,
-    required this.name,
-    required this.filename,
-    required this.createdAt,
+    this.id,
+    this.file,
+    this.name,
+    this.filename,
+    this.createdAt,
   });
   
   factory AnimalNoteFile.fromJson(Map<String, Object?> json) => _$AnimalNoteFileFromJson(json);
   
-  final int id;
-  final String file;
-  final String name;
-  final String filename;
+  final int? id;
+  final String? file;
+  final String? name;
+  final String? filename;
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   Map<String, Object?> toJson() => _$AnimalNoteFileToJson(this);
 }

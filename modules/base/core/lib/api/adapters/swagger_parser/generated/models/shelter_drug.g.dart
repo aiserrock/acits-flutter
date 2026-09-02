@@ -7,7 +7,9 @@ part of 'shelter_drug.dart';
 // **************************************************************************
 
 ShelterDrug _$ShelterDrugFromJson(Map<String, dynamic> json) => ShelterDrug(
-  drug: Drug.fromJson(json['drug'] as Map<String, dynamic>),
+  drug: json['drug'] == null
+      ? null
+      : Drug.fromJson(json['drug'] as Map<String, dynamic>),
   drugResiduesCount: (json['drug_residues_count'] as num?)?.toInt(),
 );
 

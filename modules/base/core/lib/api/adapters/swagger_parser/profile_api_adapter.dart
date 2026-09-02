@@ -62,18 +62,22 @@ class ProfileApiAdapter implements ProfileApiPort {
 
   // ── generated → OUR read DTO ────────────────────────────────────────────────
 
+  /// Placeholder for the wire-required non-null `date_joined` that the relaxed
+  /// generated model now types nullable. Real profiles always carry it.
+  static final _epoch = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+
   UserDto _mapUser(UserSerializers u) => UserDto(
-    id: u.id,
-    username: u.username,
-    firstName: u.firstName,
-    lastName: u.lastName,
+    id: u.id ?? 0,
+    username: u.username ?? '',
+    firstName: u.firstName ?? '',
+    lastName: u.lastName ?? '',
     fathersName: u.fathersName,
-    fullName: u.fullName,
-    email: u.email,
+    fullName: u.fullName ?? '',
+    email: u.email ?? '',
     phoneNumber: u.phoneNumber,
     address: u.address,
-    dateJoined: u.dateJoined,
-    isVerified: u.isVerified,
+    dateJoined: u.dateJoined ?? _epoch,
+    isVerified: u.isVerified ?? false,
     isOfferSigned: u.isOfferSigned,
   );
 }

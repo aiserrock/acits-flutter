@@ -121,7 +121,7 @@ class StaffApiAdapter implements StaffApiPort {
   // ── generated → OUR read DTO ────────────────────────────────────────────────
 
   ApplicantDto _mapApplicant(Applicant a) => ApplicantDto(
-    id: a.id,
+    id: a.id ?? 0,
     url: a.url,
     shelter: a.shelter,
     firstName: a.firstName,
@@ -138,7 +138,7 @@ class StaffApiAdapter implements StaffApiPort {
   );
 
   CuratorDto _mapCurator(Curator c) => CuratorDto(
-    id: c.id,
+    id: c.id ?? 0,
     url: c.url,
     shelter: c.shelter,
     firstName: c.firstName,

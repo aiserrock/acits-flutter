@@ -31,6 +31,10 @@ final _dateFormatter = DateFormat('dd.MM.yyyy');
 const _expandedHeight = 408.0;
 const _collapsedHeight = 235.0;
 
+/// Ход схлопывания шапки: на столько нужно проскроллить, чтобы аватар полностью
+/// «доехал» из большого фото в кружок (см. [_onScroll] / [_titleOpacity]).
+const _collapseDelta = _expandedHeight - _collapsedHeight;
+
 /// Бренд-акцент (#6776E0) для активной иконки сегмент-переключателя. Фиксированный,
 /// а не `colorScheme.primary`: в тёмной теме primary бледнеет до #9DA7F1 и почти
 /// не читается на белом thumb. Насыщенный акцент контрастен на белом в обеих темах.
@@ -152,8 +156,32 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       child: CustomScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
-        slivers: [_buildHeader(context, animal), _buildPage(context, (_currentTab + 1) * 5, animal)],
+        slivers: [
+          _buildHeader(context, animal),
+          _buildPage(context, (_currentTab + 1) * 5, animal),
+          _buildScrollExtentFiller(),
+        ],
       ),
+    );
+  }
+
+  /// Невидимый добор высоты внизу списка: гарантирует, что прокручиваемого
+  /// экстента ХВАТАЕТ на полное схлопывание шапки (ход [_collapseDelta]) даже на
+  /// коротких вкладках (Куратор/Заявитель — одна карточка). Без него на коротком
+  /// контенте `_scrollController.offset` не достигает delta, `_titleOpacity`
+  /// застревает на промежуточном значении → большое фото не уходит, аватар в
+  /// кружке проявлен наполовину и наложен сверху.
+  ///
+  /// Высота добора = сколько не хватает, чтобы `maxScrollExtent >= _collapseDelta`:
+  ///   spacer = max(0, _collapseDelta + viewport − precedingScrollExtent)
+  /// где precedingScrollExtent — прокручиваемая высота шапки+контента. На длинных
+  /// вкладках precedingScrollExtent велик → spacer = 0 (пустоты снизу нет).
+  Widget _buildScrollExtentFiller() {
+    return SliverLayoutBuilder(
+      builder: (context, constraints) {
+        final fill = max(.0, _collapseDelta + constraints.viewportMainAxisExtent - constraints.precedingScrollExtent);
+        return SliverToBoxAdapter(child: SizedBox(height: fill));
+      },
     );
   }
 
@@ -467,10 +495,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
 
   void _onScroll() {
     if (_scrollController.hasClients) {
-      const delta = _expandedHeight - _collapsedHeight;
-      final scroll = min(delta, max(.0, _scrollController.offset));
+      final scroll = min(_collapseDelta, max(.0, _scrollController.offset));
       // Без setState: обновляем только notifier → перестраивается лишь Opacity.
-      _titleOpacity.value = scroll / delta;
+      _titleOpacity.value = scroll / _collapseDelta;
     }
   }
 

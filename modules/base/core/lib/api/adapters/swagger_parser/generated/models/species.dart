@@ -12,25 +12,25 @@ part 'species.g.dart';
 @JsonSerializable()
 class Species {
   const Species({
-    required this.id,
-    required this.name,
-    required this.level,
-    required this.parentName,
-    required this.categoryName,
+    this.id,
+    this.name,
+    this.level,
     this.parentId,
+    this.parentName,
+    this.categoryName,
   });
   
   factory Species.fromJson(Map<String, Object?> json) => _$SpeciesFromJson(json);
   
-  final int id;
-  final String name;
+  final int? id;
+  final String? name;
 
   /// Level of species.
   ///
   /// * `1` - One.
   /// * `2` - Two.
   /// * `3` - Three.
-  final LevelEnum level;
+  final LevelEnum? level;
 
   /// Id of parent species
   @JsonKey(name: 'parent_id')

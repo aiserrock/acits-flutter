@@ -13,23 +13,25 @@ PrescriptionCourseOfTreatmentPrescription
 _$PrescriptionCourseOfTreatmentPrescriptionFromJson(
   Map<String, dynamic> json,
 ) => PrescriptionCourseOfTreatmentPrescription(
-  id: (json['id'] as num).toInt(),
-  url: json['url'] as String,
-  animal: (json['animal'] as num).toInt(),
-  myType: CourseOfTreatmentPrescriptionMyTypeEnum.fromJson(
-    json['myType'] as String,
-  ),
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : CourseOfTreatmentPrescriptionMyTypeEnum.fromJson(
+          json['myType'] as String,
+        ),
   duration: json['duration'] == null
       ? null
       : DurationEnum.fromJson(json['duration'] as String),
   description: json['description'] as String?,
-  createdBy: json['createdBy'] as String,
-  updatedBy: json['updatedBy'] as String,
-  drugs: (json['drugs'] as List<dynamic>)
-      .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
       .toList(),
-  executions: (json['executions'] as List<dynamic>)
-      .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
       .toList(),
   files: (json['files'] as List<dynamic>?)
       ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
@@ -53,30 +55,31 @@ Map<String, dynamic> _$PrescriptionCourseOfTreatmentPrescriptionToJson(
 };
 
 PrescriptionAppointmentPrescription
-_$PrescriptionAppointmentPrescriptionFromJson(Map<String, dynamic> json) =>
-    PrescriptionAppointmentPrescription(
-      id: (json['id'] as num).toInt(),
-      url: json['url'] as String,
-      animal: (json['animal'] as num).toInt(),
-      myType: AppointmentPrescriptionMyTypeEnum.fromJson(
-        json['myType'] as String,
-      ),
-      duration: json['duration'] == null
-          ? null
-          : DurationEnum.fromJson(json['duration'] as String),
-      description: json['description'] as String?,
-      createdBy: json['createdBy'] as String,
-      updatedBy: json['updatedBy'] as String,
-      drugs: (json['drugs'] as List<dynamic>)
-          .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      executions: (json['executions'] as List<dynamic>)
-          .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      files: (json['files'] as List<dynamic>?)
-          ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+_$PrescriptionAppointmentPrescriptionFromJson(
+  Map<String, dynamic> json,
+) => PrescriptionAppointmentPrescription(
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : AppointmentPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
+  duration: json['duration'] == null
+      ? null
+      : DurationEnum.fromJson(json['duration'] as String),
+  description: json['description'] as String?,
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  files: (json['files'] as List<dynamic>?)
+      ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$PrescriptionAppointmentPrescriptionToJson(
   PrescriptionAppointmentPrescription instance,
@@ -95,30 +98,31 @@ Map<String, dynamic> _$PrescriptionAppointmentPrescriptionToJson(
 };
 
 PrescriptionReadmissionPrescription
-_$PrescriptionReadmissionPrescriptionFromJson(Map<String, dynamic> json) =>
-    PrescriptionReadmissionPrescription(
-      id: (json['id'] as num).toInt(),
-      url: json['url'] as String,
-      animal: (json['animal'] as num).toInt(),
-      myType: ReadmissionPrescriptionMyTypeEnum.fromJson(
-        json['myType'] as String,
-      ),
-      duration: json['duration'] == null
-          ? null
-          : DurationEnum.fromJson(json['duration'] as String),
-      description: json['description'] as String?,
-      createdBy: json['createdBy'] as String,
-      updatedBy: json['updatedBy'] as String,
-      drugs: (json['drugs'] as List<dynamic>)
-          .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      executions: (json['executions'] as List<dynamic>)
-          .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      files: (json['files'] as List<dynamic>?)
-          ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+_$PrescriptionReadmissionPrescriptionFromJson(
+  Map<String, dynamic> json,
+) => PrescriptionReadmissionPrescription(
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : ReadmissionPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
+  duration: json['duration'] == null
+      ? null
+      : DurationEnum.fromJson(json['duration'] as String),
+  description: json['description'] as String?,
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  files: (json['files'] as List<dynamic>?)
+      ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$PrescriptionReadmissionPrescriptionToJson(
   PrescriptionReadmissionPrescription instance,
@@ -139,23 +143,27 @@ Map<String, dynamic> _$PrescriptionReadmissionPrescriptionToJson(
 PrescriptionRemovingStitchesPrescription
 _$PrescriptionRemovingStitchesPrescriptionFromJson(Map<String, dynamic> json) =>
     PrescriptionRemovingStitchesPrescription(
-      id: (json['id'] as num).toInt(),
-      url: json['url'] as String,
-      animal: (json['animal'] as num).toInt(),
-      myType: RemovingStitchesPrescriptionMyTypeEnum.fromJson(
-        json['myType'] as String,
-      ),
+      id: (json['id'] as num?)?.toInt(),
+      url: json['url'] as String?,
+      animal: (json['animal'] as num?)?.toInt(),
+      myType: json['myType'] == null
+          ? null
+          : RemovingStitchesPrescriptionMyTypeEnum.fromJson(
+              json['myType'] as String,
+            ),
       duration: json['duration'] == null
           ? null
           : DurationEnum.fromJson(json['duration'] as String),
       description: json['description'] as String?,
-      createdBy: json['createdBy'] as String,
-      updatedBy: json['updatedBy'] as String,
-      drugs: (json['drugs'] as List<dynamic>)
-          .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+      createdBy: json['createdBy'] as String?,
+      updatedBy: json['updatedBy'] as String?,
+      drugs: (json['drugs'] as List<dynamic>?)
+          ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
           .toList(),
-      executions: (json['executions'] as List<dynamic>)
-          .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+      executions: (json['executions'] as List<dynamic>?)
+          ?.map(
+            (e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
       files: (json['files'] as List<dynamic>?)
           ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
@@ -179,30 +187,31 @@ Map<String, dynamic> _$PrescriptionRemovingStitchesPrescriptionToJson(
 };
 
 PrescriptionWoundHealingPrescription
-_$PrescriptionWoundHealingPrescriptionFromJson(Map<String, dynamic> json) =>
-    PrescriptionWoundHealingPrescription(
-      id: (json['id'] as num).toInt(),
-      url: json['url'] as String,
-      animal: (json['animal'] as num).toInt(),
-      myType: WoundHealingPrescriptionMyTypeEnum.fromJson(
-        json['myType'] as String,
-      ),
-      duration: json['duration'] == null
-          ? null
-          : DurationEnum.fromJson(json['duration'] as String),
-      description: json['description'] as String?,
-      createdBy: json['createdBy'] as String,
-      updatedBy: json['updatedBy'] as String,
-      drugs: (json['drugs'] as List<dynamic>)
-          .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      executions: (json['executions'] as List<dynamic>)
-          .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      files: (json['files'] as List<dynamic>?)
-          ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+_$PrescriptionWoundHealingPrescriptionFromJson(
+  Map<String, dynamic> json,
+) => PrescriptionWoundHealingPrescription(
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : WoundHealingPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
+  duration: json['duration'] == null
+      ? null
+      : DurationEnum.fromJson(json['duration'] as String),
+  description: json['description'] as String?,
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  files: (json['files'] as List<dynamic>?)
+      ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$PrescriptionWoundHealingPrescriptionToJson(
   PrescriptionWoundHealingPrescription instance,
@@ -223,21 +232,23 @@ Map<String, dynamic> _$PrescriptionWoundHealingPrescriptionToJson(
 PrescriptionAnalysisPrescription _$PrescriptionAnalysisPrescriptionFromJson(
   Map<String, dynamic> json,
 ) => PrescriptionAnalysisPrescription(
-  id: (json['id'] as num).toInt(),
-  url: json['url'] as String,
-  animal: (json['animal'] as num).toInt(),
-  myType: AnalysisPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : AnalysisPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
   duration: json['duration'] == null
       ? null
       : DurationEnum.fromJson(json['duration'] as String),
   description: json['description'] as String?,
-  createdBy: json['createdBy'] as String,
-  updatedBy: json['updatedBy'] as String,
-  drugs: (json['drugs'] as List<dynamic>)
-      .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
       .toList(),
-  executions: (json['executions'] as List<dynamic>)
-      .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
       .toList(),
   files: (json['files'] as List<dynamic>?)
       ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
@@ -264,26 +275,30 @@ PrescriptionParasitesTreatmentPrescription
 _$PrescriptionParasitesTreatmentPrescriptionFromJson(
   Map<String, dynamic> json,
 ) => PrescriptionParasitesTreatmentPrescription(
-  id: (json['id'] as num).toInt(),
-  url: json['url'] as String,
-  animal: (json['animal'] as num).toInt(),
-  myType: ParasitesTreatmentPrescriptionMyTypeEnum.fromJson(
-    json['myType'] as String,
-  ),
-  extraTypeAttributes: ParasitesPrescriptionExtraAttr.fromJson(
-    json['extraTypeAttributes'] as Map<String, dynamic>,
-  ),
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : ParasitesTreatmentPrescriptionMyTypeEnum.fromJson(
+          json['myType'] as String,
+        ),
+  extraTypeAttributes: json['extraTypeAttributes'] == null
+      ? null
+      : ParasitesPrescriptionExtraAttr.fromJson(
+          json['extraTypeAttributes'] as Map<String, dynamic>,
+        ),
   duration: json['duration'] == null
       ? null
       : DurationEnum.fromJson(json['duration'] as String),
   description: json['description'] as String?,
-  createdBy: json['createdBy'] as String,
-  updatedBy: json['updatedBy'] as String,
-  drugs: (json['drugs'] as List<dynamic>)
-      .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
       .toList(),
-  executions: (json['executions'] as List<dynamic>)
-      .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
       .toList(),
   files: (json['files'] as List<dynamic>?)
       ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
@@ -308,30 +323,31 @@ Map<String, dynamic> _$PrescriptionParasitesTreatmentPrescriptionToJson(
 };
 
 PrescriptionVaccinationPrescription
-_$PrescriptionVaccinationPrescriptionFromJson(Map<String, dynamic> json) =>
-    PrescriptionVaccinationPrescription(
-      id: (json['id'] as num).toInt(),
-      url: json['url'] as String,
-      animal: (json['animal'] as num).toInt(),
-      myType: VaccinationPrescriptionMyTypeEnum.fromJson(
-        json['myType'] as String,
-      ),
-      duration: json['duration'] == null
-          ? null
-          : DurationEnum.fromJson(json['duration'] as String),
-      description: json['description'] as String?,
-      createdBy: json['createdBy'] as String,
-      updatedBy: json['updatedBy'] as String,
-      drugs: (json['drugs'] as List<dynamic>)
-          .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      executions: (json['executions'] as List<dynamic>)
-          .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      files: (json['files'] as List<dynamic>?)
-          ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+_$PrescriptionVaccinationPrescriptionFromJson(
+  Map<String, dynamic> json,
+) => PrescriptionVaccinationPrescription(
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : VaccinationPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
+  duration: json['duration'] == null
+      ? null
+      : DurationEnum.fromJson(json['duration'] as String),
+  description: json['description'] as String?,
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  files: (json['files'] as List<dynamic>?)
+      ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$PrescriptionVaccinationPrescriptionToJson(
   PrescriptionVaccinationPrescription instance,
@@ -352,21 +368,23 @@ Map<String, dynamic> _$PrescriptionVaccinationPrescriptionToJson(
 PrescriptionOtherPrescription _$PrescriptionOtherPrescriptionFromJson(
   Map<String, dynamic> json,
 ) => PrescriptionOtherPrescription(
-  id: (json['id'] as num).toInt(),
-  url: json['url'] as String,
-  animal: (json['animal'] as num).toInt(),
-  myType: OtherPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['myType'] == null
+      ? null
+      : OtherPrescriptionMyTypeEnum.fromJson(json['myType'] as String),
   duration: json['duration'] == null
       ? null
       : DurationEnum.fromJson(json['duration'] as String),
   description: json['description'] as String?,
-  createdBy: json['createdBy'] as String,
-  updatedBy: json['updatedBy'] as String,
-  drugs: (json['drugs'] as List<dynamic>)
-      .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+  createdBy: json['createdBy'] as String?,
+  updatedBy: json['updatedBy'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
       .toList(),
-  executions: (json['executions'] as List<dynamic>)
-      .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
       .toList(),
   files: (json['files'] as List<dynamic>?)
       ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))

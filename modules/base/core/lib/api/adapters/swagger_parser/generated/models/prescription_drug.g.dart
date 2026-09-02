@@ -8,11 +8,11 @@ part of 'prescription_drug.dart';
 
 PrescriptionDrug _$PrescriptionDrugFromJson(Map<String, dynamic> json) =>
     PrescriptionDrug(
-      drugId: (json['drug_id'] as num).toInt(),
-      drugName: json['drug_name'] as String,
-      usageInstruction: json['usage_instruction'] as String,
-      formOfDrug: json['form_of_drug'] as String,
-      drugDosage: (json['drug_dosage'] as num).toDouble(),
+      drugId: (json['drug_id'] as num?)?.toInt(),
+      drugName: json['drug_name'] as String?,
+      usageInstruction: json['usage_instruction'] as String?,
+      formOfDrug: json['form_of_drug'] as String?,
+      drugDosage: (json['drug_dosage'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$PrescriptionDrugToJson(PrescriptionDrug instance) =>

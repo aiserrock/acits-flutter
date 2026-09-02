@@ -12,13 +12,13 @@ part 'shelter_drug.g.dart';
 @JsonSerializable()
 class ShelterDrug {
   const ShelterDrug({
-    required this.drug,
+    this.drug,
     this.drugResiduesCount,
   });
   
   factory ShelterDrug.fromJson(Map<String, Object?> json) => _$ShelterDrugFromJson(json);
   
-  final Drug drug;
+  final Drug? drug;
   @JsonKey(name: 'drug_residues_count')
   final int? drugResiduesCount;
 

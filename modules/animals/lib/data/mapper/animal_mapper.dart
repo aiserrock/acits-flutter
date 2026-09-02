@@ -52,8 +52,8 @@ class AnimalMapper implements Transformable<Animal> {
     if (c == null) return null;
     return AnimalContact(
       id: c.id,
-      firstName: c.firstName,
-      lastName: c.lastName,
+      firstName: c.firstName ?? '',
+      lastName: c.lastName ?? '',
       phoneNumber: c.phoneNumber,
       email: c.email,
       extra: c.address,
@@ -64,8 +64,8 @@ class AnimalMapper implements Transformable<Animal> {
     if (a == null) return null;
     return AnimalContact(
       id: a.id,
-      firstName: a.firstName,
-      lastName: a.lastName,
+      firstName: a.firstName ?? '',
+      lastName: a.lastName ?? '',
       phoneNumber: a.phoneNumber,
       email: a.email,
       extra: a.contactDetails,

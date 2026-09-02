@@ -9,10 +9,10 @@ part of 'user_current_shelter_serializers.dart';
 UserCurrentShelterSerializers _$UserCurrentShelterSerializersFromJson(
   Map<String, dynamic> json,
 ) => UserCurrentShelterSerializers(
-  currentShelter: (json['current_shelter'] as num).toInt(),
-  currentShelterUserRole: json['current_shelter_user_role'] as String,
-  isUserCanEdit: json['is_user_can_edit'] as bool,
-  isUserCanDelete: json['is_user_can_delete'] as bool,
+  currentShelter: (json['current_shelter'] as num?)?.toInt(),
+  currentShelterUserRole: json['current_shelter_user_role'] as String?,
+  isUserCanEdit: json['is_user_can_edit'] as bool?,
+  isUserCanDelete: json['is_user_can_delete'] as bool?,
 );
 
 Map<String, dynamic> _$UserCurrentShelterSerializersToJson(

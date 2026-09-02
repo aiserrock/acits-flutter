@@ -7,11 +7,11 @@ part of 'drug.dart';
 // **************************************************************************
 
 Drug _$DrugFromJson(Map<String, dynamic> json) => Drug(
-  id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
-  usageInstruction: json['usage_instruction'] as String,
-  formOfDrug: (json['form_of_drug'] as num).toInt(),
-  formOfDrugName: json['form_of_drug_name'] as String,
+  id: (json['id'] as num?)?.toInt(),
+  name: json['name'] as String?,
+  usageInstruction: json['usage_instruction'] as String?,
+  formOfDrug: (json['form_of_drug'] as num?)?.toInt(),
+  formOfDrugName: json['form_of_drug_name'] as String?,
 );
 
 Map<String, dynamic> _$DrugToJson(Drug instance) => <String, dynamic>{

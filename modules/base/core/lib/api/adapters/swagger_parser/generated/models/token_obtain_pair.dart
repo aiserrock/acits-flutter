@@ -9,18 +9,18 @@ part 'token_obtain_pair.g.dart';
 @JsonSerializable()
 class TokenObtainPair {
   const TokenObtainPair({
-    required this.username,
-    required this.password,
-    required this.access,
-    required this.refresh,
+    this.username,
+    this.password,
+    this.access,
+    this.refresh,
   });
   
   factory TokenObtainPair.fromJson(Map<String, Object?> json) => _$TokenObtainPairFromJson(json);
   
-  final String username;
-  final String password;
-  final String access;
-  final String refresh;
+  final String? username;
+  final String? password;
+  final String? access;
+  final String? refresh;
 
   Map<String, Object?> toJson() => _$TokenObtainPairToJson(this);
 }

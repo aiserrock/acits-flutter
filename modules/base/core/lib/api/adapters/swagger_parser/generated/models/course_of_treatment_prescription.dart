@@ -17,34 +17,34 @@ part 'course_of_treatment_prescription.g.dart';
 @JsonSerializable()
 class CourseOfTreatmentPrescription {
   const CourseOfTreatmentPrescription({
-    required this.id,
-    required this.url,
-    required this.animal,
-    required this.myType,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.drugs,
-    required this.executions,
+    this.id,
+    this.url,
+    this.animal,
+    this.myType,
     this.duration,
     this.description,
+    this.createdBy,
+    this.updatedBy,
+    this.drugs,
+    this.executions,
     this.files,
   });
   
   factory CourseOfTreatmentPrescription.fromJson(Map<String, Object?> json) => _$CourseOfTreatmentPrescriptionFromJson(json);
   
-  final int id;
-  final String url;
-  final int animal;
+  final int? id;
+  final String? url;
+  final int? animal;
   @JsonKey(name: 'my_type')
-  final CourseOfTreatmentPrescriptionMyTypeEnum myType;
+  final CourseOfTreatmentPrescriptionMyTypeEnum? myType;
   final DurationEnum? duration;
   final String? description;
   @JsonKey(name: 'created_by')
-  final String createdBy;
+  final String? createdBy;
   @JsonKey(name: 'updated_by')
-  final String updatedBy;
-  final List<PrescriptionDrug> drugs;
-  final List<PrescriptionExecution> executions;
+  final String? updatedBy;
+  final List<PrescriptionDrug>? drugs;
+  final List<PrescriptionExecution>? executions;
   final List<PrescriptionFile>? files;
 
   Map<String, Object?> toJson() => _$CourseOfTreatmentPrescriptionToJson(this);

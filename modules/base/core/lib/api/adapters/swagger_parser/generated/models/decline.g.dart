@@ -7,7 +7,7 @@ part of 'decline.dart';
 // **************************************************************************
 
 Decline _$DeclineFromJson(Map<String, dynamic> json) =>
-    Decline(status: json['status'] as String);
+    Decline(status: json['status'] as String?);
 
 Map<String, dynamic> _$DeclineToJson(Decline instance) => <String, dynamic>{
   'status': instance.status,

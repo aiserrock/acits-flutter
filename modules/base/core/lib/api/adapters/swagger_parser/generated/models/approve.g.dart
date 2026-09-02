@@ -7,7 +7,7 @@ part of 'approve.dart';
 // **************************************************************************
 
 Approve _$ApproveFromJson(Map<String, dynamic> json) =>
-    Approve(status: json['status'] as String);
+    Approve(status: json['status'] as String?);
 
 Map<String, dynamic> _$ApproveToJson(Approve instance) => <String, dynamic>{
   'status': instance.status,

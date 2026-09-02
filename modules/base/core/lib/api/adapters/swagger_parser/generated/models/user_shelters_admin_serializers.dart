@@ -13,22 +13,22 @@ part 'user_shelters_admin_serializers.g.dart';
 @JsonSerializable()
 class UserSheltersAdminSerializers {
   const UserSheltersAdminSerializers({
-    required this.id,
-    required this.user,
-    required this.userId,
-    required this.role,
-    required this.isVerifiedByAdmin,
+    this.id,
+    this.user,
+    this.userId,
+    this.role,
+    this.isVerifiedByAdmin,
   });
   
   factory UserSheltersAdminSerializers.fromJson(Map<String, Object?> json) => _$UserSheltersAdminSerializersFromJson(json);
   
-  final int id;
-  final UserSerializers user;
+  final int? id;
+  final UserSerializers? user;
   @JsonKey(name: 'user_id')
-  final int userId;
-  final RoleEnum role;
+  final int? userId;
+  final RoleEnum? role;
   @JsonKey(name: 'is_verified_by_admin')
-  final bool isVerifiedByAdmin;
+  final bool? isVerifiedByAdmin;
 
   Map<String, Object?> toJson() => _$UserSheltersAdminSerializersToJson(this);
 }

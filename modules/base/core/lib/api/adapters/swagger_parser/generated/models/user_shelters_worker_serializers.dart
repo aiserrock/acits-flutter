@@ -12,14 +12,14 @@ part 'user_shelters_worker_serializers.g.dart';
 @JsonSerializable()
 class UserSheltersWorkerSerializers {
   const UserSheltersWorkerSerializers({
-    required this.shelter,
-    required this.role,
+    this.shelter,
+    this.role,
   });
   
   factory UserSheltersWorkerSerializers.fromJson(Map<String, Object?> json) => _$UserSheltersWorkerSerializersFromJson(json);
   
-  final int shelter;
-  final RoleEnum role;
+  final int? shelter;
+  final RoleEnum? role;
 
   Map<String, Object?> toJson() => _$UserSheltersWorkerSerializersToJson(this);
 }

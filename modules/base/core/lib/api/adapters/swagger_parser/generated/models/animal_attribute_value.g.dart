@@ -9,10 +9,10 @@ part of 'animal_attribute_value.dart';
 AnimalAttributeValue _$AnimalAttributeValueFromJson(
   Map<String, dynamic> json,
 ) => AnimalAttributeValue(
-  attrId: (json['attr_id'] as num).toInt(),
-  name: json['name'] as String,
-  value: json['value'] as String,
-  isRequired: json['is_required'] as bool,
+  attrId: (json['attr_id'] as num?)?.toInt(),
+  name: json['name'] as String?,
+  value: json['value'] as String?,
+  isRequired: json['is_required'] as bool?,
 );
 
 Map<String, dynamic> _$AnimalAttributeValueToJson(

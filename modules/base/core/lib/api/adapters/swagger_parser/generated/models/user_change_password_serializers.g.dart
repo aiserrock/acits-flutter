@@ -9,10 +9,10 @@ part of 'user_change_password_serializers.dart';
 UserChangePasswordSerializers _$UserChangePasswordSerializersFromJson(
   Map<String, dynamic> json,
 ) => UserChangePasswordSerializers(
-  id: (json['id'] as num).toInt(),
-  password: json['password'] as String,
-  rePassword: json['re_password'] as String,
-  oldPassword: json['old_password'] as String,
+  id: (json['id'] as num?)?.toInt(),
+  password: json['password'] as String?,
+  rePassword: json['re_password'] as String?,
+  oldPassword: json['old_password'] as String?,
 );
 
 Map<String, dynamic> _$UserChangePasswordSerializersToJson(

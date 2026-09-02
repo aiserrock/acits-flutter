@@ -10,20 +10,20 @@ part 'user_change_password_serializers.g.dart';
 @JsonSerializable()
 class UserChangePasswordSerializers {
   const UserChangePasswordSerializers({
-    required this.id,
-    required this.password,
-    required this.rePassword,
-    required this.oldPassword,
+    this.id,
+    this.password,
+    this.rePassword,
+    this.oldPassword,
   });
   
   factory UserChangePasswordSerializers.fromJson(Map<String, Object?> json) => _$UserChangePasswordSerializersFromJson(json);
   
-  final int id;
-  final String password;
+  final int? id;
+  final String? password;
   @JsonKey(name: 're_password')
-  final String rePassword;
+  final String? rePassword;
   @JsonKey(name: 'old_password')
-  final String oldPassword;
+  final String? oldPassword;
 
   Map<String, Object?> toJson() => _$UserChangePasswordSerializersToJson(this);
 }

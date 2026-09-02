@@ -134,18 +134,18 @@ class StaffService {
 
   Applicant _mapApplicant(ApplicantDto d) => Applicant(
     id: d.id,
-    firstName: d.firstName,
-    lastName: d.lastName,
-    phoneNumber: d.phoneNumber,
+    firstName: d.firstName ?? '',
+    lastName: d.lastName ?? '',
+    phoneNumber: d.phoneNumber ?? '',
     email: d.email,
     contactDetails: d.contactDetails,
   );
 
   Curator _mapCurator(CuratorDto d) => Curator(
     id: d.id,
-    firstName: d.firstName,
-    lastName: d.lastName,
-    phoneNumber: d.phoneNumber,
+    firstName: d.firstName ?? '',
+    lastName: d.lastName ?? '',
+    phoneNumber: d.phoneNumber ?? '',
     email: d.email,
     address: d.address,
   );

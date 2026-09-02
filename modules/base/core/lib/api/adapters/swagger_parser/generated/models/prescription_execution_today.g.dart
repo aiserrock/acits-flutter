@@ -9,11 +9,15 @@ part of 'prescription_execution_today.dart';
 PrescriptionExecutionToday _$PrescriptionExecutionTodayFromJson(
   Map<String, dynamic> json,
 ) => PrescriptionExecutionToday(
-  id: (json['id'] as num).toInt(),
-  prescription: PrescriptionShort.fromJson(
-    json['prescription'] as Map<String, dynamic>,
-  ),
-  executeAt: DateTime.parse(json['execute_at'] as String),
+  id: (json['id'] as num?)?.toInt(),
+  prescription: json['prescription'] == null
+      ? null
+      : PrescriptionShort.fromJson(
+          json['prescription'] as Map<String, dynamic>,
+        ),
+  executeAt: json['execute_at'] == null
+      ? null
+      : DateTime.parse(json['execute_at'] as String),
 );
 
 Map<String, dynamic> _$PrescriptionExecutionTodayToJson(
@@ -21,5 +25,5 @@ Map<String, dynamic> _$PrescriptionExecutionTodayToJson(
 ) => <String, dynamic>{
   'id': instance.id,
   'prescription': instance.prescription,
-  'execute_at': instance.executeAt.toIso8601String(),
+  'execute_at': instance.executeAt?.toIso8601String(),
 };

@@ -9,9 +9,9 @@ part of 'breeds_species_stats_item.dart';
 BreedsSpeciesStatsItem _$BreedsSpeciesStatsItemFromJson(
   Map<String, dynamic> json,
 ) => BreedsSpeciesStatsItem(
-  id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
-  count: (json['count'] as num).toInt(),
+  id: (json['id'] as num?)?.toInt(),
+  name: json['name'] as String?,
+  count: (json['count'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$BreedsSpeciesStatsItemToJson(

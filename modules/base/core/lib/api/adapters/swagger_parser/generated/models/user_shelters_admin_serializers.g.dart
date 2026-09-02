@@ -9,11 +9,13 @@ part of 'user_shelters_admin_serializers.dart';
 UserSheltersAdminSerializers _$UserSheltersAdminSerializersFromJson(
   Map<String, dynamic> json,
 ) => UserSheltersAdminSerializers(
-  id: (json['id'] as num).toInt(),
-  user: UserSerializers.fromJson(json['user'] as Map<String, dynamic>),
-  userId: (json['user_id'] as num).toInt(),
-  role: RoleEnum.fromJson(json['role'] as String),
-  isVerifiedByAdmin: json['is_verified_by_admin'] as bool,
+  id: (json['id'] as num?)?.toInt(),
+  user: json['user'] == null
+      ? null
+      : UserSerializers.fromJson(json['user'] as Map<String, dynamic>),
+  userId: (json['user_id'] as num?)?.toInt(),
+  role: json['role'] == null ? null : RoleEnum.fromJson(json['role'] as String),
+  isVerifiedByAdmin: json['is_verified_by_admin'] as bool?,
 );
 
 Map<String, dynamic> _$UserSheltersAdminSerializersToJson(

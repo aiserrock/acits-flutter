@@ -9,22 +9,24 @@ part of 'readmission_prescription.dart';
 ReadmissionPrescription _$ReadmissionPrescriptionFromJson(
   Map<String, dynamic> json,
 ) => ReadmissionPrescription(
-  id: (json['id'] as num).toInt(),
-  url: json['url'] as String,
-  animal: (json['animal'] as num).toInt(),
-  myType: ReadmissionPrescriptionMyTypeEnum.fromJson(json['my_type'] as String),
-  createdBy: json['created_by'] as String,
-  updatedBy: json['updated_by'] as String,
-  drugs: (json['drugs'] as List<dynamic>)
-      .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  executions: (json['executions'] as List<dynamic>)
-      .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['my_type'] == null
+      ? null
+      : ReadmissionPrescriptionMyTypeEnum.fromJson(json['my_type'] as String),
   duration: json['duration'] == null
       ? null
       : DurationEnum.fromJson(json['duration'] as String),
   description: json['description'] as String?,
+  createdBy: json['created_by'] as String?,
+  updatedBy: json['updated_by'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+      .toList(),
   files: (json['files'] as List<dynamic>?)
       ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
       .toList(),

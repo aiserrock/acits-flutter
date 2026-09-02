@@ -12,38 +12,38 @@ part 'user_shelter_admin_serializers.g.dart';
 @JsonSerializable()
 class UserShelterAdminSerializers {
   const UserShelterAdminSerializers({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.password,
-    required this.rePassword,
-    required this.isOfferSigned,
-    required this.shelter,
+    this.id,
+    this.firstName,
+    this.lastName,
     this.fathersName,
+    this.email,
     this.phoneNumber,
     this.address,
+    this.password,
+    this.rePassword,
+    this.isOfferSigned,
+    this.shelter,
   });
   
   factory UserShelterAdminSerializers.fromJson(Map<String, Object?> json) => _$UserShelterAdminSerializersFromJson(json);
   
-  final int id;
+  final int? id;
   @JsonKey(name: 'first_name')
-  final String firstName;
+  final String? firstName;
   @JsonKey(name: 'last_name')
-  final String lastName;
+  final String? lastName;
   @JsonKey(name: 'fathers_name')
   final String? fathersName;
-  final String email;
+  final String? email;
   @JsonKey(name: 'phone_number')
   final String? phoneNumber;
   final String? address;
-  final String password;
+  final String? password;
   @JsonKey(name: 're_password')
-  final String rePassword;
+  final String? rePassword;
   @JsonKey(name: 'is_offer_signed')
-  final bool isOfferSigned;
-  final ShelterSerializers shelter;
+  final bool? isOfferSigned;
+  final ShelterSerializers? shelter;
 
   Map<String, Object?> toJson() => _$UserShelterAdminSerializersToJson(this);
 }
