@@ -55,6 +55,12 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
+        // Patrol (e2e/integration-тесты): нативный JUnit-раннер, который
+        // порождает тест-кейсы из Dart-тестов через Android Test Orchestrator.
+        // Без него `patrol test` собирает APK, но выполняет 0 тестов.
+        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: "true"
+
         // Только ARM: arm64-v8a (64-бит, все актуальные устройства) и
         // armeabi-v7a (32-бит, старые). x86/x86_64 (эмуляторы, ChromeOS)
         // исключены — уменьшает размер APK/AAB. Действует на dev и prod.
@@ -101,6 +107,12 @@ android {
             resValue "string", "app_name", "Acits"
         }
     }
+
+    // Patrol: гонять тесты через Android Test Orchestrator — изолирует каждый
+    // тест в своём инстансе инструментации (чистое состояние между тестами).
+    testOptions {
+        execution "ANDROIDX_TEST_ORCHESTRATOR"
+    }
 }
 
 flutter {
@@ -117,4 +129,7 @@ kotlin {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7"
     implementation "androidx.multidex:multidex:2.0.1"
+
+    // Patrol native test runner + Android Test Orchestrator (e2e-тесты).
+    androidTestUtil "androidx.test:orchestrator:1.5.1"
 }
