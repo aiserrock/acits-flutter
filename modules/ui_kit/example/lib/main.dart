@@ -1,23 +1,10 @@
-import 'package:example/page/adaptive_scaffold.dart';
-import 'package:example/page/app_bar.dart';
-import 'package:example/page/bottom_sheet.dart';
-import 'package:example/page/buttons.dart';
-import 'package:example/page/chip.dart';
-import 'package:example/page/colors.dart';
-import 'package:example/page/form_card.dart';
-import 'package:example/page/holders.dart';
-import 'package:example/page/icons.dart';
-import 'package:example/page/images.dart';
-import 'package:example/page/loaders.dart';
-import 'package:example/page/lottie.dart';
-import 'package:example/page/misc.dart';
-import 'package:example/page/sort_chips.dart';
-import 'package:example/page/text_field.dart';
-import 'package:example/page/typography.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:storybook_flutter/storybook_flutter.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ui_kit/ui_kit.dart';
+import 'package:widgetbook/widgetbook.dart';
+
+import 'directories.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,60 +14,126 @@ Future<void> main() async {
       supportedLocales: const [Locale('ru'), Locale('en')],
       path: 'assets/translations',
       fallbackLocale: const Locale('ru'),
-      child: const UiKitStorybookApp(),
+      child: const AcitsUiKitApp(),
     ),
   );
 }
 
-/// Standalone storybook для дизайн-системы ACITS (ui_kit).
+/// Standalone-каталог дизайн-системы ACITS на widgetbook.
 ///
-/// Одна страница на компонент/раздел (`page/*.dart`); панельный плагин
-/// theme-mode переключает light/dark через `MediaQuery`, а [_wrapper] оборачивает
-/// каждую историю в реальную [AppTheme], чтобы всё рендерилось на продовых
-/// токенах.
-class UiKitStorybookApp extends StatelessWidget {
-  const UiKitStorybookApp({super.key});
+/// Живой адаптивный хост: на вебе — трёхколоночный layout, на телефоне —
+/// свёрнутая навигация, всё без крашей заброшенного storybook. Показывает
+/// общий каталог [buildGalleryDirectories] (из `ui_kit_gallery`), который тот
+/// же самый переиспользует debug-экран основного приложения.
+class AcitsUiKitApp extends StatelessWidget {
+  const AcitsUiKitApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Storybook(wrapperBuilder: _wrapper, stories: _stories);
+    return Widgetbook.material(
+      directories: buildGalleryDirectories(),
+      // Тема самого UI widgetbook (панели/навигация) в фирменных тонах ACITS.
+      lightTheme: ThemeData.light(useMaterial3: true).copyWith(colorScheme: ColorScheme.fromSeed(seedColor: _brand)),
+      darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
+        colorScheme: ColorScheme.fromSeed(seedColor: _brand, brightness: Brightness.dark),
+      ),
+      header: const _BrandHeader(),
+      // Каждый экспонат рендерится внутри EasyLocalization, чтобы `.tr()` в
+      // ui_kit-виджетах (holders, sort chips) резолвился в реальный текст.
+      appBuilder: (context, child) => EasyLocalization(
+        supportedLocales: const [Locale('ru'), Locale('en')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('ru'),
+        child: Builder(builder: (context) => child),
+      ),
+      addons: [
+        // Продовые токены дизайн-системы: тумблер Light/Dark применяет реальную
+        // AppTheme к превью.
+        MaterialThemeAddon(
+          themes: [
+            WidgetbookTheme(name: 'Light', data: AppTheme.light),
+            WidgetbookTheme(name: 'Dark', data: AppTheme.dark),
+          ],
+        ),
+        // Локализация превью (ru/en) — общий переключатель поверх всех
+        // экспонатов.
+        LocalizationAddon(
+          locales: const [Locale('ru'), Locale('en')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            DefaultWidgetsLocalizations.delegate,
+          ],
+        ),
+        // Адаптив: обрамление в реальные устройства. Полный набор пресетов
+        // widgetbook (iOS + Android + desktop) — то, чего не хватало для
+        // проверки вёрстки на всех форм-факторах.
+        ViewportAddon(_allViewports),
+      ],
+    );
   }
 }
 
-/// `MaterialApp` с продовой [AppTheme] и делегатами локализации (нужны
-/// Material-виджетам вроде date picker). Плагин theme-mode переопределяет
-/// platform brightness через `MediaQuery`, поэтому тумблер на панели управляет
-/// light/dark.
-Widget _wrapper(BuildContext context, Widget? child) => MaterialApp(
-  debugShowCheckedModeBanner: false,
-  theme: AppTheme.light,
-  darkTheme: AppTheme.dark,
-  // easy_localization прокидывает делегаты и текущую локаль (+ Material/Cupertino
-  // делегаты для системных виджетов). Так `.tr()` в ui_kit-виджетах резолвится.
-  localizationsDelegates: context.localizationDelegates,
-  supportedLocales: context.supportedLocales,
-  locale: context.locale,
-  home: child,
-);
+const _brand = Color(0xFF6776E0);
 
-final _stories = <Story>[
-  // Foundations
-  Story(name: 'Foundations/Colors', builder: (_) => const ColorsPage()),
-  Story(name: 'Foundations/Typography', builder: (_) => const TypographyPage()),
-  Story(name: 'Foundations/Icons', builder: (_) => const IconsPage()),
-  Story(name: 'Foundations/Images', builder: (_) => const ImagesPage()),
-  Story(name: 'Foundations/Lottie', builder: (_) => const LottiePage()),
-  // Components
-  Story(name: 'Components/Buttons', builder: (_) => const ButtonsPage()),
-  Story(name: 'Components/TextField', builder: (_) => const TextFieldPage()),
-  Story(name: 'Components/Chip', builder: (_) => const ChipPage()),
-  Story(name: 'Components/AppBar', builder: (_) => const AppBarPage()),
-  Story(name: 'Components/BottomSheet', builder: (_) => const BottomSheetPage()),
-  Story(name: 'Components/Loaders', builder: (_) => const LoadersPage()),
-  Story(name: 'Components/Holders', builder: (_) => const HoldersPage()),
-  Story(name: 'Components/SortChipsBar', builder: (_) => const SortChipsPage()),
-  Story(name: 'Components/FormEditCard', builder: (_) => const FormCardPage()),
-  Story(name: 'Components/Misc', builder: (_) => const MiscPage()),
-  // Layout
-  Story(name: 'Layout/AdaptiveScaffold', builder: (_) => const AdaptiveScaffoldPage()),
+/// Полный набор viewport-пресетов widgetbook: «без рамки» + все iOS/Android
+/// телефоны и планшеты + desktop (macOS/Windows/Linux). Даёт проверить вёрстку
+/// на любом форм-факторе прямо в галерее.
+const _allViewports = <ViewportData>[
+  Viewports.none,
+  ...IosViewports.all,
+  ...AndroidViewports.all,
+  ...MacosViewports.all,
+  ...WindowsViewports.all,
+  ...LinuxViewports.all,
 ];
+
+/// Фирменная шапка каталога: акцентная плитка с монограммой + «ACITS UI Kit».
+/// Сразу даёт понять, что это за инструмент, при первом открытии.
+class _BrandHeader extends StatelessWidget {
+  const _BrandHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [_brand, Color(0xFF4B5AC4)],
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 32.0,
+            height: 32.0,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: const Text(
+              'A',
+              style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w800, height: 1.0),
+            ),
+          ),
+          const SizedBox(width: 12.0),
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'ACITS UI Kit',
+                style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w700, height: 1.1),
+              ),
+              Text('Design system gallery', style: TextStyle(color: Colors.white70, fontSize: 11.0, height: 1.2)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

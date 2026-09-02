@@ -20,30 +20,15 @@ class ColorsPage extends StatelessWidget {
     final schemeRoles = <_Role>[
       _Role('primary', light.primary, dark.primary, 'Бренд-акцент: кнопки, FAB, активные элементы'),
       _Role('onPrimary', light.onPrimary, dark.onPrimary, 'Текст/иконки поверх акцентного фона'),
-      _Role(
-        'primaryContainer',
-        light.primaryContainer,
-        dark.primaryContainer,
-        'Приглушённый акцентный контейнер',
-      ),
+      _Role('primaryContainer', light.primaryContainer, dark.primaryContainer, 'Приглушённый акцентный контейнер'),
       _Role('secondary', light.secondary, dark.secondary, 'Вторичный акцент'),
-      _Role(
-        'secondaryContainer',
-        light.secondaryContainer,
-        dark.secondaryContainer,
-        'Контейнер вторичного акцента',
-      ),
+      _Role('secondaryContainer', light.secondaryContainer, dark.secondaryContainer, 'Контейнер вторичного акцента'),
       _Role('tertiary', light.tertiary, dark.tertiary, 'Третичный акцент (редкие выделения)'),
       _Role('error', light.error, dark.error, 'Ошибки, деструктивные действия'),
       _Role('errorContainer', light.errorContainer, dark.errorContainer, 'Фон блоков ошибок'),
       _Role('surface', light.surface, dark.surface, 'Основной фон экранов и Scaffold'),
       _Role('onSurface', light.onSurface, dark.onSurface, 'Основной текст и иконки на surface'),
-      _Role(
-        'surfaceContainerLow',
-        light.surfaceContainerLow,
-        dark.surfaceContainerLow,
-        'Карточки, приподнятые блоки',
-      ),
+      _Role('surfaceContainerLow', light.surfaceContainerLow, dark.surfaceContainerLow, 'Карточки, приподнятые блоки'),
       _Role(
         'surfaceContainerHigh',
         light.surfaceContainerHigh,
@@ -51,12 +36,7 @@ class ColorsPage extends StatelessWidget {
         'Более приподнятые контейнеры',
       ),
       _Role('outline', light.outline, dark.outline, 'Границы, разделители'),
-      _Role(
-        'outlineVariant',
-        light.outlineVariant,
-        dark.outlineVariant,
-        'Мягкие границы, рамки свотчей',
-      ),
+      _Role('outlineVariant', light.outlineVariant, dark.outlineVariant, 'Мягкие границы, рамки свотчей'),
     ];
 
     final appRoles = <_Role>[
@@ -66,19 +46,9 @@ class ColorsPage extends StatelessWidget {
         darkApp.indicatorActive,
         'Активный индикатор страниц (пейджинг)',
       ),
-      _Role(
-        'indicatorInactive',
-        lightApp.indicatorInactive,
-        darkApp.indicatorInactive,
-        'Неактивный индикатор страниц',
-      ),
+      _Role('indicatorInactive', lightApp.indicatorInactive, darkApp.indicatorInactive, 'Неактивный индикатор страниц'),
       _Role('inactiveIcon', lightApp.inactiveIcon, darkApp.inactiveIcon, 'Неактивные иконки'),
-      _Role(
-        'textSecondary',
-        lightApp.textSecondary,
-        darkApp.textSecondary,
-        'Вторичный текст, подписи, caption',
-      ),
+      _Role('textSecondary', lightApp.textSecondary, darkApp.textSecondary, 'Вторичный текст, подписи, caption'),
     ];
 
     return Scaffold(
@@ -178,9 +148,7 @@ class _RoleRow extends StatelessWidget {
                 const SizedBox(height: 2.0),
                 Text(
                   '${_hex(role.light)}  ·  ${_hex(role.dark)}',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
+                  style: theme.textTheme.labelSmall?.copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
                 ),
               ],
             ),
@@ -190,8 +158,7 @@ class _RoleRow extends StatelessWidget {
     );
   }
 
-  static String _hex(Color color) =>
-      '#${color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase()}';
+  static String _hex(Color color) => '#${color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase()}';
 }
 
 /// Квадратный свотч цвета с «Aa» поверх (демонстрация читаемости пары цветов).

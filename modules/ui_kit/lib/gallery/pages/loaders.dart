@@ -23,12 +23,7 @@ class LoadersPage extends StatelessWidget {
           _label(context, 'ShimmerNetworkImage'),
           Row(
             children: [
-              const ShimmerNetworkImage(
-                url: 'https://picsum.photos/200',
-                width: 96.0,
-                height: 96.0,
-                radius: 8.0,
-              ),
+              const ShimmerNetworkImage(url: 'https://picsum.photos/200', width: 96.0, height: 96.0, radius: 8.0),
               const SizedBox(width: 16.0),
               // Пустой URL → fallback (серый бокс по умолчанию).
               const ShimmerNetworkImage(url: '', width: 96.0, height: 96.0, radius: 8.0),

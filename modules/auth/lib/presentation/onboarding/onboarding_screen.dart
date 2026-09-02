@@ -14,14 +14,13 @@ import 'package:auth/presentation/onboarding/onboarding.dart';
 /// Экран онбординга при входе в приложение.
 ///
 /// [OnboardingBloc] поднимается корнем (см. app_router). App-виджеты (иконка
-/// закрытия, debug-шторка) и роутер приходят параметрами — модуль не знает про
-/// app-ассеты и app-роуты.
+/// закрытия) и роутер приходят параметрами — модуль не знает про app-ассеты и
+/// app-роуты.
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({required this.router, required this.closeIcon, required this.debugDrawer, super.key});
+  const OnboardingScreen({required this.router, required this.closeIcon, super.key});
 
   final AuthRouterService router;
   final Widget closeIcon;
-  final Widget debugDrawer;
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -61,7 +60,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(child: widget.debugDrawer),
       body: SafeArea(
         child: Column(
           children: [

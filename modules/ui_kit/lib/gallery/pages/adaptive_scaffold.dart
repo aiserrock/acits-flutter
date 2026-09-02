@@ -24,12 +24,7 @@ class _AdaptiveScaffoldPageState extends State<AdaptiveScaffoldPage> {
         AdaptiveDestination(icon: Icon(IconRes.paw), label: 'Animals'),
         AdaptiveDestination(icon: Icon(IconRes.calendar), label: 'Calendar'),
       ],
-      body: Center(
-        child: Text(
-          'Window size: ${size.name}\nSelected tab: $_index',
-          textAlign: TextAlign.center,
-        ),
-      ),
+      body: Center(child: Text('Window size: ${size.name}\nSelected tab: $_index', textAlign: TextAlign.center)),
       secondaryPane: const Center(child: Text('Secondary pane (large)')),
     );
   }

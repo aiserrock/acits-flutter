@@ -181,6 +181,13 @@ class _UIKitCard extends StatelessWidget {
               const SizedBox(height: 8.0),
               Text('UIKit', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8.0),
+              // Каталог дизайн-системы (widgetbook) — та же витрина, что и
+              // standalone example-апп. Роут gated kDebugMode (см. app_router).
+              PrimaryButton(
+                onPressed: () => context.push(AppRoutes.gallery),
+                child: Text('UI Kit Gallery'.toUpperCase()),
+              ),
+              const SizedBox(height: 8.0),
               PrimaryButton(
                 onPressed: () {
                   // Пример deeplink подтверждения почты. Реальную ссылку с

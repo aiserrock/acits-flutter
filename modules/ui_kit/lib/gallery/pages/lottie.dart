@@ -15,10 +15,7 @@ class LottiePage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          Text(
-            'Assets.lottie (${Assets.lottie.values.length})',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text('Assets.lottie (${Assets.lottie.values.length})', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 12.0),
           Wrap(
             spacing: 16.0,

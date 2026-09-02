@@ -1,11 +1,11 @@
 {
-    "name": "example",
-    "short_name": "example",
+    "name": "ACITS UI Kit",
+    "short_name": "ACITS UI Kit",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#6776E0",
+    "theme_color": "#6776E0",
+    "description": "ACITS design system — component gallery.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

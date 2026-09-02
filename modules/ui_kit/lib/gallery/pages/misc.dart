@@ -21,10 +21,7 @@ class _MiscPageState extends State<MiscPage> {
         padding: const EdgeInsets.all(16.0),
         children: [
           _label(context, 'AppLogo (флипается по теме)'),
-          AppLogo(
-            light: Assets.icon.logoBar.svg(height: 48.0),
-            dark: Assets.icon.logoBarDark.svg(height: 48.0),
-          ),
+          AppLogo(light: Assets.icon.logoBar.svg(height: 48.0), dark: Assets.icon.logoBarDark.svg(height: 48.0)),
           const SizedBox(height: 16.0),
           AppLogo(
             light: Assets.icon.logoLeadingBar.svg(height: 40.0),
@@ -43,10 +40,7 @@ class _MiscPageState extends State<MiscPage> {
             color: Theme.of(context).colorScheme.surfaceContainerHigh,
             child: VisibleItem(
               isVisible: _visible,
-              child: Text(
-                'Виден при isVisible == true',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              child: Text('Виден при isVisible == true', style: Theme.of(context).textTheme.titleMedium),
             ),
           ),
         ],

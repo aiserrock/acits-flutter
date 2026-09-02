@@ -33,8 +33,7 @@ class _ChipPageState extends State<ChipPage> {
                   UiChip(
                     label: _labels[i],
                     selected: _selected.contains(i),
-                    onSelected: (value) =>
-                        setState(() => value ? _selected.add(i) : _selected.remove(i)),
+                    onSelected: (value) => setState(() => value ? _selected.add(i) : _selected.remove(i)),
                   ),
               ],
             ),
