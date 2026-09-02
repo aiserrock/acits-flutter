@@ -19,12 +19,11 @@ abstract final class MediaAssets {
     Assets.gallery.avatarMouse.keyName,
   ];
 
-  static Widget closeIconSvg({double? width, double? height, Color? color}) =>
-      Assets.icon.close.svg(
-        width: width,
-        height: height,
-        colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
-      );
+  static Widget closeIconSvg({double? width, double? height, Color? color}) => Assets.icon.close.svg(
+    width: width,
+    height: height,
+    colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+  );
 
   static Widget emptyStateSvg() => Assets.common.emptyState.svg();
 

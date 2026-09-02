@@ -6,7 +6,6 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'package:shell/shell.dart' show AppScaffold;
 
-
 /// Точка запуска приложения (по образцу hamkormobile `runner.run`).
 ///
 /// Делает ровно три вещи: инициализирует binding + web-специфику (splash,
@@ -14,10 +13,7 @@ import 'package:shell/shell.dart' show AppScaffold;
 /// `runApp` с корневым виджетом [AppScaffold] (живёт в shell). Флейвор-специфику
 /// (Firebase-проект, DI, прокси, dev-логи) поставляет вызывающая сторона через
 /// [bootstrap] и [overlayBuilder] — сам runApp одинаков для prod/dev.
-Future<void> runAppWith({
-  required Future<void> Function() bootstrap,
-  TransitionBuilder? overlayBuilder,
-}) async {
+Future<void> runAppWith({required Future<void> Function() bootstrap, TransitionBuilder? overlayBuilder}) async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
 
   // Держим нативный splash (Android/iOS) поверх дерева до тех пор, пока splash-роут
