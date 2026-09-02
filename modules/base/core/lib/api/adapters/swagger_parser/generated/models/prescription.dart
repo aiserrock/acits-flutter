@@ -78,25 +78,25 @@ extension PrescriptionSealedDeserializer on Prescription {
 @JsonSerializable()
 class PrescriptionCourseOfTreatmentPrescription extends Prescription implements CourseOfTreatmentPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final CourseOfTreatmentPrescriptionMyTypeEnum myType;
+  final CourseOfTreatmentPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -123,25 +123,25 @@ class PrescriptionCourseOfTreatmentPrescription extends Prescription implements 
 @JsonSerializable()
 class PrescriptionAppointmentPrescription extends Prescription implements AppointmentPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final AppointmentPrescriptionMyTypeEnum myType;
+  final AppointmentPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -168,25 +168,25 @@ class PrescriptionAppointmentPrescription extends Prescription implements Appoin
 @JsonSerializable()
 class PrescriptionReadmissionPrescription extends Prescription implements ReadmissionPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final ReadmissionPrescriptionMyTypeEnum myType;
+  final ReadmissionPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -213,25 +213,25 @@ class PrescriptionReadmissionPrescription extends Prescription implements Readmi
 @JsonSerializable()
 class PrescriptionRemovingStitchesPrescription extends Prescription implements RemovingStitchesPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final RemovingStitchesPrescriptionMyTypeEnum myType;
+  final RemovingStitchesPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -258,25 +258,25 @@ class PrescriptionRemovingStitchesPrescription extends Prescription implements R
 @JsonSerializable()
 class PrescriptionWoundHealingPrescription extends Prescription implements WoundHealingPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final WoundHealingPrescriptionMyTypeEnum myType;
+  final WoundHealingPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -303,25 +303,25 @@ class PrescriptionWoundHealingPrescription extends Prescription implements Wound
 @JsonSerializable()
 class PrescriptionAnalysisPrescription extends Prescription implements AnalysisPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final AnalysisPrescriptionMyTypeEnum myType;
+  final AnalysisPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -348,27 +348,27 @@ class PrescriptionAnalysisPrescription extends Prescription implements AnalysisP
 @JsonSerializable()
 class PrescriptionParasitesTreatmentPrescription extends Prescription implements ParasitesTreatmentPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final ParasitesTreatmentPrescriptionMyTypeEnum myType;
+  final ParasitesTreatmentPrescriptionMyTypeEnum? myType;
   @override
-  final ParasitesPrescriptionExtraAttr extraTypeAttributes;
+  final ParasitesPrescriptionExtraAttr? extraTypeAttributes;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -396,25 +396,25 @@ class PrescriptionParasitesTreatmentPrescription extends Prescription implements
 @JsonSerializable()
 class PrescriptionVaccinationPrescription extends Prescription implements VaccinationPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final VaccinationPrescriptionMyTypeEnum myType;
+  final VaccinationPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 
@@ -441,25 +441,25 @@ class PrescriptionVaccinationPrescription extends Prescription implements Vaccin
 @JsonSerializable()
 class PrescriptionOtherPrescription extends Prescription implements OtherPrescription {
   @override
-  final int id;
+  final int? id;
   @override
-  final String url;
+  final String? url;
   @override
-  final int animal;
+  final int? animal;
   @override
-  final OtherPrescriptionMyTypeEnum myType;
+  final OtherPrescriptionMyTypeEnum? myType;
   @override
   final DurationEnum? duration;
   @override
   final String? description;
   @override
-  final String createdBy;
+  final String? createdBy;
   @override
-  final String updatedBy;
+  final String? updatedBy;
   @override
-  final List<PrescriptionDrug> drugs;
+  final List<PrescriptionDrug>? drugs;
   @override
-  final List<PrescriptionExecution> executions;
+  final List<PrescriptionExecution>? executions;
   @override
   final List<PrescriptionFile>? files;
 

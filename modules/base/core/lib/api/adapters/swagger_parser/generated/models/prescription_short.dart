@@ -15,31 +15,31 @@ part 'prescription_short.g.dart';
 @JsonSerializable()
 class PrescriptionShort {
   const PrescriptionShort({
-    required this.id,
-    required this.animal,
-    required this.drugs,
-    required this.createdBy,
-    required this.updatedBy,
+    this.id,
     this.myType,
     this.extraTypeAttributes,
     this.description,
+    this.animal,
+    this.drugs,
+    this.createdBy,
+    this.updatedBy,
     this.files,
   });
   
   factory PrescriptionShort.fromJson(Map<String, Object?> json) => _$PrescriptionShortFromJson(json);
   
-  final int id;
+  final int? id;
   @JsonKey(name: 'my_type')
   final PrescriptionShortMyTypeEnum? myType;
   @JsonKey(name: 'extra_type_attributes')
   final dynamic extraTypeAttributes;
   final String? description;
-  final AnimalShort animal;
-  final List<PrescriptionDrug> drugs;
+  final AnimalShort? animal;
+  final List<PrescriptionDrug>? drugs;
   @JsonKey(name: 'created_by')
-  final String createdBy;
+  final String? createdBy;
   @JsonKey(name: 'updated_by')
-  final String updatedBy;
+  final String? updatedBy;
   final List<PrescriptionFile>? files;
 
   Map<String, Object?> toJson() => _$PrescriptionShortToJson(this);

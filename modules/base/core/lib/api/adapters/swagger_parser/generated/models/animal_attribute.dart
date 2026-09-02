@@ -10,15 +10,15 @@ part 'animal_attribute.g.dart';
 @JsonSerializable()
 class AnimalAttribute {
   const AnimalAttribute({
-    required this.id,
-    required this.name,
+    this.id,
+    this.name,
     this.isRequired,
   });
   
   factory AnimalAttribute.fromJson(Map<String, Object?> json) => _$AnimalAttributeFromJson(json);
   
-  final int id;
-  final String name;
+  final int? id;
+  final String? name;
   @JsonKey(name: 'is_required')
   final bool? isRequired;
 

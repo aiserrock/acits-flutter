@@ -9,12 +9,12 @@ part 'decline.g.dart';
 @JsonSerializable()
 class Decline {
   const Decline({
-    required this.status,
+    this.status,
   });
   
   factory Decline.fromJson(Map<String, Object?> json) => _$DeclineFromJson(json);
   
-  final String status;
+  final String? status;
 
   Map<String, Object?> toJson() => _$DeclineToJson(this);
 }

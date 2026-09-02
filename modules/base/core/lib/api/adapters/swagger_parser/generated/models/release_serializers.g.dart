@@ -8,9 +8,7 @@ part of 'release_serializers.dart';
 
 ReleaseSerializers _$ReleaseSerializersFromJson(Map<String, dynamic> json) =>
     ReleaseSerializers(
-      id: (json['id'] as num).toInt(),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      id: (json['id'] as num?)?.toInt(),
       place: json['place'] as String?,
       date: json['date'] == null
           ? null
@@ -18,6 +16,12 @@ ReleaseSerializers _$ReleaseSerializersFromJson(Map<String, dynamic> json) =>
       veterinarianName: json['veterinarian_name'] as String?,
       veterinarianSurname: json['veterinarian_surname'] as String?,
       veterinarianPatronymic: json['veterinarian_patronymic'] as String?,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$ReleaseSerializersToJson(ReleaseSerializers instance) =>
@@ -28,6 +32,6 @@ Map<String, dynamic> _$ReleaseSerializersToJson(ReleaseSerializers instance) =>
       'veterinarian_name': instance.veterinarianName,
       'veterinarian_surname': instance.veterinarianSurname,
       'veterinarian_patronymic': instance.veterinarianPatronymic,
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };

@@ -9,9 +9,9 @@ part of 'user_reset_password_complete.dart';
 UserResetPasswordComplete _$UserResetPasswordCompleteFromJson(
   Map<String, dynamic> json,
 ) => UserResetPasswordComplete(
-  uidb64: json['uidb64'] as String,
-  token: json['token'] as String,
-  newPassword: json['new_password'] as String,
+  uidb64: json['uidb64'] as String?,
+  token: json['token'] as String?,
+  newPassword: json['new_password'] as String?,
 );
 
 Map<String, dynamic> _$UserResetPasswordCompleteToJson(

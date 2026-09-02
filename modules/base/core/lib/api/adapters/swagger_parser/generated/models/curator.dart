@@ -10,41 +10,41 @@ part 'curator.g.dart';
 @JsonSerializable()
 class Curator {
   const Curator({
-    required this.id,
-    required this.url,
-    required this.shelter,
-    required this.firstName,
-    required this.lastName,
-    required this.phoneNumber,
-    required this.address,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.url,
+    this.shelter,
+    this.firstName,
+    this.lastName,
     this.email,
+    this.phoneNumber,
+    this.address,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
   });
   
   factory Curator.fromJson(Map<String, Object?> json) => _$CuratorFromJson(json);
   
-  final int id;
-  final String url;
-  final String shelter;
+  final int? id;
+  final String? url;
+  final String? shelter;
   @JsonKey(name: 'first_name')
-  final String firstName;
+  final String? firstName;
   @JsonKey(name: 'last_name')
-  final String lastName;
+  final String? lastName;
   final String? email;
   @JsonKey(name: 'phone_number')
-  final String phoneNumber;
-  final String address;
+  final String? phoneNumber;
+  final String? address;
   @JsonKey(name: 'created_by')
-  final String createdBy;
+  final String? createdBy;
   @JsonKey(name: 'updated_by')
-  final String updatedBy;
+  final String? updatedBy;
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
   @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   Map<String, Object?> toJson() => _$CuratorToJson(this);
 }

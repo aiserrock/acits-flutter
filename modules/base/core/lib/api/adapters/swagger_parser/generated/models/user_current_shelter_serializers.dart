@@ -10,22 +10,22 @@ part 'user_current_shelter_serializers.g.dart';
 @JsonSerializable()
 class UserCurrentShelterSerializers {
   const UserCurrentShelterSerializers({
-    required this.currentShelter,
-    required this.currentShelterUserRole,
-    required this.isUserCanEdit,
-    required this.isUserCanDelete,
+    this.currentShelter,
+    this.currentShelterUserRole,
+    this.isUserCanEdit,
+    this.isUserCanDelete,
   });
   
   factory UserCurrentShelterSerializers.fromJson(Map<String, Object?> json) => _$UserCurrentShelterSerializersFromJson(json);
   
   @JsonKey(name: 'current_shelter')
-  final int currentShelter;
+  final int? currentShelter;
   @JsonKey(name: 'current_shelter_user_role')
-  final String currentShelterUserRole;
+  final String? currentShelterUserRole;
   @JsonKey(name: 'is_user_can_edit')
-  final bool isUserCanEdit;
+  final bool? isUserCanEdit;
   @JsonKey(name: 'is_user_can_delete')
-  final bool isUserCanDelete;
+  final bool? isUserCanDelete;
 
   Map<String, Object?> toJson() => _$UserCurrentShelterSerializersToJson(this);
 }

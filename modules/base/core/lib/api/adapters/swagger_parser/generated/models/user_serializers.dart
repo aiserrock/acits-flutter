@@ -10,42 +10,42 @@ part 'user_serializers.g.dart';
 @JsonSerializable()
 class UserSerializers {
   const UserSerializers({
-    required this.id,
-    required this.username,
-    required this.firstName,
-    required this.lastName,
-    required this.fullName,
-    required this.email,
-    required this.dateJoined,
-    required this.isVerified,
+    this.id,
+    this.username,
+    this.firstName,
+    this.lastName,
     this.fathersName,
+    this.fullName,
+    this.email,
     this.phoneNumber,
     this.address,
+    this.dateJoined,
+    this.isVerified,
     this.isOfferSigned,
   });
   
   factory UserSerializers.fromJson(Map<String, Object?> json) => _$UserSerializersFromJson(json);
   
-  final int id;
+  final int? id;
 
   /// Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
-  final String username;
+  final String? username;
   @JsonKey(name: 'first_name')
-  final String firstName;
+  final String? firstName;
   @JsonKey(name: 'last_name')
-  final String lastName;
+  final String? lastName;
   @JsonKey(name: 'fathers_name')
   final String? fathersName;
   @JsonKey(name: 'full_name')
-  final String fullName;
-  final String email;
+  final String? fullName;
+  final String? email;
   @JsonKey(name: 'phone_number')
   final String? phoneNumber;
   final String? address;
   @JsonKey(name: 'date_joined')
-  final DateTime dateJoined;
+  final DateTime? dateJoined;
   @JsonKey(name: 'is_verified')
-  final bool isVerified;
+  final bool? isVerified;
   @JsonKey(name: 'is_offer_signed')
   final bool? isOfferSigned;
 

@@ -8,8 +8,10 @@ part of 'date_joined_stats_item.dart';
 
 DateJoinedStatsItem _$DateJoinedStatsItemFromJson(Map<String, dynamic> json) =>
     DateJoinedStatsItem(
-      dateJoined: DateTime.parse(json['date_joined'] as String),
-      count: (json['count'] as num).toInt(),
+      dateJoined: json['date_joined'] == null
+          ? null
+          : DateTime.parse(json['date_joined'] as String),
+      count: (json['count'] as num?)?.toInt(),
       species: (json['species'] as List<dynamic>?)
           ?.map(
             (e) => DateJoinedInnerSpeciesCounts.fromJson(
@@ -22,7 +24,7 @@ DateJoinedStatsItem _$DateJoinedStatsItemFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$DateJoinedStatsItemToJson(
   DateJoinedStatsItem instance,
 ) => <String, dynamic>{
-  'date_joined': instance.dateJoined.toIso8601String(),
+  'date_joined': instance.dateJoined?.toIso8601String(),
   'count': instance.count,
   'species': instance.species,
 };

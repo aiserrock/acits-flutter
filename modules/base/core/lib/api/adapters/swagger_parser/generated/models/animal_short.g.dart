@@ -7,12 +7,12 @@ part of 'animal_short.dart';
 // **************************************************************************
 
 AnimalShort _$AnimalShortFromJson(Map<String, dynamic> json) => AnimalShort(
-  id: (json['id'] as num).toInt(),
-  uuid: json['uuid'] as String,
-  specName: json['spec_name'] as String,
+  id: (json['id'] as num?)?.toInt(),
+  uuid: json['uuid'] as String?,
+  name: json['name'] as String?,
+  specName: json['spec_name'] as String?,
   specParentName: json['spec_parent_name'] as String?,
   avatar: json['avatar'] as String?,
-  name: json['name'] as String?,
   defaultImageId: (json['default_image_id'] as num?)?.toInt(),
 );
 

@@ -10,19 +10,19 @@ part 'release_serializers.g.dart';
 @JsonSerializable()
 class ReleaseSerializers {
   const ReleaseSerializers({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
     this.place,
     this.date,
     this.veterinarianName,
     this.veterinarianSurname,
     this.veterinarianPatronymic,
+    this.createdAt,
+    this.updatedAt,
   });
   
   factory ReleaseSerializers.fromJson(Map<String, Object?> json) => _$ReleaseSerializersFromJson(json);
   
-  final int id;
+  final int? id;
   final String? place;
   final DateTime? date;
   @JsonKey(name: 'veterinarian_name')
@@ -32,9 +32,9 @@ class ReleaseSerializers {
   @JsonKey(name: 'veterinarian_patronymic')
   final String? veterinarianPatronymic;
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
   @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   Map<String, Object?> toJson() => _$ReleaseSerializersToJson(this);
 }

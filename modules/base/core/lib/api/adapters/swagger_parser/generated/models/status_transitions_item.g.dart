@@ -9,8 +9,8 @@ part of 'status_transitions_item.dart';
 StatusTransitionsItem _$StatusTransitionsItemFromJson(
   Map<String, dynamic> json,
 ) => StatusTransitionsItem(
-  statusSequence: json['status_sequence'] as List<dynamic>,
-  count: (json['count'] as num).toInt(),
+  statusSequence: json['status_sequence'] as List<dynamic>?,
+  count: (json['count'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$StatusTransitionsItemToJson(

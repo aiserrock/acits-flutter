@@ -7,12 +7,14 @@ part of 'species.dart';
 // **************************************************************************
 
 Species _$SpeciesFromJson(Map<String, dynamic> json) => Species(
-  id: (json['id'] as num).toInt(),
-  name: json['name'] as String,
-  level: LevelEnum.fromJson((json['level'] as num).toInt()),
+  id: (json['id'] as num?)?.toInt(),
+  name: json['name'] as String?,
+  level: json['level'] == null
+      ? null
+      : LevelEnum.fromJson((json['level'] as num).toInt()),
+  parentId: (json['parent_id'] as num?)?.toInt(),
   parentName: json['parent_name'] as String?,
   categoryName: json['category_name'] as String?,
-  parentId: (json['parent_id'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$SpeciesToJson(Species instance) => <String, dynamic>{

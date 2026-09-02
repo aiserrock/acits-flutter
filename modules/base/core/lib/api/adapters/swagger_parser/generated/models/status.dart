@@ -9,12 +9,12 @@ part 'status.g.dart';
 @JsonSerializable()
 class Status {
   const Status({
-    required this.status,
+    this.status,
   });
   
   factory Status.fromJson(Map<String, Object?> json) => _$StatusFromJson(json);
   
-  final String status;
+  final String? status;
 
   Map<String, Object?> toJson() => _$StatusToJson(this);
 }

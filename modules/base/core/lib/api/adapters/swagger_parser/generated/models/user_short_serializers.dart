@@ -10,19 +10,19 @@ part 'user_short_serializers.g.dart';
 @JsonSerializable()
 class UserShortSerializers {
   const UserShortSerializers({
-    required this.id,
-    required this.fullName,
-    required this.email,
+    this.id,
+    this.fullName,
+    this.email,
     this.phoneNumber,
     this.address,
   });
   
   factory UserShortSerializers.fromJson(Map<String, Object?> json) => _$UserShortSerializersFromJson(json);
   
-  final int id;
+  final int? id;
   @JsonKey(name: 'full_name')
-  final String fullName;
-  final String email;
+  final String? fullName;
+  final String? email;
   @JsonKey(name: 'phone_number')
   final String? phoneNumber;
   final String? address;

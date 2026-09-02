@@ -10,10 +10,10 @@ part 'shelter_serializers.g.dart';
 @JsonSerializable()
 class ShelterSerializers {
   const ShelterSerializers({
-    required this.id,
-    required this.name,
-    required this.country,
-    required this.city,
+    this.id,
+    this.name,
+    this.country,
+    this.city,
     this.state,
     this.region,
     this.street,
@@ -42,14 +42,14 @@ class ShelterSerializers {
   
   factory ShelterSerializers.fromJson(Map<String, Object?> json) => _$ShelterSerializersFromJson(json);
   
-  final int id;
-  final String name;
+  final int? id;
+  final String? name;
 
   /// Country where shelter is located
-  final String country;
+  final String? country;
 
   /// City where shelter is located
-  final String city;
+  final String? city;
 
   /// State where shelter is located
   final String? state;

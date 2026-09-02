@@ -9,9 +9,9 @@ part of 'user_short_serializers.dart';
 UserShortSerializers _$UserShortSerializersFromJson(
   Map<String, dynamic> json,
 ) => UserShortSerializers(
-  id: (json['id'] as num).toInt(),
-  fullName: json['full_name'] as String,
-  email: json['email'] as String,
+  id: (json['id'] as num?)?.toInt(),
+  fullName: json['full_name'] as String?,
+  email: json['email'] as String?,
   phoneNumber: json['phone_number'] as String?,
   address: json['address'] as String?,
 );

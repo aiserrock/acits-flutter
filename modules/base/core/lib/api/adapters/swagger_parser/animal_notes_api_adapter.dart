@@ -63,10 +63,10 @@ class AnimalNotesApiAdapter implements AnimalNotesApiPort {
   // ── generated → OUR DTO mapping ────────────────────────────────────────────
 
   AnimalNoteDto _mapNote(AnimalNote n) => AnimalNoteDto(
-    id: n.id,
+    id: n.id ?? 0,
     url: n.url,
-    animal: n.animal,
-    content: n.content,
+    animal: n.animal ?? 0,
+    content: n.content ?? '',
     files: n.files?.map(_mapFile).toList(growable: false),
     createdAt: n.createdAt,
     updatedAt: n.updatedAt,
@@ -75,6 +75,15 @@ class AnimalNotesApiAdapter implements AnimalNotesApiPort {
     isUserCanEditOrDelete: n.isUserCanEditOrDelete,
   );
 
-  AnimalNoteFileDto _mapFile(AnimalNoteFile f) =>
-      AnimalNoteFileDto(id: f.id, file: f.file, name: f.name, filename: f.filename, createdAt: f.createdAt);
+  /// Placeholder for the wire-required non-null `created_at` that the relaxed
+  /// generated model now types nullable. Real payloads always carry it.
+  static final _epoch = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+
+  AnimalNoteFileDto _mapFile(AnimalNoteFile f) => AnimalNoteFileDto(
+    id: f.id ?? 0,
+    file: f.file ?? '',
+    name: f.name ?? '',
+    filename: f.filename ?? '',
+    createdAt: f.createdAt ?? _epoch,
+  );
 }

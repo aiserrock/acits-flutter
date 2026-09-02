@@ -12,8 +12,9 @@ AttributeDto _$AttributeDtoFromJson(Map<String, dynamic> json) => AttributeDto(
   isRequired: json['is_required'] as bool?,
 );
 
-Map<String, dynamic> _$AttributeDtoToJson(AttributeDto instance) => <String, dynamic>{
-  'id': instance.id,
-  'name': instance.name,
-  'is_required': instance.isRequired,
-};
+Map<String, dynamic> _$AttributeDtoToJson(AttributeDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'is_required': instance.isRequired,
+    };

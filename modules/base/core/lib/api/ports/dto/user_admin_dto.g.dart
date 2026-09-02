@@ -18,14 +18,15 @@ UserAdminDto _$UserAdminDtoFromJson(Map<String, dynamic> json) => UserAdminDto(
   shelter: json['shelter'] as Map<String, dynamic>?,
 );
 
-Map<String, dynamic> _$UserAdminDtoToJson(UserAdminDto instance) => <String, dynamic>{
-  'id': instance.id,
-  'first_name': instance.firstName,
-  'last_name': instance.lastName,
-  'fathers_name': instance.fathersName,
-  'email': instance.email,
-  'phone_number': instance.phoneNumber,
-  'address': instance.address,
-  'is_offer_signed': instance.isOfferSigned,
-  'shelter': instance.shelter,
-};
+Map<String, dynamic> _$UserAdminDtoToJson(UserAdminDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'first_name': instance.firstName,
+      'last_name': instance.lastName,
+      'fathers_name': instance.fathersName,
+      'email': instance.email,
+      'phone_number': instance.phoneNumber,
+      'address': instance.address,
+      'is_offer_signed': instance.isOfferSigned,
+      'shelter': instance.shelter,
+    };

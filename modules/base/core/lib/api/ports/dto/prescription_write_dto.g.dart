@@ -6,10 +6,14 @@ part of 'prescription_write_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PrescriptionWriteDto _$PrescriptionWriteDtoFromJson(Map<String, dynamic> json) => PrescriptionWriteDto(
+PrescriptionWriteDto _$PrescriptionWriteDtoFromJson(
+  Map<String, dynamic> json,
+) => PrescriptionWriteDto(
   animal: (json['animal'] as num).toInt(),
   myType: json['my_type'] as String,
-  drugs: (json['drugs'] as List<dynamic>).map((e) => PrescriptionDrugDto.fromJson(e as Map<String, dynamic>)).toList(),
+  drugs: (json['drugs'] as List<dynamic>)
+      .map((e) => PrescriptionDrugDto.fromJson(e as Map<String, dynamic>))
+      .toList(),
   executions: (json['executions'] as List<dynamic>)
       .map((e) => PrescriptionExecutionDto.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -22,7 +26,9 @@ PrescriptionWriteDto _$PrescriptionWriteDtoFromJson(Map<String, dynamic> json) =
   extraTypeAttributes: json['extra_type_attributes'] as Map<String, dynamic>?,
 );
 
-Map<String, dynamic> _$PrescriptionWriteDtoToJson(PrescriptionWriteDto instance) => <String, dynamic>{
+Map<String, dynamic> _$PrescriptionWriteDtoToJson(
+  PrescriptionWriteDto instance,
+) => <String, dynamic>{
   'id': ?instance.id,
   'animal': instance.animal,
   'my_type': instance.myType,

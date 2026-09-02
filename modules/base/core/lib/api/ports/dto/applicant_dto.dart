@@ -10,15 +10,15 @@ part 'applicant_dto.g.dart';
 class ApplicantDto {
   const ApplicantDto({
     required this.id,
-    required this.url,
-    required this.shelter,
-    required this.firstName,
-    required this.lastName,
-    required this.phoneNumber,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.createdAt,
-    required this.updatedAt,
+    this.url,
+    this.shelter,
+    this.firstName,
+    this.lastName,
+    this.phoneNumber,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
     this.email,
     this.contactDetails,
     this.animalId,
@@ -28,25 +28,29 @@ class ApplicantDto {
   factory ApplicantDto.fromJson(Map<String, dynamic> json) => _$ApplicantDtoFromJson(json);
 
   final int id;
-  final String url;
-  final int shelter;
+  // NOTE: these mirror the wire `Applicant`, whose OpenAPI schema over-declares
+  // them `required` + non-null. The backend actually serves them as `null`, so
+  // we keep them nullable here. See preprocess_openapi.dart
+  // `_relaxOverstatedNonNull` and the backend PR.
+  final String? url;
+  final int? shelter;
   @JsonKey(name: 'first_name')
-  final String firstName;
+  final String? firstName;
   @JsonKey(name: 'last_name')
-  final String lastName;
+  final String? lastName;
   final String? email;
   @JsonKey(name: 'phone_number')
-  final String phoneNumber;
+  final String? phoneNumber;
   @JsonKey(name: 'contact_details')
   final String? contactDetails;
   @JsonKey(name: 'created_by')
-  final String createdBy;
+  final String? createdBy;
   @JsonKey(name: 'updated_by')
-  final String updatedBy;
+  final String? updatedBy;
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
   @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
   @JsonKey(name: 'animal_id')
   final int? animalId;
   @JsonKey(name: 'applicant_files')

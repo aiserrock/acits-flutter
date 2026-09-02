@@ -6,10 +6,14 @@ part of 'prescription_short_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PrescriptionShortDto _$PrescriptionShortDtoFromJson(Map<String, dynamic> json) => PrescriptionShortDto(
+PrescriptionShortDto _$PrescriptionShortDtoFromJson(
+  Map<String, dynamic> json,
+) => PrescriptionShortDto(
   animal: AnimalShortDto.fromJson(json['animal'] as Map<String, dynamic>),
   drugs:
-      (json['drugs'] as List<dynamic>?)?.map((e) => PrescriptionDrugDto.fromJson(e as Map<String, dynamic>)).toList() ??
+      (json['drugs'] as List<dynamic>?)
+          ?.map((e) => PrescriptionDrugDto.fromJson(e as Map<String, dynamic>))
+          .toList() ??
       [],
   id: (json['id'] as num?)?.toInt(),
   myType: json['my_type'] as String?,
@@ -22,7 +26,9 @@ PrescriptionShortDto _$PrescriptionShortDtoFromJson(Map<String, dynamic> json) =
   extraTypeAttributes: json['extra_type_attributes'] as Map<String, dynamic>?,
 );
 
-Map<String, dynamic> _$PrescriptionShortDtoToJson(PrescriptionShortDto instance) => <String, dynamic>{
+Map<String, dynamic> _$PrescriptionShortDtoToJson(
+  PrescriptionShortDto instance,
+) => <String, dynamic>{
   'id': instance.id,
   'my_type': instance.myType,
   'extra_type_attributes': instance.extraTypeAttributes,

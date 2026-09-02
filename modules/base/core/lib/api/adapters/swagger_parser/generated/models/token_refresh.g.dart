@@ -7,8 +7,8 @@ part of 'token_refresh.dart';
 // **************************************************************************
 
 TokenRefresh _$TokenRefreshFromJson(Map<String, dynamic> json) => TokenRefresh(
-  access: json['access'] as String,
-  refresh: json['refresh'] as String,
+  access: json['access'] as String?,
+  refresh: json['refresh'] as String?,
 );
 
 Map<String, dynamic> _$TokenRefreshToJson(TokenRefresh instance) =>

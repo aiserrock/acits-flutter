@@ -9,40 +9,44 @@ part 'curator_dto.g.dart';
 class CuratorDto {
   const CuratorDto({
     required this.id,
-    required this.url,
-    required this.shelter,
-    required this.firstName,
-    required this.lastName,
-    required this.phoneNumber,
-    required this.address,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.createdAt,
-    required this.updatedAt,
+    this.url,
+    this.shelter,
+    this.firstName,
+    this.lastName,
+    this.phoneNumber,
+    this.address,
+    this.createdBy,
+    this.updatedBy,
+    this.createdAt,
+    this.updatedAt,
     this.email,
   });
 
   factory CuratorDto.fromJson(Map<String, dynamic> json) => _$CuratorDtoFromJson(json);
 
   final int id;
-  final String url;
-  final String shelter;
+  // NOTE: these mirror the wire `Curator`, whose OpenAPI schema over-declares
+  // them `required` + non-null. The backend actually serves them as `null`
+  // (e.g. blank audit fields), so we keep them nullable here. See
+  // preprocess_openapi.dart `_relaxOverstatedNonNull` and the backend PR.
+  final String? url;
+  final String? shelter;
   @JsonKey(name: 'first_name')
-  final String firstName;
+  final String? firstName;
   @JsonKey(name: 'last_name')
-  final String lastName;
+  final String? lastName;
   final String? email;
   @JsonKey(name: 'phone_number')
-  final String phoneNumber;
-  final String address;
+  final String? phoneNumber;
+  final String? address;
   @JsonKey(name: 'created_by')
-  final String createdBy;
+  final String? createdBy;
   @JsonKey(name: 'updated_by')
-  final String updatedBy;
+  final String? updatedBy;
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
   @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() => _$CuratorDtoToJson(this);
 

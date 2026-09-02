@@ -12,17 +12,17 @@ part 'date_joined_inner_species_counts.g.dart';
 @JsonSerializable()
 class DateJoinedInnerSpeciesCounts {
   const DateJoinedInnerSpeciesCounts({
-    required this.id,
-    required this.name,
-    required this.count,
+    this.id,
+    this.name,
+    this.count,
     this.breeds,
   });
   
   factory DateJoinedInnerSpeciesCounts.fromJson(Map<String, Object?> json) => _$DateJoinedInnerSpeciesCountsFromJson(json);
   
-  final int id;
-  final String name;
-  final int count;
+  final int? id;
+  final String? name;
+  final int? count;
   final List<BreedsSpeciesStatsItem>? breeds;
 
   Map<String, Object?> toJson() => _$DateJoinedInnerSpeciesCountsToJson(this);

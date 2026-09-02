@@ -61,10 +61,7 @@ class AuthApiAdapter implements AuthApiPort {
       data: <String, dynamic>{'username': username, 'password': password},
     );
     final data = response.data ?? const <String, dynamic>{};
-    return TokenPairDto(
-      access: (data['access'] as String?) ?? '',
-      refresh: (data['refresh'] as String?) ?? '',
-    );
+    return TokenPairDto(access: (data['access'] as String?) ?? '', refresh: (data['refresh'] as String?) ?? '');
   }
 
   @override
@@ -72,10 +69,13 @@ class AuthApiAdapter implements AuthApiPort {
     final result = await _authedTokenClient.tokenRefreshCreate(
       body: TokenRefresh(access: access ?? '', refresh: refresh ?? ''),
     );
-    // SimpleJWT without ROTATE_REFRESH_TOKENS returns refresh='' — surface it as
-    // null so AuthService keeps the previously used refresh token.
+    // SimpleJWT without ROTATE_REFRESH_TOKENS returns refresh=null (or '') —
+    // surface it as null so AuthService keeps the previously used refresh token.
     final newRefresh = result.refresh;
-    return TokenRefreshDto(access: result.access, refresh: newRefresh.isEmpty ? null : newRefresh);
+    return TokenRefreshDto(
+      access: result.access ?? '',
+      refresh: (newRefresh == null || newRefresh.isEmpty) ? null : newRefresh,
+    );
   }
 
   @override
@@ -89,63 +89,55 @@ class AuthApiAdapter implements AuthApiPort {
   Future<CurrentShelterDto> setCurrentShelter(int shelterId) async {
     final result = await _usersClient.v1UsersMeSheltersCurrentRetrieve(xCurrentShelter: shelterId);
     return CurrentShelterDto(
-      currentShelter: result.currentShelter,
-      currentShelterUserRole: result.currentShelterUserRole,
-      isUserCanEdit: result.isUserCanEdit,
-      isUserCanDelete: result.isUserCanDelete,
+      currentShelter: result.currentShelter ?? 0,
+      currentShelterUserRole: result.currentShelterUserRole ?? '',
+      isUserCanEdit: result.isUserCanEdit ?? false,
+      isUserCanDelete: result.isUserCanDelete ?? false,
     );
   }
 
   @override
   Future<List<ShelterShortDto>> allShelters({int? limit, int? offset, String? search}) async {
-    final page = await _guestSheltersClient.v1SheltersList(
-      limit: limit,
-      offset: offset,
-      search: search,
-    );
+    final page = await _guestSheltersClient.v1SheltersList(limit: limit, offset: offset, search: search);
     final results = page.results ?? const <ShelterShortSerializers>[];
     return results.map(_mapShelter).toList(growable: false);
   }
 
   @override
   Future<UserAdminDto> registerAdmin(UserAdminWriteDto body) async {
-    final result = await _guestRegistrationClient.v1UsersAdminRegisterCreate(
-      body: _mapAdminWrite(body),
-    );
+    final result = await _guestRegistrationClient.v1UsersAdminRegisterCreate(body: _mapAdminWrite(body));
     return UserAdminDto(
-      id: result.id,
-      firstName: result.firstName,
-      lastName: result.lastName,
+      id: result.id ?? 0,
+      firstName: result.firstName ?? '',
+      lastName: result.lastName ?? '',
       fathersName: result.fathersName,
-      email: result.email,
+      email: result.email ?? '',
       phoneNumber: result.phoneNumber,
       address: result.address,
-      isOfferSigned: result.isOfferSigned,
-      shelter: Map<String, dynamic>.from(result.shelter.toJson()),
+      isOfferSigned: result.isOfferSigned ?? false,
+      shelter: result.shelter == null ? const {} : Map<String, dynamic>.from(result.shelter!.toJson()),
     );
   }
 
   @override
   Future<UserWorkerDto> registerWorker(UserWorkerWriteDto body) async {
-    final result = await _guestRegistrationClient.v1UsersWorkerRegisterCreate(
-      body: _mapWorkerWrite(body),
-    );
+    final result = await _guestRegistrationClient.v1UsersWorkerRegisterCreate(body: _mapWorkerWrite(body));
     return UserWorkerDto(
-      firstName: result.firstName,
-      lastName: result.lastName,
+      firstName: result.firstName ?? '',
+      lastName: result.lastName ?? '',
       fathersName: result.fathersName,
-      email: result.email,
+      email: result.email ?? '',
       phoneNumber: result.phoneNumber,
       address: result.address,
       shelter: result.shelter,
-      role: result.role.json,
-      isOfferSigned: result.isOfferSigned,
+      role: result.role?.json,
+      isOfferSigned: result.isOfferSigned ?? false,
     );
   }
 
   // ── mapping helpers ─────────────────────────────────────────────────────────
 
-  ShelterShortDto _mapShelter(ShelterShortSerializers s) => ShelterShortDto(id: s.id, name: s.name);
+  ShelterShortDto _mapShelter(ShelterShortSerializers s) => ShelterShortDto(id: s.id ?? 0, name: s.name ?? '');
 
   UserShelterAdminSerializers _mapAdminWrite(UserAdminWriteDto d) => UserShelterAdminSerializers(
     // `id` is required by the generated write model but read-only server-side;
@@ -170,18 +162,17 @@ class AuthApiAdapter implements AuthApiPort {
     ),
   );
 
-  UserShelterWorkerSerializers _mapWorkerWrite(UserWorkerWriteDto d) =>
-      UserShelterWorkerSerializers(
-        firstName: d.firstName,
-        lastName: d.lastName,
-        fathersName: d.fathersName,
-        email: d.email,
-        phoneNumber: d.phoneNumber,
-        address: d.address,
-        password: d.password,
-        rePassword: d.rePassword,
-        shelter: d.shelter ?? 0,
-        role: RoleEnum.fromJson(d.role),
-        isOfferSigned: d.isOfferSigned,
-      );
+  UserShelterWorkerSerializers _mapWorkerWrite(UserWorkerWriteDto d) => UserShelterWorkerSerializers(
+    firstName: d.firstName,
+    lastName: d.lastName,
+    fathersName: d.fathersName,
+    email: d.email,
+    phoneNumber: d.phoneNumber,
+    address: d.address,
+    password: d.password,
+    rePassword: d.rePassword,
+    shelter: d.shelter ?? 0,
+    role: RoleEnum.fromJson(d.role),
+    isOfferSigned: d.isOfferSigned,
+  );
 }

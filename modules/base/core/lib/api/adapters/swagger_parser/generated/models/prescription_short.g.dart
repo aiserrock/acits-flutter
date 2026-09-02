@@ -8,18 +8,20 @@ part of 'prescription_short.dart';
 
 PrescriptionShort _$PrescriptionShortFromJson(Map<String, dynamic> json) =>
     PrescriptionShort(
-      id: (json['id'] as num).toInt(),
-      animal: AnimalShort.fromJson(json['animal'] as Map<String, dynamic>),
-      drugs: (json['drugs'] as List<dynamic>)
-          .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      createdBy: json['created_by'] as String,
-      updatedBy: json['updated_by'] as String,
+      id: (json['id'] as num?)?.toInt(),
       myType: json['my_type'] == null
           ? null
           : PrescriptionShortMyTypeEnum.fromJson(json['my_type'] as String),
       extraTypeAttributes: json['extra_type_attributes'],
       description: json['description'] as String?,
+      animal: json['animal'] == null
+          ? null
+          : AnimalShort.fromJson(json['animal'] as Map<String, dynamic>),
+      drugs: (json['drugs'] as List<dynamic>?)
+          ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      createdBy: json['created_by'] as String?,
+      updatedBy: json['updated_by'] as String?,
       files: (json['files'] as List<dynamic>?)
           ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
           .toList(),

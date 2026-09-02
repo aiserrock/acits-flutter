@@ -8,8 +8,8 @@ part of 'animal_attribute.dart';
 
 AnimalAttribute _$AnimalAttributeFromJson(Map<String, dynamic> json) =>
     AnimalAttribute(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
       isRequired: json['is_required'] as bool?,
     );
 

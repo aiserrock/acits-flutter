@@ -8,11 +8,13 @@ part of 'animal_note_file.dart';
 
 AnimalNoteFile _$AnimalNoteFileFromJson(Map<String, dynamic> json) =>
     AnimalNoteFile(
-      id: (json['id'] as num).toInt(),
-      file: json['file'] as String,
-      name: json['name'] as String,
-      filename: json['filename'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      id: (json['id'] as num?)?.toInt(),
+      file: json['file'] as String?,
+      name: json['name'] as String?,
+      filename: json['filename'] as String?,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
     );
 
 Map<String, dynamic> _$AnimalNoteFileToJson(AnimalNoteFile instance) =>
@@ -21,5 +23,5 @@ Map<String, dynamic> _$AnimalNoteFileToJson(AnimalNoteFile instance) =>
       'file': instance.file,
       'name': instance.name,
       'filename': instance.filename,
-      'created_at': instance.createdAt.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
     };

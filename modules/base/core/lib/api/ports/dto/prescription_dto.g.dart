@@ -6,14 +6,20 @@ part of 'prescription_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PrescriptionDto _$PrescriptionDtoFromJson(Map<String, dynamic> json) => PrescriptionDto(
+PrescriptionDto _$PrescriptionDtoFromJson(
+  Map<String, dynamic> json,
+) => PrescriptionDto(
   animal: (json['animal'] as num).toInt(),
   drugs:
-      (json['drugs'] as List<dynamic>?)?.map((e) => PrescriptionDrugDto.fromJson(e as Map<String, dynamic>)).toList() ??
+      (json['drugs'] as List<dynamic>?)
+          ?.map((e) => PrescriptionDrugDto.fromJson(e as Map<String, dynamic>))
+          .toList() ??
       [],
   executions:
       (json['executions'] as List<dynamic>?)
-          ?.map((e) => PrescriptionExecutionDto.fromJson(e as Map<String, dynamic>))
+          ?.map(
+            (e) => PrescriptionExecutionDto.fromJson(e as Map<String, dynamic>),
+          )
           .toList() ??
       [],
   id: (json['id'] as num?)?.toInt(),
@@ -29,17 +35,18 @@ PrescriptionDto _$PrescriptionDtoFromJson(Map<String, dynamic> json) => Prescrip
   extraTypeAttributes: json['extra_type_attributes'] as Map<String, dynamic>?,
 );
 
-Map<String, dynamic> _$PrescriptionDtoToJson(PrescriptionDto instance) => <String, dynamic>{
-  'id': instance.id,
-  'url': instance.url,
-  'animal': instance.animal,
-  'my_type': instance.myType,
-  'duration': instance.duration,
-  'description': instance.description,
-  'created_by': instance.createdBy,
-  'updated_by': instance.updatedBy,
-  'drugs': instance.drugs.map((e) => e.toJson()).toList(),
-  'executions': instance.executions.map((e) => e.toJson()).toList(),
-  'files': instance.files?.map((e) => e.toJson()).toList(),
-  'extra_type_attributes': instance.extraTypeAttributes,
-};
+Map<String, dynamic> _$PrescriptionDtoToJson(PrescriptionDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'url': instance.url,
+      'animal': instance.animal,
+      'my_type': instance.myType,
+      'duration': instance.duration,
+      'description': instance.description,
+      'created_by': instance.createdBy,
+      'updated_by': instance.updatedBy,
+      'drugs': instance.drugs.map((e) => e.toJson()).toList(),
+      'executions': instance.executions.map((e) => e.toJson()).toList(),
+      'files': instance.files?.map((e) => e.toJson()).toList(),
+      'extra_type_attributes': instance.extraTypeAttributes,
+    };

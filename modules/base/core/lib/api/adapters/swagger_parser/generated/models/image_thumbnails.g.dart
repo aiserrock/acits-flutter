@@ -8,9 +8,9 @@ part of 'image_thumbnails.dart';
 
 ImageThumbnails _$ImageThumbnailsFromJson(Map<String, dynamic> json) =>
     ImageThumbnails(
-      large: json['large'] as String,
-      medium: json['medium'] as String,
-      small: json['small'] as String,
+      large: json['large'] as String?,
+      medium: json['medium'] as String?,
+      small: json['small'] as String?,
     );
 
 Map<String, dynamic> _$ImageThumbnailsToJson(ImageThumbnails instance) =>

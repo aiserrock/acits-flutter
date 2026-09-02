@@ -9,27 +9,31 @@ part of 'parasites_treatment_prescription.dart';
 ParasitesTreatmentPrescription _$ParasitesTreatmentPrescriptionFromJson(
   Map<String, dynamic> json,
 ) => ParasitesTreatmentPrescription(
-  id: (json['id'] as num).toInt(),
-  url: json['url'] as String,
-  animal: (json['animal'] as num).toInt(),
-  myType: ParasitesTreatmentPrescriptionMyTypeEnum.fromJson(
-    json['my_type'] as String,
-  ),
-  extraTypeAttributes: ParasitesPrescriptionExtraAttr.fromJson(
-    json['extra_type_attributes'] as Map<String, dynamic>,
-  ),
-  createdBy: json['created_by'] as String,
-  updatedBy: json['updated_by'] as String,
-  drugs: (json['drugs'] as List<dynamic>)
-      .map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  executions: (json['executions'] as List<dynamic>)
-      .map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  id: (json['id'] as num?)?.toInt(),
+  url: json['url'] as String?,
+  animal: (json['animal'] as num?)?.toInt(),
+  myType: json['my_type'] == null
+      ? null
+      : ParasitesTreatmentPrescriptionMyTypeEnum.fromJson(
+          json['my_type'] as String,
+        ),
+  extraTypeAttributes: json['extra_type_attributes'] == null
+      ? null
+      : ParasitesPrescriptionExtraAttr.fromJson(
+          json['extra_type_attributes'] as Map<String, dynamic>,
+        ),
   duration: json['duration'] == null
       ? null
       : DurationEnum.fromJson(json['duration'] as String),
   description: json['description'] as String?,
+  createdBy: json['created_by'] as String?,
+  updatedBy: json['updated_by'] as String?,
+  drugs: (json['drugs'] as List<dynamic>?)
+      ?.map((e) => PrescriptionDrug.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  executions: (json['executions'] as List<dynamic>?)
+      ?.map((e) => PrescriptionExecution.fromJson(e as Map<String, dynamic>))
+      .toList(),
   files: (json['files'] as List<dynamic>?)
       ?.map((e) => PrescriptionFile.fromJson(e as Map<String, dynamic>))
       .toList(),

@@ -9,12 +9,12 @@ part 'approve.g.dart';
 @JsonSerializable()
 class Approve {
   const Approve({
-    required this.status,
+    this.status,
   });
   
   factory Approve.fromJson(Map<String, Object?> json) => _$ApproveFromJson(json);
   
-  final String status;
+  final String? status;
 
   Map<String, Object?> toJson() => _$ApproveToJson(this);
 }

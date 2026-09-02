@@ -21,17 +21,18 @@ UserWriteDto _$UserWriteDtoFromJson(Map<String, dynamic> json) => UserWriteDto(
   isOfferSigned: json['is_offer_signed'] as bool?,
 );
 
-Map<String, dynamic> _$UserWriteDtoToJson(UserWriteDto instance) => <String, dynamic>{
-  'id': instance.id,
-  'username': instance.username,
-  'first_name': instance.firstName,
-  'last_name': instance.lastName,
-  'fathers_name': ?instance.fathersName,
-  'full_name': instance.fullName,
-  'email': instance.email,
-  'phone_number': ?instance.phoneNumber,
-  'address': ?instance.address,
-  'date_joined': instance.dateJoined.toIso8601String(),
-  'is_verified': instance.isVerified,
-  'is_offer_signed': ?instance.isOfferSigned,
-};
+Map<String, dynamic> _$UserWriteDtoToJson(UserWriteDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'username': instance.username,
+      'first_name': instance.firstName,
+      'last_name': instance.lastName,
+      'fathers_name': ?instance.fathersName,
+      'full_name': instance.fullName,
+      'email': instance.email,
+      'phone_number': ?instance.phoneNumber,
+      'address': ?instance.address,
+      'date_joined': instance.dateJoined.toIso8601String(),
+      'is_verified': instance.isVerified,
+      'is_offer_signed': ?instance.isOfferSigned,
+    };

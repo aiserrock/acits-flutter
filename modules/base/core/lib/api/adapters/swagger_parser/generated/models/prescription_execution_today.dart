@@ -12,17 +12,17 @@ part 'prescription_execution_today.g.dart';
 @JsonSerializable()
 class PrescriptionExecutionToday {
   const PrescriptionExecutionToday({
-    required this.id,
-    required this.prescription,
-    required this.executeAt,
+    this.id,
+    this.prescription,
+    this.executeAt,
   });
   
   factory PrescriptionExecutionToday.fromJson(Map<String, Object?> json) => _$PrescriptionExecutionTodayFromJson(json);
   
-  final int id;
-  final PrescriptionShort prescription;
+  final int? id;
+  final PrescriptionShort? prescription;
   @JsonKey(name: 'execute_at')
-  final DateTime executeAt;
+  final DateTime? executeAt;
 
   Map<String, Object?> toJson() => _$PrescriptionExecutionTodayToJson(this);
 }

@@ -10,24 +10,24 @@ part 'feedback.g.dart';
 @JsonSerializable()
 class Feedback {
   const Feedback({
-    required this.shelterId,
-    required this.shelterName,
-    required this.date,
-    required this.action,
-    required this.email,
-    required this.message,
+    this.shelterId,
+    this.shelterName,
+    this.date,
+    this.action,
+    this.email,
+    this.message,
   });
   
   factory Feedback.fromJson(Map<String, Object?> json) => _$FeedbackFromJson(json);
   
   @JsonKey(name: 'shelter_id')
-  final int shelterId;
+  final int? shelterId;
   @JsonKey(name: 'shelter_name')
-  final String shelterName;
-  final DateTime date;
-  final String action;
-  final String email;
-  final String message;
+  final String? shelterName;
+  final DateTime? date;
+  final String? action;
+  final String? email;
+  final String? message;
 
   Map<String, Object?> toJson() => _$FeedbackToJson(this);
 }

@@ -39,8 +39,7 @@ class _FakeGuestDio implements Dio {
   }
 
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnimplementedError('${invocation.memberName} not used');
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError('${invocation.memberName} not used');
 }
 
 /// Fake generated token client — returns models parsed from wire fixtures.
@@ -56,17 +55,13 @@ class _FakeTokenClient implements TokenClient {
       throw UnimplementedError('login uses a raw Dio POST, not tokenCreate');
 
   @override
-  Future<TokenRefresh> tokenRefreshCreate({
-    required TokenRefresh body,
-    int? xCurrentShelter,
-  }) async {
+  Future<TokenRefresh> tokenRefreshCreate({required TokenRefresh body, int? xCurrentShelter}) async {
     lastRefreshBody = body;
     return refreshResult!;
   }
 
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnimplementedError('${invocation.memberName} not used');
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError('${invocation.memberName} not used');
 }
 
 class _FakeUsersClient implements UsersClient {
@@ -85,16 +80,13 @@ class _FakeUsersClient implements UsersClient {
   }) async => shelters!;
 
   @override
-  Future<UserCurrentShelterSerializers> v1UsersMeSheltersCurrentRetrieve({
-    int? xCurrentShelter,
-  }) async {
+  Future<UserCurrentShelterSerializers> v1UsersMeSheltersCurrentRetrieve({int? xCurrentShelter}) async {
     lastCurrentShelterId = xCurrentShelter;
     return current!;
   }
 
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnimplementedError('${invocation.memberName} not used');
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError('${invocation.memberName} not used');
 }
 
 class _FakeSheltersClient implements SheltersClient {
@@ -120,8 +112,7 @@ class _FakeSheltersClient implements SheltersClient {
   }
 
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnimplementedError('${invocation.memberName} not used');
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError('${invocation.memberName} not used');
 }
 
 class _FakeRegistrationClient implements UsersRegistrationClient {
@@ -152,8 +143,7 @@ class _FakeRegistrationClient implements UsersRegistrationClient {
   }
 
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnimplementedError('${invocation.memberName} not used');
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError('${invocation.memberName} not used');
 }
 
 AuthApiAdapter _adapter({
@@ -172,19 +162,16 @@ AuthApiAdapter _adapter({
 
 void main() {
   group('AuthApiAdapter parity — login', () {
-    test(
-      'raw POST /api/token/ sends only credentials, maps access/refresh onto TokenPairDto',
-      () async {
-        // Response body has ONLY access/refresh (no username/password — write-only);
-        // the raw POST path avoids the generated TokenObtainPair.fromJson null-cast crash.
-        final dio = _FakeGuestDio(tokenResponse: const {'access': 'acc', 'refresh': 'ref'});
-        final result = await _adapter(guestDio: dio).login('john', 'secret');
+    test('raw POST /api/token/ sends only credentials, maps access/refresh onto TokenPairDto', () async {
+      // Response body has ONLY access/refresh (no username/password — write-only);
+      // the raw POST path avoids the generated TokenObtainPair.fromJson null-cast crash.
+      final dio = _FakeGuestDio(tokenResponse: const {'access': 'acc', 'refresh': 'ref'});
+      final result = await _adapter(guestDio: dio).login('john', 'secret');
 
-        expect(result, const TokenPairDto(access: 'acc', refresh: 'ref'));
-        expect(dio.lastPath, '/api/token/');
-        expect(dio.lastData, {'username': 'john', 'password': 'secret'});
-      },
-    );
+      expect(result, const TokenPairDto(access: 'acc', refresh: 'ref'));
+      expect(dio.lastPath, '/api/token/');
+      expect(dio.lastData, {'username': 'john', 'password': 'secret'});
+    });
 
     test('tolerates a token response missing fields (null → empty)', () async {
       final dio = _FakeGuestDio(tokenResponse: const {'access': 'acc'});
@@ -196,17 +183,13 @@ void main() {
   group('AuthApiAdapter parity — refresh', () {
     test('maps a non-empty refresh through', () async {
       final refresh = TokenRefresh.fromJson({'access': 'new-acc', 'refresh': 'new-ref'});
-      final result = await _adapter(
-        authedToken: _FakeTokenClient(refreshResult: refresh),
-      ).refresh('old', 'old-acc');
+      final result = await _adapter(authedToken: _FakeTokenClient(refreshResult: refresh)).refresh('old', 'old-acc');
       expect(result, const TokenRefreshDto(access: 'new-acc', refresh: 'new-ref'));
     });
 
     test('surfaces empty refresh as null (SimpleJWT without rotation)', () async {
       final refresh = TokenRefresh.fromJson({'access': 'new-acc', 'refresh': ''});
-      final result = await _adapter(
-        authedToken: _FakeTokenClient(refreshResult: refresh),
-      ).refresh('old', 'old-acc');
+      final result = await _adapter(authedToken: _FakeTokenClient(refreshResult: refresh)).refresh('old', 'old-acc');
       expect(result.access, 'new-acc');
       expect(result.refresh, isNull);
     });
@@ -222,10 +205,7 @@ void main() {
         ],
       });
       final result = await _adapter(users: _FakeUsersClient(shelters: page)).myShelters();
-      expect(result, const [
-        ShelterShortDto(id: 1, name: 'Alpha'),
-        ShelterShortDto(id: 2, name: 'Beta'),
-      ]);
+      expect(result, const [ShelterShortDto(id: 1, name: 'Alpha'), ShelterShortDto(id: 2, name: 'Beta')]);
     });
 
     test('null results envelope maps to empty list', () async {
@@ -241,9 +221,7 @@ void main() {
         ],
       });
       final client = _FakeSheltersClient(page);
-      final result = await _adapter(
-        shelters: client,
-      ).allShelters(limit: 10, offset: 5, search: 'ga');
+      final result = await _adapter(shelters: client).allShelters(limit: 10, offset: 5, search: 'ga');
       expect(result, const [ShelterShortDto(id: 7, name: 'Gamma')]);
       expect(client.lastLimit, 10);
       expect(client.lastOffset, 5);
@@ -252,100 +230,93 @@ void main() {
   });
 
   group('AuthApiAdapter parity — current shelter', () {
-    test(
-      'maps current-shelter JSON onto CurrentShelterDto and forwards the shelter id header',
-      () async {
-        final current = UserCurrentShelterSerializers.fromJson({
-          'current_shelter': 42,
-          'current_shelter_user_role': 'ADMIN',
-          'is_user_can_edit': true,
-          'is_user_can_delete': false,
-        });
-        final client = _FakeUsersClient(current: current);
-        final result = await _adapter(users: client).setCurrentShelter(42);
-        expect(
-          result,
-          const CurrentShelterDto(
-            currentShelter: 42,
-            currentShelterUserRole: 'ADMIN',
-            isUserCanEdit: true,
-            isUserCanDelete: false,
-          ),
-        );
-        expect(client.lastCurrentShelterId, 42);
-      },
-    );
+    test('maps current-shelter JSON onto CurrentShelterDto and forwards the shelter id header', () async {
+      final current = UserCurrentShelterSerializers.fromJson({
+        'current_shelter': 42,
+        'current_shelter_user_role': 'ADMIN',
+        'is_user_can_edit': true,
+        'is_user_can_delete': false,
+      });
+      final client = _FakeUsersClient(current: current);
+      final result = await _adapter(users: client).setCurrentShelter(42);
+      expect(
+        result,
+        const CurrentShelterDto(
+          currentShelter: 42,
+          currentShelterUserRole: 'ADMIN',
+          isUserCanEdit: true,
+          isUserCanDelete: false,
+        ),
+      );
+      expect(client.lastCurrentShelterId, 42);
+    });
   });
 
   group('AuthApiAdapter parity — register', () {
-    test(
-      'admin write DTO serialises onto the generated body; response maps to UserAdminDto',
-      () async {
-        final response = UserShelterAdminSerializers.fromJson({
-          'id': 5,
-          'first_name': 'Ivan',
-          'last_name': 'Ivanov',
-          'email': 'ivan@mail.ru',
-          'password': 'x',
-          're_password': 'x',
-          'is_offer_signed': true,
-          'shelter': {'id': 9, 'name': 'Shelter', 'country': 'RU', 'city': 'Moscow'},
-        });
-        final client = _FakeRegistrationClient(admin: response);
-        final result = await _adapter(registration: client).registerAdmin(
-          const UserAdminWriteDto(
-            email: 'ivan@mail.ru',
-            password: 'x',
-            rePassword: 'x',
-            firstName: 'Ivan',
-            lastName: 'Ivanov',
-            isOfferSigned: true,
-            shelter: ShelterWriteDto(name: 'Shelter', country: 'RU', city: 'Moscow', region: 'MO'),
-          ),
-        );
-        expect(result.id, 5);
-        expect(result.email, 'ivan@mail.ru');
-        // Write body carried through to the generated model.
-        expect(client.lastAdminBody!.firstName, 'Ivan');
-        expect(client.lastAdminBody!.shelter.name, 'Shelter');
-        expect(client.lastAdminBody!.shelter.country, 'RU');
-        expect(client.lastAdminBody!.shelter.city, 'Moscow');
-        expect(client.lastAdminBody!.shelter.region, 'MO');
-      },
-    );
+    test('admin write DTO serialises onto the generated body; response maps to UserAdminDto', () async {
+      final response = UserShelterAdminSerializers.fromJson({
+        'id': 5,
+        'first_name': 'Ivan',
+        'last_name': 'Ivanov',
+        'email': 'ivan@mail.ru',
+        'password': 'x',
+        're_password': 'x',
+        'is_offer_signed': true,
+        'shelter': {'id': 9, 'name': 'Shelter', 'country': 'RU', 'city': 'Moscow'},
+      });
+      final client = _FakeRegistrationClient(admin: response);
+      final result = await _adapter(registration: client).registerAdmin(
+        const UserAdminWriteDto(
+          email: 'ivan@mail.ru',
+          password: 'x',
+          rePassword: 'x',
+          firstName: 'Ivan',
+          lastName: 'Ivanov',
+          isOfferSigned: true,
+          shelter: ShelterWriteDto(name: 'Shelter', country: 'RU', city: 'Moscow', region: 'MO'),
+        ),
+      );
+      expect(result.id, 5);
+      expect(result.email, 'ivan@mail.ru');
+      // Write body carried through to the generated model. `shelter` is now
+      // nullable in the generated model (global spec relax), but the write
+      // body always carries it — assert on the non-null value.
+      expect(client.lastAdminBody!.firstName, 'Ivan');
+      expect(client.lastAdminBody!.shelter!.name, 'Shelter');
+      expect(client.lastAdminBody!.shelter!.country, 'RU');
+      expect(client.lastAdminBody!.shelter!.city, 'Moscow');
+      expect(client.lastAdminBody!.shelter!.region, 'MO');
+    });
 
-    test(
-      'worker write DTO maps role string onto the generated enum; response maps to UserWorkerDto',
-      () async {
-        final response = UserShelterWorkerSerializers.fromJson({
-          'first_name': 'Petr',
-          'last_name': 'Petrov',
-          'email': 'petr@mail.ru',
-          'password': 'x',
-          're_password': 'x',
-          'shelter': 3,
-          'role': 'WORKER',
-          'is_offer_signed': true,
-        });
-        final client = _FakeRegistrationClient(worker: response);
-        final result = await _adapter(registration: client).registerWorker(
-          const UserWorkerWriteDto(
-            email: 'petr@mail.ru',
-            password: 'x',
-            rePassword: 'x',
-            firstName: 'Petr',
-            lastName: 'Petrov',
-            role: 'WORKER',
-            shelter: 3,
-            isOfferSigned: true,
-          ),
-        );
-        expect(result.email, 'petr@mail.ru');
-        expect(result.role, 'WORKER');
-        expect(client.lastWorkerBody!.shelter, 3);
-        expect(client.lastWorkerBody!.role, RoleEnum.worker);
-      },
-    );
+    test('worker write DTO maps role string onto the generated enum; response maps to UserWorkerDto', () async {
+      final response = UserShelterWorkerSerializers.fromJson({
+        'first_name': 'Petr',
+        'last_name': 'Petrov',
+        'email': 'petr@mail.ru',
+        'password': 'x',
+        're_password': 'x',
+        'shelter': 3,
+        'role': 'WORKER',
+        'is_offer_signed': true,
+      });
+      final client = _FakeRegistrationClient(worker: response);
+      final result = await _adapter(registration: client).registerWorker(
+        const UserWorkerWriteDto(
+          email: 'petr@mail.ru',
+          password: 'x',
+          rePassword: 'x',
+          firstName: 'Petr',
+          lastName: 'Petrov',
+          role: 'WORKER',
+          shelter: 3,
+          isOfferSigned: true,
+        ),
+      );
+      expect(result.email, 'petr@mail.ru');
+      expect(result.role, 'WORKER');
+      expect(client.lastWorkerBody!.shelter, 3);
+      expect(client.lastWorkerBody!.role, RoleEnum.worker);
+    });
   });
 
   group('Auth DTO json round-trips', () {

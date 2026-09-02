@@ -10,15 +10,15 @@ part 'status_transitions_item.g.dart';
 @JsonSerializable()
 class StatusTransitionsItem {
   const StatusTransitionsItem({
-    required this.statusSequence,
-    required this.count,
+    this.statusSequence,
+    this.count,
   });
   
   factory StatusTransitionsItem.fromJson(Map<String, Object?> json) => _$StatusTransitionsItemFromJson(json);
   
   @JsonKey(name: 'status_sequence')
-  final List<dynamic> statusSequence;
-  final int count;
+  final List<dynamic>? statusSequence;
+  final int? count;
 
   Map<String, Object?> toJson() => _$StatusTransitionsItemToJson(this);
 }

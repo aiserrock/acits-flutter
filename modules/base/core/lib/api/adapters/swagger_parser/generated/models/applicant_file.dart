@@ -10,21 +10,21 @@ part 'applicant_file.g.dart';
 @JsonSerializable()
 class ApplicantFile {
   const ApplicantFile({
-    required this.id,
-    required this.file,
-    required this.name,
-    required this.filename,
-    required this.createdAt,
+    this.id,
+    this.file,
+    this.name,
+    this.filename,
+    this.createdAt,
   });
   
   factory ApplicantFile.fromJson(Map<String, Object?> json) => _$ApplicantFileFromJson(json);
   
-  final int id;
-  final String file;
-  final String name;
-  final String filename;
+  final int? id;
+  final String? file;
+  final String? name;
+  final String? filename;
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   Map<String, Object?> toJson() => _$ApplicantFileToJson(this);
 }

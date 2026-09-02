@@ -10,22 +10,22 @@ part 'animal_short.g.dart';
 @JsonSerializable()
 class AnimalShort {
   const AnimalShort({
-    required this.id,
-    required this.uuid,
-    required this.specName,
-    required this.specParentName,
-    required this.avatar,
+    this.id,
+    this.uuid,
     this.name,
+    this.specName,
+    this.specParentName,
+    this.avatar,
     this.defaultImageId,
   });
   
   factory AnimalShort.fromJson(Map<String, Object?> json) => _$AnimalShortFromJson(json);
   
-  final int id;
-  final String uuid;
+  final int? id;
+  final String? uuid;
   final String? name;
   @JsonKey(name: 'spec_name')
-  final String specName;
+  final String? specName;
   @JsonKey(name: 'spec_parent_name')
   final String? specParentName;
 

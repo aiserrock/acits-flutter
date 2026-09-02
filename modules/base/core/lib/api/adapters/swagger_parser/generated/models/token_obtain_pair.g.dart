@@ -8,10 +8,10 @@ part of 'token_obtain_pair.dart';
 
 TokenObtainPair _$TokenObtainPairFromJson(Map<String, dynamic> json) =>
     TokenObtainPair(
-      username: json['username'] as String,
-      password: json['password'] as String,
-      access: json['access'] as String,
-      refresh: json['refresh'] as String,
+      username: json['username'] as String?,
+      password: json['password'] as String?,
+      access: json['access'] as String?,
+      refresh: json['refresh'] as String?,
     );
 
 Map<String, dynamic> _$TokenObtainPairToJson(TokenObtainPair instance) =>
