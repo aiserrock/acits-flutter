@@ -36,8 +36,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  # Foundation packages (workspace members). Wired into the app in Step 7
-  # alongside chopper — additive, no feature migrated yet.
+  # Foundation packages (workspace members).
   localization:
     path: modules/base/localization
   util:
@@ -153,8 +152,8 @@ dependencies:
   firebase_analytics: ^12.4.3
 
   # In-app логи: Talker + экран логов (dev debug-меню) и BLoC-observer.
-  # talker_dio_logger НЕ нужен — основной клиент chopper (сетевой логгер —
-  # свой chopper-интерцептор в test/dev/).
+  # talker_dio_logger НЕ нужен: сетевой лог в dev даёт Alice-интерцептор
+  # (экран «HTTP») + LogInterceptor — см. test/dev/service/client/dio_register.dart.
   talker_flutter: ^5.1.16
   talker_bloc_logger: ^5.1.17
 
