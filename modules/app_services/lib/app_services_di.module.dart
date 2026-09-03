@@ -187,17 +187,17 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
       () => _i277.ConfigService(gh<_i995.SelectionApiPort>(), gh<_i397.AuthService>(), gh<_i614.PreferenceStorage>()),
     );
     gh.factory<_i20.ApplicantsShelterProvider>(() => _i14.AuthServiceApplicantsShelter(gh<_i397.AuthService>()));
-    gh.singleton<_i20.StaffService>(
-      () => applicantsRegister.staffService(gh<_i20.ApplicantsShelterProvider>(), gh<_i995.StaffApiPort>()),
-    );
     gh.factory<_i249.MediaShelterProvider>(() => _i428.AuthServiceMediaShelter(gh<_i397.AuthService>()));
     gh.factory<_i1007.PersonalShelterProvider>(() => _i118.AuthServicePersonalShelter(gh<_i397.AuthService>()));
     gh.factory<_i616.CurrentShelterProvider>(() => _i694.AuthServiceCurrentShelter(gh<_i397.AuthService>()));
     gh.factory<_i857.PrescriptionAnimalLoader>(
       () => _i68.AnimalRepositoryPrescriptionAnimalLoader(gh<_i616.AnimalRepository>(), gh<_i397.AuthService>()),
     );
-    gh.singleton<_i1007.PersonalService>(
-      () => personalRegister.personalService(gh<_i995.ProfileApiPort>(), gh<_i1007.PersonalShelterProvider>()),
+    gh.singleton<_i20.StaffRepository>(
+      () => applicantsRegister.staffRepository(gh<_i20.ApplicantsShelterProvider>(), gh<_i995.StaffApiPort>()),
+    );
+    gh.singleton<_i1007.PersonalRepository>(
+      () => personalRegister.personalRepository(gh<_i995.ProfileApiPort>(), gh<_i1007.PersonalShelterProvider>()),
     );
     gh.factory<_i857.PrescriptionsShelterProvider>(() => _i68.AuthServicePrescriptionsShelter(gh<_i397.AuthService>()));
     gh.factory<_i616.AnimalPermissions>(() => _i694.AuthServiceAnimalPermissions(gh<_i397.AuthService>()));
@@ -206,15 +206,19 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
     );
     gh.factory<_i857.PrescriptionTypeLabels>(() => _i68.ConfigServicePrescriptionTypeLabels(gh<_i277.ConfigService>()));
     gh.factory<_i616.AnimalStatusLabels>(() => _i694.ConfigServiceAnimalStatusLabels(gh<_i277.ConfigService>()));
-    gh.singleton<_i857.PrescriptionService>(
-      () => prescriptionsRegister.prescriptionService(
+    gh.singleton<_i857.PrescriptionRepository>(
+      () => prescriptionsRegister.prescriptionRepository(
         gh<_i995.PrescriptionApiPort>(),
         gh<_i857.PrescriptionsShelterProvider>(),
         gh<_i857.PrescriptionTypeLabels>(),
       ),
     );
-    gh.singleton<_i1007.CommentsService>(
-      () => personalRegister.commentsService(gh<_i995.AnimalNotesApiPort>(), gh<_i1007.PersonalShelterProvider>()),
+    gh.singleton<_i1007.CommentsRepository>(
+      () => personalRegister.commentsRepository(gh<_i995.AnimalNotesApiPort>(), gh<_i1007.PersonalShelterProvider>()),
+    );
+    gh.singleton<_i20.StaffService>(() => applicantsRegister.staffService(gh<_i20.StaffRepository>()));
+    gh.singleton<_i857.PrescriptionService>(
+      () => prescriptionsRegister.prescriptionService(gh<_i857.PrescriptionRepository>()),
     );
     gh.factory<_i249.SearchDeps>(
       () => mediaRegister.searchDeps(

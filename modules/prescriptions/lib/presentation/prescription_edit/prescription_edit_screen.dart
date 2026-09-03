@@ -10,14 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:prescriptions/data/data.dart';
 import 'package:prescriptions/domain/domain.dart';
 import 'package:prescriptions/presentation/presentation.dart';
 
 /// Экран создания и редактирования назначений
 class PrescriptionEditScreen extends StatelessWidget {
   const PrescriptionEditScreen({
-    required this.service,
+    required this.repository,
     required this.router,
     required this.animalLoader,
     required this.typeLabels,
@@ -29,7 +28,7 @@ class PrescriptionEditScreen extends StatelessWidget {
     super.key,
   });
 
-  final PrescriptionService service;
+  final PrescriptionRepository repository;
   final PrescriptionsRouterService router;
   final PrescriptionAnimalLoader animalLoader;
   final PrescriptionTypeLabels typeLabels;
@@ -48,7 +47,7 @@ class PrescriptionEditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => PrescriptionEditCubit(
-        service,
+        repository,
         router,
         animalLoader,
         typeLabels,

@@ -4,85 +4,82 @@ import 'package:applicants/applicants.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockStaffService extends Mock implements StaffService {}
+class MockStaffRepository extends Mock implements StaffRepository {}
 
 void main() {
-  late MockStaffService service;
+  late MockStaffRepository repository;
 
   setUpAll(() => registerFallbackValue(const Applicant(firstName: '', lastName: '', phoneNumber: '')));
 
-  setUp(() => service = MockStaffService());
+  setUp(() => repository = MockStaffRepository());
 
   const draft = Applicant(firstName: 'Grace', lastName: 'Hopper', phoneNumber: '+7');
   const loaded = Applicant(id: 7, firstName: 'Ada', lastName: 'Lovelace', phoneNumber: '+1');
 
   group('create mode (no id)', () {
     test('initial state is empty content, no load performed', () {
-      final cubit = ApplicantEditCubit(service);
+      final cubit = ApplicantEditCubit(repository);
       expect(cubit.isEdit, isFalse);
       expect(cubit.state, isA<DataContent<Applicant>>());
       expect(cubit.state.valueOrNull?.firstName, '');
-      verifyNever(() => service.fetchApplicantById(id: any(named: 'id')));
+      verifyNever(() => repository.getApplicantById(any()));
     });
 
     test('submit creates applicant and returns the saved entity', () async {
-      when(() => service.createApplicant(applicant: any(named: 'applicant'))).thenAnswer((_) async => draft);
-      final cubit = ApplicantEditCubit(service);
+      when(() => repository.createApplicant(any())).thenAnswer((_) async => const Ok(draft));
+      final cubit = ApplicantEditCubit(repository);
 
       final result = await cubit.submit(draft);
 
       expect(result, draft);
-      verify(() => service.createApplicant(applicant: draft)).called(1);
+      verify(() => repository.createApplicant(draft)).called(1);
       expect(cubit.state, isA<DataContent<Applicant>>());
     });
 
-    test('submit failure emits error and returns null', () async {
-      when(() => service.createApplicant(applicant: any(named: 'applicant'))).thenThrow(Exception('boom'));
-      final cubit = ApplicantEditCubit(service);
+    test('submit failure emits error with the Failure and returns null', () async {
+      when(() => repository.createApplicant(any())).thenAnswer((_) async => const Err(ServerFailure(500)));
+      final cubit = ApplicantEditCubit(repository);
 
       final result = await cubit.submit(draft);
 
       expect(result, isNull);
       expect(cubit.state, isA<DataError<Applicant>>());
+      expect((cubit.state as DataError<Applicant>).error, const ServerFailure(500));
     });
   });
 
   group('edit mode (id given)', () {
     test('loads applicant by id on construction', () async {
-      when(() => service.fetchApplicantById(id: 7)).thenAnswer((_) async => loaded);
-      final cubit = ApplicantEditCubit(service, applicantId: 7);
+      when(() => repository.getApplicantById(7)).thenAnswer((_) async => const Ok(loaded));
+      final cubit = ApplicantEditCubit(repository, applicantId: 7);
       expect(cubit.isEdit, isTrue);
 
       await Future<void>.delayed(Duration.zero);
 
       expect(cubit.state.valueOrNull, loaded);
-      verify(() => service.fetchApplicantById(id: 7)).called(1);
+      verify(() => repository.getApplicantById(7)).called(1);
     });
 
     test('submit updates applicant', () async {
-      when(() => service.fetchApplicantById(id: 7)).thenAnswer((_) async => loaded);
-      when(
-        () => service.updateApplicant(
-          id: any(named: 'id'),
-          applicant: any(named: 'applicant'),
-        ),
-      ).thenAnswer((_) async => loaded);
-      final cubit = ApplicantEditCubit(service, applicantId: 7);
+      when(() => repository.getApplicantById(7)).thenAnswer((_) async => const Ok(loaded));
+      when(() => repository.updateApplicant(any(), any())).thenAnswer((_) async => const Ok(loaded));
+      final cubit = ApplicantEditCubit(repository, applicantId: 7);
       await Future<void>.delayed(Duration.zero);
 
       final result = await cubit.submit(loaded);
 
       expect(result, loaded);
-      verify(() => service.updateApplicant(id: 7, applicant: loaded)).called(1);
+      verify(() => repository.updateApplicant(7, loaded)).called(1);
     });
 
     test('load failure emits error state', () async {
-      when(() => service.fetchApplicantById(id: 7)).thenThrow(Exception('boom'));
-      final cubit = ApplicantEditCubit(service, applicantId: 7);
+      when(() => repository.getApplicantById(7)).thenAnswer((_) async => const Err(NoInternet()));
+      final cubit = ApplicantEditCubit(repository, applicantId: 7);
 
       await Future<void>.delayed(Duration.zero);
 
       expect(cubit.state, isA<DataError<Applicant>>());
+      expect((cubit.state as DataError<Applicant>).error, isA<NoInternet>());
     });
   });
 }

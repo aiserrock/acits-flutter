@@ -1,2 +1,6 @@
-export 'comments_service.dart';
-export 'personal_service.dart';
+/// Data-слой модуля. Наружу отдаются только реализации репозиториев (для DI):
+/// мапперы принимают DTO в конструкторах и остаются внутренними — так DTO не
+/// проникают в публичный barrel модуля.
+library;
+
+export 'repository/repository.dart';

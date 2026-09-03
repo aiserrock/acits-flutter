@@ -5,6 +5,7 @@
 library;
 
 export 'domain/entity/animal.dart';
+export 'domain/entity/animal_attribute_definition.dart';
 export 'domain/entity/animal_sex.dart';
 export 'domain/exception/exception.dart';
 export 'domain/entity/applicant.dart';
@@ -14,7 +15,6 @@ export 'domain/entity/prescription.dart';
 export 'domain/entity/shelter.dart';
 export 'domain/mapper/transformable.dart';
 export 'domain/repository/animal_repository.dart';
-export 'domain/repository/prescription_repository.dart';
 export 'domain/router/router_service.dart';
 
 // Re-export Result/Failure so features get them from the domain barrel.

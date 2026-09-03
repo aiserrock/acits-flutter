@@ -1,5 +1,5 @@
 name: prescriptions
-description: Prescriptions + drugs feature module — today executions, prescription edit/animal tabs, drug search, and the PrescriptionService application service on top of the stable PrescriptionApiPort.
+description: Prescriptions + drugs feature module — today executions, prescription edit/animal tabs, drug search, and the Result-returning PrescriptionRepository on top of the stable PrescriptionApiPort.
 publish_to: "none"
 version: 0.1.0
 

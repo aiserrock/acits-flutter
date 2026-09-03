@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:prescriptions/data/data.dart';
 import 'package:prescriptions/domain/domain.dart';
 import 'package:prescriptions/presentation/presentation.dart';
 import 'package:prescriptions/util/util.dart';
@@ -26,12 +25,13 @@ const _shiftLastStartDate = Duration(days: 120);
 /// bottom-sheet дозировки). UI-контроллеры ([TabController],
 /// [TextEditingController]) остаются во [StatefulWidget] экрана.
 ///
-/// Зависимости инъектятся через конструктор: сервис назначений, порт навигации
-/// (поиск животного/препарата), порт загрузки животного (мостится к
-/// `AnimalRepository`), порт имён типов и ключ ScaffoldMessenger приложения.
+/// Зависимости инъектятся через конструктор: репозиторий назначений
+/// ([Result], без DTO), порт навигации (поиск животного/препарата), порт
+/// загрузки животного (мостится к `AnimalRepository`), порт имён типов и ключ
+/// ScaffoldMessenger приложения.
 class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
   PrescriptionEditCubit(
-    this._prescriptionService,
+    this._repository,
     this._router,
     this._animalLoader,
     this._typeLabels,
@@ -61,7 +61,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
 
   final int? editPrescriptionId;
   final Prescription? editPrescription;
-  final PrescriptionService _prescriptionService;
+  final PrescriptionRepository _repository;
   final PrescriptionsRouterService _router;
   final PrescriptionAnimalLoader _animalLoader;
   final PrescriptionTypeLabels _typeLabels;
@@ -109,18 +109,19 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     );
 
     safeEmit(state.copyWith(screen: const DataState.loading()));
-    try {
-      final result = isEdit
-          ? await _prescriptionService.updatePrescription(data)
-          : await _prescriptionService.createPrescription(data);
-      Log.info('PrescriptionEditCubit.submit ok: id=${result.id}');
-      safeEmit(state.copyWith(screen: DataState.content(result)));
-      return result;
-    } catch (e, s) {
-      Log.error('PrescriptionEditCubit.submit failed', e, s);
-      safeEmit(state.copyWith(screen: DataState.error(e)));
-      return null;
-    }
+    final result = isEdit ? await _repository.update(data) : await _repository.create(data);
+    return result.fold(
+      (failure) {
+        Log.error('PrescriptionEditCubit.submit failed', failure);
+        safeEmit(state.copyWith(screen: DataState.error(failure)));
+        return null;
+      },
+      (prescription) {
+        Log.info('PrescriptionEditCubit.submit ok: id=${prescription.id}');
+        safeEmit(state.copyWith(screen: DataState.content(prescription)));
+        return prescription;
+      },
+    );
   }
 
   List<PrescriptionType> getTypes() => _filteredTypes;
@@ -164,12 +165,12 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     if (editPrescription != null) {
       prescription = editPrescription;
     } else if (id != null) {
-      try {
-        prescription = await _prescriptionService.fetchPrescriptionById(id);
-      } catch (e, s) {
-        Log.error('PrescriptionEditCubit.setEditedState failed', e, s);
-        safeEmit(state.copyWith(screen: DataState.error(e)));
-      }
+      final result = await _repository.getById(id);
+      prescription = result.fold((failure) {
+        Log.error('PrescriptionEditCubit.setEditedState failed', failure);
+        safeEmit(state.copyWith(screen: DataState.error(failure)));
+        return null;
+      }, (value) => value);
     }
 
     if (prescription == null) return null;

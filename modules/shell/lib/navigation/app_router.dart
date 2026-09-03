@@ -11,11 +11,11 @@ import 'package:prescriptions/prescriptions.dart'
         PrescriptionAnimalLoader,
         PrescriptionAnimalRef,
         PrescriptionEditScreen,
-        PrescriptionService,
+        PrescriptionRepository,
         PrescriptionTypeLabels,
         PrescriptionsRouterService;
 import 'package:personal/personal.dart'
-    show AnimalNote, CommentEditScreen, CommentsService, PersonalScreen, PersonalService;
+    show AnimalNote, CommentEditScreen, CommentsRepository, PersonalRepository, PersonalScreen;
 import 'package:app_services/app_services.dart' show DebugService;
 import 'package:di/di.dart';
 import 'package:shell/navigation/auth_screen_bindings.dart';
@@ -104,21 +104,21 @@ GoRouter createAppRouter() {
       GoRoute(
         path: AppRoutes.applicantEdit,
         builder: (context, state) => ApplicantEditScreen(
-          staffService: getIt<StaffService>(),
+          staffRepository: getIt<StaffRepository>(),
           applicantId: int.tryParse(state.uri.queryParameters['applicantId'] ?? ''),
         ),
       ),
       GoRoute(
         path: AppRoutes.curatorEdit,
         builder: (context, state) => CuratorEditScreen(
-          staffService: getIt<StaffService>(),
+          staffRepository: getIt<StaffRepository>(),
           curatorId: int.tryParse(state.uri.queryParameters['curatorId'] ?? ''),
         ),
       ),
       GoRoute(
         path: AppRoutes.commentEdit,
         builder: (context, state) => CommentEditScreen(
-          service: getIt<CommentsService>(),
+          repository: getIt<CommentsRepository>(),
           animalId: int.parse(state.pathParameters['animalId']!),
           comment: state.extra as AnimalNote?,
         ),
@@ -128,7 +128,7 @@ GoRouter createAppRouter() {
         builder: (context, state) {
           final extra = state.extra as Map<String, Object?>?;
           return PrescriptionEditScreen(
-            service: getIt<PrescriptionService>(),
+            repository: getIt<PrescriptionRepository>(),
             router: getIt<PrescriptionsRouterService>(),
             animalLoader: getIt<PrescriptionAnimalLoader>(),
             typeLabels: getIt<PrescriptionTypeLabels>(),
@@ -164,7 +164,7 @@ GoRouter createAppRouter() {
       GoRoute(
         path: AppRoutes.personal,
         builder: (context, state) => PersonalScreen(
-          service: getIt<PersonalService>(),
+          repository: getIt<PersonalRepository>(),
           isChangePass: state.uri.queryParameters['changePass'] == 'true',
         ),
       ),

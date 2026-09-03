@@ -3,6 +3,7 @@ import 'package:applicants/applicants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:util/util.dart';
 
 class MockStaffApiPort extends Mock implements StaffApiPort {}
 
@@ -38,19 +39,20 @@ CuratorDto _curatorDto() => CuratorDto(
   updatedAt: DateTime.utc(2024),
 );
 
-DioException _dioError() => DioException(
+DioException _dioError({int statusCode = 400}) => DioException(
   requestOptions: RequestOptions(path: '/'),
+  type: DioExceptionType.badResponse,
   response: Response(
     requestOptions: RequestOptions(path: '/'),
     data: 'boom',
-    statusCode: 400,
+    statusCode: statusCode,
   ),
 );
 
 void main() {
   late MockStaffApiPort port;
   late MockShelterProvider shelter;
-  late StaffService service;
+  late StaffRepository repository;
 
   setUpAll(() {
     registerFallbackValue(const ApplicantWriteDto(firstName: '', lastName: '', phoneNumber: ''));
@@ -61,11 +63,11 @@ void main() {
     port = MockStaffApiPort();
     shelter = MockShelterProvider();
     when(() => shelter.shelterId).thenReturn(50);
-    service = StaffService(shelter, port);
+    repository = StaffRepositoryImpl(shelter, port);
   });
 
   group('applicants', () {
-    test('fetchApplicants maps DTO→domain entity', () async {
+    test('listApplicants maps DTO→domain entity inside Ok', () async {
       when(
         () => port.listApplicants(
           search: any(named: 'search'),
@@ -75,8 +77,10 @@ void main() {
         ),
       ).thenAnswer((_) async => [_applicantDto()]);
 
-      final list = await service.fetchApplicants(searchRequest: 'g');
+      final result = await repository.listApplicants(searchRequest: 'g');
 
+      expect(result.isOk, isTrue);
+      final list = result.valueOrNull!;
       expect(list, hasLength(1));
       expect(list.single, isA<Applicant>());
       expect(list.single.id, 7);
@@ -89,17 +93,18 @@ void main() {
         () => port.createApplicant(any(), shelterId: any(named: 'shelterId')),
       ).thenAnswer((_) async => _applicantDto());
 
-      await service.createApplicant(
-        applicant: const Applicant(firstName: 'Grace', lastName: 'Hopper', phoneNumber: '+7'),
+      final result = await repository.createApplicant(
+        const Applicant(firstName: 'Grace', lastName: 'Hopper', phoneNumber: '+7'),
       );
 
+      expect(result.isOk, isTrue);
       final captured =
           verify(() => port.createApplicant(captureAny(), shelterId: 50)).captured.single as ApplicantWriteDto;
       expect(captured.firstName, 'Grace');
       expect(captured.shelter, 50);
     });
 
-    test('fetchApplicants wraps DioException into MessagedException', () async {
+    test('listApplicants maps a bad-response DioException to Err(ServerFailure)', () async {
       when(
         () => port.listApplicants(
           search: any(named: 'search'),
@@ -109,12 +114,24 @@ void main() {
         ),
       ).thenThrow(_dioError());
 
-      expect(service.fetchApplicants(), throwsA(isA<MessagedException>()));
+      final result = await repository.listApplicants();
+
+      expect(result.isErr, isTrue);
+      expect(result.failureOrNull, isA<ServerFailure>());
+      expect((result.failureOrNull! as ServerFailure).code, 400);
+    });
+
+    test('getApplicantById maps a 401 to Err(AuthFailure)', () async {
+      when(() => port.getApplicant(any(), shelterId: any(named: 'shelterId'))).thenThrow(_dioError(statusCode: 401));
+
+      final result = await repository.getApplicantById(7);
+
+      expect(result.failureOrNull, isA<AuthFailure>());
     });
   });
 
   group('curators', () {
-    test('fetchCurators maps DTO→domain entity', () async {
+    test('listCurators maps DTO→domain entity inside Ok', () async {
       when(
         () => port.listCurators(
           search: any(named: 'search'),
@@ -124,11 +141,13 @@ void main() {
         ),
       ).thenAnswer((_) async => [_curatorDto()]);
 
-      final list = await service.fetchCurators();
+      final result = await repository.listCurators();
 
-      expect(list.single, isA<Curator>());
-      expect(list.single.address, 'London');
-      expect(list.single.fullName, 'Ada Lovelace');
+      expect(result.isOk, isTrue);
+      final curator = result.valueOrNull!.single;
+      expect(curator, isA<Curator>());
+      expect(curator.address, 'London');
+      expect(curator.fullName, 'Ada Lovelace');
     });
 
     test('updateCurator sends the id + shelter as string', () async {
@@ -136,16 +155,65 @@ void main() {
         () => port.updateCurator(any(), any(), shelterId: any(named: 'shelterId')),
       ).thenAnswer((_) async => _curatorDto());
 
-      await service.updateCurator(
-        id: 9,
-        curator: const Curator(id: 9, firstName: 'Ada', lastName: 'Lovelace', phoneNumber: '+7', address: 'London'),
+      final result = await repository.updateCurator(
+        9,
+        const Curator(id: 9, firstName: 'Ada', lastName: 'Lovelace', phoneNumber: '+7', address: 'London'),
       );
 
+      expect(result.isOk, isTrue);
       final captured =
           verify(() => port.updateCurator(9, captureAny(), shelterId: 50)).captured.single as CuratorWriteDto;
       expect(captured.id, 9);
       expect(captured.shelter, '50');
       expect(captured.address, 'London');
+    });
+
+    test('createCurator maps a connection error to Err(NoInternet)', () async {
+      when(() => port.createCurator(any(), shelterId: any(named: 'shelterId'))).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: '/'),
+          type: DioExceptionType.connectionError,
+        ),
+      );
+
+      final result = await repository.createCurator(
+        const Curator(firstName: 'Ada', lastName: 'Lovelace', phoneNumber: '+7', address: 'London'),
+      );
+
+      expect(result.failureOrNull, isA<NoInternet>());
+    });
+  });
+
+  group('StaffService thin wrapper (media search adapter)', () {
+    test('fetchApplicants unwraps Ok to a plain list', () async {
+      when(
+        () => port.listApplicants(
+          search: any(named: 'search'),
+          limit: any(named: 'limit'),
+          offset: any(named: 'offset'),
+          shelterId: any(named: 'shelterId'),
+        ),
+      ).thenAnswer((_) async => [_applicantDto()]);
+
+      final list = await StaffService(repository).fetchApplicants(searchRequest: 'g');
+
+      expect(list, hasLength(1));
+      expect(list.single.id, 7);
+    });
+
+    test('fetchCurators returns an empty list on failure', () async {
+      when(
+        () => port.listCurators(
+          search: any(named: 'search'),
+          limit: any(named: 'limit'),
+          offset: any(named: 'offset'),
+          shelterId: any(named: 'shelterId'),
+        ),
+      ).thenThrow(_dioError());
+
+      final list = await StaffService(repository).fetchCurators();
+
+      expect(list, isEmpty);
     });
   });
 }

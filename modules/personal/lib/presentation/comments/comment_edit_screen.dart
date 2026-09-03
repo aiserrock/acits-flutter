@@ -8,23 +8,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:personal/data/data.dart';
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/comments/comments.dart';
 
 const _allowedFileAttachExtensions = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'];
 
 class CommentEditScreen extends StatelessWidget {
-  const CommentEditScreen({required this.service, required this.animalId, this.comment, super.key});
+  const CommentEditScreen({required this.repository, required this.animalId, this.comment, super.key});
 
-  final CommentsService service;
+  final CommentsRepository repository;
   final int animalId;
   final AnimalNote? comment;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CommentEditCubit(service: service, animalId: animalId, comment: comment),
+      create: (_) => CommentEditCubit(repository: repository, animalId: animalId, comment: comment),
       child: const _CommentEditView(),
     );
   }
@@ -188,14 +187,15 @@ class _CommentEditViewState extends State<_CommentEditView> {
 
   Future<void> _onSubmit(BuildContext context) async {
     final cubit = context.read<CommentEditCubit>();
-    try {
-      final comment = await cubit.submit(_textController.text);
-      if (!mounted) return;
-      Navigator.of(context).pop(comment);
-    } catch (_) {
-      if (!mounted) return;
+    // Cubit возвращает null при ошибке (раньше — пробрасывал исключение);
+    // сообщение пользователю остаётся прежним.
+    final comment = await cubit.submit(_textController.text);
+    if (!mounted) return;
+    if (comment == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(LocaleKeys.commonErrorTryAgainMessage.tr())));
+      return;
     }
+    Navigator.of(context).pop(comment);
   }
 
   Future<void> _pickFile() async {
