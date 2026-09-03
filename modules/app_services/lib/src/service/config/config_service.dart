@@ -28,12 +28,12 @@ class ConfigService implements AuthConfigInitializer {
 
   final _prescriptionTypeNames = <String, String?>{};
   final _animalStatusNames = <String, String?>{};
-  List<AttributeDto>? _animalAttributes;
+  List<AnimalAttributeDefinition>? _animalAttributes;
   int? _animalAttributesShelterId;
 
   Map<String, dynamic>? get typeValues => _typeValues != null ? Map<String, dynamic>.from(_typeValues!) : null;
 
-  List<AttributeDto>? get animalAttributes => _animalAttributes;
+  List<AnimalAttributeDefinition>? get animalAttributes => _animalAttributes;
 
   @override
   Future<void> initConfig({int? currentShelterId}) async {
@@ -60,7 +60,7 @@ class ConfigService implements AuthConfigInitializer {
     }
   }
 
-  Future<List<AttributeDto>> getAnimalAttr({int? currentShelterId}) async {
+  Future<List<AnimalAttributeDefinition>> getAnimalAttr({int? currentShelterId}) async {
     final shelterId = currentShelterId ?? _authService.currentShelterId;
     Log.debug('Get animal attributes: shelterId=$shelterId');
     if (_animalAttributes != null && _animalAttributesShelterId == shelterId) {
@@ -69,7 +69,7 @@ class ConfigService implements AuthConfigInitializer {
     }
     try {
       final result = await _port.animalAttributes(shelterId: shelterId);
-      _animalAttributes = result;
+      _animalAttributes = result.map(_toDefinition).toList(growable: false);
       _animalAttributesShelterId = shelterId;
       Log.info('Animal attributes loaded: count=${_animalAttributes!.length}');
       return _animalAttributes!;
@@ -78,6 +78,9 @@ class ConfigService implements AuthConfigInitializer {
       throw MessagedException(error: _errorText(e));
     }
   }
+
+  static AnimalAttributeDefinition _toDefinition(AttributeDto d) =>
+      AnimalAttributeDefinition(id: d.id, name: d.name, isRequired: d.isRequired ?? false);
 
   /// Человекочитаемое имя типа назначения по его wire-значению (из серверного
   /// конфига). Принимает wire-строку — enum'ы генератора здесь больше не нужны.

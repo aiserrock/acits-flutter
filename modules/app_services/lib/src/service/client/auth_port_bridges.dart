@@ -30,10 +30,7 @@ class AuthServiceTokenRefresher implements TokenRefresher {
   const AuthServiceTokenRefresher();
 
   @override
-  Future<String?> refresh() async {
-    final result = await getIt<AuthService>().refreshToken();
-    return result?.access;
-  }
+  Future<String?> refresh() => getIt<AuthService>().refreshToken();
 }
 
 /// Инвалидирует сессию через [AuthService.logout].
