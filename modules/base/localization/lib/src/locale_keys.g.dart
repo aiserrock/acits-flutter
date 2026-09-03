@@ -102,9 +102,15 @@ abstract class  LocaleKeys {
   static const commonYear = 'commonYear';
   static const curatorAdd = 'curatorAdd';
   static const curatorEdit = 'curatorEdit';
+  static const errorAuthFail = 'errorAuthFail';
+  static const errorAuthFailMsg = 'errorAuthFailMsg';
   static const errorDefaultMsg = 'errorDefaultMsg';
   static const errorInternetFail = 'errorInternetFail';
   static const errorInternetFailMsg = 'errorInternetFailMsg';
+  static const errorServerFail = 'errorServerFail';
+  static const errorServerFailMsg = 'errorServerFailMsg';
+  static const errorTimeoutFail = 'errorTimeoutFail';
+  static const errorTimeoutFailMsg = 'errorTimeoutFailMsg';
   static const loginAuthorizeError = 'loginAuthorizeError';
   static const loginDescribeMsg = 'loginDescribeMsg';
   static const loginEntryBtn = 'loginEntryBtn';

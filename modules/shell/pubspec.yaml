@@ -81,6 +81,8 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   injectable_generator: ^3.0.0
   build_runner: ^2.4.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.5
 
 # NOTE: the app's flutter_gen assets (`lib/gen/assets.gen.dart`) are moved into
 # this package as a plain Dart file that references bare `assets/...` paths with

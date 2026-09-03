@@ -19,6 +19,11 @@ dependencies:
   dio: ^5.9.2
   flutter_svg: ^2.2.4
 
+  # Для Failure — типизированные ошибки, которые ErrorHolderWidget превращает в
+  # человекочитаемый текст. util — низ графа, цикла нет.
+  util:
+    path: ../base/util
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
