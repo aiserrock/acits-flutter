@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:core/api.dart';
+import 'package:core/data.dart';
 import 'package:util/util.dart';
-import 'package:dio/dio.dart';
 
 import 'package:animals/data/data.dart';
 import 'package:animals/domain/domain.dart';
@@ -163,35 +163,5 @@ class AnimalRepositoryImpl implements AnimalRepository {
   );
 
   /// Единая точка: сеть/парсинг-ошибки → типизированный [Failure].
-  Future<Result<Failure, T>> _guard<T>(Future<T> Function() body) async {
-    try {
-      return Ok(await body());
-    } on DioException catch (e) {
-      return Err(_mapDioException(e));
-    } on FormatException {
-      return const Err(ParseFailure());
-    } catch (_) {
-      return const Err(UnknownFailure());
-    }
-  }
-
-  Failure _mapDioException(DioException e) {
-    switch (e.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-      case DioExceptionType.transformTimeout:
-        return const Timeout();
-      case DioExceptionType.connectionError:
-        return const NoInternet();
-      case DioExceptionType.badResponse:
-        final code = e.response?.statusCode;
-        if (code == 401 || code == 403) return const AuthFailure();
-        return ServerFailure(code ?? 0, e.response?.statusMessage);
-      case DioExceptionType.badCertificate:
-      case DioExceptionType.cancel:
-      case DioExceptionType.unknown:
-        return const UnknownFailure();
-    }
-  }
+  Future<Result<Failure, T>> _guard<T>(Future<T> Function() body) => guard(body);
 }
