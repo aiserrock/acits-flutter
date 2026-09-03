@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prescriptions/prescriptions.dart' show PrescriptionService;
+import 'package:prescriptions/prescriptions.dart' show PrescriptionRepository;
 
 import 'package:di/di.dart';
 import 'package:shell/presentation/common/sort/sort_preset.dart';
@@ -18,11 +18,11 @@ const _searchDebounce = Duration(milliseconds: 300);
 /// запросе (`search` + `ordering`). UI-контроллеры (TextEditingController)
 /// остаются во [StatefulWidget] экрана.
 class MainCubit extends Cubit<MainState> {
-  MainCubit() : _prescriptionService = getIt.get<PrescriptionService>(), super(MainState()) {
+  MainCubit() : _repository = getIt.get<PrescriptionRepository>(), super(MainState()) {
     loadExecutions();
   }
 
-  final PrescriptionService _prescriptionService;
+  final PrescriptionRepository _repository;
 
   /// Таймер debounce для поля поиска.
   Timer? _searchDebounceTimer;
@@ -41,22 +41,24 @@ class MainCubit extends Cubit<MainState> {
     _requestGen++;
     final gen = _requestGen;
     safeEmit(state.copyWith(data: const DataState.loading()));
-    try {
-      final value = await _prescriptionService.fetchTodayPrescriptionList(
-        search: state.searchRequest.isEmpty ? null : state.searchRequest,
-        ordering: state.activeSort.ordering,
-      );
-      if (gen != _requestGen) {
-        Log.debug('MainCubit.loadExecutions: stale response gen=$gen cur=$_requestGen, skip');
-        return;
-      }
-      Log.info('MainCubit.loadExecutions ok: count=${value.length}');
-      safeEmit(state.copyWith(data: DataState.content(value)));
-    } catch (e, s) {
-      if (gen != _requestGen) return;
-      Log.error('MainCubit.loadExecutions failed', e, s);
-      safeEmit(state.copyWith(data: DataState.error(e)));
+    final result = await _repository.listTodayExecutions(
+      search: state.searchRequest.isEmpty ? null : state.searchRequest,
+      ordering: state.activeSort.ordering,
+    );
+    if (gen != _requestGen) {
+      Log.debug('MainCubit.loadExecutions: stale response gen=$gen cur=$_requestGen, skip');
+      return;
     }
+    result.fold(
+      (failure) {
+        Log.error('MainCubit.loadExecutions failed', failure);
+        safeEmit(state.copyWith(data: DataState.error(failure)));
+      },
+      (value) {
+        Log.info('MainCubit.loadExecutions ok: count=${value.length}');
+        safeEmit(state.copyWith(data: DataState.content(value)));
+      },
+    );
   }
 
   /// Переключить режим поиска. При выключении сбрасывает запрос и перезагружает.
