@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:util/util.dart';
 
 import '../../gen/assets.gen.dart';
 import '../components/primary_button.dart';
@@ -66,7 +67,19 @@ class ErrorHolderWidget extends StatelessWidget {
 
 extension _ErrorX on Object {
   String get title {
-    if (this is DioException) {
+    // Repositories surface a typed Failure; raw exceptions still reach here from
+    // the paths that have not moved behind a repository yet.
+    final self = this;
+    if (self is Failure) {
+      return switch (self) {
+        NoInternet() => 'errorInternetFail'.tr(),
+        Timeout() => 'errorTimeoutFail'.tr(),
+        ServerFailure() => 'errorServerFail'.tr(),
+        AuthFailure() => 'errorAuthFail'.tr(),
+        ParseFailure() || UnknownFailure() => 'commonError'.tr(),
+      };
+    }
+    if (self is DioException) {
       return 'errorInternetFail'.tr();
     }
     switch (runtimeType) {
@@ -78,7 +91,17 @@ extension _ErrorX on Object {
   }
 
   String get message {
-    if (this is DioException) {
+    final self = this;
+    if (self is Failure) {
+      return switch (self) {
+        NoInternet() => 'errorInternetFailMsg'.tr(),
+        Timeout() => 'errorTimeoutFailMsg'.tr(),
+        ServerFailure() => 'errorServerFailMsg'.tr(),
+        AuthFailure() => 'errorAuthFailMsg'.tr(),
+        ParseFailure() || UnknownFailure() => 'errorDefaultMsg'.tr(),
+      };
+    }
+    if (self is DioException) {
       return 'errorInternetFail'.tr();
     }
     switch (runtimeType) {
