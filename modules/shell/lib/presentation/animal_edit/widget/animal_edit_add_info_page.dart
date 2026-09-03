@@ -284,7 +284,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with Anim
       if (value.isEmpty) return;
       final def = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull((e) => e.name == name);
       if (def == null) return;
-      attr.add(AnimalAttributeInput(attrId: def.id, isRequired: def.isRequired ?? false, name: def.name, value: value));
+      attr.add(AnimalAttributeInput(attrId: def.id, isRequired: def.isRequired, name: def.name, value: value));
     }
 
     addAttr('sex', _sexController.text);

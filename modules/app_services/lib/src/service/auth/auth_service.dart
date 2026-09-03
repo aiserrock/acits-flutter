@@ -56,7 +56,10 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
 
   Shelter? get currentShelter => _shelterList.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
-  Future<TokenRefreshDto?> refreshToken({String? refresh}) async {
+  /// Обновляет пару токенов и возвращает новый access (null — обновить не
+  /// удалось). Наружу отдаётся строка, а не DTO: транспортные типы дальше
+  /// этого сервиса не идут.
+  Future<String?> refreshToken({String? refresh}) async {
     final usedRefresh = refresh ?? _refresh;
     try {
       final result = await _authApi.refresh(usedRefresh, _access);
@@ -69,7 +72,7 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
       final newRefresh = result.refresh ?? usedRefresh;
       if (newRefresh != null && newRefresh != _refresh) _refresh = newRefresh;
       Log.info('Token refreshed');
-      return result;
+      return result.access;
     } on DioException catch (e) {
       Log.warning('Token refresh failed (status=${e.response?.statusCode})');
       return null;
@@ -77,14 +80,13 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
   }
 
   @override
-  Future<TokenPairDto?> login(String? login, String? pass) async {
+  Future<void> login(String? login, String? pass) async {
     Log.info('Login attempt: username=$login');
     try {
       final result = await _authApi.login(login ?? '', pass ?? '');
       _access = result.access;
       _refresh = result.refresh;
       Log.info('Login success: username=$login');
-      return result;
     } on DioException catch (e) {
       Log.warning('Login failed (status=${e.response?.statusCode}): username=$login');
       final message = _errorBody(e)?.toString();

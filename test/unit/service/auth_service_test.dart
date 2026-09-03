@@ -65,10 +65,9 @@ void main() {
   });
 
   group('login', () {
-    test('stores tokens and returns pair on success', () async {
+    test('stores tokens on success', () async {
       when(() => api.login('u', 'p')).thenAnswer((_) async => const TokenPairDto(access: 'a', refresh: 'r'));
-      final result = await service.login('u', 'p');
-      expect(result?.access, 'a');
+      await service.login('u', 'p');
       expect(service.access, 'a');
     });
 
