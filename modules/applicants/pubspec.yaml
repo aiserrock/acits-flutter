@@ -1,5 +1,5 @@
 name: applicants
-description: Applicants + curators (staff) feature module — edit screens, their cubits, and the StaffService application service on top of the stable StaffApiPort.
+description: Applicants + curators (staff) feature module — edit screens, their cubits, and the StaffRepository on top of the stable StaffApiPort.
 publish_to: "none"
 version: 0.1.0
 

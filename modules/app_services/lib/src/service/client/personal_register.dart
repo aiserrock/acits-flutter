@@ -7,19 +7,20 @@ import 'package:personal/personal.dart';
 import 'package:app_services/src/service/auth/auth_service.dart';
 import 'package:app_services/src/service/file/file_service.dart';
 
-/// DI-модуль фичи «Личный кабинет / комментарии»: собирает [PersonalService]
-/// (поверх [ProfileApiPort]) и [CommentsService] (поверх [AnimalNotesApiPort]) и
-/// мостит порты модуля к сервисам приложения (приют + разлогин, загрузка файла).
-/// Зеркалит паттерн applicants_register.dart / prescriptions_register.dart.
+/// DI-модуль фичи «Личный кабинет / комментарии»: собирает [PersonalRepository]
+/// (поверх [ProfileApiPort]) и [CommentsRepository] (поверх
+/// [AnimalNotesApiPort]) и мостит порты модуля к сервисам приложения (приют +
+/// разлогин, загрузка файла). Зеркалит паттерн applicants_register.dart /
+/// prescriptions_register.dart.
 @module
 abstract class PersonalRegister {
   @singleton
-  PersonalService personalService(ProfileApiPort port, PersonalShelterProvider shelterProvider) =>
-      PersonalService(port, shelterProvider);
+  PersonalRepository personalRepository(ProfileApiPort port, PersonalShelterProvider shelterProvider) =>
+      PersonalRepositoryImpl(port, shelterProvider);
 
   @singleton
-  CommentsService commentsService(AnimalNotesApiPort port, PersonalShelterProvider shelterProvider) =>
-      CommentsService(port, shelterProvider);
+  CommentsRepository commentsRepository(AnimalNotesApiPort port, PersonalShelterProvider shelterProvider) =>
+      CommentsRepositoryImpl(port, shelterProvider);
 }
 
 /// Текущий приют + сигнал разлогина из [AuthService] для скоупинга запросов

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:animals/animals.dart';
 import 'package:personal/personal.dart'
-    show AnimalNote, CommentFileOpener, CommentListWidget, CommentsService, PersonalRouterService;
+    show AnimalNote, CommentFileOpener, CommentListWidget, CommentsRepository, PersonalRouterService;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +17,12 @@ import 'package:shell/src/shell_exports.dart';
 import 'package:app_services/app_services.dart';
 import 'package:shell/presentation/animal_detail/animal_content_card.dart';
 import 'package:prescriptions/prescriptions.dart'
-    show AnimalPrescriptionCard, AnimalPrescriptionsCubit, AnimalPrescriptionsState, Prescription, PrescriptionService;
+    show
+        AnimalPrescriptionCard,
+        AnimalPrescriptionsCubit,
+        AnimalPrescriptionsState,
+        Prescription,
+        PrescriptionRepository;
 import 'package:shell/widget/shimmer_network_image.dart';
 import 'package:shell/widget/error_stub.dart';
 
@@ -48,15 +53,15 @@ class AnimalDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Животное грузится модульным cubit'ом (богатая сущность через репозиторий,
-    // Result — без DTO). Назначения — отдельная фича, ещё на chopper; её cubit
-    // остаётся в корне (strangler-граница). Комментарии — тоже chopper (свой
-    // виджет). См. animal_prescriptions_cubit.dart.
+    // Result — без DTO). Назначения — отдельная фича со своим репозиторием
+    // (тоже Result); её cubit живёт в модуле prescriptions и провайдится здесь.
+    // См. animal_prescriptions_cubit.dart.
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (_) => AnimalDetailCubit(getIt<AnimalRepository>(), getIt<CurrentShelterProvider>(), id: id),
         ),
-        BlocProvider(create: (_) => AnimalPrescriptionsCubit(getIt<PrescriptionService>(), animalId: id)),
+        BlocProvider(create: (_) => AnimalPrescriptionsCubit(getIt<PrescriptionRepository>(), animalId: id)),
       ],
       child: _AnimalDetailView(id: id),
     );
@@ -425,7 +430,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       default:
         return CommentListWidget(
           animal.id,
-          service: getIt<CommentsService>(),
+          repository: getIt<CommentsRepository>(),
           router: getIt<PersonalRouterService>(),
           fileOpener: getIt<CommentFileOpener>(),
           scrollController: _scrollController,

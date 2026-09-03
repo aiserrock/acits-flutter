@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:personal/data/data.dart';
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/comments/comments.dart';
 import 'package:personal/util/util.dart';
@@ -11,23 +10,24 @@ import 'package:personal/util/util.dart';
 /// Cubit экрана списка комментариев к животному.
 ///
 /// Владеет состоянием списка [DataState], пагинацией (offset) и логикой
-/// добавления/редактирования/удаления комментариев. Подписывается на внешний
-/// поток создания комментариев ([onCreateCommentStream]) и отменяет подписку
-/// в [close] — устраняет утечку, при которой обработчик дописывал в уже
+/// добавления/редактирования/удаления комментариев. Данные — доменные
+/// [AnimalNote] из [CommentsRepository] (Result, без DTO). Подписывается на
+/// внешний поток создания комментариев ([onCreateCommentStream]) и отменяет
+/// подписку в [close] — устраняет утечку, при которой обработчик дописывал в уже
 /// закрытый subject после dispose. ScrollController остаётся во
 /// [StatefulWidget] экрана.
 class CommentListCubit extends Cubit<CommentListState> {
   CommentListCubit({
-    required CommentsService service,
+    required CommentsRepository repository,
     required this.animalId,
     Stream<AnimalNote>? onCreateCommentStream,
-  }) : _service = service,
+  }) : _repository = repository,
        super(const CommentListState()) {
     _createCommentSub = onCreateCommentStream?.listen(_onCreateComment);
     _init();
   }
 
-  final CommentsService _service;
+  final CommentsRepository _repository;
 
   /// ID животного, к которому относятся комментарии.
   final int animalId;
@@ -56,14 +56,17 @@ class CommentListCubit extends Cubit<CommentListState> {
   Future<void> _init() async {
     Log.debug('CommentListCubit.init animalId=$animalId');
     safeEmit(state.copyWith(data: const DataState.loading()));
-    try {
-      final results = await _service.fetchAnimalNotes(animalId);
-      Log.info('CommentListCubit.init ok: count=${results.length}');
-      safeEmit(state.copyWith(data: DataState.content(_sorted(results))));
-    } catch (e, s) {
-      Log.error('CommentListCubit.init failed', e, s);
-      safeEmit(state.copyWith(data: DataState.error(e)));
-    }
+    final result = await _repository.listByAnimal(animalId);
+    result.fold(
+      (failure) {
+        Log.error('CommentListCubit.init failed: $failure');
+        safeEmit(state.copyWith(data: DataState.error(failure)));
+      },
+      (results) {
+        Log.info('CommentListCubit.init ok: count=${results.length}');
+        safeEmit(state.copyWith(data: DataState.content(_sorted(results))));
+      },
+    );
   }
 
   /// Догрузить следующую страницу комментариев (infinite scroll).
@@ -72,15 +75,18 @@ class CommentListCubit extends Cubit<CommentListState> {
     if (current == null || state.page.isLoading) return;
     Log.debug('CommentListCubit.loadNextPage animalId=$animalId offset=${current.length}');
     safeEmit(state.copyWith(page: const DataState.loading()));
-    try {
-      final value = await _service.fetchAnimalNotes(animalId, offset: current.length);
-      final newList = <AnimalNote>[...current, ...value];
-      Log.info('CommentListCubit.loadNextPage ok: count=${newList.length}');
-      safeEmit(state.copyWith(data: DataState.content(_sorted(newList)), page: const DataState.content(null)));
-    } catch (e, s) {
-      Log.error('CommentListCubit.loadNextPage failed', e, s);
-      safeEmit(state.copyWith(page: DataState.error(e)));
-    }
+    final result = await _repository.listByAnimal(animalId, offset: current.length);
+    result.fold(
+      (failure) {
+        Log.error('CommentListCubit.loadNextPage failed: $failure');
+        safeEmit(state.copyWith(page: DataState.error(failure)));
+      },
+      (value) {
+        final newList = <AnimalNote>[...current, ...value];
+        Log.info('CommentListCubit.loadNextPage ok: count=${newList.length}');
+        safeEmit(state.copyWith(data: DataState.content(_sorted(newList)), page: const DataState.content(null)));
+      },
+    );
   }
 
   /// Удалить комментарий и убрать его из списка при успехе.
@@ -89,19 +95,22 @@ class CommentListCubit extends Cubit<CommentListState> {
   /// показывает snackbar).
   Future<bool> deleteComment(AnimalNote comment) async {
     Log.debug('CommentListCubit.deleteComment id=${comment.id}');
-    try {
-      await _service.deleteAnimalNote(id: comment.id);
-      final current = state.data.valueOrNull;
-      if (current != null) {
-        final newList = List<AnimalNote>.from(current)..remove(comment);
-        safeEmit(state.copyWith(data: DataState.content(newList)));
-      }
-      Log.info('CommentListCubit.deleteComment ok: id=${comment.id}');
-      return true;
-    } catch (e, s) {
-      Log.error('CommentListCubit.deleteComment failed', e, s);
-      return false;
-    }
+    final result = await _repository.delete(comment.id);
+    return result.fold(
+      (failure) {
+        Log.error('CommentListCubit.deleteComment failed: $failure');
+        return false;
+      },
+      (_) {
+        final current = state.data.valueOrNull;
+        if (current != null) {
+          final newList = List<AnimalNote>.from(current)..remove(comment);
+          safeEmit(state.copyWith(data: DataState.content(newList)));
+        }
+        Log.info('CommentListCubit.deleteComment ok: id=${comment.id}');
+        return true;
+      },
+    );
   }
 
   /// Заменить в списке отредактированный комментарий.

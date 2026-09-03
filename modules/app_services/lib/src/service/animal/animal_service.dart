@@ -7,7 +7,7 @@ import 'package:app_services/src/log.dart';
 
 /// Сервис PDF-карточки животного. PDF — через [DocumentRepository] (модульный
 /// `AnimalRepository`). Заметки/комментарии переехали в модуль `personal`
-/// (`CommentsService`).
+/// (`CommentsRepository`).
 @singleton
 class AnimalService {
   AnimalService();

@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-import 'package:applicants/data/data.dart';
+import 'package:applicants/domain/domain.dart';
 import 'package:applicants/presentation/curator/curator.dart';
 
 /// Экран создания или редактирования куратора
 class CuratorEditScreen extends StatelessWidget {
-  const CuratorEditScreen({required this.staffService, this.curatorId, super.key});
+  const CuratorEditScreen({required this.staffRepository, this.curatorId, super.key});
 
-  final StaffService staffService;
+  final StaffRepository staffRepository;
   final int? curatorId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CuratorEditCubit(staffService, curatorId: curatorId),
+      create: (_) => CuratorEditCubit(staffRepository, curatorId: curatorId),
       child: const _CuratorEditView(),
     );
   }

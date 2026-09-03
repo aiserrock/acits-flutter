@@ -7,30 +7,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-import 'package:personal/data/data.dart';
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/presentation.dart';
 
 /// Экран личного кабинета пользователя
 class PersonalScreen extends StatelessWidget {
-  const PersonalScreen({required this.service, required this.isChangePass, super.key});
+  const PersonalScreen({required this.repository, required this.isChangePass, super.key});
 
-  final PersonalService service;
+  final PersonalRepository repository;
   final bool isChangePass;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PersonalCubit(service),
-      child: _PersonalView(service: service, isChangePass: isChangePass),
+      create: (_) => PersonalCubit(repository),
+      child: _PersonalView(repository: repository, isChangePass: isChangePass),
     );
   }
 }
 
 class _PersonalView extends StatefulWidget {
-  const _PersonalView({required this.service, required this.isChangePass});
+  const _PersonalView({required this.repository, required this.isChangePass});
 
-  final PersonalService service;
+  final PersonalRepository repository;
   final bool isChangePass;
 
   @override
@@ -176,7 +175,7 @@ class _PersonalViewState extends State<_PersonalView> {
   void _onPassChange(BuildContext context) {
     showCupertinoDialog(
       context: context,
-      builder: (_) => ChangePassWidget(service: widget.service),
+      builder: (_) => ChangePassWidget(repository: widget.repository),
     );
   }
 

@@ -1,33 +1,36 @@
 import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:personal/data/data.dart';
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/personal/personal.dart';
 import 'package:personal/util/util.dart';
 
 /// Cubit экрана личного кабинета. Загружает данные пользователя и сохраняет
-/// изменённые поля. UI-контроллеры (TextEditingController) живут в виджете.
+/// изменённые поля. Данные — доменный [UserProfile] из [PersonalRepository]
+/// (Result, без DTO). UI-контроллеры (TextEditingController) живут в виджете.
 class PersonalCubit extends Cubit<PersonalState> {
-  PersonalCubit(this._personalService) : super(const PersonalState.loading());
+  PersonalCubit(this._repository) : super(const PersonalState.loading());
 
-  final PersonalService _personalService;
+  final PersonalRepository _repository;
 
   /// Загрузить данные пользователя. Возвращает загруженного пользователя,
   /// чтобы виджет мог проинициализировать контроллеры полей.
   Future<UserProfile?> load() async {
     Log.debug('PersonalCubit.load');
     safeEmit(state.copyWith(data: const DataState.loading(), fabVisible: false));
-    try {
-      final user = await _personalService.fetchPersonal(force: true);
-      Log.info('PersonalCubit.load ok: id=${user.id}');
-      safeEmit(PersonalState(data: DataState.content(user)));
-      return user;
-    } catch (e, s) {
-      Log.error('PersonalCubit.load failed', e, s);
-      safeEmit(state.copyWith(data: DataState.error(e)));
-      return null;
-    }
+    final result = await _repository.fetchPersonal(force: true);
+    return result.fold(
+      (failure) {
+        Log.error('PersonalCubit.load failed: $failure');
+        safeEmit(state.copyWith(data: DataState.error(failure)));
+        return null;
+      },
+      (user) {
+        Log.info('PersonalCubit.load ok: id=${user.id}');
+        safeEmit(PersonalState(data: DataState.content(user)));
+        return user;
+      },
+    );
   }
 
   /// Пересчитать видимость кнопки сохранения по текущим значениям полей.
@@ -73,13 +76,16 @@ class PersonalCubit extends Cubit<PersonalState> {
       phoneNumber: phoneNumber,
       email: email,
     );
-    try {
-      final user = await _personalService.changePersonal(changed);
-      Log.info('PersonalCubit.submit ok: id=${user.id}');
-      safeEmit(PersonalState(data: DataState.content(user)));
-    } catch (e, s) {
-      Log.error('PersonalCubit.submit failed', e, s);
-      safeEmit(state.copyWith(data: DataState.error(e)));
-    }
+    final result = await _repository.changePersonal(changed);
+    result.fold(
+      (failure) {
+        Log.error('PersonalCubit.submit failed: $failure');
+        safeEmit(state.copyWith(data: DataState.error(failure)));
+      },
+      (user) {
+        Log.info('PersonalCubit.submit ok: id=${user.id}');
+        safeEmit(PersonalState(data: DataState.content(user)));
+      },
+    );
   }
 }

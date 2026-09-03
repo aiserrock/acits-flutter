@@ -14,4 +14,5 @@ export 'prescription_type.dart';
 export 'prescription_type_labels.dart';
 export 'prescription_type_labels_x.dart';
 export 'prescriptions_shelter_provider.dart';
+export 'repository/repository.dart';
 export 'router/router.dart';

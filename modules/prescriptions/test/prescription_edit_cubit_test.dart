@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prescriptions/prescriptions.dart';
 
-class MockPrescriptionService extends Mock implements PrescriptionService {}
+class MockPrescriptionRepository extends Mock implements PrescriptionRepository {}
 
 class MockRouter extends Mock implements PrescriptionsRouterService {}
 
@@ -12,14 +12,14 @@ class MockAnimalLoader extends Mock implements PrescriptionAnimalLoader {}
 class MockTypeLabels extends Mock implements PrescriptionTypeLabels {}
 
 void main() {
-  late MockPrescriptionService service;
+  late MockPrescriptionRepository repository;
   late MockRouter router;
   late MockAnimalLoader animalLoader;
   late MockTypeLabels typeLabels;
   final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
   PrescriptionEditCubit build({PrescriptionAnimalRef? initAnimal, int? initAnimalId}) => PrescriptionEditCubit(
-    service,
+    repository,
     router,
     animalLoader,
     typeLabels,
@@ -29,7 +29,7 @@ void main() {
   );
 
   setUp(() {
-    service = MockPrescriptionService();
+    repository = MockPrescriptionRepository();
     router = MockRouter();
     animalLoader = MockAnimalLoader();
     typeLabels = MockTypeLabels();

@@ -15,14 +15,13 @@ import 'package:lottie/lottie.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:personal/data/data.dart';
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/presentation.dart';
 
 class CommentListWidget extends StatelessWidget {
   const CommentListWidget(
     this.animalId, {
-    required this.service,
+    required this.repository,
     required this.router,
     required this.fileOpener,
     this.scrollController,
@@ -31,7 +30,7 @@ class CommentListWidget extends StatelessWidget {
   });
 
   final int animalId;
-  final CommentsService service;
+  final CommentsRepository repository;
   final PersonalRouterService router;
   final CommentFileOpener fileOpener;
   final ScrollController? scrollController;
@@ -40,8 +39,11 @@ class CommentListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          CommentListCubit(service: service, animalId: animalId, onCreateCommentStream: onCreateCommentStream?.stream),
+      create: (_) => CommentListCubit(
+        repository: repository,
+        animalId: animalId,
+        onCreateCommentStream: onCreateCommentStream?.stream,
+      ),
       child: _CommentListView(
         animalId: animalId,
         router: router,

@@ -1,5 +1,4 @@
 import 'package:util/util.dart';
-import 'package:core/domain.dart' show MessagedException;
 import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:personal/data/data.dart';
+import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/presentation.dart';
 
 class ChangePassWidget extends StatelessWidget {
-  const ChangePassWidget({required this.service, super.key});
+  const ChangePassWidget({required this.repository, super.key});
 
-  final PersonalService service;
+  final PersonalRepository repository;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => ChangePassCubit(service), child: const _ChangePassView());
+    return BlocProvider(create: (_) => ChangePassCubit(repository), child: const _ChangePassView());
   }
 }
 
@@ -130,10 +129,12 @@ class _ChangePassViewState extends State<_ChangePassView> {
 
     final state = cubit.state;
     final rawError = state is DataError<void> ? state.error : null;
-    final error = rawError is MessagedException ? rawError.error : null;
-    messenger.showSnackBar(
-      SnackBar(content: Text('${LocaleKeys.personalChangeErrorMsg.tr()}${error is String ? error : ''}')),
-    );
+    // Раньше сюда попадал MessagedException с телом ответа сервера; теперь —
+    // типизированный Failure. Показываем ту же пару «префикс + деталь»: деталь
+    // несёт только ServerFailure (note из ответа), остальные варианты дают
+    // голый префикс — как и прежде при отсутствующем теле ответа.
+    final detail = rawError is ServerFailure ? (rawError.note ?? '') : '';
+    messenger.showSnackBar(SnackBar(content: Text('${LocaleKeys.personalChangeErrorMsg.tr()}$detail')));
   }
 
   void _showMessage(String msg) {

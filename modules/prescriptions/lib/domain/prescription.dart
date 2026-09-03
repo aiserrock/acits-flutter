@@ -5,7 +5,7 @@ import 'package:prescriptions/domain/domain.dart';
 /// Плоская сущность поверх полиморфного (`oneOf` по `my_type`) серверного
 /// назначения: все подтипы имеют идентичный набор полей и различаются лишь
 /// [type] и [extraTypeAttributes]. Не зависит от `gen/api` — маппинг DTO→сущность
-/// живёт в [PrescriptionService].
+/// живёт в реализации [PrescriptionRepository] (data-слой).
 class Prescription {
   const Prescription({
     required this.animal,
