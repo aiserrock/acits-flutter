@@ -5,17 +5,15 @@ import 'package:injectable/injectable.dart';
 
 import 'package:app_services/src/domain/env.dart';
 
-/// DI-модуль НОВОГО API-стека (base Dio + acits_api адаптер).
+/// DI-модуль API-стека: сконфигурированный Dio + адаптеры портов из `core/api`.
 ///
-/// Регистрируется рядом с chopper и пока никем не потребляется — фичи не
-/// мигрированы. Цель Step 7: базис существует и резолвится в get_it до того, как
-/// его начнут использовать. Именованный инстанс `@Named('acitsApi')` не
-/// конфликтует с существующим `@prod Dio` (см. dio_register.dart).
+/// Единственный клиент приложения. Инстансы именованные (`@Named('acitsApi')` и
+/// `@Named('acitsApiGuest')`), потому что гостевой ходит без auth-интерцептора.
 @module
 abstract class AcitsApiRegister {
   /// Единый сконфигурированный Dio для нового клиента: интерцепторы
   /// auth/header из base, порты — мосты к AuthService/ConfigService
-  /// (см. auth_port_bridges.dart). baseUrl берём из того же [Env], что и chopper.
+  /// (см. auth_port_bridges.dart). baseUrl — из [Env].
   @prod
   @Named('acitsApi')
   Dio createAcitsApiDio(
@@ -36,7 +34,7 @@ abstract class AcitsApiRegister {
   }
 
   /// Гостевой Dio для нового клиента: БЕЗ auth-интерцептора (логин/регистрация/
-  /// список всех приютов). Зеркалит chopper `@Named('guest')`. baseUrl — из [Env].
+  /// список всех приютов). baseUrl — из [Env].
   @prod
   @Named('acitsApiGuest')
   Dio createAcitsApiGuestDio(Env env) {
