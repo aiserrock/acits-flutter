@@ -24,7 +24,7 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
   @override
   Future<Result<Failure, List<PrescriptionExecutionToday>>> listTodayExecutions({String? search, String? ordering}) {
     Log.debug('Fetch today prescription executions: search=$search ordering=$ordering');
-    return guard(() async {
+    return _guard(() async {
       await _typeLabels.ensureLoaded();
       final dtos = await _port.todayExecutions(search: search, ordering: ordering, shelterId: _currentShelterId);
       Log.info('Today prescription executions loaded: count=${dtos.length}');
@@ -44,7 +44,7 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
     Log.debug(
       'Fetch prescriptions by animal: animalId=$animalId limit=$limit offset=$offset isActual=$isActual isOld=$isOld',
     );
-    return guard(() async {
+    return _guard(() async {
       await _typeLabels.ensureLoaded();
       final dtos = await _port.listByAnimal(
         animalId,
@@ -62,7 +62,7 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
   @override
   Future<Result<Failure, Prescription>> getById(int id) {
     Log.debug('Fetch prescription by id: id=$id');
-    return guard(() async {
+    return _guard(() async {
       final dto = await _port.getById(id, shelterId: _currentShelterId);
       Log.info('Prescription loaded: id=$id');
       return _toLocal(_mapPrescription(dto));
@@ -72,7 +72,7 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
   @override
   Future<Result<Failure, Prescription>> create(Prescription prescription) {
     Log.debug('Create prescription: animalId=${prescription.animal}');
-    return guard(() async {
+    return _guard(() async {
       final dto = await _port.create(_toWriteDto(prescription), shelterId: _currentShelterId);
       final model = _mapPrescription(dto);
       Log.info('Prescription created: id=${model.id}');
@@ -84,7 +84,7 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
   Future<Result<Failure, Prescription>> update(Prescription prescription) {
     final id = prescription.id;
     Log.debug('Update prescription: id=$id');
-    return guard(() async {
+    return _guard(() async {
       // Без id обновлять нечего — guard превратит это в UnknownFailure, экран
       // покажет ошибку (раньше был MessagedException).
       if (id == null) throw StateError('Prescription id is required for update');
@@ -98,7 +98,7 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
   @override
   Future<Result<Failure, List<Drug>>> listDrugs({String? searchRequest, int limit = 25, int offset = 0}) {
     Log.debug('Fetch drug list: search=$searchRequest limit=$limit offset=$offset');
-    return guard(() async {
+    return _guard(() async {
       final dtos = await _port.listDrugs(
         search: searchRequest,
         limit: limit,
@@ -214,4 +214,10 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
   Prescription _toLocal(Prescription p) => p.copyWith(
     executions: p.executions.map((e) => e.copyWith(executeAt: e.executeAt.toLocal())).toList(growable: false),
   );
+
+  /// Логируем на этом уровне: выше остаётся только [Failure], а исходное
+  /// исключение со стеком — единственное, по чему в crash-репорте видно, что
+  /// именно упало.
+  Future<Result<Failure, T>> _guard<T>(Future<T> Function() body) =>
+      guard(body, onError: (e, s) => Log.error('PrescriptionRepository request failed', e, s));
 }

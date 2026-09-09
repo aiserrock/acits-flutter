@@ -24,7 +24,7 @@ class CommentsRepositoryImpl implements CommentsRepository {
   @override
   Future<Result<Failure, List<AnimalNote>>> listByAnimal(int animalId, {int limit = kNotesListLimit, int offset = 0}) {
     Log.debug('Fetch animal notes: animalId=$animalId limit=$limit offset=$offset');
-    return guard(() async {
+    return _guard(() async {
       final dtos = await _notesPort.listByAnimal(
         animalId,
         limit: limit,
@@ -43,7 +43,7 @@ class CommentsRepositoryImpl implements CommentsRepository {
     List<AnimalNoteFileInput> files = const [],
   }) {
     Log.debug('Create animal note: animalId=$animalId files=${files.length}');
-    return guard(() async {
+    return _guard(() async {
       final dto = await _notesPort.create(
         AnimalNoteWriteDto(animal: animalId, content: text, files: _toFileDtos(files)),
         shelterId: _shelterProvider.shelterId,
@@ -61,7 +61,7 @@ class CommentsRepositoryImpl implements CommentsRepository {
     List<AnimalNoteFileInput> files = const [],
   }) {
     Log.debug('Patch animal note: id=$id animalId=$animalId files=${files.length}');
-    return guard(() async {
+    return _guard(() async {
       final dto = await _notesPort.patch(
         id,
         AnimalNoteWriteDto(id: id, animal: animalId, content: text, files: _toFileDtos(files)),
@@ -75,7 +75,7 @@ class CommentsRepositoryImpl implements CommentsRepository {
   @override
   Future<Result<Failure, void>> delete(int id) {
     Log.debug('Delete animal note: id=$id');
-    return guard(() async {
+    return _guard(() async {
       await _notesPort.delete(id, shelterId: _shelterProvider.shelterId);
       Log.info('Animal note deleted: id=$id');
     });
@@ -94,4 +94,10 @@ class CommentsRepositoryImpl implements CommentsRepository {
       );
     }).toList();
   }
+
+  /// Логируем на этом уровне: выше остаётся только [Failure], а исходное
+  /// исключение со стеком — единственное, по чему в crash-репорте видно, что
+  /// именно упало.
+  Future<Result<Failure, T>> _guard<T>(Future<T> Function() body) =>
+      guard(body, onError: (e, s) => Log.error('CommentsRepository request failed', e, s));
 }

@@ -33,7 +33,7 @@ class PersonalRepositoryImpl implements PersonalRepository {
       return Ok(cached);
     }
 
-    final result = await guard(() async {
+    final result = await _guard(() async {
       final dto = await _port.me(shelterId: _shelterProvider.shelterId);
       return UserProfileMapper(dto).toEntity();
     });
@@ -47,7 +47,7 @@ class PersonalRepositoryImpl implements PersonalRepository {
   @override
   Future<Result<Failure, UserProfile>> changePersonal(UserProfile data) async {
     Log.debug('Change personal: id=${data.id}');
-    final result = await guard(() async {
+    final result = await _guard(() async {
       final dto = await _port.updateMe(UserProfileWriteMapper(data).toDto(), shelterId: _shelterProvider.shelterId);
       return UserProfileMapper(dto).toEntity();
     });
@@ -61,7 +61,7 @@ class PersonalRepositoryImpl implements PersonalRepository {
   @override
   Future<Result<Failure, void>> changePass(String oldPass, String newPass) {
     Log.debug('Change password attempt');
-    return guard(() async {
+    return _guard(() async {
       await _port.changePassword(oldPass, newPass, shelterId: _shelterProvider.shelterId);
       Log.info('Change password success');
     });
@@ -71,4 +71,10 @@ class PersonalRepositoryImpl implements PersonalRepository {
   void _onLogout() {
     _person = null;
   }
+
+  /// Логируем на этом уровне: выше остаётся только [Failure], а исходное
+  /// исключение со стеком — единственное, по чему в crash-репорте видно, что
+  /// именно упало.
+  Future<Result<Failure, T>> _guard<T>(Future<T> Function() body) =>
+      guard(body, onError: (e, s) => Log.error('PersonalRepository request failed', e, s));
 }
