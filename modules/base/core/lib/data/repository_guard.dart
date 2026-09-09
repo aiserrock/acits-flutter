@@ -8,14 +8,24 @@ import 'package:util/util.dart';
 /// Belongs to the data layer by contract: it is the seam where transport
 /// exceptions stop and `Result` begins. Nothing above a repository should
 /// need it.
-Future<Result<Failure, T>> guard<T>(Future<T> Function() body) async {
+///
+/// This is also the last place the original exception and its stack trace
+/// exist — above here only the [Failure] survives, and a bare `const
+/// UnknownFailure()` tells a crash report nothing. Pass [onError] to log them.
+Future<Result<Failure, T>> guard<T>(
+  Future<T> Function() body, {
+  void Function(Object error, StackTrace stackTrace)? onError,
+}) async {
   try {
     return Ok(await body());
-  } on DioException catch (e) {
+  } on DioException catch (e, s) {
+    onError?.call(e, s);
     return Err(mapDioException(e));
-  } on FormatException {
+  } on FormatException catch (e, s) {
+    onError?.call(e, s);
     return const Err(ParseFailure());
-  } catch (_) {
+  } catch (e, s) {
+    onError?.call(e, s);
     return const Err(UnknownFailure());
   }
 }
@@ -33,7 +43,11 @@ Failure mapDioException(DioException e) {
     case DioExceptionType.badResponse:
       final code = e.response?.statusCode;
       if (code == 401 || code == 403) return const AuthFailure();
-      return ServerFailure(code ?? 0, e.response?.statusMessage);
+      // Тело ответа несёт причину отказа (валидация DRF: какое поле и почему).
+      // statusMessage — только сухая HTTP-фраза («Bad Request»), по которой
+      // пользователь не поймёт, что исправить; берём его лишь как запасной.
+      final body = e.response?.data;
+      return ServerFailure(code ?? 0, body?.toString() ?? e.response?.statusMessage);
     case DioExceptionType.badCertificate:
     case DioExceptionType.cancel:
     case DioExceptionType.unknown:

@@ -201,7 +201,10 @@ void main() {
       expect(list.single.id, 7);
     });
 
-    test('fetchCurators returns an empty list on failure', () async {
+    // The wrapper must NOT swallow the failure: SearchBloc catches it and shows
+    // a retry stub. An empty list would read as "nothing found" and would also
+    // latch isReachedMax, ending pagination for the rest of the session.
+    test('fetchCurators throws the Failure so the search screen can show it', () async {
       when(
         () => port.listCurators(
           search: any(named: 'search'),
@@ -211,9 +214,7 @@ void main() {
         ),
       ).thenThrow(_dioError());
 
-      final list = await StaffService(repository).fetchCurators();
-
-      expect(list, isEmpty);
+      await expectLater(StaffService(repository).fetchCurators(), throwsA(isA<Failure>()));
     });
   });
 }

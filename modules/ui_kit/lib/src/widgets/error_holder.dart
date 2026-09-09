@@ -74,6 +74,9 @@ extension _ErrorX on Object {
       return switch (self) {
         NoInternet() => 'errorInternetFail'.tr(),
         Timeout() => 'errorTimeoutFail'.tr(),
+        // 4xx — запрос отклонён (валидация, конфликт), сервер жив. Говорить
+        // «сервер недоступен» здесь неверно и уводит от реальной причины.
+        ServerFailure(:final code) when code >= 400 && code < 500 => 'commonError'.tr(),
         ServerFailure() => 'errorServerFail'.tr(),
         AuthFailure() => 'errorAuthFail'.tr(),
         ParseFailure() || UnknownFailure() => 'commonError'.tr(),
@@ -96,6 +99,10 @@ extension _ErrorX on Object {
       return switch (self) {
         NoInternet() => 'errorInternetFailMsg'.tr(),
         Timeout() => 'errorTimeoutFailMsg'.tr(),
+        // Тело ответа объясняет, что именно не так (какое поле не прошло
+        // валидацию) — показываем его вместо общей фразы, если сервер прислал.
+        ServerFailure(:final code, :final note) when code >= 400 && code < 500 =>
+          note?.isNotEmpty ?? false ? note! : 'errorDefaultMsg'.tr(),
         ServerFailure() => 'errorServerFailMsg'.tr(),
         AuthFailure() => 'errorAuthFailMsg'.tr(),
         ParseFailure() || UnknownFailure() => 'errorDefaultMsg'.tr(),
