@@ -42,7 +42,10 @@ Failure mapDioException(DioException e) {
       return const NoInternet();
     case DioExceptionType.badResponse:
       final code = e.response?.statusCode;
-      if (code == 401 || code == 403) return const AuthFailure();
+      // 401 — сессия недействительна, перелогин помогает. 403 — прав нет,
+      // перелогин бесполезен; предлагать его пользователю значит врать.
+      if (code == 401) return const AuthFailure();
+      if (code == 403) return const ForbiddenFailure();
       // Тело ответа несёт причину отказа (валидация DRF: какое поле и почему).
       // statusMessage — только сухая HTTP-фраза («Bad Request»), по которой
       // пользователь не поймёт, что исправить; берём его лишь как запасной.

@@ -28,8 +28,15 @@ final class ServerFailure extends NetworkFailure {
   int get hashCode => Object.hash(code, note);
 }
 
+/// Сессия недействительна (401) — вход заново её восстановит.
 final class AuthFailure extends Failure {
   const AuthFailure();
+}
+
+/// Доступ запрещён (403): сессия валидна, но прав на операцию нет. Отличается
+/// от [AuthFailure] тем, что перелогин не поможет — предлагать его вредно.
+final class ForbiddenFailure extends Failure {
+  const ForbiddenFailure();
 }
 
 final class ParseFailure extends Failure {

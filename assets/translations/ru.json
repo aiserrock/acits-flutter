@@ -118,6 +118,8 @@
   "curatorEdit": "Редактирование",
   "errorAuthFail": "Сессия истекла",
   "errorAuthFailMsg": "Войдите в аккаунт заново",
+  "errorForbidden": "Доступ запрещён",
+  "errorForbiddenMsg": "У вас нет прав на это действие. Обратитесь к администратору приюта.",
   "errorDefaultMsg": "Что-то пошло не так, попробуйте еще раз позже",
   "errorInternetFail": "Нет интернета :(",
   "errorInternetFailMsg": "Неустойчивое соединение, попробуйте еще раз позже",
