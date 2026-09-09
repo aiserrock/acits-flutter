@@ -79,6 +79,7 @@ extension _ErrorX on Object {
         ServerFailure(:final code) when code >= 400 && code < 500 => 'commonError'.tr(),
         ServerFailure() => 'errorServerFail'.tr(),
         AuthFailure() => 'errorAuthFail'.tr(),
+        ForbiddenFailure() => 'errorForbidden'.tr(),
         ParseFailure() || UnknownFailure() => 'commonError'.tr(),
       };
     }
@@ -105,6 +106,7 @@ extension _ErrorX on Object {
           note?.isNotEmpty ?? false ? note! : 'errorDefaultMsg'.tr(),
         ServerFailure() => 'errorServerFailMsg'.tr(),
         AuthFailure() => 'errorAuthFailMsg'.tr(),
+        ForbiddenFailure() => 'errorForbiddenMsg'.tr(),
         ParseFailure() || UnknownFailure() => 'errorDefaultMsg'.tr(),
       };
     }

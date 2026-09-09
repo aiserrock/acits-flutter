@@ -147,13 +147,15 @@ void main() {
       expect(result.valueOrNull, isNot(isA<AnimalDto>()));
     });
 
-    test('403 → Err(AuthFailure)', () async {
+    // 403 is a permission refusal, not an expired session — telling the user to
+    // sign in again would be wrong advice, so it maps to its own failure.
+    test('403 → Err(ForbiddenFailure)', () async {
       when(
         () => port.getById(any(), shelterId: any(named: 'shelterId')),
       ).thenThrow(_dio(DioExceptionType.badResponse, status: 403));
 
       final result = await repo.getById(501);
-      expect(result.failureOrNull, isA<AuthFailure>());
+      expect(result.failureOrNull, isA<ForbiddenFailure>());
     });
   });
 

@@ -74,4 +74,16 @@ void main() {
     expect(auth, contains('errorAuthFail'));
     expect(auth, isNot(equals(unknown)));
   });
+
+  testWidgets('403 does not tell the user to sign in again', (tester) async {
+    await pump(tester, const domain.ForbiddenFailure());
+    final forbidden = textOf(tester);
+
+    await pump(tester, const domain.AuthFailure());
+    final expiredSession = textOf(tester);
+
+    // Signing in again does not grant a permission the account lacks.
+    expect(forbidden, contains('errorForbidden'));
+    expect(forbidden, isNot(equals(expiredSession)));
+  });
 }

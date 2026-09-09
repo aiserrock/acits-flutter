@@ -104,6 +104,8 @@ abstract class  LocaleKeys {
   static const curatorEdit = 'curatorEdit';
   static const errorAuthFail = 'errorAuthFail';
   static const errorAuthFailMsg = 'errorAuthFailMsg';
+  static const errorForbidden = 'errorForbidden';
+  static const errorForbiddenMsg = 'errorForbiddenMsg';
   static const errorDefaultMsg = 'errorDefaultMsg';
   static const errorInternetFail = 'errorInternetFail';
   static const errorInternetFailMsg = 'errorInternetFailMsg';

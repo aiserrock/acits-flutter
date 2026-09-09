@@ -112,6 +112,8 @@
   "curatorEdit": "Edit",
   "errorAuthFail": "Session expired",
   "errorAuthFailMsg": "Please sign in again",
+  "errorForbidden": "Access denied",
+  "errorForbiddenMsg": "You do not have permission for this action. Ask a shelter administrator.",
   "errorDefaultMsg": "Something has gone wrong, please try again later",
   "errorInternetFail": "No internet connection :(",
   "errorInternetFailMsg": "The connection is unstable, please try again later",
