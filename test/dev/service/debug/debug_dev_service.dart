@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import 'package:acits_flutter/service/debug/debug_service.dart';
-import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
-import 'package:acits_flutter/util/restart_widget.dart';
+import 'package:app_services/app_services.dart';
+import 'package:util/util.dart';
+import 'package:shell/shell.dart' show RestartWidget;
 
 import '../../di/di_container.dart';
 import '../../ui/debug_screen/applying_overlay.dart';
@@ -21,6 +21,10 @@ class DebugDevService implements DebugService {
   DebugDevService(this._storage);
 
   final DebugPreferenceStorage _storage;
+
+  /// dev-флейвор — галерея и прочие dev-фичи доступны в любом build-режиме.
+  @override
+  bool get isDevFlavor => true;
 
   /// Видимость плавающей debug-кнопки (по образцу a production app):
   /// скрывается на время открытого debug-экрана и по long-press на кнопке.

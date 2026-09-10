@@ -1,0 +1,17 @@
+{
+  "commonCancel": "Cancel",
+  "commonError": "Error",
+  "commonErrorStubMsg": "The data could not be loaded.\nPlease try again.",
+  "commonErrorStubTitle": "Oh, something has gone wrong…",
+  "commonReloadBtn": "Refresh",
+  "commonRepeat": "Try again",
+  "commonSort": "Sort",
+  "sortByName": "By name",
+  "sortByNameDesc": "By name ↓",
+  "sortNewest": "Newest first",
+  "sortOldest": "Oldest first",
+  "sortByAge": "By age",
+  "errorDefaultMsg": "Something has gone wrong, please try again later",
+  "errorInternetFail": "No internet connection :(",
+  "errorInternetFailMsg": "The connection is unstable, please try again later"
+}

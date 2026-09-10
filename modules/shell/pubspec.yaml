@@ -1,0 +1,95 @@
+name: shell
+description: App shell for ACITS — composition screens (root, main, animal detail/edit) and the navigation tree (GoRouter, extra codec, auth-screen bindings, the six feature router-service impls). Owns the app's flutter_gen assets for now (moves to ui_kit in a later step). Depends on features + app_services + foundation; nothing depends on the shell.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Material/Widgets/Cupertino delegates для LocalizationAddon в debug-галерее.
+  flutter_localizations:
+    sdk: flutter
+
+  # Foundation packages.
+  util:
+    path: ../base/util
+  network:
+    path: ../base/network
+  core:
+    path: ../base/core
+  ui_kit:
+    path: ../ui_kit
+  navigation:
+    path: ../base/navigation
+  localization:
+    path: ../base/localization
+  di:
+    path: ../base/di
+
+  # Feature modules whose screens/router contracts the shell composes.
+  animals:
+    path: ../animals
+  auth:
+    path: ../auth
+  applicants:
+    path: ../applicants
+  prescriptions:
+    path: ../prescriptions
+  personal:
+    path: ../personal
+  media:
+    path: ../media
+
+  # App-composition services (session/config/animal, storage, doc export) the
+  # shell screens + router services resolve.
+  app_services:
+    path: ../app_services
+
+  # Navigation + DI.
+  go_router: ^17.3.0
+  injectable: ^3.0.0
+  get_it: ^9.2.1
+
+  # State + UI.
+  flutter_bloc: ^9.1.1
+  provider: ^6.1.5
+  easy_localization: ^3.0.8
+  # Debug-only: гостит ту же ui_kit-галерею, что и standalone example.
+  # Экран под kDebugMode → в release-сборку код не попадает (tree-shaken).
+  widgetbook: ^3.25.0
+  smooth_page_indicator: ^2.0.1
+  flutter_slidable: ^4.0.3
+  flutter_keyboard_visibility: ^6.0.0
+  flutter_svg: ^2.2.4
+  equatable: ^2.0.8
+  collection: ^1.19.0
+  intl: ^0.20.2
+
+  # Splash control (native) + web insets (root screen) + web share/download.
+  flutter_native_splash: ^2.4.7
+  web: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  injectable_generator: ^3.0.0
+  build_runner: ^2.4.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.5
+
+# NOTE: the app's flutter_gen assets (`lib/gen/assets.gen.dart`) are moved into
+# this package as a plain Dart file that references bare `assets/...` paths with
+# NO `package:` prefix — so they resolve against the app's bundled asset tree.
+# The physical assets + `flutter:` asset/font declarations + the `flutter_gen`
+# codegen config STAY in the root app for now; Пункт 7 relocates assets (and the
+# flutter_gen ownership) into ui_kit. Until then shell owns only the generated
+# accessor, not the asset bundle.
+flutter:
+  uses-material-design: true

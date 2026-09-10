@@ -1,0 +1,26 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+
+import '../../gen/assets.gen.dart';
+
+const _sizePart = .75;
+
+class LoaderHolderWidget extends StatelessWidget {
+  const LoaderHolderWidget({this.assetPath, super.key});
+
+  final String? assetPath;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (_, cons) {
+        final size = min(cons.maxHeight, cons.maxWidth) * _sizePart;
+        return Center(
+          child: Lottie.asset(assetPath ?? Assets.lottie.loading, height: size, width: size),
+        );
+      },
+    );
+  }
+}

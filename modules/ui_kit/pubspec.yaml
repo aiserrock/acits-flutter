@@ -1,0 +1,67 @@
+name: ui_kit
+description: Design system for ACITS — Material 3 tokens (AppTheme/AppColors), breakpoints, adaptive scaffold, base components, generated assets.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  easy_localization: ^3.0.8
+  equatable: ^2.0.8
+  shimmer: ^3.0.0
+  lottie: ^3.3.3
+  dio: ^5.9.2
+  flutter_svg: ^2.2.4
+
+  # Для Failure — типизированные ошибки, которые ErrorHolderWidget превращает в
+  # человекочитаемый текст. util — низ графа, цикла нет.
+  util:
+    path: ../base/util
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.13.1
+  flutter_gen_runner: ^5.14.0
+
+# Пакет владеет всеми дизайн-ассетами системы (иконки, картинки, шрифт
+# icomoon, lottie, онбординг, галерея). Они лежат внутри пакета и резолвятся
+# как `packages/ui_kit/assets/...`. Приложение оставляет себе только
+# translations/ (локализация) и cert/ (runtime-сертификат) — не дизайн.
+flutter:
+  assets:
+    - assets/image/
+    - assets/icon/
+    - assets/onboarding/
+    - assets/common/
+    - assets/lottie/
+    - assets/gallery/
+
+  fonts:
+    - family: icomoon
+      fonts:
+        - asset: assets/font/icomoon.ttf
+
+# flutter_gen генерирует package-aware `Assets` (пути с `packages/ui_kit/`,
+# package_parameter_enabled), чтобы ассеты резолвились из пакета, а не из
+# бандла приложения. Вывод — lib/gen, экспортируется из ui_kit.dart.
+flutter_gen:
+  output: lib/gen/
+  line_length: 120
+  integrations:
+    flutter_svg: true
+  assets:
+    enabled: true
+    outputs:
+      package_parameter_enabled: true
+  fonts:
+    enabled: false
+  colors:
+    enabled: false

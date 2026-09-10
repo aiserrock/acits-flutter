@@ -1,0 +1,59 @@
+name: example
+description: "ACITS UI Kit — standalone widgetbook gallery for the design system."
+publish_to: "none"
+version: 1.0.0+1
+
+# NB: This app is intentionally NOT a Dart workspace member — it resolves its
+# own dependencies (`cd modules/ui_kit/example && fvm flutter pub get`) so the
+# main app build is unaffected. It depends on ui_kit via a path dependency and
+# renders the shared gallery catalog (ui_kit_gallery) through widgetbook.
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.9
+  # widgetbook — живой адаптивный каталог (web + mobile + desktop). Заменил
+  # заброшенный storybook_flutter, который крашился на узком экране.
+  widgetbook: ^3.25.0
+  flutter_svg: ^2.2.4
+  lottie: ^3.3.3
+  easy_localization: ^3.0.8
+
+  ui_kit:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  # Генерация фирменной иконки запуска из бренд-логотипа ACITS.
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  # Мини-бандл переводов только для ключей, которые ui_kit-виджеты резолвят
+  # через easy_localization `.tr()` (error/success holders, sort chips). Без
+  # него галерея показывала бы технические ключи вместо текста.
+  assets:
+    - assets/translations/
+    - assets/branding/
+
+# Фирменная иконка запуска: морда-логотип ACITS на акцентном фоне #6776E0.
+# Запуск: `cd modules/ui_kit/example && fvm dart run flutter_launcher_icons`.
+flutter_launcher_icons:
+  image_path: "assets/branding/icon.png"
+  adaptive_icon_background: "#6776E0"
+  adaptive_icon_foreground: "assets/branding/icon_foreground.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+    background_color: "#6776E0"
+    theme_color: "#6776E0"

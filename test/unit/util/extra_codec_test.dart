@@ -1,4 +1,4 @@
-import 'package:acits_flutter/navigation/extra_codec.dart';
+import 'package:shell/navigation/extra_codec.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Небольшой не-примитивный класс для проверки токенизации.

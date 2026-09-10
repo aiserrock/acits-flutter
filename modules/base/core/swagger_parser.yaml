@@ -1,0 +1,21 @@
+# swagger_parser config — API client generation for the core module's api layer.
+# Isolated codegen: `melos run genapi` runs this from the module dir, OUTSIDE
+# the app's global build_runner pass. Output lives only under api/adapters/swagger_parser/generated.
+#
+# schema_path points at the PREPROCESSED spec, not the raw doc/api/openapi.json.
+# `melos genapi` first runs `dart run tool/preprocess_openapi.dart`, which strips
+# non-JSON request-body content variants (works around a swagger_parser 1.44 bug
+# that drops schemas used as multipart bodies — see tool/preprocess_openapi.dart).
+swagger_parser:
+  schema_path: .gen/openapi.preprocessed.json
+  output_directory: lib/api/adapters/swagger_parser/generated/
+  language: dart
+  json_serializer: json_serializable
+  root_client: true
+  root_client_name: AcitsGeneratedClient
+  client_postfix: Client
+  put_clients_in_folder: true
+  enums_to_json: true
+  unknown_enum_value: true
+  use_freezed3: false
+  original_http_response: false

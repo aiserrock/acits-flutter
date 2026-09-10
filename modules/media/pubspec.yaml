@@ -1,0 +1,52 @@
+name: media
+description: Media feature module — animal photo gallery + editor, cross-platform PDF doc viewer, and the generic cross-feature search/picker (animals, applicants, curators, drugs, shelters, species) with its paging adapters.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  bloc: ^9.2.0
+  bloc_concurrency: ^0.3.0
+  stream_transform: ^2.1.1
+  equatable: ^2.0.8
+  easy_localization: ^3.0.8
+  collection: ^1.19.0
+  dio: ^5.9.2
+  get_it: ^9.2.1
+  talker_flutter: ^5.1.16
+  flutter_svg: ^2.2.4
+  pro_image_editor: ^11.0.0
+  pdfx: ^2.9.2
+  image: ^4.8.0
+  image_picker: ^1.2.1
+  util:
+    path: ../base/util
+  localization:
+    path: ../base/localization
+  core:
+    path: ../base/core
+  ui_kit:
+    path: ../ui_kit
+  navigation:
+    path: ../base/navigation
+  animals:
+    path: ../animals
+  applicants:
+    path: ../applicants
+  prescriptions:
+    path: ../prescriptions
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.5

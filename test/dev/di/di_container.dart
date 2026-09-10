@@ -1,13 +1,15 @@
-import 'package:acits_flutter/navigation/app_router.dart';
-import 'package:acits_flutter/service/debug/debug_service.dart';
+import 'package:app_services/app_services.dart';
+import 'package:di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alice/alice.dart';
-import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shell/shell.dart';
 
 import 'di_container.config.dart';
 
-final getIt = GetIt.instance;
+// getIt-инстанс живёт в пакете di; ре-экспортим, чтобы относительные импортёры
+// внутри test/dev (register-модули, debug-экран) видели тот же локатор, что и app.
+export 'package:di/di.dart' show getIt;
 
 final _navigatorKey = GlobalKey<NavigatorState>();
 final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -18,6 +20,7 @@ final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   preferRelativeImports: true,
   asExtension: false,
   ignoreUnregisteredTypes: [DebugService, Alice],
+  externalPackageModulesAfter: [ExternalModule(AppServicesPackageModule), ExternalModule(ShellPackageModule)],
 )
 Future<void> initDevDi() async {
   getIt.registerSingleton(_navigatorKey);

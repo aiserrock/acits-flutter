@@ -1,0 +1,30 @@
+name: util
+description: Pure cross-cutting utilities for ACITS — Result/Failure, AppTask pipeline, DataState, platform-service ports, and small shared helpers (validators, safe-emit, app version, date/URL).
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  equatable: ^2.0.8
+  flutter_bloc: ^9.1.1
+  intl: ^0.20.2
+  package_info_plus: ^9.0.1
+
+  # Logger infra (shared Talker factory + formatter/observer, bloc observer).
+  # Crashlytics-плагина на web нет — observer под guard kIsWeb.
+  talker_flutter: ^5.1.16
+  talker_bloc_logger: ^5.1.17
+  firebase_crashlytics: ^5.2.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.5

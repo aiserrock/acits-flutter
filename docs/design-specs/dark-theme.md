@@ -29,10 +29,10 @@
   токенов, которых нет в M3 `ColorScheme` (indicatorActive/inactive,
   inactiveIcon, textSecondary-градации и т.п.). Реализовать `copyWith` +
   **настоящий `lerp`** (интерполяция `Color.lerp` по каждому токену) — чтобы
-  переход между темами был плавным. Это отличается от ke-business-app, где `lerp`
+  переход между темами был плавным. Это отличается от reference app A (banking), где `lerp`
   = no-op `return this` (у них тем две нет, интерполировать нечего).
 - **Эргономичный доступ** через extension на `BuildContext` (паттерн взят из
-  ke-business-app `context.themeStyle`): `context.appColors.indicatorActive`
+  reference app A (banking) `context.themeStyle`): `context.appColors.indicatorActive`
   вместо длинного `Theme.of(context).extension<AppColors>()!.indicatorActive` в
   254 местах.
 - **Полностью мигрировать** статические `ColorRes.X` / `StyleRes.X` (254
@@ -138,7 +138,7 @@
   `lerp` (по-токенно через `Color.lerp(a, b, t)`). Две инстанции:
   `const AppColors.light(...)`, `const AppColors.dark(...)` — как два именованных
   конструктора одного контракта (паттерн abstract-контракт + инстансы из
-  ke-business-app `BaseColors`/`KeColors`, но здесь ось light/dark вместо бренда).
+  reference app A (banking) `BaseColors`/`KeColors`, но здесь ось light/dark вместо бренда).
 - **`extension AppColorsX on BuildContext`** — `AppColors get appColors =>
   Theme.of(this).extension<AppColors>()!;`. Единая точка доступа для виджетов.
 - **`ThemeMode`** — стандартный enum Flutter (`system`/`light`/`dark`). Состояние
@@ -166,7 +166,7 @@
   System/Light/Dark. Состояния: текущий выбранный режим отмечен. Вход: открытие
   бокового меню. Выход: тап по варианту → `ThemeCubit.setMode()` → мгновенная
   перерисовка всего дерева + персист. UI-паттерн: список из 3 радио-опций
-  (аналог `RadioSheet` из smp_bank, но нативно M3).
+  (аналог `RadioSheet` из reference app B, но нативно M3).
 - **Все существующие экраны (50 файлов)** — визуально не меняют структуру;
   меняется только источник цвета (context вместо статики). Каждый должен
   корректно выглядеть в обеих темах после миграции.
@@ -179,27 +179,27 @@
 
 | Проект | M3 | dark | ColorScheme | ThemeExt | Доступ | Что берём / чему не следуем |
 |---|---|---|---|---|---|---|
-| smp_bank_copy | ❌ M2 | через синглтон | ручной `fromSwatch` | ❌ | `ColorRes.X` от синглтона | ❌ анти-паттерн, обходит `Theme.of` |
-| ke-business-app | ❌ M2 | нет (TODO) | нет вообще | ✅ 1 (`ThemeStyle`) | `context.themeStyle.colors.X` | ✅ эргономика доступа + слои палитры; ❌ `lerp`=no-op |
-| tms-driver-app | ❌ | нет | ручной `.light`, 2 слота | ❌ | `KEColors.X` статик | ❌ статик-глобал |
+| reference app B (banking) | ❌ M2 | через синглтон | ручной `fromSwatch` | ❌ | `ColorRes.X` от синглтона | ❌ анти-паттерн, обходит `Theme.of` |
+| reference app A (banking) | ❌ M2 | нет (TODO) | нет вообще | ✅ 1 (`ThemeStyle`) | `context.themeStyle.colors.X` | ✅ эргономика доступа + слои палитры; ❌ `lerp`=no-op |
+| reference app C (logistics) | ❌ | нет | ручной `.light`, 2 слота | ❌ | `KEColors.X` статик | ❌ статик-глобал |
 | acits_flutter (наш) | ❌ M2 | нет | `.light` | ❌ | `ColorRes.X` статик | базовая точка миграции |
 
 **Взято в этот дизайн:**
-- Из **ke-business-app** — эргономичный `context.appColors` (их `context.themeStyle`)
+- Из **reference app A (banking)** — эргономичный `context.appColors` (их `context.themeStyle`)
   и слоистость палитры (сырой swatch → семантические токены → инстанс).
-- **Исправлено относительно них:** настоящий `lerp` (у ke-business no-op),
+- **Исправлено относительно них:** настоящий `lerp` (у reference app A no-op),
   реальные две инстанции light/dark (у всех тема одна), M3 + `fromSeed` +
   `themeMode` (ни у кого нет).
 
 ## Alternatives Considered
 
-1. **smp_bank-подход (ColorRes-геттеры от синглтона ThemeMode)** — отклонён:
+1. **reference app B-подход (ColorRes-геттеры от синглтона ThemeMode)** — отклонён:
    Material 2, без `fromSeed`, без `ThemeExtension`; обходит Theme-наследование
    Flutter, требует полного ребилда дерева и глобального service-locator вместо
    `BuildContext`. Это ровно тот анти-паттерн, от которого предостерегает
    Flutter-команда; теряется весь смысл «M3 и современных вещей».
-2. **ke-business-app / tms-driver-app подход (статик-токены, тема одна)** —
-   отклонён как целевой: у ke-business хорошая слоистость палитры и эргономика
+2. **reference app A (banking) / reference app C (logistics) подход (статик-токены, тема одна)** —
+   отклонён как целевой: у reference app A хорошая слоистость палитры и эргономика
    `context.themeStyle`, но `useMaterial3: false`, нет `ColorScheme`, `lerp`
    = no-op и **тёмной темы просто нет**. tms — плоский `KEColors.X` статик без
    `ThemeExtension`. Берём у них только паттерны организации, не архитектуру темы.
@@ -212,7 +212,7 @@
 4. **Полностью ручная `ColorScheme.dark/light` без seed** — отклонён: ~20 слотов
    × 2 темы вручную, выше риск неконсистентности и провалов контраста; `fromSeed`
    даёт гармоничную базу автоматически, override — только критичные слоты.
-5. **`ValueNotifier<ThemeMode>` (как smp_bank)** — отклонён: проект целиком на
+5. **`ValueNotifier<ThemeMode>` (как reference app B)** — отклонён: проект целиком на
    `flutter_bloc`, Cubit консистентнее с остальным кодом.
 
 ## Open Questions

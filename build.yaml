@@ -1,26 +1,13 @@
-global_options:
-  swagger_dart_code_generator:
-    options:
-      input_folder: "doc/api/"
-      output_folder: "lib/gen/api/"
-
+# App-level build_runner config. The API client generator (swagger_parser) is
+# isolated in modules/core (api layer, run via `melos genapi`), NOT in this pass —
+# here build_runner only runs injectable / flutter_gen / json_serializable.
 targets:
   $default:
     sources:
       include:
         - lib/**
-        - doc/**
         - test/**
         - pubspec.*
         - $package$
       exclude:
-        # flutter_gherkin временно отключён — не запускаем генераторы для его
-        # исходников, чтобы не падать на нерезолвящихся @GherkinTestSuite.
         - test/integration_test/**
-    builders:
-      swagger_dart_code_generator:
-        enabled: true
-        options:
-          input_folder: "doc/api/"
-          output_folder: "lib/gen/api/"
-          separate_models: false
