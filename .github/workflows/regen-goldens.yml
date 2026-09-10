@@ -7,6 +7,12 @@ name: Regenerate ui_kit goldens (temp)
 # be committed and CI can compare like-for-like. Deleted once no longer needed.
 on:
   workflow_dispatch:
+  # workflow_dispatch only fires from the default branch until GitHub has
+  # indexed the workflow file there; push on this branch works immediately,
+  # which is what actually lets this run without waiting on a merge.
+  push:
+    branches: [refactor/foundation]
+    paths: [".github/workflows/regen-goldens.yml"]
 
 env:
   FLUTTER_VERSION: "3.44.0"
