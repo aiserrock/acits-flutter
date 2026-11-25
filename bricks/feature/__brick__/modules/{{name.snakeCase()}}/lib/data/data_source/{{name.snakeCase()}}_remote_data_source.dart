@@ -2,7 +2,7 @@ import 'package:core/api.dart';
 
 // After scaffolding: add `{{name.pascalCase()}}ApiPort` + `{{name.pascalCase()}}Dto` to
 // modules/base/core (lib/api/ports/ + lib/api/ports/dto/) and its swagger_parser
-// adapter, then replace the placeholders below. See CLAUDE.md → "Ritual: add an endpoint".
+// adapter, then replace the placeholders below. See CONTRIBUTING.md → "Adding a feature or endpoint".
 
 /// Thin wrapper over `{{name.pascalCase()}}ApiPort`: only calls, no logic/mapping.
 /// Returns DTOs — the repository unwraps DTO → entity (DTOs stop there).

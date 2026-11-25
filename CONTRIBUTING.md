@@ -93,7 +93,7 @@ A working Android and/or iOS toolchain (Android Studio / Xcode) is also required
    # App-level: injectable DI, flutter_gen assets, json_serializable DTOs.
    fvm dart run build_runner build --delete-conflicting-outputs
 
-   # API client: swagger_parser, isolated inside modules/core (api layer) — runs
+   # API client: swagger_parser, isolated inside modules/base/core (api layer) — runs
    # its own preprocess + swagger_parser + build_runner. Only needed when the
    # OpenAPI spec (doc/api/openapi.json) changes; the generated client is committed.
    melos genapi
@@ -182,7 +182,7 @@ docs: update contributing guide for FVM 3.44
 
 - **Dependency injection uses `get_it` + `injectable` 3.** `initDi()` runs inside the `AppTask` startup pipeline before `runApp`. Re-run `build_runner` after touching any `@injectable` annotation. **Do not register Cubits/BLoCs in DI** — provide them via `BlocProvider` at the screen widget and pull their dependencies from `getIt` in the constructor.
 
-- **Networking uses a single dio client behind a ports-and-adapters API layer** in `modules/core` (the `api/` half). Features and repositories depend on stable `abstract <Feature>ApiPort` interfaces speaking OUR DTOs (`modules/core/lib/api/ports/dto/`); the generated `swagger_parser` client lives only in `modules/core/lib/api/adapters/` and never leaks upward. **DTO containment rule:** DTOs exist only inside `core/api` and repository implementations — repositories map DTO → domain entity via a `Transformable<T>` mapper and return `Result<Failure, T>`. There is no chopper. Never hand-edit generated files. For hand-written DTOs use `@JsonSerializable` with `part '<name>.g.dart';`.
+- **Networking uses a single dio client behind a ports-and-adapters API layer** in `modules/base/core` (the `api/` half). Features and repositories depend on stable `abstract <Feature>ApiPort` interfaces speaking OUR DTOs (`modules/base/core/lib/api/ports/dto/`); the generated `swagger_parser` client lives only in `modules/base/core/lib/api/adapters/` and never leaks upward. **DTO containment rule:** DTOs exist only inside `core/api` and repository implementations — repositories map DTO → domain entity via a `Transformable<T>` mapper and return `Result<Failure, T>`. There is no chopper. Never hand-edit generated files. For hand-written DTOs use `@JsonSerializable` with `part '<name>.g.dart';`.
 
 - **State returns `Result<Failure, T>`** (`base`) from repositories. Use **Bloc + freezed state** when a screen has ≥2 event sources or a non-trivial flow; otherwise **Cubit + Equatable** (with the shared `DataState<T>` from `base`). Prefer `copyWith` over hand-rolled sealed states when the state has many fields.
 
@@ -225,7 +225,7 @@ Two generators, deliberately separated:
 | Command | Generates | When to run |
 | --- | --- | --- |
 | `fvm dart run build_runner build --delete-conflicting-outputs` (or `melos gen`) | injectable DI, flutter_gen assets, json_serializable `*.g.dart` | after touching `@injectable`, `@JsonSerializable`, or adding assets |
-| `melos genapi` | the `swagger_parser` API client + models inside `modules/core` | **only** when `doc/api/openapi.json` changes |
+| `melos genapi` | the `swagger_parser` API client + models inside `modules/base/core` | **only** when `doc/api/openapi.json` changes |
 | `melos genone` (`MELOS_GENONE_PKG=modules/<pkg> melos run genone`) | build_runner for a single package | when regenerating one package in isolation |
 
 Skipping `genapi` after a spec change leaves a stale client (missing DTO fields, `InvalidType` at build). See [docs/GOTCHAS.md](docs/GOTCHAS.md).
@@ -245,10 +245,10 @@ After scaffolding a feature/screen, run `build_runner` (DI/json) and wire the ne
 
 ### Adding a feature or endpoint
 
-The endpoint ritual is mechanical (details in [CLAUDE.md](CLAUDE.md)):
+The endpoint ritual is mechanical:
 
 1. Add the method to the feature's `abstract <Feature>ApiPort` (in terms of our DTOs).
-2. Add/extend the DTO under `modules/core/lib/api/ports/dto/` (`@JsonSerializable`).
+2. Add/extend the DTO under `modules/base/core/lib/api/ports/dto/` (`@JsonSerializable`).
 3. Implement it in the `swagger_parser` adapter (map generated model → our DTO). Run `melos genapi` if the spec changed.
 4. Expose it on the feature repository interface (`domain/`) returning `Result<Failure, T>`; implement in `data/repository/` mapping DTO → entity.
 5. Consume it from the cubit/bloc, then the screen. DTOs never leave the data layer.

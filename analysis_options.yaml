@@ -23,6 +23,9 @@ analyzer:
     - "lib/gen/**"
     - "test/integration_test/**"
     - "build.yaml"
+      # build output: on macOS `flutter pub get` checks Swift packages out into
+      # build/ios/SourcePackages, including the plugins' own Dart tests/examples.
+    - "build/**"
       # mason brick templates are mustache (*.dart with `{{ }}` vars), not valid
       # Dart until rendered — exclude them from the analyzer.
     - "bricks/**"

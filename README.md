@@ -72,8 +72,7 @@ Pushing a `v*` tag (e.g. `v0.5.1`) builds Android/iOS/web, publishes a [GitHub R
 ## Documentation
 
 - [Architecture](ARCHITECTURE.md) — package DAG, ports & adapters, request flow, Result/Failure, cross-platform strategy.
-- [Contributing guide](CONTRIBUTING.md) — setup, project structure, codegen rituals, localization, testing, build and PR workflow.
-- [Agent & contributor guide](CLAUDE.md) — the add-a-feature / add-an-endpoint rituals and conventions (for humans and AI agents).
+- [Contributing guide](CONTRIBUTING.md) — setup, project structure, codegen and add-a-feature / add-an-endpoint rituals, localization, testing, build and PR workflow.
 - [Gotchas](docs/GOTCHAS.md) — symptoms of skipping `genapi`/`build_runner` and other workspace pitfalls.
 - [Security policy](SECURITY.md) — supported versions and how to report a vulnerability.
 - [Code of conduct](CODE_OF_CONDUCT.md)

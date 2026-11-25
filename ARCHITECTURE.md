@@ -2,8 +2,8 @@
 
 This document describes how **acits_flutter** is structured: the package graph,
 the API ports-and-adapters boundary, the request flow, error handling, and the
-cross-platform strategy. It is the map a new contributor (human or AI agent)
-reads before touching code.
+cross-platform strategy. It is the map a new contributor reads before touching
+code.
 
 The guiding idea: **adding a feature or an endpoint is a mechanical, documented
 ritual**; layers are enforced by the package graph; the API generator is
@@ -125,7 +125,7 @@ Solved with a hexagonal boundary inside `core/api`.
 modules/<feature>/data/repository/     depends ONLY on the port + our DTOs
         │   port.getById(id) -> AnimalDto        (never sees generated types)
         ▼
- modules/core/lib/api/
+ modules/base/core/lib/api/
  ├── ports/                             STABLE — never changes on a generator swap
  │     ├── animal_api_port.dart          abstract interface AnimalApiPort { ... our DTOs ... }
  │     └── dto/                          OUR DTOs (json_serializable, generator-agnostic)
@@ -149,7 +149,7 @@ DI binding. Ports, DTOs, repositories, blocs, and UI are untouched — blast
 radius is one package. Parity tests in `core/test/` assert an adapter maps
 realistic wire JSON onto the DTOs correctly, so a replacement can be validated
 against the same fixtures. Full detail lives in
-[`modules/core/README.md`](modules/core/README.md).
+[`modules/base/core/README.md`](modules/base/core/README.md).
 
 ## Request flow
 
@@ -260,10 +260,9 @@ removed only after an `rg` gate confirmed zero legacy imports across `lib/` and
 
 ## Where to read next
 
-- [`modules/base/README.md`](modules/base/README.md)
-- [`modules/core/README.md`](modules/core/README.md) — domain + api split, and the generator-swap detail
+- [`modules/base/core/README.md`](modules/base/core/README.md) — domain + api split, and the generator-swap detail
 - [`modules/ui_kit/README.md`](modules/ui_kit/README.md)
-- [`modules/navigation/README.md`](modules/navigation/README.md)
+- [`modules/base/navigation/README.md`](modules/base/navigation/README.md)
 - [`modules/animals/README.md`](modules/animals/README.md) — the feature template
-- [`CLAUDE.md`](CLAUDE.md) — the add-a-feature / add-an-endpoint rituals
+- [`CONTRIBUTING.md`](CONTRIBUTING.md#adding-a-feature-or-endpoint) — the add-a-feature / add-an-endpoint rituals
 - [`docs/GOTCHAS.md`](docs/GOTCHAS.md) — codegen pitfalls

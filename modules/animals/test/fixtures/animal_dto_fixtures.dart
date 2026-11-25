@@ -1,7 +1,7 @@
 import 'package:core/api.dart';
 
 /// Реалистичные AnimalDto для тестов data-слоя. Формы позаимствованы у
-/// modules/core/test/fixtures/animals_fixtures.dart, но собраны сразу в
+/// modules/base/core/test/fixtures/animals_fixtures.dart, но собраны сразу в
 /// DTO (маппер/репозиторий работают с DTO, не с сырым JSON).
 
 ImageThumbnailsDto _thumbs(String base) =>

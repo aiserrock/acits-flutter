@@ -1,6 +1,6 @@
 # Implementation Plan: Foundation Re-Architecture (Phase 0)
 
-> Scope: the **foundation** the whole re-architecture stands on. NOT a screen. Screens (`animals` first, then the other 20) are planned per-screen via `/plan` **after** this phase lands. Source of truth: `docs/design-specs/architecture-rearchitecture.md` (approved).
+> Scope: the **foundation** the whole re-architecture stands on. NOT a screen. Screens (`animals` first, then the other 20) are planned per-screen via `/plan` **after** this phase lands. Source of truth: the approved architecture design spec (a local planning note, not part of the repository).
 >
 > Toolchain: FVM Flutter 3.44.0. All commands `fvm flutter` / `fvm dart`. Formatting `fvm dart format -l 120`. Analyze `fvm dart analyze`. Melos is the task-runner.
 >
@@ -106,7 +106,7 @@ Strangler order — **chopper stays until the last consumer is migrated.** Found
 9. **Group-by-group migration** of the remaining features; each verified green. Route aliases old→canonical kept ≥1 release.
 10. **Legacy removal (gated):** remove chopper, `chopper_generator`, `swagger_dart_code_generator`, `openapi.swagger.*` **only** when `rg -l 'gen/api|chopper' lib modules` returns nothing.
 11. **mason bricks** `feature` + `screen` — **after** `animals` + one differing feature, so the template reflects proven boilerplate.
-12. **OSS + CI:** README (10-section), CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, ARCHITECTURE.md + SVG diagrams (neutral wording — no closed-project names), per-package READMEs, `.github/` templates, `presubmit.yml`, `semantic-pr.yml`, release-please, dependabot; root `CLAUDE.md` documenting rituals.
+12. **OSS + CI:** README (10-section), CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, ARCHITECTURE.md + SVG diagrams (neutral wording — no closed-project names), per-package READMEs, `.github/` templates, `presubmit.yml`, `semantic-pr.yml`, release-please, dependabot; the feature/endpoint rituals documented in CONTRIBUTING.md.
 
 Steps 1–5 are the critical path. Step 8 (`animals`) is the architecture proof. Legacy is removed only at step 10.
 
@@ -127,7 +127,7 @@ How this plan is executed once approved. **Not started yet — awaiting owner ap
 - **Mode:** ultracode + `Workflow`. Agents carry orchestrator-style instructions as their prompt (implement → run `fvm dart analyze` + `melos check-all` + tests → fix own errors in a loop → return). Note: workflow subagents cannot invoke the `/orchestrator` skill itself; they receive its plan→implement→self-verify→fix loop as instructions.
 - **Sequencing: fully sequential — one agent at a time.** No parallel waves. Order follows the dependency graph strictly (a package is built only after everything it imports exists), so no false compile errors from missing deps: Step 1 workspace/melos → 2 `acits_core` → 3 `acits_domain` → 4 `acits_api` (+parity) → 5 `acits_ui_kit` → 6 navigation-in-root → 7 app composition (chopper stays) → 8 `animals` slice → 9 group migration → 10 gated legacy removal → 11 mason → 12 OSS/CI. One agent at a time ⇒ **no worktree isolation needed**. Native uploader is backlog (own sub-plan later).
 - **Autonomy: run to the milestone gate without stopping for review.** Each agent self-verifies and fixes its own errors; owner is shown the result at the end (owner stated "not in prod, safe to proceed"). A step is checked only when it compiles + `melos check-all` is green + its tests pass. **Milestone gate is broader than "compiles"**: clean codegen, package-graph check (no forbidden edges), `fvm flutter build web`, Android debug build, iOS simulator build `--no-codesign`, plus a URL-reload/startup smoke test.
-- **Git: branch `refactor/foundation` off `develop`.** Commit after each successfully completed step/wave (revertable checkpoints). Commit messages end without Claude attribution (per project rule). **No `push` / PR** until the owner explicitly asks.
+- **Git: branch `refactor/foundation` off `develop`.** Commit after each successfully completed step/wave (revertable checkpoints). Commit messages carry no tool attribution (per project rule). **No `push` / PR** until the owner explicitly asks.
 - **Stop conditions:** an agent that cannot make its package compile/pass after its fix loop stops and reports rather than checking the box; the workflow surfaces the blocker instead of forcing a green.
 
 ## Progress Checklist
@@ -212,12 +212,12 @@ How this plan is executed once approved. **Not started yet — awaiting owner ap
 - [x] `.github/` issue + PR templates (already present, kept)
 - [x] CI targeted edits: strict analyze (`--fatal-infos --fatal-warnings`), root+package/module tests, workspace archive incl. packages/modules
 - [x] `semantic-pr.yml`, dependabot (pub + github-actions, grouped)
-- [x] root `CLAUDE.md` (feature/endpoint rituals) + `docs/GOTCHAS.md`
+- [x] feature/endpoint rituals (CONTRIBUTING.md) + `docs/GOTCHAS.md`
 
 ### Backlog (separate sub-plans, not this phase)
 - [ ] Native background upload — pigeon + Kotlin `WorkManager` / Swift `NSURLSession` + web Background Fetch; **blocked on backend upload-session/idempotency contract**. Interim: durable whole-request retry behind `PhotoUploadService`.
 - [ ] On-device ML; Rust core.
-- [x] root `CLAUDE.md` documenting feature/endpoint rituals for agents (done in Step 12)
+- [x] feature/endpoint rituals documented in CONTRIBUTING.md (done in Step 12)
 - [x] "gotcha" doc (symptoms of skipping `genapi`/`genone`) — docs/GOTCHAS.md (done in Step 12)
 
 ### Milestone gates

@@ -31,7 +31,7 @@ lib/
 ## Wiring checklist (after scaffolding)
 
 1. Add `modules/{{name.snakeCase()}}` under `workspace:` in the root `pubspec.yaml`, then `fvm flutter pub get`.
-2. Add `{{name.pascalCase()}}ApiPort` + `{{name.pascalCase()}}Dto` to `modules/base/core` (`lib/api/ports/` + `lib/api/ports/dto/`) and a swagger_parser adapter (see CLAUDE.md → add an endpoint).
+2. Add `{{name.pascalCase()}}ApiPort` + `{{name.pascalCase()}}Dto` to `modules/base/core` (`lib/api/ports/` + `lib/api/ports/dto/`) and a swagger_parser adapter (see CONTRIBUTING.md → "Adding a feature or endpoint").
 3. In the root DI: construct adapter → repository → `{{name.pascalCase()}}RouterServiceImpl`; register them; add routes to the root GoRouter tree.
 4. `fvm dart run build_runner build --delete-conflicting-outputs`, then `melos check-all`.
 

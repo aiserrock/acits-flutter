@@ -124,7 +124,7 @@ hand-written коду проходит.
   и debug-экран в shell.
 - `CHANGELOG.md`, `[Unreleased]`: записать ветку — re-architecture (модули,
   dio/ports вместо chopper), widgetbook-галерея, Patrol e2e, фикс nullability.
-- `docs/design-specs/patrol-smoke-e2e.md`: в Open Questions снять пункт про
+- Спека Patrol-смоука (локальная заметка, вне репозитория): в Open Questions снять пункт про
   iOS, если Шаг 3 прошёл.
 
 ### Шаг 5 — разложить по коммитам

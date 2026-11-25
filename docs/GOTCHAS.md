@@ -11,7 +11,7 @@ something breaks in a confusing way, scan the symptom column.
 | New `@JsonSerializable` DTO won't compile / `_$FooFromJson` undefined | `.g.dart` not generated | `melos gen` (or `MELOS_GENONE_PKG=modules/core melos run genone`) |
 | `@injectable` binding not found at runtime / DI can't resolve a type | `di_container.config.dart` stale | `fvm dart run build_runner build --delete-conflicting-outputs` |
 | `LocaleKeys.foo` undefined after adding a string | l10n keys not regenerated, or key added to only one language file | add the key to **both** `en.json` and `ru.json`, then `melos l10n` |
-| `build_runner` fails inside `modules/core` with dangling imports around `Species` / `Applicant` / `Prescription` etc. | swagger_parser 1.44 drops data classes used as `multipart/form-data` request bodies | this is why `melos genapi` runs `tool/preprocess_openapi.dart` first — always go through `melos genapi`, never raw `swagger_parser`. See [`modules/core/README.md`](../modules/core/README.md) |
+| `build_runner` fails inside `modules/base/core` with dangling imports around `Species` / `Applicant` / `Prescription` etc. | swagger_parser 1.44 drops data classes used as `multipart/form-data` request bodies | this is why `melos genapi` runs `tool/preprocess_openapi.dart` first — always go through `melos genapi`, never raw `swagger_parser`. See [`modules/core/README.md`](../modules/core/README.md) |
 
 **Rule of thumb:** touched the API layer → `melos genapi` then `melos gen`.
 Touched DI/json/assets → `melos gen`. Touched the spec → `melos genapi`.
