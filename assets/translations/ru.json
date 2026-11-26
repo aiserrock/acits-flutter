@@ -226,5 +226,7 @@
   "themeDark": "Тёмная",
   "themeLight": "Светлая",
   "themeSectionTitle": "Тема оформления",
-  "themeSystem": "Системная"
+  "themeSystem": "Системная",
+  "privacyCollectionTitle": "Отправлять статистику и отчёты об ошибках",
+  "privacyCollectionSubtitle": "Помогает находить и исправлять сбои. Имя, почта и телефон не передаются."
 }

@@ -79,6 +79,7 @@ abstract final class AppRoutes {
 GoRouter createAppRouter() {
   return GoRouter(
     navigatorKey: getIt<GlobalKey<NavigatorState>>(),
+    observers: getIt.isRegistered<List<NavigatorObserver>>() ? getIt<List<NavigatorObserver>>() : null,
     // Всегда стартуем со splash: он делает refresh токена и решает, куда идти
     // (onboarding / login / pick-shelter / root), без мелькания login.
     initialLocation: AppRoutes.splash,

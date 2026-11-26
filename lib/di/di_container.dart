@@ -4,6 +4,9 @@ import 'package:injectable/injectable.dart';
 import 'package:shell/shell.dart';
 
 import 'package:di/di.dart';
+import 'package:observability/observability.dart';
+
+import 'package:acits_flutter/observability_setup.dart';
 
 import 'di_container.config.dart';
 
@@ -15,12 +18,23 @@ final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   initializerName: r'$initGetIt',
   preferRelativeImports: false,
   asExtension: false,
-  ignoreUnregisteredTypes: [DebugService],
+  ignoreUnregisteredTypes: [DebugService, ErrorReporter],
   externalPackageModulesAfter: [ExternalModule(AppServicesPackageModule), ExternalModule(ShellPackageModule)],
 )
-Future<void> initDi() async {
+Future<void> initDi(ObservabilitySetup observability) async {
+  // До $initGetIt: Talker (injectable) резолвит ErrorReporter в своей фабрике.
+  getIt.registerSingleton<ErrorReporter>(observability.reporter);
   await $initGetIt(getIt, environmentFilter: NoEnvOrContains(Environment.prod));
+  await registerCollectionSettings(observability);
   getIt.registerSingleton(_navigatorKey);
   getIt.registerSingleton(_scaffoldMessengerKey);
+  getIt.registerSingleton<List<NavigatorObserver>>(observability.navigatorObservers());
   getIt.registerSingleton(createAppRouter());
+}
+
+/// Регистрирует выбор пользователя о сборе данных и применяет сохранённое значение.
+Future<void> registerCollectionSettings(ObservabilitySetup observability) async {
+  final settings = observability.collectionSettings(getIt<PreferenceStorage>());
+  getIt.registerSingleton<CollectionSettings>(settings);
+  await settings.apply();
 }

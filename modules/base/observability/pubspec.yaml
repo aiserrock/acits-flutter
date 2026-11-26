@@ -1,0 +1,22 @@
+name: observability
+description: Error and event reporting for ACITS — one reporter fan-out over Crashlytics and Sentry, PII scrubbing and the collection opt-out. Leaf package with no internal dependencies.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.50.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_analytics: ^13.1.0
+  firebase_crashlytics: ^6.1.0
+  sentry_flutter: ^10.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

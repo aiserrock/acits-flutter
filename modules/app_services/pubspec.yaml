@@ -17,6 +17,8 @@ dependencies:
   # Foundation packages.
   util:
     path: ../base/util
+  observability:
+    path: ../base/observability
   network:
     path: ../base/network
   core:

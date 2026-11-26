@@ -14,6 +14,7 @@ import 'package:acits_flutter/di/app_logger.dart' as _i418;
 import 'package:app_services/app_services.dart' as _i579;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:observability/observability.dart' as _i441;
 import 'package:shell/shell.dart' as _i889;
 import 'package:talker_flutter/talker_flutter.dart' as _i207;
 
@@ -28,7 +29,7 @@ Future<_i174.GetIt> $initGetIt(
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final appLoggerModule = _$AppLoggerModule();
   gh.singleton<_i207.Talker>(
-    () => appLoggerModule.talker(),
+    () => appLoggerModule.talker(gh<_i441.ErrorReporter>()),
     registerFor: {_prod},
   );
   await _i579.AppServicesPackageModule().init(gh);

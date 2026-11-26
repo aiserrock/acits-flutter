@@ -23,6 +23,12 @@ abstract final class AppVersion {
   }
 
   /// Короткая метка вида `v0.7.0 (20)`. Пустая строка, если [load] не отработал.
+  /// Marketing version (`1.2.0`), empty until [load] has run.
+  static String get version => _version;
+
+  /// Build number shared by all stores, empty until [load] has run.
+  static String get buildNumber => _buildNumber;
+
   static String get label {
     if (_version.isEmpty) return '';
     return _buildNumber.isEmpty ? 'v$_version' : 'v$_version ($_buildNumber)';

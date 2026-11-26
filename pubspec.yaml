@@ -19,6 +19,7 @@ workspace:
   - modules/ui_kit
   - modules/base/navigation
   - modules/base/di
+  - modules/base/observability
   - modules/animals
   - modules/auth
   - modules/applicants
@@ -57,6 +58,8 @@ dependencies:
   # scan lib/service/* app-composition classes — a package can't scan its consumer.
   di:
     path: modules/base/di
+  observability:
+    path: modules/base/observability
 
   # Feature module: animals list migrated onto the new stack (Step 8b).
   animals:
