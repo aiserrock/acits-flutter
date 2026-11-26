@@ -215,6 +215,28 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+          # Gradle caches keyed by the build scripts and wrapper: a warm cache
+          # skips the dependency downloads that Maven Central rate-limits (429).
+          cache: gradle
+          cache-dependency-path: |
+            android/*.gradle*
+            android/app/*.gradle*
+            android/gradle/wrapper/gradle-wrapper.properties
+
+      # Maven Central answers GitHub-hosted runners with 429 Too Many Requests.
+      # The init script resolves its artifacts through Google's mirror first
+      # (tool/ci/gradle-mirror.init.gradle); the HTTP settings retry the few
+      # plugin markers that only the Gradle plugin portal serves.
+      - name: Use the Maven Central mirror
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cp tool/ci/gradle-mirror.init.gradle ~/.gradle/init.d/
+          {
+            echo "org.gradle.internal.http.connectionTimeout=60000"
+            echo "org.gradle.internal.http.socketTimeout=60000"
+            echo "org.gradle.internal.repository.max.retries=6"
+            echo "org.gradle.internal.repository.initial.backoff=2000"
+          } >> ~/.gradle/gradle.properties
 
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
