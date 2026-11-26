@@ -56,9 +56,8 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
 
   Shelter? get currentShelter => _shelterList.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
-  /// Обновляет пару токенов и возвращает новый access (null — обновить не
-  /// удалось). Наружу отдаётся строка, а не DTO: транспортные типы дальше
-  /// этого сервиса не идут.
+  /// Обновляет пару токенов и возвращает новый access. `null` — сервер отверг
+  /// refresh-токен; сетевой сбой пробрасывается (контракт `TokenRefresher`).
   Future<String?> refreshToken({String? refresh}) async {
     final usedRefresh = refresh ?? _refresh;
     try {
@@ -74,8 +73,12 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
       Log.info('Token refreshed');
       return result.access;
     } on DioException catch (e) {
-      Log.warning('Token refresh failed (status=${e.response?.statusCode})');
-      return null;
+      final status = e.response?.statusCode;
+      Log.warning('Token refresh failed (status=$status)');
+      // 400/401/403 — сервер отверг refresh-токен. Сеть, таймаут и 5xx пробрасываем:
+      // сессия жива, разлогинивать пользователя нельзя.
+      if (status == 400 || status == 401 || status == 403) return null;
+      rethrow;
     }
   }
 

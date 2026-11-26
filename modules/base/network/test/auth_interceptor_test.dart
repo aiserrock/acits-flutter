@@ -141,6 +141,26 @@ void main() {
       expect(invalidator.calls, 1);
     });
 
+    test('a network failure during refresh keeps the session and surfaces the network error', () async {
+      final adapter = _MockAdapter();
+      final store = _MutableTokenStore();
+      final invalidator = _RecordingInvalidator();
+
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+      dio.httpClientAdapter = adapter;
+      dio.interceptors.add(
+        AuthInterceptor(dio: dio, tokenStore: store, refresher: _OfflineRefresher(), sessionInvalidator: invalidator),
+      );
+
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async => _resBody(401));
+
+      await expectLater(
+        dio.get<dynamic>('/a'),
+        throwsA(isA<DioException>().having((e) => e.type, 'type', DioExceptionType.connectionError)),
+      );
+      expect(invalidator.calls, 0);
+    });
+
     test('non-401 errors pass through without refresh', () async {
       final adapter = _MockAdapter();
       final store = _MutableTokenStore();
@@ -160,6 +180,14 @@ void main() {
       expect(invalidator.calls, 0);
     });
   });
+}
+
+class _OfflineRefresher implements TokenRefresher {
+  @override
+  Future<String?> refresh() async => throw DioException(
+    requestOptions: RequestOptions(path: '/token/refresh/'),
+    type: DioExceptionType.connectionError,
+  );
 }
 
 class _NullRefresher implements TokenRefresher {
