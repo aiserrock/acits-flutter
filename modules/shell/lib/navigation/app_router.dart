@@ -7,6 +7,7 @@ import 'package:applicants/applicants.dart';
 import 'package:media/media.dart';
 import 'package:prescriptions/prescriptions.dart'
     show
+        DrugsScreen,
         Prescription,
         PrescriptionAnimalLoader,
         PrescriptionAnimalRef,
@@ -15,13 +16,15 @@ import 'package:prescriptions/prescriptions.dart'
         PrescriptionTypeLabels,
         PrescriptionsRouterService;
 import 'package:personal/personal.dart'
-    show AnimalNote, CommentEditScreen, CommentsRepository, PersonalRepository, PersonalScreen;
+    show AnimalNote, CalendarScreen, CommentEditScreen, CommentsRepository, PersonalRepository, PersonalScreen;
 import 'package:app_services/app_services.dart' show DebugService;
 import 'package:di/di.dart';
 import 'package:shell/navigation/auth_screen_bindings.dart';
 import 'package:shell/navigation/extra_codec.dart';
 import 'package:shell/presentation/animal_detail/animal_detail_screen.dart';
 import 'package:shell/presentation/animal_edit/animal_edit_screen.dart';
+import 'package:shell/presentation/animals_section.dart';
+import 'package:shell/presentation/main/main_screen.dart';
 import 'package:shell/presentation/gallery/gallery_screen.dart';
 import 'package:shell/presentation/root_screen.dart';
 
@@ -37,9 +40,18 @@ abstract final class AppRoutes {
   static const login = '/login';
   static const registration = '/registration';
   static const emailConfirmation = '/email-confirmation';
-  static const root = '/root';
 
-  static const animalDetail = '/animal/:id';
+  /// The signed-in shell; lands on the «Today» tab.
+  static const root = today;
+
+  // Tabs of the signed-in shell. Each tab keeps its own navigation stack.
+  static const today = '/today';
+  static const animals = '/animals';
+  static const calendar = '/calendar';
+  static const drugs = '/drugs';
+
+  /// Animal card inside the animals tab (next to the list on wide windows).
+  static const animalDetail = '/animals/:id';
   static const animalEdit = '/animal-edit';
   static const applicantEdit = '/applicant-edit';
   static const curatorEdit = '/curator-edit';
@@ -56,7 +68,7 @@ abstract final class AppRoutes {
   static const gallery = '/debug/gallery';
 
   /// Построить путь к экрану деталей животного.
-  static String animalDetailPath(int id) => '/animal/$id';
+  static String animalDetailPath(int id) => '/animals/$id';
 
   /// Построить путь к галерее фото животного.
   static String photoGalleryPath(int animalId) => '/photo-gallery/$animalId';
@@ -93,10 +105,55 @@ GoRouter createAppRouter() {
         path: AppRoutes.emailConfirmation,
         builder: (context, state) => AuthScreenBindings.emailConfirmation(state.uri.queryParameters['link'] ?? ''),
       ),
-      GoRoute(path: AppRoutes.root, builder: (context, state) => const RootScreen()),
+      // Paths used before the tabs had their own URLs: saved links and bookmarks keep working.
+      GoRoute(path: '/root', redirect: (_, _) => AppRoutes.today),
       GoRoute(
-        path: AppRoutes.animalDetail,
-        builder: (context, state) => AnimalDetailScreen(id: int.parse(state.pathParameters['id']!)),
+        path: '/animal/:id',
+        redirect: (_, state) => AppRoutes.animalDetailPath(int.parse(state.pathParameters['id']!)),
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => RootScreen(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.today, builder: (context, state) => const MainScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [
+              ShellRoute(
+                builder: (context, state, child) => AnimalsSection(child: child),
+                routes: [
+                  GoRoute(
+                    path: AppRoutes.animals,
+                    builder: (context, state) => const AnimalsRootPage(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => AnimalDetailScreen(
+                          key: ValueKey(state.pathParameters['id']),
+                          id: int.parse(state.pathParameters['id']!),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.calendar, builder: (context, state) => const CalendarScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.drugs,
+                builder: (context, state) => DrugsScreen(
+                  repository: getIt<PrescriptionRepository>(),
+                  onMenuPressed: RootDrawerProvider.of(context)?.openDrawer,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.animalEdit,

@@ -110,6 +110,8 @@
   "commonYear": "year",
   "curatorAdd": "New curator",
   "curatorEdit": "Edit",
+  "drugsEmptyState": "No medications in the catalogue yet",
+  "drugsStock": "In stock: {}",
   "errorAuthFail": "Session expired",
   "errorAuthFailMsg": "Please sign in again",
   "errorForbidden": "Access denied",
