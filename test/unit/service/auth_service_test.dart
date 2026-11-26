@@ -82,6 +82,41 @@ void main() {
     });
   });
 
+  group('refreshToken', () {
+    DioException offline() => DioException(
+      requestOptions: RequestOptions(path: '/'),
+      type: DioExceptionType.connectionError,
+    );
+
+    test('returns the new access token on success', () async {
+      when(() => api.refresh('r', any())).thenAnswer((_) async => const TokenRefreshDto(access: 'a2'));
+      expect(await service.refreshToken(refresh: 'r'), 'a2');
+      expect(service.access, 'a2');
+    });
+
+    test('returns null when the server rejects the refresh token', () async {
+      when(() => api.refresh('r', any())).thenThrow(_dio(401));
+      expect(await service.refreshToken(refresh: 'r'), isNull);
+    });
+
+    test('rethrows a network failure instead of reporting the session as ended', () async {
+      when(() => api.refresh('r', any())).thenThrow(offline());
+      await expectLater(service.refreshToken(refresh: 'r'), throwsA(isA<DioException>()));
+    });
+
+    test('rethrows a server error (5xx): the refresh token was not rejected', () async {
+      when(() => api.refresh('r', any())).thenThrow(_dio(503));
+      await expectLater(service.refreshToken(refresh: 'r'), throwsA(isA<DioException>()));
+    });
+
+    test('tryRefreshLastAuth is false without a network and leaves the stored refresh token alone', () async {
+      when(() => authRepo.refresh).thenAnswer((_) async => 'r');
+      when(() => api.refresh('r', any())).thenThrow(offline());
+      expect(await service.tryRefreshLastAuth(), isFalse);
+      verifyNever(() => authRepo.clearRefresh());
+    });
+  });
+
   group('getShelterList', () {
     test('maps ShelterShortDto list to Shelter entities and caches them', () async {
       when(

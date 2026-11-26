@@ -28,7 +28,8 @@ class RefreshCoordinator {
 }
 
 /// На 401 запускает single-flight refresh и, при успехе, ретраит упавший запрос
-/// с новым Bearer. При провале refresh — инвалидация сессии и проброс ошибки.
+/// с новым Bearer. Сессия инвалидируется, только когда сервер отверг refresh-токен
+/// (refresher вернул null); сбой сети при refresh сессию не трогает.
 ///
 /// Обычный (не queued) Interceptor: пачка параллельных 401 приходит в onError
 /// почти одновременно, поэтому `??=`-замок в координаторе реально шарит один
@@ -63,8 +64,11 @@ class AuthInterceptor extends Interceptor {
     String? token;
     try {
       token = await _coordinator.run();
+    } on DioException catch (refreshError) {
+      // Refresh не дошёл до решения сервера (сеть, таймаут, 5xx): сессия жива,
+      // наверх уходит сетевая ошибка, а не 401.
+      return handler.next(refreshError);
     } catch (_) {
-      _sessionInvalidator.invalidate();
       return handler.next(err);
     }
     if (token == null) {
