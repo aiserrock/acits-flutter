@@ -12,40 +12,28 @@ mobile, web/PWA, and desktop.
 
 ## Workspace shape
 
-The repo is a single melos **workspace** — a thin root application plus a set of
-versioned packages and feature modules resolved together (`resolution:
-workspace`). Dependencies point strictly **downward**; feature modules never
-import each other.
+The repo is a single melos **workspace** — a thin root application plus the
+packages under `modules/`, resolved together (`resolution: workspace`).
+Dependencies point strictly **downward** through the layers below; the rule is
+enforced by `tool/check_package_graph.dart` (`melos run graph:check`, also a CI
+step), which fails on any upward or same-layer edge.
 
-- **Root app** (`lib/`) — the flavor entrypoints (`main.dart` prod,
-  `test/dev/main.dart` dev), `bootstrap.dart` (`AppTask` startup pipeline), DI
-  composition, the `MaterialApp.router` shell (`root_screen`/`main` + the
-  `animal_detail`/`animal_edit` composition screens where cross-feature tabs
-  meet), and app-level infra (`AuthService` session state + `ConfigService` —
-  they stay in the app because they bridge features and depend on the `auth`
-  feature facade, so hosting them lower would create an upward edge). It depends
-  on everything and is the only place that wires ports to adapters and assembles
-  the router tree, importing each module only through its **barrel**
-  (`package:<module>/<module>.dart`).
-- **`packages/`** — reserved for **forks of external libraries and truly generic
-  self-written libs** reusable across projects without acits-specific rework.
-  Currently empty (nothing qualifies yet).
-- **`modules/`** — all project code, no `acits_` prefix, reference-app-style:
-  - shared kernel: **`base`** (infra — `Result`/`Failure`, Dio factory +
-    interceptors + network ports, platform ports, `DataState`, shared pure util;
-    depends on nothing internal), **`core`** (`domain/` entities + mappers + repo
-    interfaces and `api/` ports + our DTOs + swagger_parser adapters + generated
-    client; depends on `base` only), **`ui_kit`** (M3 tokens, breakpoints,
-    adaptive scaffold, shared widgets), **`navigation`** (route primitives),
-    **`l10n`** (one generated easy_localization `LocaleKeys`, `melos run l10n`).
-  - six feature packages, each internally layered `data / domain / presentation`
-    and free of any `package:acits_flutter` (app) import: `animals`, `auth`,
-    `applicants`, `prescriptions`, `personal`, `media`. Cross-feature needs are
-    met through ports (implemented in the app) or a downward barrel dependency on
-    another leaf module — never a cycle. The `animal_detail`/`animal_edit` screens
-    stay in the app precisely because they compose `prescriptions` + `personal`
-    (comments) + `media` tabs, and `media` already depends on `animals` — hosting
-    them in `modules/animals` would form an `animals → media → animals` cycle.
+| Layer | Packages | Role |
+| --- | --- | --- |
+| 6 | root app (`lib/`, `test/dev/`) | Flavor entrypoints, `bootstrap.dart` (`AppTask` startup pipeline) and the DI composition (`lib/di/` for prod, `test/dev/di/` for dev). The only place that sees every package. |
+| 5 | `shell` | `MaterialApp.router`, the router tree, `RootScreen` and the screens that compose several features (`animal_detail`, `animal_edit`). |
+| 4 | `app_services` | Services that bridge features: session (`AuthService`), config, document export, port bridges. |
+| 3 | `media` | Photo gallery/editor and search; composes `animals`, `applicants`, `prescriptions`. |
+| 2 | `animals`, `applicants`, `auth`, `prescriptions`, `personal` | Feature packages, each layered `data / domain / presentation`. They never import each other. |
+| 1 | `core`, `ui_kit` | `core`: domain entities, repository interfaces, API ports, our DTOs, the swagger_parser adapters. `ui_kit`: tokens, breakpoints, adaptive scaffold, shared widgets. |
+| 0 | `util`, `network`, `navigation`, `localization`, `di` | Leaf infrastructure with no internal dependencies. `di` owns only the shared `getIt` instance. |
+
+`packages/` is reserved for forks of external libraries and generic self-written
+libs; it is empty today.
+
+Why the composition screens live in `shell` and not in a feature: they combine
+`prescriptions`, `personal` (comments) and `media` tabs, and `media` already
+depends on `animals` — hosting them in `animals` would form a cycle.
 
 ## Barrel convention (inside every module)
 
@@ -62,58 +50,33 @@ bricks scaffold this shape.
 
 ## Package DAG
 
-Every arrow is an allowed dependency; the absence of an arrow is a rule. The one
-that matters most: **`core/domain` never depends on `core/api`** — the domain is
-DTO-free, and DTO→entity mapping lives in each feature's `data` layer.
+Every arrow is an allowed dependency; the absence of an arrow is a rule. Inside
+`core` one more rule applies: **`core/domain` never depends on `core/api`** — the
+domain is DTO-free, and DTO→entity mapping lives in each feature's `data` layer.
 
 ```mermaid
 graph TD
-    app["app (root)<br/>shell · bootstrap · DI · router tree · session/config"]
-    features["modules/features<br/>animals · auth · applicants ·<br/>prescriptions · personal · media<br/>(each: data · domain · presentation)"]
-    base["base<br/>Result/Failure · Dio · AppTask · platform ports · util"]
-    core["core<br/>domain/ (entities · repo ifaces · Transformable&lt;T&gt;)<br/>+ api/ (ports · our DTOs · adapters)"]
-    uikit["ui_kit<br/>tokens · breakpoints · AdaptiveScaffold · shared widgets"]
-    nav["navigation<br/>route constants · codecs · guards"]
-    l10n["l10n<br/>generated LocaleKeys"]
-    gen["swagger_parser generated client<br/>(private, inside core/api/adapters)"]
+    app["root app<br/>flavors · bootstrap · DI composition"]
+    shell["shell<br/>router tree · RootScreen · composition screens"]
+    services["app_services<br/>session · config · port bridges"]
+    media["media"]
+    features["animals · applicants · auth ·<br/>prescriptions · personal"]
+    core["core<br/>domain/ + api/ (ports · DTOs · adapters)"]
+    uikit["ui_kit"]
+    leaf["util · network · navigation ·<br/>localization · di"]
 
-    app --> features
-    app --> base
-    app --> core
-    app --> uikit
-    app --> nav
-    app --> l10n
-
-    features --> base
+    app --> shell
+    shell --> services
+    services --> media
+    media --> features
     features --> core
     features --> uikit
-    features --> nav
-    features --> l10n
-    features -.->|leaf→leaf barrel, no cycle<br/>e.g. media→animals for photo upload/search| features
-
-    core --> base
-    core -->|adapter only| gen
-    uikit --> base
-    nav --> base
-
-    subgraph coreInternal["inside core"]
-      coreDomain["domain/"]
-      coreApi["api/"]
-    end
-    coreDomain -. forbidden .-x coreApi
+    core --> leaf
+    uikit --> leaf
 ```
 
-Rules encoded above:
-
-- `feature.presentation → feature.domain`; `feature.data → feature.domain + core`.
-- `core/api` adapter → generated client + `base` (the shared Dio).
-- `core/domain` depends on `base` (for `Result`/`Failure`) but **not** on
-  `core/api` (domain stays DTO-free).
-- `navigation` holds navigation **primitives** only (route constants,
-  param codecs, guards) with **no feature/screen imports** — this avoids an
-  `app → navigation → screen → app` cycle. The concrete GoRouter tree is
-  assembled in the root app, which is the only layer allowed to import both
-  screens and routes.
+The diagram shows the layer order; a package may also depend on any layer below
+the next one (for example `shell` uses `ui_kit` and `navigation` directly).
 
 ## Ports & adapters: the swappable generator boundary
 

@@ -9,6 +9,8 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
+import 'package:acits_flutter/di/app_logger.dart' as _i418;
 import 'package:app_services/app_services.dart' as _i579;
 import 'package:core/api.dart' as _i995;
 import 'package:dio/dio.dart' as _i361;
@@ -26,6 +28,7 @@ import '../service/logger/logger_register.dart' as _i175;
 import '../service/shared_pref/debug_preference_storage.dart' as _i1058;
 
 const String _dev = 'dev';
+const String _prod = 'prod';
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i174.GetIt> $initDevGetIt(
@@ -37,6 +40,7 @@ Future<_i174.GetIt> $initDevGetIt(
   final envDevRegistrer = _$EnvDevRegistrer();
   final dioRegisterDev = _$DioRegisterDev();
   final loggerRegisterDev = _$LoggerRegisterDev();
+  final appLoggerModule = _$AppLoggerModule();
   final acitsApiRegisterDev = _$AcitsApiRegisterDev();
   gh.factory<_i579.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i361.Dio>(
@@ -54,6 +58,10 @@ Future<_i174.GetIt> $initDevGetIt(
   gh.singleton<_i579.DebugService>(
     () => _i218.DebugDevService(gh<_i1058.DebugPreferenceStorage>()),
     registerFor: {_dev},
+  );
+  gh.singleton<_i207.Talker>(
+    () => appLoggerModule.talker(),
+    registerFor: {_prod},
   );
   gh.factory<_i361.Dio>(
     () => acitsApiRegisterDev.createAcitsApiGuestDio(
@@ -194,5 +202,7 @@ class _$EnvDevRegistrer extends _i962.EnvDevRegistrer {}
 class _$DioRegisterDev extends _i230.DioRegisterDev {}
 
 class _$LoggerRegisterDev extends _i175.LoggerRegisterDev {}
+
+class _$AppLoggerModule extends _i418.AppLoggerModule {}
 
 class _$AcitsApiRegisterDev extends _i39.AcitsApiRegisterDev {}

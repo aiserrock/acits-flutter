@@ -3,13 +3,15 @@ import 'package:material_ui/material_ui.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shell/shell.dart';
 
+import 'package:di/di.dart';
+
 import 'di_container.config.dart';
-import 'get_it.dart';
 
 final _navigatorKey = GlobalKey<NavigatorState>();
 final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 @InjectableInit(
+  generateForDir: ['lib'],
   initializerName: r'$initGetIt',
   preferRelativeImports: false,
   asExtension: false,
