@@ -37,6 +37,13 @@ CSRF_TRUSTED_ORIGINS = ["https://aiserrock.github.io"]
 `CORS_ALLOW_HEADERS`, дефолт django-cors-headers уже покрывает почти всё):
 `authorization`, `content-type`, `x-current-shelter`.
 
+Мобильные сборки дополнительно шлют версию клиента: `x-app-version`,
+`x-app-build`, `x-app-platform`. С web они **не отправляются**, пока эти три
+заголовка не добавлены в `CORS_ALLOW_HEADERS`: нестандартный заголовок вызывает
+preflight, и без разрешения браузер заблокировал бы каждый запрос. После правки
+на бэкенде — убрать web-исключение в `AppClientInfoProvider`
+(`modules/app_services/lib/src/service/client/auth_port_bridges.dart`).
+
 ## Как проверить
 
 ```bash

@@ -24,6 +24,7 @@ abstract class AcitsApiRegisterDev {
     TokenRefresher refresher,
     SessionInvalidator sessionInvalidator,
     LocaleProvider localeProvider,
+    ClientInfoProvider clientInfo,
     Env env,
     DebugPreferenceStorage ps,
   ) {
@@ -32,6 +33,7 @@ abstract class AcitsApiRegisterDev {
       refresher: refresher,
       sessionInvalidator: sessionInvalidator,
       localeProvider: localeProvider,
+      clientInfo: clientInfo,
     );
     dio.options.baseUrl = UrlCorsProxy.wrapBase(ps.baseUrl ?? env.apiUrl);
     dio.interceptors.add(getIt<Alice>().getDioInterceptor());
@@ -40,15 +42,8 @@ abstract class AcitsApiRegisterDev {
 
   @dev
   @Named('acitsApiGuest')
-  Dio createAcitsApiGuestDio(Env env, DebugPreferenceStorage ps) {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: UrlCorsProxy.wrapBase(ps.baseUrl ?? env.apiUrl),
-        connectTimeout: const Duration(milliseconds: 30000),
-        receiveTimeout: const Duration(milliseconds: 30000),
-        sendTimeout: const Duration(milliseconds: 30000),
-      ),
-    );
+  Dio createAcitsApiGuestDio(Env env, DebugPreferenceStorage ps, ClientInfoProvider clientInfo) {
+    final dio = createGuestDio(baseUrl: UrlCorsProxy.wrapBase(ps.baseUrl ?? env.apiUrl), clientInfo: clientInfo);
     dio.interceptors.add(getIt<Alice>().getDioInterceptor());
     return dio;
   }

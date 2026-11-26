@@ -41,8 +41,8 @@ Future<_i174.GetIt> $initDevGetIt(
   final loggerRegisterDev = _$LoggerRegisterDev();
   final envDevRegistrer = _$EnvDevRegistrer();
   final dioRegisterDev = _$DioRegisterDev();
-  final appLoggerModule = _$AppLoggerModule();
   final acitsApiRegisterDev = _$AcitsApiRegisterDev();
+  final appLoggerModule = _$AppLoggerModule();
   gh.singleton<_i207.Talker>(
     () => loggerRegisterDev.talker(gh<_i441.ErrorReporter>()),
     registerFor: {_dev},
@@ -60,28 +60,13 @@ Future<_i174.GetIt> $initDevGetIt(
     () => _i218.DebugDevService(gh<_i1058.DebugPreferenceStorage>()),
     registerFor: {_dev},
   );
-  gh.singleton<_i207.Talker>(
-    () => appLoggerModule.talker(gh<_i441.ErrorReporter>()),
-    registerFor: {_prod},
-  );
   gh.factory<_i361.Dio>(
     () => acitsApiRegisterDev.createAcitsApiGuestDio(
       gh<_i579.Env>(),
       gh<_i1058.DebugPreferenceStorage>(),
+      gh<_i372.ClientInfoProvider>(),
     ),
     instanceName: 'acitsApiGuest',
-    registerFor: {_dev},
-  );
-  gh.factory<_i361.Dio>(
-    () => acitsApiRegisterDev.createAcitsApiDio(
-      gh<_i372.TokenStore>(),
-      gh<_i372.TokenRefresher>(),
-      gh<_i372.SessionInvalidator>(),
-      gh<_i372.LocaleProvider>(),
-      gh<_i579.Env>(),
-      gh<_i1058.DebugPreferenceStorage>(),
-    ),
-    instanceName: 'acitsApi',
     registerFor: {_dev},
   );
   gh.factory<_i995.SheltersClient>(
@@ -94,6 +79,23 @@ Future<_i174.GetIt> $initDevGetIt(
     () => acitsApiRegisterDev.usersRegistrationClient(
       gh<_i361.Dio>(instanceName: 'acitsApiGuest'),
     ),
+    registerFor: {_dev},
+  );
+  gh.singleton<_i207.Talker>(
+    () => appLoggerModule.talker(gh<_i441.ErrorReporter>()),
+    registerFor: {_prod},
+  );
+  gh.factory<_i361.Dio>(
+    () => acitsApiRegisterDev.createAcitsApiDio(
+      gh<_i372.TokenStore>(),
+      gh<_i372.TokenRefresher>(),
+      gh<_i372.SessionInvalidator>(),
+      gh<_i372.LocaleProvider>(),
+      gh<_i372.ClientInfoProvider>(),
+      gh<_i579.Env>(),
+      gh<_i1058.DebugPreferenceStorage>(),
+    ),
+    instanceName: 'acitsApi',
     registerFor: {_dev},
   );
   gh.factory<_i995.AnimalsClient>(
@@ -204,6 +206,6 @@ class _$EnvDevRegistrer extends _i962.EnvDevRegistrer {}
 
 class _$DioRegisterDev extends _i230.DioRegisterDev {}
 
-class _$AppLoggerModule extends _i418.AppLoggerModule {}
-
 class _$AcitsApiRegisterDev extends _i39.AcitsApiRegisterDev {}
+
+class _$AppLoggerModule extends _i418.AppLoggerModule {}

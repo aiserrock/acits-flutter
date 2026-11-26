@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:network/network.dart';
 import 'package:injectable/injectable.dart';
+import 'package:util/util.dart' show AppVersion;
 
 import 'package:di/di.dart';
 import 'package:app_services/src/service/auth/auth_service.dart';
@@ -52,4 +54,24 @@ class ConfigServiceLocaleProvider implements LocaleProvider {
   // AuthService, а тот теперь — от AuthApiPort поверх этого же Dio.
   @override
   String get locale => getIt<ConfigService>().local;
+}
+
+/// Версия, сборка и платформа клиента для заголовков `x-app-*`. Версия читается
+/// из [AppVersion], загруженного на старте до первого запроса.
+///
+/// На web заголовки не отправляются: нестандартный заголовок вызывает CORS-preflight,
+/// и пока бэкенд не разрешил `x-app-*` в `CORS_ALLOW_HEADERS`, браузер блокировал бы
+/// каждый запрос (см. doc/backend-cors-web-pwa.md).
+@Injectable(as: ClientInfoProvider)
+class AppClientInfoProvider implements ClientInfoProvider {
+  const AppClientInfoProvider();
+
+  @override
+  String get version => kIsWeb ? '' : AppVersion.version;
+
+  @override
+  String get buildNumber => kIsWeb ? '' : AppVersion.buildNumber;
+
+  @override
+  String get platform => kIsWeb ? '' : defaultTargetPlatform.name.toLowerCase();
 }
