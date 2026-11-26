@@ -108,12 +108,12 @@ dependencies:
   shell:
     path: modules/shell
 
-  app_links: ^7.0.0
+  app_links: ^7.2.2
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
   collection: ^1.19.0
   cupertino_icons: ^1.0.9
-  dio: ^5.9.2
+  dio: ^5.11.1
   equatable: ^2.0.8
   file_picker: ^13.4.1
   firebase_core: ^4.7.0
@@ -122,16 +122,16 @@ dependencies:
   flutter_secure_storage: ^10.0.0
   flutter_slidable: ^4.0.3
   flutter_svg: ^2.2.4
-  formz: ^0.8.0
+  formz: ^0.8.1
   pro_image_editor: ^14.29.0
-  get_it: ^9.2.1
+  get_it: ^9.3.0
   go_router: ^17.3.0
-  image: ^4.8.0
-  image_picker: ^1.2.1
+  image: ^4.13.1
+  image_picker: ^1.2.4
   injectable: ^3.0.0
   intl: ^0.20.2
   json_annotation: ^4.11.0
-  lottie: ^3.3.3
+  lottie: ^3.8.2
   mask_text_input_formatter: ^2.9.0
   open_filex: ^4.7.0
   path_provider: ^2.1.5
@@ -141,14 +141,14 @@ dependencies:
   rxdart: ^0.28.0
   # Share content via the OS share sheet (ACTION_SEND)
   share_plus: ^13.3.1
-  shared_preferences: ^2.5.5
+  shared_preferences: ^2.5.6
   shimmer: ^3.0.0
   smooth_page_indicator: ^2.0.1
-  stream_transform: ^2.1.1
-  url_launcher: ^6.3.2
+  stream_transform: ^2.1.2
+  url_launcher: ^6.3.3
   # Прямой доступ к браузерным API (Web Share / скачивание blob) в web-реализации
   # DocExporter. Только под web (conditional import).
-  web: ^1.1.0
+  web: ^1.1.2
   easy_localization: ^3.0.8
   firebase_crashlytics: ^5.2.4
   firebase_analytics: ^12.4.3
@@ -156,8 +156,8 @@ dependencies:
   # In-app логи: Talker + экран логов (dev debug-меню) и BLoC-observer.
   # talker_dio_logger НЕ нужен: сетевой лог в dev даёт Alice-интерцептор
   # (экран «HTTP») + LogInterceptor — см. test/dev/service/client/dio_register.dart.
-  talker_flutter: ^5.1.16
-  talker_bloc_logger: ^5.1.17
+  talker_flutter: ^5.2.0
+  talker_bloc_logger: ^5.2.0
 
   # Alice — in-app HTTP-инспектор (как в a large production app). Chopper подключается
   # через кастомный интерцептор (addHttpCall), Dio — через getDioInterceptor.
@@ -175,11 +175,11 @@ dev_dependencies:
     sdk: flutter
 
   bloc_test: ^10.0.0
-  build_runner: ^2.13.1
+  build_runner: ^2.16.1
   flutter_lints: ^6.0.0
   http: ^1.6.0
   injectable_generator: ^3.0.2
-  json_serializable: ^6.13.1
+  json_serializable: ^6.15.2
   logging: ^1.3.0
   melos: ^8.10.1
   mocktail: ^1.0.5

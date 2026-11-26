@@ -16,7 +16,7 @@ dependencies:
   cupertino_ui: ^1.1.7
   flutter_bloc: ^9.1.1
   equatable: ^2.0.8
-  dio: ^5.9.2
+  dio: ^5.11.1
   easy_localization: ^3.0.8
   flutter_slidable: ^4.0.3
   util:

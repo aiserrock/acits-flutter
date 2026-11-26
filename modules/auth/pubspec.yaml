@@ -17,18 +17,18 @@ dependencies:
   flutter_bloc: ^9.1.1
   bloc: ^9.2.0
   equatable: ^2.0.8
-  formz: ^0.8.0
+  formz: ^0.8.1
   collection: ^1.19.0
-  dio: ^5.9.2
+  dio: ^5.11.1
   easy_localization: ^3.0.8
   flutter_keyboard_visibility: ^6.0.0
   smooth_page_indicator: ^2.0.1
   shimmer: ^3.0.0
-  lottie: ^3.3.3
-  url_launcher: ^6.3.2
+  lottie: ^3.8.2
+  url_launcher: ^6.3.3
   mask_text_input_formatter: ^2.9.0
-  get_it: ^9.2.1
-  talker_flutter: ^5.1.16
+  get_it: ^9.3.0
+  talker_flutter: ^5.2.0
   util:
     path: ../base/util
   localization:
