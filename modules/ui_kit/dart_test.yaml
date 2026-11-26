@@ -1,0 +1,3 @@
+# Tags used by this package's tests (see test/golden_test.dart).
+tags:
+  golden:

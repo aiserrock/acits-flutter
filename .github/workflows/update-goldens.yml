@@ -1,0 +1,58 @@
+name: Update goldens
+
+# Re-records the ui_kit golden images on the same Linux runner image the CI
+# `Test` job compares them on, and opens a pull request with the new PNGs.
+# Run it from the Actions tab on the branch whose visuals changed on purpose;
+# review the images in the pull request before merging.
+on:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: "3.50.0"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    name: Record goldens
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Record goldens
+        working-directory: modules/ui_kit
+        run: flutter test --tags golden --update-goldens
+
+      - name: Open a pull request with the new images
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.ref_name }}
+        run: |
+          if git diff --quiet -- modules/ui_kit/test/goldens; then
+            echo "Goldens are up to date."
+            exit 0
+          fi
+          branch="chore/update-goldens-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add modules/ui_kit/test/goldens
+          git commit -m "test(ui_kit): re-record goldens on Linux"
+          git push -u origin "$branch"
+          gh pr create --base "$BASE" --head "$branch" \
+            --title "test(ui_kit): re-record goldens on Linux" \
+            --body "Goldens re-recorded by the \`Update goldens\` workflow (run ${GITHUB_RUN_ID}) on \`$BASE\`. Check every changed image before merging."

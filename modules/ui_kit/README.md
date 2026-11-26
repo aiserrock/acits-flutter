@@ -63,6 +63,22 @@ Two hosts render the same catalog through `widgetbook`, each converting
 - **Token-driven base components** — button, appbar, text field, sheet, chip.
 - **`IconRes`** — the icomoon icon set.
 
+## Golden tests
+
+`test/golden_test.dart` (tag `golden`) compares rendered widgets with the PNGs in
+`test/goldens/`. They are recorded on the Linux CI runner and checked by the CI `Test` job.
+macOS and Windows anti-alias glyphs differently — by about as many pixels as a one-letter
+text change — so locally they always differ and are excluded:
+
+```sh
+fvm dart run melos run test               # all packages, goldens excluded
+cd modules/ui_kit && fvm flutter test --exclude-tags golden
+```
+
+After an intended visual change, run the **Update goldens** workflow (Actions tab) on your
+branch: it re-records the images on Linux and opens a pull request with them. Do not commit
+goldens recorded on macOS.
+
 ## Dependency rule
 
 May import: `base`, Flutter SDK, leaf UI packages. **May NOT import**
