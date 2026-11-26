@@ -170,6 +170,8 @@
   "personLogout": "Sign out",
   "personMyData": "My details",
   "personMyShelters": "My organisations",
+  "personMySheltersCurrent": "Current organisation",
+  "personMySheltersEmpty": "You do not belong to any organisation yet",
   "personalChangeErrorMsg": "The password could not be changed\n",
   "personalChangePass": "Change password",
   "personalEmptyFieldErrorMsg": "Please fill in the fields",

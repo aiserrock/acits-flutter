@@ -191,6 +191,7 @@ class AppServicesPackageModule extends _i526.MicroPackageModule {
     gh.factory<_i616.AnimalPermissions>(() => _i694.AuthServiceAnimalPermissions(gh<_i397.AuthService>()));
     gh.factory<_i857.PrescriptionsShelterProvider>(() => _i68.AuthServicePrescriptionsShelter(gh<_i397.AuthService>()));
     gh.factory<_i20.ApplicantsShelterProvider>(() => _i14.AuthServiceApplicantsShelter(gh<_i397.AuthService>()));
+    gh.factory<_i1007.MySheltersSource>(() => _i118.AuthServiceMySheltersSource(gh<_i397.AuthService>()));
     gh.factory<_i249.MediaShelterProvider>(() => _i428.AuthServiceMediaShelter(gh<_i397.AuthService>()));
     gh.singleton<_i1007.CommentsRepository>(
       () => personalRegister.commentsRepository(gh<_i995.AnimalNotesApiPort>(), gh<_i1007.PersonalShelterProvider>()),

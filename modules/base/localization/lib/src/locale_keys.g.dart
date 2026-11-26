@@ -162,6 +162,8 @@ abstract class  LocaleKeys {
   static const personLogout = 'personLogout';
   static const personMyData = 'personMyData';
   static const personMyShelters = 'personMyShelters';
+  static const personMySheltersCurrent = 'personMySheltersCurrent';
+  static const personMySheltersEmpty = 'personMySheltersEmpty';
   static const personalChangeErrorMsg = 'personalChangeErrorMsg';
   static const personalChangePass = 'personalChangePass';
   static const personalEmptyFieldErrorMsg = 'personalEmptyFieldErrorMsg';
