@@ -49,7 +49,9 @@ android {
 
     defaultConfig {
         applicationId "ru.acits"
-        minSdkVersion flutter.minSdkVersion
+        // Зафиксировано явно: апгрейд Flutter не должен молча поднять нижнюю
+        // границу и отрезать пользователей (24 требуют Firebase BoM 35 и secure storage 11).
+        minSdkVersion 24
         targetSdkVersion flutter.targetSdkVersion
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()

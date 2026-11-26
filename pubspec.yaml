@@ -116,10 +116,10 @@ dependencies:
   dio: ^5.9.2
   equatable: ^3.0.0
   file_picker: ^13.4.1
-  firebase_core: ^4.7.0
+  firebase_core: ^5.2.0
   flutter_bloc: ^9.1.1
   flutter_keyboard_visibility: ^7.0.1
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^11.2.0
   flutter_slidable: ^5.2.0
   flutter_svg: ^2.2.4
   formz: ^0.8.0
@@ -150,8 +150,8 @@ dependencies:
   # DocExporter. Только под web (conditional import).
   web: ^1.1.0
   easy_localization: ^3.0.8
-  firebase_crashlytics: ^5.2.4
-  firebase_analytics: ^12.4.3
+  firebase_crashlytics: ^6.1.0
+  firebase_analytics: ^13.1.0
 
   # In-app логи: Talker + экран логов (dev debug-меню) и BLoC-observer.
   # talker_dio_logger НЕ нужен: сетевой лог в dev даёт Alice-интерцептор
@@ -159,10 +159,9 @@ dependencies:
   talker_flutter: ^5.2.0
   talker_bloc_logger: ^5.2.0
 
-  # Alice — in-app HTTP-инспектор (как в a large production app). Chopper подключается
-  # через кастомный интерцептор (addHttpCall), Dio — через getDioInterceptor.
-  # Открывается из dev debug-меню (showInspector). Только dev-трафик.
-  flutter_alice: 2.0.1
+  # Alice — in-app HTTP-инспектор dev-флейвора: Dio подключается через
+  # getDioInterceptor, открывается из debug-меню (showInspector).
+  flutter_alice: ^3.0.0
   package_info_plus: ^10.2.2
 
   # Держит нативный splash до конца auth-решения на splash-роуте (preserve/remove),

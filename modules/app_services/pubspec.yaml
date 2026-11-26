@@ -50,7 +50,7 @@ dependencies:
   # HTTP + platform.
   dio: ^5.9.2
   app_links: ^7.0.0
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^11.2.0
   shared_preferences: ^2.5.5
   share_plus: ^13.3.1
   open_filex: ^5.0.0

@@ -22,7 +22,7 @@ dependencies:
   # Crashlytics-плагина на web нет — observer под guard kIsWeb.
   talker_flutter: ^5.2.0
   talker_bloc_logger: ^5.2.0
-  firebase_crashlytics: ^5.2.4
+  firebase_crashlytics: ^6.1.0
 
 dev_dependencies:
   flutter_test:
