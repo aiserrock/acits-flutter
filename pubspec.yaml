@@ -265,61 +265,29 @@ melos:
       run: fvm flutter analyze
 
     analyze:strict:
-      description: Строгий анализ — падает на infos и warnings (CI-гейт).
-      run: fvm flutter analyze --fatal-infos --fatal-warnings
+      description: Строгий анализ (--fatal-infos --fatal-warnings) + граф пакетов — тот же шаг, что в CI.
+      run: tool/ci/gate.sh analyze
 
-    # Ширина строки закреплена в analysis_options.yaml (formatter.page_width),
-    # чтобы IDE форматировала так же; `-l 120` здесь оставлен как явный дубль
-    # для запусков вне контекста пакета.
+    # Формат, анализ и тесты живут в tool/ci/gate.sh: его же вызывает CI, так
+    # что локальный гейт и CI проверяют одно и то же.
     format:
       description: Форматирование hand-written кода (line length 120) в корне и модулях, генерённые файлы исключены.
-      run: |
-        find lib test modules tool -name '*.dart' \
-          ! -name '*.g.dart' \
-          ! -name '*.config.dart' \
-          ! -name '*.swagger.dart' \
-          ! -name '*.gen.dart' \
-          ! -name 'locale_keys.g.dart' \
-          ! -name 'firebase_options.dart' \
-          ! -path '*/generated/*' \
-          ! -path '*/.dart_tool/*' \
-          ! -path '*/build/*' \
-          -print0 | xargs -0 fvm dart format -l 120
+      run: tool/ci/gate.sh format
 
     format:check:
       description: Проверка форматирования без правок (CI/pre-commit), падает при расхождении.
-      run: |
-        find lib test modules tool -name '*.dart' \
-          ! -name '*.g.dart' \
-          ! -name '*.config.dart' \
-          ! -name '*.swagger.dart' \
-          ! -name '*.gen.dart' \
-          ! -name 'locale_keys.g.dart' \
-          ! -name 'firebase_options.dart' \
-          ! -path '*/generated/*' \
-          ! -path '*/.dart_tool/*' \
-          ! -path '*/build/*' \
-          -print0 | xargs -0 fvm dart format --output=none --set-exit-if-changed -l 120
+      run: tool/ci/gate.sh format-check
 
     # ── Тесты ────────────────────────────────────────────────────────────────
-    # `modules/base/*` — контейнер, пакеты лежат на уровень глубже, поэтому
-    # обходятся отдельной маской (иначе 100+ тестов молча не гоняются).
     # Голдены (тег `golden`) сняты на Linux-раннере CI и локально не сходятся по
-    # сглаживанию шрифтов, поэтому здесь исключены; CI гоняет их в джобе Test.
+    # сглаживанию шрифтов, поэтому `test` их исключает; CI гоняет их отдельным шагом.
     test:
       description: Юнит- и виджет-тесты корня и каждого пакета воркспейса с test/ (без голденов).
-      run: |
-        fvm flutter test
-        for p in packages/* modules/* modules/base/*; do
-          if [ -d "$p/test" ]; then
-            echo "── flutter test ($p)"
-            (cd "$p" && fvm flutter test --exclude-tags golden) || exit 1
-          fi
-        done
+      run: tool/ci/gate.sh test
 
     test:goldens:
       description: Только голден-тесты (сходятся на Linux; на macOS — для перезаписи через --update-goldens нельзя).
-      run: cd modules/ui_kit && fvm flutter test --tags golden
+      run: tool/ci/gate.sh goldens
 
     test:coverage:
       description: Тесты со сбором покрытия (coverage/lcov.info).
@@ -357,11 +325,7 @@ melos:
 
     check-all:
       description: Гейт качества — формат-чек, граф пакетов, строгий анализ (--fatal-infos --fatal-warnings), тесты.
-      steps:
-        - format:check
-        - graph:check
-        - analyze:strict
-        - test
+      run: tool/ci/gate.sh all
 
     fix:
       description: Приборка перед коммитом — кодоген, l10n, формат.
