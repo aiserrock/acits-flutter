@@ -3,6 +3,13 @@
 // ignore_for_file: constant_identifier_names
 
 abstract class  LocaleKeys {
+  static const accountDelete = 'accountDelete';
+  static const accountDeleteConfirm = 'accountDeleteConfirm';
+  static const accountDeleteMailBody = 'accountDeleteMailBody';
+  static const accountDeleteMailSubject = 'accountDeleteMailSubject';
+  static const accountDeleteMsg = 'accountDeleteMsg';
+  static const accountDeleteNoMail = 'accountDeleteNoMail';
+  static const accountDeleteTitle = 'accountDeleteTitle';
   static const animalAdd = 'animalAdd';
   static const animalAdditionalInfo = 'animalAdditionalInfo';
   static const animalAdmitted = 'animalAdmitted';
@@ -121,6 +128,11 @@ abstract class  LocaleKeys {
   static const errorServerFailMsg = 'errorServerFailMsg';
   static const errorTimeoutFail = 'errorTimeoutFail';
   static const errorTimeoutFailMsg = 'errorTimeoutFailMsg';
+  static const feedbackMailSubject = 'feedbackMailSubject';
+  static const legalLicenses = 'legalLicenses';
+  static const legalPrivacyPolicy = 'legalPrivacyPolicy';
+  static const legalSection = 'legalSection';
+  static const legalTerms = 'legalTerms';
   static const loginAuthorizeError = 'loginAuthorizeError';
   static const loginDescribeMsg = 'loginDescribeMsg';
   static const loginEntryBtn = 'loginEntryBtn';
