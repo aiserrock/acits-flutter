@@ -15,8 +15,8 @@ dependencies:
   easy_localization: ^3.0.8
   equatable: ^2.0.8
   shimmer: ^3.0.0
-  lottie: ^3.3.3
-  dio: ^5.9.2
+  lottie: ^3.7.0
+  dio: ^5.11.1
   flutter_svg: ^2.2.4
 
   # Для Failure — типизированные ошибки, которые ErrorHolderWidget превращает в
@@ -28,8 +28,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner: ^2.13.1
-  flutter_gen_runner: ^5.14.0
+  build_runner: ^2.15.1
+  flutter_gen_runner: ^5.15.0
 
 # Пакет владеет всеми дизайн-ассетами системы (иконки, картинки, шрифт
 # icomoon, lottie, онбординг, галерея). Они лежат внутри пакета и резолвятся
