@@ -172,7 +172,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
         retainImageIds: retainImageIds,
         shelterId: _shelterProvider.shelterId,
       );
-      return result.fold(
+      return await result.fold(
         (failure) {
           Log.error('PhotoGalleryCubit.submit failed: $failure');
           safeEmit(state.copyWith(data: DataState.error(failure)));
