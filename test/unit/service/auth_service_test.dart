@@ -155,6 +155,33 @@ void main() {
       expect(service.currentShelterId, 5);
       verify(() => prefs.currentShelterId = 5).called(1);
     });
+
+    test('tells session listeners which shelter became current', () async {
+      when(() => api.setCurrentShelter(5)).thenAnswer(
+        (_) async => const CurrentShelterDto(
+          currentShelter: 5,
+          currentShelterUserRole: 'WORKER',
+          isUserCanEdit: false,
+          isUserCanDelete: false,
+        ),
+      );
+      final sessions = <int?>[];
+      service.addSessionListener(sessions.add);
+
+      await service.setCurrentShelter(5);
+
+      expect(sessions, [5]);
+    });
+
+    test('does not notify session listeners when the shelter cannot be applied', () async {
+      when(() => api.setCurrentShelter(5)).thenThrow(_dio(403));
+      final sessions = <int?>[];
+      service.addSessionListener(sessions.add);
+
+      await service.setCurrentShelter(5);
+
+      expect(sessions, isEmpty);
+    });
   });
 
   group('restoreShelter', () {

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- iOS: манифест приватности `PrivacyInfo.xcprivacy` (без трекинга; API с
+  обязательной причиной — UserDefaults, метки времени файлов, время загрузки системы;
+  собираемые данные — сбои, производительность, просмотры экранов, идентификатор,
+  e-mail) и `ITSAppUsesNonExemptEncryption = false` в `Info.plist`. В
+  `doc/release.md` — что ответить в анкете приватности App Store Connect.
+- Отчёты об ошибках (Crashlytics, Sentry) и Analytics привязаны к сессии: при выборе
+  приюта им передаётся его id, при выходе привязка снимается.
+
 - Вкладки получили собственные адреса и стеки навигации (`StatefulShellRoute`):
   `/today`, `/animals`, `/animals/:id`, `/calendar`, `/drugs`. Состояние вкладки
   (прокрутка, поиск, открытая карточка) сохраняется при переключении; повторное

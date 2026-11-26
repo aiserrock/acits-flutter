@@ -54,6 +54,18 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
 
   int? get currentShelterId => _shelterRole?.currentShelterId;
 
+  final _sessionListeners = <void Function(int? shelterId)>[];
+
+  /// Called with the shelter id when a shelter becomes current and with `null`
+  /// on logout. Crash and error reports use it to tie events to the session.
+  void addSessionListener(void Function(int? shelterId) listener) => _sessionListeners.add(listener);
+
+  void _notifySession(int? shelterId) {
+    for (final listener in List.of(_sessionListeners)) {
+      listener(shelterId);
+    }
+  }
+
   Shelter? get currentShelter => _shelterList.firstWhereOrNull((shelter) => shelter.id == currentShelterId);
 
   /// Обновляет пару токенов и возвращает новый access. `null` — сервер отверг
@@ -110,6 +122,7 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
       _shelterRole = role;
       // Запоминаем приют для автовхода без экрана выбора при следующем старте.
       _preferenceStorage.currentShelterId = shelterId;
+      _notifySession(role.currentShelterId);
       return role;
     });
   }
@@ -137,6 +150,7 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
     _shelterRole = null;
     _authRepository.clearRefresh();
     _preferenceStorage.currentShelterId = null;
+    _notifySession(null);
     notifyListeners();
     getIt<GoRouter>().go(Routes.login);
   }

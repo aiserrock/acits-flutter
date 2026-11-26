@@ -26,6 +26,8 @@ Future<void> initDi(ObservabilitySetup observability) async {
   getIt.registerSingleton<ErrorReporter>(observability.reporter);
   await $initGetIt(getIt, environmentFilter: NoEnvOrContains(Environment.prod));
   await registerCollectionSettings(observability);
+  // Error reports carry the current shelter id, cleared on logout.
+  getIt<AuthService>().addSessionListener((shelterId) => observability.setUser(shelterId: shelterId));
   getIt.registerSingleton(_navigatorKey);
   getIt.registerSingleton(_scaffoldMessengerKey);
   getIt.registerSingleton<List<NavigatorObserver>>(observability.navigatorObservers());
