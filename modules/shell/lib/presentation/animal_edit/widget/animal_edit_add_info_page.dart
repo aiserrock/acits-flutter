@@ -221,7 +221,7 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with Anim
         },
       ),
     );
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) => bsSelectorActions(ctx, <Widget, dynamic Function()>{

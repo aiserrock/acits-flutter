@@ -49,8 +49,8 @@ void main() {
     final cubit = AnimalPrescriptionsCubit(repository, animalId: 501);
     await Future<void>.delayed(Duration.zero);
 
-    expect(cubit.state.prescriptions, isA<DataError>());
-    expect((cubit.state.prescriptions as DataError).error, isA<ServerFailure>());
+    expect(cubit.state.prescriptions, isA<DataError<List<Prescription>?>>());
+    expect((cubit.state.prescriptions as DataError<List<Prescription>?>).error, isA<ServerFailure>());
   });
 
   test('togglePrescriptionActive switches the filter and reloads (old)', () async {

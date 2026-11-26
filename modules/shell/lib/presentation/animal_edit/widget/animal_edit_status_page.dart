@@ -116,7 +116,7 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
       return <Widget, dynamic Function()>{for (final item in entries) item.key: item.value};
     }
 
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,

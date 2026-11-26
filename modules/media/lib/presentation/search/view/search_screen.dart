@@ -12,7 +12,7 @@ class Search<T> extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
   Search({required this.adapter, this.tileBuilder, super.key});
 
-  final PagingFetchAdapter adapter;
+  final PagingFetchAdapter<T> adapter;
   final Widget Function(T item)? tileBuilder;
 
   /// Собрать [Search] по строковому ключу типа (для go_router `?type=`).

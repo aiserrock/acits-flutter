@@ -107,7 +107,7 @@ class AnimalCardWidget extends StatelessWidget {
   Widget _buildDeleteAction(BuildContext context) {
     return SlidableAction(
       onPressed: (ctx) {
-        showDialog(
+        showDialog<void>(
           context: ctx,
           builder: (dialogCtx) {
             final msg = '${LocaleKeys.animalDeleteAcceptMsg.tr()} ${itemData.name}?';

@@ -177,7 +177,7 @@ class _PersonalViewState extends State<_PersonalView> {
   }
 
   void _onPassChange(BuildContext context) {
-    showCupertinoDialog(
+    showCupertinoDialog<void>(
       context: context,
       builder: (_) => ChangePassWidget(repository: widget.repository),
     );

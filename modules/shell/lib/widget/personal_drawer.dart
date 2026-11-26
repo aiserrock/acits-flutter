@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core/domain.dart' show Shelter;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -196,9 +198,9 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
     final scaffold = Scaffold.maybeOf(context);
     if (scaffold?.isDrawerOpen ?? false) {
       scaffold?.closeDrawer();
-      await Future.delayed(_kBaseSettleDuration);
+      await Future<void>.delayed(_kBaseSettleDuration);
     }
     if (!mounted) return;
-    context.push(location);
+    unawaited(context.push<void>(location));
   }
 }

@@ -36,8 +36,8 @@ Map<String, dynamic> prescriptionListByAnimalJson() => {
       'id': 12,
       'animal': 501,
       // my_type отсутствует — плоский DTO должен это стерпеть (unknown).
-      'drugs': [],
-      'executions': [],
+      'drugs': <Object?>[],
+      'executions': <Object?>[],
     },
   ],
 };
@@ -48,7 +48,7 @@ Map<String, dynamic> prescriptionUnknownTypeJson() => {
   'id': 99,
   'animal': 501,
   'my_type': 'SOME_FUTURE_TYPE',
-  'drugs': [],
+  'drugs': <Object?>[],
   'executions': [
     {'id': 1, 'execute_at': '2024-06-01T12:00:00Z', 'status': 'CANCELLED'},
   ],

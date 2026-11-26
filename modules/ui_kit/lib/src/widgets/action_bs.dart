@@ -2,11 +2,11 @@ import 'package:material_ui/material_ui.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 /// BottomSheet c действиями и кнопкой отмены
-Widget bsSelectorActions(BuildContext context, Map<Widget, Function()> actions) {
+Widget bsSelectorActions(BuildContext context, Map<Widget, void Function()> actions) {
   return _buildIosStyle(context, actions);
 }
 
-Widget _buildIosStyle(BuildContext context, Map<Widget, Function()> actions) {
+Widget _buildIosStyle(BuildContext context, Map<Widget, void Function()> actions) {
   Widget buildAction(Widget title, VoidCallback onPressed, {bool islast = false}) {
     return Column(
       mainAxisSize: MainAxisSize.min,

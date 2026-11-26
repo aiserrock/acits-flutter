@@ -184,7 +184,7 @@ class _CommentListViewState extends State<_CommentListView> {
       },
     });
 
-    showModalBottomSheet(backgroundColor: Colors.transparent, context: context, builder: (ctx) => actions);
+    showModalBottomSheet<void>(backgroundColor: Colors.transparent, context: context, builder: (ctx) => actions);
   }
 
   Future<void> _deleteComment(BuildContext context, AnimalNote comment) async {
