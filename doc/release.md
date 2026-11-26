@@ -111,8 +111,32 @@ One-time actions outside the repository:
   testers for 14 days before production access.
 - **App Store:** create the app record for bundle id `ru.acits`, fill in the privacy
   details, age rating and review notes with a demo account. Listing texts and screenshots
-  are edited in App Store Connect; CI never overwrites them.
+  are edited in App Store Connect; CI never overwrites them. See "Privacy manifest and
+  App Store privacy questionnaire" below.
 - **RuStore:** create the app and publish its first version by hand — the API creates
   drafts from an existing active version. Sign RuStore builds with the same key as Google
   Play so users can move between stores.
 - **Firebase:** create the tester groups named in `FIREBASE_TESTER_GROUPS`.
+
+### Privacy manifest and App Store privacy questionnaire
+
+[`ios/Runner/PrivacyInfo.xcprivacy`](../ios/Runner/PrivacyInfo.xcprivacy) is the app's own
+manifest; plugins and the Firebase and Sentry SDKs ship theirs. It declares no tracking,
+the required-reason APIs the app and the Flutter engine use (UserDefaults, file
+timestamps, system boot time) and the collected data: crash and performance data
+(Crashlytics, Sentry), product interaction (Analytics screen views), user ID and email
+address, all linked to the user and none used for tracking. Today reports carry the
+current shelter id (set on shelter pick, cleared on logout), not the account id; the
+user ID entry is declared so that adding the account id later needs no new review answer. `Info.plist` sets
+`ITSAppUsesNonExemptEncryption` to `false` (HTTPS and OS crypto only), so App Store Connect
+skips the export-compliance question.
+
+Before the first submission:
+
+- Answer the "App Privacy" questionnaire in App Store Connect with the same data types,
+  purposes and "linked to the user" flags as the manifest, with tracking set to "No".
+  Add every data type the backend stores beyond the manifest (name, phone, photos).
+- After adding a plugin or SDK, rebuild the IPA and check Xcode's Product → Archive →
+  Generate Privacy Report for the merged manifest; fix mismatches here.
+- Keep the in-app opt-out (`CollectionSettings`) and the privacy policy URL in sync with
+  these answers.
