@@ -24,7 +24,7 @@
 Выход: в проекте нет CocoaPods, Android-сборка не печатает предупреждений о Kotlin Gradle
 Plugin, генератор API на текущем мажоре.
 
-- **Убрать интеграцию CocoaPods** — M. Все плагины уже Swift-пакеты, в `Podfile.lock` остался
+- ✅ **Убрать интеграцию CocoaPods** — M. Все плагины уже Swift-пакеты, в `Podfile.lock` остался
   только Flutter. Удалить `Podfile`, включения `Pods-Runner.*.xcconfig` из `ios/Flutter/*.xcconfig`,
   фазы `[CP]` и группу Pods из `project.pbxproj`; таргет `RunnerUITests` (Patrol) перевести на
   Swift-пакет `patrol`. Закоммитить `Package.resolved`. Обновить кэширование в CI.
