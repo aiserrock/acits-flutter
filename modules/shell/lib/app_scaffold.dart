@@ -57,7 +57,7 @@ class _MaterialRoot extends StatelessWidget {
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
             themeMode: themeMode,
-            localizationsDelegates: context.localizationDelegates,
+            localizationsDelegates: L10n.delegates(context),
             supportedLocales: context.supportedLocales,
             locale: context.locale,
             color: AppTheme.light.colorScheme.primary,
