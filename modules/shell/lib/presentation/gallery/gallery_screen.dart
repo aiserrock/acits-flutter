@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:shell/res/l10n.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:widgetbook/widgetbook.dart';
@@ -40,7 +39,17 @@ class GalleryScreen extends StatelessWidget {
               child: Builder(builder: (context) => child),
             ),
             addons: [
-              MaterialThemeAddon(
+              // widgetbook 3.x типизирует MaterialThemeAddon легаси-ThemeData из
+              // flutter/material.dart, поэтому строим ThemeAddon на ThemeData
+              // из material_ui сами.
+              ThemeAddon<ThemeData>(
+                themeBuilder: (context, theme, child) => Theme(
+                  data: theme,
+                  child: ColoredBox(
+                    color: theme.scaffoldBackgroundColor,
+                    child: DefaultTextStyle(style: theme.textTheme.bodyMedium!, child: child),
+                  ),
+                ),
                 themes: [
                   WidgetbookTheme(name: 'Light', data: AppTheme.light),
                   WidgetbookTheme(name: 'Dark', data: AppTheme.dark),
@@ -50,12 +59,7 @@ class GalleryScreen extends StatelessWidget {
               // со standalone example.
               LocalizationAddon(
                 locales: L10n.supportedLocales,
-                localizationsDelegates: const [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                  DefaultWidgetsLocalizations.delegate,
-                ],
+                localizationsDelegates: GlobalMaterialLocalizations.delegates,
               ),
               ViewportAddon(_allViewports),
             ],
