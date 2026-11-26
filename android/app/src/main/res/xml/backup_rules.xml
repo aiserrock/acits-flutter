@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto Backup rules for Android 11 and lower (android:fullBackupContent).
+
+  flutter_secure_storage encrypts its data with a key that lives in the Android
+  Keystore. The Keystore is not backed up, so a restored copy of these files is
+  ciphertext that can never be decrypted. Names come from the plugin sources
+  (FlutterSecureStorageConfig, NamespacedConfigSource).
+-->
+<full-backup-content>
+    <!-- Encrypted values. -->
+    <exclude domain="sharedpref" path="FlutterSecureStorage.xml" />
+    <!-- Wrapped AES key. -->
+    <exclude domain="sharedpref" path="FlutterSecureKeyStorage.xml" />
+    <!-- Cipher algorithm and migration markers. -->
+    <exclude domain="sharedpref" path="FlutterSecureStorageConfiguration.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureStorageConfiguration:FlutterSecureStorage.xml" />
+</full-backup-content>

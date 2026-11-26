@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Android: из манифеста убраны разрешения, которые приложению не нужны —
+  `READ_MEDIA_*` и `READ_EXTERNAL_STORAGE` (их объявляет `open_filex`, файлы и фото
+  выбираются системными пикерами) и рекламные `AD_ID` / `ACCESS_ADSERVICES_*`
+  (приходят с SDK аналитики). Снят флаг `requestLegacyExternalStorage`. Данные
+  `flutter_secure_storage` исключены из облачного бэкапа и переноса между
+  устройствами: ключ шифрования в бэкап не попадает, и восстановленные данные
+  нельзя было бы расшифровать.
+
 - Единая модель ошибок: сервисы сессии и конфигурации (`AuthService`,
   `ConfigService`, подтверждение e-mail) возвращают `Result<Failure, T>` вместо
   исключений, `DataState.error` принимает только `Failure`, а `DioException`
