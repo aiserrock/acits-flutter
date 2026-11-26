@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:app_services/app_services.dart' show ThemeStorage;
 import 'package:di/di.dart';
 import 'package:ui_kit/ui_kit.dart' show AppTheme;
 
@@ -49,7 +50,7 @@ class _MaterialRoot extends StatelessWidget {
     // при смене режима, отдавая свежий themeMode. theme/darkTheme — статичные
     // M3-схемы, Flutter сам выбирает нужную по themeMode.
     return BlocProvider(
-      create: (_) => ThemeCubit(),
+      create: (_) => ThemeCubit(storage: getIt<ThemeStorage>()),
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return MaterialApp.router(

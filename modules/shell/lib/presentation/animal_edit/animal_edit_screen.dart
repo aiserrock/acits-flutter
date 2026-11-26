@@ -8,7 +8,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:ui_kit/ui_kit.dart' show ContentWidth, ErrorHolderWidget, LoaderHolderWidget, SuccessHolderWidget;
 
-import 'package:di/di.dart';
+import 'package:app_services/app_services.dart' show ConfigService;
 import 'package:shell/presentation/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:shell/presentation/animal_edit/data/animal_edit_pager_holder.dart';
 import 'package:shell/presentation/animal_edit/widget/animal_edit_add_info_page.dart';
@@ -25,23 +25,44 @@ const _onPageChangedBackDuration = Duration(milliseconds: 500);
 /// Данными загрузки/ошибки/успеха владеет [AnimalEditCubit]; форма страниц
 /// живёт в [AnimalEditHolder]/[AnimalEditPagerHolder] (ChangeNotifier),
 /// UI-контроллеры — во [State] вью.
+///
+/// Зависимости приходят от route builder: репозиторий и провайдер приюта идут в
+/// [AnimalEditCubit], [statusLabels] и [configService] отдаются страницам формы
+/// через [Provider].
 class AnimalEditScreen extends StatelessWidget {
-  const AnimalEditScreen({this.id, super.key});
+  const AnimalEditScreen({
+    required this.animalRepository,
+    required this.shelterProvider,
+    required this.statusLabels,
+    required this.configService,
+    this.id,
+    super.key,
+  });
 
   final int? id;
+  final AnimalRepository animalRepository;
+  final CurrentShelterProvider shelterProvider;
+  final AnimalStatusLabels statusLabels;
+  final ConfigService configService;
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AnimalEditPagerHolder>(
-      create: (_) => AnimalEditPagerHolder(),
-      child: ChangeNotifierProvider<AnimalEditHolder>(
-        create: (_) => AnimalEditHolder(),
-        child: BlocProvider<AnimalEditCubit>(
-          // Load/submit идут через модульный репозиторий (домен + Result, без
-          // DTO). Форма (мультистраничный UI) работает на доменном состоянии
-          // AnimalEditFormState — chopper/gen из формы полностью убраны.
-          create: (_) => AnimalEditCubit(getIt<AnimalRepository>(), getIt<CurrentShelterProvider>(), id: id),
-          child: const _AnimalEditView(),
+    return MultiProvider(
+      providers: [
+        Provider<AnimalStatusLabels>.value(value: statusLabels),
+        Provider<ConfigService>.value(value: configService),
+      ],
+      child: ChangeNotifierProvider<AnimalEditPagerHolder>(
+        create: (_) => AnimalEditPagerHolder(),
+        child: ChangeNotifierProvider<AnimalEditHolder>(
+          create: (_) => AnimalEditHolder(),
+          child: BlocProvider<AnimalEditCubit>(
+            // Load/submit идут через модульный репозиторий (домен + Result, без
+            // DTO). Форма (мультистраничный UI) работает на доменном состоянии
+            // AnimalEditFormState — chopper/gen из формы полностью убраны.
+            create: (_) => AnimalEditCubit(animalRepository, shelterProvider, id: id),
+            child: const _AnimalEditView(),
+          ),
         ),
       ),
     );

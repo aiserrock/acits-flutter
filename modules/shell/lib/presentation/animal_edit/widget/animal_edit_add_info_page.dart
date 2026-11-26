@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_kit/ui_kit.dart' show FormEditCard, EditCardData, bsSelectorActions;
 
-import 'package:di/di.dart';
 import 'package:shell/domain/animal_sex_enum.dart';
 import 'package:shell/src/shell_exports.dart';
 import 'package:app_services/app_services.dart';
@@ -279,10 +278,11 @@ class _AnimalEditAddInfoPageState extends State<AnimalEditAddInfoPage> with Anim
   @override
   void onChangePage() {
     if (page != 2) return;
+    final configService = context.read<ConfigService>();
     final attr = <AnimalAttributeInput>[];
     void addAttr(String name, String value) {
       if (value.isEmpty) return;
-      final def = (getIt<ConfigService>().animalAttributes ?? []).firstWhereOrNull((e) => e.name == name);
+      final def = (configService.animalAttributes ?? []).firstWhereOrNull((e) => e.name == name);
       if (def == null) return;
       attr.add(AnimalAttributeInput(attrId: def.id, isRequired: def.isRequired, name: def.name, value: value));
     }

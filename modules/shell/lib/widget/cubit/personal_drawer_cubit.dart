@@ -2,11 +2,9 @@ import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/personal.dart' show PersonalRepository, UserProfile;
 
-import 'package:di/di.dart';
-
 /// Загружает данные пользователя для бокового меню [PersonalDrawerWidget].
 class PersonalDrawerCubit extends Cubit<DataState<UserProfile>> {
-  PersonalDrawerCubit() : _repository = getIt<PersonalRepository>(), super(const DataLoading()) {
+  PersonalDrawerCubit(this._repository) : super(const DataLoading()) {
     _load();
   }
 

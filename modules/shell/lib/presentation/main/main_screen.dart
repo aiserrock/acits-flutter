@@ -9,33 +9,39 @@ import 'package:app_services/app_services.dart';
 import 'package:shell/presentation/common/sort/sort_preset.dart';
 import 'package:shell/presentation/main/cubit/main_cubit.dart';
 import 'package:shell/presentation/main/cubit/main_state.dart';
-import 'package:prescriptions/prescriptions.dart' show Prescription, PrescriptionCardWidget, PrescriptionExecutionToday;
-import 'package:di/di.dart';
+import 'package:prescriptions/prescriptions.dart'
+    show Prescription, PrescriptionCardWidget, PrescriptionExecutionToday, PrescriptionRepository;
 import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+/// The «Today» tab. Dependencies come from the route builder: [repository] feeds
+/// [MainCubit], [debugService] opens the debug screen on a long press of the menu.
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  const MainScreen({required this.repository, required this.debugService, super.key});
+
+  final PrescriptionRepository repository;
+  final DebugService debugService;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => MainCubit(), child: const _MainView());
+    return BlocProvider(
+      create: (_) => MainCubit(repository),
+      child: _MainView(debugService: debugService),
+    );
   }
 }
 
 class _MainView extends StatefulWidget {
-  const _MainView();
+  const _MainView({required this.debugService});
+
+  final DebugService debugService;
 
   @override
   State<_MainView> createState() => _MainViewState();
 }
 
 class _MainViewState extends State<_MainView> {
-  _MainViewState() : _debugService = getIt.get<DebugService>();
-
-  final DebugService _debugService;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _searchController = TextEditingController();
   late bool _isSmallScreen;
@@ -194,7 +200,7 @@ class _MainViewState extends State<_MainView> {
   }
 
   void _openDebug(BuildContext context) {
-    _debugService.openDebugScreen();
+    widget.debugService.openDebugScreen();
   }
 
   void _onFabPressed(BuildContext context) {
@@ -214,10 +220,10 @@ class _MainScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (data?.isEmpty ?? true) ? _buildEmptyState(context) : _buildList();
+    return (data?.isEmpty ?? true) ? _buildEmptyState(context) : _buildList(context);
   }
 
-  Widget _buildList() {
+  Widget _buildList(BuildContext context) {
     final items = data ?? const <PrescriptionExecutionToday>[];
     return RefreshIndicator(
       onRefresh: pullToRefresh,
@@ -231,7 +237,7 @@ class _MainScreenContent extends StatelessWidget {
               columns: columns,
               children: [
                 for (final item in items.skip(row * columns).take(columns))
-                  PrescriptionCardWidget(item, onEditedPrescription: () => _onEditPrescriptionPressed(item)),
+                  PrescriptionCardWidget(item, onEditedPrescription: () => _onEditPrescriptionPressed(context, item)),
               ],
             ),
             itemCount: AdaptiveColumns.rowCount(items.length, columns),
@@ -270,10 +276,8 @@ class _MainScreenContent extends StatelessWidget {
     );
   }
 
-  Future<void> _onEditPrescriptionPressed(PrescriptionExecutionToday item) async {
-    final result = await getIt<GoRouter>().push<Prescription>(
-      "${AppRoutes.prescriptionEdit}?id=${item.prescription.id}",
-    );
+  Future<void> _onEditPrescriptionPressed(BuildContext context, PrescriptionExecutionToday item) async {
+    final result = await context.push<Prescription>("${AppRoutes.prescriptionEdit}?id=${item.prescription.id}");
     if (result != null) await pullToRefresh();
   }
 }

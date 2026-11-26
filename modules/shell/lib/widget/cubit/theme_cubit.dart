@@ -2,7 +2,6 @@ import 'package:util/util.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:di/di.dart';
 import 'package:app_services/app_services.dart';
 
 /// Держит текущий [ThemeMode] приложения (System/Light/Dark) и персистит выбор.
@@ -10,9 +9,8 @@ import 'package:app_services/app_services.dart';
 /// Состояние — сам enum [ThemeMode]: асинхронного контента для отображения нет,
 /// переключателю нужен только текущий режим. Дефолт до загрузки — system.
 class ThemeCubit extends Cubit<ThemeMode> {
-  /// [storage] инжектится ради тестируемости; по умолчанию резолвится из DI,
-  /// чтобы вызывающая сторона (`app_scaffold`) не тянула зависимость руками.
-  ThemeCubit({ThemeStorage? storage}) : _storage = storage ?? getIt<ThemeStorage>(), super(ThemeMode.system) {
+  /// [storage] приходит от composition root (`app_scaffold`).
+  ThemeCubit({required ThemeStorage storage}) : _storage = storage, super(ThemeMode.system) {
     _load();
   }
 

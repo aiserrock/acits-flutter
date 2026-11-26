@@ -1,7 +1,7 @@
 part of 'animal_detail_screen.dart';
 
-SliverList _buildCommonInfoPage(BuildContext context, Animal animal) {
-  return SliverList(delegate: SliverChildListDelegate(_buildCommonInfoContent(context, animal)));
+SliverList _buildCommonInfoPage(BuildContext context, Animal animal, AnimalStatusLabels statusLabels) {
+  return SliverList(delegate: SliverChildListDelegate(_buildCommonInfoContent(context, animal, statusLabels)));
 }
 
 /// Локализованный возраст из даты рождения (дни/месяцы/годы). Перенесено из
@@ -17,9 +17,9 @@ String? _ageString(Animal animal) {
 }
 
 /// Человекочитаемое название статуса из серверного конфига (через порт модуля).
-String? _statusString(Animal animal) => getIt<AnimalStatusLabels>().label(animal.status);
+String? _statusString(Animal animal, AnimalStatusLabels statusLabels) => statusLabels.label(animal.status);
 
-List<Widget> _buildCommonInfoContent(BuildContext context, Animal animal) {
+List<Widget> _buildCommonInfoContent(BuildContext context, Animal animal, AnimalStatusLabels statusLabels) {
   return [
     Padding(
       padding: const EdgeInsets.only(top: 24.0, left: 16.0, bottom: 8.0),
@@ -47,7 +47,7 @@ List<Widget> _buildCommonInfoContent(BuildContext context, Animal animal) {
         firstCaption: LocaleKeys.animalReceiptDate.tr(),
         firstValue: animal.dateJoined != null ? _dateFormatter.format(animal.dateJoined!) : '',
         secondCaption: LocaleKeys.animalStatus.tr(),
-        secondValue: _statusString(animal) ?? '',
+        secondValue: _statusString(animal, statusLabels) ?? '',
       ),
       CardData(firstCaption: LocaleKeys.animalCatchPlace.tr(), firstValue: animal.placeOfCatch),
     ]),

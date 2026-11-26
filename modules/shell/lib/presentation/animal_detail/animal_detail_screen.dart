@@ -13,7 +13,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:ui_kit/ui_kit.dart'
     show DefaultAppBar, DefaultIconButton, ErrorHolderWidget, LoaderHolderWidget, Skeleton;
 
-import 'package:di/di.dart';
 import 'package:shell/navigation/app_router.dart';
 import 'package:shell/src/shell_exports.dart';
 import 'package:shell/presentation/animal_detail/animal_content_card.dart';
@@ -47,9 +46,26 @@ const _collapseDelta = _expandedHeight - _collapsedHeight;
 const _kBrandAccent = Color(0xFF6776E0);
 
 class AnimalDetailScreen extends StatelessWidget {
-  const AnimalDetailScreen({required this.id, super.key});
+  const AnimalDetailScreen({
+    required this.id,
+    required this.animalRepository,
+    required this.shelterProvider,
+    required this.prescriptionRepository,
+    required this.commentsRepository,
+    required this.personalRouter,
+    required this.commentFileOpener,
+    required this.statusLabels,
+    super.key,
+  });
 
   final int id;
+  final AnimalRepository animalRepository;
+  final CurrentShelterProvider shelterProvider;
+  final PrescriptionRepository prescriptionRepository;
+  final CommentsRepository commentsRepository;
+  final PersonalRouterService personalRouter;
+  final CommentFileOpener commentFileOpener;
+  final AnimalStatusLabels statusLabels;
 
   @override
   Widget build(BuildContext context) {
@@ -59,20 +75,34 @@ class AnimalDetailScreen extends StatelessWidget {
     // См. animal_prescriptions_cubit.dart.
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) => AnimalDetailCubit(getIt<AnimalRepository>(), getIt<CurrentShelterProvider>(), id: id),
-        ),
-        BlocProvider(create: (_) => AnimalPrescriptionsCubit(getIt<PrescriptionRepository>(), animalId: id)),
+        BlocProvider(create: (_) => AnimalDetailCubit(animalRepository, shelterProvider, id: id)),
+        BlocProvider(create: (_) => AnimalPrescriptionsCubit(prescriptionRepository, animalId: id)),
       ],
-      child: _AnimalDetailView(id: id),
+      child: _AnimalDetailView(
+        id: id,
+        commentsRepository: commentsRepository,
+        personalRouter: personalRouter,
+        commentFileOpener: commentFileOpener,
+        statusLabels: statusLabels,
+      ),
     );
   }
 }
 
 class _AnimalDetailView extends StatefulWidget {
-  const _AnimalDetailView({required this.id});
+  const _AnimalDetailView({
+    required this.id,
+    required this.commentsRepository,
+    required this.personalRouter,
+    required this.commentFileOpener,
+    required this.statusLabels,
+  });
 
   final int id;
+  final CommentsRepository commentsRepository;
+  final PersonalRouterService personalRouter;
+  final CommentFileOpener commentFileOpener;
+  final AnimalStatusLabels statusLabels;
 
   @override
   State<_AnimalDetailView> createState() => _AnimalDetailViewState();
@@ -418,7 +448,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
   Widget _buildPage(BuildContext context, int count, Animal animal) {
     switch (_currentTab) {
       case 0:
-        return _buildCommonInfoPage(context, animal);
+        return _buildCommonInfoPage(context, animal, widget.statusLabels);
       case 1:
         return _buildPrescriptionsPage();
       case 2:
@@ -428,9 +458,9 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
       default:
         return CommentListWidget(
           animal.id,
-          repository: getIt<CommentsRepository>(),
-          router: getIt<PersonalRouterService>(),
-          fileOpener: getIt<CommentFileOpener>(),
+          repository: widget.commentsRepository,
+          router: widget.personalRouter,
+          fileOpener: widget.commentFileOpener,
           scrollController: _scrollController,
           onCreateCommentStream: _onCreateCommentStream,
         );
