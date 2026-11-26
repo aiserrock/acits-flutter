@@ -1,8 +1,10 @@
 version: 2
 
-# Weekly pub dependency updates for the root app and the workspace packages.
-# Minor + patch bumps are grouped into a single PR per directory to cut noise;
-# major bumps come as individual PRs so breaking changes are reviewed alone.
+# Weekly dependency updates. The pub workspace is resolved from the root
+# pubspec.yaml (all modules/* are workspace members), so one pub block covers
+# the app and every module. Minor + patch bumps are grouped into a single PR
+# per ecosystem to cut noise; major bumps come as individual PRs so breaking
+# changes are reviewed alone.
 updates:
   - package-ecosystem: pub
     directory: "/"
@@ -18,22 +20,8 @@ updates:
           - minor
           - patch
 
-  - package-ecosystem: pub
-    directory: "/packages/acits_core"
-    schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 3
-    commit-message:
-      prefix: chore
-    groups:
-      minor-and-patch:
-        update-types:
-          - minor
-          - patch
-
-  - package-ecosystem: pub
-    directory: "/packages/acits_api"
+  - package-ecosystem: gradle
+    directory: "/android"
     schedule:
       interval: weekly
       day: monday
