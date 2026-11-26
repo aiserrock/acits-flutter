@@ -1,6 +1,6 @@
 import 'package:core/domain.dart' show Shelter;
 import 'package:ui_kit/ui_kit.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ShelterListItem extends StatelessWidget {
   const ShelterListItem({required this.shelter, super.key});

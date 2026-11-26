@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Токен-ориентированное текстовое поле. Обводка/цвета берутся из
 /// `inputDecorationTheme` и `colorScheme`; здесь задаётся только форма и

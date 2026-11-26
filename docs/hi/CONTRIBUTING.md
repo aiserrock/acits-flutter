@@ -31,8 +31,8 @@
 
 | टूल | संस्करण |
 | --- | --- |
-| Flutter | 3.44.0 |
-| Dart | 3.12.0 |
+| Flutter | 3.50.0 |
+| Dart | 3.14.0 |
 | FVM | नवीनतम स्थिर संस्करण |
 
 FVM और पिन की गई SDK इंस्टॉल करें:
@@ -152,7 +152,7 @@ git checkout -b feature/short-descriptive-name
 ```text
 feat(animals): add photo gallery to animal detail screen
 fix(auth): handle expired token on cold start
-docs: update contributing guide for FVM 3.44
+docs: update contributing guide for FVM 3.50
 ```
 
 ---

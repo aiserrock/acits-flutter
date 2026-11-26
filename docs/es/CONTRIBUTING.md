@@ -31,8 +31,8 @@ El toolchain está fijado mediante **FVM** (Flutter Version Management) a travé
 
 | Herramienta | Versión |
 | --- | --- |
-| Flutter | 3.44.0 |
-| Dart | 3.12.0 |
+| Flutter | 3.50.0 |
+| Dart | 3.14.0 |
 | FVM | latest stable |
 
 Instala FVM y el SDK fijado:
@@ -152,7 +152,7 @@ Ejemplos:
 ```text
 feat(animals): add photo gallery to animal detail screen
 fix(auth): handle expired token on cold start
-docs: update contributing guide for FVM 3.44
+docs: update contributing guide for FVM 3.50
 ```
 
 ---

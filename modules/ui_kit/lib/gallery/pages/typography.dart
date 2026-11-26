@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Полная шкала [TextTheme] дизайн-системы. Каждая строка отрисована своим
 /// слотом — так видно реальный размер/вес/цвет из [AppTheme].

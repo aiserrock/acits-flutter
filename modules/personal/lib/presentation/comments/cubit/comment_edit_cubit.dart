@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:personal/domain/domain.dart';
@@ -47,7 +44,7 @@ class CommentEditCubit extends Cubit<CommentEditState> {
     Log.debug('CommentEditCubit.submit isEdit=$isEdit animalId=$animalId');
     safeEmit(state.copyWith(isSubmitting: true));
     final file = state.attachedFile;
-    final files = file == null ? <AnimalNoteFileInput>[] : _toInputs([file]);
+    final files = file == null ? <AnimalNoteFileInput>[] : await _toInputs([file]);
     final source = comment;
 
     final result = source != null
@@ -67,24 +64,18 @@ class CommentEditCubit extends Cubit<CommentEditState> {
     );
   }
 
-  /// Выбранные файлы → доменные входные данные. Байты берём кроссплатформенно:
-  /// file_picker на web кладёт содержимое в [PlatformFile.bytes] (path == null),
-  /// на нативе — читаем с ФС по path. Файлы без доступного содержимого
-  /// отбрасываем.
-  List<AnimalNoteFileInput> _toInputs(List<PlatformFile> files) {
-    return files
-        .map<AnimalNoteFileInput?>((file) {
-          final bytes = _readPlatformFileBytes(file);
-          if (bytes == null) return null;
-          return AnimalNoteFileInput(name: file.name, bytes: bytes, extension: file.extension);
-        })
-        .whereType<AnimalNoteFileInput>()
-        .toList();
-  }
-
-  Uint8List? _readPlatformFileBytes(PlatformFile file) {
-    if (file.bytes != null) return file.bytes;
-    if (!kIsWeb && file.path != null) return File(file.path!).readAsBytesSync();
-    return null;
+  /// Выбранные файлы → доменные входные данные. Байты читаем через
+  /// [PlatformFile.readAsBytes] — одинаково на web и нативе. Файлы, которые не
+  /// удалось прочитать, отбрасываем.
+  Future<List<AnimalNoteFileInput>> _toInputs(List<PlatformFile> files) async {
+    final inputs = <AnimalNoteFileInput>[];
+    for (final file in files) {
+      try {
+        inputs.add(AnimalNoteFileInput(name: file.name, bytes: await file.readAsBytes(), extension: file.extension));
+      } catch (e) {
+        Log.error('CommentEditCubit: cannot read attached file ${file.name}: $e');
+      }
+    }
+    return inputs;
   }
 }

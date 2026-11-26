@@ -5,16 +5,15 @@ version: 0.1.0
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
-  flutter: ">=3.44.0"
+  flutter: ">=3.50.0"
 
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-  # Material/Widgets/Cupertino delegates для LocalizationAddon в debug-галерее.
-  flutter_localizations:
-    sdk: flutter
+  material_ui: ^1.11.1
+  cupertino_ui: ^1.1.7
 
   # Foundation packages.
   util:
@@ -83,6 +82,7 @@ dev_dependencies:
   build_runner: ^2.4.0
   bloc_test: ^10.0.0
   mocktail: ^1.0.5
+  shared_preferences: ^2.5.5
 
 # NOTE: the app's flutter_gen assets (`lib/gen/assets.gen.dart`) are moved into
 # this package as a plain Dart file that references bare `assets/...` paths with

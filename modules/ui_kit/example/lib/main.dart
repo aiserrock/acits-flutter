@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// widgetbook 3.x типизирует lightTheme/darkTheme легаси-ThemeData из flutter/material.dart.
+// ignore: deprecated_member_use
+import 'package:flutter/material.dart' as legacy;
+import 'package:material_ui/material_ui.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:widgetbook/widgetbook.dart';
 
@@ -33,9 +35,11 @@ class AcitsUiKitApp extends StatelessWidget {
     return Widgetbook.material(
       directories: buildGalleryDirectories(),
       // Тема самого UI widgetbook (панели/навигация) в фирменных тонах ACITS.
-      lightTheme: ThemeData.light(useMaterial3: true).copyWith(colorScheme: ColorScheme.fromSeed(seedColor: _brand)),
-      darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
-        colorScheme: ColorScheme.fromSeed(seedColor: _brand, brightness: Brightness.dark),
+      lightTheme: legacy.ThemeData.light(
+        useMaterial3: true,
+      ).copyWith(colorScheme: legacy.ColorScheme.fromSeed(seedColor: _brand)),
+      darkTheme: legacy.ThemeData.dark(useMaterial3: true).copyWith(
+        colorScheme: legacy.ColorScheme.fromSeed(seedColor: _brand, brightness: Brightness.dark),
       ),
       header: const _BrandHeader(),
       // Каждый экспонат рендерится внутри EasyLocalization, чтобы `.tr()` в
@@ -49,7 +53,16 @@ class AcitsUiKitApp extends StatelessWidget {
       addons: [
         // Продовые токены дизайн-системы: тумблер Light/Dark применяет реальную
         // AppTheme к превью.
-        MaterialThemeAddon(
+        // MaterialThemeAddon из widgetbook 3.x принимает легаси-ThemeData, а
+        // AppTheme собран на material_ui — строим ThemeAddon на нём сами.
+        ThemeAddon<ThemeData>(
+          themeBuilder: (context, theme, child) => Theme(
+            data: theme,
+            child: ColoredBox(
+              color: theme.scaffoldBackgroundColor,
+              child: DefaultTextStyle(style: theme.textTheme.bodyMedium!, child: child),
+            ),
+          ),
           themes: [
             WidgetbookTheme(name: 'Light', data: AppTheme.light),
             WidgetbookTheme(name: 'Dark', data: AppTheme.dark),
@@ -59,12 +72,7 @@ class AcitsUiKitApp extends StatelessWidget {
         // экспонатов.
         LocalizationAddon(
           locales: const [Locale('ru'), Locale('en')],
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            DefaultWidgetsLocalizations.delegate,
-          ],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
         ),
         // Адаптив: обрамление в реальные устройства. Полный набор пресетов
         // widgetbook (iOS + Android + desktop) — то, чего не хватало для

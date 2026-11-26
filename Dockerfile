@@ -1,7 +1,7 @@
 # cirrusci/flutter is unmaintained and its pinned 3.3.1 tag predates the SDK
-# this project needs (.fvmrc / CI pin: 3.44.0). ghcr.io/cirruslabs/flutter is
+# this project needs (.fvmrc / CI pin: 3.50.0). ghcr.io/cirruslabs/flutter is
 # the maintained successor image, tagged after the Flutter SDK version.
-FROM ghcr.io/cirruslabs/flutter:3.44.0 AS build
+FROM ghcr.io/cirruslabs/flutter:3.50.0 AS build
 WORKDIR /usr/src/app
 COPY . .
 RUN flutter pub get

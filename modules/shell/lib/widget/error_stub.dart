@@ -1,5 +1,5 @@
 import 'package:ui_kit/ui_kit.dart' as ui_kit;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// App-обёртка над [ui_kit.ErrorStubWidget]: подставляет фирменную SVG-заглушку
 /// `errorStub` из дизайн-системы (package-scoped [ui_kit.Assets]). Тонкий адаптер.

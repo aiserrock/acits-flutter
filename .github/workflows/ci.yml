@@ -22,11 +22,11 @@ concurrency:
   group: pages-${{ github.workflow }}
   cancel-in-progress: false
 
-# Matches the FVM pin in .fvmrc (Dart 3.12, Flutter 3.44.x). CI pins the SDK
+# Matches the FVM pin in .fvmrc (Dart 3.14, Flutter 3.50.x). CI pins the SDK
 # directly via subosito/flutter-action — FVM's install step is fragile here
 # and breaks the action's caching.
 env:
-  FLUTTER_VERSION: "3.44.0"
+  FLUTTER_VERSION: "3.50.0"
 
 # One job per pipeline stage (prepare -> lint/analyse/test -> build ->
 # deploy web -> notify) so a failure shows up as its own named check instead

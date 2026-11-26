@@ -1,5 +1,5 @@
 import 'package:core/domain.dart' show Curator;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CuratorListItem extends StatelessWidget {
   const CuratorListItem({required this.curator, super.key});

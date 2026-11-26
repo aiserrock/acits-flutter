@@ -92,6 +92,11 @@ android {
         }
     }
 
+    // AGP 9 turns resValues off by default; the flavors below use resValue.
+    buildFeatures {
+        resValues true
+    }
+
     flavorDimensions "release_type"
 
     productFlavors {

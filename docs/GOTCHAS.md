@@ -22,7 +22,7 @@ Touched DI/json/assets → `melos gen`. Touched the spec → `melos genapi`.
 | --- | --- | --- |
 | A new module isn't picked up / `pub get` doesn't see it | not listed under `workspace:` in the root `pubspec.yaml` | add it, then `fvm flutter pub get` |
 | Analyzer flags files under `modules/*/build/` or generated output | those are build artifacts | `modules/*/build/`, `modules/*/.dart_tool/` (and `packages/*/build/` if a fork lands there) are gitignored; generated code is excluded from analysis — don't commit `build/` |
-| `flutter` / `dart` uses the wrong SDK version | ran without FVM | always prefix with `fvm` (Flutter 3.44.0 / Dart 3.12, pinned in `.fvmrc`) |
+| `flutter` / `dart` uses the wrong SDK version | ran without FVM | always prefix with `fvm` (Flutter 3.50.0 / Dart 3.14, pinned in `.fvmrc`) |
 | `flutter test` at the root passes but package tests are ignored | root `flutter test` runs only the root package | run each package: `for p in . packages/* modules/*; do [ -d "$p/test" ] && (cd "$p" && fvm flutter test); done` (CI does this) |
 
 ## Analyze / format

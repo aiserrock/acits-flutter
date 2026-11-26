@@ -9,7 +9,7 @@ import 'package:shell/presentation/main/main_screen.dart';
 import 'package:shell/widget/personal_drawer.dart';
 import 'package:shell/util/web_insets/web_insets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 List<BottomNavigationBarItem> _buildBottomNavItems(BuildContext context) {

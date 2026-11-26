@@ -1,5 +1,5 @@
 import 'package:core/domain.dart' show Applicant;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ApplicantListItem extends StatelessWidget {
   const ApplicantListItem({required this.applicant, super.key});

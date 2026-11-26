@@ -9,3 +9,4 @@ analyzer:
   exclude:
     # Generated LocaleKeys — easy_localization output, not hand-maintained.
     - "lib/src/locale_keys.g.dart"
+    - build/**

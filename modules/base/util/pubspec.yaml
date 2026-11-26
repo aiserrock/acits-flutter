@@ -5,17 +5,18 @@ version: 0.1.0
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
-  flutter: ">=3.44.0"
+  flutter: ">=3.50.0"
 
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
+  material_ui: ^1.11.1
   equatable: ^2.0.8
   flutter_bloc: ^9.1.1
   intl: ^0.20.2
-  package_info_plus: ^9.0.1
+  package_info_plus: ^10.2.2
 
   # Logger infra (shared Talker factory + formatter/observer, bloc observer).
   # Crashlytics-плагина на web нет — observer под guard kIsWeb.

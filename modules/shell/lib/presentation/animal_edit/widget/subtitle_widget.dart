@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SubtitleWidget extends StatelessWidget {
   const SubtitleWidget({required this.title, this.actions, super.key});

@@ -14,8 +14,8 @@
   </p>
 
   [![CI](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/aiserrock/acits-flutter/actions/workflows/ci.yml)
-  [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-  [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+  [![Flutter](https://img.shields.io/badge/Flutter-3.50-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+  [![Dart](https://img.shields.io/badge/Dart-3.14-0175C2?logo=dart&logoColor=white)](https://dart.dev)
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../LICENSE)
   [![Telegram](https://img.shields.io/badge/Telegram-build_notifications-26A5E4?logo=telegram&logoColor=white)](https://t.me/acitsFlutterBuildNotifications)
 </div>
@@ -28,7 +28,7 @@
 
 ## टेक स्टैक
 
-`flutter_bloc` (Cubit) · `go_router` · `easy_localization` · `get_it` + `injectable` · Chopper/Dio (OpenAPI) · Firebase · e2e के लिए Patrol। [FVM](https://fvm.app) के ज़रिए Flutter 3.44 / Dart 3.12 पर पिन किया गया।
+`flutter_bloc` (Cubit) · `go_router` · `easy_localization` · `get_it` + `injectable` · Chopper/Dio (OpenAPI) · Firebase · e2e के लिए Patrol। [FVM](https://fvm.app) के ज़रिए Flutter 3.50 / Dart 3.14 पर पिन किया गया।
 
 ## क्विक स्टार्ट
 

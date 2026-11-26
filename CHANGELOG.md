@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Тулчейн обновлён до Flutter 3.50.0 / Dart 3.14.0 (`.fvmrc`, `pubspec.yaml` корня
+  и модулей, CI, Dockerfile, шаблон mason-кирпича, документация).
+- Android: Gradle 9.5.0 / AGP 9.3.1 / Kotlin 2.4.20 — верхняя граница, которую
+  принимает Flutter 3.50. В `app/build.gradle` включён `buildFeatures.resValues`
+  (AGP 9 выключает его по умолчанию, флейворы используют `resValue`).
+  Built-in Kotlin и новый DSL остаются включёнными.
+- Обновлены плагины, без которых Android не собирается на AGP 9 со встроенным
+  Kotlin: `file_picker` 13, `share_plus` 13, `package_info_plus` 10, `pdfx` 2.11,
+  `patrol` 4.12. `file_picker` 13 убрал `withData` и `FilePickerResult` — файл
+  комментария читается через `PlatformFile.readAsBytes()`.
+- `melos` 8.10.1: версия 8.2.2 не запускалась на Dart 3.14.
 - Переход на многопакетную структуру: код приложения разложен по `modules/` —
   базовый слой (`base/{util,network,core,di,navigation,localization}`),
   `ui_kit`, `app_services`, `shell` и шесть фича-модулей.
