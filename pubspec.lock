@@ -1766,10 +1766,18 @@ packages:
     dependency: transitive
     description:
       name: swagger_parser
-      sha256: "80c54a8a002cce03c047f48cbc93668d179dc3d1711b5ecfb406fb65bf1e551f"
+      sha256: "7041a4c9051d54319dd1f820b0918296462b3df2456da6347d78ae0ba67126bf"
       url: "https://pub.dev"
     source: hosted
-    version: "1.46.0"
+    version: "2.4.0"
+  swagger_parser_core:
+    dependency: transitive
+    description:
+      name: swagger_parser_core
+      sha256: "62dcff2e4fe0ab1d7d847fab8f80a93dd35424ba035aa266e3a54393c88496ef"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   synchronized:
     dependency: transitive
     description:

@@ -6,5 +6,4 @@
 /// matches the app's wire shape. This narrow barrel exposes exactly those.
 library;
 
-export '../adapters/swagger_parser/generated/clients/animals_client.dart';
-export '../adapters/swagger_parser/generated/models/animal_attribute.dart';
+export '../adapters/swagger_parser/generated/exports.dart';

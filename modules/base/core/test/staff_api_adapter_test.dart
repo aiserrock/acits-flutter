@@ -5,6 +5,7 @@
 // write body (with shelter scoping) that the app historically posted.
 import 'package:core/api.dart';
 import 'package:core/api/src/staff_client_barrel.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _FakeApplicantsClient implements ApplicantsClient {
@@ -18,6 +19,9 @@ class _FakeApplicantsClient implements ApplicantsClient {
 
   @override
   Future<PaginatedApplicantList> v1ApplicantsList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     int? limit,
     int? offset,
@@ -30,21 +34,40 @@ class _FakeApplicantsClient implements ApplicantsClient {
   }
 
   @override
-  Future<Applicant> v1ApplicantsRetrieve({required int id, int? xCurrentShelter}) async {
+  Future<Applicant> v1ApplicantsRetrieve({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required int id,
+    int? xCurrentShelter,
+  }) async {
     lastId = id;
     lastShelterId = xCurrentShelter;
     return single;
   }
 
   @override
-  Future<Applicant> v1ApplicantsCreate({required Applicant body, int? xCurrentShelter}) async {
+  Future<Applicant> v1ApplicantsCreate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required Applicant body,
+    int? xCurrentShelter,
+  }) async {
     lastBody = body;
     lastShelterId = xCurrentShelter;
     return single;
   }
 
   @override
-  Future<Applicant> v1ApplicantsUpdate({required int id, required Applicant body, int? xCurrentShelter}) async {
+  Future<Applicant> v1ApplicantsUpdate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required int id,
+    required Applicant body,
+    int? xCurrentShelter,
+  }) async {
     lastId = id;
     lastBody = body;
     lastShelterId = xCurrentShelter;
@@ -65,28 +88,55 @@ class _FakeCuratorsClient implements CuratorsClient {
   int? lastId;
 
   @override
-  Future<PaginatedCuratorList> v1CuratorsList({int? xCurrentShelter, int? limit, int? offset, String? search}) async {
+  Future<PaginatedCuratorList> v1CuratorsList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    int? xCurrentShelter,
+    int? limit,
+    int? offset,
+    String? search,
+  }) async {
     lastShelterId = xCurrentShelter;
     lastSearch = search;
     return listPage;
   }
 
   @override
-  Future<Curator> v1CuratorsRetrieve({required int id, int? xCurrentShelter}) async {
+  Future<Curator> v1CuratorsRetrieve({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required int id,
+    int? xCurrentShelter,
+  }) async {
     lastId = id;
     lastShelterId = xCurrentShelter;
     return single;
   }
 
   @override
-  Future<Curator> v1CuratorsCreate({required Curator body, int? xCurrentShelter}) async {
+  Future<Curator> v1CuratorsCreate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required Curator body,
+    int? xCurrentShelter,
+  }) async {
     lastBody = body;
     lastShelterId = xCurrentShelter;
     return single;
   }
 
   @override
-  Future<Curator> v1CuratorsUpdate({required int id, required Curator body, int? xCurrentShelter}) async {
+  Future<Curator> v1CuratorsUpdate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required int id,
+    required Curator body,
+    int? xCurrentShelter,
+  }) async {
     lastId = id;
     lastBody = body;
     lastShelterId = xCurrentShelter;

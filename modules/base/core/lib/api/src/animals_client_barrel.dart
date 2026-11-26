@@ -8,7 +8,4 @@
 /// without opening the whole generated surface to app code.
 library;
 
-export '../adapters/swagger_parser/generated/clients/animals_client.dart';
-export '../adapters/swagger_parser/generated/models/animal_read.dart';
-export '../adapters/swagger_parser/generated/models/animal_write.dart';
-export '../adapters/swagger_parser/generated/models/paginated_animal_read_list.dart';
+export '../adapters/swagger_parser/generated/exports.dart';

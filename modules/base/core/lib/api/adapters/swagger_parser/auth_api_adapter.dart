@@ -9,16 +9,7 @@ import '../../ports/dto/user_admin_dto.dart';
 import '../../ports/dto/user_admin_write_dto.dart';
 import '../../ports/dto/user_worker_dto.dart';
 import '../../ports/dto/user_worker_write_dto.dart';
-import 'generated/clients/shelters_client.dart';
-import 'generated/clients/token_client.dart';
-import 'generated/clients/users_client.dart';
-import 'generated/clients/users_registration_client.dart';
-import 'generated/models/role_enum.dart';
-import 'generated/models/shelter_serializers.dart';
-import 'generated/models/shelter_short_serializers.dart';
-import 'generated/models/token_refresh.dart';
-import 'generated/models/user_shelter_admin_serializers.dart';
-import 'generated/models/user_shelter_worker_serializers.dart';
+import 'generated/exports.dart';
 
 /// The ONLY place generated swagger_parser code is touched for the auth slice.
 ///
@@ -149,7 +140,10 @@ class AuthApiAdapter implements AuthApiPort {
       phoneNumber: result.phoneNumber,
       address: result.address,
       shelter: result.shelter,
-      role: result.role?.json,
+      role: switch (result.role) {
+        RoleEnumKnown(:final value) => value.value,
+        _ => null,
+      },
       isOfferSigned: result.isOfferSigned ?? false,
     );
   }

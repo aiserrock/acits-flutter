@@ -8,15 +8,7 @@ import '../../ports/dto/prescription_execution_today_dto.dart';
 import '../../ports/dto/prescription_short_dto.dart';
 import '../../ports/dto/prescription_write_dto.dart';
 import '../../ports/prescription_api_port.dart';
-import 'generated/clients/prescriptions_client.dart';
-import 'generated/clients/shelters_client.dart';
-import 'generated/models/animal_short.dart';
-import 'generated/models/paginated_prescription_execution_today_list.dart';
-import 'generated/models/drug.dart';
-import 'generated/models/prescription_drug.dart';
-import 'generated/models/prescription_execution_today.dart';
-import 'generated/models/prescription_short.dart';
-import 'generated/models/shelter_drug.dart';
+import 'generated/exports.dart';
 
 /// The ONLY place generated swagger_parser code is touched for prescriptions.
 ///
@@ -75,13 +67,10 @@ class PrescriptionApiAdapter implements PrescriptionApiPort {
     int? offset,
     int? shelterId,
   }) async {
-    final now = DateTime.now();
-    final from = DateTime(now.year, now.month, now.day);
+    // Спека объявляет from/to как path-параметры без плейсхолдера; препроцессор
+    // их убирает, так что запрос идёт без них (как и у прежнего клиента) —
+    // сервер сам отдаёт «сегодня». Диапазон — в [executionsInRange].
     final page = await _prescriptions.v1PrescriptionsExecutionsList(
-      // from/to повторяют прежнюю сигнатуру; на этом эндпоинте генератор их
-      // отбрасывает (как и chopper) — поведение идентично.
-      from: from,
-      to: from.add(const Duration(days: 1)),
       xCurrentShelter: shelterId,
       search: search,
       ordering: ordering,
@@ -184,7 +173,10 @@ class PrescriptionApiAdapter implements PrescriptionApiPort {
 
   PrescriptionShortDto _mapShort(PrescriptionShort s) => PrescriptionShortDto(
     id: s.id,
-    myType: s.myType?.json,
+    myType: switch (s.myType) {
+      PrescriptionShortMyTypeEnumKnown(:final value) => value.value,
+      _ => null,
+    },
     extraTypeAttributes: s.extraTypeAttributes is Map<String, dynamic>
         ? s.extraTypeAttributes as Map<String, dynamic>
         : null,
@@ -208,7 +200,7 @@ class PrescriptionApiAdapter implements PrescriptionApiPort {
   PrescriptionDrugDto _mapDrugLine(PrescriptionDrug d) => PrescriptionDrugDto(
     drugId: d.drugId ?? 0,
     drugName: d.drugName ?? '',
-    drugDosage: d.drugDosage ?? 0,
+    drugDosage: (d.drugDosage ?? 0).toDouble(),
     usageInstruction: d.usageInstruction,
     formOfDrug: d.formOfDrug,
   );

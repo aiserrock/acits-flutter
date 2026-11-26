@@ -34,6 +34,9 @@ class _FakeAnimalsClient implements AnimalsClient {
 
   @override
   Future<PaginatedAnimalReadList> v1AnimalsList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     int? limit,
     int? offset,
@@ -48,14 +51,27 @@ class _FakeAnimalsClient implements AnimalsClient {
   }
 
   @override
-  Future<AnimalRead> v1AnimalsRetrieve({required String id, int? xCurrentShelter}) async {
+  Future<AnimalRead> v1AnimalsRetrieve({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required String id,
+    int? xCurrentShelter,
+  }) async {
     lastId = id;
     lastShelterId = xCurrentShelter;
     return single!;
   }
 
   @override
-  Future<AnimalRead> v1AnimalsUpdate({required String id, required AnimalWrite body, int? xCurrentShelter}) async {
+  Future<AnimalRead> v1AnimalsUpdate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required String id,
+    required AnimalWrite body,
+    int? xCurrentShelter,
+  }) async {
     lastId = id;
     lastShelterId = xCurrentShelter;
     lastUpdateBody = body;

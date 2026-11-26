@@ -43,6 +43,9 @@ class _FakeAnimalsClient implements AnimalsClient {
 
   @override
   Future<List<AnimalAttribute>> v1AnimalsAttributesList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     bool? isRequired,
     String? ordering,

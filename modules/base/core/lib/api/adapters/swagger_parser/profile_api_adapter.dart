@@ -3,8 +3,7 @@ import 'package:dio/dio.dart';
 import '../../ports/dto/user_dto.dart';
 import '../../ports/dto/user_write_dto.dart';
 import '../../ports/profile_api_port.dart';
-import 'generated/clients/users_client.dart';
-import 'generated/models/user_serializers.dart';
+import 'generated/exports.dart';
 
 /// The ONLY place generated swagger_parser code is touched for the profile slice.
 ///

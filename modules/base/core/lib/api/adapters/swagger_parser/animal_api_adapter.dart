@@ -12,18 +12,7 @@ import '../../ports/dto/applicant_dto.dart';
 import '../../ports/dto/curator_dto.dart';
 import '../../ports/dto/image_thumbnails_dto.dart';
 import '../../ports/dto/species_dto.dart';
-import 'generated/clients/animals_client.dart';
-import 'generated/models/animal_attribute_value.dart';
-import 'generated/models/animal_image_read.dart';
-import 'generated/models/animal_image_write.dart';
-import 'generated/models/animal_read.dart';
-import 'generated/models/animal_write.dart';
-import 'generated/models/applicant.dart';
-import 'generated/models/curator.dart';
-import 'generated/models/image_thumbnails.dart';
-import 'generated/models/level.dart';
-import 'generated/models/species.dart';
-import 'generated/models/status69f_enum.dart';
+import 'generated/exports.dart';
 
 /// The ONLY place generated swagger_parser code is touched.
 ///
@@ -91,7 +80,7 @@ class AnimalApiAdapter implements AnimalApiPort {
   }) async {
     final page = await _client.v1AnimalsSpeciesList(
       xCurrentShelter: shelterId,
-      level: Level.fromJson(level),
+      level: V1AnimalsSpeciesListLevel.fromJson(level),
       parentId: parentId,
       search: search,
       limit: limit,
@@ -210,7 +199,12 @@ class AnimalApiAdapter implements AnimalApiPort {
     name: a.name,
     images: (a.images ?? const []).map(_mapImage).toList(growable: false),
     spec: a.spec == null ? null : _mapSpecies(a.spec!),
-    status: a.status?.json,
+    // Unknown wire values surface as null (the previous enum fell back to
+    // `$unknown` whose json was null).
+    status: switch (a.status) {
+      Status69fEnumKnown(:final value) => value.value,
+      _ => null,
+    },
     dateJoined: a.dateJoined ?? _epoch,
     birthDate: a.birthDate,
     deathDate: a.deathDate,
@@ -243,7 +237,7 @@ class AnimalApiAdapter implements AnimalApiPort {
   SpeciesDto _mapSpecies(Species s) => SpeciesDto(
     id: s.id ?? 0,
     name: s.name ?? '',
-    level: s.level?.json ?? 0,
+    level: s.level?.value ?? 0,
     parentId: s.parentId,
     parentName: s.parentName,
     categoryName: s.categoryName,

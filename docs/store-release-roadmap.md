@@ -28,7 +28,7 @@ Plugin, генератор API на текущем мажоре.
   только Flutter. Удалить `Podfile`, включения `Pods-Runner.*.xcconfig` из `ios/Flutter/*.xcconfig`,
   фазы `[CP]` и группу Pods из `project.pbxproj`; таргет `RunnerUITests` (Patrol) перевести на
   Swift-пакет `patrol`. Закоммитить `Package.resolved`. Обновить кэширование в CI.
-- **`swagger_parser` 2.x** — L. Новый формат конфига и раскладка генерата по тегам (197 файлов
+- ✅ **`swagger_parser` 2.x** — L. Новый формат конфига и раскладка генерата по тегам (197 файлов
   вместо 263, другие имена моделей): переписать `swagger_parser.yaml`, дополнить
   `tool/preprocess_openapi.dart` (два path-параметра без плейсхолдера, схема с пробелом в имени,
   пустые `required: []`), поправить 7 адаптеров и 85 импортов. Порты и фичи не меняются —

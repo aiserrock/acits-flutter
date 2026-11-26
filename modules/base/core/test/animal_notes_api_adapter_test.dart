@@ -53,6 +53,9 @@ class _FakeAnimalsClient implements AnimalsClient {
 
   @override
   Future<PaginatedAnimalNoteList> v1AnimalsNotesList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     int? animal,
     int? limit,
@@ -66,7 +69,13 @@ class _FakeAnimalsClient implements AnimalsClient {
   }
 
   @override
-  Future<void> v1AnimalsNotesDestroy({required int id, int? xCurrentShelter}) async {
+  Future<void> v1AnimalsNotesDestroy({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required int id,
+    int? xCurrentShelter,
+  }) async {
     lastDeletedId = id;
     lastShelterId = xCurrentShelter;
   }
