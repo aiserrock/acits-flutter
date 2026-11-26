@@ -6,6 +6,7 @@ A release is built once and then promoted. Two pushes drive it, both handled by
 | Push | What happens |
 | --- | --- |
 | branch `release/*` | Signed prod builds for Android and iOS are produced and uploaded to the internal channels. |
+| manual run, `dry_run` | The same release builds (signed Android, obfuscated unsigned iOS) as run artefacts; nothing is uploaded. Needs only the Android keystore and Firebase config secrets: `gh workflow run release.yml --ref develop -f dry_run=true`. |
 | tag `v*` on that same commit | The builds already uploaded are promoted to production. Nothing is rebuilt. |
 
 ## Step by step
