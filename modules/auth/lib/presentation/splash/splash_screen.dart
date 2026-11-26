@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 
 import 'package:auth/domain/domain.dart';
 import 'package:auth/util/util.dart';
+import 'package:auth/presentation/splash/update_gate_view.dart';
 
 /// Стартовый splash-роут. Не рисует собственный UI: держит тот же кадр, что и
 /// нативный splash (Android/iOS) или DOM-splash (web) — сплошной фон #6776E0.
@@ -28,6 +29,7 @@ class SplashScreen extends StatefulWidget {
     required this.navigator,
     required this.logo,
     required this.loadingAnimations,
+    this.updatePolicy,
     super.key,
   });
 
@@ -41,6 +43,9 @@ class SplashScreen extends StatefulWidget {
   /// Пути к loading-lottie (`assets/lottie/*_loading.json`) — на старт выбирается
   /// случайная. Резолвятся из бандла приложения.
   final List<String> loadingAnimations;
+
+  /// Remote update policy, checked before any route. `null` skips the check.
+  final AppUpdatePolicy? updatePolicy;
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -59,6 +64,9 @@ class _SplashScreenState extends State<SplashScreen> {
   /// Момент, когда splash смонтирован — от него отсчитываем минимум показа.
   final Stopwatch _shownFor = Stopwatch();
 
+  /// Non-null while the update or kill-switch screen is shown instead of the splash.
+  UpdateRequirement? _gate;
+
   @override
   void initState() {
     super.initState();
@@ -73,7 +81,38 @@ class _SplashScreenState extends State<SplashScreen> {
     if (left > Duration.zero) await Future<void>.delayed(left);
   }
 
+  /// Asks the remote policy first: an outdated or switched-off build stops here,
+  /// before any network call that its old API contract could break.
   Future<void> _decideStartRoute() async {
+    final requirement = await widget.updatePolicy?.check() ?? UpdateRequirement.none;
+    if (!mounted) return;
+    if (requirement != UpdateRequirement.none) {
+      Log.info('Splash: update gate → ${requirement.name}');
+      await _ensureMinDuration();
+      if (!mounted) return;
+      setState(() => _gate = requirement);
+      widget.navigator.revealInPlace();
+      return;
+    }
+    await _route();
+  }
+
+  void _continueWithoutUpdate() {
+    setState(() => _gate = null);
+    _route();
+  }
+
+  Future<void> _retryGate() async {
+    final requirement = await widget.updatePolicy?.check() ?? UpdateRequirement.none;
+    if (!mounted) return;
+    if (requirement == UpdateRequirement.none) {
+      _continueWithoutUpdate();
+    } else {
+      setState(() => _gate = requirement);
+    }
+  }
+
+  Future<void> _route() async {
     final config = widget.configService;
     final auth = widget.authService;
 
@@ -125,6 +164,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final gate = _gate;
+    if (gate != null) {
+      final policy = widget.updatePolicy!;
+      return UpdateGateView(
+        requirement: gate,
+        message: policy.message,
+        onUpdate: policy.openStore,
+        onLater: _continueWithoutUpdate,
+        onRetry: _retryGate,
+      );
+    }
     // Кадр повторяет нативный/DOM splash: фон #6776E0, белая иконка (logo_splash)
     // по центру. Вместо CSS-спиннера #loader — случайная loading-lottie внизу на
     // ~18% высоты (тот же цвет фона, поэтому переход с нативного/DOM splash
