@@ -1,3 +1,11 @@
+// Goldens are recorded on the Linux CI runner and run only there: macOS and Windows
+// anti-alias glyphs differently, by as many pixels as a one-letter text change, so no
+// tolerance separates platform noise from a regression. Locally:
+//   fvm flutter test --exclude-tags golden      (what `melos run test` does)
+// To re-record after an intended visual change, run the `Update goldens` workflow.
+@Tags(['golden'])
+library;
+
 import 'package:ui_kit/ui_kit.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';

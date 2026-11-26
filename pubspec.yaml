@@ -303,16 +303,22 @@ melos:
     # ── Тесты ────────────────────────────────────────────────────────────────
     # `modules/base/*` — контейнер, пакеты лежат на уровень глубже, поэтому
     # обходятся отдельной маской (иначе 100+ тестов молча не гоняются).
+    # Голдены (тег `golden`) сняты на Linux-раннере CI и локально не сходятся по
+    # сглаживанию шрифтов, поэтому здесь исключены; CI гоняет их в джобе Test.
     test:
-      description: Юнит- и виджет-тесты корня и каждого пакета воркспейса с test/.
+      description: Юнит- и виджет-тесты корня и каждого пакета воркспейса с test/ (без голденов).
       run: |
         fvm flutter test
         for p in packages/* modules/* modules/base/*; do
           if [ -d "$p/test" ]; then
             echo "── flutter test ($p)"
-            (cd "$p" && fvm flutter test) || exit 1
+            (cd "$p" && fvm flutter test --exclude-tags golden) || exit 1
           fi
         done
+
+    test:goldens:
+      description: Только голден-тесты (сходятся на Linux; на macOS — для перезаписи через --update-goldens нельзя).
+      run: cd modules/ui_kit && fvm flutter test --tags golden
 
     test:coverage:
       description: Тесты со сбором покрытия (coverage/lcov.info).
