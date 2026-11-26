@@ -118,7 +118,7 @@ dependencies:
   file_picker: ^13.4.1
   firebase_core: ^4.7.0
   flutter_bloc: ^9.1.1
-  flutter_keyboard_visibility: ^6.0.0
+  flutter_keyboard_visibility: ^7.0.1
   flutter_secure_storage: ^10.0.0
   flutter_slidable: ^4.0.3
   flutter_svg: ^2.2.4

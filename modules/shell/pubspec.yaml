@@ -64,7 +64,7 @@ dependencies:
   widgetbook: ^3.25.0
   smooth_page_indicator: ^2.0.1
   flutter_slidable: ^4.0.3
-  flutter_keyboard_visibility: ^6.0.0
+  flutter_keyboard_visibility: ^7.0.1
   flutter_svg: ^2.2.4
   equatable: ^2.0.8
   collection: ^1.19.0

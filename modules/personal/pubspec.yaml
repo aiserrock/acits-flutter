@@ -18,7 +18,7 @@ dependencies:
   bloc: ^9.2.0
   equatable: ^2.0.8
   easy_localization: ^3.0.8
-  flutter_keyboard_visibility: ^6.0.0
+  flutter_keyboard_visibility: ^7.0.1
   flutter_svg: ^2.2.4
   file_picker: ^13.4.1
   lottie: ^3.3.3
