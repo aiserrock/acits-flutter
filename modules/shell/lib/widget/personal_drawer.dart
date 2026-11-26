@@ -53,7 +53,6 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
           final hasError = state.hasError;
           final person = state.valueOrNull;
           final titleStyle = Theme.of(context).textTheme.titleLarge;
-          final secondaryTitleStyle = titleStyle?.copyWith(color: context.appColors.textSecondary);
           return ListView(
             children: [
               _buildHeader(),
@@ -62,8 +61,8 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               _buildDivider(),
               if (!hasError) _buildDataTileWidget(context, isLoading),
               ListTile(
-                title: Text(LocaleKeys.personMyShelters.tr(), style: secondaryTitleStyle),
-                // onTap: () {},
+                title: Text(LocaleKeys.personMyShelters.tr(), style: titleStyle),
+                onTap: _openMyShelters,
               ),
               _buildDivider(),
               ListTile(
@@ -180,13 +179,18 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
     }
   }
 
-  void _openPersonalScreen({bool isChangePass = false}) async {
+  void _openPersonalScreen({bool isChangePass = false}) =>
+      _openScreen('${AppRoutes.personal}?changePass=$isChangePass');
+
+  void _openMyShelters() => _openScreen(AppRoutes.myShelters);
+
+  Future<void> _openScreen(String location) async {
     final scaffold = Scaffold.maybeOf(context);
     if (scaffold?.isDrawerOpen ?? false) {
       scaffold?.closeDrawer();
       await Future.delayed(_kBaseSettleDuration);
     }
     if (!mounted) return;
-    context.push('${AppRoutes.personal}?changePass=$isChangePass');
+    context.push(location);
   }
 }

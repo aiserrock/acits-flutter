@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:core/api.dart';
+import 'package:core/domain.dart' show Shelter;
 import 'package:injectable/injectable.dart';
 import 'package:personal/personal.dart';
+import 'package:util/util.dart' show Failure, Result;
 
 import 'package:app_services/src/service/auth/auth_service.dart';
 import 'package:app_services/src/service/file/file_service.dart';
@@ -51,4 +53,19 @@ class FileServiceCommentFileOpener implements CommentFileOpener {
 
   @override
   Future<File> loadFile(String url, String title) => _fileService.loadFile(url, title);
+}
+
+/// Список приютов пользователя и текущий приют для экрана «Мои организации»
+/// поверх [AuthService].
+@Injectable(as: MySheltersSource)
+class AuthServiceMySheltersSource implements MySheltersSource {
+  const AuthServiceMySheltersSource(this._authService);
+
+  final AuthService _authService;
+
+  @override
+  Future<Result<Failure, List<Shelter>>> load() => _authService.getShelterList();
+
+  @override
+  int? get currentShelterId => _authService.currentShelterId;
 }

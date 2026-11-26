@@ -17,8 +17,17 @@ import 'package:prescriptions/prescriptions.dart'
         PrescriptionTypeLabels,
         PrescriptionsRouterService;
 import 'package:personal/personal.dart'
-    show AnimalNote, CommentEditScreen, CommentsRepository, PersonalRepository, PersonalScreen;
-import 'package:app_services/app_services.dart' show DebugService;
+    show
+        AnimalNote,
+        CommentEditScreen,
+        CommentsRepository,
+        MySheltersScreen,
+        MySheltersSource,
+        PersonalRepository,
+        PersonalScreen;
+import 'package:app_services/app_services.dart' show AuthService, ConfigService, DebugService;
+import 'package:easy_localization/easy_localization.dart';
+import 'package:localization/localization.dart' show LocaleKeys;
 import 'package:di/di.dart';
 import 'package:shell/navigation/auth_screen_bindings.dart';
 import 'package:shell/navigation/extra_codec.dart';
@@ -62,6 +71,7 @@ abstract final class AppRoutes {
   static const photoGallery = '/photo-gallery/:animalId';
   static const personal = '/personal';
   static const pickShelter = '/pick-shelter';
+  static const myShelters = '/my-shelters';
   static const searchSpec = '/search-spec';
   static const search = '/search';
 
@@ -236,6 +246,11 @@ GoRouter createAppRouter() {
         ),
       ),
       GoRoute(
+        path: AppRoutes.myShelters,
+        builder: (context, state) =>
+            MySheltersScreen(source: getIt<MySheltersSource>(), onSwitch: (shelter) => _switchShelter(shelter)),
+      ),
+      GoRoute(
         path: AppRoutes.pickShelter,
         builder: (context, state) {
           final extra = state.extra as Map<String, Object?>?;
@@ -266,4 +281,31 @@ GoRouter createAppRouter() {
         GoRoute(path: AppRoutes.gallery, builder: (context, state) => const GalleryScreen()),
     ],
   );
+}
+
+bool _switchingShelter = false;
+
+/// Makes [shelter] current and lands on the root screen.
+///
+/// Mirrors what the pick-shelter screen does after a tap: set the current
+/// shelter, reload the shelter-scoped config, then `go` to the root (the same
+/// call as `AuthRouterService.toRoot`), which rebuilds the tabs for the new
+/// shelter. On failure the user stays on the list and gets a message.
+Future<void> _switchShelter(Shelter shelter) async {
+  if (_switchingShelter) return;
+  _switchingShelter = true;
+  try {
+    final failure =
+        (await getIt<AuthService>().setCurrentShelter(shelter.id)).failureOrNull ??
+        (await getIt<ConfigService>().initConfig(currentShelterId: shelter.id)).failureOrNull;
+    if (failure != null) {
+      getIt<GlobalKey<ScaffoldMessengerState>>().currentState?.showSnackBar(
+        SnackBar(content: Text(LocaleKeys.errorDefaultMsg.tr())),
+      );
+      return;
+    }
+    getIt<GoRouter>().go(AppRoutes.root);
+  } finally {
+    _switchingShelter = false;
+  }
 }

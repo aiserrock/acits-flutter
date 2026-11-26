@@ -6,3 +6,4 @@ export 'personal_shelter_provider.dart';
 export 'repository/repository.dart';
 export 'router/router.dart';
 export 'user_profile.dart';
+export 'my_shelters_source.dart';

@@ -176,6 +176,8 @@
   "personLogout": "Выйти",
   "personMyData": "Мои данные",
   "personMyShelters": "Мои организации",
+  "personMySheltersCurrent": "Текущая организация",
+  "personMySheltersEmpty": "У вас пока нет организаций",
   "personalChangeErrorMsg": "Не удалось изменить пароль\n",
   "personalChangePass": "Изменить пароль",
   "personalEmptyFieldErrorMsg": "Заполните значения",
