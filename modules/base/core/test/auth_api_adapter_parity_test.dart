@@ -51,11 +51,22 @@ class _FakeTokenClient implements TokenClient {
   TokenRefresh? lastRefreshBody;
 
   @override
-  Future<TokenObtainPair> tokenCreate({required TokenObtainPair body, int? xCurrentShelter}) =>
-      throw UnimplementedError('login uses a raw Dio POST, not tokenCreate');
+  Future<TokenObtainPair> tokenCreate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required TokenObtainPair body,
+    int? xCurrentShelter,
+  }) => throw UnimplementedError('login uses a raw Dio POST, not tokenCreate');
 
   @override
-  Future<TokenRefresh> tokenRefreshCreate({required TokenRefresh body, int? xCurrentShelter}) async {
+  Future<TokenRefresh> tokenRefreshCreate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required TokenRefresh body,
+    int? xCurrentShelter,
+  }) async {
     lastRefreshBody = body;
     return refreshResult!;
   }
@@ -74,13 +85,21 @@ class _FakeUsersClient implements UsersClient {
 
   @override
   Future<PaginatedShelterShortSerializersList> v1UsersMeSheltersList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     int? limit,
     int? offset,
   }) async => shelters!;
 
   @override
-  Future<UserCurrentShelterSerializers> v1UsersMeSheltersCurrentRetrieve({int? xCurrentShelter}) async {
+  Future<UserCurrentShelterSerializers> v1UsersMeSheltersCurrentRetrieve({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    int? xCurrentShelter,
+  }) async {
     lastCurrentShelterId = xCurrentShelter;
     return current!;
   }
@@ -100,6 +119,9 @@ class _FakeSheltersClient implements SheltersClient {
 
   @override
   Future<PaginatedShelterShortSerializersList> v1SheltersList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     int? limit,
     int? offset,
@@ -126,6 +148,9 @@ class _FakeRegistrationClient implements UsersRegistrationClient {
 
   @override
   Future<UserShelterAdminSerializers> v1UsersAdminRegisterCreate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     required UserShelterAdminSerializers body,
     int? xCurrentShelter,
   }) async {
@@ -135,6 +160,9 @@ class _FakeRegistrationClient implements UsersRegistrationClient {
 
   @override
   Future<UserShelterWorkerSerializers> v1UsersWorkerRegisterCreate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     required UserShelterWorkerSerializers body,
     int? xCurrentShelter,
   }) async {

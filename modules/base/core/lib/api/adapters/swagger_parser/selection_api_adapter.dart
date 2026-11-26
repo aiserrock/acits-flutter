@@ -3,8 +3,7 @@ import 'package:dio/dio.dart';
 import '../../ports/dto/attribute_dto.dart';
 import '../../ports/dto/selection_values_dto.dart';
 import '../../ports/selection_api_port.dart';
-import 'generated/clients/animals_client.dart';
-import 'generated/models/animal_attribute.dart';
+import 'generated/exports.dart';
 
 /// The ONLY place generated swagger_parser code is touched for the config slice.
 ///

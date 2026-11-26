@@ -24,27 +24,18 @@ export 'api/ports/selection_api_port.dart';
 export 'api/ports/staff_api_port.dart';
 export 'api/ports/dto/dto.dart';
 
-// The generated retrofit [AnimalsClient] is exposed narrowly so the app's DI
-// can construct it over the shared base Dio and hand it to
-// [AnimalApiAdapter]. Only the client type leaks — generated models stay private.
-export 'api/adapters/swagger_parser/generated/clients/animals_client.dart' show AnimalsClient;
-
-// The generated retrofit [PrescriptionsClient] is exposed narrowly so root DI
-// can construct it over the authed acitsApi Dio and hand it to
-// [PrescriptionApiAdapter] (drugs + today-executions paths). Only the client
-// type leaks — generated models stay private.
-export 'api/adapters/swagger_parser/generated/clients/prescriptions_client.dart' show PrescriptionsClient;
-
-// The generated retrofit auth clients are exposed narrowly so root DI can
-// construct them over the guest/authed Dios and hand them to [AuthApiAdapter].
-// Only the client types leak — generated models stay private.
-export 'api/adapters/swagger_parser/generated/clients/shelters_client.dart' show SheltersClient;
-export 'api/adapters/swagger_parser/generated/clients/token_client.dart' show TokenClient;
-export 'api/adapters/swagger_parser/generated/clients/users_client.dart' show UsersClient;
-export 'api/adapters/swagger_parser/generated/clients/users_registration_client.dart' show UsersRegistrationClient;
-
-// The generated retrofit staff clients are exposed narrowly so root DI can
-// construct them over the authed acitsApi Dio and hand them to [StaffApiAdapter].
-// Only the client types leak — generated models stay private.
-export 'api/adapters/swagger_parser/generated/clients/applicants_client.dart' show ApplicantsClient;
-export 'api/adapters/swagger_parser/generated/clients/curators_client.dart' show CuratorsClient;
+// The generated retrofit clients are exposed narrowly so root DI can construct
+// them over the shared / guest / authed Dios and hand them to the adapters
+// ([AnimalApiAdapter], [PrescriptionApiAdapter], [AuthApiAdapter],
+// [StaffApiAdapter], ...). Only the client types leak — generated models stay
+// private.
+export 'api/adapters/swagger_parser/generated/exports.dart'
+    show
+        AnimalsClient,
+        ApplicantsClient,
+        CuratorsClient,
+        PrescriptionsClient,
+        SheltersClient,
+        TokenClient,
+        UsersClient,
+        UsersRegistrationClient;

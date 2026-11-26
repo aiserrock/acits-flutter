@@ -7,9 +7,4 @@
 /// those, without opening the whole generated surface to app code.
 library;
 
-export '../adapters/swagger_parser/generated/clients/prescriptions_client.dart';
-export '../adapters/swagger_parser/generated/clients/shelters_client.dart';
-export '../adapters/swagger_parser/generated/models/paginated_prescription_execution_today_list.dart';
-export '../adapters/swagger_parser/generated/models/paginated_shelter_drug_list.dart';
-export '../adapters/swagger_parser/generated/models/prescription_execution_today.dart';
-export '../adapters/swagger_parser/generated/models/shelter_drug.dart';
+export '../adapters/swagger_parser/generated/exports.dart';

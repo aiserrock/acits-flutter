@@ -4,9 +4,7 @@ import '../../ports/animal_notes_api_port.dart';
 import '../../ports/dto/animal_note_dto.dart';
 import '../../ports/dto/animal_note_file_dto.dart';
 import '../../ports/dto/animal_note_write_dto.dart';
-import 'generated/clients/animals_client.dart';
-import 'generated/models/animal_note.dart';
-import 'generated/models/animal_note_file.dart';
+import 'generated/exports.dart';
 
 /// The ONLY place generated swagger_parser code is touched for animal notes.
 ///

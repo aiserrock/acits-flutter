@@ -29,4 +29,4 @@ dev_dependencies:
   json_serializable: ^6.13.1
   # Generator for the Retrofit client .g.dart files (api/adapters/swagger_parser/generated).
   retrofit_generator: ^10.0.1
-  swagger_parser: ^1.44.0
+  swagger_parser: ^2.4.0

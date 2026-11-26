@@ -54,8 +54,9 @@ class _FakePrescriptionsClient implements PrescriptionsClient {
 
   @override
   Future<PaginatedPrescriptionExecutionTodayList> v1PrescriptionsExecutionsList({
-    required DateTime from,
-    required DateTime to,
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     int? limit,
     int? offset,
@@ -79,6 +80,9 @@ class _FakeSheltersClient implements SheltersClient {
 
   @override
   Future<PaginatedShelterDrugList> v1ShelterDrugsList({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
     int? xCurrentShelter,
     int? limit,
     int? offset,

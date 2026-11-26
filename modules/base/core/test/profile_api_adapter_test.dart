@@ -43,13 +43,24 @@ class _FakeUsersClient implements UsersClient {
   UserSerializers? lastBody;
 
   @override
-  Future<UserSerializers> v1UsersMeRetrieve({int? xCurrentShelter}) async {
+  Future<UserSerializers> v1UsersMeRetrieve({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    int? xCurrentShelter,
+  }) async {
     lastShelterId = xCurrentShelter;
     return user;
   }
 
   @override
-  Future<UserSerializers> v1UsersMeUpdate({required UserSerializers body, int? xCurrentShelter}) async {
+  Future<UserSerializers> v1UsersMeUpdate({
+    Map<String, Object?>? extra,
+    CancelToken? cancelToken,
+    Options? options,
+    required UserSerializers body,
+    int? xCurrentShelter,
+  }) async {
     lastBody = body;
     lastShelterId = xCurrentShelter;
     return body;

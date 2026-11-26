@@ -3,10 +3,7 @@ import '../../ports/dto/applicant_write_dto.dart';
 import '../../ports/dto/curator_dto.dart';
 import '../../ports/dto/curator_write_dto.dart';
 import '../../ports/staff_api_port.dart';
-import 'generated/clients/applicants_client.dart';
-import 'generated/clients/curators_client.dart';
-import 'generated/models/applicant.dart';
-import 'generated/models/curator.dart';
+import 'generated/exports.dart';
 
 /// The ONLY place generated swagger_parser code is touched for the staff slice.
 ///
