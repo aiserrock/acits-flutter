@@ -16,7 +16,7 @@ dependencies:
   equatable: ^2.0.8
   flutter_bloc: ^9.1.1
   intl: ^0.20.2
-  package_info_plus: ^9.0.1
+  package_info_plus: ^10.2.2
 
   # Logger infra (shared Talker factory + formatter/observer, bloc observer).
   # Crashlytics-плагина на web нет — observer под guard kIsWeb.

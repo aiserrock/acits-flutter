@@ -199,17 +199,9 @@ class _CommentEditViewState extends State<_CommentEditView> {
   }
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: _allowedFileAttachExtensions,
-      // withData: байты кладутся в PlatformFile.bytes на всех платформах —
-      // на web это единственный способ получить содержимое (path == null).
-      withData: true,
-    );
-    if (result != null) {
-      if (!mounted) return;
-      context.read<CommentEditCubit>().attachFile(result.files[0]);
-    }
+    final file = await FilePicker.pickFile(type: FileType.custom, allowedExtensions: _allowedFileAttachExtensions);
+    if (file == null || !mounted) return;
+    context.read<CommentEditCubit>().attachFile(file);
   }
 
   String? get _sourceFileName => context.read<CommentEditCubit>().comment?.files?.firstOrNull?.filename;
