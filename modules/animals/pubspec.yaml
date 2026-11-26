@@ -15,10 +15,10 @@ dependencies:
   material_ui: ^1.11.1
   cupertino_ui: ^1.1.7
   flutter_bloc: ^9.1.1
-  equatable: ^2.0.8
+  equatable: ^3.0.0
   dio: ^5.9.2
   easy_localization: ^3.0.8
-  flutter_slidable: ^4.0.3
+  flutter_slidable: ^5.2.0
   util:
     path: ../base/util
   localization:

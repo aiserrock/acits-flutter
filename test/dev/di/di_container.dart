@@ -25,10 +25,10 @@ final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 Future<void> initDevDi() async {
   getIt.registerSingleton(_navigatorKey);
   getIt.registerSingleton(_scaffoldMessengerKey);
-  // Alice регистрируем ДО $initDevGetIt: chopper/dio-клиенты (injectable)
+  // Alice регистрируем ДО $initDevGetIt: dio-клиенты (injectable)
   // резолвят getIt<Alice>() в своих фабриках для HTTP-инспектора. navigatorKey
   // выше — Alice.showInspector() навигирует через него.
-  getIt.registerSingleton(Alice(showNotification: false, navigatorKey: _navigatorKey));
+  getIt.registerSingleton(Alice(navigatorKey: _navigatorKey));
   await $initDevGetIt(getIt, environmentFilter: NoEnvOrContains(Environment.dev));
   getIt.registerSingleton(createAppRouter());
 }

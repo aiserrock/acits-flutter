@@ -15,8 +15,8 @@ dependencies:
   material_ui: ^1.11.1
   cupertino_ui: ^1.1.7
   easy_localization: ^3.0.8
-  equatable: ^2.0.8
-  shimmer: ^3.0.0
+  equatable: ^3.0.0
+  shimmer: ^4.0.0
   lottie: ^3.3.3
   dio: ^5.9.2
   flutter_svg: ^2.2.4

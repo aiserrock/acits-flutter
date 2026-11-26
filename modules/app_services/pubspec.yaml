@@ -41,7 +41,7 @@ dependencies:
     path: ../media
 
   # Context-less navigation (logout/deeplink) resolves GoRouter from getIt.
-  go_router: ^17.3.0
+  go_router: ^18.1.4
 
   # DI.
   injectable: ^3.0.0
@@ -50,10 +50,10 @@ dependencies:
   # HTTP + platform.
   dio: ^5.9.2
   app_links: ^7.0.0
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^11.2.0
   shared_preferences: ^2.5.5
   share_plus: ^13.3.1
-  open_filex: ^4.7.0
+  open_filex: ^5.0.0
   path_provider: ^2.1.5
   web: ^1.1.0
 
@@ -64,7 +64,7 @@ dependencies:
 
   # Log facade (Talker) — app_services keeps its own copy, matching the
   # per-module convention (each feature module has its own util/log.dart).
-  talker_flutter: ^5.1.16
+  talker_flutter: ^5.2.0
 
 dev_dependencies:
   flutter_test:

@@ -20,6 +20,16 @@ and this project adheres to [Semantic Versioning].
   `patrol` 4.12. `file_picker` 13 убрал `withData` и `FilePickerResult` — файл
   комментария читается через `PlatformFile.readAsBytes()`.
 - `melos` 8.10.1: версия 8.2.2 не запускалась на Dart 3.14.
+- Зависимости подняты до текущих мажоров: Firebase (`firebase_core` 5,
+  `firebase_crashlytics` 6, `firebase_analytics` 13 — Firebase iOS SDK 13, Android
+  BoM 35), `flutter_secure_storage` 11, `go_router` 18, `equatable` 3,
+  `flutter_slidable` 5, `shimmer` 4, `smooth_page_indicator` 3, `open_filex` 5,
+  `flutter_keyboard_visibility` 7, `cupertino_icons` 2, `flutter_alice` 3.
+- Android: `minSdkVersion 24` зафиксирован явно (раньше брался из Flutter).
+- `flutter_secure_storage` 11 меняет шифр ключа на Android и переносит данные при
+  первом обращении; перенос включён с резервной копией (`migrateWithBackup`).
+- iOS: все плагины собираются через Swift Package Manager, в CocoaPods остался
+  только сам Flutter.
 - Переход на многопакетную структуру: код приложения разложен по `modules/` —
   базовый слой (`base/{util,network,core,di,navigation,localization}`),
   `ui_kit`, `app_services`, `shell` и шесть фича-модулей.
