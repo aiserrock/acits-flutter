@@ -3,6 +3,7 @@
 /// [ThemeCubit] the app wires above `MaterialApp`.
 library;
 
+export 'account_deletion.dart';
 export 'app_logo.dart';
 export 'app_version_label.dart';
 export 'cubit/personal_drawer_cubit.dart';

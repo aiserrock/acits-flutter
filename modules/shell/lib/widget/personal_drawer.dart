@@ -2,6 +2,7 @@ import 'package:core/domain.dart' show Shelter;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ui_kit/ui_kit.dart' show Skeleton;
 
 import 'package:personal/personal.dart' show UserProfile;
@@ -9,9 +10,12 @@ import 'package:personal/personal.dart' show UserProfile;
 import 'package:di/di.dart';
 import 'package:observability/observability.dart' show CollectionSettings;
 import 'package:shell/navigation/app_router.dart';
+import 'package:shell/res/legal_links.dart';
+import 'package:shell/res/strings.dart';
 import 'package:shell/src/shell_exports.dart';
 import 'package:app_services/app_services.dart';
 import 'package:shell/widget/cubit/personal_drawer_cubit.dart';
+import 'package:shell/widget/account_deletion.dart';
 import 'package:shell/widget/app_version_label.dart';
 import 'package:shell/widget/collection_switch_tile.dart';
 import 'package:shell/widget/locale_switcher.dart';
@@ -77,8 +81,8 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
                 },
               ),
               ListTile(
-                title: Text(LocaleKeys.personFeedback.tr(), style: secondaryTitleStyle),
-                // onTap: () {},
+                title: Text(LocaleKeys.personFeedback.tr(), style: titleStyle),
+                onTap: () => _open(supportMail(subject: LocaleKeys.feedbackMailSubject.tr())),
               ),
               ListTile(
                 title: Text(LocaleKeys.personLogout.tr(), style: titleStyle),
@@ -91,6 +95,33 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
                 title: Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.bodyLarge),
                 trailing: const LocaleSwitcher(size: 22.0),
               ),
+              _buildDivider(),
+              ListTile(
+                title: Text(LocaleKeys.legalPrivacyPolicy.tr(), style: Theme.of(context).textTheme.bodyLarge),
+                onTap: () => _open(LegalLinks.privacyPolicy),
+              ),
+              ListTile(
+                title: Text(LocaleKeys.legalTerms.tr(), style: Theme.of(context).textTheme.bodyLarge),
+                onTap: () => _open(LegalLinks.terms),
+              ),
+              ListTile(
+                title: Text(LocaleKeys.legalLicenses.tr(), style: Theme.of(context).textTheme.bodyLarge),
+                onTap: () => showLicensePage(context: context, applicationName: StringConst.commonAppName),
+              ),
+              if (!hasError && person != null)
+                ListTile(
+                  title: Text(
+                    LocaleKeys.accountDelete.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
+                  ),
+                  onTap: () => confirmAccountDeletion(
+                    context,
+                    deletion: const SupportMailAccountDeletion(),
+                    email: person.email,
+                    shelter: _authService.currentShelter?.name ?? '',
+                    onRequested: _authService.logout,
+                  ),
+                ),
               _buildDivider(),
               const Padding(padding: EdgeInsets.symmetric(vertical: 12.0), child: AppVersionLabel()),
             ],
@@ -139,6 +170,14 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
 
   Widget _buildDivider() {
     return const Divider(endIndent: 16.0, indent: 16.0, thickness: 2.0);
+  }
+
+  Future<void> _open(Uri uri) async {
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      // No browser or mail app: nothing to open, the menu stays.
+    }
   }
 
   void _openPersonalScreen({bool isChangePass = false}) async {

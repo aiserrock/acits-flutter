@@ -5,5 +5,6 @@ library;
 
 export 'package:ui_kit/ui_kit.dart' show IconRes;
 export 'l10n.dart';
+export 'legal_links.dart';
 export 'lottie.dart';
 export 'strings.dart';
