@@ -30,6 +30,16 @@ abstract interface class PrescriptionApiPort {
     int? shelterId,
   });
 
+  /// Lists every execution scheduled in `[from, to)`, all pages.
+  ///
+  /// The bounds are sent as instants (UTC); callers pass local day boundaries.
+  Future<List<PrescriptionExecutionTodayDto>> executionsInRange(
+    DateTime from,
+    DateTime to, {
+    String? search,
+    int? shelterId,
+  });
+
   /// Fetches a single prescription by its numeric [id].
   Future<PrescriptionDto> getById(int id, {int? shelterId});
 

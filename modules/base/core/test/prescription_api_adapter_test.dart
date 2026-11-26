@@ -215,4 +215,73 @@ void main() {
       expect(drugs.single.drugResiduesCount, 42);
     });
   });
+
+  group('PrescriptionApiAdapter — executionsInRange', () {
+    test('sends the range as UTC query parameters with the shelter header', () async {
+      final out = _StubHttpAdapter(todayExecutionsJson());
+      final from = DateTime.utc(2024, 4, 30, 21);
+      final to = DateTime.utc(2024, 5, 31, 21);
+
+      final list = await _adapter(const {}, out: out).executionsInRange(from, to, shelterId: 4);
+
+      final q = out.lastRequest!.queryParameters;
+      expect(out.lastRequest!.path, '/api/v1/prescriptions/executions/');
+      expect(q['from'], '2024-04-30T21:00:00.000Z');
+      expect(q['to'], '2024-05-31T21:00:00.000Z');
+      expect(q['ordering'], 'execute_at');
+      expect(q['offset'], 0);
+      expect(out.lastRequest!.headers['x-current-shelter'], 4);
+      expect(list.single.id, 900);
+      expect(list.single.prescription.animal.name, 'Барсик');
+    });
+
+    test('follows `next` until the last page', () async {
+      final pages = <Map<String, dynamic>>[
+        {...todayExecutionsJson(), 'next': 'page-2', 'results': List.filled(100, todayExecutionsJson()['results'][0])},
+        todayExecutionsJson(),
+      ];
+      final offsets = <Object?>[];
+      final dio = Dio(BaseOptions(baseUrl: 'https://api.acits.ru'))
+        ..httpClientAdapter = _PagedStubAdapter(pages, onRequest: (o) => offsets.add(o.queryParameters['offset']));
+      final adapter = PrescriptionApiAdapter(
+        dio,
+        _FakePrescriptionsClient(PaginatedPrescriptionExecutionTodayList.fromJson(todayExecutionsJson())),
+        _FakeSheltersClient(PaginatedShelterDrugList.fromJson(drugListJson())),
+      );
+
+      final list = await adapter.executionsInRange(DateTime.utc(2024, 5), DateTime.utc(2024, 6));
+
+      expect(list, hasLength(101));
+      expect(offsets, [0, 100]);
+    });
+  });
+}
+
+/// Replays [pages] one per request.
+class _PagedStubAdapter implements HttpClientAdapter {
+  _PagedStubAdapter(this._pages, {required this.onRequest});
+
+  final List<Map<String, dynamic>> _pages;
+  final void Function(RequestOptions) onRequest;
+  var _next = 0;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    onRequest(options);
+    final body = _pages[_next++];
+    return ResponseBody.fromString(
+      jsonEncode(body),
+      200,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
 }
