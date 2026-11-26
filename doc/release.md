@@ -136,7 +136,8 @@ list of what is missing.
 | --- | --- |
 | `FIREBASE_TESTER_GROUPS` | Optional. Comma-separated App Distribution group aliases |
 | `PLAY_ROLLOUT_FRACTION` | Optional. Initial production rollout, default `0.1` |
-| `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_URL` | Optional. Sentry is skipped unless the token, org and project are all set |
+| `SENTRY_DSN` | Optional. Client DSN passed to every release build as `--dart-define=SENTRY_DSN`; empty keeps Sentry off in the app |
+| `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_URL` | Optional. Symbol upload is skipped unless the token, org and project are all set |
 
 `GOOGLE_SERVICES_JSON_*` and `GOOGLE_SERVICE_INFO_PLIST_*` are also used by pull-request
 builds in `ci.yml`, where missing values fall back to the committed placeholders. A
