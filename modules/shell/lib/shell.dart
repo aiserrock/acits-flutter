@@ -28,3 +28,4 @@ export 'res/res.dart';
 
 // DI micro-package pulled into the app's @InjectableInit via externalPackageModules.
 export 'src/shell_di.dart';
+export 'util/orientation_policy.dart';

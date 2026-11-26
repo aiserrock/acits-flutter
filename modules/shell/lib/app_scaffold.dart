@@ -63,14 +63,10 @@ class _MaterialRoot extends StatelessWidget {
             color: AppTheme.light.colorScheme.primary,
             scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
             routerConfig: getIt<GoRouter>(),
-            // На web-десктопе ограничиваем интерфейс шириной смартфона
-            // (PhoneFrame), затем поверх — необязательный overlayBuilder
-            // (dev-кнопка). Порядок: сначала рамка, потом overlay, чтобы кнопка
-            // была над «телефоном».
+            // Необязательный overlayBuilder (dev-кнопка) поверх всего приложения.
             builder: (context, child) {
-              Widget framed = PhoneFrame(child: child ?? const SizedBox.shrink());
-              if (overlayBuilder != null) framed = overlayBuilder!(context, framed);
-              return framed;
+              final content = child ?? const SizedBox.shrink();
+              return overlayBuilder?.call(context, content) ?? content;
             },
           );
         },

@@ -1,11 +1,11 @@
 import 'package:util/util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:di/di.dart';
+import 'package:shell/shell.dart' show OrientationPolicy;
 
 import 'package:acits_flutter/di/di_container.dart';
 import 'package:acits_flutter/observability_setup.dart';
@@ -65,7 +65,7 @@ class SentryInitTask implements AppTask {
 }
 
 /// Независимые инициализации — параллельно (ускоряет старт, особенно «белый
-/// экран» на web): локализация, ориентация и версия приложения не зависят друг
+/// экран» на web): локализация, политика ориентации и версия приложения не зависят друг
 /// от друга. Один `Future.wait` сохраняет ту же параллельность, что была в
 /// прежнем `main()`.
 class IndependentInitTask implements AppTask {
@@ -76,11 +76,7 @@ class IndependentInitTask implements AppTask {
 
   @override
   Future<void> run() async {
-    await Future.wait([
-      EasyLocalization.ensureInitialized(),
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
-      AppVersion.load(),
-    ]);
+    await Future.wait([EasyLocalization.ensureInitialized(), OrientationPolicy.apply(), AppVersion.load()]);
   }
 }
 

@@ -86,23 +86,25 @@ class _PickShelterViewState extends State<_PickShelterView> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: BlocBuilder<PickShelterCubit, PickShelterState>(
-              builder: (context, state) => DataStateBuilder<Object>(
-                state: state.status,
-                loader: (_) => const LoaderHolderWidget(),
-                errorBuilder: (_, _) => ErrorHolderWidget(onPressed: () => context.read<PickShelterCubit>().retry()),
-                builder: (_, _) => _buildContent(state),
+      body: ContentWidth(
+        child: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<PickShelterCubit, PickShelterState>(
+                builder: (context, state) => DataStateBuilder<Object>(
+                  state: state.status,
+                  loader: (_) => const LoaderHolderWidget(),
+                  errorBuilder: (_, _) => ErrorHolderWidget(onPressed: () => context.read<PickShelterCubit>().retry()),
+                  builder: (_, _) => _buildContent(state),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 40.0),
-            child: Text(LocaleKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 40.0),
+              child: Text(LocaleKeys.loginDescribeMsg.tr(), textAlign: TextAlign.center),
+            ),
+          ],
+        ),
       ),
     );
   }

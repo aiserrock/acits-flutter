@@ -47,34 +47,37 @@ class _EmailConfirmationView extends StatelessWidget {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: BlocBuilder<EmailConfirmCubit, DataState<void>>(
-          builder: (context, state) {
-            return AnimatedSwitcher(
-              duration: _switchDuration,
-              reverseDuration: _switchDuration,
-              child: DataStateBuilder<void>(
-                key: ValueKey(state.runtimeType),
-                state: state,
-                loader: (_) => const LoaderHolderWidget(),
-                builder: (context, _) => SuccessHolderWidget(
-                  title: LocaleKeys.regEmailConfirmed.tr(),
-                  message: LocaleKeys.regEmailConfirmSentMsg.tr(),
-                  button: LocaleKeys.commonClose.tr().toUpperCase(),
-                  onPressed: Navigator.of(context).pop,
+        child: ContentWidth(
+          alignment: Alignment.center,
+          child: BlocBuilder<EmailConfirmCubit, DataState<void>>(
+            builder: (context, state) {
+              return AnimatedSwitcher(
+                duration: _switchDuration,
+                reverseDuration: _switchDuration,
+                child: DataStateBuilder<void>(
+                  key: ValueKey(state.runtimeType),
+                  state: state,
+                  loader: (_) => const LoaderHolderWidget(),
+                  builder: (context, _) => SuccessHolderWidget(
+                    title: LocaleKeys.regEmailConfirmed.tr(),
+                    message: LocaleKeys.regEmailConfirmSentMsg.tr(),
+                    button: LocaleKeys.commonClose.tr().toUpperCase(),
+                    onPressed: Navigator.of(context).pop,
+                  ),
+                  errorBuilder: (context, error) {
+                    final isReject = error is EmailLinkRejected;
+                    return ErrorHolderWidget(
+                      title: isReject ? LocaleKeys.regRegisterRejectTitle.tr() : null,
+                      message: isReject ? LocaleKeys.regRegisterRejectMsg.tr() : null,
+                      error: isReject ? null : error,
+                      onPressed: context.read<EmailConfirmCubit>().retry,
+                      button: LocaleKeys.commonRepeat.tr().toUpperCase(),
+                    );
+                  },
                 ),
-                errorBuilder: (context, error) {
-                  final isReject = error is EmailLinkRejected;
-                  return ErrorHolderWidget(
-                    title: isReject ? LocaleKeys.regRegisterRejectTitle.tr() : null,
-                    message: isReject ? LocaleKeys.regRegisterRejectMsg.tr() : null,
-                    error: isReject ? null : error,
-                    onPressed: context.read<EmailConfirmCubit>().retry,
-                    button: LocaleKeys.commonRepeat.tr().toUpperCase(),
-                  );
-                },
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

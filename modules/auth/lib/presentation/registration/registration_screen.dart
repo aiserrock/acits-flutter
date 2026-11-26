@@ -91,19 +91,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
           ),
           backgroundColor: Theme.of(context).colorScheme.surface,
           body: KeyboardDismissOnTap(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: BlocSelector<RegistrationCubit, RegistrationState, int>(
-                selector: (state) => state.tabIndex,
-                builder: (_, tabIndex) {
-                  final current = tabIndex == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond;
-                  return AnimatedCrossFade(
-                    firstChild: const RegistrationOrgForm(),
-                    secondChild: const RegistrationCustomerForm(),
-                    crossFadeState: current,
-                    duration: kTabScrollDuration,
-                  );
-                },
+            child: ContentWidth(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: BlocSelector<RegistrationCubit, RegistrationState, int>(
+                  selector: (state) => state.tabIndex,
+                  builder: (_, tabIndex) {
+                    final current = tabIndex == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond;
+                    return AnimatedCrossFade(
+                      firstChild: const RegistrationOrgForm(),
+                      secondChild: const RegistrationCustomerForm(),
+                      crossFadeState: current,
+                      duration: kTabScrollDuration,
+                    );
+                  },
+                ),
               ),
             ),
           ),

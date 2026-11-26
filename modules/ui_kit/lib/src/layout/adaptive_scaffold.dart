@@ -4,11 +4,14 @@ import 'breakpoints.dart';
 
 /// Пункт навигации адаптивного каркаса.
 class AdaptiveDestination {
-  const AdaptiveDestination({required this.icon, required this.label, this.selectedIcon});
+  const AdaptiveDestination({required this.icon, required this.label, this.selectedIcon, this.enabled = true});
 
   final Widget icon;
   final Widget? selectedIcon;
   final String label;
+
+  /// A disabled destination is shown dimmed and cannot be selected.
+  final bool enabled;
 }
 
 /// Каркас, выбирающий форму навигации по ширине окна:
@@ -27,6 +30,10 @@ class AdaptiveScaffold extends StatelessWidget {
     this.twoPane = true,
     this.appBar,
     this.floatingActionButton,
+    this.drawer,
+    this.scaffoldKey,
+    this.railLeading,
+    this.bottomInset = 0,
     super.key,
   }) : assert(destinations.length >= 2);
 
@@ -48,34 +55,61 @@ class AdaptiveScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
 
+  /// Side drawer, available at every width.
+  final Widget? drawer;
+
+  /// Key of the inner [Scaffold], for opening [drawer] from a descendant.
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+
+  /// Shown above the rail destinations (for example a menu button).
+  final Widget? railLeading;
+
+  /// Extra space kept under the bottom bar, for platforms that do not report
+  /// their bottom safe area through [MediaQuery].
+  final double bottomInset;
+
   @override
   Widget build(BuildContext context) {
     final size = WindowSize.fromWidth(MediaQuery.sizeOf(context).width);
 
     if (size == WindowSize.compact) {
+      final bar = NavigationBar(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: onDestinationSelected,
+        destinations: [
+          for (final d in destinations)
+            NavigationDestination(icon: d.icon, selectedIcon: d.selectedIcon, label: d.label, enabled: d.enabled),
+        ],
+      );
       return Scaffold(
+        key: scaffoldKey,
         appBar: appBar,
+        drawer: drawer,
         body: body,
         floatingActionButton: floatingActionButton,
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: selectedIndex,
-          onDestinationSelected: onDestinationSelected,
-          destinations: [
-            for (final d in destinations)
-              NavigationDestination(icon: d.icon, selectedIcon: d.selectedIcon, label: d.label),
-          ],
-        ),
+        bottomNavigationBar: bottomInset > 0
+            ? SafeArea(
+                minimum: EdgeInsets.only(bottom: bottomInset),
+                child: bar,
+              )
+            : bar,
       );
     }
 
     final extended = size == WindowSize.expanded || size == WindowSize.large;
     final rail = NavigationRail(
       extended: extended,
+      leading: railLeading,
       selectedIndex: selectedIndex,
       onDestinationSelected: onDestinationSelected,
       destinations: [
         for (final d in destinations)
-          NavigationRailDestination(icon: d.icon, selectedIcon: d.selectedIcon ?? d.icon, label: Text(d.label)),
+          NavigationRailDestination(
+            icon: d.icon,
+            selectedIcon: d.selectedIcon ?? d.icon,
+            label: Text(d.label),
+            disabled: !d.enabled,
+          ),
       ],
     );
 
@@ -97,10 +131,13 @@ class AdaptiveScaffold extends StatelessWidget {
         : body;
 
     return Scaffold(
+      key: scaffoldKey,
       appBar: appBar,
+      drawer: drawer,
       floatingActionButton: floatingActionButton,
       body: Row(
         children: [
+          // The rail scrolls when the window is too short for all destinations.
           rail,
           const VerticalDivider(width: 1.0),
           Expanded(child: content),
