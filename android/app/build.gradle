@@ -4,8 +4,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     // END: FlutterFire Configuration
-    // kotlin-android убран — приложение использует built-in Kotlin
-    // (android.builtInKotlin=true), Kotlin конфигурится через kotlin{}-блок ниже.
+    id "org.jetbrains.kotlin.android"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -92,6 +91,11 @@ android {
         }
     }
 
+    // AGP 9 turns resValues off by default; the flavors below use resValue.
+    buildFeatures {
+        resValues true
+    }
+
     flavorDimensions "release_type"
 
     productFlavors {
@@ -119,7 +123,7 @@ flutter {
     source "../.."
 }
 
-// Built-in Kotlin: конфиг компилятора вместо снятого kotlinOptions{}.
+// Конфиг компилятора Kotlin (kotlin{} вместо снятого kotlinOptions{}).
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
