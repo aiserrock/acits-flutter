@@ -1,6 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
+import '../layout/content_width.dart';
+
 /// Тема оформления приложения (Material 3).
 ///
 /// Светлая и тёмная схемы строятся от одного бренд-акцента [_seed] через
@@ -45,6 +47,12 @@ abstract final class AppTheme {
         // на тёмной — светлые. Живёт в теме, поэтому реагирует на themeMode.
         systemOverlayStyle: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       ),
+      // Every modal bottom sheet in the app (showModalBottomSheet and
+      // showUiBottomSheet) stays a readable column on tablets and desktop
+      // browsers instead of spanning the whole window; on phones the width is
+      // the window anyway. Dialogs get the same ceiling.
+      bottomSheetTheme: const BottomSheetThemeData(constraints: BoxConstraints(maxWidth: ContentWidth.reading)),
+      dialogTheme: const DialogThemeData(constraints: BoxConstraints(maxWidth: ContentWidth.form)),
       inputDecorationTheme: InputDecorationTheme(iconColor: scheme.primary, focusColor: scheme.primary),
       textSelectionTheme: TextSelectionThemeData(cursorColor: scheme.primary),
       // M3 по умолчанию делает FAB скруглённым квадратом; возвращаем круг (как
