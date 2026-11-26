@@ -111,7 +111,7 @@ jobs:
       # Mirrors `melos format:check`.
       - name: Verify formatting
         run: |
-          find lib test modules -name '*.dart' \
+          find lib test modules tool -name '*.dart' \
             ! -name '*.g.dart' \
             ! -name '*.config.dart' \
             ! -name '*.swagger.dart' \
@@ -152,6 +152,11 @@ jobs:
       # `melos analyze:strict` / `melos check-all` used locally.
       - name: Analyse
         run: flutter analyze --fatal-infos --fatal-warnings
+
+      # Layering gate: no cycles and no upward dependencies between workspace
+      # packages. Mirrors `melos graph:check`.
+      - name: Check package graph
+        run: dart run tool/check_package_graph.dart
 
   ##### test #####
   test:

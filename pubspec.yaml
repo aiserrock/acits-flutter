@@ -270,7 +270,7 @@ melos:
     format:
       description: Форматирование hand-written кода (line length 120) в корне и модулях, генерённые файлы исключены.
       run: |
-        find lib test modules -name '*.dart' \
+        find lib test modules tool -name '*.dart' \
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
@@ -285,7 +285,7 @@ melos:
     format:check:
       description: Проверка форматирования без правок (CI/pre-commit), падает при расхождении.
       run: |
-        find lib test modules -name '*.dart' \
+        find lib test modules tool -name '*.dart' \
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
@@ -341,10 +341,15 @@ melos:
         - analyze
         - test
 
+    graph:check:
+      description: Проверка графа пакетов — нет циклов и зависимостей снизу вверх (см. ARCHITECTURE.md).
+      run: fvm dart run tool/check_package_graph.dart
+
     check-all:
-      description: Гейт качества — формат-чек, строгий анализ (--fatal-infos --fatal-warnings), тесты.
+      description: Гейт качества — формат-чек, граф пакетов, строгий анализ (--fatal-infos --fatal-warnings), тесты.
       steps:
         - format:check
+        - graph:check
         - analyze:strict
         - test
 

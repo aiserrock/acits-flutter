@@ -9,6 +9,8 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:di/di.dart';
 
+import 'package:acits_flutter/di/di_container.dart';
+
 /// Стартовый пайплайн приложения как упорядоченный список [AppTask]
 /// (base). Обёртка над теми же фазами инициализации, что раньше жили
 /// прямо в `main()` — поведение и порядок сохранены 1:1.

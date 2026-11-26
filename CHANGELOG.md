@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Разорван цикл пакетов `di ↔ app_services ↔ shell`: пакет `di` теперь владеет
+  только экземпляром `getIt` и ни от чего внутреннего не зависит, а prod-композиция
+  (`@InjectableInit`) переехала в приложение — `lib/di/`. Граф пакетов проверяется
+  скриптом `tool/check_package_graph.dart` (`melos run graph:check`, шаг в CI).
+  `ARCHITECTURE.md` описывает реальные слои.
+
 - Тулчейн обновлён до Flutter 3.50.0 / Dart 3.14.0 (`.fvmrc`, `pubspec.yaml` корня
   и модулей, CI, Dockerfile, шаблон mason-кирпича, документация).
 - Android: Gradle 9.5.0 / AGP 9.3.1 / Kotlin 2.4.20 — верхняя граница, которую
