@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand accent, the same as the native splash background. -->
+    <color name="ic_launcher_background">#6776E0</color>
+</resources>

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Android: адаптивная иконка запуска (фон #6776E0, логотип в безопасной зоне) с
+  монохромным слоем для тематических иконок Android 13+, и системный splash Android 12+
+  на том же фоне с логотипом вместо растянутой картинки. Dev-сборка — на тёмном фоне
+  #2E3A8C, чтобы на рабочем столе её было не спутать с prod. Старые PNG-иконки
+  остаются для Android 7.
+
 - Deep links: зафиксирован текущий контракт ссылок и чек-лист владельца перед первой
   публикацией (`doc/deeplink/README.md`: хосты, `assetlinks.json` с ключом Play App
   Signing, `apple-app-site-association`, associated domains). Веб-образ отдаёт
