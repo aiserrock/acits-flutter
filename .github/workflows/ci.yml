@@ -471,7 +471,7 @@ jobs:
             --build-number="$GITHUB_RUN_NUMBER" \
             --base-href "/${GITHUB_REPOSITORY#*/}/"
 
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: build/web
 
