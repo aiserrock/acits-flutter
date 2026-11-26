@@ -94,13 +94,15 @@ class _AnimalsViewState extends State<AnimalsView> {
             backgroundColor: Theme.of(context).colorScheme.surface,
             shadowColor: Colors.transparent,
             leading: state.isSearchActive
-                ? GestureDetector(
-                    onTap: _exitSearch,
-                    child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
+                ? IconButton(
+                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                    onPressed: _exitSearch,
+                    icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
                   )
-                : GestureDetector(
-                    onTap: widget.onMenuPressed,
-                    child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
+                : IconButton(
+                    tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                    onPressed: widget.onMenuPressed,
+                    icon: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
                   ),
             title: _buildTitle(state),
             actions: _buildAppBarActions(state),
@@ -132,9 +134,10 @@ class _AnimalsViewState extends State<AnimalsView> {
       if (!state.isSearchActive)
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
-          child: GestureDetector(
-            child: Icon(Icons.search, color: Theme.of(context).colorScheme.primary),
-            onTap: () => context.read<AnimalsCubit>().toggleSearch(),
+          child: IconButton(
+            tooltip: MaterialLocalizations.of(context).searchFieldLabel,
+            onPressed: () => context.read<AnimalsCubit>().toggleSearch(),
+            icon: Icon(Icons.search, color: Theme.of(context).colorScheme.primary),
           ),
         ),
     ];
@@ -176,9 +179,13 @@ class _AnimalsViewState extends State<AnimalsView> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 prefixIcon: Icon(Icons.search, size: 20.0, color: Theme.of(context).colorScheme.primary),
                 prefixIconConstraints: const BoxConstraints(minWidth: 40.0, minHeight: 40.0),
-                suffixIcon: GestureDetector(
-                  onTap: _searchController.clear,
-                  child: Icon(Icons.close, size: 18.0, color: Theme.of(context).colorScheme.primary),
+                suffixIcon: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 36.0, minHeight: 40.0),
+                  style: const ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                  tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
+                  onPressed: _searchController.clear,
+                  icon: Icon(Icons.close, size: 18.0, color: Theme.of(context).colorScheme.primary),
                 ),
                 suffixIconConstraints: const BoxConstraints(minWidth: 36.0, minHeight: 40.0),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),

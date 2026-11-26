@@ -65,9 +65,10 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
-        leading: GestureDetector(
-          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
-          onTap: () => Navigator.of(context).pop(),
+        leading: IconButton(
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
         ),
         title: Text(
           cubit.isEdit ? LocaleKeys.curatorEdit.tr() : LocaleKeys.curatorAdd.tr(),
