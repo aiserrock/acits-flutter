@@ -107,6 +107,13 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+          # Gradle caches keyed by the build scripts and wrapper: a warm cache
+          # skips the dependency downloads that Maven Central rate-limits (429).
+          cache: gradle
+          cache-dependency-path: |
+            android/*.gradle*
+            android/app/*.gradle*
+            android/gradle/wrapper/gradle-wrapper.properties
 
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
