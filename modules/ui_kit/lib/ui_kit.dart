@@ -12,6 +12,7 @@ export 'src/layout/adaptive_scaffold.dart';
 export 'src/layout/content_width.dart';
 export 'src/layout/adaptive_columns.dart';
 export 'src/layout/list_detail_layout.dart';
+export 'src/layout/list_screen_shortcuts.dart';
 export 'src/components/primary_button.dart';
 export 'src/components/app_bar.dart';
 export 'src/components/text_field.dart';

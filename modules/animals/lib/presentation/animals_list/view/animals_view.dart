@@ -87,43 +87,51 @@ class _AnimalsViewState extends State<AnimalsView> {
   Widget build(BuildContext context) {
     return BlocBuilder<AnimalsCubit, AnimalsState>(
       builder: (context, state) {
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: AppBar(
+        return ListScreenShortcuts(
+          onSearch: state.isSearchActive ? null : () => context.read<AnimalsCubit>().toggleSearch(),
+          onEscape: state.isSearchActive ? _exitSearch : null,
+          onCreate: _create,
+          onRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
+          child: Scaffold(
+            key: scaffoldKey,
             backgroundColor: Theme.of(context).colorScheme.surface,
-            shadowColor: Colors.transparent,
-            leading: state.isSearchActive
-                ? IconButton(
-                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                    onPressed: _exitSearch,
-                    icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
-                  )
-                : IconButton(
-                    tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-                    onPressed: widget.onMenuPressed,
-                    icon: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
-                  ),
-            title: _buildTitle(state),
-            actions: _buildAppBarActions(state),
-            centerTitle: true,
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              shadowColor: Colors.transparent,
+              leading: state.isSearchActive
+                  ? IconButton(
+                      tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                      onPressed: _exitSearch,
+                      icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
+                    )
+                  : IconButton(
+                      tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                      onPressed: widget.onMenuPressed,
+                      icon: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
+                    ),
+              title: _buildTitle(state),
+              actions: _buildAppBarActions(state),
+              centerTitle: true,
+            ),
+            floatingActionButton: _buildFab(),
+            body: _buildBody(state),
           ),
-          floatingActionButton: _buildFab(),
-          body: _buildBody(state),
         );
       },
     );
+  }
+
+  Future<void> _create() async {
+    final cubit = context.read<AnimalsCubit>();
+    final isAdded = await widget.router.openCreate();
+    if (isAdded ?? false) cubit.loadAnimalList(needResetOffset: true);
   }
 
   Widget _buildFab() {
     return FloatingActionButton(
       heroTag: 'AnimalsFab',
       mini: _isSmallScreen,
-      onPressed: () async {
-        final cubit = context.read<AnimalsCubit>();
-        final isAdded = await widget.router.openCreate();
-        if (isAdded ?? false) cubit.loadAnimalList(needResetOffset: true);
-      },
+      onPressed: _create,
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
     );
