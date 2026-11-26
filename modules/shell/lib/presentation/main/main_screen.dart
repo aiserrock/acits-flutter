@@ -76,33 +76,39 @@ class _MainViewState extends State<_MainView> {
   Widget build(BuildContext context) {
     return BlocBuilder<MainCubit, MainState>(
       builder: (context, state) {
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: AppBar(
+        return ListScreenShortcuts(
+          onSearch: state.isSearchActive ? null : () => context.read<MainCubit>().toggleSearch(),
+          onEscape: state.isSearchActive ? _exitSearch : null,
+          onCreate: () => _onFabPressed(context),
+          onRefresh: () => context.read<MainCubit>().loadExecutions(),
+          child: Scaffold(
+            key: scaffoldKey,
             backgroundColor: Theme.of(context).colorScheme.surface,
-            shadowColor: Colors.transparent,
-            leading: state.isSearchActive
-                ? IconButton(
-                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                    onPressed: _exitSearch,
-                    icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
-                  )
-                : Builder(
-                    builder: (context) {
-                      return GestureDetector(
-                        onTap: RootDrawerProvider.of(context)?.openDrawer,
-                        onLongPress: () => _openDebug(context),
-                        child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
-                      );
-                    },
-                  ),
-            title: _buildTitle(state),
-            actions: _buildAppBarActions(state),
-            centerTitle: true,
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              shadowColor: Colors.transparent,
+              leading: state.isSearchActive
+                  ? IconButton(
+                      tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                      onPressed: _exitSearch,
+                      icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary),
+                    )
+                  : Builder(
+                      builder: (context) {
+                        return GestureDetector(
+                          onTap: RootDrawerProvider.of(context)?.openDrawer,
+                          onLongPress: () => _openDebug(context),
+                          child: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
+                        );
+                      },
+                    ),
+              title: _buildTitle(state),
+              actions: _buildAppBarActions(state),
+              centerTitle: true,
+            ),
+            floatingActionButton: _buidFab(context),
+            body: _buildBody(state),
           ),
-          floatingActionButton: _buidFab(context),
-          body: _buildBody(state),
         );
       },
     );
