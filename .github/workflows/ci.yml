@@ -14,11 +14,12 @@ on:
     branches: [main, develop]
   workflow_dispatch:
 
-# GitHub Pages is a single per-repo site. Serialise Pages deploys so back-to-back
-# merges into develop don't race; the newest deploy wins the stand.
+# One run per ref: a new push to a pull request replaces its outdated run, and
+# runs for different pull requests never wait for or cancel each other. Pages
+# deploys are serialised separately, on the build-web job.
 concurrency:
-  group: pages-${{ github.workflow }}
-  cancel-in-progress: false
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Matches the FVM pin in .fvmrc (Dart 3.14, Flutter 3.50.x). CI pins the SDK
 # directly via subosito/flutter-action — FVM's install step is fragile here
@@ -405,6 +406,11 @@ jobs:
       (github.event_name == 'push' && github.ref == 'refs/heads/develop')
       || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    # GitHub Pages is a single per-repo site. Serialise deploys so back-to-back
+    # merges into develop don't race; a deploy in progress is never cancelled.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     permissions:
       pages: write
       id-token: write
