@@ -54,6 +54,13 @@ and this project adheres to [Semantic Versioning].
 
 ### Added
 
+- Релизный пайплайн на три стора (`.github/workflows/release.yml`): push ветки
+  `release/*` собирает подписанные обфусцированные сборки и грузит их во внутренние
+  каналы (Google Play internal, TestFlight, модерация RuStore, Firebase App
+  Distribution), тег `v*` продвигает ту же сборку в production за окружением с
+  ручным подтверждением. Единый номер сборки для трёх сторов, fastlane для Android и
+  iOS, загрузка символов в Crashlytics. Процесс и секреты — в `doc/release.md`.
+
 - Каталог дизайн-системы на widgetbook: общие экспонаты в `ui_kit/lib/gallery/`,
   standalone-приложение «ACITS UI Kit» и debug-экран `/debug/gallery` в
   dev-флейворе.

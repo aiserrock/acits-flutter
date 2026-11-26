@@ -6,12 +6,10 @@ name: CI
 #     Pages, refreshing the dev stand. Deploy runs post-merge (not from the PR
 #     context) because the github-pages environment only allows deploys from
 #     the develop branch, not from refs/pull/*/merge.
-#   push tags "v*" -> build the signed prod APK/IPA artifacts. Prod server
-#     deployment (prod flavor) is added here later.
+# Store releases (release/* branches and v* tags) live in release.yml.
 on:
   push:
     branches: [develop]
-    tags: ["v*"]
   pull_request:
     branches: [main, develop]
   workflow_dispatch:
@@ -76,14 +74,14 @@ jobs:
           path: workspace.tar.gz
           retention-days: 1
 
-  # lint/analyse/test are the PR/tag quality gate. A push to develop only
+  # lint/analyse/test are the PR quality gate. A push to develop only
   # redeploys the PWA (that PR already passed the gate at review time), so
   # skip them there.
   ##### lint #####
   lint:
     name: Lint
     needs: prepare
-    if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -127,7 +125,7 @@ jobs:
   analyse:
     name: Analyse
     needs: prepare
-    if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -162,7 +160,7 @@ jobs:
   test:
     name: Test
     needs: prepare
-    if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -199,13 +197,13 @@ jobs:
           done
 
   ##### build #####
-  # PR builds the dev flavor; a v* tag builds prod. Both are signed release
-  # builds (release keystore from secrets). A plain push to main/develop
-  # builds nothing — merging already implies the PR build passed.
+  # PR builds the dev flavor as a signed release build (keystore from secrets);
+  # prod is built by release.yml. A plain push to develop builds nothing —
+  # merging already implies the PR build passed.
   build-android:
     name: Build Android (signed release)
     needs: [lint, analyse, test]
-    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       # Full checkout for android/ (Gradle config, etc.) — the workspace
@@ -220,17 +218,12 @@ jobs:
 
       - run: tar -xzf workspace.tar.gz
 
-      # dev on PR, prod on a tag. Downstream steps read these outputs.
+      # Pull requests build the dev flavor; prod is built by release.yml.
       - name: Select flavor
         id: flavor
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "name=dev"   >> "$GITHUB_OUTPUT"
-            echo "target=test/dev/main.dart" >> "$GITHUB_OUTPUT"
-          else
-            echo "name=prod"  >> "$GITHUB_OUTPUT"
-            echo "target=lib/main.dart" >> "$GITHUB_OUTPUT"
-          fi
+          echo "name=dev" >> "$GITHUB_OUTPUT"
+          echo "target=test/dev/main.dart" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-java@v5
         with:
@@ -303,7 +296,7 @@ jobs:
   build-ios:
     name: Build iOS (unsigned release)
     needs: [lint, analyse, test]
-    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'pull_request'
     runs-on: macos-latest
     steps:
       # Full checkout for ios/ (Xcode project, Podfile, etc.) — the workspace
@@ -318,17 +311,12 @@ jobs:
 
       - run: tar -xzf workspace.tar.gz
 
-      # dev on PR, prod on a tag.
+      # Pull requests build the dev flavor; prod is built by release.yml.
       - name: Select flavor
         id: flavor
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "name=dev"   >> "$GITHUB_OUTPUT"
-            echo "target=test/dev/main.dart" >> "$GITHUB_OUTPUT"
-          else
-            echo "name=prod"  >> "$GITHUB_OUTPUT"
-            echo "target=lib/main.dart" >> "$GITHUB_OUTPUT"
-          fi
+          echo "name=dev" >> "$GITHUB_OUTPUT"
+          echo "target=test/dev/main.dart" >> "$GITHUB_OUTPUT"
 
       - uses: subosito/flutter-action@v2
         with:
@@ -484,66 +472,12 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  ##### release (tags only) #####
-  # Publishes the GitHub Release: attaches the signed prod APK built above and
-  # writes release notes from CHANGELOG.md. Pushing a tag is the whole release
-  # process — no manual release-page editing.
-  release:
-    name: Publish GitHub Release
-    needs: [build-android]
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/download-artifact@v8
-        with:
-          name: acits-prod-release
-          path: release-assets
-
-      # Release notes are an extract of CHANGELOG.md, nothing invented here:
-      # take the section for this tag's version, keep only the "- " bullet
-      # lines (drop the ### Added/Changed/Fixed subheadings), no emoji, no
-      # generated commentary.
-      - name: Extract changelog section
-        id: changelog
-        run: |
-          tag="${GITHUB_REF#refs/tags/v}"
-          notes=$(awk -v ver="$tag" '
-            $0 ~ "^## \\[" ver "([+ ]|\\])" { found=1; next }
-            found && /^## \[/ { exit }
-            found && /^- / { print }
-          ' CHANGELOG.md)
-
-          if [ -z "$notes" ]; then
-            echo "No CHANGELOG.md section found for version $tag" >&2
-            exit 1
-          fi
-
-          {
-            echo "notes<<CHANGELOG_EOF"
-            echo "$notes"
-            echo "CHANGELOG_EOF"
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Create release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          NOTES: ${{ steps.changelog.outputs.notes }}
-        run: |
-          gh release create "$GITHUB_REF_NAME" \
-            release-assets/app-prod-release.apk \
-            --title "$GITHUB_REF_NAME" \
-            --notes "$NOTES"
-
   ##### notify #####
-  # Runs on every trigger — PR, tag push, and manual workflow_dispatch — so
+  # Runs on every trigger — PR, push to develop and manual workflow_dispatch — so
   # every pipeline run gets a Telegram notification.
   notify:
     name: Notify Telegram
-    needs: [prepare, lint, analyse, test, build-android, build-ios, build-web, release]
+    needs: [prepare, lint, analyse, test, build-android, build-ios, build-web]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -566,7 +500,6 @@ jobs:
           RESULT_ANDROID: ${{ needs.build-android.result }}
           RESULT_IOS: ${{ needs.build-ios.result }}
           RESULT_WEB: ${{ needs.build-web.result }}
-          RESULT_RELEASE: ${{ needs.release.result }}
           PWA_URL: ${{ needs.build-web.outputs.page_url }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
@@ -596,7 +529,7 @@ jobs:
           # avoids that failure mode entirely.
           changelog=$(git log -8 --pretty=format:'- %ad %an | %s' --date=short)
 
-          # Every stage is conditionally gated (PR vs push-develop vs tag), so
+          # Every stage is conditionally gated (PR vs push-develop), so
           # "skipped" is an expected result, not a failure — only
           # "failure"/"cancelled" turns this red. prepare always runs, so it
           # must be a hard success.
@@ -604,16 +537,15 @@ jobs:
           if [ "$RESULT_PREPARE" = "success" ] && \
              ! is_bad "$RESULT_LINT" && ! is_bad "$RESULT_ANALYSE" && \
              ! is_bad "$RESULT_TEST" && ! is_bad "$RESULT_ANDROID" && \
-             ! is_bad "$RESULT_IOS" && ! is_bad "$RESULT_WEB" && \
-             ! is_bad "$RESULT_RELEASE"; then
+             ! is_bad "$RESULT_IOS" && ! is_bad "$RESULT_WEB"; then
             status_line="✅ Build succeeded"
           else
-            status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB, release: $RESULT_RELEASE)"
+            status_line="❌ Build failed (prepare: $RESULT_PREPARE, lint: $RESULT_LINT, analyse: $RESULT_ANALYSE, test: $RESULT_TEST, android: $RESULT_ANDROID, ios: $RESULT_IOS, web: $RESULT_WEB)"
           fi
 
           # On a successful web deploy, add the live PWA URL — same slot the
           # mobile builds imply the APK/IPA artifact in. Empty when web is
-          # skipped (PR/tag runs), so the line is omitted then.
+          # skipped (PR runs), so the line is omitted then.
           pwa_line=""
           if [ "$RESULT_WEB" = "success" ] && [ -n "$PWA_URL" ]; then
             pwa_line=$(printf '\nPWA: %s' "$PWA_URL")

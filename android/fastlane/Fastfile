@@ -1,0 +1,43 @@
+# Google Play lanes. The AAB is built by `flutter build appbundle` in CI; these
+# lanes only talk to the Play Developer API.
+#
+# Credentials: PLAY_SERVICE_ACCOUNT_JSON holds the service-account JSON itself.
+
+default_platform(:android)
+
+platform :android do
+  # Never push store listing data from CI: the listing is edited in the console.
+  LISTING_OFF = {
+    skip_upload_metadata: true,
+    skip_upload_changelogs: true,
+    skip_upload_images: true,
+    skip_upload_screenshots: true,
+  }.freeze
+
+  desc "Upload a signed AAB to the internal track"
+  lane :internal do |options|
+    upload_to_play_store(
+      json_key_data: ENV.fetch("PLAY_SERVICE_ACCOUNT_JSON"),
+      track: "internal",
+      aab: options.fetch(:aab),
+      release_status: "completed",
+      skip_upload_apk: true,
+      **LISTING_OFF
+    )
+  end
+
+  desc "Promote a build from internal to production as a staged rollout"
+  lane :promote do |options|
+    upload_to_play_store(
+      json_key_data: ENV.fetch("PLAY_SERVICE_ACCOUNT_JSON"),
+      track: "internal",
+      track_promote_to: "production",
+      track_promote_release_status: "inProgress",
+      rollout: options.fetch(:rollout, "0.1").to_s,
+      version_code: Integer(options.fetch(:version_code)),
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      **LISTING_OFF
+    )
+  end
+end

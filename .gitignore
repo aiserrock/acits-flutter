@@ -68,6 +68,12 @@ android/local.properties
 
 # fastlane
 ios/fastlane/*.p8
+**/fastlane/report.xml
+**/fastlane/README.md
+ios/build/
+vendor/bundle/
+.bundle/
+dist/
 ios/*.cer
 ios/*.ipa
 ios/*.app.dSYM.zip

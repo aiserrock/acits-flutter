@@ -1,108 +1,85 @@
-# Customise this file, documentation can be found here:
-# https://docs.fastlane.tools/actions/
-# All available actions: https://docs.fastlane.tools/actions
-# can also be listed using the `fastlane actions` command
+# App Store lanes. Signing uses an App Store Connect API key only — no Apple ID
+# login and no shared certificate repository: `cert` and `sigh` create or reuse
+# the distribution certificate and profile inside a temporary CI keychain.
+#
+# Environment: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8_BASE64 (the .p8 file,
+# base64-encoded), APPLE_TEAM_ID, IOS_BUNDLE_ID (defaults to ru.acits).
 
-# Change the syntax highlighting to Ruby
-# All lines starting with a # are ignored when running `fastlane`
-
-# If you want to automatically update fastlane if a new version is available:
-# update_fastlane
-
-# This is the minimum version number required.
-# Update this, if you use features of a newer version
-fastlane_version "2.173.0"
-
-dev_bundle_id = "ru.acits.dev"
-prod_bundle_id = "ru.acits"
-
-dev_config = "Release-dev"
-prod_config = "Release-prod"
-
-dev_scheme = "dev"
-prod_scheme = "prod"
-
-debug_dev_provision = "certs/dev_store.mobileprovision"
-prod_release_provision = "certs/prod_store.mobileprovision"
-
-default_platform :ios
+default_platform(:ios)
 
 platform :ios do
+  BUNDLE_ID = ENV.fetch("IOS_BUNDLE_ID", "ru.acits")
 
-  desc "Build & upload mobDev to Testflight"
-  lane :releaseDev do
-      release(
-        app_identifier: dev_bundle_id,
-        configuration: dev_config,
-        scheme: dev_scheme,
-        bundle_id: dev_bundle_id,
-        provision: debug_dev_provision
-      )
-  end
-
-  desc "Submit a new Release Build to Testflight"
-  lane :release do |options|
-    app_identifier = options[:app_identifier]
-    configuration = options[:configuration]
-    scheme = options[:scheme]
-    bundle_id = options[:bundle_id]
-    provision = options[:provision]
-
-    # https://github.com/fastlane/fastlane/issues/20741
-    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true'
-
-    cert(
-        development: false,
-        api_key: get_app_store_connect_api_key,
-        output_path: "certs"
-    )
-
-    sigh(
-      development: false,
-      app_identifier: app_identifier,
-      api_key: get_app_store_connect_api_key,
-      force: true,
-      filename: provision
-    )
-
-    gym(
-      scheme: scheme,
-      configuration: configuration,
-      clean: false,
-      include_bitcode: false,
-      export_options: {
-        compileBitcode: false,
-        provisioningProfiles: {
-          bundle_id => provision
-        }
-      },
-      export_method: "app-store",
-      export_xcargs: "-allowProvisioningUpdates"
-    )
-
-    upload_to_testflight(
-        skip_waiting_for_build_processing: true,
-        # https://github.com/fastlane/fastlane/issues/20741
-        app_identifier: app_identifier,
-        api_key: get_app_store_connect_api_key
-    )
-  end
-
-
-  lane :get_app_store_connect_api_key do
-    ensure_env_vars(
-      env_vars: [
-        'APP_STORE_CONNECT_API_KEY'
-      ]
-    )
+  private_lane :api_key do
     app_store_connect_api_key(
-      key_id: "9H77DX9646",
-      issuer_id: "3f2e356c-d427-4c6c-8653-3a348a52cf3b",
-      key_content: "#{ENV["APP_STORE_CONNECT_API_KEY"]}".gsub('\n', '\\n'),
-      # key_filepath: "",
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_content: ENV.fetch("ASC_KEY_P8_BASE64"),
+      is_key_content_base64: true,
       duration: 1200,
-      in_house: false,
+      in_house: false
     )
   end
 
+  desc "Sign the prod app for the App Store and export an IPA"
+  lane :build do |options|
+    key = api_key
+    setup_ci
+
+    cert(api_key: key, development: false, output_path: "build/signing")
+    sigh(api_key: key, app_identifier: BUNDLE_ID, output_path: "build/signing")
+    profile = lane_context[SharedValues::SIGH_NAME]
+
+    # The project uses automatic signing for local development; a store build
+    # needs the distribution identity and the profile fetched above.
+    update_code_signing_settings(
+      path: "Runner.xcodeproj",
+      use_automatic_signing: false,
+      team_id: ENV.fetch("APPLE_TEAM_ID"),
+      targets: ["Runner"],
+      build_configurations: ["Release-prod"],
+      code_sign_identity: "Apple Distribution",
+      profile_name: profile,
+      bundle_identifier: BUNDLE_ID
+    )
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "prod",
+      configuration: "Release-prod",
+      export_method: "app-store",
+      export_options: { provisioningProfiles: { BUNDLE_ID => profile } },
+      output_directory: options.fetch(:output_directory, "build/ipa"),
+      output_name: "acits.ipa",
+      clean: false
+    )
+  end
+
+  desc "Upload an IPA to TestFlight"
+  lane :beta do |options|
+    upload_to_testflight(
+      api_key: api_key,
+      ipa: options.fetch(:ipa),
+      app_identifier: BUNDLE_ID,
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  desc "Submit an already uploaded build for App Store review"
+  lane :submit do |options|
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: BUNDLE_ID,
+      app_version: options.fetch(:version),
+      build_number: options.fetch(:build_number).to_s,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: true,
+      submit_for_review: true,
+      automatic_release: false,
+      run_precheck_before_submit: false,
+      force: true,
+      submission_information: { add_id_info_uses_idfa: false }
+    )
+  end
 end

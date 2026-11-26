@@ -65,14 +65,15 @@ fvm flutter run -t test/dev/main.dart --flavor dev
 
 CI runs on pull requests (lint, analyse, test, build) — a plain merge to `main`/`develop` triggers nothing on its own, since the PR that landed it already went through the full pipeline.
 
-Pushing a `v*` tag (e.g. `v0.5.1`) builds Android/iOS/web, publishes a [GitHub Release](https://github.com/aiserrock/acits-flutter/releases) with the dev APK attached, deploys the `prod` web build to **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)**, and posts a build notification to the **[build notifications channel](https://t.me/acitsFlutterBuildNotifications)** on Telegram.
+Store releases are built once and promoted: pushing a `release/*` branch uploads signed builds to the internal channels (Google Play internal track, TestFlight, RuStore moderation, Firebase App Distribution), and pushing a `v*` tag on that commit promotes them to production and publishes a [GitHub Release](https://github.com/aiserrock/acits-flutter/releases). See [doc/release.md](doc/release.md). A push to `develop` deploys the dev web build to **[GitHub Pages](https://aiserrock.github.io/acits-flutter/)**, and every CI run posts a build notification to the **[build notifications channel](https://t.me/acitsFlutterBuildNotifications)** on Telegram.
 
-**[Live PWA](https://aiserrock.github.io/acits-flutter/)** — the `prod` web build, installable as a Progressive Web App.
+**[Live PWA](https://aiserrock.github.io/acits-flutter/)** — the `dev` web build, installable as a Progressive Web App.
 
 ## Documentation
 
 - [Architecture](ARCHITECTURE.md) — package DAG, ports & adapters, request flow, Result/Failure, cross-platform strategy.
 - [Contributing guide](CONTRIBUTING.md) — setup, project structure, codegen and add-a-feature / add-an-endpoint rituals, localization, testing, build and PR workflow.
+- [Releasing](doc/release.md) — release branches, tags, the shared build number and every CI secret.
 - [Gotchas](docs/GOTCHAS.md) — symptoms of skipping `genapi`/`build_runner` and other workspace pitfalls.
 - [Security policy](SECURITY.md) — supported versions and how to report a vulnerability.
 - [Code of conduct](CODE_OF_CONDUCT.md)
