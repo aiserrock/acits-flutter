@@ -34,4 +34,7 @@ abstract interface class CommentsRepository {
 
   /// Удаляет заметку [id].
   Future<Result<Failure, void>> delete(int id);
+
+  /// One note by [id] (an edit link opened without a cached copy).
+  Future<Result<Failure, AnimalNote>> getById(int id);
 }

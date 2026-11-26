@@ -83,6 +83,16 @@ void main() {
       expect(second, isNull);
     });
 
+    test('a list of entities is tokenized whole and restored as the same typed list', () {
+      final list = <_Payload>[const _Payload(1), const _Payload(2)];
+      final encoded = codec.encode(list);
+
+      expect((encoded as Map<String, Object?>).keys.single, '__extra_token__');
+      final decoded = codec.decode(encoded);
+      expect(identical(decoded, list), isTrue);
+      expect(decoded, isA<List<_Payload>>());
+    });
+
     test('non-primitive nested inside a map is restored to same instance', () {
       const payload = _Payload(11);
       final encoded = codec.encode(<String, Object?>{'obj': payload, 'n': 1});

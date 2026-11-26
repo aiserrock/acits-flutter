@@ -47,7 +47,7 @@ void main() {
 
   test('with parent species of level 1 → queries level 2 scoped to parentId', () async {
     stubListSpecies([_species(9, level: 2, name: 'Барсик')]);
-    final cubit = SearchSpecCubit(repo, shelter, parentSearch: _species(3, level: 1));
+    final cubit = SearchSpecCubit(repo, shelter, parentId: 3, parentLevel: 1);
     await Future<void>.delayed(Duration.zero);
 
     verify(() => repo.listSpecies(level: 2, parentId: 3, search: null, offset: 0, shelterId: 50)).called(1);

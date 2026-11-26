@@ -469,7 +469,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('family'),
               onTap: () async {
                 if (_category != null) {
-                  final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _category);
+                  final result = await context.push<AnimalSpecies>(AppRoutes.searchSpecPath(parent: _category));
                   if (result != null) {
                     setState(() {
                       _family = result;
@@ -484,7 +484,7 @@ class _SearchSpeciesCardState extends State<_SearchSpeciesCard> {
               subtitle: const Text('kind'),
               onTap: () async {
                 if (_family != null) {
-                  final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _family);
+                  final result = await context.push<AnimalSpecies>(AppRoutes.searchSpecPath(parent: _family));
                   if (result != null) {
                     setState(() {
                       _kind = result;

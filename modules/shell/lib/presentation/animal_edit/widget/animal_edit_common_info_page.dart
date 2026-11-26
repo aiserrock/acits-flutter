@@ -170,7 +170,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
     }
     if (!mounted) return;
 
-    final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _categorySpec);
+    final result = await context.push<AnimalSpecies>(AppRoutes.searchSpecPath(parent: _categorySpec));
     if (!mounted) return;
     if (result != null) {
       setState(() {
@@ -189,7 +189,7 @@ class _AnimalEditCommonInfoPageState extends State<AnimalEditCommonInfoPage> wit
     }
     if (!mounted) return;
 
-    final result = await context.push<AnimalSpecies>(AppRoutes.searchSpec, extra: _familySpec);
+    final result = await context.push<AnimalSpecies>(AppRoutes.searchSpecPath(parent: _familySpec));
     if (!mounted) return;
     if (result != null) {
       setState(() {

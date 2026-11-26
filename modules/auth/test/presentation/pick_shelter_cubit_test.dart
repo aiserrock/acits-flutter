@@ -41,6 +41,44 @@ void main() {
     });
   });
 
+  group('PickShelterCubit — list opened by URL (no list anywhere)', () {
+    test('loads the list itself: loading first, then the shelters', () async {
+      when(() => auth.shelterList).thenReturn(const []);
+      when(() => auth.getShelterList()).thenAnswer((_) async => const Ok(shelters));
+
+      final cubit = build(autoSelectSingle: true);
+      expect(cubit.state.status.isLoading, isTrue);
+
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.results, shelters);
+      expect(cubit.state.status.isLoading, isFalse);
+      expect(cubit.state.status.hasError, isFalse);
+    });
+
+    test('a failed load shows the error state and retry loads again', () async {
+      when(() => auth.shelterList).thenReturn(const []);
+      when(() => auth.getShelterList()).thenAnswer((_) async => const Err(AuthFailure()));
+
+      final cubit = build(autoSelectSingle: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.status, const DataError<Object>(AuthFailure()));
+
+      when(() => auth.getShelterList()).thenAnswer((_) async => const Ok(shelters));
+      cubit.retry();
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.results, shelters);
+      expect(cubit.state.status.hasError, isFalse);
+      verify(() => auth.getShelterList()).called(2);
+    });
+
+    test('a passed or session list does not trigger a load', () async {
+      when(() => auth.shelterList).thenReturn(shelters);
+      build(autoSelectSingle: true);
+      build(autoSelectSingle: true, shelterList: shelters);
+      verifyNever(() => auth.getShelterList());
+    });
+  });
+
   group('PickShelterCubit — pickShelter', () {
     test('applies shelter + config and returns true on success', () async {
       when(() => auth.shelterList).thenReturn(const []);

@@ -46,6 +46,15 @@ class AnimalNotesApiAdapter implements AnimalNotesApiPort {
   }
 
   @override
+  Future<AnimalNoteDto> getById(int id, {int? shelterId}) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/api/v1/animals/notes/$id/',
+      options: _shelterHeader(shelterId),
+    );
+    return AnimalNoteDto.fromJson(response.data ?? const <String, dynamic>{});
+  }
+
+  @override
   Future<AnimalNoteDto> patch(int id, AnimalNoteWriteDto body, {int? shelterId}) async {
     final response = await _dio.patch<Map<String, dynamic>>(
       '/api/v1/animals/notes/$id/',

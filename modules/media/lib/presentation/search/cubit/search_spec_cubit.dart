@@ -15,15 +15,19 @@ const _searchBouncePeriod = Duration(milliseconds: 1000);
 /// остаются во [StatefulWidget] экрана. Данные — доменные [AnimalSpecies] через
 /// модульный [AnimalRepository].
 class SearchSpecCubit extends Cubit<SearchSpecState> {
-  SearchSpecCubit(this._repository, this._shelterProvider, {this.parentSearch}) : super(const SearchSpecState()) {
+  SearchSpecCubit(this._repository, this._shelterProvider, {this.parentId, this.parentLevel = 0})
+    : super(const SearchSpecState()) {
     loadData(searchRequest: null, resetOffset: true);
   }
 
   final AnimalRepository _repository;
   final CurrentShelterProvider _shelterProvider;
 
-  /// Родительский вид, внутри которого выполняется поиск (или null — верхний уровень).
-  final AnimalSpecies? parentSearch;
+  /// Id родительского вида, внутри которого выполняется поиск (null — верхний уровень).
+  final int? parentId;
+
+  /// Уровень родительского вида в таксономии (0 — родителя нет).
+  final int parentLevel;
 
   Timer? _bounceTimer;
 
@@ -59,10 +63,10 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
 
     try {
       // Уровень таксономии для запроса = уровень родителя + 1 (верхний = 1).
-      final level = (parentSearch?.level ?? 0) + 1;
+      final level = parentLevel + 1;
       final result = await _repository.listSpecies(
         level: level,
-        parentId: parentSearch?.id,
+        parentId: parentId,
         offset: state.offset,
         search: searchRequest,
         shelterId: _shelterProvider.shelterId,

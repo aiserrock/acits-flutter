@@ -11,6 +11,9 @@ abstract interface class AnimalNotesApiPort {
   Future<List<AnimalNoteDto>> listByAnimal(int animalId, {int? limit, int? offset, int? shelterId});
 
   /// Creates a note from [body]; returns the created note.
+  /// `GET /api/v1/animals/notes/{id}/` — one note, for opening an edit link without a cached copy.
+  Future<AnimalNoteDto> getById(int id, {int? shelterId});
+
   Future<AnimalNoteDto> create(AnimalNoteWriteDto body, {int? shelterId});
 
   /// Partially updates the note [id] with [body]; returns the updated note.

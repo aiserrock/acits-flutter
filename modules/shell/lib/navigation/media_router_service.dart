@@ -22,14 +22,11 @@ class MediaRouterServiceImpl implements MediaRouterService {
   Future<bool?> openPhotoGallery(int animalId) => _router.push<bool>(AppRoutes.photoGalleryPath(animalId));
 
   @override
-  void openDocViewer(PdfDocFetcher fetcher, {String? title, String? fileName}) {
-    _router.push(
-      AppRoutes.docViewer,
-      extra: <String, Object?>{'fetcher': fetcher, 'title': title, 'fileName': fileName},
-    );
+  void openDocViewer(DocKind kind, int id, {String? title, String? fileName}) {
+    _router.push(AppRoutes.docViewerPath(kind, id, title: title, fileName: fileName));
   }
 
   @override
   Future<AnimalSpecies?> pickSpecies({AnimalSpecies? parent}) =>
-      _router.push<AnimalSpecies>(AppRoutes.searchSpec, extra: parent);
+      _router.push<AnimalSpecies>(AppRoutes.searchSpecPath(parent: parent));
 }

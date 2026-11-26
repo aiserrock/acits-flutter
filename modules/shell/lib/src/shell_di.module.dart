@@ -6,7 +6,6 @@
 import 'dart:async' as _i687;
 
 import 'package:animals/animals.dart' as _i616;
-import 'package:app_services/app_services.dart' as _i579;
 import 'package:applicants/applicants.dart' as _i20;
 import 'package:auth/auth.dart' as _i662;
 import 'package:injectable/injectable.dart' as _i526;
@@ -26,7 +25,7 @@ class ShellPackageModule extends _i526.MicroPackageModule {
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
     gh.factory<_i857.PrescriptionsRouterService>(() => const _i919.PrescriptionsRouterServiceImpl());
     gh.factory<_i249.MediaRouterService>(() => const _i572.MediaRouterServiceImpl());
-    gh.factory<_i616.AnimalsRouterService>(() => _i959.AnimalsRouterServiceImpl(gh<_i579.AnimalService>()));
+    gh.factory<_i616.AnimalsRouterService>(() => const _i959.AnimalsRouterServiceImpl());
     gh.factory<_i1007.PersonalRouterService>(() => const _i8.PersonalRouterServiceImpl());
     gh.factory<_i662.SplashNavigator>(() => const _i422.SplashNavigatorImpl());
     gh.factory<_i662.AuthRouterService>(() => const _i422.AuthRouterServiceImpl());

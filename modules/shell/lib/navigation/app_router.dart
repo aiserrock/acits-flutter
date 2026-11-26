@@ -1,4 +1,5 @@
 import 'package:core/domain.dart' show Shelter;
+import 'package:util/util.dart' show Failure, Result;
 import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,9 +10,7 @@ import 'package:prescriptions/prescriptions.dart'
     show
         CalendarScreen,
         DrugsScreen,
-        Prescription,
         PrescriptionAnimalLoader,
-        PrescriptionAnimalRef,
         PrescriptionEditScreen,
         PrescriptionRepository,
         PrescriptionTypeLabels,
@@ -25,12 +24,13 @@ import 'package:personal/personal.dart'
         MySheltersSource,
         PersonalRepository,
         PersonalScreen;
-import 'package:app_services/app_services.dart' show AuthService, ConfigService, DebugService;
+import 'package:app_services/app_services.dart' show AnimalService, AuthService, ConfigService, DebugService;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:localization/localization.dart' show LocaleKeys;
 import 'package:di/di.dart';
 import 'package:shell/navigation/auth_screen_bindings.dart';
 import 'package:shell/navigation/extra_codec.dart';
+import 'package:shell/navigation/route_error_screen.dart';
 import 'package:shell/presentation/animal_detail/animal_detail_screen.dart';
 import 'package:shell/presentation/animal_edit/animal_edit_screen.dart';
 import 'package:shell/presentation/animals_section.dart';
@@ -43,7 +43,12 @@ import 'package:shell/presentation/root_screen.dart';
 /// Навигация построена на go_router (прямое использование через getIt, без
 /// interface-обёртки — mainstream-подход Flutter-команды 2026). Экраны, которые
 /// возвращают значение, открываются через `context.push<T>()` + `context.pop(result)`.
-/// Сложные объекты передаются через `extra` (см. [AppExtraCodec]).
+///
+/// Идентичность экрана целиком лежит в path/query: ссылка открывается после
+/// перезагрузки web-страницы, по «назад/вперёд» браузера и при восстановлении
+/// состояния. `extra` (см. [AppExtraCodec]) допустим только как необязательный
+/// in-memory кэш уже загруженной сущности; он живёт в рамках процесса и
+/// извлекается один раз, поэтому билдеры роутов обязаны работать и без него.
 abstract final class AppRoutes {
   static const splash = '/splash';
   static const onboarding = '/onboarding';
@@ -87,8 +92,32 @@ abstract final class AppRoutes {
   /// Построить путь к галерее фото животного.
   static String photoGalleryPath(int animalId) => '/photo-gallery/$animalId';
 
-  /// Построить путь к экрану добавления/редактирования комментария.
-  static String commentEditPath(int animalId) => '/comment-edit/$animalId';
+  /// Построить путь к экрану добавления/редактирования комментария. С
+  /// [commentId] открывается правка существующего комментария; сама заметка
+  /// может ехать в `extra` как кэш.
+  static String commentEditPath(int animalId, {int? commentId}) =>
+      commentId == null ? '/comment-edit/$animalId' : '/comment-edit/$animalId?id=$commentId';
+
+  /// Построить путь к просмотрщику документа [kind] с идентификатором [id].
+  /// [title] и [fileName] едут в query, чтобы ссылка воспроизводилась целиком.
+  static String docViewerPath(DocKind kind, int id, {String? title, String? fileName}) => Uri(
+    path: docViewer,
+    queryParameters: <String, String>{'kind': kind.name, 'id': '$id', 'title': ?title, 'fileName': ?fileName},
+  ).toString();
+
+  /// Построить путь к выбору приюта. Без автовыбора единственного приюта
+  /// добавляется `autoSelectSingle=false` (по умолчанию автовыбор включён).
+  static String pickShelterPath({bool autoSelectSingle = true}) =>
+      autoSelectSingle ? pickShelter : '$pickShelter?autoSelectSingle=false';
+
+  /// Построить путь к поиску вида животного; [parent] — вид, внутри которого
+  /// ищем (его id и уровень едут в query).
+  static String searchSpecPath({AnimalSpecies? parent}) => parent == null
+      ? searchSpec
+      : Uri(
+          path: searchSpec,
+          queryParameters: <String, String>{'parentId': '${parent.id}', 'parentLevel': '${parent.level}'},
+        ).toString();
 
   /// Построить путь к созданию назначения для preset-животного [animalId].
   static String prescriptionEditForAnimalPath(int animalId) => '/prescription-edit?animalId=$animalId';
@@ -102,13 +131,20 @@ abstract final class AppRoutes {
 /// Навигация авторизации остаётся явной (logout/login вызывают `go` напрямую),
 /// т.к. флоу входа многошаговый (login → выбор приюта → root) и авто-redirect
 /// по наличию токена конфликтовал бы с промежуточным выбором приюта.
-GoRouter createAppRouter() {
+///
+/// [initialLocation] и [initialExtra] нужны тестам, чтобы открыть конкретный URL
+/// (с кэшем в `extra` или без него) вместо splash.
+GoRouter createAppRouter({
+  @visibleForTesting String initialLocation = AppRoutes.splash,
+  @visibleForTesting Object? initialExtra,
+}) {
   return GoRouter(
     navigatorKey: getIt<GlobalKey<NavigatorState>>(),
     observers: getIt.isRegistered<List<NavigatorObserver>>() ? getIt<List<NavigatorObserver>>() : null,
     // Всегда стартуем со splash: он делает refresh токена и решает, куда идти
     // (onboarding / login / pick-shelter / root), без мелькания login.
-    initialLocation: AppRoutes.splash,
+    initialLocation: initialLocation,
+    initialExtra: initialExtra,
     extraCodec: const AppExtraCodec(),
     routes: [
       GoRoute(path: AppRoutes.splash, builder: (context, state) => AuthScreenBindings.splash()),
@@ -201,39 +237,53 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutes.commentEdit,
-        builder: (context, state) => CommentEditScreen(
-          repository: getIt<CommentsRepository>(),
-          animalId: int.parse(state.pathParameters['animalId']!),
-          comment: state.extra as AnimalNote?,
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.prescriptionEdit,
         builder: (context, state) {
-          final extra = state.extra as Map<String, Object?>?;
-          return PrescriptionEditScreen(
-            repository: getIt<PrescriptionRepository>(),
-            router: getIt<PrescriptionsRouterService>(),
-            animalLoader: getIt<PrescriptionAnimalLoader>(),
-            typeLabels: getIt<PrescriptionTypeLabels>(),
-            scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
-            editPrescriptionId: int.tryParse(state.uri.queryParameters['id'] ?? ''),
-            animalId: int.tryParse(state.uri.queryParameters['animalId'] ?? ''),
-            editPrescription: extra?['prescription'] as Prescription?,
-            animal: extra?['animal'] as PrescriptionAnimalRef?,
-          );
+          final animalId = int.tryParse(state.pathParameters['animalId'] ?? '');
+          if (animalId == null) return const RouteErrorScreen();
+          // Identity: `?id=<noteId>` marks an edit. The note may ride in `extra` as an
+          // in-memory cache; without it (reload, back/forward) it is loaded by id.
+          final extra = state.extra;
+          final cached = extra is AnimalNote ? extra : null;
+          final rawId = state.uri.queryParameters['id'];
+          final repository = getIt<CommentsRepository>();
+          if (rawId == null) return CommentEditScreen(repository: repository, animalId: animalId);
+          final noteId = int.tryParse(rawId);
+          if (noteId == null) return const RouteErrorScreen();
+          if (cached != null && cached.id == noteId) {
+            return CommentEditScreen(repository: repository, animalId: animalId, comment: cached);
+          }
+          return _CommentEditById(repository: repository, animalId: animalId, noteId: noteId);
         },
       ),
+      // Identity is `id` (edit) / `animalId` (preset animal) in the query; the screen loads
+      // the prescription and the animal itself through its repository and loader.
+      GoRoute(
+        path: AppRoutes.prescriptionEdit,
+        builder: (context, state) => PrescriptionEditScreen(
+          repository: getIt<PrescriptionRepository>(),
+          router: getIt<PrescriptionsRouterService>(),
+          animalLoader: getIt<PrescriptionAnimalLoader>(),
+          typeLabels: getIt<PrescriptionTypeLabels>(),
+          scaffoldMessengerKey: getIt<GlobalKey<ScaffoldMessengerState>>(),
+          editPrescriptionId: int.tryParse(state.uri.queryParameters['id'] ?? ''),
+          animalId: int.tryParse(state.uri.queryParameters['animalId'] ?? ''),
+        ),
+      ),
+      // The document is described by `kind` + `id` (+ optional `title`/`fileName`) and the
+      // byte fetcher is resolved here through DI.
       GoRoute(
         path: AppRoutes.docViewer,
         builder: (context, state) {
-          final extra = state.extra as Map<String, Object?>?;
+          final query = state.uri.queryParameters;
+          final kind = DocKind.fromName(query['kind']);
+          final id = int.tryParse(query['id'] ?? '');
+          if (kind == null || id == null) return const RouteErrorScreen();
           return DocViewerScreen(
-            extra?['fetcher'] as PdfDocFetcher,
+            _docFetcher(kind, id),
             exporter: getIt<DocExporterPort>(),
             pdfjsReady: getIt<PdfjsReadyPort>(),
-            title: extra?['title'] as String?,
-            fileName: extra?['fileName'] as String?,
+            title: query['title'],
+            fileName: query['fileName'],
           );
         },
       ),
@@ -260,20 +310,28 @@ GoRouter createAppRouter() {
       GoRoute(
         path: AppRoutes.pickShelter,
         builder: (context, state) {
-          final extra = state.extra as Map<String, Object?>?;
+          // `autoSelectSingle` lives in the query. The shelter list may ride in `extra` as a
+          // cache; without it the screen takes the session's list or loads it itself.
+          final extra = state.extra;
           return AuthScreenBindings.pickShelter(
-            autoSelectSingle: extra?['autoSelectSingle'] as bool? ?? true,
-            shelterList: extra?['shelterList'] as List<Shelter>?,
+            autoSelectSingle: state.uri.queryParameters['autoSelectSingle'] != 'false',
+            shelterList: extra is List<Shelter> ? extra : null,
           );
         },
       ),
+      // The parent species is `parentId` + `parentLevel` in the query (no parent: top level).
       GoRoute(
         path: AppRoutes.searchSpec,
-        builder: (context, state) => SearchScreen(
-          repository: getIt<AnimalRepository>(),
-          shelterProvider: getIt<CurrentShelterProvider>(),
-          parentSearch: state.extra as AnimalSpecies?,
-        ),
+        builder: (context, state) {
+          final query = state.uri.queryParameters;
+          final parentId = int.tryParse(query['parentId'] ?? '');
+          return SearchScreen(
+            repository: getIt<AnimalRepository>(),
+            shelterProvider: getIt<CurrentShelterProvider>(),
+            parentId: parentId,
+            parentLevel: parentId == null ? 0 : int.tryParse(query['parentLevel'] ?? '') ?? 1,
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.search,
@@ -289,6 +347,11 @@ GoRouter createAppRouter() {
     ],
   );
 }
+
+/// Byte source of the document described by [kind] + [id], resolved through DI.
+PdfDocFetcher _docFetcher(DocKind kind, int id) => switch (kind) {
+  DocKind.animalCard => () => getIt<AnimalService>().fetchPdfAnimalCard(id),
+};
 
 bool _switchingShelter = false;
 
@@ -314,5 +377,28 @@ Future<void> _switchShelter(Shelter shelter) async {
     getIt<GoRouter>().go(AppRoutes.root);
   } finally {
     _switchingShelter = false;
+  }
+}
+
+/// Loads a note by id, then opens it for editing; the error screen when it cannot.
+class _CommentEditById extends StatelessWidget {
+  const _CommentEditById({required this.repository, required this.animalId, required this.noteId});
+
+  final CommentsRepository repository;
+  final int animalId;
+  final int noteId;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Result<Failure, AnimalNote>>(
+      future: repository.getById(noteId),
+      builder: (context, snapshot) {
+        final result = snapshot.data;
+        if (result == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        final note = result.valueOrNull;
+        if (note == null) return const RouteErrorScreen();
+        return CommentEditScreen(repository: repository, animalId: animalId, comment: note);
+      },
+    );
   }
 }
