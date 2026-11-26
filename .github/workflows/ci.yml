@@ -470,7 +470,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   ##### notify #####
   # Runs on every trigger — PR, push to develop and manual workflow_dispatch — so
