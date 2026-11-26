@@ -1,0 +1,18 @@
+name: localization
+description: Generated easy_localization LocaleKeys for ACITS — single source of translation keys shared by the app and all feature modules.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  easy_localization: ^3.0.8
+
+dev_dependencies:
+  flutter_lints: ^6.0.0

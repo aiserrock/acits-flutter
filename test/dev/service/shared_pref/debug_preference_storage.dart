@@ -1,4 +1,4 @@
-import 'package:acits_flutter/di/di_container.dart';
+import 'package:di/di.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,0 +1,28 @@
+name: feature
+description: >-
+  Scaffolds a new ACITS feature module (modules/{{name}}/) on the proven
+  reference structure: workspace pubspec, per-folder barrels, domain (entity +
+  repository interface returning Result + router contract), data (mapper
+  implementing Transformable, data_source over a port, repository_impl), and one
+  presentation screen (cubit + page + view + widgets). Intra-module imports go
+  through package: barrels; the layer is presentation/ (not ui/).
+version: 0.1.0
+
+environment:
+  mason: ">=0.1.0 <1.0.0"
+
+vars:
+  name:
+    type: string
+    description: Feature name (snake_case, singular domain — e.g. prescriptions).
+    prompt: Feature name (snake_case)?
+  screen:
+    type: string
+    description: First screen name inside the module (snake_case, e.g. list).
+    default: list
+    prompt: First screen name (snake_case)?
+  description:
+    type: string
+    description: One-line pubspec description.
+    default: ACITS feature module.
+    prompt: Short module description?

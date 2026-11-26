@@ -36,6 +36,13 @@
 .pub-cache/
 .pub/
 /build/
+# Workspace package build/tool artifacts (each package builds under its own dir).
+packages/*/build/
+packages/*/.dart_tool/
+modules/*/build/
+modules/*/.dart_tool/
+modules/*/*/build/
+modules/*/*/.dart_tool/
 .fvm/
 
 # Web related
@@ -117,3 +124,15 @@ mockoon/_bodies.json
 # Local scratch & planning notes — not part of the project
 tmp/
 docs/design-specs/
+modules/ui_kit/example/build/
+modules/ui_kit/example/.dart_tool/
+
+# Mason local cache (absolute paths, machine-specific)
+.mason/
+mason-lock.json
+
+# Patrol: сгенерированный тест-бандл (регенерится на каждый `patrol test`).
+# integration_test/ — наш каталог (patrol.test_directory); patrol_test/ — дефолт
+# CLI, куда bundle попадает, если test_directory не задан.
+integration_test/test_bundle.dart
+patrol_test/

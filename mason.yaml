@@ -1,0 +1,14 @@
+# Mason brick registry for ACITS scaffolding.
+#
+# Install: dart pub global activate mason_cli
+# Resolve: mason get
+# Use:
+#   mason make feature --name prescriptions
+#   mason make screen  --name prescription_detail --module prescriptions
+#
+# The bricks are modelled on modules/animals — the proven reference slice.
+bricks:
+  feature:
+    path: bricks/feature
+  screen:
+    path: bricks/screen

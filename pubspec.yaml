@@ -9,6 +9,25 @@ environment:
   sdk: ">=3.9.0 <4.0.0"
   flutter: 3.44.0
 
+# Dart pub workspace — root + foundation packages share one resolution.
+# Feature modules (modules/*) are added lazily as they are migrated.
+workspace:
+  - modules/base/localization
+  - modules/base/util
+  - modules/base/network
+  - modules/base/core
+  - modules/ui_kit
+  - modules/base/navigation
+  - modules/base/di
+  - modules/animals
+  - modules/auth
+  - modules/applicants
+  - modules/prescriptions
+  - modules/personal
+  - modules/media
+  - modules/app_services
+  - modules/shell
+
 dependencies:
   flutter:
     sdk: flutter
@@ -17,10 +36,79 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
+  # Foundation packages (workspace members).
+  localization:
+    path: modules/base/localization
+  util:
+    path: modules/base/util
+  network:
+    path: modules/base/network
+  core:
+    path: modules/base/core
+  ui_kit:
+    path: modules/ui_kit
+  navigation:
+    path: modules/base/navigation
+
+  # DI container: owns the shared get_it instance (GetIt.instance) for the whole
+  # app. The @InjectableInit bootstrap itself stays in the app (lib/di) so it can
+  # scan lib/service/* app-composition classes — a package can't scan its consumer.
+  di:
+    path: modules/base/di
+
+  # Feature module: animals list migrated onto the new stack (Step 8b).
+  animals:
+    path: modules/animals
+
+  # Feature module: auth (login/registration/splash/onboarding/pick-shelter).
+  # Session state stays in the app behind AuthSessionApi (implemented by AuthService).
+  auth:
+    path: modules/auth
+
+  # Feature module: applicants + curators (staff). StaffService lives here and is
+  # also consumed by the app's search paging adapter.
+  applicants:
+    path: modules/applicants
+
+  # Feature module: prescriptions + drugs. PrescriptionService + domain entities
+  # live here; consumed by the app shell (today executions), animal-detail
+  # prescriptions tab, and the search paging adapter (drug search).
+  prescriptions:
+    path: modules/prescriptions
+
+  # Feature module: personal cabinet + calendar + animal comments. PersonalService
+  # (profile) and CommentsService (animal notes) live here; consumed by the app
+  # shell/drawer, the personal screen, and the animal-detail comments tab.
+  personal:
+    path: modules/personal
+
+  # Feature module: media (photo gallery + editor, PDF doc viewer) and the
+  # generic cross-feature search/picker. Depends on animals/applicants/
+  # prescriptions for the search paging adapters and photo upload; consumed by
+  # the app router, animal-edit applicant/curator pages, and the prescriptions/
+  # auth router services.
+  media:
+    path: modules/media
+
+  # App-composition services (session/config/animal, storage + client register
+  # modules, port bridges, document/share platform code). Extracted from
+  # lib/service so the shell + DI depend on their types without an app edge; its
+  # injectables are pulled into DI as a micro-package (externalPackageModules).
+  app_services:
+    path: modules/app_services
+
+  # App shell: composition screens (root/main/animal detail+edit) + navigation
+  # tree (GoRouter factory, extra codec, auth bindings, the six feature router
+  # services). The app builds MaterialApp.router with the shell's router and
+  # top-level ThemeCubit; the shell's router-service injectables are pulled into
+  # DI as a micro-package (externalPackageModules). Owns the app's flutter_gen
+  # assets accessor for now (moves to ui_kit in a later step).
+  shell:
+    path: modules/shell
+
   app_links: ^7.0.0
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
-  chopper: ^8.5.1
   collection: ^1.19.0
   cupertino_icons: ^1.0.9
   dio: ^5.9.2
@@ -64,8 +152,8 @@ dependencies:
   firebase_analytics: ^12.4.3
 
   # In-app логи: Talker + экран логов (dev debug-меню) и BLoC-observer.
-  # talker_dio_logger НЕ нужен — основной клиент chopper (сетевой логгер —
-  # свой chopper-интерцептор в test/dev/).
+  # talker_dio_logger НЕ нужен: сетевой лог в dev даёт Alice-интерцептор
+  # (экран «HTTP») + LogInterceptor — см. test/dev/service/client/dio_register.dart.
   talker_flutter: ^5.1.16
   talker_bloc_logger: ^5.1.17
 
@@ -86,8 +174,6 @@ dev_dependencies:
 
   bloc_test: ^10.0.0
   build_runner: ^2.13.1
-  chopper_generator: ^8.6.1
-  flutter_gen_runner: ^5.14.0
   flutter_lints: ^6.0.0
   http: ^1.6.0
   injectable_generator: ^3.0.2
@@ -96,64 +182,48 @@ dev_dependencies:
   melos: ^8.2.2
   mocktail: ^1.0.5
   patrol: ^4.6.1
-  swagger_dart_code_generator: ^4.1.1
 
 flutter:
   uses-material-design: true
 
+  # Дизайн-ассеты (иконки, картинки, шрифт icomoon, lottie, онбординг,
+  # галерея) переехали в пакет ui_kit и резолвятся как `packages/ui_kit/...`.
+  # Приложение оставляет себе только локализацию и runtime-сертификат.
   assets:
     - assets/translations/
-    - assets/image/
-    - assets/icon/
-    - assets/onboarding/
-    - assets/common/
-    - assets/lottie/
     - assets/cert/
-    - assets/gallery/
-
-  fonts:
-    - family: icomoon
-      fonts:
-        - asset: assets/font/icomoon.ttf
-
-flutter_gen:
-  line_length: 120
-  integrations:
-    flutter_svg: true
-  assets:
-    inputs:
-      - assets/image/
-      - assets/icon/
-      - assets/onboarding/
-      - assets/common/
-      - assets/lottie/
-      - assets/gallery/
 
 # Patrol integration/e2e tests (industry-standard native UI automation).
-# Tests live in integration_test/. Run with: patrol test --flavor dev
+# Tests live in integration_test/. Прогон на реальном устройстве/эмуляторе:
+#   dart pub global activate patrol_cli 4.4.0   # ← парная к пакету patrol 4.6.1
+#   patrol test --target integration_test/auth_login_test.dart --flavor dev \
+#     --dart-define=ACITS_TEST_LOGIN=test_user_2 --dart-define=ACITS_TEST_PASSWORD=user10000
+# Android-обвязка: android/app/src/androidTest/.../MainActivityTest.java +
+# testInstrumentationRunner/testOptions в android/app/build.gradle.
 patrol:
   app_name: ACITS
+  # Тесты живут в integration_test/ (стандартный каталог Flutter), а не в
+  # дефолтном для patrol_cli patrol_test/ — иначе CLI генерирует битые импорты
+  # в test_bundle.dart (абсолютные пути) и Gradle-сборка падает.
+  test_directory: integration_test
   android:
     package_name: ru.acits.dev
   ios:
     bundle_id: ru.acits.dev
 
-# Melos как task-runner для single-package проекта.
+# Melos — task-runner для монорепо. Скрипты живут здесь (melos 8.x читает
+# `melos:` из pubspec.yaml; отдельный melos.yaml он не использует). Пакеты
+# монорепо melos берёт из dart pub `workspace:` выше — отдельный `packages:`
+# не нужен.
 #
-# Не монорепо — один пакет (useRootAsPackage: true). Melos заменяет разрозненные
-# `fvm flutter ...` команды единым набором `melos run <script>`. Этот блок —
-# источник истины по частым командам проекта.
-#
-# Установка: `dart pub global activate melos`. Запуск: `melos run <name>`
-# (или `fvm dart run melos run <name>` через локальную dev-зависимость).
+# Установка: `dart pub global activate melos`. Запуск: `fvm dart run melos run <name>`.
 melos:
-  useRootAsPackage: true
   sdkPath: .fvm/flutter_sdk
 
   scripts:
     # ── Codegen ──────────────────────────────────────────────────────────────
     gen:
-      description: Кодогенерация (build_runner) — swagger, chopper, injectable, assets, json.
+      description: Кодогенерация (build_runner) — injectable, assets, json. API-клиент — отдельно (melos genapi).
       run: fvm dart run build_runner build --delete-conflicting-outputs
 
     gen:watch:
@@ -164,47 +234,81 @@ melos:
       description: Очистить кэш build_runner перед rebuild (после правок swagger-DTO).
       run: fvm dart run build_runner clean
 
+    genapi:
+      description: Генерация API-клиента (swagger_parser) в core (api-слой) — изолированно, вне глобального build_runner приложения.
+      run: |
+        cd modules/base/core
+        fvm dart run tool/preprocess_openapi.dart
+        fvm dart run swagger_parser
+        fvm dart run build_runner build --delete-conflicting-outputs
+
+    genone:
+      description: build_runner (freezed/injectable/json) для одного пакета. Использование — MELOS_GENONE_PKG=modules/base/di melos run genone.
+      run: |
+        cd ${MELOS_GENONE_PKG:-.}
+        fvm dart run build_runner build --delete-conflicting-outputs
+
     l10n:
-      description: Сгенерировать LocaleKeys из assets/translations (easy_localization).
+      description: Сгенерировать общий LocaleKeys (пакет l10n) из assets/translations.
       run: >
         fvm dart run easy_localization:generate
-        -S assets/translations -O lib/gen/l10n -o locale_keys.g.dart -f keys
+        -S assets/translations -O modules/base/localization/lib/src -o locale_keys.g.dart -f keys
 
     # ── Качество кода ────────────────────────────────────────────────────────
     analyze:
       description: Статический анализ (flutter analyze).
       run: fvm flutter analyze
 
+    analyze:strict:
+      description: Строгий анализ — падает на infos и warnings (CI-гейт).
+      run: fvm flutter analyze --fatal-infos --fatal-warnings
+
+    # Ширина строки закреплена в analysis_options.yaml (formatter.page_width),
+    # чтобы IDE форматировала так же; `-l 120` здесь оставлен как явный дубль
+    # для запусков вне контекста пакета.
     format:
-      description: Форматирование hand-written кода (line length 120), генерённые файлы исключены.
+      description: Форматирование hand-written кода (line length 120) в корне и модулях, генерённые файлы исключены.
       run: |
-        files=$(find lib test -name '*.dart' \
+        find lib test modules -name '*.dart' \
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
-          ! -name '*.chopper.dart' \
           ! -name '*.gen.dart' \
           ! -name 'locale_keys.g.dart' \
-          ! -name 'firebase_options.dart')
-        fvm dart format -l 120 $files
+          ! -name 'firebase_options.dart' \
+          ! -path '*/generated/*' \
+          ! -path '*/.dart_tool/*' \
+          ! -path '*/build/*' \
+          -print0 | xargs -0 fvm dart format -l 120
 
     format:check:
       description: Проверка форматирования без правок (CI/pre-commit), падает при расхождении.
       run: |
-        files=$(find lib test -name '*.dart' \
+        find lib test modules -name '*.dart' \
           ! -name '*.g.dart' \
           ! -name '*.config.dart' \
           ! -name '*.swagger.dart' \
-          ! -name '*.chopper.dart' \
           ! -name '*.gen.dart' \
           ! -name 'locale_keys.g.dart' \
-          ! -name 'firebase_options.dart')
-        fvm dart format --output=none --set-exit-if-changed -l 120 $files
+          ! -name 'firebase_options.dart' \
+          ! -path '*/generated/*' \
+          ! -path '*/.dart_tool/*' \
+          ! -path '*/build/*' \
+          -print0 | xargs -0 fvm dart format --output=none --set-exit-if-changed -l 120
 
     # ── Тесты ────────────────────────────────────────────────────────────────
+    # `modules/base/*` — контейнер, пакеты лежат на уровень глубже, поэтому
+    # обходятся отдельной маской (иначе 100+ тестов молча не гоняются).
     test:
-      description: Юнит- и виджет-тесты.
-      run: fvm flutter test
+      description: Юнит- и виджет-тесты корня и каждого пакета воркспейса с test/.
+      run: |
+        fvm flutter test
+        for p in packages/* modules/* modules/base/*; do
+          if [ -d "$p/test" ]; then
+            echo "── flutter test ($p)"
+            (cd "$p" && fvm flutter test) || exit 1
+          fi
+        done
 
     test:coverage:
       description: Тесты со сбором покрытия (coverage/lcov.info).
@@ -234,6 +338,13 @@ melos:
       steps:
         - format:check
         - analyze
+        - test
+
+    check-all:
+      description: Гейт качества — формат-чек, строгий анализ (--fatal-infos --fatal-warnings), тесты.
+      steps:
+        - format:check
+        - analyze:strict
         - test
 
     fix:

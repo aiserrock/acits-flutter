@@ -1,4 +1,4 @@
-import 'package:acits_flutter/domain/env.dart';
+import 'package:app_services/app_services.dart';
 import 'package:injectable/injectable.dart';
 
 /// Регистрация окружения в зависимоcти от flavor

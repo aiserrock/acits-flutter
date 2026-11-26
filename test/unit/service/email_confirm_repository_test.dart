@@ -1,5 +1,5 @@
-import 'package:acits_flutter/domain/exception.dart';
-import 'package:acits_flutter/service/auth/email_confirm_repository.dart';
+import 'package:core/core.dart';
+import 'package:app_services/app_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

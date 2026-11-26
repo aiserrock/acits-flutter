@@ -1,0 +1,42 @@
+name: prescriptions
+description: Prescriptions + drugs feature module — today executions, prescription edit/animal tabs, drug search, and the Result-returning PrescriptionRepository on top of the stable PrescriptionApiPort.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  bloc: ^9.2.0
+  equatable: ^2.0.8
+  easy_localization: ^3.0.8
+  flutter_keyboard_visibility: ^6.0.0
+  lottie: ^3.3.3
+  intl: ^0.20.2
+  collection: ^1.19.0
+  dio: ^5.9.2
+  get_it: ^9.2.1
+  talker_flutter: ^5.1.16
+  util:
+    path: ../base/util
+  localization:
+    path: ../base/localization
+  core:
+    path: ../base/core
+  ui_kit:
+    path: ../ui_kit
+  navigation:
+    path: ../base/navigation
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.5

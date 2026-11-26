@@ -1,0 +1,37 @@
+name: {{name.snakeCase()}}
+description: {{description}}
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.8
+  dio: ^5.9.2
+  easy_localization: ^3.0.8
+  util:
+    path: ../base/util
+  network:
+    path: ../base/network
+  core:
+    path: ../base/core
+  navigation:
+    path: ../base/navigation
+  localization:
+    path: ../base/localization
+  ui_kit:
+    path: ../ui_kit
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.5

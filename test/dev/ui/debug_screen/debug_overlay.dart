@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:acits_flutter/service/debug/debug_service.dart';
-
+import 'package:app_services/app_services.dart';
 import '../../di/di_container.dart';
 import '../../service/debug/debug_dev_service.dart';
 import 'debug_floating_button.dart';

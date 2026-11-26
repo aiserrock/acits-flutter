@@ -7,24 +7,27 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:logging/logging.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:util/util.dart';
 
-import 'package:acits_flutter/main.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
-import 'package:acits_flutter/util/app_version.dart';
-import 'package:acits_flutter/util/logger/app_bloc_observer.dart';
-import 'package:acits_flutter/util/logger/log.dart';
+import 'package:acits_flutter/run_app.dart';
+import 'package:app_services/app_services.dart' show Log;
 import 'di/di_container.dart';
 import 'service/shared_pref/debug_preference_storage.dart';
 import 'service/client/proxy_http_overrides.dart';
 import 'ui/debug_screen/debug_overlay.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  usePathUrlStrategy(); // обычные web-пути (/login), no-op на мобильных
+/// DEV-энтрипоинт. Тонкий: dev-подготовка (bootstrap) + запуск (runApp) —
+/// см. `run_app.dart`. dev отличается своим Firebase-проектом, dev-DI, прокси и
+/// плавающей debug-кнопкой (overlayBuilder).
+Future<void> main() => runAppWith(
+  bootstrap: _bootstrapDev,
+  overlayBuilder: (_, child) => DebugOverlay(child: child ?? const SizedBox()),
+);
 
+Future<void> _bootstrapDev() async {
   // dev-окружение: свой Firebase-проект acits-dev. Crashlytics только на
   // android/ios (web-плагина нет — под guard kIsWeb).
   await Firebase.initializeApp(options: devFirebaseOptions);
@@ -47,9 +50,9 @@ Future<void> main() async {
   Log.info('App start · flavor=dev');
 
   // Прокси (Charles/mitmproxy) — глобальный HttpOverrides, покрывает ВЕСЬ
-  // трафик (chopper, dio, картинки). Ставится при старте, читая сохранённый
-  // флаг из storage; поэтому смена прокси в debug требует полного перезапуска
-  // приложения (не kIsWeb — HttpOverrides только на нативе).
+  // трафик (dio, картинки). Ставится при старте, читая сохранённый флаг из
+  // storage; поэтому смена прокси в debug требует полного перезапуска приложения
+  // (не kIsWeb — HttpOverrides только на нативе).
   if (!kIsWeb) {
     final debugPrefs = getIt<DebugPreferenceStorage>();
     final proxy = debugPrefs.proxy;
@@ -57,9 +60,6 @@ Future<void> main() async {
       HttpOverrides.global = ProxyHttpOverrides(proxy);
     }
   }
-
-  // Плавающая debug-кнопка поверх приложения (только dev, только debug mode).
-  runApp(AcitsApp(overlayBuilder: (_, child) => DebugOverlay(child: child ?? const SizedBox())));
 }
 
 void _setupLogging() {
