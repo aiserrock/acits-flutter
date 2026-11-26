@@ -2,10 +2,11 @@ import 'package:di/di.dart';
 import 'package:injectable/injectable.dart';
 import 'package:observability/observability.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app_services/src/service/storage/storage_keys.dart';
 
-const _isFirstKey = 'isFirstKey';
-const _currentShelterKey = 'currentShelterId';
-const _collectionEnabledKey = 'collectionEnabled';
+const _isFirstKey = StorageKeys.isFirstLaunch;
+const _currentShelterKey = StorageKeys.currentShelterId;
+const _collectionEnabledKey = StorageKeys.collectionEnabled;
 
 @injectable
 class PreferenceStorage implements CollectionPreferenceStore {
