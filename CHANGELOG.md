@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-26
+
+Первый релиз в Google Play, App Store и RuStore.
+
 ### Changed
 
 - Sentry в релизных сборках: DSN из переменной репозитория `SENTRY_DSN` передаётся во все
@@ -602,6 +606,7 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/aiserrock/acits-flutter/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/aiserrock/acits-flutter/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/aiserrock/acits-flutter/compare/v0.10.0...v2.0.0
 [0.4.0+17]: https://github.com/aiserrock/acits-flutter/releases/tag/v0.4.0
 [0.3.0+17]: https://github.com/aiserrock/acits-flutter/releases/tag/v0.3.0
