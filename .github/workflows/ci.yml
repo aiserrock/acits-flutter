@@ -94,13 +94,18 @@ jobs:
 
       - run: tar -xzf workspace.tar.gz
 
-      # dart format only parses syntax, no package resolution — so no
-      # `flutter pub get` here, just the SDK to get a `dart` binary.
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
+
+      # dart format picks its style from each package's language version, read
+      # from .dart_tool/package_config.json. Without it the formatter falls back
+      # to the pre-3.7 "short" style and flags every file the "tall" style wrote
+      # (what `melos run format` produces locally).
+      - name: Install dependencies
+        run: flutter pub get
 
       # Format only hand-written code (line length 120), across the root app and
       # every workspace module. Generated files (*.g.dart, *.config.dart,
