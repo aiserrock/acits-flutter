@@ -1,6 +1,6 @@
 import 'package:util/util.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:prescriptions/domain/domain.dart';
 import 'package:prescriptions/presentation/prescription_edit/prescription_edit.dart';

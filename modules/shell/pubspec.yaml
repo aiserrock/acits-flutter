@@ -12,9 +12,8 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  # Material/Widgets/Cupertino delegates для LocalizationAddon в debug-галерее.
-  flutter_localizations:
-    sdk: flutter
+  material_ui: ^1.11.1
+  cupertino_ui: ^1.1.7
 
   # Foundation packages.
   util:

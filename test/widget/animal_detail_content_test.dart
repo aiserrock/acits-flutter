@@ -1,6 +1,6 @@
 import 'package:shell/presentation/animal_detail/animal_content_card.dart';
 import 'package:animals/animals.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Smoke-тест миграции карточки животного на сущность [Animal]: вкладки

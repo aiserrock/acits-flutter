@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Обёртка над [AppBar]: цвета фона/заголовка приходят из `AppBarTheme` темы,
 /// поэтому бар автоматически следует за светлой/тёмной темой. Стрелка «назад»

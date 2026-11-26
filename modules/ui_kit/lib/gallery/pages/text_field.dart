@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 /// [UiTextField] — токен-ориентированное поле: label / hint / prefix / suffix /

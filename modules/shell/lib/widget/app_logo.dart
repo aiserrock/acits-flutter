@@ -1,5 +1,5 @@
 import 'package:ui_kit/ui_kit.dart' as ui_kit;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Логотип ACITS, адаптивный к теме.
 ///

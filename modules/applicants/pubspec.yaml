@@ -12,6 +12,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  material_ui: ^1.11.1
   flutter_bloc: ^9.1.1
   bloc: ^9.2.0
   equatable: ^2.0.8

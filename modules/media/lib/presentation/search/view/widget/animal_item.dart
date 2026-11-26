@@ -1,6 +1,6 @@
 import 'package:ui_kit/ui_kit.dart';
 import 'package:animals/animals.dart' show AnimalListItem;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Плитка животного в поиске. Рендерит доменную сущность [AnimalListItem]
 /// (модуль animals) — поиск животных мигрирован на репозиторий.

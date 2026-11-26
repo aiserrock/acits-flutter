@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 /// Иконки дизайн-системы: (1) шрифт icomoon [IconRes], (2) package-scoped SVG

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Акцентная кнопка. Цвета/текст берутся из [ElevatedButtonThemeData] темы;
 /// здесь фиксируется только форма (радиус 8) и режим растяжки.

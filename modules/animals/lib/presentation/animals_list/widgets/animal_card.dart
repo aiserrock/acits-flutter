@@ -2,8 +2,8 @@ import 'package:util/util.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:localization/localization.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:animals/domain/domain.dart';

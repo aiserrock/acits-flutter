@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Показ M3-модального bottom sheet с токен-ориентированными скруглениями.
 /// Фон/тень приходят из темы; здесь фиксируется форма верхних углов.

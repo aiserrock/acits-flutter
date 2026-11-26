@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Плавающая draggable-кнопка входа в дебаг-экран (dev-сборка).
 /// Паттерн из a production app: перетаскивается по экрану, прилипает к ближайшему

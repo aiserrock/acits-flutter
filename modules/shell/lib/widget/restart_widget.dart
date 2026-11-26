@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Обёртка над всем деревом приложения, которая умеет:
 ///  1. Пересоздать поддерево «начисто» (смена [Key] → Flutter выбрасывает и

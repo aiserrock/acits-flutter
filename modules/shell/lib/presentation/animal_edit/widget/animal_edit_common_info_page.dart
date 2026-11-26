@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:animals/animals.dart';
 import 'package:util/util.dart' show Validator;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_kit/ui_kit.dart' show FormEditCard, EditCardData;
 

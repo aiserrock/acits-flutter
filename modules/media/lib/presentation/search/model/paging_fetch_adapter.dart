@@ -1,7 +1,7 @@
 import 'package:core/domain.dart' show Applicant, Curator, Shelter;
 import 'package:animals/animals.dart' show AnimalListItem, AnimalRepository;
 import 'package:applicants/applicants.dart' show StaffService;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:prescriptions/prescriptions.dart' show Drug, PrescriptionService;
 
 import 'package:media/domain/domain.dart';

@@ -12,6 +12,8 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  material_ui: ^1.11.1
+  cupertino_ui: ^1.1.7
   flutter_bloc: ^9.1.1
   equatable: ^2.0.8
   dio: ^5.9.2
