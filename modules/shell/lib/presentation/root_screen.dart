@@ -20,8 +20,7 @@ List<AdaptiveDestination> _buildDestinations(BuildContext context) {
   return [
     item(Assets.icon.today, LocaleKeys.commonToday.tr()),
     item(Assets.icon.paw, LocaleKeys.commonAnimals.tr()),
-    // The calendar is not built yet: the tab is visible but locked.
-    item(Assets.icon.calendar, LocaleKeys.commonCalendar.tr(), enabled: false),
+    item(Assets.icon.calendar, LocaleKeys.commonCalendar.tr()),
     item(Assets.icon.drugs, LocaleKeys.commonDrugs.tr()),
   ];
 }

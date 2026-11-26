@@ -13,6 +13,10 @@ abstract interface class PrescriptionRepository {
   /// Исполнения назначений, запланированные на сегодня (лента главного экрана).
   Future<Result<Failure, List<PrescriptionExecutionToday>>> listTodayExecutions({String? search, String? ordering});
 
+  /// Все исполнения в интервале `[from, to)` (локальные границы дня), по
+  /// возрастанию времени. Для календаря: месяц целиком, без пагинации.
+  Future<Result<Failure, List<PrescriptionExecutionToday>>> listExecutions(DateTime from, DateTime to);
+
   /// Назначения животного [animalId]: актуальные ([isActual]) или прошлые
   /// ([isOld]).
   Future<Result<Failure, List<Prescription>>> listByAnimal(

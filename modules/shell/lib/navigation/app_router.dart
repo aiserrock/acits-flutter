@@ -7,6 +7,7 @@ import 'package:applicants/applicants.dart';
 import 'package:media/media.dart';
 import 'package:prescriptions/prescriptions.dart'
     show
+        CalendarScreen,
         DrugsScreen,
         Prescription,
         PrescriptionAnimalLoader,
@@ -16,7 +17,7 @@ import 'package:prescriptions/prescriptions.dart'
         PrescriptionTypeLabels,
         PrescriptionsRouterService;
 import 'package:personal/personal.dart'
-    show AnimalNote, CalendarScreen, CommentEditScreen, CommentsRepository, PersonalRepository, PersonalScreen;
+    show AnimalNote, CommentEditScreen, CommentsRepository, PersonalRepository, PersonalScreen;
 import 'package:app_services/app_services.dart' show DebugService;
 import 'package:di/di.dart';
 import 'package:shell/navigation/auth_screen_bindings.dart';
@@ -140,7 +141,15 @@ GoRouter createAppRouter() {
             ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.calendar, builder: (context, state) => const CalendarScreen())],
+            routes: [
+              GoRoute(
+                path: AppRoutes.calendar,
+                builder: (context, state) => CalendarScreen(
+                  repository: getIt<PrescriptionRepository>(),
+                  onMenuPressed: RootDrawerProvider.of(context)?.openDrawer,
+                ),
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [

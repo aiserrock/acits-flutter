@@ -11,6 +11,7 @@ import '../../ports/prescription_api_port.dart';
 import 'generated/clients/prescriptions_client.dart';
 import 'generated/clients/shelters_client.dart';
 import 'generated/models/animal_short.dart';
+import 'generated/models/paginated_prescription_execution_today_list.dart';
 import 'generated/models/drug.dart';
 import 'generated/models/prescription_drug.dart';
 import 'generated/models/prescription_execution_today.dart';
@@ -89,6 +90,43 @@ class PrescriptionApiAdapter implements PrescriptionApiPort {
     );
     final results = page.results ?? const <PrescriptionExecutionToday>[];
     return results.map(_mapExecutionToday).toList(growable: false);
+  }
+
+  /// Page size for [executionsInRange]: a busy shelter has a few hundred a month.
+  static const _rangePageSize = 100;
+
+  /// Hard stop for [executionsInRange] in case the server keeps returning `next`.
+  static const _rangeMaxPages = 50;
+
+  @override
+  Future<List<PrescriptionExecutionTodayDto>> executionsInRange(
+    DateTime from,
+    DateTime to, {
+    String? search,
+    int? shelterId,
+  }) async {
+    // Raw Dio: the generated client declares `from`/`to` as path parameters and
+    // drops them from the query, so it can only ever return the server default.
+    final all = <PrescriptionExecutionTodayDto>[];
+    for (var page = 0; page < _rangeMaxPages; page++) {
+      final response = await _dio.get<Map<String, dynamic>>(
+        '/api/v1/prescriptions/executions/',
+        queryParameters: <String, dynamic>{
+          'from': from.toUtc().toIso8601String(),
+          'to': to.toUtc().toIso8601String(),
+          'ordering': 'execute_at',
+          'limit': _rangePageSize,
+          'offset': page * _rangePageSize,
+          if (search != null && search.isNotEmpty) 'search': search,
+        },
+        options: _shelterHeader(shelterId),
+      );
+      final body = PaginatedPrescriptionExecutionTodayList.fromJson(response.data ?? const <String, dynamic>{});
+      final results = body.results ?? const <PrescriptionExecutionToday>[];
+      all.addAll(results.where((e) => e.prescription != null).map(_mapExecutionToday));
+      if (body.next == null || results.length < _rangePageSize) break;
+    }
+    return all;
   }
 
   @override

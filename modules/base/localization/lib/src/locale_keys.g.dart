@@ -59,6 +59,10 @@ abstract class  LocaleKeys {
   static const aninmalSize = 'aninmalSize';
   static const applicantAdd = 'applicantAdd';
   static const applicantEdit = 'applicantEdit';
+  static const calendarDaySemantics = 'calendarDaySemantics';
+  static const calendarEmptyDay = 'calendarEmptyDay';
+  static const calendarNextMonth = 'calendarNextMonth';
+  static const calendarPrevMonth = 'calendarPrevMonth';
   static const commentDeletingFail = 'commentDeletingFail';
   static const commentTitleEdit = 'commentTitleEdit';
   static const commentTitleNew = 'commentTitleNew';

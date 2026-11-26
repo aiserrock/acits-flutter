@@ -34,6 +34,17 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
   }
 
   @override
+  Future<Result<Failure, List<PrescriptionExecutionToday>>> listExecutions(DateTime from, DateTime to) {
+    Log.debug('Fetch prescription executions: from=$from to=$to');
+    return _guard(() async {
+      await _typeLabels.ensureLoaded();
+      final dtos = await _port.executionsInRange(from, to, shelterId: _currentShelterId);
+      Log.info('Prescription executions loaded: count=${dtos.length}');
+      return dtos.map(_mapExecutionToday).toList(growable: false);
+    });
+  }
+
+  @override
   Future<Result<Failure, List<Prescription>>> listByAnimal(
     int animalId, {
     int? limit,
