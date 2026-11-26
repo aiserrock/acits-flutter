@@ -119,7 +119,7 @@ dependencies:
   firebase_core: ^4.7.0
   flutter_bloc: ^9.1.1
   flutter_keyboard_visibility: ^6.0.0
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^11.2.0
   flutter_slidable: ^4.0.3
   flutter_svg: ^2.2.4
   formz: ^0.8.0
