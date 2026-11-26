@@ -1,4 +1,5 @@
 import 'package:core/domain.dart' show Shelter;
+import 'package:util/util.dart' show Failure, Result;
 
 /// Порт доступа к текущему приюту и списку всех приютов для generic-поиска.
 ///
@@ -10,5 +11,5 @@ abstract interface class MediaShelterProvider {
   int? get currentShelterId;
 
   /// Постранично загрузить список всех приютов (поиск/выбор приюта).
-  Future<List<Shelter>> getAllShelterList({int limit, int offset, String? searchRequest});
+  Future<Result<Failure, List<Shelter>>> getAllShelterList({int limit, int offset, String? searchRequest});
 }

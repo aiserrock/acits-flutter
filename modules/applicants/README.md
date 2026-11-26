@@ -33,5 +33,5 @@ staff search.
   the app translation bundle), same pattern as `modules/auth` / `modules/animals`.
 - Shared widgets (`FormEditCard`/`EditCardData`, `LoaderHolderWidget`,
   `ErrorHolderWidget`) come from `package:ui_kit/acits_ui_kit.dart`; `DataState`/
-  `DataStateBuilder` from `base`; `Applicant`/`Curator`/`MessagedException`
+  `DataStateBuilder` from `base`; `Applicant`/`Curator`
   from `core/domain`.

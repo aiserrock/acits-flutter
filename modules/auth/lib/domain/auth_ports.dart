@@ -1,3 +1,5 @@
+import 'package:util/util.dart';
+
 /// Порт открытия debug-экрана из формы логина (long-press по кнопке входа).
 /// Приложение реализует его своим `DebugService` (no-op в проде).
 abstract interface class AuthDebugHook {
@@ -22,7 +24,7 @@ abstract interface class AuthConfigInitializer {
   bool get isFirstLaunch;
 
   /// Загрузить конфиг для выбранного приюта [currentShelterId].
-  Future<void> initConfig({int? currentShelterId});
+  Future<Result<Failure, void>> initConfig({int? currentShelterId});
 
   /// Пометить, что онбординг пройден (первый запуск завершён).
   void setFirstLaunch();

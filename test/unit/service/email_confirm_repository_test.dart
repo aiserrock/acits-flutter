@@ -1,7 +1,7 @@
-import 'package:core/core.dart';
 import 'package:app_services/app_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:util/util.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockDio extends Mock implements Dio {}
@@ -32,7 +32,7 @@ void main() {
     const trustedLink = 'https://dev.acits.ru/api/v1/users/verify-email/abc123?token=xyz';
 
     test('trusted https .acits.ru link with verify-email path calls getUri once', () async {
-      await repository.confirmEmail(trustedLink);
+      expect((await repository.confirmEmail(trustedLink)).isOk, isTrue);
 
       verify(() => dio.getUri<dynamic>(any(), options: any(named: 'options'))).called(1);
     });
@@ -43,53 +43,53 @@ void main() {
       verify(() => dio.getUri<dynamic>(any(), options: any(named: 'options'))).called(1);
     });
 
-    test('untrusted host throws and never calls dio', () async {
-      await expectLater(
-        repository.confirmEmail('https://evil.test/api/v1/users/verify-email/token'),
-        throwsA(isA<EmailConfirmException>()),
+    test('untrusted host is rejected and never calls dio', () async {
+      expect(
+        (await repository.confirmEmail('https://evil.test/api/v1/users/verify-email/token')).failureOrNull,
+        const EmailLinkRejected(),
       );
 
       verifyNever(() => dio.getUri<dynamic>(any()));
     });
 
     test('host that only suffix-matches loosely is rejected (e.g. acits.ru.evil.com)', () async {
-      await expectLater(
-        repository.confirmEmail('https://acits.ru.evil.com/api/v1/users/verify-email/token'),
-        throwsA(isA<EmailConfirmException>()),
+      expect(
+        (await repository.confirmEmail('https://acits.ru.evil.com/api/v1/users/verify-email/token')).failureOrNull,
+        const EmailLinkRejected(),
       );
 
       verifyNever(() => dio.getUri<dynamic>(any()));
     });
 
-    test('http scheme throws and never calls dio', () async {
-      await expectLater(
-        repository.confirmEmail('http://dev.acits.ru/api/v1/users/verify-email/token'),
-        throwsA(isA<EmailConfirmException>()),
+    test('http scheme is rejected and never calls dio', () async {
+      expect(
+        (await repository.confirmEmail('http://dev.acits.ru/api/v1/users/verify-email/token')).failureOrNull,
+        const EmailLinkRejected(),
       );
 
       verifyNever(() => dio.getUri<dynamic>(any()));
     });
 
-    test('missing verify-email path segment throws and never calls dio', () async {
-      await expectLater(
-        repository.confirmEmail('https://dev.acits.ru/api/v1/something-else/'),
-        throwsA(isA<EmailConfirmException>()),
+    test('missing verify-email path segment is rejected and never calls dio', () async {
+      expect(
+        (await repository.confirmEmail('https://dev.acits.ru/api/v1/something-else/')).failureOrNull,
+        const EmailLinkRejected(),
       );
 
       verifyNever(() => dio.getUri<dynamic>(any()));
     });
 
-    test('link without authority (relative) throws and never calls dio', () async {
-      await expectLater(
-        repository.confirmEmail('/api/v1/users/verify-email/token'),
-        throwsA(isA<EmailConfirmException>()),
+    test('link without authority (relative) is rejected and never calls dio', () async {
+      expect(
+        (await repository.confirmEmail('/api/v1/users/verify-email/token')).failureOrNull,
+        const EmailLinkRejected(),
       );
 
       verifyNever(() => dio.getUri<dynamic>(any()));
     });
 
-    test('empty string throws and never calls dio', () async {
-      await expectLater(repository.confirmEmail(''), throwsA(isA<EmailConfirmException>()));
+    test('empty string is rejected and never calls dio', () async {
+      expect((await repository.confirmEmail('')).failureOrNull, const EmailLinkRejected());
 
       verifyNever(() => dio.getUri<dynamic>(any()));
     });

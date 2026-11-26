@@ -1,4 +1,5 @@
-import 'package:core/domain.dart' show Shelter, MessagedException;
+import 'package:core/domain.dart' show Shelter;
+import 'package:util/util.dart' show Failure, NoInternet, ServerFailure, Timeout;
 import 'package:ui_kit/ui_kit.dart';
 import 'package:localization/localization.dart';
 import 'package:collection/collection.dart';
@@ -341,17 +342,10 @@ class RegistrationSubmitBtn extends StatelessWidget {
     }
 
     final navigator = Navigator.of(context);
-    try {
-      final bool success;
-      if (state.tabIndex == 0) {
-        success = await cubit.submitAdmin(forms.buildAdmin());
-      } else {
-        success = await cubit.submitCustomer(forms.buildCustomer(shelter: state.shelter, role: state.role));
-      }
-      if (success) _onSuccess(navigator);
-    } catch (e) {
-      _showSnack(forms, e is MessagedException ? e.errorMessage() : e.toString());
-    }
+    final result = state.tabIndex == 0
+        ? await cubit.submitAdmin(forms.buildAdmin())
+        : await cubit.submitCustomer(forms.buildCustomer(shelter: state.shelter, role: state.role));
+    result?.fold((failure) => _showSnack(forms, failure.registrationMessage()), (_) => _onSuccess(navigator));
   }
 
   void _onSuccess(NavigatorState navigator) {
@@ -724,12 +718,12 @@ extension CustomerRoleX on CustomerRole {
   String get value => this == CustomerRole.employer ? LocaleKeys.regEmployee.tr() : LocaleKeys.regGuest.tr();
 }
 
-extension _MessagedExceptionX on MessagedException {
-  String errorMessage() {
-    final msg = message;
-    if (msg != null) return msg;
-    final errMsg = error;
-    if (errMsg is String) return errMsg;
-    return LocaleKeys.errorDefaultMsg.tr();
-  }
+extension _RegistrationFailureX on Failure {
+  /// Отказ 4xx несёт объяснение сервера (какое поле не прошло) — показываем его.
+  String registrationMessage() => switch (this) {
+    ServerFailure(:final note?) when note.isNotEmpty => note,
+    NoInternet() => LocaleKeys.errorInternetFailMsg.tr(),
+    Timeout() => LocaleKeys.errorTimeoutFailMsg.tr(),
+    _ => LocaleKeys.errorDefaultMsg.tr(),
+  };
 }

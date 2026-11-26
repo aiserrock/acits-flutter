@@ -54,7 +54,8 @@ class ConfigServicePrescriptionTypeLabels implements PrescriptionTypeLabels {
   @override
   Future<void> ensureLoaded() async {
     if (_configService.typeValues == null) {
-      await _configService.getTypeValues();
+      // Вызывается из репозитория внутри guard(): Failure пробрасываем как есть.
+      (await _configService.getTypeValues()).fold((failure) => throw failure, (_) {});
     }
   }
 }

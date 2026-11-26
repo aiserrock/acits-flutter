@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:util/util.dart';
-import 'package:core/domain.dart' show MessagedException;
 import 'package:animals/animals.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
@@ -185,7 +184,7 @@ class PhotoGalleryCubit extends Cubit<PhotoGalleryState> {
       );
     } catch (e, s) {
       Log.error('PhotoGalleryCubit.submit failed', e, s);
-      safeEmit(state.copyWith(data: DataState.error(MessagedException(error: e))));
+      safeEmit(state.copyWith(data: DataState.error(Failure.from(e))));
       return false;
     }
   }

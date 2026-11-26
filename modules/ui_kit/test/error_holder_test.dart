@@ -13,7 +13,7 @@ import 'package:util/util.dart' as domain;
 /// different failures resolve to DIFFERENT keys, which is exactly the property
 /// that regressed.
 void main() {
-  Future<void> pump(WidgetTester tester, Object error) async {
+  Future<void> pump(WidgetTester tester, domain.Failure error) async {
     // The stub sizes its illustration off the viewport; the 800x600 default
     // leaves the column short and overflows. Give it a phone-sized screen.
     tester.view.physicalSize = const Size(1080, 2400);

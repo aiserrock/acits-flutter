@@ -52,7 +52,7 @@ void main() {
     ).thenAnswer((_) async => const [AttributeDto(id: 1, name: 'sex', isRequired: true)]);
 
     final first = await service.getAnimalAttr();
-    expect(first.single.name, 'sex');
+    expect(first.valueOrNull?.single.name, 'sex');
     expect(service.animalAttributes, isNotNull);
 
     // Second call for the same shelter is served from cache.

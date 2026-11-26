@@ -45,5 +45,4 @@ App → module (downward) is allowed; those consumers import from
 - Shared widgets (`FormEditCard`/`EditCardData`, `VisibleItem`,
   `LoaderHolderWidget`, `ErrorHolderWidget`, `ShimmerNetworkImage`,
   `bsSelectorActions`, `PrimaryButton`) come from `package:ui_kit/acits_ui_kit.dart`;
-  `DataState` from `base`; `UrlCorsProxy` from `base`;
-  `MessagedException` from `core/domain`.
+  `DataState` from `base`; `UrlCorsProxy` from `base`.

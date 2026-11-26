@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Единая модель ошибок: сервисы сессии и конфигурации (`AuthService`,
+  `ConfigService`, подтверждение e-mail) возвращают `Result<Failure, T>` вместо
+  исключений, `DataState.error` принимает только `Failure`, а `DioException`
+  больше не выходит за data-слой. Удалены `MessagedException`,
+  `NotAuthorizedException`, `EmailConfirmException`; у `ui_kit` и `auth` убрана
+  зависимость от `dio`.
+
 - Разорван цикл пакетов `di ↔ app_services ↔ shell`: пакет `di` теперь владеет
   только экземпляром `getIt` и ни от чего внутреннего не зависит, а prod-композиция
   (`@InjectableInit`) переехала в приложение — `lib/di/`. Граф пакетов проверяется

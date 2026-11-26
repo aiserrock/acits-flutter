@@ -40,43 +40,28 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     safeEmit(state.copyWith(shelter: shelter));
   }
 
-  /// Зарегистрировать администратора приюта.
-  ///
-  /// Возвращает `true` при успехе, `false` — при ошибке (виджет показывает
-  /// snackbar). Бросает исключение наружу для показа сообщения.
-  Future<bool> submitAdmin(AdminRegistrationInput admin) async {
-    if (state.submitting) return false;
-    Log.debug('RegistrationCubit.submitAdmin email=${admin.email}');
-    safeEmit(state.copyWith(submitting: true));
-    try {
-      final result = await _authService.registrationAdmin(admin);
-      Log.info('RegistrationCubit.submitAdmin ok: email=${admin.email}');
-      return result;
-    } catch (e, s) {
-      Log.error('RegistrationCubit.submitAdmin failed', e, s);
-      rethrow;
-    } finally {
-      safeEmit(state.copyWith(submitting: false));
-    }
-  }
+  /// Зарегистрировать администратора приюта. `null` — отправка уже идёт, вызов проигнорирован.
+  Future<Result<Failure, void>?> submitAdmin(AdminRegistrationInput admin) =>
+      _submit('submitAdmin', admin.email, () => _authService.registrationAdmin(admin));
 
-  /// Зарегистрировать кастомера.
-  ///
-  /// Возвращает `true` при успехе, `false` — при ошибке (виджет показывает
-  /// snackbar). Бросает исключение наружу для показа сообщения.
-  Future<bool> submitCustomer(WorkerRegistrationInput customer) async {
-    if (state.submitting) return false;
-    Log.debug('RegistrationCubit.submitCustomer email=${customer.email}');
+  /// Зарегистрировать кастомера. `null` — отправка уже идёт, вызов проигнорирован.
+  Future<Result<Failure, void>?> submitCustomer(WorkerRegistrationInput customer) =>
+      _submit('submitCustomer', customer.email, () => _authService.registrationCustomer(customer));
+
+  Future<Result<Failure, void>?> _submit(
+    String action,
+    String email,
+    Future<Result<Failure, void>> Function() request,
+  ) async {
+    if (state.submitting) return null;
+    Log.debug('RegistrationCubit.$action email=$email');
     safeEmit(state.copyWith(submitting: true));
-    try {
-      final result = await _authService.registrationCustomer(customer);
-      Log.info('RegistrationCubit.submitCustomer ok: email=${customer.email}');
-      return result;
-    } catch (e, s) {
-      Log.error('RegistrationCubit.submitCustomer failed', e, s);
-      rethrow;
-    } finally {
-      safeEmit(state.copyWith(submitting: false));
-    }
+    final result = await request();
+    result.fold(
+      (failure) => Log.error('RegistrationCubit.$action failed: $failure'),
+      (_) => Log.info('RegistrationCubit.$action ok: email=$email'),
+    );
+    safeEmit(state.copyWith(submitting: false));
+    return result;
   }
 }

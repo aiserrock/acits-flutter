@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:core/domain.dart' show Shelter;
+import 'package:core/domain.dart' show Failure, Result, Shelter;
 import 'package:animals/animals.dart' show AnimalRepository, CurrentShelterProvider;
 import 'package:applicants/applicants.dart' show StaffService;
 import 'package:injectable/injectable.dart';
@@ -82,6 +82,6 @@ class AuthServiceMediaShelter implements MediaShelterProvider {
   int? get currentShelterId => _authService.currentShelterId;
 
   @override
-  Future<List<Shelter>> getAllShelterList({int limit = 25, int offset = 0, String? searchRequest}) =>
+  Future<Result<Failure, List<Shelter>>> getAllShelterList({int limit = 25, int offset = 0, String? searchRequest}) =>
       _authService.getAllShelterList(limit: limit, offset: offset, searchRequest: searchRequest);
 }

@@ -85,8 +85,7 @@ class PrescriptionRepositoryImpl implements PrescriptionRepository {
     final id = prescription.id;
     Log.debug('Update prescription: id=$id');
     return _guard(() async {
-      // Без id обновлять нечего — guard превратит это в UnknownFailure, экран
-      // покажет ошибку (раньше был MessagedException).
+      // Без id обновлять нечего — guard превратит это в UnknownFailure, экран покажет ошибку.
       if (id == null) throw StateError('Prescription id is required for update');
       final dto = await _port.update(id, _toWriteDto(prescription), shelterId: _currentShelterId);
       final model = _mapPrescription(dto);

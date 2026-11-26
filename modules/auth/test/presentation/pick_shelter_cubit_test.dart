@@ -18,6 +18,7 @@ void main() {
   });
 
   const shelters = [Shelter(id: 1, name: 'Alpha'), Shelter(id: 2, name: 'Beta')];
+  const role = CurrentShelterRole(currentShelterId: 1, role: 'ADMIN', canEdit: true, canDelete: true);
 
   PickShelterCubit build({required bool autoSelectSingle, List<Shelter>? shelterList}) => PickShelterCubit(
     authService: auth,
@@ -43,8 +44,8 @@ void main() {
   group('PickShelterCubit — pickShelter', () {
     test('applies shelter + config and returns true on success', () async {
       when(() => auth.shelterList).thenReturn(const []);
-      when(() => auth.setCurrentShelter(1)).thenAnswer((_) async {});
-      when(() => config.initConfig(currentShelterId: 1)).thenAnswer((_) async {});
+      when(() => auth.setCurrentShelter(1)).thenAnswer((_) async => Ok(role));
+      when(() => config.initConfig(currentShelterId: 1)).thenAnswer((_) async => const Ok(null));
 
       final cubit = build(autoSelectSingle: false, shelterList: shelters);
       final ok = await cubit.pickShelter(0);
@@ -56,13 +57,14 @@ void main() {
 
     test('returns false and emits error status when apply fails', () async {
       when(() => auth.shelterList).thenReturn(const []);
-      when(() => auth.setCurrentShelter(1)).thenThrow(MessagedException(message: 'boom'));
+      when(() => auth.setCurrentShelter(1)).thenAnswer((_) async => const Err(NoInternet()));
 
       final cubit = build(autoSelectSingle: false, shelterList: shelters);
       final ok = await cubit.pickShelter(0);
 
       expect(ok, isFalse);
-      expect(cubit.state.status, isA<DataError<Object>>());
+      expect(cubit.state.status, const DataError<Object>(NoInternet()));
+      verifyNever(() => config.initConfig(currentShelterId: any(named: 'currentShelterId')));
     });
 
     test('out-of-range index is a no-op', () async {
@@ -76,8 +78,8 @@ void main() {
   group('PickShelterCubit — maybeAutoSelectSingle', () {
     test('auto-selects when exactly one shelter and flag on', () async {
       when(() => auth.shelterList).thenReturn(const []);
-      when(() => auth.setCurrentShelter(1)).thenAnswer((_) async {});
-      when(() => config.initConfig(currentShelterId: 1)).thenAnswer((_) async {});
+      when(() => auth.setCurrentShelter(1)).thenAnswer((_) async => Ok(role));
+      when(() => config.initConfig(currentShelterId: 1)).thenAnswer((_) async => const Ok(null));
 
       final cubit = build(autoSelectSingle: true, shelterList: const [Shelter(id: 1, name: 'Solo')]);
       expect(await cubit.maybeAutoSelectSingle(), isTrue);

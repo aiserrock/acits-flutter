@@ -1,8 +1,6 @@
 import 'package:util/util.dart';
-import 'package:core/domain.dart' show EmailConfirmException;
 import 'package:localization/localization.dart';
 import 'package:ui_kit/ui_kit.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,7 +63,7 @@ class _EmailConfirmationView extends StatelessWidget {
                   onPressed: Navigator.of(context).pop,
                 ),
                 errorBuilder: (context, error) {
-                  final isReject = error is DioException && error.error is EmailConfirmException;
+                  final isReject = error is EmailLinkRejected;
                   return ErrorHolderWidget(
                     title: isReject ? LocaleKeys.regRegisterRejectTitle.tr() : null,
                     message: isReject ? LocaleKeys.regRegisterRejectMsg.tr() : null,

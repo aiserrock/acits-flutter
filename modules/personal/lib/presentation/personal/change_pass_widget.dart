@@ -129,10 +129,8 @@ class _ChangePassViewState extends State<_ChangePassView> {
 
     final state = cubit.state;
     final rawError = state is DataError<void> ? state.error : null;
-    // Раньше сюда попадал MessagedException с телом ответа сервера; теперь —
-    // типизированный Failure. Показываем ту же пару «префикс + деталь»: деталь
-    // несёт только ServerFailure (note из ответа), остальные варианты дают
-    // голый префикс — как и прежде при отсутствующем теле ответа.
+    // Показываем пару «префикс + деталь»: деталь несёт только ServerFailure
+    // (note из ответа сервера), остальные варианты дают голый префикс.
     final detail = rawError is ServerFailure ? (rawError.note ?? '') : '';
     messenger.showSnackBar(SnackBar(content: Text('${LocaleKeys.personalChangeErrorMsg.tr()}$detail')));
   }

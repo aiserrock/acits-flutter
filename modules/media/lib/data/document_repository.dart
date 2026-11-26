@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:core/domain.dart' show MessagedException;
 import 'package:animals/animals.dart';
 
 import 'package:media/util/util.dart';
@@ -28,7 +27,7 @@ class DocumentRepository {
     return result.fold(
       (failure) {
         Log.warning('Fetch animal doc failed: animalId=$animalId, error=$failure');
-        throw MessagedException(error: failure.toString());
+        throw failure;
       },
       (bytes) {
         Log.info('Animal doc fetched: animalId=$animalId (${bytes.lengthInBytes}B)');

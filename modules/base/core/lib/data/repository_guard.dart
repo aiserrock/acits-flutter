@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:util/util.dart';
 
 /// Runs a repository body and converts anything it throws into a typed
-/// [Failure], so repositories can return `Result` without each one restating
+/// [Failure] (a [Failure] thrown by a port bridge passes through unchanged), so repositories can return `Result` without each one restating
 /// the same dio-exception mapping.
 ///
 /// Belongs to the data layer by contract: it is the seam where transport
@@ -18,6 +18,9 @@ Future<Result<Failure, T>> guard<T>(
 }) async {
   try {
     return Ok(await body());
+  } on Failure catch (failure) {
+    // Уже типизированная ошибка (порт-мост пробросил Failure) — не огрубляем.
+    return Err(failure);
   } on DioException catch (e, s) {
     onError?.call(e, s);
     return Err(mapDioException(e));

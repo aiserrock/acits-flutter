@@ -131,10 +131,15 @@ class DrugFetchAdapter extends PagingFetchAdapter<Drug> {
 }
 
 class ShelterFetchAdapter extends PagingFetchAdapter<Shelter> {
-  ShelterFetchAdapter(SearchDeps deps) : super(deps.shelterProvider.getAllShelterList);
+  ShelterFetchAdapter(this._deps) : super(_unusedFetcher);
+
+  final SearchDeps _deps;
+
+  static Future<dynamic> _unusedFetcher({int limit = 25, int offset = 0, String? searchRequest}) async => null;
 
   @override
   Future<List<Shelter>> fetch({required int limit, int offset = 0, String? search}) async {
-    return fetcher.call(limit: limit, offset: offset, searchRequest: search).then((value) => value ?? <Shelter>[]);
+    final result = await _deps.shelterProvider.getAllShelterList(limit: limit, offset: offset, searchRequest: search);
+    return result.fold((failure) => throw failure, (shelters) => shelters);
   }
 }

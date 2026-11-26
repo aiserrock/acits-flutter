@@ -20,8 +20,8 @@ void main() {
     });
 
     test('error', () {
-      final err = Exception('boom');
-      final state = DataState<int>.error(err);
+      const err = NoInternet();
+      const state = DataState<int>.error(err);
       expect(state.hasError, isTrue);
       expect(state.isContent, isFalse);
       expect(state.isLoading, isFalse);

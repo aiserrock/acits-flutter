@@ -17,7 +17,7 @@ void main() {
 
   group('EmailConfirmCubit', () {
     test('constructor triggers confirm -> emits [loading, content(null)] on success', () async {
-      when(() => authService.confirmEmail(any())).thenAnswer((_) async {});
+      when(() => authService.confirmEmail(any())).thenAnswer((_) async => const Ok(null));
       final emitted = <DataState<void>>[];
       final cubit = build();
       final sub = cubit.stream.listen(emitted.add);
@@ -33,19 +33,18 @@ void main() {
       await cubit.close();
     });
 
-    test('ends in error state when confirmEmail throws', () async {
-      when(() => authService.confirmEmail(any())).thenThrow(Exception('boom'));
+    test('ends in error state carrying the failure when confirmEmail fails', () async {
+      when(() => authService.confirmEmail(any())).thenAnswer((_) async => const Err(EmailLinkRejected()));
       final cubit = build();
-      // Исключение пробрасывается синхронно и ловится в конструкторе.
       await Future<void>.delayed(Duration.zero);
 
-      expect(cubit.state, isA<DataError<void>>());
+      expect(cubit.state, const DataError<void>(EmailLinkRejected()));
       verify(() => authService.confirmEmail(link)).called(1);
       await cubit.close();
     });
 
     test('retry() re-runs confirmEmail and re-emits [loading, content(null)]', () async {
-      when(() => authService.confirmEmail(any())).thenAnswer((_) async {});
+      when(() => authService.confirmEmail(any())).thenAnswer((_) async => const Ok(null));
       final cubit = build();
       await Future<void>.delayed(Duration.zero);
       expect(cubit.state, const DataContent<void>(null));

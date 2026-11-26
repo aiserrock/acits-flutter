@@ -19,7 +19,7 @@ abstract interface class AuthSessionApi {
   List<Shelter> get shelterList;
 
   /// Войти по логину/паролю. Бросает доменное исключение при ошибке.
-  Future<void> login(String? login, String? pass);
+  Future<Result<Failure, void>> login(String? login, String? pass);
 
   /// Попробовать восстановить сессию из прошлого refresh-токена.
   Future<bool> tryRefreshLastAuth();
@@ -28,17 +28,17 @@ abstract interface class AuthSessionApi {
   Future<bool> restoreShelter();
 
   /// Загрузить список приютов пользователя.
-  Future<List<Shelter>> getShelterList();
+  Future<Result<Failure, List<Shelter>>> getShelterList();
 
   /// Установить текущий приют по [shelterId].
-  Future<void> setCurrentShelter(int shelterId);
+  Future<Result<Failure, CurrentShelterRole>> setCurrentShelter(int shelterId);
 
   /// Зарегистрировать нового администратора приюта.
-  Future<bool> registrationAdmin(AdminRegistrationInput input);
+  Future<Result<Failure, void>> registrationAdmin(AdminRegistrationInput input);
 
   /// Зарегистрировать нового кастомера (сотрудник/гость).
-  Future<bool> registrationCustomer(WorkerRegistrationInput input);
+  Future<Result<Failure, void>> registrationCustomer(WorkerRegistrationInput input);
 
   /// Подтвердить электронную почту по ссылке [confirmLink].
-  Future<void> confirmEmail(String confirmLink);
+  Future<Result<Failure, void>> confirmEmail(String confirmLink);
 }

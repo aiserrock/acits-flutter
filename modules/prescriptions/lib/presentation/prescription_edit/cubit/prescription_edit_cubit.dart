@@ -179,7 +179,7 @@ class PrescriptionEditCubit extends Cubit<PrescriptionEditState> {
     final ref = await _animalLoader.loadById(animalId);
     if (ref == null) {
       Log.error('PrescriptionEditCubit.setEditedState failed: animal load failed id=$animalId');
-      safeEmit(state.copyWith(screen: const DataState.error('animal load failed')));
+      safeEmit(state.copyWith(screen: const DataState.error(UnknownFailure())));
       return null;
     }
 

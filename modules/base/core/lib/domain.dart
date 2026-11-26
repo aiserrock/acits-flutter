@@ -7,7 +7,6 @@ library;
 export 'domain/entity/animal.dart';
 export 'domain/entity/animal_attribute_definition.dart';
 export 'domain/entity/animal_sex.dart';
-export 'domain/exception/exception.dart';
 export 'domain/entity/applicant.dart';
 export 'domain/entity/current_shelter_role.dart';
 export 'domain/entity/curator.dart';

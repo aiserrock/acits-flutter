@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:core/domain.dart' show Shelter;
 import 'package:material_ui/material_ui.dart';
 import 'package:lottie/lottie.dart';
 
@@ -109,11 +108,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Приют не запомнен/недоступен — уходим на выбор приюта.
     Log.info('Splash: refresh ok, no shelter → pick shelter');
-    final List<Shelter> list;
-    try {
-      list = await auth.getShelterList();
-    } catch (e, s) {
-      Log.error('Splash: shelter list load failed', e, s);
+    final list = (await auth.getShelterList()).valueOrNull;
+    if (list == null) {
+      Log.error('Splash: shelter list load failed');
       if (!mounted) return;
       await _ensureMinDuration();
       if (!mounted) return;

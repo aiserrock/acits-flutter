@@ -25,13 +25,13 @@ class SearchSpecState extends Equatable {
   final bool isPaging;
 
   /// Ошибка последней догрузки страницы (null — ошибки нет).
-  final Object? pagingError;
+  final Failure? pagingError;
 
   SearchSpecState copyWith({
     DataState<List<AnimalSpecies>>? data,
     int? offset,
     bool? isPaging,
-    Object? Function()? pagingError,
+    Failure? Function()? pagingError,
   }) {
     return SearchSpecState(
       data: data ?? this.data,

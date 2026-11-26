@@ -1,6 +1,6 @@
 import 'package:core/api.dart';
 import 'package:auth/auth.dart' show AuthConfigInitializer;
-import 'package:dio/dio.dart';
+import 'package:core/data.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:injectable/injectable.dart';
 
@@ -36,17 +36,19 @@ class ConfigService implements AuthConfigInitializer {
   List<AnimalAttributeDefinition>? get animalAttributes => _animalAttributes;
 
   @override
-  Future<void> initConfig({int? currentShelterId}) async {
-    await Future.wait([
+  Future<Result<Failure, void>> initConfig({int? currentShelterId}) async {
+    final results = await Future.wait<Result<Failure, Object?>>([
       getTypeValues(currentShelterId: currentShelterId),
       getAnimalAttr(currentShelterId: currentShelterId),
     ]);
+    final failure = results.map((r) => r.failureOrNull).nonNulls.firstOrNull;
+    return failure == null ? const Ok(null) : Err(failure);
   }
 
-  Future<Map<String, dynamic>?> getTypeValues({int? currentShelterId}) async {
+  Future<Result<Failure, Map<String, dynamic>?>> getTypeValues({int? currentShelterId}) {
     final shelterId = currentShelterId ?? _authService.currentShelterId;
     Log.debug('Get type values: shelterId=$shelterId');
-    try {
+    return _guard('Get type values', () async {
       final result = await _port.valuesForSelection(shelterId: shelterId);
       _typeValues = Map<String, dynamic>.from(result.values);
       // Инвалидируем кеши имён — они лениво перечитают новые значения.
@@ -54,29 +56,25 @@ class ConfigService implements AuthConfigInitializer {
       _animalStatusNames.clear();
       Log.info('Type values loaded: keys=${_typeValues?.length ?? 0}');
       return _typeValues;
-    } on DioException catch (e) {
-      Log.warning('Get type values failed: ${_errorText(e)}');
-      throw MessagedException(error: _errorText(e));
-    }
+    });
   }
 
-  Future<List<AnimalAttributeDefinition>> getAnimalAttr({int? currentShelterId}) async {
+  Future<Result<Failure, List<AnimalAttributeDefinition>>> getAnimalAttr({int? currentShelterId}) async {
     final shelterId = currentShelterId ?? _authService.currentShelterId;
     Log.debug('Get animal attributes: shelterId=$shelterId');
-    if (_animalAttributes != null && _animalAttributesShelterId == shelterId) {
-      Log.debug('Animal attributes returned from cache: count=${_animalAttributes!.length}');
-      return _animalAttributes!;
+    final cached = _animalAttributes;
+    if (cached != null && _animalAttributesShelterId == shelterId) {
+      Log.debug('Animal attributes returned from cache: count=${cached.length}');
+      return Ok(cached);
     }
-    try {
+    return _guard('Get animal attributes', () async {
       final result = await _port.animalAttributes(shelterId: shelterId);
-      _animalAttributes = result.map(_toDefinition).toList(growable: false);
+      final attributes = result.map(_toDefinition).toList(growable: false);
+      _animalAttributes = attributes;
       _animalAttributesShelterId = shelterId;
-      Log.info('Animal attributes loaded: count=${_animalAttributes!.length}');
-      return _animalAttributes!;
-    } on DioException catch (e) {
-      Log.warning('Get animal attributes failed: ${_errorText(e)}');
-      throw MessagedException(error: _errorText(e));
-    }
+      Log.info('Animal attributes loaded: count=${attributes.length}');
+      return attributes;
+    });
   }
 
   static AnimalAttributeDefinition _toDefinition(AttributeDto d) =>
@@ -132,5 +130,7 @@ class ConfigService implements AuthConfigInitializer {
   /// Текущая локаль приложения в формате ru-RU
   String get local => Intl.getCurrentLocale().replaceAll('_', '-');
 
-  String _errorText(DioException e) => e.response?.data?.toString() ?? e.message ?? e.toString();
+  /// Транспортные исключения заканчиваются здесь: наружу уходит [Failure].
+  Future<Result<Failure, T>> _guard<T>(String action, Future<T> Function() body) =>
+      guard(body, onError: (e, s) => Log.warning('$action failed', e, s));
 }

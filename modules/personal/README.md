@@ -47,4 +47,4 @@ from the barrel.
 - Shared widgets (`FormEditCard`/`EditCardData`, `LoaderHolderWidget`,
   `ErrorHolderWidget`, `bsSelectorActions`, `PrimaryButton`, `context.appColors`)
   come from `package:ui_kit/acits_ui_kit.dart`; `DataState`/`DataStateBuilder` from
-  `base`; `MessagedException` from `core/domain`.
+  `base`.
