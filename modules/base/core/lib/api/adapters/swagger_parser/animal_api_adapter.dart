@@ -97,46 +97,19 @@ class AnimalApiAdapter implements AnimalApiPort {
     required List<int> retainImageIds,
     int? shelterId,
   }) async {
-    // Читаем текущее животное и переписываем его целиком, меняя только фото —
-    // так сохраняются все поля (атрибуты с attrId, вид, даты, куратор/заявитель),
-    // которые плоская доменная сущность восстановить не может. Зеркалит прежний
-    // chopper-путь `animal.body.write.copyWith(images, validImages)`.
-    final current = await _client.v1AnimalsRetrieve(id: id.toString(), xCurrentShelter: shelterId);
-    final body = _writeFromRead(
-      current,
-      images: newImages.map(_mapImageWrite).toList(growable: false),
-      validImages: retainImageIds,
+    // PATCH with the photo fields only (PatchedAnimalWrite has no required
+    // fields): the server keeps every other field, so there is no read-modify-
+    // write race with a concurrent edit of the animal and no full body to send.
+    final response = await _dio.patch<Map<String, dynamic>>(
+      '/api/v1/animals/$id/',
+      data: <String, dynamic>{
+        'images': newImages.map((i) => _mapImageWrite(i).toJson()).toList(growable: false),
+        'valid_images': retainImageIds,
+      },
+      options: Options(headers: shelterId == null ? null : {'x-current-shelter': shelterId}),
     );
-    final updated = await _client.v1AnimalsUpdate(id: id.toString(), body: body, xCurrentShelter: shelterId);
-    return _mapAnimal(updated);
+    return _mapAnimal(AnimalRead.fromJson(response.data ?? const <String, dynamic>{}));
   }
-
-  /// Собирает [AnimalWrite] из прочитанного [AnimalRead], подставляя новые
-  /// [images]/[validImages]. Прочие поля переносятся 1:1.
-  AnimalWrite _writeFromRead(AnimalRead a, {required List<AnimalImageWrite> images, required List<int> validImages}) =>
-      AnimalWrite(
-        name: a.name,
-        images: images,
-        validImages: validImages,
-        specId: a.spec?.id ?? 0,
-        status: a.status,
-        dateJoined: a.dateJoined ?? _epoch,
-        birthDate: a.birthDate,
-        deathDate: a.deathDate,
-        deathReason: a.deathReason,
-        defaultImageId: a.defaultImageId,
-        placeOfCatch: a.placeOfCatch ?? '',
-        placeOfRelease: a.placeOfRelease,
-        dateOfChipping: a.dateOfChipping,
-        chippingCode: a.chippingCode,
-        height: a.height,
-        weight: a.weight,
-        shelter: a.shelter ?? 0,
-        curatorId: a.curator?.id,
-        applicantId: a.applicant?.id,
-        animalAttributes: a.animalAttributes ?? const [],
-        canBeShared: a.canBeShared,
-      );
 
   @override
   Future<Uint8List> getAnimalPdf({
