@@ -5,6 +5,7 @@
 // `AnimalRead` is parsed by the generated models here and mapped, field-for-
 // field, onto OUR generator-agnostic `AnimalDto`. Also proves the paginated
 // envelope is unwrapped to its `results` list.
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:core/api.dart';
@@ -81,6 +82,33 @@ class _FakeAnimalsClient implements AnimalsClient {
   @override
   dynamic noSuchMethod(Invocation invocation) =>
       throw UnimplementedError('${invocation.memberName} is not used by the read adapter');
+}
+
+/// Records every request and answers each with [body] as JSON.
+class _JsonHttpAdapter implements HttpClientAdapter {
+  _JsonHttpAdapter(this.body);
+
+  final Map<String, dynamic> body;
+  final requests = <RequestOptions>[];
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    requests.add(options);
+    return ResponseBody.fromString(
+      jsonEncode(body),
+      200,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
 }
 
 /// Fake Dio HTTP adapter: returns fixed [body] bytes and records the last
@@ -257,11 +285,12 @@ void main() {
     });
   });
 
-  group('AnimalApiAdapter — updatePhotos (read→write echo)', () {
-    test('re-writes the animal preserving all fields, swapping only images/valid_images', () async {
-      final single = AnimalRead.fromJson(fullAnimalJson());
-      final client = _FakeAnimalsClient(single: single);
-      final adapter = AnimalApiAdapter(client, Dio());
+  group('AnimalApiAdapter — updatePhotos (PATCH)', () {
+    test('sends only images and valid_images in one PATCH and maps the answer', () async {
+      final http = _JsonHttpAdapter(fullAnimalJson());
+      final dio = Dio(BaseOptions(baseUrl: 'https://api.example.test'))..httpClientAdapter = http;
+      final client = _FakeAnimalsClient(single: AnimalRead.fromJson(fullAnimalJson()));
+      final adapter = AnimalApiAdapter(client, dio);
 
       final dto = await adapter.updatePhotos(
         501,
@@ -270,26 +299,19 @@ void main() {
         shelterId: 50,
       );
 
-      // GET then PUT both hit id 501 with the shelter header.
-      expect(client.lastId, '501');
-      expect(client.lastShelterId, 50);
-
-      final body = client.lastUpdateBody!;
-      // Only images change.
-      expect(body.images, hasLength(1));
-      expect(body.images!.single.name, 'new.png');
-      expect(body.images!.single.image, 'BASE64DATA');
-      expect(body.validImages, [9001]);
-      // Every other field is carried over from the read unchanged.
-      expect(body.name, 'Барсик');
-      expect(body.specId, 12);
-      expect(body.shelter, 50);
-      expect(body.placeOfCatch, 'ул. Пушкина, д. 10');
-      expect(body.chippingCode, '643098100012345');
-      expect(body.curatorId, 77);
-      expect(body.applicantId, 88);
-      expect(body.animalAttributes, hasLength(2));
-      // Returned entity is mapped from the (echoed) read.
+      expect(http.requests, hasLength(1), reason: 'no read-modify-write');
+      final request = http.requests.single;
+      expect(request.method, 'PATCH');
+      expect(request.path, '/api/v1/animals/501/');
+      expect(request.headers['x-current-shelter'], 50);
+      final body = request.data as Map<String, dynamic>;
+      expect(body.keys, unorderedEquals(['images', 'valid_images']));
+      expect(body['valid_images'], [9001]);
+      final image = (body['images'] as List).single as Map<String, dynamic>;
+      expect(image['name'], 'new.png');
+      expect(image['image'], 'BASE64DATA');
+      // The generated client is not used for the write anymore.
+      expect(client.lastUpdateBody, isNull);
       expect(dto.id, 501);
     });
   });
