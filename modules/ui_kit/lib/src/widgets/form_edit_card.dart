@@ -113,5 +113,5 @@ class EditCardData {
   final String? initValue;
   final int? maxLength;
   final bool isObscure;
-  final Function(String)? onChanged;
+  final void Function(String)? onChanged;
 }

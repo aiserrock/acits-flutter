@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:util/util.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:localization/localization.dart';
@@ -124,7 +126,7 @@ class _AnimalsViewState extends State<AnimalsView> {
   Future<void> _create() async {
     final cubit = context.read<AnimalsCubit>();
     final isAdded = await widget.router.openCreate();
-    if (isAdded ?? false) cubit.loadAnimalList(needResetOffset: true);
+    if (isAdded ?? false) unawaited(cubit.loadAnimalList(needResetOffset: true));
   }
 
   Widget _buildFab() {

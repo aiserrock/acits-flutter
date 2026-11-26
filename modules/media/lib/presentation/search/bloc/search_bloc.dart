@@ -29,7 +29,7 @@ EventTransformer<E> _debounceRestartable<E>(Duration duration) {
 }
 
 class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
-  final PagingFetchAdapter adapter;
+  final PagingFetchAdapter<T> adapter;
   final int pageLimit;
 
   SearchBloc({required this.adapter, this.pageLimit = _defaultPageLimit}) : super(SearchState.initial()) {
@@ -51,7 +51,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
           emitter(
             state.copyWith(
               status: SearchStatus.success,
-              items: List.of(state.items)..addAll(value as List<T>),
+              items: List.of(state.items)..addAll(value),
               isReachedMax: value.length < pageLimit,
               error: null,
             ),
@@ -76,7 +76,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
           emitter(
             state.copyWith(
               status: SearchStatus.success,
-              items: value as List<T>,
+              items: value,
               isReachedMax: value.length < pageLimit,
               error: null,
             ),
@@ -102,7 +102,7 @@ class SearchBloc<T> extends Bloc<SearchEvent, SearchState<T>> {
           emitter(
             state.copyWith(
               status: SearchStatus.success,
-              items: value as List<T>,
+              items: value,
               searchRequest: event.searchRequest,
               isReachedMax: value.length < pageLimit,
               error: null,

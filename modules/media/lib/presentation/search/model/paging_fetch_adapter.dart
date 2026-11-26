@@ -35,7 +35,7 @@ class SearchDeps {
 }
 
 class SearchAdapterTypeFactoryDelegate {
-  static PagingFetchAdapter adapter(Type type, SearchDeps deps) {
+  static PagingFetchAdapter<Object> adapter(Type type, SearchDeps deps) {
     switch (type) {
       case const (AnimalListItem):
         return AnimalFetchAdapter(deps);
@@ -73,7 +73,7 @@ class SearchAdapterTypeFactoryDelegate {
 abstract class PagingFetchAdapter<R> {
   PagingFetchAdapter(this.fetcher);
 
-  final Future Function({int limit, int offset, String? searchRequest}) fetcher;
+  final Future<List<R>?> Function({int limit, int offset, String? searchRequest}) fetcher;
 
   Future<List<R>> fetch({required int limit, int offset = 0, String? search});
 }
@@ -87,7 +87,8 @@ class AnimalFetchAdapter extends PagingFetchAdapter<AnimalListItem> {
 
   AnimalRepository get _repository => _deps.animalRepository;
 
-  static Future<dynamic> _unusedFetcher({int limit = 25, int offset = 0, String? searchRequest}) async => null;
+  static Future<List<AnimalListItem>?> _unusedFetcher({int limit = 25, int offset = 0, String? searchRequest}) async =>
+      null;
 
   @override
   Future<List<AnimalListItem>> fetch({required int limit, int offset = 0, String? search}) async {
@@ -135,7 +136,7 @@ class ShelterFetchAdapter extends PagingFetchAdapter<Shelter> {
 
   final SearchDeps _deps;
 
-  static Future<dynamic> _unusedFetcher({int limit = 25, int offset = 0, String? searchRequest}) async => null;
+  static Future<List<Shelter>?> _unusedFetcher({int limit = 25, int offset = 0, String? searchRequest}) async => null;
 
   @override
   Future<List<Shelter>> fetch({required int limit, int offset = 0, String? search}) async {

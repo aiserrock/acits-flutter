@@ -172,7 +172,7 @@ class _PrescriptionCardWidgetState extends State<PrescriptionCardWidget> {
   }
 
   void _openBsActions() {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => bsSelectorActions(context, <Widget, dynamic Function()>{
         Text(

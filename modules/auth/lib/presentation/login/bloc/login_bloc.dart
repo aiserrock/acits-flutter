@@ -137,7 +137,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Log.info('LoginBloc.tryRefreshLastSession ok: refreshed=$refreshed');
     emitter(state.copyWith(status: FormzSubmissionStatus.canceled));
     if (refreshed) {
-      _pickShelter();
+      unawaited(_pickShelter());
     }
   }
 

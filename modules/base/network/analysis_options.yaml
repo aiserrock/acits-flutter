@@ -7,7 +7,12 @@ formatter:
 
 linter:
   rules:
+    unawaited_futures: true
     no_logic_in_create_state: false
 analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
   exclude:
     - build/**

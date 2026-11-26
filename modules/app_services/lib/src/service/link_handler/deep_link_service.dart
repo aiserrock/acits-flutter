@@ -26,7 +26,7 @@ class DeepLinkService implements Disposable, AuthDeepLinkHandler {
   String? _unhandledInitLink;
 
   @override
-  FutureOr onDispose() {
+  FutureOr<void> onDispose() {
     _subscription?.cancel();
   }
 

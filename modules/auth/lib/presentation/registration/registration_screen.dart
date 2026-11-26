@@ -353,7 +353,7 @@ class RegistrationSubmitBtn extends StatelessWidget {
 
   void _onSuccess(NavigatorState navigator) {
     navigator.pushReplacement(
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (_) => Scaffold(
           body: SafeArea(
             child: SuccessHolderWidget(
