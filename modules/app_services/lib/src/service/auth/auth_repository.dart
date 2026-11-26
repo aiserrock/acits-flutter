@@ -1,8 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app_services/src/log.dart';
+import 'package:app_services/src/service/storage/storage_keys.dart';
 
-const _refreshKey = 'refreshKey';
+const _refreshKey = StorageKeys.refreshToken;
 
 /// Хранилище key-value в аппаратном storage
 @injectable
