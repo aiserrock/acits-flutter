@@ -18,12 +18,12 @@ dependencies:
   bloc: ^9.2.0
   bloc_concurrency: ^0.3.0
   stream_transform: ^2.1.1
-  equatable: ^2.0.8
+  equatable: ^3.0.0
   easy_localization: ^3.0.8
   collection: ^1.19.0
   dio: ^5.9.2
   get_it: ^9.2.1
-  talker_flutter: ^5.1.16
+  talker_flutter: ^5.2.0
   flutter_svg: ^2.2.4
   pro_image_editor: ^14.29.0
   pdfx: ^2.11.0

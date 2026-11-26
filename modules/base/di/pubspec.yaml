@@ -19,7 +19,7 @@ dependencies:
   # Shared logger factory (createAppTalker) for the prod @module AppLoggerModule.
   util:
     path: ../util
-  talker_flutter: ^5.1.16
+  talker_flutter: ^5.2.0
 
   # The prod @InjectableInit references the external micro-packages + their types
   # (Environment/NoEnvOrContains from injectable, createAppRouter from shell,
