@@ -49,6 +49,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   final AuthSessionApi _authService;
+
+  /// The session API, for actions on the login screen outside the form (password recovery).
+  AuthSessionApi get authService => _authService;
   final AuthDebugHook _debugService;
   final AuthDeepLinkHandler _deepLinkService;
   final AuthRouterService _router;

@@ -10,6 +10,7 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:auth/domain/domain.dart';
 import 'package:auth/presentation/login/login.dart';
+import 'package:auth/presentation/login/view/password_reset_sheet.dart';
 
 class LoginForm extends StatelessWidget {
   LoginForm({
@@ -100,7 +101,11 @@ class LoginForm extends StatelessWidget {
           transform: Transform.translate(offset: const Offset(-16.0, 8.0)).transform,
           child: MaterialButton(
             padding: const EdgeInsets.all(16.0),
-            onPressed: () {},
+            onPressed: () => showPasswordResetSheet(
+              context,
+              auth: context.read<LoginBloc>().authService,
+              initialEmail: context.read<LoginBloc>().state.name.value,
+            ),
             child: Text(LocaleKeys.loginForgetPass.tr(), style: TextStyle(color: context.appColors.textSecondary)),
           ),
         ),

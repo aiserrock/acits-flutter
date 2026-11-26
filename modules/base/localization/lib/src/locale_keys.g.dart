@@ -217,6 +217,12 @@ abstract class  LocaleKeys {
   static const regWriteCity = 'regWriteCity';
   static const regWriteCountry = 'regWriteCountry';
   static const regWriteRegion = 'regWriteRegion';
+  static const resetPassEmailLabel = 'resetPassEmailLabel';
+  static const resetPassInvalidEmail = 'resetPassInvalidEmail';
+  static const resetPassMsg = 'resetPassMsg';
+  static const resetPassSend = 'resetPassSend';
+  static const resetPassSent = 'resetPassSent';
+  static const resetPassTitle = 'resetPassTitle';
   static const shelterSelectShelter = 'shelterSelectShelter';
   static const sortAnimalNameAsc = 'sortAnimalNameAsc';
   static const sortAnimalNameDesc = 'sortAnimalNameDesc';
