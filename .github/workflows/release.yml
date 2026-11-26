@@ -8,11 +8,20 @@ name: Release
 #   push tag v*        -> promote the build made from that commit to production:
 #                         Play staged rollout, App Store review, RuStore
 #                         publication, GitHub Release. Nothing is rebuilt.
+#   manual run, dry_run -> the same release builds (signed Android, obfuscated
+#                         iOS without signing) as artefacts, uploaded nowhere.
+#                         Checks the pipeline before store accounts exist.
 # The process, the build number formula and every secret are in doc/release.md.
 on:
   push:
     branches: ["release/**"]
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build the release artefacts without uploading to any store
+        type: boolean
+        default: true
 
 # One release run per ref, and a running release is never cancelled.
 concurrency:
@@ -48,7 +57,15 @@ jobs:
           persist-credentials: false
 
       # Fail here, before any build, with one message naming every gap.
+      # A manual run never uploads: store releases go through release/* and v*.
+      - name: Manual runs are dry runs
+        if: ${{ github.event_name == 'workflow_dispatch' && !inputs.dry_run }}
+        run: |
+          echo "Manual release runs must be dry runs; push release/* to upload." >&2
+          exit 1
+
       - name: Check required secrets
+        if: ${{ !inputs.dry_run }}
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
@@ -72,6 +89,22 @@ jobs:
             PLAY_SERVICE_ACCOUNT_JSON FIREBASE_SERVICE_ACCOUNT_JSON \
             ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8_BASE64 APPLE_TEAM_ID \
             RUSTORE_KEY_ID RUSTORE_PRIVATE_KEY
+
+      # A dry run builds only, so it needs just the build secrets.
+      - name: Check build secrets (dry run)
+        if: ${{ inputs.dry_run }}
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          GOOGLE_SERVICES_JSON_PROD: ${{ secrets.GOOGLE_SERVICES_JSON_PROD }}
+          GOOGLE_SERVICES_JSON_DEV: ${{ secrets.GOOGLE_SERVICES_JSON_DEV }}
+          GOOGLE_SERVICE_INFO_PLIST_PROD: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
+        run: |
+          tool/release/require_env.sh \
+            ANDROID_KEYSTORE_BASE64 ANDROID_STORE_PASSWORD ANDROID_KEY_PASSWORD ANDROID_KEY_ALIAS \
+            GOOGLE_SERVICES_JSON_PROD GOOGLE_SERVICES_JSON_DEV GOOGLE_SERVICE_INFO_PLIST_PROD
 
       - name: Compute version and build number
         id: version
@@ -271,6 +304,7 @@ jobs:
             --obfuscate --split-debug-info=build/symbols/prod-ios
 
       - name: Sign and export IPA
+        if: ${{ !inputs.dry_run }}
         working-directory: ios
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
@@ -278,6 +312,20 @@ jobs:
           ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: bundle exec fastlane ios build output_directory:"$GITHUB_WORKSPACE/dist"
+
+      # Without App Store credentials compile the release app unsigned, so the
+      # obfuscated Release-prod build is still checked end to end.
+      - name: Build unsigned app (dry run)
+        if: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          flutter build ios --release --no-codesign \
+            --flavor prod --target lib/main.dart \
+            --build-name="$VERSION" --build-number="$BUILD_NUMBER" \
+            --dart-define=SENTRY_DSN="$SENTRY_DSN" \
+            --obfuscate --split-debug-info=build/symbols/prod-ios
+          ditto -c -k --keepParent build/ios/iphoneos/Runner.app dist/acits-unsigned-app.zip
 
       - name: Collect symbols
         run: |
@@ -296,6 +344,7 @@ jobs:
   play-internal:
     name: Google Play (internal)
     needs: [preflight, build-android]
+    if: ${{ !inputs.dry_run }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -318,6 +367,7 @@ jobs:
   rustore-draft:
     name: RuStore (moderation)
     needs: [preflight, build-android]
+    if: ${{ !inputs.dry_run }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -338,6 +388,7 @@ jobs:
   testflight:
     name: TestFlight
     needs: [preflight, build-ios]
+    if: ${{ !inputs.dry_run }}
     runs-on: macos-latest
     timeout-minutes: 30
     steps:
@@ -362,6 +413,7 @@ jobs:
   firebase:
     name: Firebase (dev build, symbols)
     needs: [preflight, build-android]
+    if: ${{ !inputs.dry_run }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -404,6 +456,7 @@ jobs:
   ios-symbols:
     name: Crashlytics (iOS Dart symbols)
     needs: [preflight, build-ios]
+    if: ${{ !inputs.dry_run }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -427,6 +480,7 @@ jobs:
   sentry-symbols:
     name: Sentry (symbols)
     needs: [preflight, build-android]
+    if: ${{ !inputs.dry_run }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
