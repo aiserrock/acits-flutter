@@ -27,8 +27,6 @@ dependencies:
     path: ../base/core
   ui_kit:
     path: ../ui_kit
-  navigation:
-    path: ../base/navigation
 
 dev_dependencies:
   flutter_test:

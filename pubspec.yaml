@@ -50,8 +50,6 @@ dependencies:
     path: modules/base/core
   ui_kit:
     path: modules/ui_kit
-  navigation:
-    path: modules/base/navigation
 
   # DI container: owns the shared get_it instance (GetIt.instance) for the whole
   # app. The @InjectableInit bootstrap itself stays in the app (lib/di) so it can
@@ -70,31 +68,6 @@ dependencies:
   auth:
     path: modules/auth
 
-  # Feature module: applicants + curators (staff). StaffService lives here and is
-  # also consumed by the app's search paging adapter.
-  applicants:
-    path: modules/applicants
-
-  # Feature module: prescriptions + drugs. PrescriptionService + domain entities
-  # live here; consumed by the app shell (today executions), animal-detail
-  # prescriptions tab, and the search paging adapter (drug search).
-  prescriptions:
-    path: modules/prescriptions
-
-  # Feature module: personal cabinet + calendar + animal comments. PersonalService
-  # (profile) and CommentsService (animal notes) live here; consumed by the app
-  # shell/drawer, the personal screen, and the animal-detail comments tab.
-  personal:
-    path: modules/personal
-
-  # Feature module: media (photo gallery + editor, PDF doc viewer) and the
-  # generic cross-feature search/picker. Depends on animals/applicants/
-  # prescriptions for the search paging adapters and photo upload; consumed by
-  # the app router, animal-edit applicant/curator pages, and the prescriptions/
-  # auth router services.
-  media:
-    path: modules/media
-
   # App-composition services (session/config/animal, storage + client register
   # modules, port bridges, document/share platform code). Extracted from
   # lib/service so the shell + DI depend on their types without an app edge; its
@@ -111,47 +84,17 @@ dependencies:
   shell:
     path: modules/shell
 
-  app_links: ^7.0.0
-  bloc: ^9.2.0
-  bloc_concurrency: ^0.3.0
-  collection: ^1.19.0
   cupertino_icons: ^2.0.0
   dio: ^5.9.2
-  equatable: ^3.0.0
-  file_picker: ^13.4.1
   firebase_core: ^5.2.0
   flutter_bloc: ^9.1.1
-  flutter_keyboard_visibility: ^7.0.1
   flutter_secure_storage: ^11.2.0
-  flutter_slidable: ^5.2.0
-  flutter_svg: ^2.2.4
-  formz: ^0.8.0
-  pro_image_editor: ^14.29.0
   get_it: ^9.2.1
   go_router: ^18.1.4
-  image: ^4.8.0
-  image_picker: ^1.2.1
   injectable: ^3.0.0
-  intl: ^0.20.2
-  json_annotation: ^4.11.0
   lottie: ^3.3.3
-  mask_text_input_formatter: ^2.9.0
-  open_filex: ^5.0.0
-  path_provider: ^2.1.5
-  # pdf viewer (native_pdf_view was renamed to pdfx)
-  pdfx: ^2.11.0
-  provider: ^6.1.5
-  rxdart: ^0.28.0
-  # Share content via the OS share sheet (ACTION_SEND)
-  share_plus: ^13.3.1
   shared_preferences: ^2.5.5
-  shimmer: ^4.0.0
-  smooth_page_indicator: ^3.0.0
-  stream_transform: ^2.1.1
   url_launcher: ^6.3.2
-  # Прямой доступ к браузерным API (Web Share / скачивание blob) в web-реализации
-  # DocExporter. Только под web (conditional import).
-  web: ^1.1.0
   easy_localization: ^3.0.8
   firebase_crashlytics: ^6.1.0
   firebase_analytics: ^13.1.0
@@ -161,12 +104,10 @@ dependencies:
   # talker_dio_logger НЕ нужен: сетевой лог в dev даёт Alice-интерцептор
   # (экран «HTTP») + LogInterceptor — см. test/dev/service/client/dio_register.dart.
   talker_flutter: ^5.2.0
-  talker_bloc_logger: ^5.2.0
 
   # Alice — in-app HTTP-инспектор dev-флейвора: Dio подключается через
   # getDioInterceptor, открывается из debug-меню (showInspector).
   flutter_alice: ^3.0.0
-  package_info_plus: ^10.2.2
 
   # Держит нативный splash до конца auth-решения на splash-роуте (preserve/remove),
   # чтобы холодный старт авторизованного юзера не мелькал login. Генерация картинок
@@ -177,10 +118,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  bloc_test: ^10.0.0
   build_runner: ^2.13.1
   flutter_lints: ^6.0.0
-  http: ^1.6.0
   injectable_generator: ^3.0.2
   json_serializable: ^6.13.1
   logging: ^1.3.0

@@ -16,12 +16,9 @@ formatter:
 
 analyzer:
   exclude:
-      # ignore generated files — all code generators output under lib/gen/,
-      # except injectable's di_container.config.dart, which the generator
-      # hardcodes next to its @InjectableInit source (lib/di/).
+      # ignore generated files: injectable's di_container.config.dart, which the
+      # generator hardcodes next to its @InjectableInit source (lib/di/).
     - "lib/di/*.config.dart"
-    - "lib/gen/**"
-    - "test/integration_test/**"
     - "build.yaml"
       # build output: on macOS `flutter pub get` checks Swift packages out into
       # build/ios/SourcePackages, including the plugins' own Dart tests/examples.

@@ -9,5 +9,3 @@ targets:
         - test/**
         - pubspec.*
         - $package$
-      exclude:
-        - test/integration_test/**

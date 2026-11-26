@@ -244,7 +244,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_svg:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_svg
       sha256: "5b0dd02de78d110e4acaca042e3be80c9b2ec04c1f41a83ca39a717497c7e2d2"
@@ -406,7 +406,7 @@ packages:
     source: hosted
     version: "1.3.0"
   lottie:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: lottie
       sha256: "3ce005da56c2ce38b97d2fe8ca812627d12aae3d13bb611f735c4a506cdf46b9"
