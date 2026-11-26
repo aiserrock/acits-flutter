@@ -19,14 +19,10 @@ dependencies:
   # Foundation packages.
   util:
     path: ../base/util
-  network:
-    path: ../base/network
   core:
     path: ../base/core
   ui_kit:
     path: ../ui_kit
-  navigation:
-    path: ../base/navigation
   localization:
     path: ../base/localization
   di:
@@ -56,7 +52,6 @@ dependencies:
   # Navigation + DI.
   go_router: ^18.1.4
   injectable: ^3.0.0
-  get_it: ^9.2.1
 
   # State + UI.
   flutter_bloc: ^9.1.1
@@ -66,12 +61,9 @@ dependencies:
   # Экран под kDebugMode → в release-сборку код не попадает (tree-shaken).
   widgetbook: ^3.25.0
   smooth_page_indicator: ^3.0.0
-  flutter_slidable: ^5.2.0
   flutter_keyboard_visibility: ^7.0.1
-  flutter_svg: ^2.2.4
   equatable: ^3.0.0
   collection: ^1.19.0
-  intl: ^0.20.2
 
   # Splash control (native) + web insets (root screen) + web share/download.
   flutter_native_splash: ^2.4.7

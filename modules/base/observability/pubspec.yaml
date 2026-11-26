@@ -12,7 +12,6 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  firebase_analytics: ^13.1.0
   firebase_crashlytics: ^6.1.0
   sentry_flutter: ^10.6.0
 

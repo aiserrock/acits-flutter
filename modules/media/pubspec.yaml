@@ -20,9 +20,7 @@ dependencies:
   stream_transform: ^2.1.1
   equatable: ^3.0.0
   easy_localization: ^3.0.8
-  collection: ^1.19.0
   dio: ^5.9.2
-  flutter_svg: ^2.2.4
   pro_image_editor: ^14.29.0
   pdfx: ^2.11.0
   image: ^4.8.0
@@ -35,8 +33,6 @@ dependencies:
     path: ../base/core
   ui_kit:
     path: ../ui_kit
-  navigation:
-    path: ../base/navigation
   animals:
     path: ../animals
   applicants:
@@ -48,5 +44,4 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  bloc_test: ^10.0.0
   mocktail: ^1.0.5
