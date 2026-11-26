@@ -26,6 +26,8 @@ abstract final class AuthScreenBindings {
       navigator: getIt<SplashNavigator>(),
       logo: Assets.icon.logoSplash.svg(width: 80.0, height: 108.0),
       loadingAnimations: [LottieRes.loading, LottieRes.pawLoading, LottieRes.dogLoading, LottieRes.catsLoading],
+      // Registered by the prod DI root; the dev root has no remote policy.
+      updatePolicy: getIt.isRegistered<AppUpdatePolicy>() ? getIt<AppUpdatePolicy>() : null,
     );
   }
 

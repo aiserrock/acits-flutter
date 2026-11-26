@@ -18,4 +18,8 @@ abstract interface class SplashNavigator {
 
   /// Уйти на экран входа и открыть выбор приюта поверх, затем снять splash.
   void toPickShelterAndReveal({required List<Shelter> shelterList, required bool autoSelectSingle});
+
+  /// Снять splash, оставшись на splash-роуте (он сам показывает экран
+  /// обновления или блокировки).
+  void revealInPlace();
 }

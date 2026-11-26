@@ -20,6 +20,9 @@ final class ObservabilitySetup {
   SentryErrorReporter? _sentry;
   bool _firebaseReady = false;
 
+  /// Whether Firebase initialised for this build (Remote Config needs it).
+  bool get firebaseReady => _firebaseReady;
+
   late final ErrorReporter reporter = CompositeErrorReporter(_backends);
 
   /// Routes uncaught Flutter and platform errors to [reporter]. Call first.

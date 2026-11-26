@@ -59,6 +59,29 @@ version 1.0.0 produces `1.0.0 (1007)` in all three stores. The formula lives in
 
 The `+N` suffix of `version:` in `pubspec.yaml` is not used by release builds.
 
+## Forced update and kill-switch
+
+The splash asks Firebase Remote Config before routing anywhere
+([`lib/update_policy.dart`](../lib/update_policy.dart)). Parameters, set in the Firebase
+console of the prod project:
+
+| Parameter | Type | Effect |
+| --- | --- | --- |
+| `min_supported_build` | number | Builds below it must update; the only action is "Update". |
+| `recommended_build` | number | Builds below it see "Update available" with "Later". |
+| `kill_switch` | boolean | `true` blocks every build with "Service temporarily unavailable" and "Try again". |
+| `update_message` | string | Optional text that replaces the default message on these screens. |
+
+Values are compared with the build number (see *Build number* above). The app never blocks
+on its own defaults, on a failed or slow fetch (4 s), on web, or when Firebase is not
+configured: only values actually published in the console restrict users. Results are
+cached for an hour. Raising `min_supported_build` is the way to retire a build after an
+incompatible backend change — do it only once the new build is live in all three stores.
+
+RuStore builds open the RuStore page when built with `--dart-define=STORE=rustore`. The
+App Store link searches by name until the app record exists; replace `StoreLinks.appStore`
+with the `apps.apple.com/app/id…` link after the first iOS release.
+
 ## Symbols
 
 Release builds are obfuscated (`--obfuscate --split-debug-info`). The Dart symbols of

@@ -80,4 +80,7 @@ class SplashNavigatorImpl implements SplashNavigator {
       );
     _revealAfterFrame();
   }
+
+  @override
+  void revealInPlace() => _revealAfterFrame();
 }

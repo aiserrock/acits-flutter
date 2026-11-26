@@ -57,6 +57,8 @@ abstract class  LocaleKeys {
   static const animalWeight = 'animalWeight';
   static const animalsEmptyState = 'animalsEmptyState';
   static const aninmalSize = 'aninmalSize';
+  static const appBlockedMsg = 'appBlockedMsg';
+  static const appBlockedTitle = 'appBlockedTitle';
   static const applicantAdd = 'applicantAdd';
   static const applicantEdit = 'applicantEdit';
   static const calendarDaySemantics = 'calendarDaySemantics';
@@ -110,9 +112,9 @@ abstract class  LocaleKeys {
   static const drugsStock = 'drugsStock';
   static const errorAuthFail = 'errorAuthFail';
   static const errorAuthFailMsg = 'errorAuthFailMsg';
+  static const errorDefaultMsg = 'errorDefaultMsg';
   static const errorForbidden = 'errorForbidden';
   static const errorForbiddenMsg = 'errorForbiddenMsg';
-  static const errorDefaultMsg = 'errorDefaultMsg';
   static const errorInternetFail = 'errorInternetFail';
   static const errorInternetFailMsg = 'errorInternetFailMsg';
   static const errorServerFail = 'errorServerFail';
@@ -169,6 +171,8 @@ abstract class  LocaleKeys {
   static const prescriptionTitleEdit = 'prescriptionTitleEdit';
   static const prescriptionWaitLoadingMsg = 'prescriptionWaitLoadingMsg';
   static const prescriptionWeekly = 'prescriptionWeekly';
+  static const privacyCollectionSubtitle = 'privacyCollectionSubtitle';
+  static const privacyCollectionTitle = 'privacyCollectionTitle';
   static const regAboutOrg = 'regAboutOrg';
   static const regAboutYou = 'regAboutYou';
   static const regAdminRegMsg = 'regAdminRegMsg';
@@ -219,7 +223,11 @@ abstract class  LocaleKeys {
   static const themeLight = 'themeLight';
   static const themeSectionTitle = 'themeSectionTitle';
   static const themeSystem = 'themeSystem';
-  static const privacyCollectionTitle = 'privacyCollectionTitle';
-  static const privacyCollectionSubtitle = 'privacyCollectionSubtitle';
+  static const updateAction = 'updateAction';
+  static const updateLater = 'updateLater';
+  static const updateRecommendedMsg = 'updateRecommendedMsg';
+  static const updateRecommendedTitle = 'updateRecommendedTitle';
+  static const updateRequiredMsg = 'updateRequiredMsg';
+  static const updateRequiredTitle = 'updateRequiredTitle';
 
 }

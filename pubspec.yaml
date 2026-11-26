@@ -155,6 +155,7 @@ dependencies:
   easy_localization: ^3.0.8
   firebase_crashlytics: ^6.1.0
   firebase_analytics: ^13.1.0
+  firebase_remote_config: ^7.1.0
 
   # In-app логи: Talker + экран логов (dev debug-меню) и BLoC-observer.
   # talker_dio_logger НЕ нужен: сетевой лог в dev даёт Alice-интерцептор
