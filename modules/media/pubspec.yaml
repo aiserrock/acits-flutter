@@ -25,7 +25,7 @@ dependencies:
   get_it: ^9.2.1
   talker_flutter: ^5.1.16
   flutter_svg: ^2.2.4
-  pro_image_editor: ^11.0.0
+  pro_image_editor: ^14.29.0
   pdfx: ^2.9.2
   image: ^4.8.0
   image_picker: ^1.2.1

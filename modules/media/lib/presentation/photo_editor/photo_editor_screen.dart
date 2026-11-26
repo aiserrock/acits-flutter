@@ -48,7 +48,12 @@ class PhotoEditorScreen extends StatelessWidget {
           enableDoubleTapZoom: true,
           tools: [SubEditorMode.cropRotate],
         ),
-        cropRotateEditor: const CropRotateEditorConfigs(enableDoubleTap: true),
+        // v14 добавил в набор по умолчанию перспективный наклон (tilt) — оставляем
+        // прежний набор инструментов.
+        cropRotateEditor: const CropRotateEditorConfigs(
+          enableDoubleTap: true,
+          tools: [CropRotateTool.rotate, CropRotateTool.flip, CropRotateTool.aspectRatio, CropRotateTool.reset],
+        ),
         theme: ThemeData.dark().copyWith(colorScheme: scheme),
       ),
     );
