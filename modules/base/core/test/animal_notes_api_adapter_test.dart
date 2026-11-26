@@ -116,6 +116,25 @@ void main() {
     });
   });
 
+  group('AnimalNotesApiAdapter — getById (raw Dio)', () {
+    test('gets one note with the shelter header and parses it', () async {
+      final stub = _StubHttpAdapter(createdAnimalNoteJson());
+      final dio = Dio(BaseOptions(baseUrl: 'https://api.acits.ru'));
+      dio.httpClientAdapter = stub;
+      final adapter = AnimalNotesApiAdapter(
+        dio,
+        _FakeAnimalsClient(PaginatedAnimalNoteList.fromJson(animalNotesListJson())),
+      );
+
+      final note = await adapter.getById(6, shelterId: 50);
+
+      expect(stub.lastRequest!.method, 'GET');
+      expect(stub.lastRequest!.path, '/api/v1/animals/notes/6/');
+      expect(stub.lastRequest!.headers['x-current-shelter'], 50);
+      expect(note.id, 6);
+    });
+  });
+
   group('AnimalNotesApiAdapter — create (raw Dio)', () {
     test('posts the flat write payload and parses the created note', () async {
       final stub = _StubHttpAdapter(createdAnimalNoteJson());

@@ -1,4 +1,5 @@
 import 'package:core/domain.dart' show Shelter;
+import 'package:util/util.dart' show Failure, Result;
 import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 
@@ -239,16 +240,19 @@ GoRouter createAppRouter({
         builder: (context, state) {
           final animalId = int.tryParse(state.pathParameters['animalId'] ?? '');
           if (animalId == null) return const RouteErrorScreen();
-          // Identity: `?id=<noteId>` marks an edit. The note itself may ride in `extra` as an
-          // in-memory cache; `CommentsRepository` has no load-by-id, so without the cache
-          // (reload, back/forward) the edit cannot be restored and the error screen shows.
+          // Identity: `?id=<noteId>` marks an edit. The note may ride in `extra` as an
+          // in-memory cache; without it (reload, back/forward) it is loaded by id.
           final extra = state.extra;
           final cached = extra is AnimalNote ? extra : null;
           final rawId = state.uri.queryParameters['id'];
-          if (rawId != null && (cached == null || cached.id.toString() != rawId)) {
-            return const RouteErrorScreen();
+          final repository = getIt<CommentsRepository>();
+          if (rawId == null) return CommentEditScreen(repository: repository, animalId: animalId);
+          final noteId = int.tryParse(rawId);
+          if (noteId == null) return const RouteErrorScreen();
+          if (cached != null && cached.id == noteId) {
+            return CommentEditScreen(repository: repository, animalId: animalId, comment: cached);
           }
-          return CommentEditScreen(repository: getIt<CommentsRepository>(), animalId: animalId, comment: cached);
+          return _CommentEditById(repository: repository, animalId: animalId, noteId: noteId);
         },
       ),
       // Identity is `id` (edit) / `animalId` (preset animal) in the query; the screen loads
@@ -373,5 +377,28 @@ Future<void> _switchShelter(Shelter shelter) async {
     getIt<GoRouter>().go(AppRoutes.root);
   } finally {
     _switchingShelter = false;
+  }
+}
+
+/// Loads a note by id, then opens it for editing; the error screen when it cannot.
+class _CommentEditById extends StatelessWidget {
+  const _CommentEditById({required this.repository, required this.animalId, required this.noteId});
+
+  final CommentsRepository repository;
+  final int animalId;
+  final int noteId;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Result<Failure, AnimalNote>>(
+      future: repository.getById(noteId),
+      builder: (context, snapshot) {
+        final result = snapshot.data;
+        if (result == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        final note = result.valueOrNull;
+        if (note == null) return const RouteErrorScreen();
+        return CommentEditScreen(repository: repository, animalId: animalId, comment: note);
+      },
+    );
   }
 }

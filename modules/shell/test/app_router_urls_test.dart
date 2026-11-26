@@ -148,8 +148,20 @@ void main() {
       expect(screen.comment, isNull);
     });
 
-    testWidgets('an edit link without the cached note shows the error screen (no load-by-id)', (tester) async {
+    testWidgets('an edit link without the cached note loads the note by id', (tester) async {
+      const note = AnimalNote(id: 3, animal: 7, content: 'from the server');
+      when(() => comments.getById(3)).thenAnswer((_) async => const Ok(note));
       await open(tester, AppRoutes.commentEditPath(7, commentId: 3));
+      await tester.pump();
+
+      verify(() => comments.getById(3)).called(1);
+      expect(tester.widget<CommentEditScreen>(find.byType(CommentEditScreen)).comment, note);
+    });
+
+    testWidgets('an edit link for a note that cannot be loaded shows the error screen', (tester) async {
+      when(() => comments.getById(3)).thenAnswer((_) async => const Err(ServerFailure(404)));
+      await open(tester, AppRoutes.commentEditPath(7, commentId: 3));
+      await tester.pump();
 
       expect(find.byType(RouteErrorScreen), findsOneWidget);
       expect(find.byType(CommentEditScreen), findsNothing);

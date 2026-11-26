@@ -53,6 +53,15 @@ class CommentsRepositoryImpl implements CommentsRepository {
   }
 
   @override
+  Future<Result<Failure, AnimalNote>> getById(int id) {
+    Log.debug('Fetch animal note: id=$id');
+    return _guard(() async {
+      final dto = await _notesPort.getById(id, shelterId: _shelterProvider.shelterId);
+      return AnimalNoteMapper(dto).toEntity();
+    });
+  }
+
+  @override
   Future<Result<Failure, AnimalNote>> patch({
     required int id,
     required int animalId,
