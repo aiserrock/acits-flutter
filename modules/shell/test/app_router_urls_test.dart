@@ -128,11 +128,19 @@ void main() {
   });
 
   /// Starts the real app router at [location] (optionally with a cached [extra]).
-  Future<void> open(WidgetTester tester, String location, {Object? extra}) async {
+  Future<void> open(
+    WidgetTester tester,
+    String location, {
+    Object? extra,
+    Size size = const Size(900, 1600),
+    double textScale = 1,
+  }) async {
     tester.view
-      ..physicalSize = const Size(900, 1600)
+      ..physicalSize = size
       ..devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = textScale;
     addTearDown(tester.view.reset);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     router = createAppRouter(initialLocation: location, initialExtra: extra);
     await tester.pumpWidget(MaterialApp.router(theme: AppTheme.light, routerConfig: router));
     await tester.pump();
@@ -272,5 +280,45 @@ void main() {
         () => animals.listSpecies(level: 2, parentId: 3, search: null, offset: 0, shelterId: 50),
       ).called(greaterThan(0));
     });
+  });
+
+  // Every screen reachable by URL renders at each window class without an
+  // overflow or an exception: narrow phone, phone in landscape, tablet in
+  // portrait (medium), small laptop (expanded), desktop (large).
+  group('every breakpoint', () {
+    const sizes = <String, Size>{
+      'compact 360x780': Size(360, 780),
+      'compact landscape 780x360': Size(780, 360),
+      'medium 700x1000': Size(700, 1000),
+      'expanded 1000x800': Size(1000, 800),
+      'large 1440x900': Size(1440, 900),
+    };
+    final locations = <String, (String, Type)>{
+      'new comment': (AppRoutes.commentEditPath(7), CommentEditScreen),
+      'prescription edit': ('${AppRoutes.prescriptionEdit}?id=5', PrescriptionEditScreen),
+      'pick shelter': (AppRoutes.pickShelterPath(autoSelectSingle: false), PickShelterScreen),
+      'species search': (AppRoutes.searchSpecPath(), SearchScreen),
+    };
+
+    for (final screen in locations.entries) {
+      for (final size in sizes.entries) {
+        testWidgets('${screen.key} at ${size.key}', (tester) async {
+          await open(tester, screen.value.$1, size: size.value);
+          await tester.pump(const Duration(milliseconds: 300));
+
+          expect(tester.takeException(), isNull);
+          expect(find.byType(screen.value.$2), findsOneWidget);
+        });
+      }
+
+      // Largest system font on the narrowest phone: the hardest case for overflow.
+      testWidgets('${screen.key} at compact 360x780 with text scale 2', (tester) async {
+        await open(tester, screen.value.$1, size: const Size(360, 780), textScale: 2);
+        await tester.pump(const Duration(milliseconds: 300));
+
+        expect(tester.takeException(), isNull);
+        expect(find.byType(screen.value.$2), findsOneWidget);
+      });
+    }
   });
 }
