@@ -31,8 +31,8 @@
 
 | 工具 | 版本 |
 | --- | --- |
-| Flutter | 3.44.0 |
-| Dart | 3.12.0 |
+| Flutter | 3.50.0 |
+| Dart | 3.14.0 |
 | FVM | 最新稳定版 |
 
 安装 FVM 及锁定的 SDK：
@@ -152,7 +152,7 @@ Pull Request 始终 **面向 `develop` 提交**，绝不面向 `main`。
 ```text
 feat(animals): add photo gallery to animal detail screen
 fix(auth): handle expired token on cold start
-docs: update contributing guide for FVM 3.44
+docs: update contributing guide for FVM 3.50
 ```
 
 ---

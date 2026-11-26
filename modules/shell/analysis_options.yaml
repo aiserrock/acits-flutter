@@ -10,6 +10,7 @@ analyzer:
     # flutter_gen output (app assets accessor moved here from lib/gen). Generated
     # code — excluded from analysis exactly as the root app excludes lib/gen/**.
     - "lib/gen/**"
+    - build/**
 
 linter:
   rules:

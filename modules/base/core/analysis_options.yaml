@@ -8,6 +8,7 @@ formatter:
 analyzer:
   exclude:
     - "lib/api/adapters/swagger_parser/generated/**"
+    - build/**
 
 linter:
   rules:

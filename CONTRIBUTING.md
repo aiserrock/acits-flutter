@@ -32,8 +32,8 @@ The toolchain is pinned via **FVM** (Flutter Version Management) through the `.f
 
 | Tool | Version |
 | --- | --- |
-| Flutter | 3.44.0 |
-| Dart | 3.12.0 |
+| Flutter | 3.50.0 |
+| Dart | 3.14.0 |
 | FVM | latest stable |
 
 Install FVM and the pinned SDK:
@@ -161,7 +161,7 @@ Examples:
 ```text
 feat(animals): add photo gallery to animal detail screen
 fix(auth): handle expired token on cold start
-docs: update contributing guide for FVM 3.44
+docs: update contributing guide for FVM 3.50
 ```
 
 ---

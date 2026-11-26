@@ -7,7 +7,7 @@ version: 0.10.0+24
 
 environment:
   sdk: ">=3.9.0 <4.0.0"
-  flutter: 3.44.0
+  flutter: 3.50.0
 
 # Dart pub workspace — root + foundation packages share one resolution.
 # Feature modules (modules/*) are added lazily as they are migrated.

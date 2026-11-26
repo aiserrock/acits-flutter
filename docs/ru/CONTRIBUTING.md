@@ -31,8 +31,8 @@
 
 | Инструмент | Версия |
 | --- | --- |
-| Flutter | 3.44.0 |
-| Dart | 3.12.0 |
+| Flutter | 3.50.0 |
+| Dart | 3.14.0 |
 | FVM | актуальная стабильная |
 
 Установите FVM и зафиксированный SDK:
@@ -149,7 +149,7 @@ Pull request всегда открывается **в ветку `develop`**, н
 ```text
 feat(animal-card): add vaccination history section
 fix(login): handle expired refresh token
-docs: update contributing guide for FVM 3.44
+docs: update contributing guide for FVM 3.50
 ```
 
 ---

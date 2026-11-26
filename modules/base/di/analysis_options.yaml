@@ -9,3 +9,4 @@ analyzer:
   exclude:
     # injectable output — генератор кладёт его рядом с @InjectableInit-источником.
     - "lib/src/di_container.config.dart"
+    - build/**

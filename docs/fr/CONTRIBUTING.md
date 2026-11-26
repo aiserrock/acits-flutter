@@ -31,8 +31,8 @@ La chaîne d'outils est figée via **FVM** (Flutter Version Management) grâce a
 
 | Outil | Version |
 | --- | --- |
-| Flutter | 3.44.0 |
-| Dart | 3.12.0 |
+| Flutter | 3.50.0 |
+| Dart | 3.14.0 |
 | FVM | dernière version stable |
 
 Installez FVM et le SDK figé :
@@ -152,7 +152,7 @@ Exemples :
 ```text
 feat(animals): add photo gallery to animal detail screen
 fix(auth): handle expired token on cold start
-docs: update contributing guide for FVM 3.44
+docs: update contributing guide for FVM 3.50
 ```
 
 ---

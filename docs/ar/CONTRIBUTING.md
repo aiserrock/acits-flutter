@@ -31,8 +31,8 @@
 
 | الأداة | الإصدار |
 | --- | --- |
-| Flutter | 3.44.0 |
-| Dart | 3.12.0 |
+| Flutter | 3.50.0 |
+| Dart | 3.14.0 |
 | FVM | أحدث إصدار مستقر |
 
 قم بتثبيت FVM وحزمة SDK المحددة:
@@ -152,7 +152,7 @@ git checkout -b feature/short-descriptive-name
 ```text
 feat(animals): add photo gallery to animal detail screen
 fix(auth): handle expired token on cold start
-docs: update contributing guide for FVM 3.44
+docs: update contributing guide for FVM 3.50
 ```
 
 ---

@@ -9,7 +9,7 @@ version: 1.0.0+1
 # renders the shared gallery catalog (ui_kit_gallery) through widgetbook.
 environment:
   sdk: ">=3.9.0 <4.0.0"
-  flutter: ">=3.44.0"
+  flutter: ">=3.50.0"
 
 dependencies:
   flutter:
