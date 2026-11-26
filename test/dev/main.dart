@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +10,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:util/util.dart';
 
 import 'package:acits_flutter/firebase/firebase_config.dart';
+import 'package:acits_flutter/observability_setup.dart';
 import 'package:acits_flutter/run_app.dart';
 import 'package:app_services/app_services.dart' show Log;
 import 'di/di_container.dart';
@@ -28,22 +27,16 @@ Future<void> main() => runAppWith(
 );
 
 Future<void> _bootstrapDev() async {
-  // dev-окружение: свой Firebase-проект acits-dev. Crashlytics только на
-  // android/ios (web-плагина нет — под guard kIsWeb).
-  await Firebase.initializeApp(options: devFirebaseOptions);
-  if (!kIsWeb) {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
-  }
+  // Хуки ошибок ставим первыми; dev-окружение — свой Firebase-проект acits-dev.
+  final observability = ObservabilitySetup(environment: 'dev')..installErrorHooks();
+  await observability.initFirebase(devFirebaseOptions);
 
   await EasyLocalization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await AppVersion.load();
+  await observability.initSentry();
   _setupLogging();
-  await initDevDi();
+  await initDevDi(observability);
 
   // Логи всех cubit'ов/bloc'ов идут в общий Talker (виден в debug-меню → «Логи»).
   Bloc.observer = createAppBlocObserver(getIt<Talker>());

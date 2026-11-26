@@ -7,6 +7,7 @@ import 'package:di/di.dart';
 
 import 'package:acits_flutter/bootstrap.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
+import 'package:acits_flutter/observability_setup.dart';
 import 'package:acits_flutter/run_app.dart';
 
 /// PROD-энтрипоинт. Тонкий: подготовка (bootstrap) и запуск (runApp) вынесены —
@@ -17,7 +18,9 @@ Future<void> main() => runAppWith(bootstrap: _bootstrapProd);
 /// ориентация/версия → DI → Bloc.observer. Порядок и параллелизм — в
 /// [appStartupTasks].
 Future<void> _bootstrapProd() async {
-  await AppTaskRunner(appStartupTasks(firebaseOptions: prodFirebaseOptions)).run();
+  // Хуки ошибок ставим первыми: всё, что упадёт дальше, уже будет зарепорчено.
+  final observability = ObservabilitySetup(environment: 'prod')..installErrorHooks();
+  await AppTaskRunner(appStartupTasks(firebaseOptions: prodFirebaseOptions, observability: observability)).run();
   Bloc.observer = createAppBlocObserver(getIt<Talker>());
   Log.info('App start · flavor=prod');
 }

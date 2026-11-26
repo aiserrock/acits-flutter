@@ -7,11 +7,13 @@ import 'package:ui_kit/ui_kit.dart' show Skeleton;
 import 'package:personal/personal.dart' show UserProfile;
 
 import 'package:di/di.dart';
+import 'package:observability/observability.dart' show CollectionSettings;
 import 'package:shell/navigation/app_router.dart';
 import 'package:shell/src/shell_exports.dart';
 import 'package:app_services/app_services.dart';
 import 'package:shell/widget/cubit/personal_drawer_cubit.dart';
 import 'package:shell/widget/app_version_label.dart';
+import 'package:shell/widget/collection_switch_tile.dart';
 import 'package:shell/widget/locale_switcher.dart';
 import 'package:shell/widget/theme_switcher_tile.dart';
 
@@ -84,6 +86,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               ),
               _buildDivider(),
               const ThemeSwitcherTile(),
+              if (getIt.isRegistered<CollectionSettings>()) CollectionSwitchTile(settings: getIt<CollectionSettings>()),
               ListTile(
                 title: Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.bodyLarge),
                 trailing: const LocaleSwitcher(size: 22.0),

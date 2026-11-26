@@ -11,6 +11,7 @@ const layers = <String, int>{
   'navigation': 0,
   'localization': 0,
   'di': 0,
+  'observability': 0,
   // 1 — shared kernel.
   'core': 1,
   'ui_kit': 1,

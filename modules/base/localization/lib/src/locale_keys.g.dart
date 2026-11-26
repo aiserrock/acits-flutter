@@ -213,5 +213,7 @@ abstract class  LocaleKeys {
   static const themeLight = 'themeLight';
   static const themeSectionTitle = 'themeSectionTitle';
   static const themeSystem = 'themeSystem';
+  static const privacyCollectionTitle = 'privacyCollectionTitle';
+  static const privacyCollectionSubtitle = 'privacyCollectionSubtitle';
 
 }

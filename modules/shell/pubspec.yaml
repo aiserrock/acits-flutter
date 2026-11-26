@@ -30,6 +30,8 @@ dependencies:
     path: ../base/localization
   di:
     path: ../base/di
+  observability:
+    path: ../base/observability
 
   # Feature modules whose screens/router contracts the shell composes.
   animals:

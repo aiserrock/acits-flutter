@@ -26,7 +26,7 @@ step), which fails on any upward or same-layer edge.
 | 3 | `media` | Photo gallery/editor and search; composes `animals`, `applicants`, `prescriptions`. |
 | 2 | `animals`, `applicants`, `auth`, `prescriptions`, `personal` | Feature packages, each layered `data / domain / presentation`. They never import each other. |
 | 1 | `core`, `ui_kit` | `core`: domain entities, repository interfaces, API ports, our DTOs, the swagger_parser adapters. `ui_kit`: tokens, breakpoints, adaptive scaffold, shared widgets. |
-| 0 | `util`, `network`, `navigation`, `localization`, `di` | Leaf infrastructure with no internal dependencies. `di` owns only the shared `getIt` instance. |
+| 0 | `util`, `network`, `navigation`, `localization`, `di`, `observability` | Leaf infrastructure with no internal dependencies. `di` owns only the shared `getIt` instance; `observability` owns error and event reporting. |
 
 `packages/` is reserved for forks of external libraries and generic self-written
 libs; it is empty today.
@@ -63,7 +63,7 @@ graph TD
     features["animals · applicants · auth ·<br/>prescriptions · personal"]
     core["core<br/>domain/ + api/ (ports · DTOs · adapters)"]
     uikit["ui_kit"]
-    leaf["util · network · navigation ·<br/>localization · di"]
+    leaf["util · network · navigation ·<br/>localization · di · observability"]
 
     app --> shell
     shell --> services

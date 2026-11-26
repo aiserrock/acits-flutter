@@ -1,8 +1,6 @@
 import 'package:util/util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -10,50 +8,60 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:di/di.dart';
 
 import 'package:acits_flutter/di/di_container.dart';
+import 'package:acits_flutter/observability_setup.dart';
 
 /// Стартовый пайплайн приложения как упорядоченный список [AppTask]
 /// (base). Обёртка над теми же фазами инициализации, что раньше жили
 /// прямо в `main()` — поведение и порядок сохранены 1:1.
 ///
 /// Порядок:
-///   1. [FirebaseInitTask]        — Firebase + crashlytics-обработчики (первым).
+///   1. [FirebaseInitTask]        — Firebase (первым; сбой не останавливает запуск).
 ///   2. [IndependentInitTask]     — локализация / ориентация / версия одним
 ///      `Future.wait` (как раньше — параллельно, чтобы не тормозить холодный
 ///      старт web).
-///   3. [DiInitTask]              — get_it (часть сервисов опирается на п.2).
-///   4. [BlocObserverTask]        — Bloc.observer поверх готового DI.
+///   3. [SentryInitTask]          — Sentry, если DSN задан при сборке.
+///   4. [DiInitTask]              — get_it (часть сервисов опирается на п.2).
+///   5. [BlocObserverTask]        — Bloc.observer поверх готового DI.
 ///
 /// `WidgetsFlutterBinding.ensureInitialized`, `FlutterNativeSplash.preserve` и
 /// `usePathUrlStrategy` остаются инлайн в `main()` — они трогают binding до
 /// задач и логически предшествуют пайплайну.
-List<AppTask> appStartupTasks({required FirebaseOptions firebaseOptions}) => [
-  FirebaseInitTask(firebaseOptions),
-  const IndependentInitTask(),
-  const DiInitTask(),
-  const BlocObserverTask(),
-];
+List<AppTask> appStartupTasks({required FirebaseOptions firebaseOptions, required ObservabilitySetup observability}) =>
+    [
+      FirebaseInitTask(firebaseOptions, observability),
+      const IndependentInitTask(),
+      SentryInitTask(observability),
+      DiInitTask(observability),
+      const BlocObserverTask(),
+    ];
 
-/// prod-окружение: Firebase-проект acits-prod. Crashlytics существует только на
-/// мобильных — на web плагина нет, обработчики под `!kIsWeb`.
+/// Firebase проекта флейвора. Сбой инициализации не останавливает запуск:
+/// приложение обязано открыться и без Firebase.
 class FirebaseInitTask implements AppTask {
-  const FirebaseInitTask(this._options);
+  const FirebaseInitTask(this._options, this._observability);
 
   final FirebaseOptions _options;
+  final ObservabilitySetup _observability;
 
   @override
   String get name => 'firebase';
 
   @override
-  Future<void> run() async {
-    await Firebase.initializeApp(options: _options);
-    if (!kIsWeb) {
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-      PlatformDispatcher.instance.onError = (error, stack) {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-        return true;
-      };
-    }
-  }
+  Future<void> run() => _observability.initFirebase(_options);
+}
+
+/// Sentry — только если DSN задан при сборке. Идёт после [IndependentInitTask]:
+/// release и dist берутся из уже загруженной версии приложения.
+class SentryInitTask implements AppTask {
+  const SentryInitTask(this._observability);
+
+  final ObservabilitySetup _observability;
+
+  @override
+  String get name => 'sentry';
+
+  @override
+  Future<void> run() => _observability.initSentry();
 }
 
 /// Независимые инициализации — параллельно (ускоряет старт, особенно «белый
@@ -79,16 +87,18 @@ class IndependentInitTask implements AppTask {
 /// get_it. Идёт после [IndependentInitTask] — часть сервисов может опираться на
 /// уже готовые локализацию/версию.
 class DiInitTask implements AppTask {
-  const DiInitTask();
+  const DiInitTask(this._observability);
+
+  final ObservabilitySetup _observability;
 
   @override
   String get name => 'di';
 
   @override
-  Future<void> run() => initDi();
+  Future<void> run() => initDi(_observability);
 }
 
-/// Логи всех cubit'ов/bloc'ов идут в общий Talker (в prod-release он выключен).
+/// Логи всех cubit'ов/bloc'ов идут в общий Talker.
 /// Требует готового DI ([DiInitTask]), поэтому — последним.
 class BlocObserverTask implements AppTask {
   const BlocObserverTask();

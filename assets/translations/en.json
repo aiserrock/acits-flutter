@@ -220,5 +220,7 @@
   "themeDark": "Dark",
   "themeLight": "Light",
   "themeSectionTitle": "Appearance",
-  "themeSystem": "System"
+  "themeSystem": "System",
+  "privacyCollectionTitle": "Send usage statistics and crash reports",
+  "privacyCollectionSubtitle": "Helps us find and fix failures. Your name, e-mail and phone number are never sent."
 }

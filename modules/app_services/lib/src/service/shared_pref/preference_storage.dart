@@ -1,12 +1,14 @@
 import 'package:di/di.dart';
 import 'package:injectable/injectable.dart';
+import 'package:observability/observability.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _isFirstKey = 'isFirstKey';
 const _currentShelterKey = 'currentShelterId';
+const _collectionEnabledKey = 'collectionEnabled';
 
 @injectable
-class PreferenceStorage {
+class PreferenceStorage implements CollectionPreferenceStore {
   SharedPreferences get _sp => getIt.get<SharedPreferences>();
 
   bool? get isFirstLaunch => _sp.getBool(_isFirstKey);
@@ -24,4 +26,10 @@ class PreferenceStorage {
       _sp.setInt(_currentShelterKey, id);
     }
   }
+
+  @override
+  bool? readCollectionEnabled() => _sp.getBool(_collectionEnabledKey);
+
+  @override
+  Future<void> writeCollectionEnabled(bool enabled) => _sp.setBool(_collectionEnabledKey, enabled);
 }

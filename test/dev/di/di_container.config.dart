@@ -17,6 +17,7 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:network/network.dart' as _i372;
+import 'package:observability/observability.dart' as _i441;
 import 'package:shell/shell.dart' as _i889;
 import 'package:talker_flutter/talker_flutter.dart' as _i207;
 
@@ -37,11 +38,15 @@ Future<_i174.GetIt> $initDevGetIt(
   _i526.EnvironmentFilter? environmentFilter,
 }) async {
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
+  final loggerRegisterDev = _$LoggerRegisterDev();
   final envDevRegistrer = _$EnvDevRegistrer();
   final dioRegisterDev = _$DioRegisterDev();
-  final loggerRegisterDev = _$LoggerRegisterDev();
   final appLoggerModule = _$AppLoggerModule();
   final acitsApiRegisterDev = _$AcitsApiRegisterDev();
+  gh.singleton<_i207.Talker>(
+    () => loggerRegisterDev.talker(gh<_i441.ErrorReporter>()),
+    registerFor: {_dev},
+  );
   gh.factory<_i579.Env>(() => envDevRegistrer.createEnv(), registerFor: {_dev});
   gh.factory<_i361.Dio>(
     () => dioRegisterDev.createDioClient(),
@@ -51,16 +56,12 @@ Future<_i174.GetIt> $initDevGetIt(
     () => _i1058.DebugPreferenceStorage(),
     registerFor: {_dev},
   );
-  gh.singleton<_i207.Talker>(
-    () => loggerRegisterDev.talker(),
-    registerFor: {_dev},
-  );
   gh.singleton<_i579.DebugService>(
     () => _i218.DebugDevService(gh<_i1058.DebugPreferenceStorage>()),
     registerFor: {_dev},
   );
   gh.singleton<_i207.Talker>(
-    () => appLoggerModule.talker(),
+    () => appLoggerModule.talker(gh<_i441.ErrorReporter>()),
     registerFor: {_prod},
   );
   gh.factory<_i361.Dio>(
@@ -197,11 +198,11 @@ Future<_i174.GetIt> $initDevGetIt(
   return getIt;
 }
 
+class _$LoggerRegisterDev extends _i175.LoggerRegisterDev {}
+
 class _$EnvDevRegistrer extends _i962.EnvDevRegistrer {}
 
 class _$DioRegisterDev extends _i230.DioRegisterDev {}
-
-class _$LoggerRegisterDev extends _i175.LoggerRegisterDev {}
 
 class _$AppLoggerModule extends _i418.AppLoggerModule {}
 
