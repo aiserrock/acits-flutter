@@ -4,7 +4,6 @@ import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prescriptions/prescriptions.dart' show PrescriptionRepository;
 
-import 'package:di/di.dart';
 import 'package:shell/presentation/common/sort/sort_preset.dart';
 import 'package:shell/presentation/main/cubit/main_state.dart';
 
@@ -17,7 +16,7 @@ const _searchDebounce = Duration(milliseconds: 300);
 /// запросе (`search` + `ordering`). UI-контроллеры (TextEditingController)
 /// остаются во [StatefulWidget] экрана.
 class MainCubit extends Cubit<MainState> {
-  MainCubit() : _repository = getIt.get<PrescriptionRepository>(), super(MainState()) {
+  MainCubit(this._repository) : super(MainState()) {
     loadExecutions();
   }
 

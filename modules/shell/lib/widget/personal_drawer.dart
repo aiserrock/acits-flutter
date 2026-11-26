@@ -5,9 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ui_kit/ui_kit.dart' show Skeleton;
 
-import 'package:personal/personal.dart' show UserProfile;
+import 'package:personal/personal.dart' show PersonalRepository, UserProfile;
 
-import 'package:di/di.dart';
 import 'package:observability/observability.dart' show CollectionSettings;
 import 'package:shell/navigation/app_router.dart';
 import 'package:shell/res/legal_links.dart';
@@ -23,26 +22,38 @@ import 'package:shell/widget/theme_switcher_tile.dart';
 
 const Duration _kBaseSettleDuration = Duration(milliseconds: 246);
 
+/// Боковое меню приложения. Зависимости приходят из composition root
+/// (`app_router.dart`): [authService] — сессия/выход, [repository] — профиль
+/// пользователя, [collectionSettings] — настройки сбора данных (`null`, когда
+/// сборка их не регистрирует: тогда переключатель не показывается).
 class PersonalDrawerWidget extends StatelessWidget {
-  const PersonalDrawerWidget({super.key});
+  const PersonalDrawerWidget({required this.authService, required this.repository, this.collectionSettings, super.key});
+
+  final AuthService authService;
+  final PersonalRepository repository;
+  final CollectionSettings? collectionSettings;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => PersonalDrawerCubit(), child: const _PersonalDrawerView());
+    return BlocProvider(
+      create: (_) => PersonalDrawerCubit(repository),
+      child: _PersonalDrawerView(authService: authService, collectionSettings: collectionSettings),
+    );
   }
 }
 
 class _PersonalDrawerView extends StatefulWidget {
-  const _PersonalDrawerView();
+  const _PersonalDrawerView({required this.authService, required this.collectionSettings});
+
+  final AuthService authService;
+  final CollectionSettings? collectionSettings;
 
   @override
   State<_PersonalDrawerView> createState() => _PersonalDrawerViewState();
 }
 
 class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
-  _PersonalDrawerViewState() : _authService = getIt<AuthService>();
-
-  final AuthService _authService;
+  AuthService get _authService => widget.authService;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +97,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               ),
               _buildDivider(),
               const ThemeSwitcherTile(),
-              if (getIt.isRegistered<CollectionSettings>()) CollectionSwitchTile(settings: getIt<CollectionSettings>()),
+              if (widget.collectionSettings case final settings?) CollectionSwitchTile(settings: settings),
               ListTile(
                 title: Text(LocaleKeys.commonLanguage.tr(), style: Theme.of(context).textTheme.bodyLarge),
                 trailing: const LocaleSwitcher(size: 22.0),

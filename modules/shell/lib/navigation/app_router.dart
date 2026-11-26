@@ -3,7 +3,14 @@ import 'package:util/util.dart' show Failure, Result;
 import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:animals/animals.dart' show AnimalRepository, AnimalSpecies, CurrentShelterProvider;
+import 'package:animals/animals.dart'
+    show
+        AnimalPermissions,
+        AnimalRepository,
+        AnimalSpecies,
+        AnimalStatusLabels,
+        AnimalsRouterService,
+        CurrentShelterProvider;
 import 'package:applicants/applicants.dart';
 import 'package:media/media.dart';
 import 'package:prescriptions/prescriptions.dart'
@@ -19,12 +26,15 @@ import 'package:personal/personal.dart'
     show
         AnimalNote,
         CommentEditScreen,
+        CommentFileOpener,
         CommentsRepository,
         MySheltersScreen,
         MySheltersSource,
         PersonalRepository,
+        PersonalRouterService,
         PersonalScreen;
 import 'package:app_services/app_services.dart' show AnimalService, AuthService, ConfigService, DebugService;
+import 'package:observability/observability.dart' show CollectionSettings;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:localization/localization.dart' show LocaleKeys;
 import 'package:di/di.dart';
@@ -37,6 +47,7 @@ import 'package:shell/presentation/animals_section.dart';
 import 'package:shell/presentation/main/main_screen.dart';
 import 'package:shell/presentation/gallery/gallery_screen.dart';
 import 'package:shell/presentation/root_screen.dart';
+import 'package:shell/widget/personal_drawer.dart';
 
 /// Пути и имена роутов приложения.
 ///
@@ -166,25 +177,45 @@ GoRouter createAppRouter({
         redirect: (_, state) => AppRoutes.animalDetailPath(int.parse(state.pathParameters['id']!)),
       ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => RootScreen(navigationShell: navigationShell),
+        builder: (context, state, navigationShell) => RootScreen(
+          navigationShell: navigationShell,
+          drawer: PersonalDrawerWidget(
+            authService: getIt<AuthService>(),
+            repository: getIt<PersonalRepository>(),
+            collectionSettings: getIt.isRegistered<CollectionSettings>() ? getIt<CollectionSettings>() : null,
+          ),
+        ),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.today, builder: (context, state) => const MainScreen())],
+            routes: [
+              GoRoute(
+                path: AppRoutes.today,
+                builder: (context, state) =>
+                    MainScreen(repository: getIt<PrescriptionRepository>(), debugService: getIt<DebugService>()),
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [
               ShellRoute(
-                builder: (context, state, child) => AnimalsSection(child: child),
+                builder: (context, state, child) => AnimalsSection(deps: _animalsListDeps(), child: child),
                 routes: [
                   GoRoute(
                     path: AppRoutes.animals,
-                    builder: (context, state) => const AnimalsRootPage(),
+                    builder: (context, state) => AnimalsRootPage(deps: _animalsListDeps()),
                     routes: [
                       GoRoute(
                         path: ':id',
                         builder: (context, state) => AnimalDetailScreen(
                           key: ValueKey(state.pathParameters['id']),
                           id: int.parse(state.pathParameters['id']!),
+                          animalRepository: getIt<AnimalRepository>(),
+                          shelterProvider: getIt<CurrentShelterProvider>(),
+                          prescriptionRepository: getIt<PrescriptionRepository>(),
+                          commentsRepository: getIt<CommentsRepository>(),
+                          personalRouter: getIt<PersonalRouterService>(),
+                          commentFileOpener: getIt<CommentFileOpener>(),
+                          statusLabels: getIt<AnimalStatusLabels>(),
                         ),
                       ),
                     ],
@@ -219,7 +250,13 @@ GoRouter createAppRouter({
       ),
       GoRoute(
         path: AppRoutes.animalEdit,
-        builder: (context, state) => AnimalEditScreen(id: int.tryParse(state.uri.queryParameters['id'] ?? '')),
+        builder: (context, state) => AnimalEditScreen(
+          id: int.tryParse(state.uri.queryParameters['id'] ?? ''),
+          animalRepository: getIt<AnimalRepository>(),
+          shelterProvider: getIt<CurrentShelterProvider>(),
+          statusLabels: getIt<AnimalStatusLabels>(),
+          configService: getIt<ConfigService>(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.applicantEdit,
@@ -347,6 +384,15 @@ GoRouter createAppRouter({
     ],
   );
 }
+
+/// Dependencies of the animals list (tab root and the left pane on wide windows).
+AnimalsListDeps _animalsListDeps() => AnimalsListDeps(
+  repository: getIt<AnimalRepository>(),
+  shelterProvider: getIt<CurrentShelterProvider>(),
+  router: getIt<AnimalsRouterService>(),
+  permissions: getIt<AnimalPermissions>(),
+  statusLabels: getIt<AnimalStatusLabels>(),
+);
 
 /// Byte source of the document described by [kind] + [id], resolved through DI.
 PdfDocFetcher _docFetcher(DocKind kind, int id) => switch (kind) {

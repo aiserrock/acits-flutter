@@ -5,7 +5,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ui_kit/ui_kit.dart';
 
-import 'package:shell/widget/personal_drawer.dart';
 import 'package:shell/util/web_insets/web_insets.dart';
 
 List<AdaptiveDestination> _buildDestinations(BuildContext context) {
@@ -32,9 +31,12 @@ List<AdaptiveDestination> _buildDestinations(BuildContext context) {
 /// navigation stack, kept while the user switches tabs. A branch is built the
 /// first time it is opened.
 class RootScreen extends StatefulWidget {
-  const RootScreen({required this.navigationShell, super.key});
+  const RootScreen({required this.navigationShell, required this.drawer, super.key});
 
   final StatefulNavigationShell navigationShell;
+
+  /// The app drawer, wired with its dependencies by the route builder.
+  final Widget drawer;
 
   @override
   State<RootScreen> createState() => _RootScreenState();
@@ -81,7 +83,7 @@ class _RootScreenState extends State<RootScreen> {
       // планшете, развёрнутый рейл на широком окне.
       child: AdaptiveScaffold(
         scaffoldKey: _scaffoldKey,
-        drawer: const PersonalDrawerWidget(),
+        drawer: widget.drawer,
         destinations: _buildDestinations(context),
         selectedIndex: widget.navigationShell.currentIndex,
         onDestinationSelected: _onDestinationSelected,

@@ -4,7 +4,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_kit/ui_kit.dart' show FormEditCard, EditCardData, bsSelectorActions;
 
-import 'package:di/di.dart';
 import 'package:shell/src/shell_exports.dart';
 import 'package:shell/presentation/animal_edit/data/animal_edit_data_holder.dart';
 import 'package:shell/presentation/animal_edit/widget/animal_edit_page.dart';
@@ -29,13 +28,14 @@ class _AnimalEditStatusPageState extends State<AnimalEditStatusPage> with Animal
   final _dateReceiptController = TextEditingController();
   final _statusController = TextEditingController();
   final _catchController = TextEditingController();
-  final _statusLabels = getIt<AnimalStatusLabels>();
+  late final AnimalStatusLabels _statusLabels;
   AnimalStatus? status;
   DateTime? date;
 
   @override
   void initState() {
     super.initState();
+    _statusLabels = context.read<AnimalStatusLabels>();
     _setControllers(widget.animal);
   }
 
