@@ -1,0 +1,569 @@
+name: Release
+
+# Two-step release, build once and promote the same binaries:
+#   push to release/*  -> build signed prod binaries and upload them to the
+#                         internal channels: Google Play internal track,
+#                         TestFlight, RuStore (sent to moderation with manual
+#                         publication) and Firebase App Distribution (dev).
+#   push tag v*        -> promote the build made from that commit to production:
+#                         Play staged rollout, App Store review, RuStore
+#                         publication, GitHub Release. Nothing is rebuilt.
+# The process, the build number formula and every secret are in doc/release.md.
+on:
+  push:
+    branches: ["release/**"]
+    tags: ["v*"]
+
+# One release run per ref, and a running release is never cancelled.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  ANDROID_PACKAGE_NAME: ru.acits
+  IOS_BUNDLE_ID: ru.acits
+  FIREBASE_ANDROID_APP_ID_PROD: "1:783694751281:android:46079e805d6be431c99710"
+  FIREBASE_ANDROID_APP_ID_DEV: "1:874749050746:android:d9e96dcaa51896eec3a0c3"
+  FIREBASE_IOS_APP_ID_PROD: "1:783694751281:ios:857fc77a2eaee11ec99710"
+
+jobs:
+  # ─────────────────────────── release/* : build ───────────────────────────
+  preflight:
+    name: Preflight
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      build_number: ${{ steps.version.outputs.build_number }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Fail here, before any build, with one message naming every gap.
+      - name: Check required secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          GOOGLE_SERVICES_JSON_PROD: ${{ secrets.GOOGLE_SERVICES_JSON_PROD }}
+          GOOGLE_SERVICES_JSON_DEV: ${{ secrets.GOOGLE_SERVICES_JSON_DEV }}
+          GOOGLE_SERVICE_INFO_PLIST_PROD: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          RUSTORE_KEY_ID: ${{ secrets.RUSTORE_KEY_ID }}
+          RUSTORE_PRIVATE_KEY: ${{ secrets.RUSTORE_PRIVATE_KEY }}
+        run: |
+          tool/release/require_env.sh \
+            ANDROID_KEYSTORE_BASE64 ANDROID_STORE_PASSWORD ANDROID_KEY_PASSWORD ANDROID_KEY_ALIAS \
+            GOOGLE_SERVICES_JSON_PROD GOOGLE_SERVICES_JSON_DEV GOOGLE_SERVICE_INFO_PLIST_PROD \
+            PLAY_SERVICE_ACCOUNT_JSON FIREBASE_SERVICE_ACCOUNT_JSON \
+            ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8_BASE64 APPLE_TEAM_ID \
+            RUSTORE_KEY_ID RUSTORE_PRIVATE_KEY
+
+      - name: Compute version and build number
+        id: version
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          tool/release/build_number.sh "$RUN_NUMBER" | tee -a "$GITHUB_OUTPUT"
+
+      # The marketing version must already have its changelog section: the tag
+      # step publishes release notes from it.
+      - name: Check changelog section
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          if ! grep -qE "^## \[${VERSION//./\\.}([+ ]|\])" CHANGELOG.md; then
+            echo "CHANGELOG.md has no section for $VERSION" >&2
+            exit 1
+          fi
+
+  build-android:
+    name: Build Android
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      VERSION: ${{ needs.preflight.outputs.version }}
+      BUILD_NUMBER: ${{ needs.preflight.outputs.build_number }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version-file: .fvmrc
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Provision Firebase config
+        env:
+          GOOGLE_SERVICES_PROD: ${{ secrets.GOOGLE_SERVICES_JSON_PROD }}
+          GOOGLE_SERVICES_DEV: ${{ secrets.GOOGLE_SERVICES_JSON_DEV }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$GOOGLE_SERVICES_PROD" | base64 --decode > android/app/src/prod/google-services.json
+          printf '%s' "$GOOGLE_SERVICES_DEV" | base64 --decode > android/app/src/dev/google-services.json
+          tool/release/check_firebase_config.sh \
+            android/app/src/prod/google-services.json android/app/src/dev/google-services.json
+
+      - name: Provision release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/keystore/release.jks
+          {
+            echo "storeFile=../keystore/release.jks"
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyPassword=$KEY_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+          } > android/keystore/key.properties
+
+      # One obfuscated build per artefact; each keeps its own Dart symbols,
+      # because symbols only match the build that produced them.
+      - name: Build prod AAB (Google Play)
+        run: |
+          flutter build appbundle --release --flavor prod --target lib/main.dart \
+            --build-name="$VERSION" --build-number="$BUILD_NUMBER" \
+            --obfuscate --split-debug-info=build/symbols/prod-aab
+
+      - name: Build prod APK (RuStore, GitHub Release)
+        run: |
+          flutter build apk --release --flavor prod --target lib/main.dart \
+            --build-name="$VERSION" --build-number="$BUILD_NUMBER" \
+            --obfuscate --split-debug-info=build/symbols/prod-apk
+
+      - name: Build dev APK (Firebase App Distribution)
+        run: |
+          flutter build apk --release --flavor dev --target test/dev/main.dart \
+            --build-name="$VERSION" --build-number="$BUILD_NUMBER"
+
+      - name: Remove signing material
+        if: always()
+        run: rm -f android/keystore/release.jks android/keystore/key.properties
+
+      - name: Collect artefacts
+        run: |
+          set -euo pipefail
+          mkdir -p dist/symbols
+          cp build/app/outputs/bundle/prodRelease/app-prod-release.aab dist/acits-prod.aab
+          cp build/app/outputs/flutter-apk/app-prod-release.apk dist/acits-prod.apk
+          cp build/app/outputs/flutter-apk/app-dev-release.apk dist/acits-dev.apk
+          cp -R build/symbols/prod-aab dist/symbols/prod-aab
+          cp -R build/symbols/prod-apk dist/symbols/prod-apk
+          if [ -f build/app/outputs/mapping/prodRelease/mapping.txt ]; then
+            cp build/app/outputs/mapping/prodRelease/mapping.txt dist/symbols/mapping.txt
+          fi
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: android-release
+          path: dist/
+          if-no-files-found: error
+          retention-days: 90
+
+  build-ios:
+    name: Build iOS
+    needs: preflight
+    runs-on: macos-latest
+    timeout-minutes: 60
+    env:
+      VERSION: ${{ needs.preflight.outputs.version }}
+      BUILD_NUMBER: ${{ needs.preflight.outputs.build_number }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version-file: .fvmrc
+          channel: stable
+          cache: true
+
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          flutter config --enable-swift-package-manager
+          flutter pub get
+
+      - name: Cache SwiftPM
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('ios/**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Provision Firebase config
+        env:
+          GOOGLE_SERVICE_INFO_PROD: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$GOOGLE_SERVICE_INFO_PROD" | base64 --decode > ios/flavors/prod/GoogleService-Info.plist
+          cp ios/flavors/dev/GoogleService-Info.plist.example ios/flavors/dev/GoogleService-Info.plist
+          tool/release/check_firebase_config.sh ios/flavors/prod/GoogleService-Info.plist
+
+      # Compiles the Dart code with obfuscation and writes the version into the
+      # Xcode build settings; fastlane then archives and signs.
+      - name: Build Flutter iOS (no codesign)
+        run: |
+          flutter build ios --release --no-codesign --config-only \
+            --flavor prod --target lib/main.dart \
+            --build-name="$VERSION" --build-number="$BUILD_NUMBER" \
+            --obfuscate --split-debug-info=build/symbols/prod-ios
+
+      - name: Sign and export IPA
+        working-directory: ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: bundle exec fastlane ios build output_directory:"$GITHUB_WORKSPACE/dist"
+
+      - name: Collect symbols
+        run: |
+          set -euo pipefail
+          mkdir -p dist/symbols
+          cp -R build/symbols/prod-ios dist/symbols/prod-ios
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ios-release
+          path: dist/
+          if-no-files-found: error
+          retention-days: 90
+
+  # ───────────────────── release/* : internal channels ─────────────────────
+  play-internal:
+    name: Google Play (internal)
+    needs: [preflight, build-android]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: android-release
+          path: dist
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          bundler-cache: true
+      - name: Upload to the internal track
+        working-directory: android
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: bundle exec fastlane android internal aab:"$GITHUB_WORKSPACE/dist/acits-prod.aab"
+
+  rustore-draft:
+    name: RuStore (moderation)
+    needs: [preflight, build-android]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: android-release
+          path: dist
+      - name: Create the version and send it to moderation
+        env:
+          RUSTORE_KEY_ID: ${{ secrets.RUSTORE_KEY_ID }}
+          RUSTORE_PRIVATE_KEY: ${{ secrets.RUSTORE_PRIVATE_KEY }}
+          RUSTORE_PACKAGE_NAME: ${{ env.ANDROID_PACKAGE_NAME }}
+        run: tool/release/rustore.sh draft dist/acits-prod.apk
+
+  testflight:
+    name: TestFlight
+    needs: [preflight, build-ios]
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ios-release
+          path: dist
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          bundler-cache: true
+      - name: Upload to TestFlight
+        working-directory: ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+        run: bundle exec fastlane ios beta ipa:"$GITHUB_WORKSPACE/dist/acits.ipa"
+
+  firebase:
+    name: Firebase (dev build, symbols)
+    needs: [preflight, build-android]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: android-release
+          path: dist
+      - name: Install Firebase CLI
+        run: npm install --global firebase-tools@15.28.1
+      - name: Write service account
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT_JSON" > "$RUNNER_TEMP/firebase-sa.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/firebase-sa.json" >> "$GITHUB_ENV"
+      - name: Distribute the dev build to testers
+        env:
+          VERSION: ${{ needs.preflight.outputs.version }}
+          BUILD_NUMBER: ${{ needs.preflight.outputs.build_number }}
+          TESTER_GROUPS: ${{ vars.FIREBASE_TESTER_GROUPS }}
+        run: |
+          set -euo pipefail
+          args=(--app "$FIREBASE_ANDROID_APP_ID_DEV" --release-notes "$VERSION ($BUILD_NUMBER)")
+          if [ -n "$TESTER_GROUPS" ]; then args+=(--groups "$TESTER_GROUPS"); fi
+          firebase appdistribution:distribute dist/acits-dev.apk "${args[@]}"
+      # Dart symbols of both prod binaries, so obfuscated stack traces resolve.
+      - name: Upload Dart symbols to Crashlytics
+        run: |
+          set -euo pipefail
+          firebase crashlytics:symbols:upload --app "$FIREBASE_ANDROID_APP_ID_PROD" dist/symbols/prod-aab
+          firebase crashlytics:symbols:upload --app "$FIREBASE_ANDROID_APP_ID_PROD" dist/symbols/prod-apk
+      - name: Remove service account
+        if: always()
+        run: rm -f "$RUNNER_TEMP/firebase-sa.json"
+
+  ios-symbols:
+    name: Crashlytics (iOS Dart symbols)
+    needs: [preflight, build-ios]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ios-release
+          path: dist
+      - name: Install Firebase CLI
+        run: npm install --global firebase-tools@15.28.1
+      - name: Upload Dart symbols
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          trap 'rm -f "$RUNNER_TEMP/firebase-sa.json"' EXIT
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT_JSON" > "$RUNNER_TEMP/firebase-sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-sa.json"
+          firebase crashlytics:symbols:upload --app "$FIREBASE_IOS_APP_ID_PROD" dist/symbols/prod-ios
+
+  # Runs only when the Sentry secrets exist; the release does not depend on it.
+  sentry-symbols:
+    name: Sentry (symbols)
+    needs: [preflight, build-android]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+      SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+      SENTRY_URL: ${{ vars.SENTRY_URL }}
+    steps:
+      - name: Check configuration
+        id: config
+        run: |
+          if [ -n "$SENTRY_AUTH_TOKEN" ] && [ -n "$SENTRY_ORG" ] && [ -n "$SENTRY_PROJECT" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Sentry is not configured — symbols were not uploaded."
+          fi
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: steps.config.outputs.enabled == 'true'
+        with:
+          name: android-release
+          path: dist
+      - name: Upload debug files
+        if: steps.config.outputs.enabled == 'true'
+        run: |
+          set -euo pipefail
+          npm install --global @sentry/cli@2
+          sentry-cli debug-files upload --include-sources dist/symbols
+
+  # ─────────────────────────── tag v* : promote ────────────────────────────
+  # Finds the release-branch run that built this exact commit. The tag must
+  # point at a commit that was already built and uploaded.
+  locate-build:
+    name: Locate the build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      run_id: ${{ steps.find.outputs.run_id }}
+      version: ${{ steps.find.outputs.version }}
+      build_number: ${{ steps.find.outputs.build_number }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Find the successful release run for this commit
+        id: find
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          run="$(gh api --paginate "repos/$REPO/actions/workflows/release.yml/runs?head_sha=$SHA&event=push&status=success" \
+            --jq '[.workflow_runs[] | select(.head_branch | startswith("release/"))] | sort_by(.run_number) | last | select(. != null) | "\(.id) \(.run_number)"' | tail -1)"
+          if [ -z "$run" ]; then
+            echo "No successful release/* build exists for $SHA. Push the release branch first and tag the commit it built." >&2
+            exit 1
+          fi
+          run_id="${run%% *}"
+          tool/release/build_number.sh "${run##* }" | tee -a "$GITHUB_OUTPUT"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          version="$(tool/release/build_number.sh 1 | sed -n 's/^version=//p')"
+          if [ "v$version" != "$TAG" ]; then
+            echo "Tag $TAG does not match pubspec version $version." >&2
+            exit 1
+          fi
+
+  play-production:
+    name: Google Play (production)
+    needs: locate-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          bundler-cache: true
+      - name: Promote internal to production (staged rollout)
+        working-directory: android
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          BUILD_NUMBER: ${{ needs.locate-build.outputs.build_number }}
+          ROLLOUT: ${{ vars.PLAY_ROLLOUT_FRACTION || '0.1' }}
+        run: bundle exec fastlane android promote version_code:"$BUILD_NUMBER" rollout:"$ROLLOUT"
+
+  appstore-submit:
+    name: App Store (review)
+    needs: locate-build
+    runs-on: macos-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          bundler-cache: true
+      - name: Submit the TestFlight build for review
+        working-directory: ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          VERSION: ${{ needs.locate-build.outputs.version }}
+          BUILD_NUMBER: ${{ needs.locate-build.outputs.build_number }}
+        run: bundle exec fastlane ios submit version:"$VERSION" build_number:"$BUILD_NUMBER"
+
+  rustore-publish:
+    name: RuStore (publish)
+    needs: locate-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Publish the moderated version
+        env:
+          RUSTORE_KEY_ID: ${{ secrets.RUSTORE_KEY_ID }}
+          RUSTORE_PRIVATE_KEY: ${{ secrets.RUSTORE_PRIVATE_KEY }}
+          RUSTORE_PACKAGE_NAME: ${{ env.ANDROID_PACKAGE_NAME }}
+          BUILD_NUMBER: ${{ needs.locate-build.outputs.build_number }}
+        run: tool/release/rustore.sh publish "$BUILD_NUMBER"
+
+  github-release:
+    name: GitHub Release
+    needs: locate-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: android-release
+          path: dist
+          run-id: ${{ needs.locate-build.outputs.run_id }}
+          github-token: ${{ github.token }}
+      # Release notes are the changelog section of this version, bullets only.
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.locate-build.outputs.version }}
+        run: |
+          set -euo pipefail
+          notes="$(awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "([+ ]|\\])" { found=1; next }
+            found && /^## \[/ { exit }
+            found && /^- / { print }
+          ' CHANGELOG.md)"
+          if [ -z "$notes" ]; then
+            echo "No CHANGELOG.md section found for $VERSION" >&2
+            exit 1
+          fi
+          gh release create "$TAG" dist/acits-prod.apk --title "$TAG" --notes "$notes"
