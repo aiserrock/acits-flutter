@@ -19,9 +19,10 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(titleString),
-      leading: GestureDetector(
-        onTap: onBackPressure,
-        child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
+      leading: IconButton(
+        tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        onPressed: onBackPressure,
+        icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
       ),
       centerTitle: true,
       elevation: elevation,

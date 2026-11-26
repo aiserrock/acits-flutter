@@ -36,9 +36,10 @@ class _EmailConfirmationView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         shadowColor: Colors.transparent,
-        leading: GestureDetector(
-          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
-          onTap: () => Navigator.of(context).pop(),
+        leading: IconButton(
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
         ),
         title: Text(
           LocaleKeys.regEmaiConfirmation.tr(),

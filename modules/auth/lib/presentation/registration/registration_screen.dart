@@ -83,9 +83,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> with TickerProv
             shadowColor: Colors.transparent,
             title: widget.appLogo,
             centerTitle: true,
-            leading: GestureDetector(
-              child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
-              onTap: () => Navigator.of(context).pop(),
+            leading: IconButton(
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.primary),
             ),
             bottom: _buildTabs(context),
           ),
