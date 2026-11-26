@@ -41,7 +41,7 @@ dependencies:
     path: ../media
 
   # Context-less navigation (logout/deeplink) resolves GoRouter from getIt.
-  go_router: ^17.3.0
+  go_router: ^18.1.4
 
   # DI.
   injectable: ^3.0.0
