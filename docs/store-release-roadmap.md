@@ -146,6 +146,8 @@ Plugin, генератор API на текущем мажоре.
   читаются после обновления».
 - ⛔ **Deep links и app links** — M. Финальные схемы и хосты, `assetlinks.json`,
   `apple-app-site-association`, associated domains в entitlements (сейчас файл пустой).
+  Текущий контракт и чек-лист владельца — `doc/deeplink/README.md`; ждёт домен, SHA-256
+  ключа Play App Signing и решение по путям вместе с бэкендом.
 - **Правила бэкапа** — S. `allowBackup` и исключения для secure storage.
 - **Разрешения Android** — S. Убрать `READ_MEDIA_*`, `READ_EXTERNAL_STORAGE`, `AD_ID` и
   рекламные разрешения, которые тянут плагины и которые приложению не нужны.

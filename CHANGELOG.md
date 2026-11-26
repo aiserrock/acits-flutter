@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Deep links: зафиксирован текущий контракт ссылок и чек-лист владельца перед первой
+  публикацией (`doc/deeplink/README.md`: хосты, `assetlinks.json` с ключом Play App
+  Signing, `apple-app-site-association`, associated domains). Веб-образ отдаёт
+  `/.well-known/*` как JSON и 404 вместо подмены на `index.html`. Черновик
+  `assetLinks.json` переименован в `assetlinks.json` — так его ищет Android.
+
 - Принудительное и рекомендуемое обновление, kill-switch: splash до любой навигации
   спрашивает Firebase Remote Config (`min_supported_build`, `recommended_build`,
   `kill_switch`, `update_message`) и показывает экран «Нужно обновить приложение»,
