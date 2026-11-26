@@ -34,7 +34,7 @@ class DocViewerCubit extends Cubit<DataState<Uint8List>> {
       safeEmit(DataState.content(bytes));
     } catch (e, s) {
       Log.error('[doc_viewer] fetchData упал (${e.runtimeType})', e, s);
-      safeEmit(DataState.error(e));
+      safeEmit(DataState.error(Failure.from(e)));
     }
   }
 }

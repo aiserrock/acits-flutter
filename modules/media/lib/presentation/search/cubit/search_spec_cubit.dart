@@ -81,10 +81,11 @@ class SearchSpecCubit extends Cubit<SearchSpecState> {
       );
     } catch (error, s) {
       Log.error('SearchSpecCubit.loadData failed', error, s);
+      final failure = Failure.from(error);
       if (state.data.isLoading) {
-        safeEmit(state.copyWith(data: DataState.error(error), isPaging: false));
+        safeEmit(state.copyWith(data: DataState.error(failure), isPaging: false));
       } else {
-        safeEmit(state.copyWith(isPaging: false, pagingError: () => error));
+        safeEmit(state.copyWith(isPaging: false, pagingError: () => failure));
       }
     }
   }

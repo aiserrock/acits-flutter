@@ -19,7 +19,6 @@ dependencies:
   equatable: ^3.0.0
   formz: ^0.8.0
   collection: ^1.19.0
-  dio: ^5.9.2
   easy_localization: ^3.0.8
   flutter_keyboard_visibility: ^7.0.1
   smooth_page_indicator: ^3.0.0

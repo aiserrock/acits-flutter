@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:core/data.dart';
 import 'package:auth/auth.dart' show AuthSessionApi, AdminRegistrationInput, WorkerRegistrationInput, WorkerRole;
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -20,8 +21,7 @@ const _shelterListDefaultLenght = 25;
 /// Сессионный держатель приложения: токены, список приютов, текущая роль. API
 /// вызовы идут через стабильный [AuthApiPort] (core api) — сгенерированные
 /// chopper/retrofit типы сюда не протекают. Наружу отдаёт доменные сущности
-/// ([Shelter]/[CurrentShelterRole]); ошибки маппит в существующие исключения
-/// приложения, чтобы не переписывать catch у вызывающих сторон.
+/// ([Shelter]/[CurrentShelterRole]) в `Result<Failure, T>`, как репозитории фич.
 @singleton
 class AuthService extends ChangeNotifier implements AuthSessionApi {
   AuthService(this._authApi, this._authRepository, this._confirmRepository, this._preferenceStorage);
@@ -83,48 +83,35 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
   }
 
   @override
-  Future<void> login(String? login, String? pass) async {
+  Future<Result<Failure, void>> login(String? login, String? pass) {
     Log.info('Login attempt: username=$login');
-    try {
+    return _guard<void>('Login', () async {
       final result = await _authApi.login(login ?? '', pass ?? '');
       _access = result.access;
       _refresh = result.refresh;
       Log.info('Login success: username=$login');
-    } on DioException catch (e) {
-      Log.warning('Login failed (status=${e.response?.statusCode}): username=$login');
-      final message = _errorBody(e)?.toString();
-      switch (e.response?.statusCode) {
-        case 401:
-          throw NotAuthorizedException(message: message);
-        default:
-          throw MessagedException(message: message);
-      }
-    }
+    });
   }
 
   @override
-  Future<List<Shelter>> getShelterList() async {
-    try {
+  Future<Result<Failure, List<Shelter>>> getShelterList() {
+    return _guard('Get shelter list', () async {
       final result = await _authApi.myShelters();
       _shelterList = result.map(_toShelter).toList(growable: false);
       return _shelterList;
-    } on DioException catch (e) {
-      throw MessagedException(error: _errorBody(e));
-    }
+    });
   }
 
   @override
-  Future<CurrentShelterRole?> setCurrentShelter(int shelterId) async {
+  Future<Result<Failure, CurrentShelterRole>> setCurrentShelter(int shelterId) {
     Log.info('Set current shelter: id=$shelterId');
-    try {
-      final result = await _authApi.setCurrentShelter(shelterId);
-      _shelterRole = _toRole(result);
+    return _guard('Set current shelter', () async {
+      final role = _toRole(await _authApi.setCurrentShelter(shelterId));
+      _shelterRole = role;
       // Запоминаем приют для автовхода без экрана выбора при следующем старте.
       _preferenceStorage.currentShelterId = shelterId;
-      return _shelterRole;
-    } on DioException catch (e) {
-      throw MessagedException(error: _errorBody(e));
-    }
+      return role;
+    });
   }
 
   /// Восстановить ранее выбранный приют из хранилища (для автовхода).
@@ -140,13 +127,7 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
       return false;
     }
     Log.info('AuthService.restoreShelter: id=$savedId');
-    try {
-      final role = await setCurrentShelter(savedId);
-      return role != null;
-    } catch (e, s) {
-      Log.warning('AuthService.restoreShelter failed', e, s);
-      return false;
-    }
+    return (await setCurrentShelter(savedId)).isOk;
   }
 
   void logout() {
@@ -170,24 +151,22 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
   }
 
   /// Список всех доступных приютов
-  Future<List<Shelter>> getAllShelterList({
+  Future<Result<Failure, List<Shelter>>> getAllShelterList({
     int limit = _shelterListDefaultLenght,
     int offset = 0,
     String? searchRequest,
-  }) async {
-    try {
+  }) {
+    return _guard('Get all shelters', () async {
       final result = await _authApi.allShelters(limit: limit, offset: offset, search: searchRequest);
       _shelterList = result.map(_toShelter).toList(growable: false);
       return _shelterList;
-    } on DioException catch (e) {
-      throw MessagedException(error: _errorBody(e));
-    }
+    });
   }
 
   /// Зарегистрировать новый приют и админа в нем
   @override
-  Future<bool> registrationAdmin(AdminRegistrationInput input) async {
-    try {
+  Future<Result<Failure, void>> registrationAdmin(AdminRegistrationInput input) {
+    return _guard<void>('Register admin', () async {
       await _authApi.registerAdmin(
         UserAdminWriteDto(
           email: input.email,
@@ -207,16 +186,13 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
           ),
         ),
       );
-      return true;
-    } on DioException catch (e) {
-      throw MessagedException(error: _errorBody(e));
-    }
+    });
   }
 
   /// Зарегистрировать нового пользователя
   @override
-  Future<bool> registrationCustomer(WorkerRegistrationInput input) async {
-    try {
+  Future<Result<Failure, void>> registrationCustomer(WorkerRegistrationInput input) {
+    return _guard<void>('Register worker', () async {
       await _authApi.registerWorker(
         UserWorkerWriteDto(
           shelter: input.shelterId,
@@ -232,15 +208,12 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
           role: input.role == WorkerRole.worker ? 'WORKER' : 'GUEST',
         ),
       );
-      return true;
-    } on DioException catch (e) {
-      throw MessagedException(error: _errorBody(e));
-    }
+    });
   }
 
   /// Подтвердить электронную почту при регистрации
   @override
-  Future<void> confirmEmail(String email) => _confirmRepository.confirmEmail(email);
+  Future<Result<Failure, void>> confirmEmail(String email) => _confirmRepository.confirmEmail(email);
 
   Shelter _toShelter(ShelterShortDto d) => Shelter(id: d.id, name: d.name);
 
@@ -251,6 +224,7 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
     canDelete: d.isUserCanDelete,
   );
 
-  /// Тело ответа-ошибки dio в человекочитаемом виде (как раньше `result.error`).
-  Object? _errorBody(DioException e) => e.response?.data ?? e.message;
+  /// Транспортные исключения заканчиваются здесь: наружу уходит [Failure].
+  Future<Result<Failure, T>> _guard<T>(String action, Future<T> Function() body) =>
+      guard(body, onError: (e, s) => Log.warning('$action failed', e, s));
 }

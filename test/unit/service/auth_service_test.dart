@@ -3,6 +3,7 @@ import 'package:auth/auth.dart';
 import 'package:app_services/app_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:util/util.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthApiPort extends Mock implements AuthApiPort {}
@@ -71,14 +72,25 @@ void main() {
       expect(service.access, 'a');
     });
 
-    test('maps 401 to NotAuthorizedException', () async {
+    test('wrong credentials (401) become AuthFailure, not an exception', () async {
       when(() => api.login(any(), any())).thenThrow(_dio(401));
-      await expectLater(service.login('u', 'p'), throwsA(isA<NotAuthorizedException>()));
+      expect((await service.login('u', 'p')).failureOrNull, const AuthFailure());
+      expect(service.access, isNull);
     });
 
-    test('maps other errors to MessagedException', () async {
+    test('a server error becomes ServerFailure carrying the status and body', () async {
       when(() => api.login(any(), any())).thenThrow(_dio(500));
-      await expectLater(service.login('u', 'p'), throwsA(isA<MessagedException>()));
+      expect((await service.login('u', 'p')).failureOrNull, const ServerFailure(500, 'err'));
+    });
+
+    test('no connection becomes NoInternet', () async {
+      when(() => api.login(any(), any())).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: '/'),
+          type: DioExceptionType.connectionError,
+        ),
+      );
+      expect((await service.login('u', 'p')).failureOrNull, const NoInternet());
     });
   });
 
@@ -122,7 +134,7 @@ void main() {
       when(
         () => api.myShelters(),
       ).thenAnswer((_) async => const [ShelterShortDto(id: 1, name: 'Alpha'), ShelterShortDto(id: 2, name: 'Beta')]);
-      final result = await service.getShelterList();
+      final result = (await service.getShelterList()).valueOrNull;
       expect(result, const [Shelter(id: 1, name: 'Alpha'), Shelter(id: 2, name: 'Beta')]);
       expect(service.shelterList, result);
     });
@@ -138,10 +150,18 @@ void main() {
           isUserCanDelete: false,
         ),
       );
-      final role = await service.setCurrentShelter(5);
+      final role = (await service.setCurrentShelter(5)).valueOrNull;
       expect(role, const CurrentShelterRole(currentShelterId: 5, role: 'WORKER', canEdit: true, canDelete: false));
       expect(service.currentShelterId, 5);
       verify(() => prefs.currentShelterId = 5).called(1);
+    });
+  });
+
+  group('restoreShelter', () {
+    test('is false when the saved shelter can no longer be applied, and does not throw', () async {
+      when(() => prefs.currentShelterId).thenReturn(5);
+      when(() => api.setCurrentShelter(5)).thenThrow(_dio(403));
+      expect(await service.restoreShelter(), isFalse);
     });
   });
 
@@ -163,7 +183,7 @@ void main() {
   });
 
   group('registration', () {
-    test('registrationAdmin maps input to a write DTO and returns true', () async {
+    test('registrationAdmin maps input to a write DTO and returns Ok', () async {
       when(() => api.registerAdmin(any())).thenAnswer(
         (_) async => const UserAdminDto(id: 1, firstName: 'A', lastName: 'B', email: 'a@b.c', isOfferSigned: true),
       );
@@ -178,7 +198,7 @@ void main() {
           city: 'M',
         ),
       );
-      expect(ok, isTrue);
+      expect(ok.isOk, isTrue);
 
       final captured = verify(() => api.registerAdmin(captureAny())).captured.single as UserAdminWriteDto;
       expect(captured.email, 'a@b.c');
@@ -201,7 +221,7 @@ void main() {
           shelterId: 3,
         ),
       );
-      expect(ok, isTrue);
+      expect(ok.isOk, isTrue);
 
       final captured = verify(() => api.registerWorker(captureAny())).captured.single as UserWorkerWriteDto;
       expect(captured.role, 'WORKER');

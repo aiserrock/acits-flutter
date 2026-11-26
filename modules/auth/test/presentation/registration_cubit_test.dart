@@ -1,4 +1,5 @@
 import 'package:core/domain.dart';
+import 'package:util/util.dart';
 import 'package:auth/auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -62,35 +63,35 @@ void main() {
   });
 
   group('RegistrationCubit — submitAdmin', () {
-    test('returns true and toggles submitting on success', () async {
-      when(() => auth.registrationAdmin(any())).thenAnswer((_) async => true);
+    test('returns Ok and toggles submitting on success', () async {
+      when(() => auth.registrationAdmin(any())).thenAnswer((_) async => const Ok(null));
       final cubit = build();
-      final ok = await cubit.submitAdmin(_admin);
-      expect(ok, isTrue);
+      expect((await cubit.submitAdmin(_admin))?.isOk, isTrue);
       expect(cubit.state.submitting, isFalse);
       verify(() => auth.registrationAdmin(_admin)).called(1);
     });
 
-    test('rethrows and clears submitting on failure', () async {
-      when(() => auth.registrationAdmin(any())).thenThrow(MessagedException(message: 'bad'));
+    test('returns the failure and clears submitting when the server refuses', () async {
+      const refusal = ServerFailure(400, 'email: already registered');
+      when(() => auth.registrationAdmin(any())).thenAnswer((_) async => const Err(refusal));
       final cubit = build();
-      await expectLater(cubit.submitAdmin(_admin), throwsA(isA<MessagedException>()));
+      expect((await cubit.submitAdmin(_admin))?.failureOrNull, refusal);
       expect(cubit.state.submitting, isFalse);
     });
   });
 
   group('RegistrationCubit — submitCustomer', () {
-    test('returns true on success', () async {
-      when(() => auth.registrationCustomer(any())).thenAnswer((_) async => true);
+    test('returns Ok on success', () async {
+      when(() => auth.registrationCustomer(any())).thenAnswer((_) async => const Ok(null));
       final cubit = build();
-      expect(await cubit.submitCustomer(_worker), isTrue);
+      expect((await cubit.submitCustomer(_worker))?.isOk, isTrue);
       verify(() => auth.registrationCustomer(_worker)).called(1);
     });
 
-    test('rethrows on failure', () async {
-      when(() => auth.registrationCustomer(any())).thenThrow(MessagedException(message: 'bad'));
+    test('returns the failure when the request does not reach the server', () async {
+      when(() => auth.registrationCustomer(any())).thenAnswer((_) async => const Err(NoInternet()));
       final cubit = build();
-      await expectLater(cubit.submitCustomer(_worker), throwsA(isA<MessagedException>()));
+      expect((await cubit.submitCustomer(_worker))?.failureOrNull, const NoInternet());
       expect(cubit.state.submitting, isFalse);
     });
   });

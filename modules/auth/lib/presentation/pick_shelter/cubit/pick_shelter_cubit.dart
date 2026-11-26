@@ -56,16 +56,16 @@ class PickShelterCubit extends Cubit<PickShelterState> {
     final shelter = results[index];
     Log.debug('PickShelterCubit.pickShelter: index=$index id=${shelter.id}');
     safeEmit(state.copyWith(status: const DataState.loading()));
-    try {
-      await _authService.setCurrentShelter(shelter.id);
-      await _configService.initConfig(currentShelterId: shelter.id);
-      Log.info('PickShelterCubit.pickShelter ok: id=${shelter.id}');
-      return true;
-    } catch (e, s) {
-      Log.error('PickShelterCubit.pickShelter failed: id=${shelter.id}', e, s);
-      safeEmit(state.copyWith(status: DataState.error(e)));
+    final failure =
+        (await _authService.setCurrentShelter(shelter.id)).failureOrNull ??
+        (await _configService.initConfig(currentShelterId: shelter.id)).failureOrNull;
+    if (failure != null) {
+      Log.error('PickShelterCubit.pickShelter failed: id=${shelter.id}: $failure');
+      safeEmit(state.copyWith(status: DataState.error(failure)));
       return false;
     }
+    Log.info('PickShelterCubit.pickShelter ok: id=${shelter.id}');
+    return true;
   }
 
   /// Сбросить ошибку выбора и вернуть экран к отрисовке списка.

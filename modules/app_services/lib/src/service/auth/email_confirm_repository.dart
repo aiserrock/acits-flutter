@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:core/domain.dart';
+import 'package:core/data.dart';
 import 'package:dio/dio.dart';
+import 'package:util/util.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app_services/src/log.dart';
 
@@ -18,12 +19,13 @@ class EmailConfirmRepository {
   static const _allowedHostSuffix = '.acits.ru';
   static const _requiredPathSegment = '/api/v1/users/verify-email/';
 
-  Future<void> confirmEmail(String confirmLink) async {
+  /// `Err(EmailLinkRejected)` — ссылка недоверенная или сервер её не принял.
+  Future<Result<Failure, void>> confirmEmail(String confirmLink) async {
     Log.debug('Confirm email');
     final uri = Uri.tryParse(confirmLink);
     if (!_isTrustedConfirmLink(uri)) {
       Log.warning('Untrusted confirm link rejected: ${uri?.host ?? '<unparseable>'}');
-      throw EmailConfirmException();
+      return const Err(EmailLinkRejected());
     }
 
     // Не мутируем общий Dio: следование редиректам отключаем через Options
@@ -33,8 +35,15 @@ class EmailConfirmRepository {
       _client.interceptors.add(_EmailConfirmInterceptor());
     }
 
-    await _client.getUri(uri!, options: Options(followRedirects: false));
-    Log.info('Email confirmed: ${uri.host}');
+    final result = await guard(
+      () => _client.getUri<dynamic>(uri!, options: Options(followRedirects: false)),
+      onError: (e, s) => Log.warning('Confirm email failed', e, s),
+    );
+    return result.fold((failure) => Err(failure), (response) {
+      if (response.extra[_rejectedFlag] == true) return const Err(EmailLinkRejected());
+      Log.info('Email confirmed: ${uri!.host}');
+      return const Ok(null);
+    });
   }
 
   /// Ссылка должна быть HTTPS, вести на `*.acits.ru` (или сам `acits.ru`) и
@@ -46,6 +55,8 @@ class EmailConfirmRepository {
     return hostOk && uri.path.contains(_requiredPathSegment);
   }
 }
+
+const _rejectedFlag = 'email_confirm.rejected';
 
 class _EmailConfirmInterceptor extends Interceptor {
   @override
@@ -59,7 +70,10 @@ class _EmailConfirmInterceptor extends Interceptor {
     if (response != null &&
         response.statusCode == HttpStatus.movedTemporarily &&
         (response.headers.value('location')?.contains('status=invalid_link') ?? false)) {
-      return handler.reject(DioException(requestOptions: response.requestOptions, error: EmailConfirmException()));
+      // Сервер ответил редиректом «ссылка недействительна» — это ответ, а не сбой сети.
+      return handler.resolve(
+        Response(statusCode: 200, requestOptions: response.requestOptions, extra: {_rejectedFlag: true}),
+      );
     }
     super.onError(err, handler);
   }

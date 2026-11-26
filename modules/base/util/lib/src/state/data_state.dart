@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../failure/failure.dart';
+
 /// Иммутабельное состояние загрузки данных для Cubit/Bloc.
 ///
 /// Замена мутабельного `ScreenDataState` из `screen_state.dart`. Три варианта:
@@ -12,7 +14,7 @@ sealed class DataState<T> extends Equatable {
 
   const factory DataState.loading() = DataLoading<T>;
   const factory DataState.content(T data) = DataContent<T>;
-  const factory DataState.error(Object error) = DataError<T>;
+  const factory DataState.error(Failure error) = DataError<T>;
 
   bool get isLoading => this is DataLoading<T>;
   bool get isContent => this is DataContent<T>;
@@ -41,7 +43,7 @@ class DataContent<T> extends DataState<T> {
 class DataError<T> extends DataState<T> {
   const DataError(this.error);
 
-  final Object error;
+  final Failure error;
 
   @override
   List<Object?> get props => [error];
@@ -62,7 +64,7 @@ class DataStateBuilder<T> extends StatelessWidget {
 
   final DataState<T> state;
   final WidgetBuilder loader;
-  final Widget Function(BuildContext context, Object error) errorBuilder;
+  final Widget Function(BuildContext context, Failure error) errorBuilder;
   final Widget Function(BuildContext context, T data) builder;
 
   @override
@@ -80,7 +82,7 @@ class DataStateConsumer<C extends StateStreamable<DataState<T>>, T> extends Stat
   const DataStateConsumer({required this.builder, required this.loader, required this.errorBuilder, super.key});
 
   final WidgetBuilder loader;
-  final Widget Function(BuildContext context, Object error) errorBuilder;
+  final Widget Function(BuildContext context, Failure error) errorBuilder;
   final Widget Function(BuildContext context, T data) builder;
 
   @override

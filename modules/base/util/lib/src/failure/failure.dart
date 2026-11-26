@@ -1,5 +1,10 @@
 sealed class Failure {
   const Failure();
+
+  /// Приводит пойманный объект к [Failure]: уже типизированная ошибка проходит
+  /// как есть, всё остальное — [UnknownFailure]. Транспортные исключения сюда
+  /// доходить не должны — их маппит data-слой (`guard`).
+  static Failure from(Object error) => error is Failure ? error : const UnknownFailure();
 }
 
 sealed class NetworkFailure extends Failure {
@@ -45,4 +50,10 @@ final class ParseFailure extends Failure {
 
 final class UnknownFailure extends Failure {
   const UnknownFailure();
+}
+
+/// Ссылка подтверждения e-mail отклонена: недоверенный адрес или сервер ответил,
+/// что ссылка недействительна.
+final class EmailLinkRejected extends Failure {
+  const EmailLinkRejected();
 }

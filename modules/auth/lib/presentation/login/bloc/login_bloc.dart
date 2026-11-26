@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:core/domain.dart' show Shelter;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -94,14 +93,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Log.debug('LoginBloc.submit: login attempt name=${state.name.value}');
       emitter(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
-      try {
-        await _authService.login(state.name.value, state.password.value);
-        Log.info('LoginBloc.submit ok: name=${state.name.value}');
-        emitter(state.copyWith(status: FormzSubmissionStatus.success));
-      } catch (e, s) {
-        Log.error('LoginBloc.submit failed: name=${state.name.value}', e, s);
-        emitter(state.copyWith(status: FormzSubmissionStatus.failure));
-      }
+      final result = await _authService.login(state.name.value, state.password.value);
+      result.fold(
+        (failure) {
+          Log.error('LoginBloc.submit failed: name=${state.name.value}: $failure');
+          emitter(state.copyWith(status: FormzSubmissionStatus.failure));
+        },
+        (_) {
+          Log.info('LoginBloc.submit ok: name=${state.name.value}');
+          emitter(state.copyWith(status: FormzSubmissionStatus.success));
+        },
+      );
     } else {
       Log.debug('LoginBloc.submit: validation failed');
     }
@@ -138,11 +140,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _pickShelter() async {
     Log.debug('LoginBloc.pickShelter: fetching shelter list');
-    final List<Shelter> list;
-    try {
-      list = await _authService.getShelterList();
-    } catch (error, stack) {
-      Log.error('LoginBloc.pickShelter failed to load shelter list', error, stack);
+    final list = (await _authService.getShelterList()).valueOrNull;
+    if (list == null) {
+      Log.error('LoginBloc.pickShelter failed to load shelter list');
       return;
     }
     Log.info('LoginBloc.pickShelter ok: navigating to pick shelter');

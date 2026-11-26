@@ -26,13 +26,16 @@ class EmailConfirmCubit extends Cubit<DataState<void>> {
   Future<void> _confirmEmail() async {
     Log.debug('EmailConfirmCubit.confirmEmail');
     safeEmit(const DataState.loading());
-    try {
-      await _authService.confirmEmail(confirmLink);
-      Log.info('EmailConfirmCubit.confirmEmail ok');
-      safeEmit(const DataState.content(null));
-    } catch (e, s) {
-      Log.error('EmailConfirmCubit.confirmEmail failed', e, s);
-      safeEmit(DataState.error(e));
-    }
+    final result = await _authService.confirmEmail(confirmLink);
+    result.fold(
+      (failure) {
+        Log.error('EmailConfirmCubit.confirmEmail failed: $failure');
+        safeEmit(DataState.error(failure));
+      },
+      (_) {
+        Log.info('EmailConfirmCubit.confirmEmail ok');
+        safeEmit(const DataState.content(null));
+      },
+    );
   }
 }

@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:lottie/lottie.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -27,7 +25,7 @@ class ErrorHolderWidget extends StatelessWidget {
   final String? title;
   final String? message;
   final String? button;
-  final Object? error;
+  final Failure? error;
   final VoidCallback? onPressed;
 
   @override
@@ -65,59 +63,29 @@ class ErrorHolderWidget extends StatelessWidget {
   }
 }
 
-extension _ErrorX on Object {
-  String get title {
-    // Repositories surface a typed Failure; raw exceptions still reach here from
-    // the paths that have not moved behind a repository yet.
-    final self = this;
-    if (self is Failure) {
-      return switch (self) {
-        NoInternet() => 'errorInternetFail'.tr(),
-        Timeout() => 'errorTimeoutFail'.tr(),
-        // 4xx — запрос отклонён (валидация, конфликт), сервер жив. Говорить
-        // «сервер недоступен» здесь неверно и уводит от реальной причины.
-        ServerFailure(:final code) when code >= 400 && code < 500 => 'commonError'.tr(),
-        ServerFailure() => 'errorServerFail'.tr(),
-        AuthFailure() => 'errorAuthFail'.tr(),
-        ForbiddenFailure() => 'errorForbidden'.tr(),
-        ParseFailure() || UnknownFailure() => 'commonError'.tr(),
-      };
-    }
-    if (self is DioException) {
-      return 'errorInternetFail'.tr();
-    }
-    switch (runtimeType) {
-      case const (SocketException):
-        return 'errorInternetFail'.tr();
-      default:
-        return 'commonError'.tr();
-    }
-  }
+extension _FailureX on Failure {
+  String get title => switch (this) {
+    NoInternet() => 'errorInternetFail'.tr(),
+    Timeout() => 'errorTimeoutFail'.tr(),
+    // 4xx — запрос отклонён (валидация, конфликт), сервер жив. Говорить
+    // «сервер недоступен» здесь неверно и уводит от реальной причины.
+    ServerFailure(:final code) when code >= 400 && code < 500 => 'commonError'.tr(),
+    ServerFailure() => 'errorServerFail'.tr(),
+    AuthFailure() => 'errorAuthFail'.tr(),
+    ForbiddenFailure() => 'errorForbidden'.tr(),
+    ParseFailure() || UnknownFailure() || EmailLinkRejected() => 'commonError'.tr(),
+  };
 
-  String get message {
-    final self = this;
-    if (self is Failure) {
-      return switch (self) {
-        NoInternet() => 'errorInternetFailMsg'.tr(),
-        Timeout() => 'errorTimeoutFailMsg'.tr(),
-        // Тело ответа объясняет, что именно не так (какое поле не прошло
-        // валидацию) — показываем его вместо общей фразы, если сервер прислал.
-        ServerFailure(:final code, :final note) when code >= 400 && code < 500 =>
-          note?.isNotEmpty ?? false ? note! : 'errorDefaultMsg'.tr(),
-        ServerFailure() => 'errorServerFailMsg'.tr(),
-        AuthFailure() => 'errorAuthFailMsg'.tr(),
-        ForbiddenFailure() => 'errorForbiddenMsg'.tr(),
-        ParseFailure() || UnknownFailure() => 'errorDefaultMsg'.tr(),
-      };
-    }
-    if (self is DioException) {
-      return 'errorInternetFail'.tr();
-    }
-    switch (runtimeType) {
-      case const (SocketException):
-        return 'errorInternetFailMsg'.tr();
-      default:
-        return 'errorDefaultMsg'.tr();
-    }
-  }
+  String get message => switch (this) {
+    NoInternet() => 'errorInternetFailMsg'.tr(),
+    Timeout() => 'errorTimeoutFailMsg'.tr(),
+    // Тело ответа объясняет, что именно не так (какое поле не прошло
+    // валидацию) — показываем его вместо общей фразы, если сервер прислал.
+    ServerFailure(:final code, :final note) when code >= 400 && code < 500 =>
+      note?.isNotEmpty ?? false ? note! : 'errorDefaultMsg'.tr(),
+    ServerFailure() => 'errorServerFailMsg'.tr(),
+    AuthFailure() => 'errorAuthFailMsg'.tr(),
+    ForbiddenFailure() => 'errorForbiddenMsg'.tr(),
+    ParseFailure() || UnknownFailure() || EmailLinkRejected() => 'errorDefaultMsg'.tr(),
+  };
 }

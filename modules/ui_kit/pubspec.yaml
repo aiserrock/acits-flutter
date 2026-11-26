@@ -18,7 +18,6 @@ dependencies:
   equatable: ^3.0.0
   shimmer: ^4.0.0
   lottie: ^3.3.3
-  dio: ^5.9.2
   flutter_svg: ^2.2.4
 
   # Для Failure — типизированные ошибки, которые ErrorHolderWidget превращает в
