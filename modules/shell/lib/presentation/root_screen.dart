@@ -1,19 +1,12 @@
-import 'package:animals/animals.dart';
-import 'package:prescriptions/prescriptions.dart' show DrugsScreen;
-import 'package:personal/personal.dart' show CalendarScreen;
-
-import 'package:di/di.dart';
-import 'package:localization/localization.dart';
-import 'package:ui_kit/ui_kit.dart';
-import 'package:shell/presentation/main/main_screen.dart';
-import 'package:shell/widget/personal_drawer.dart';
-import 'package:shell/util/web_insets/web_insets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:go_router/go_router.dart';
+import 'package:localization/localization.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ui_kit/ui_kit.dart';
 
-/// Индекс первой недоступной вкладки: «Календарь» и «Медикаменты» пока заглушки.
-const _firstLockedTab = 2;
+import 'package:shell/widget/personal_drawer.dart';
+import 'package:shell/util/web_insets/web_insets.dart';
 
 List<AdaptiveDestination> _buildDestinations(BuildContext context) {
   final inactive = context.appColors.inactiveIcon;
@@ -27,13 +20,22 @@ List<AdaptiveDestination> _buildDestinations(BuildContext context) {
   return [
     item(Assets.icon.today, LocaleKeys.commonToday.tr()),
     item(Assets.icon.paw, LocaleKeys.commonAnimals.tr()),
+    // The calendar is not built yet: the tab is visible but locked.
     item(Assets.icon.calendar, LocaleKeys.commonCalendar.tr(), enabled: false),
-    item(Assets.icon.drugs, LocaleKeys.commonDrugs.tr(), enabled: false),
+    item(Assets.icon.drugs, LocaleKeys.commonDrugs.tr()),
   ];
 }
 
+/// The signed-in shell: navigation bar or rail around the four tabs.
+///
+/// Tabs are branches of a `StatefulShellRoute` (see `app_router.dart`): each has
+/// its own URL (`/today`, `/animals`, `/calendar`, `/drugs`) and its own
+/// navigation stack, kept while the user switches tabs. A branch is built the
+/// first time it is opened.
 class RootScreen extends StatefulWidget {
-  const RootScreen({super.key});
+  const RootScreen({required this.navigationShell, super.key});
+
+  final StatefulNavigationShell navigationShell;
 
   @override
   State<RootScreen> createState() => _RootScreenState();
@@ -41,13 +43,6 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _current = 0;
-
-  /// Индексы вкладок, которые уже были показаны хотя бы раз. Вкладку строим
-  /// (и поднимаем её cubit) лениво — только после первого перехода на неё,
-  /// а не все четыре с первого кадра. AnimalsPage не грузит список, пока
-  /// пользователь не откроет вкладку «Животные».
-  final _visited = <int>{0};
 
   /// Отмена подписки на WebInsets (см. dispose).
   void Function()? _insetsSub;
@@ -73,28 +68,10 @@ class _RootScreenState extends State<RootScreen> {
     super.dispose();
   }
 
-  /// Собрать мигрированный экран списка животных (модуль `animals`), прокинув
-  /// зависимости из DI, drawer приложения и app-ассеты (заглушки/иллюстрации),
-  /// которыми модуль не владеет.
-  Widget _buildAnimalsPage(BuildContext context) {
-    return AnimalsPage(
-      repository: getIt<AnimalRepository>(),
-      shelterProvider: getIt<CurrentShelterProvider>(),
-      router: getIt<AnimalsRouterService>(),
-      permissions: getIt<AnimalPermissions>(),
-      statusLabels: getIt<AnimalStatusLabels>(),
-      onMenuPressed: RootDrawerProvider.of(context)?.openDrawer,
-      emptyStateIllustration: Assets.common.emptyState.svg(),
-      avatarFallback: Assets.image.animalStub.image(fit: BoxFit.cover, width: 80.0, height: 80.0),
-    );
-  }
-
   void _onDestinationSelected(int index) {
-    if (index >= _firstLockedTab || index == _current) return;
-    setState(() {
-      _current = index;
-      _visited.add(index);
-    });
+    final shell = widget.navigationShell;
+    // A second tap on the current tab returns it to its root page.
+    shell.goBranch(index, initialLocation: index == shell.currentIndex);
   }
 
   @override
@@ -107,24 +84,12 @@ class _RootScreenState extends State<RootScreen> {
         scaffoldKey: _scaffoldKey,
         drawer: const PersonalDrawerWidget(),
         destinations: _buildDestinations(context),
-        selectedIndex: _current,
+        selectedIndex: widget.navigationShell.currentIndex,
         onDestinationSelected: _onDestinationSelected,
         // Web (iOS PWA): Flutter не пробрасывает env(safe-area-inset) в MediaQuery,
         // поэтому нижняя панель лезла бы под home-indicator. На нативе inset = 0.
         bottomInset: kIsWeb ? WebInsets.bottom : 0,
-        // IndexedStack сохраняет состояние уже открытых вкладок (скролл,
-        // введённый поиск), но каждую вкладку строим лениво — до первого
-        // перехода на неё в дереве стоит пустой SizedBox, и её cubit не
-        // поднимается. Calendar/Drugs пока недоступны, поэтому остаются заглушками.
-        body: IndexedStack(
-          index: _current,
-          children: [
-            _visited.contains(0) ? const MainScreen() : const SizedBox.shrink(),
-            _visited.contains(1) ? _buildAnimalsPage(context) : const SizedBox.shrink(),
-            const CalendarScreen(),
-            const DrugsScreen(),
-          ],
-        ),
+        body: widget.navigationShell,
       ),
     );
   }

@@ -102,6 +102,8 @@ abstract class  LocaleKeys {
   static const commonYear = 'commonYear';
   static const curatorAdd = 'curatorAdd';
   static const curatorEdit = 'curatorEdit';
+  static const drugsEmptyState = 'drugsEmptyState';
+  static const drugsStock = 'drugsStock';
   static const errorAuthFail = 'errorAuthFail';
   static const errorAuthFailMsg = 'errorAuthFailMsg';
   static const errorForbidden = 'errorForbidden';

@@ -22,7 +22,9 @@ class AnimalsRouterServiceImpl implements AnimalsRouterService {
   GoRouter get _router => getIt<GoRouter>();
 
   @override
-  void openDetail(int id) => _router.push(AppRoutes.animalDetailPath(id));
+  // `go`, not `push`: the card replaces the previous one next to the list on a wide
+  // window, and on a narrow one the list stays underneath it for «back».
+  void openDetail(int id) => _router.go(AppRoutes.animalDetailPath(id));
 
   @override
   Future<bool?> openCreate() => _router.push<bool>(AppRoutes.animalEdit);

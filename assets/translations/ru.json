@@ -116,6 +116,8 @@
   "commonYear": "год",
   "curatorAdd": "Новый куратор",
   "curatorEdit": "Редактирование",
+  "drugsEmptyState": "В каталоге пока нет медикаментов",
+  "drugsStock": "Остаток: {}",
   "errorAuthFail": "Сессия истекла",
   "errorAuthFailMsg": "Войдите в аккаунт заново",
   "errorForbidden": "Доступ запрещён",
