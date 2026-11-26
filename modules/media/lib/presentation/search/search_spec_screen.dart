@@ -76,7 +76,7 @@ class _SearchViewState extends State<_SearchView> {
         title: _buildTitle(context),
         centerTitle: true,
       ),
-      body: _buildBody(),
+      body: ContentWidth(child: _buildBody()),
     );
   }
 

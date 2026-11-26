@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 /// Keeps content readable on wide windows: centred and no wider than [maxWidth].
-/// On narrow windows it is a pass-through, so phone layouts are unchanged.
+///
+/// The child always gets a tight box — the full window on narrow screens, a
+/// column of [maxWidth] on wide ones — so a layout written for a phone behaves
+/// the same inside it.
 class ContentWidth extends StatelessWidget {
   const ContentWidth({required this.child, this.maxWidth = form, this.alignment = Alignment.topCenter, super.key});
 
@@ -13,16 +16,24 @@ class ContentWidth extends StatelessWidget {
 
   final Widget child;
   final double maxWidth;
+
+  /// Where the column sits when the window is wider than [maxWidth].
   final AlignmentGeometry alignment;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: alignment,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth),
-        child: child,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth < maxWidth ? constraints.maxWidth : maxWidth;
+        return Align(
+          alignment: alignment,
+          child: SizedBox(
+            width: width,
+            height: constraints.hasBoundedHeight ? constraints.maxHeight : null,
+            child: child,
+          ),
+        );
+      },
     );
   }
 }

@@ -182,7 +182,7 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
         ),
       ),
       floatingActionButton: _buildFab(context),
-      body: KeyboardDismissOnTap(child: _buildBody()),
+      body: ContentWidth(child: KeyboardDismissOnTap(child: _buildBody())),
     );
   }
 
@@ -207,12 +207,11 @@ class _PrescriptionEditViewState extends State<_PrescriptionEditView> with Ticke
   }
 
   Widget _buildBody() {
-    return Builder(
-      builder: (context) {
-        // sizeOf вместо of(context).size — подписка только на изменение
-        // размера, а не на весь MediaQuery (клавиатура/insets не триггерят
-        // лишний ребилд этого поддерева).
-        final sw = MediaQuery.sizeOf(context).width;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Ширина самой формы, а не окна: на широких экранах форма уже окна,
+        // и свайп между вкладками должен идти за пальцем один к одному.
+        final sw = constraints.maxWidth;
         return Column(
           children: [
             BlocSelector<PrescriptionEditCubit, PrescriptionEditState, bool>(

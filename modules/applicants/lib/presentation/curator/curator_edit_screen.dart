@@ -84,7 +84,7 @@ class _CuratorEditViewState extends State<_CuratorEditView> {
               )
             : const SizedBox.shrink(),
       ),
-      body: _buildBody(),
+      body: ContentWidth(child: _buildBody()),
     );
   }
 

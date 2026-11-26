@@ -59,7 +59,7 @@ class _CommentEditViewState extends State<_CommentEditView> {
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(context, state.attachedFile),
           floatingActionButton: _buildFab(context, state),
-          body: _buildBody(context),
+          body: ContentWidth(child: _buildBody(context)),
         );
       },
     );

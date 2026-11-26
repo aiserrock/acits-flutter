@@ -48,7 +48,6 @@ class _EmailConfirmationView extends StatelessWidget {
       ),
       body: SafeArea(
         child: ContentWidth(
-          alignment: Alignment.center,
           child: BlocBuilder<EmailConfirmCubit, DataState<void>>(
             builder: (context, state) {
               return AnimatedSwitcher(

@@ -53,7 +53,7 @@ class _SearchContentState<T> extends State<SearchContent<T>> {
         title: _buildTitle(context),
         centerTitle: true,
       ),
-      body: _buildBody(context),
+      body: ContentWidth(maxWidth: ContentWidth.reading, child: _buildBody(context)),
     );
   }
 

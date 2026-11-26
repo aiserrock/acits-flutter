@@ -160,4 +160,21 @@ void main() {
     expect(await widthAt(360), 360);
     expect(await widthAt(1400), ContentWidth.form);
   });
+
+  testWidgets('ContentWidth hands its child a tight box, so phone layouts keep their size', (tester) async {
+    await tester.pumpWidget(
+      const Center(
+        child: SizedBox(
+          width: 360,
+          height: 500,
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: ContentWidth(child: SizedBox(width: 10, height: 10, key: Key('content'))),
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.getSize(find.byKey(const Key('content'))), const Size(360, 500));
+  });
 }

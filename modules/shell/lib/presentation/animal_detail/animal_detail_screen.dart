@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:animals/animals.dart';
+import 'package:ui_kit/ui_kit.dart' show ContentWidth;
 import 'package:personal/personal.dart'
     show AnimalNote, CommentFileOpener, CommentListWidget, CommentsRepository, PersonalRouterService;
 import 'package:cupertino_ui/cupertino_ui.dart';
@@ -126,7 +127,7 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: _buildBody(),
+      body: ContentWidth(maxWidth: ContentWidth.reading, child: _buildBody()),
       floatingActionButton: _buildFab(),
     );
   }
