@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:auth/domain/domain.dart';
 import 'package:auth/presentation/pick_shelter/cubit/cubit.dart';
-import 'package:auth/util/util.dart';
 
 /// Cubit экрана выбора приюта.
 ///

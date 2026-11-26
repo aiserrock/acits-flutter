@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:di/di.dart';
 import 'package:injectable/injectable.dart';
 import 'package:media/media.dart' show DocumentRepository;
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 /// Сервис PDF-карточки животного. PDF — через [DocumentRepository] (модульный
 /// `AnimalRepository`). Заметки/комментарии переехали в модуль `personal`

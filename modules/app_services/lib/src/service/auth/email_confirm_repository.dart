@@ -4,7 +4,6 @@ import 'package:core/data.dart';
 import 'package:dio/dio.dart';
 import 'package:util/util.dart';
 import 'package:injectable/injectable.dart';
-import 'package:app_services/src/log.dart';
 
 @injectable
 class EmailConfirmRepository {

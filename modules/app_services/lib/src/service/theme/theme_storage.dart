@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 import 'package:app_services/src/service/storage/storage_keys.dart';
 
 const _themeModeKey = StorageKeys.themeMode;

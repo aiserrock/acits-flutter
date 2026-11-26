@@ -2,7 +2,6 @@ import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:personal/domain/domain.dart';
-import 'package:personal/util/util.dart';
 
 /// Cubit смены пароля пользователя.
 ///

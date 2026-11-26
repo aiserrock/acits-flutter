@@ -1,10 +1,10 @@
+import 'package:util/util.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import 'package:media/presentation/search/model/model.dart';
-import 'package:media/util/util.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';

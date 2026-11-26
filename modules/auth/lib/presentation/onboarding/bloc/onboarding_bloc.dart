@@ -1,9 +1,9 @@
+import 'package:util/util.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:auth/domain/domain.dart';
 import 'package:auth/presentation/onboarding/model/model.dart' as data;
-import 'package:auth/util/util.dart';
 
 part 'onboarding_event.dart';
 part 'onboarding_state.dart';

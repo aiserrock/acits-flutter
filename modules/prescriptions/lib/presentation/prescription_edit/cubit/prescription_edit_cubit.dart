@@ -12,7 +12,6 @@ import 'package:lottie/lottie.dart';
 
 import 'package:prescriptions/domain/domain.dart';
 import 'package:prescriptions/presentation/presentation.dart';
-import 'package:prescriptions/util/util.dart';
 
 const _shiftFirtsStartDate = Duration(days: 30);
 const _shiftLastStartDate = Duration(days: 120);

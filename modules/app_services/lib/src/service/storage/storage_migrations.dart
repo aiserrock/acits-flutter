@@ -1,4 +1,4 @@
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 import 'package:app_services/src/service/storage/storage_keys.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';

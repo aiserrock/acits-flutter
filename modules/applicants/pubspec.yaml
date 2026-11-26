@@ -19,8 +19,6 @@ dependencies:
   easy_localization: ^3.0.8
   flutter_keyboard_visibility: ^7.0.1
   dio: ^5.9.2
-  get_it: ^9.2.1
-  talker_flutter: ^5.2.0
   util:
     path: ../base/util
   localization:

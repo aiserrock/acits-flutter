@@ -4,11 +4,12 @@ import 'package:talker_flutter/talker_flutter.dart';
 /// Тонкий фасад над Talker для бизнес-кода: `Log.info(...)`, `Log.error(...)`.
 ///
 /// Не тянет Talker-импорт в каждый сервис и не требует прокидывать логгер через
-/// конструкторы. Talker берётся из getIt лениво; в release он отключён
-/// ([AppLoggerModule]), поэтому вызовы дёшевы и безопасны (ничего не пишут).
+/// конструкторы. Talker берётся из `GetIt.instance` лениво — это тот же
+/// синглтон, что создаёт приложение через `createAppTalker`; в release он
+/// отключён для консоли, поэтому вызовы дёшевы и безопасны.
 ///
-/// Если Talker в getIt не зарегистрирован (юнит-тесты cubit'ов без полного DI),
-/// логирование становится no-op — вспомогательный лог не должен ронять
+/// Если Talker не зарегистрирован (юнит-тесты cubit'ов без полного DI) —
+/// логирование становится no-op: вспомогательный лог не должен ронять
 /// бизнес-логику.
 abstract final class Log {
   static Talker? get _talker => GetIt.instance.isRegistered<Talker>() ? GetIt.instance<Talker>() : null;

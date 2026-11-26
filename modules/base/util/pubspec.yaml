@@ -21,6 +21,7 @@ dependencies:
   # Logger infra (shared Talker factory + formatter/observer, bloc observer).
   talker_flutter: ^5.2.0
   talker_bloc_logger: ^5.2.0
+  get_it: ^9.2.1
 
 dev_dependencies:
   flutter_test:

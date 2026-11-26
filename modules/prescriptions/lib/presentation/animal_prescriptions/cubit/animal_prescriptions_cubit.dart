@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:prescriptions/domain/domain.dart';
 import 'package:prescriptions/presentation/animal_prescriptions/animal_prescriptions.dart';
-import 'package:prescriptions/util/util.dart';
 
 /// Cubit вкладки «Назначения» карточки животного.
 ///

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Один фасад логирования `Log` в `util` вместо шести одинаковых копий в `personal`,
+  `auth`, `applicants`, `prescriptions`, `media` и `app_services`; уровни и сообщения не
+  менялись. Из этих пакетов убраны лишние зависимости `talker_flutter` и `get_it`.
+
 - Ссылка сброса пароля из письма открывается в приложении: экран «Новый пароль» берёт
   `uidb64` и `token` из ссылки (только https на `acits.ru` и поддоменах), проверяет длину
   и совпадение паролей и вызывает `POST /api/v1/users/reset-password/complete/`; при

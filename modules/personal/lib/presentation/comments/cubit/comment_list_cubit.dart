@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/comments/comments.dart';
-import 'package:personal/util/util.dart';
 
 /// Cubit экрана списка комментариев к животному.
 ///

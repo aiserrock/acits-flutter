@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:util/util.dart';
 
 import 'package:personal/domain/domain.dart';
-import 'package:personal/util/util.dart';
 
 /// Cubit of the «My organisations» screen: loads the user's shelters from a
 /// [MySheltersSource]. Read-only; switching is handled by the host app.

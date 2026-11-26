@@ -2,7 +2,6 @@ import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:auth/domain/domain.dart';
-import 'package:auth/util/util.dart';
 
 /// Cubit экрана подтверждения электронной почты при регистрации.
 ///

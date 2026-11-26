@@ -11,7 +11,6 @@ import 'package:util/util.dart';
 import 'package:acits_flutter/firebase/firebase_config.dart';
 import 'package:acits_flutter/observability_setup.dart';
 import 'package:acits_flutter/run_app.dart';
-import 'package:app_services/app_services.dart' show Log;
 import 'package:shell/shell.dart' show OrientationPolicy;
 import 'di/di_container.dart';
 import 'service/shared_pref/debug_preference_storage.dart';

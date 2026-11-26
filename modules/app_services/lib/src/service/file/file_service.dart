@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app_services/src/service/file/file_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 /// Интерактор для загрузки и сохранения файлов
 @injectable

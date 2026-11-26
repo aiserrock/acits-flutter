@@ -6,7 +6,6 @@ import 'package:util/util.dart';
 
 import 'package:personal/data/mapper/mapper.dart';
 import 'package:personal/domain/domain.dart';
-import 'package:personal/util/util.dart';
 
 /// Реализация [CommentsRepository]. Здесь DTO заканчиваются: вызываем
 /// [AnimalNotesApiPort], разворачиваем DTO → сущности мапперами, ловим

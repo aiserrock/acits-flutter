@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:app_services/src/service/document/doc_exporter/doc_exporter.dart';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 /// Mobile/desktop-реализация [DocExporter]: системный share-sheet (ACTION_SEND
 /// на Android, UIActivityViewController на iOS) через share_plus.

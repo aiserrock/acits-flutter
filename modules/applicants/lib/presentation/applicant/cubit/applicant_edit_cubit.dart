@@ -3,7 +3,6 @@ import 'package:core/domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:applicants/domain/domain.dart';
-import 'package:applicants/util/util.dart';
 
 const _emptyApplicant = Applicant(firstName: '', lastName: '', phoneNumber: '');
 
