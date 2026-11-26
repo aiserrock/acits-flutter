@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:material_ui/material_ui.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 
 /// Открыть редактор фото поверх текущего экрана.
@@ -27,6 +28,21 @@ class PhotoEditorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final theme = ThemeData.dark().copyWith(colorScheme: scheme);
+    // Редактор держим в колонке ContentWidth.reading по центру: на десктопном
+    // браузере холст не растягивается на всё окно, поля по бокам заливаются
+    // фоном редактора. На телефоне колонка совпадает с окном.
+    return ColoredBox(
+      color: theme.scaffoldBackgroundColor,
+      child: ContentWidth(
+        maxWidth: ContentWidth.reading,
+        alignment: Alignment.center,
+        child: _buildEditor(context, theme),
+      ),
+    );
+  }
+
+  Widget _buildEditor(BuildContext context, ThemeData theme) {
     return ProImageEditor.memory(
       source,
       callbacks: ProImageEditorCallbacks(
@@ -54,7 +70,7 @@ class PhotoEditorScreen extends StatelessWidget {
           enableDoubleTap: true,
           tools: [CropRotateTool.rotate, CropRotateTool.flip, CropRotateTool.aspectRatio, CropRotateTool.reset],
         ),
-        theme: ThemeData.dark().copyWith(colorScheme: scheme),
+        theme: theme,
       ),
     );
   }

@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-
+import 'package:flutter/services.dart';
 import 'package:util/util.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:material_ui/material_ui.dart';
@@ -86,6 +85,24 @@ class _DocViewerViewState extends State<_DocViewerView> {
 
   void _toggleRotate() => setState(() => _landscape = !_landscape);
 
+  /// Страницы доступны, когда документ загружен и вьюпорт привязан к контроллеру
+  /// (до этого `page`/`nextPage` читают неинициализированное состояние pdfx).
+  bool get _pdfReady => _controller?.loadingState.value == PdfLoadingState.success;
+
+  static const _pageDuration = Duration(milliseconds: 250);
+
+  void _nextPage() {
+    final controller = _controller;
+    if (!_pdfReady || controller == null) return;
+    controller.nextPage(duration: _pageDuration, curve: Curves.easeInOut);
+  }
+
+  void _previousPage() {
+    final controller = _controller;
+    if (!_pdfReady || controller == null) return;
+    controller.previousPage(duration: _pageDuration, curve: Curves.easeInOut);
+  }
+
   void _zoomBy(double factor) => _applyScale(factor);
 
   /// Множит текущий масштаб на [factor] и клэмпит в [_minScale, _maxScale]
@@ -111,6 +128,11 @@ class _DocViewerViewState extends State<_DocViewerView> {
 
   @override
   Widget build(BuildContext context) {
+    // На medium+ кнопки зума и страниц переезжают в AppBar (на телефоне зум —
+    // pinch и FAB-кнопки, листание — прокрутка).
+    final wide = WindowSize.fromWidth(MediaQuery.sizeOf(context).width) != WindowSize.compact;
+    final l10n = MaterialLocalizations.of(context);
+    final primary = Theme.of(context).colorScheme.primary;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -124,6 +146,28 @@ class _DocViewerViewState extends State<_DocViewerView> {
         title: Text(widget.title ?? 'Doc viewer', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         centerTitle: true,
         actions: [
+          if (wide) ...[
+            IconButton(
+              icon: Icon(Icons.keyboard_arrow_up, color: primary),
+              tooltip: l10n.previousPageTooltip,
+              onPressed: _previousPage,
+            ),
+            IconButton(
+              icon: Icon(Icons.keyboard_arrow_down, color: primary),
+              tooltip: l10n.nextPageTooltip,
+              onPressed: _nextPage,
+            ),
+            IconButton(
+              icon: Icon(Icons.zoom_out, color: primary),
+              tooltip: 'Zoom out',
+              onPressed: () => _zoomBy(1 / _zoomStep),
+            ),
+            IconButton(
+              icon: Icon(Icons.zoom_in, color: primary),
+              tooltip: 'Zoom in',
+              onPressed: () => _zoomBy(_zoomStep),
+            ),
+          ],
           IconButton(
             icon: Icon(
               _landscape ? Icons.rotate_90_degrees_ccw : Icons.rotate_90_degrees_cw,
@@ -152,20 +196,26 @@ class _DocViewerViewState extends State<_DocViewerView> {
 
   Widget _buildContent(Uint8List bytes) {
     final controller = _controllerFor(bytes);
-    return Column(
+    final wide = WindowSize.fromWidth(MediaQuery.sizeOf(context).width) != WindowSize.compact;
+    final content = Column(
       children: [
         Expanded(
           child: Stack(
             children: [
               // Поворот страницы внутри вьюпорта (не всего экрана). Pinch-zoom —
               // из коробки PdfViewPinch; кнопки +/− дублируют его для десктопа.
+              // Ширина страницы ограничена колонкой ContentWidth.reading по центру.
               Positioned.fill(
-                child: RotatedBox(
-                  quarterTurns: _landscape ? 1 : 0,
-                  child: PdfViewPinch(controller: controller, minScale: _minScale, maxScale: _maxScale),
+                child: ContentWidth(
+                  maxWidth: ContentWidth.reading,
+                  alignment: Alignment.center,
+                  child: RotatedBox(
+                    quarterTurns: _landscape ? 1 : 0,
+                    child: PdfViewPinch(controller: controller, minScale: _minScale, maxScale: _maxScale),
+                  ),
                 ),
               ),
-              Positioned(right: 12, bottom: 12, child: _zoomControls(bytes)),
+              Positioned(right: 12, bottom: 12, child: _zoomControls(bytes, showZoom: !wide)),
             ],
           ),
         ),
@@ -176,6 +226,22 @@ class _DocViewerViewState extends State<_DocViewerView> {
           ),
         ),
       ],
+    );
+    // Клавиатура: +/− — зум, PageUp/PageDown и ←/→ — страницы.
+    return CallbackShortcuts(
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.equal): () => _zoomBy(_zoomStep),
+        const SingleActivator(LogicalKeyboardKey.equal, shift: true): () => _zoomBy(_zoomStep),
+        const SingleActivator(LogicalKeyboardKey.add): () => _zoomBy(_zoomStep),
+        const SingleActivator(LogicalKeyboardKey.numpadAdd): () => _zoomBy(_zoomStep),
+        const SingleActivator(LogicalKeyboardKey.minus): () => _zoomBy(1 / _zoomStep),
+        const SingleActivator(LogicalKeyboardKey.numpadSubtract): () => _zoomBy(1 / _zoomStep),
+        const SingleActivator(LogicalKeyboardKey.pageDown): _nextPage,
+        const SingleActivator(LogicalKeyboardKey.arrowRight): _nextPage,
+        const SingleActivator(LogicalKeyboardKey.pageUp): _previousPage,
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): _previousPage,
+      },
+      child: Focus(autofocus: true, child: content),
     );
   }
 
@@ -204,29 +270,34 @@ class _DocViewerViewState extends State<_DocViewerView> {
     }
   }
 
-  Widget _zoomControls(Uint8List bytes) {
+  Widget _zoomControls(Uint8List bytes, {required bool showZoom}) {
     final scheme = Theme.of(context).colorScheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        FloatingActionButton.small(
-          heroTag: 'zoom_in',
-          backgroundColor: scheme.surface,
-          foregroundColor: scheme.primary,
-          onPressed: () => _zoomBy(_zoomStep),
-          child: const Icon(Icons.add),
-        ),
-        const SizedBox(height: 8),
-        FloatingActionButton.small(
-          heroTag: 'zoom_out',
-          backgroundColor: scheme.surface,
-          foregroundColor: scheme.primary,
-          onPressed: () => _zoomBy(1 / _zoomStep),
-          child: const Icon(Icons.remove),
-        ),
-        const SizedBox(height: 8),
+        if (showZoom) ...[
+          FloatingActionButton.small(
+            heroTag: 'zoom_in',
+            tooltip: 'Zoom in',
+            backgroundColor: scheme.surface,
+            foregroundColor: scheme.primary,
+            onPressed: () => _zoomBy(_zoomStep),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.small(
+            heroTag: 'zoom_out',
+            tooltip: 'Zoom out',
+            backgroundColor: scheme.surface,
+            foregroundColor: scheme.primary,
+            onPressed: () => _zoomBy(1 / _zoomStep),
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 8),
+        ],
         FloatingActionButton.small(
           heroTag: 'download',
+          tooltip: 'Download',
           backgroundColor: scheme.surface,
           foregroundColor: scheme.primary,
           onPressed: () => _onDownload(bytes),
