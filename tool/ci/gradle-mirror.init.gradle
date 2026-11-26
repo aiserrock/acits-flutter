@@ -1,0 +1,47 @@
+// CI-only Gradle init script: resolve Maven Central artifacts through Google's
+// mirror first. Maven Central (and the Gradle plugin portal, which redirects
+// to it) answers GitHub-hosted runners with 429 Too Many Requests, which fails
+// the Android build before any of our code compiles.
+//
+// An init script reaches every build of the composite, including the
+// flutter_tools Gradle build that the Flutter SDK includes with its own
+// hard-coded mavenCentral(); editing android/settings.gradle cannot.
+// The original repositories stay in place as a fallback.
+//
+// Installed by the CI step "Use the Maven Central mirror" into
+// ~/.gradle/init.d/. Local builds are unaffected.
+
+def mirrorUrl = 'https://maven-central.storage-download.googleapis.com/maven2/'
+
+def addMirrorFirst = { RepositoryHandler repos ->
+    if (repos.findByName('MavenCentralMirror') == null) {
+        def mirror = repos.maven {
+            name = 'MavenCentralMirror'
+            url = mirrorUrl
+        }
+        repos.remove(mirror)
+        repos.addFirst(mirror)
+    }
+}
+
+beforeSettings { settings ->
+    def plugins = settings.pluginManagement.repositories
+    addMirrorFirst(plugins)
+    // An empty pluginManagement list means "Gradle plugin portal". Adding the
+    // mirror makes the list non-empty and drops that default, so put the
+    // portal back behind the mirror: plugin markers live only on the portal.
+    settings.gradle.settingsEvaluated {
+        if (plugins.size() == 1) plugins.gradlePluginPortal()
+    }
+    addMirrorFirst(settings.dependencyResolutionManagement.repositories)
+}
+
+allprojects { project ->
+    addMirrorFirst(project.buildscript.repositories)
+    // Builds that forbid project repositories (flutter_tools uses
+    // FAIL_ON_PROJECT_REPOS) already get the mirror from the settings above.
+    def mode = project.gradle.settings.dependencyResolutionManagement.repositoriesMode.get()
+    if (mode != RepositoriesMode.FAIL_ON_PROJECT_REPOS) {
+        addMirrorFirst(project.repositories)
+    }
+}
