@@ -64,10 +64,6 @@ dependencies:
   collection: ^1.19.0
   intl: ^0.20.2
 
-  # Log facade (Talker) — app_services keeps its own copy, matching the
-  # per-module convention (each feature module has its own util/log.dart).
-  talker_flutter: ^5.2.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

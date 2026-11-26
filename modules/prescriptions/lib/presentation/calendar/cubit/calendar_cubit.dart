@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prescriptions/domain/domain.dart';
 import 'package:prescriptions/presentation/calendar/cubit/calendar_dates.dart';
 import 'package:prescriptions/presentation/calendar/cubit/calendar_state.dart';
-import 'package:prescriptions/util/util.dart';
 
 /// Cubit экрана «Календарь» (только чтение).
 ///

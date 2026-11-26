@@ -1,10 +1,10 @@
+import 'package:util/util.dart';
 import 'dart:math';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:auth/domain/domain.dart';
-import 'package:auth/util/util.dart';
 import 'package:auth/presentation/splash/update_gate_view.dart';
 
 /// Стартовый splash-роут. Не рисует собственный UI: держит тот же кадр, что и

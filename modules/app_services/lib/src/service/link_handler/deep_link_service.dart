@@ -8,7 +8,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:di/di.dart';
 import 'package:navigation/navigation.dart';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 @singleton
 class DeepLinkService implements Disposable, AuthDeepLinkHandler {

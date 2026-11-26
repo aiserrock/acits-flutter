@@ -11,7 +11,6 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:media/domain/domain.dart';
 import 'package:media/presentation/presentation.dart';
-import 'package:media/util/util.dart';
 
 const _maxAnimalImageSize = 1024;
 

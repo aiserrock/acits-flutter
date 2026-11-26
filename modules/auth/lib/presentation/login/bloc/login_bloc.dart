@@ -1,3 +1,4 @@
+import 'package:util/util.dart';
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -6,7 +7,6 @@ import 'package:formz/formz.dart';
 
 import 'package:auth/domain/domain.dart';
 import 'package:auth/presentation/login/login.dart';
-import 'package:auth/util/util.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

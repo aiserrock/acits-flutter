@@ -36,11 +36,6 @@ export 'src/domain/env.dart';
 export 'src/service/document/doc_exporter/doc_exporter.dart';
 export 'src/service/document/pdfjs_ready/pdfjs_ready.dart';
 
-// Log facade (own copy of the Talker facade, mirroring each feature module's
-// local util/log.dart — keeping it out of the shared `util` barrel avoids an
-// ambiguous `Log` import in modules that already define their own).
-export 'src/log.dart';
-
 // DI micro-package: the generated external module the app pulls into its
 // @InjectableInit via externalPackageModules.
 export 'app_services_di.dart';

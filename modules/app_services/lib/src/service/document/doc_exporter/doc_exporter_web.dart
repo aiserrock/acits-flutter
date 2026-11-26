@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:web/web.dart' as web;
 
 import 'package:app_services/src/service/document/doc_exporter/doc_exporter.dart';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 /// Web-реализация [DocExporter]: сначала Web Share API (share-sheet как на
 /// мобильном), иначе фолбэк на скачивание через `<a download>`.

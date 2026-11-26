@@ -7,7 +7,6 @@ import 'package:pdfx/pdfx.dart';
 
 import 'package:media/domain/domain.dart';
 import 'package:media/presentation/doc_viewer/cubit/cubit.dart';
-import 'package:media/util/util.dart';
 
 /// Экран просмотра PDF-документа с кнопкой «Поделиться». Работает на всех
 /// платформах: PDF рендерится из байтов (`PdfDocument.openData`), шаринг —

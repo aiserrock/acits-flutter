@@ -12,7 +12,7 @@ import 'package:navigation/navigation.dart';
 import 'package:app_services/src/service/auth/auth_repository.dart';
 import 'package:app_services/src/service/auth/email_confirm_repository.dart';
 import 'package:app_services/src/service/shared_pref/preference_storage.dart';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 const _shelterListDefaultLenght = 25;
 

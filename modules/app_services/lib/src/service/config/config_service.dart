@@ -7,7 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:core/domain.dart';
 import 'package:app_services/src/service/auth/auth_service.dart';
 import 'package:app_services/src/service/shared_pref/preference_storage.dart';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 /// Сервис конфигурации.
 ///

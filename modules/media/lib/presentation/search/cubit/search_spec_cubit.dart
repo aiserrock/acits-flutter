@@ -5,7 +5,6 @@ import 'package:animals/animals.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:media/presentation/search/cubit/cubit.dart';
-import 'package:media/util/util.dart';
 
 const _searchBouncePeriod = Duration(milliseconds: 1000);
 

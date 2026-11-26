@@ -7,7 +7,6 @@ import 'package:prescriptions/prescriptions.dart' show PrescriptionRepository;
 import 'package:di/di.dart';
 import 'package:shell/presentation/common/sort/sort_preset.dart';
 import 'package:shell/presentation/main/cubit/main_state.dart';
-import 'package:app_services/app_services.dart';
 
 const _searchDebounce = Duration(milliseconds: 300);
 

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/personal/personal.dart';
-import 'package:personal/util/util.dart';
 
 /// Cubit экрана личного кабинета. Загружает данные пользователя и сохраняет
 /// изменённые поля. Данные — доменный [UserProfile] из [PersonalRepository]

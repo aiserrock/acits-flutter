@@ -1,9 +1,9 @@
+import 'package:util/util.dart';
 import 'package:core/domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:auth/domain/domain.dart';
 import 'package:auth/presentation/registration/cubit/cubit.dart';
-import 'package:auth/util/util.dart';
 
 /// Cubit флоу регистрации.
 ///

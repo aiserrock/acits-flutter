@@ -1,8 +1,7 @@
+import 'package:util/util.dart';
 import 'dart:typed_data';
 
 import 'package:animals/animals.dart';
-
-import 'package:media/util/util.dart';
 
 /// Репозиторий доступа к документам (pdf). Работает через модульный
 /// [AnimalRepository] (домен + Result, без chopper): байты PDF идут напрямую в

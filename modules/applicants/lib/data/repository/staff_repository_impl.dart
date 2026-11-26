@@ -1,10 +1,10 @@
+import 'package:util/util.dart';
 import 'package:core/api.dart';
 import 'package:core/data.dart';
 import 'package:core/domain.dart';
 
 import 'package:applicants/data/mapper/mapper.dart';
 import 'package:applicants/domain/domain.dart';
-import 'package:applicants/util/util.dart';
 
 /// Реализация [StaffRepository]. Здесь DTO заканчиваются: вызываем
 /// [StaffApiPort], разворачиваем DTO → сущности мапперами, ловим исключения →

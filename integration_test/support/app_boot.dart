@@ -6,7 +6,7 @@ import 'package:patrol/patrol.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:util/util.dart';
 
-import 'package:app_services/app_services.dart' show AuthService, ConfigService, Log;
+import 'package:app_services/app_services.dart' show AuthService, ConfigService;
 import 'package:shell/shell.dart' show AppScaffold;
 
 import 'package:acits_flutter/firebase/firebase_config.dart';

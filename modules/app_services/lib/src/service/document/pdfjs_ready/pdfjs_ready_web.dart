@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:js_interop';
-import 'package:app_services/src/log.dart';
+import 'package:util/util.dart';
 
 /// Есть ли на странице загруженный pdf.js (`globalThis.pdfjsLib`).
 @JS('pdfjsLib')

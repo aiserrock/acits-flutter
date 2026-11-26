@@ -1,9 +1,9 @@
+import 'package:util/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:personal/domain/domain.dart';
 import 'package:personal/presentation/comments/comments.dart';
-import 'package:personal/util/util.dart';
 
 /// Cubit экрана добавления/редактирования комментария к животному.
 ///

@@ -4,7 +4,6 @@ import 'package:util/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:media/domain/domain.dart';
-import 'package:media/util/util.dart';
 
 /// Cubit экрана просмотра PDF-документа.
 ///

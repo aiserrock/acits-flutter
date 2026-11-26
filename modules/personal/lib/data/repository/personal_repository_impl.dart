@@ -4,7 +4,6 @@ import 'package:util/util.dart';
 
 import 'package:personal/data/mapper/mapper.dart';
 import 'package:personal/domain/domain.dart';
-import 'package:personal/util/util.dart';
 
 /// Реализация [PersonalRepository]. Здесь DTO заканчиваются: вызываем
 /// [ProfileApiPort], разворачиваем DTO → сущность маппером, ловим исключения →

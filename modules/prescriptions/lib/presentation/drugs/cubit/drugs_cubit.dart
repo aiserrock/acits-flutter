@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:prescriptions/domain/domain.dart';
 import 'package:prescriptions/presentation/drugs/cubit/drugs_state.dart';
-import 'package:prescriptions/util/util.dart';
 
 /// Размер страницы каталога препаратов.
 const drugsPageSize = 25;

@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:util/util.dart';
 
-import 'package:app_services/app_services.dart' show Log;
 import 'package:di/di.dart';
 
 import 'package:acits_flutter/bootstrap.dart';

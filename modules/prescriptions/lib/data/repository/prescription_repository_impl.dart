@@ -3,7 +3,6 @@ import 'package:core/data.dart';
 import 'package:util/util.dart';
 
 import 'package:prescriptions/domain/domain.dart';
-import 'package:prescriptions/util/util.dart';
 
 /// Реализация [PrescriptionRepository]. Здесь DTO заканчиваются: вызываем
 /// [PrescriptionApiPort], разворачиваем DTO → сущности, ловим исключения →
