@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:di/di.dart';
+import 'package:media/media.dart' show DocKind;
 import 'package:shell/navigation/app_router.dart';
-import 'package:app_services/app_services.dart';
 
 /// Реализация навигационного контракта модуля «Животные» через go_router и
 /// [AppRoutes] приложения. Модуль зависит только от абстракции
@@ -15,9 +15,7 @@ import 'package:app_services/app_services.dart';
 /// требовать его constructor-инъекции в dev/test-DI.
 @Injectable(as: AnimalsRouterService)
 class AnimalsRouterServiceImpl implements AnimalsRouterService {
-  const AnimalsRouterServiceImpl(this._animalService);
-
-  final AnimalService _animalService;
+  const AnimalsRouterServiceImpl();
 
   GoRouter get _router => getIt<GoRouter>();
 
@@ -34,13 +32,6 @@ class AnimalsRouterServiceImpl implements AnimalsRouterService {
 
   @override
   void openAnimalPdf(int id) {
-    _router.push(
-      AppRoutes.docViewer,
-      extra: <String, Object?>{
-        'fetcher': () => _animalService.fetchPdfAnimalCard(id),
-        'title': 'Animal $id',
-        'fileName': 'animal_$id.pdf',
-      },
-    );
+    _router.push(AppRoutes.docViewerPath(DocKind.animalCard, id, title: 'Animal $id', fileName: 'animal_$id.pdf'));
   }
 }

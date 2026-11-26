@@ -32,10 +32,7 @@ class AuthRouterServiceImpl implements AuthRouterService {
 
   @override
   void toPickShelter({required List<Shelter> shelterList, required bool autoSelectSingle}) {
-    _router.push(
-      AppRoutes.pickShelter,
-      extra: <String, Object?>{'shelterList': shelterList, 'autoSelectSingle': autoSelectSingle},
-    );
+    _router.push(AppRoutes.pickShelterPath(autoSelectSingle: autoSelectSingle), extra: shelterList);
   }
 
   @override
@@ -74,10 +71,7 @@ class SplashNavigatorImpl implements SplashNavigator {
   void toPickShelterAndReveal({required List<Shelter> shelterList, required bool autoSelectSingle}) {
     _router
       ..go(AppRoutes.login)
-      ..push(
-        AppRoutes.pickShelter,
-        extra: <String, Object?>{'shelterList': shelterList, 'autoSelectSingle': autoSelectSingle},
-      );
+      ..push(AppRoutes.pickShelterPath(autoSelectSingle: autoSelectSingle), extra: shelterList);
     _revealAfterFrame();
   }
 

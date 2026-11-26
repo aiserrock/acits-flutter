@@ -12,6 +12,11 @@ import 'package:auth/presentation/pick_shelter/cubit/cubit.dart';
 /// приюта выполняется ровно один раз (защита от повторного входа). Навигацию к
 /// корню после успешного выбора делает виджет по возвращённому `true`.
 class PickShelterCubit extends Cubit<PickShelterState> {
+  /// [shelterList] — необязательный кэш списка из навигации. Без него берётся
+  /// список из сессии ([AuthSessionApi.shelterList]); если и он пуст (экран
+  /// открыт по ссылке или после перезагрузки страницы), список загружается
+  /// самим cubit: пока идёт запрос — состояние загрузки, при сбое — ошибка с
+  /// ретраем.
   PickShelterCubit({
     required AuthSessionApi authService,
     required AuthConfigInitializer configService,
@@ -19,7 +24,18 @@ class PickShelterCubit extends Cubit<PickShelterState> {
     List<Shelter>? shelterList,
   }) : _authService = authService,
        _configService = configService,
-       super(PickShelterState(shelters: shelterList ?? authService.shelterList));
+       super(_initial(shelterList, authService)) {
+    if (state.status.isLoading) _loadShelters();
+  }
+
+  static PickShelterState _initial(List<Shelter>? passed, AuthSessionApi authService) {
+    final shelters = passed ?? authService.shelterList;
+    final needsLoad = passed == null && shelters.isEmpty;
+    return PickShelterState(
+      shelters: shelters,
+      status: needsLoad ? const DataState.loading() : const PickShelterState().status,
+    );
+  }
 
   final AuthSessionApi _authService;
   final AuthConfigInitializer _configService;
@@ -67,8 +83,31 @@ class PickShelterCubit extends Cubit<PickShelterState> {
     return true;
   }
 
-  /// Сбросить ошибку выбора и вернуть экран к отрисовке списка.
+  /// Сбросить ошибку выбора и вернуть экран к отрисовке списка. Если списка
+  /// нет (его загрузка упала), загружает его заново.
   void retry() {
+    if (state.results.isEmpty) {
+      _loadShelters();
+      return;
+    }
     safeEmit(state.copyWith(status: const PickShelterState().status));
+  }
+
+  /// Загрузить список приютов пользователя, когда его нет ни в аргументах
+  /// экрана, ни в сессии.
+  Future<void> _loadShelters() async {
+    Log.debug('PickShelterCubit._loadShelters');
+    safeEmit(state.copyWith(status: const DataState.loading()));
+    final result = await _authService.getShelterList();
+    result.fold(
+      (failure) {
+        Log.error('PickShelterCubit._loadShelters failed: $failure');
+        safeEmit(state.copyWith(status: DataState.error(failure)));
+      },
+      (shelters) {
+        Log.info('PickShelterCubit._loadShelters ok: ${shelters.length} shelters');
+        safeEmit(state.copyWith(shelters: shelters, status: const PickShelterState().status));
+      },
+    );
   }
 }

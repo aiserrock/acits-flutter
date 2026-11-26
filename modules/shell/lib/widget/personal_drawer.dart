@@ -72,10 +72,7 @@ class _PersonalDrawerViewState extends State<_PersonalDrawerView> {
               ListTile(
                 title: Text(LocaleKeys.personChangeShelter.tr(), style: titleStyle),
                 onTap: () async {
-                  final shelter = await context.push<Shelter>(
-                    AppRoutes.pickShelter,
-                    extra: <String, Object?>{'autoSelectSingle': false, 'shelterList': null},
-                  );
+                  final shelter = await context.push<Shelter>(AppRoutes.pickShelterPath(autoSelectSingle: false));
                   if (shelter == null) return;
                 },
               ),

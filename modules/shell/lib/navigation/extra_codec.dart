@@ -12,11 +12,20 @@ import 'dart:convert';
 ///
 /// !!! НЕ предназначен для передачи «живых» объектов (контроллеры, контекст).
 ///
+/// Правило роутов приложения: идентичность экрана живёт в path/query, а `extra`
+/// — только необязательный in-memory кэш уже загруженной сущности (сейчас это
+/// `AnimalNote` экрана правки комментария и `List<Shelter>` экрана выбора
+/// приюта). Билдеры роутов обязаны работать при `extra == null`: токен живёт
+/// только в рамках процесса и извлекается один раз, поэтому после перезагрузки
+/// страницы и повторного «вперёд/назад» кэша уже нет.
+///
 /// Как работает:
 /// - Примитивы (String, num, bool, null) — передаются как есть.
-/// - Коллекции (`List`, `Map<String, Object?>`) — кодируются рекурсивно.
-/// - Любой другой объект → сохраняется в [_ExtraTokenStore] и заменяется на
-///   карту вида `{"__extra_token__": "<id>"}`.
+/// - Коллекции из одних примитивов (`List`, `Map<String, Object?>`) — кодируются
+///   рекурсивно.
+/// - Любой другой объект, а также список с не-примитивными элементами →
+///   сохраняется целиком в [_ExtraTokenStore] и заменяется на карту вида
+///   `{"__extra_token__": "<id>"}`.
 /// - При декодировании токены восстанавливаются в исходные объекты и
 ///   одновременно удаляются из хранилища (извлечение ровно один раз).
 ///
@@ -42,6 +51,10 @@ class AppExtraCodec extends Codec<Object?, Object?> {
       return value;
     }
     if (value is List) {
+      // Список сущностей (например, `List<Shelter>`) токенизируется целиком, чтобы
+      // при декодировании вернуться тем же типизированным списком, а не
+      // `List<Object?>` из отдельных токенов.
+      if (value.any((item) => !_isPlain(item))) return <String, Object?>{_kTokenKey: _ExtraTokenStore.put(value)};
       return value.map(_encode).toList();
     }
     if (value is Map) {
@@ -52,6 +65,14 @@ class AppExtraCodec extends Codec<Object?, Object?> {
       return result;
     }
     return <String, Object?>{_kTokenKey: _ExtraTokenStore.put(value)};
+  }
+
+  /// Значение, которое кодек пропускает как есть (рекурсивно для коллекций).
+  static bool _isPlain(Object? value) {
+    if (value == null || value is String || value is num || value is bool) return true;
+    if (value is List) return value.every(_isPlain);
+    if (value is Map) return value.entries.every((e) => e.key is String && _isPlain(e.value));
+    return false;
   }
 
   static Object? _decode(Object? value) {

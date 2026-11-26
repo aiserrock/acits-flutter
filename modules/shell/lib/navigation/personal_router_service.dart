@@ -18,5 +18,5 @@ class PersonalRouterServiceImpl implements PersonalRouterService {
 
   @override
   Future<AnimalNote?> openCommentEdit(int animalId, {AnimalNote? comment}) =>
-      _router.push<AnimalNote>(AppRoutes.commentEditPath(animalId), extra: comment);
+      _router.push<AnimalNote>(AppRoutes.commentEditPath(animalId, commentId: comment?.id), extra: comment);
 }

@@ -10,17 +10,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media/presentation/presentation.dart';
 
 /// Экран поиска вида животного. Возвращает выбранный [AnimalSpecies] через `pop`.
+///
+/// Родительский вид задаётся парой [parentId]/[parentLevel] (поиск идёт на
+/// уровень ниже); без [parentId] ищется верхний уровень таксономии.
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({required this.repository, required this.shelterProvider, this.parentSearch, super.key});
+  const SearchScreen({
+    required this.repository,
+    required this.shelterProvider,
+    this.parentId,
+    this.parentLevel = 0,
+    super.key,
+  });
 
   final AnimalRepository repository;
   final CurrentShelterProvider shelterProvider;
-  final AnimalSpecies? parentSearch;
+  final int? parentId;
+  final int parentLevel;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchSpecCubit(repository, shelterProvider, parentSearch: parentSearch),
+      create: (_) => SearchSpecCubit(repository, shelterProvider, parentId: parentId, parentLevel: parentLevel),
       child: const _SearchView(),
     );
   }

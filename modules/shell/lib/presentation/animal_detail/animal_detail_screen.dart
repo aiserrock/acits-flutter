@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:animals/animals.dart';
+import 'package:media/media.dart' show DocKind;
 import 'package:ui_kit/ui_kit.dart' show ContentWidth;
 import 'package:personal/personal.dart'
     show AnimalNote, CommentFileOpener, CommentListWidget, CommentsRepository, PersonalRouterService;
@@ -15,7 +16,6 @@ import 'package:ui_kit/ui_kit.dart'
 import 'package:di/di.dart';
 import 'package:shell/navigation/app_router.dart';
 import 'package:shell/src/shell_exports.dart';
-import 'package:app_services/app_services.dart';
 import 'package:shell/presentation/animal_detail/animal_content_card.dart';
 import 'package:prescriptions/prescriptions.dart'
     show
@@ -79,9 +79,6 @@ class _AnimalDetailView extends StatefulWidget {
 }
 
 class _AnimalDetailViewState extends State<_AnimalDetailView> {
-  _AnimalDetailViewState() : _animalService = getIt<AnimalService>();
-
-  final AnimalService _animalService;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _scrollController = ScrollController();
   final _imagePageController = PageController();
@@ -403,12 +400,12 @@ class _AnimalDetailViewState extends State<_AnimalDetailView> {
               icon: Icon(Icons.share_outlined, color: Theme.of(context).colorScheme.primary),
               onPressed: () {
                 context.push(
-                  AppRoutes.docViewer,
-                  extra: <String, Object?>{
-                    'fetcher': () => _animalService.fetchPdfAnimalCard(widget.id),
-                    'title': '${LocaleKeys.mainAnimal.tr()} ${widget.id}',
-                    'fileName': 'animal_${widget.id}.pdf',
-                  },
+                  AppRoutes.docViewerPath(
+                    DocKind.animalCard,
+                    widget.id,
+                    title: '${LocaleKeys.mainAnimal.tr()} ${widget.id}',
+                    fileName: 'animal_${widget.id}.pdf',
+                  ),
                 );
               },
             ),
