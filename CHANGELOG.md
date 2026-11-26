@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Адаптивные модальные окна: на планшете и в окне браузера нижние панели не шире 840 px,
+  диалоги не шире 560 px (ограничение в теме `ui_kit`, действует на все
+  `showModalBottomSheet` и `showDialog` приложения); на телефоне ширина прежняя.
+
 - iOS без CocoaPods: удалены `Podfile`, `Podfile.lock`, включения `Pods-Runner.*.xcconfig`,
   фазы `[CP]`, фреймворки и группа Pods в `project.pbxproj`. Все плагины, включая Patrol,
   подключаются Swift-пакетом `FlutterGeneratedPluginSwiftPackage`; таргет `RunnerUITests`
