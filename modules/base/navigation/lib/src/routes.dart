@@ -14,6 +14,7 @@ abstract final class Routes {
   static const login = '/login';
   static const register = '/register';
   static const emailConfirmation = '/email-confirmation';
+  static const resetPassword = '/reset-password';
   static const pickShelter = '/pick-shelter';
 
   // Animals (reference slice)

@@ -10,7 +10,7 @@ later breaks every link already sent.
 | --- | --- | --- |
 | `https://<host>/api/v1/users/verify-email/<uidb64>/<sidb64>/<token>/` | backend, sign-up e-mail | Android App Link filter (`*.acits.ru`, `android/app/src/main/AndroidManifest.xml`), `DeepLinkService` → `/email-confirmation?link=…` → `EmailConfirmRepository` (https, `acits.ru` or `*.acits.ru`, GET without redirects) |
 | `https://<host>/api/v1/users/verify-worker/<uidb64>/<sidb64>/<token>/` | backend, shelter-worker confirmation | not handled: opens in the browser |
-| password reset | — | no flow in the app yet |
+| `https://<host>/api/v1/users/reset-password/confirm/<uidb64>/<token>/` | backend, password reset e-mail | same App Link filter, `DeepLinkService` → `/reset-password?link=…` → `NewPasswordScreen` (https, `acits.ru` or `*.acits.ru`) → `POST /api/v1/users/reset-password/complete/` |
 
 Hosts per environment (`path.txt`): prod `app.acits.ru`, stage `stage.app.acits.ru`, dev
 `dev-N.app.acits.ru` (N = 0..3). Application ids: `ru.acits` (prod), `ru.acits.dev` (dev);
@@ -19,8 +19,9 @@ iOS team `45G32KJDV7`.
 ## State
 
 - **Android:** one `autoVerify` filter for `https://*.acits.ru/api/v1/users/verify-email*`.
-  Verification fails until `assetlinks.json` is served (see below), so Android shows the
-  disambiguation dialog instead of opening the app.
+  The same filter covers `/api/v1/users/reset-password/confirm`. Verification fails until
+  `assetlinks.json` is served (see below), so Android shows the disambiguation dialog
+  instead of opening the app.
 - **iOS:** `ios/Runner/Runner.entitlements` is empty — no associated domains, so links open
   Safari. `Runner.entitlements.example` lists `app.acits.ru` and `dev.acits.ru`; the second
   does not match the dev hosts above.

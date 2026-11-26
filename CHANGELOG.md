@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- Ссылка сброса пароля из письма открывается в приложении: экран «Новый пароль» берёт
+  `uidb64` и `token` из ссылки (только https на `acits.ru` и поддоменах), проверяет длину
+  и совпадение паролей и вызывает `POST /api/v1/users/reset-password/complete/`; при
+  успехе — переход ко входу. Путь `/api/v1/users/reset-password/confirm` добавлен в
+  фильтр App Links Android и в шаблон `apple-app-site-association`.
+
 - Клавиатурные сокращения на экранах «Сегодня» и «Животные» (планшет с клавиатурой,
   браузер): `/` или Ctrl/⌘+F — поиск, Esc — закрыть поиск, Ctrl/⌘+N — добавить,
   F5 или Ctrl/⌘+R — обновить. В поле ввода `/` и F5 остаются обычными клавишами.

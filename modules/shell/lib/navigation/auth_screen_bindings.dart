@@ -2,10 +2,12 @@ import 'package:core/domain.dart' show Shelter;
 import 'package:auth/auth.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:di/di.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:localization/localization.dart';
+import 'package:shell/navigation/app_router.dart';
 import 'package:shell/res/lottie.dart';
 import 'package:app_services/app_services.dart';
 import 'package:shell/widget/app_logo.dart';
@@ -65,6 +67,14 @@ abstract final class AuthScreenBindings {
 
   static Widget emailConfirmation(String link) {
     return EmailConfirmationScreen(authService: getIt<AuthService>(), confirmLink: link);
+  }
+
+  static Widget resetPassword(String link) {
+    return NewPasswordScreen(
+      auth: getIt<AuthService>(),
+      link: link,
+      onDone: () => getIt<GoRouter>().go(AppRoutes.login),
+    );
   }
 
   static Widget pickShelter({required bool autoSelectSingle, required List<Shelter>? shelterList}) {

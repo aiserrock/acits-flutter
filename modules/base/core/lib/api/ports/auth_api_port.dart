@@ -42,4 +42,9 @@ abstract interface class AuthApiPort {
   /// `POST /api/v1/users/reset-password/` — e-mails a password reset link to
   /// [email] (guest). The server answers 400 when no user has this e-mail.
   Future<void> requestPasswordReset(String email);
+
+  /// `POST /api/v1/users/reset-password/complete/` — sets [newPassword] for the
+  /// account the e-mailed link was issued to (guest). [uidb64] and [token] come
+  /// from that link.
+  Future<void> completePasswordReset({required String uidb64, required String token, required String newPassword});
 }
