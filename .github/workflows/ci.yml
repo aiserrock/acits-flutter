@@ -299,7 +299,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: macos-latest
     steps:
-      # Full checkout for ios/ (Xcode project, Podfile, etc.) — the workspace
+      # Full checkout for ios/ (Xcode project, Package.resolved, etc.) — the workspace
       # artifact only carries lib/test/pubspec.lock, not the whole tree.
       - uses: actions/checkout@v7
 
@@ -327,8 +327,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # SPM-capable plugins build via Swift Package Manager; the rest stay on
-      # CocoaPods (hybrid). The flag is a machine setting, not a repo file.
+      # Every plugin builds via Swift Package Manager; the project has no CocoaPods.
+      # The flag is a machine setting, not a repo file.
       - name: Enable Swift Package Manager
         run: flutter config --enable-swift-package-manager
 

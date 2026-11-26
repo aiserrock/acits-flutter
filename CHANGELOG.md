@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 ### Changed
 
+- iOS без CocoaPods: удалены `Podfile`, `Podfile.lock`, включения `Pods-Runner.*.xcconfig`,
+  фазы `[CP]`, фреймворки и группа Pods в `project.pbxproj`. Все плагины, включая Patrol,
+  подключаются Swift-пакетом `FlutterGeneratedPluginSwiftPackage`; таргет `RunnerUITests`
+  теперь тоже получает его как зависимость. Закоммичены `Package.resolved` — версии
+  Swift-пакетов (Firebase, Sentry и др.) зафиксированы.
+
 - Восстановление пароля: «Забыли пароль?» на экране входа (раньше кнопка ничего не
   делала) открывает окно с полем почты и отправляет запрос
   `POST /api/v1/users/reset-password/`. Ответ одинаковый для зарегистрированной и

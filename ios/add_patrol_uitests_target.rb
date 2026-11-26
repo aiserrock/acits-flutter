@@ -7,13 +7,17 @@
 # the `xcodeproj` gem instead. Kept in the repo because the file is checked in —
 # whoever regenerates the Xcode project can re-run this.
 #
-#   cd ios && ruby add_patrol_uitests_target.rb && pod install
+#   cd ios && ruby add_patrol_uitests_target.rb
 #
-# The target deliberately carries NO base configuration reference: CocoaPods
-# needs that slot free to attach Pods-Runner-RunnerUITests.*.xcconfig, which is
-# what lets the bundle `@import patrol`. Runner's own flavor xcconfigs are not
-# inherited, so the bundle identifier is written out per configuration instead
-# of via $(identifier)$(bundle_suffix).
+# The project uses Swift Package Manager only (no CocoaPods). `@import patrol`
+# resolves through the FlutterGeneratedPluginSwiftPackage product, which the
+# target must list in its packageProductDependencies and Frameworks phase — this
+# script does not add it; see the RunnerUITests entries in project.pbxproj.
+# PATROL_ENABLED, FULL_ISOLATION, CLEAR_PERMISSIONS and the XCTest linker flags
+# come from patrol_cli on the xcodebuild command line, so the target carries no
+# base configuration. Runner's flavor xcconfigs are not inherited, so the bundle
+# identifier is written out per configuration instead of via
+# $(identifier)$(bundle_suffix).
 
 require 'xcodeproj'
 
@@ -66,8 +70,6 @@ target.build_configurations.each do |config|
     'IPHONEOS_DEPLOYMENT_TARGET' => '15.0',
     'SWIFT_VERSION' => '5.0',
   )
-  # Owned by Pods-Runner-RunnerUITests.xcconfig — overriding it here makes
-  # CocoaPods warn and can break the pod linkage.
   config.build_settings.delete('ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES')
 end
 
@@ -91,4 +93,4 @@ if File.exist?(scheme_path)
 end
 
 puts "Added #{TARGET_NAME} (#{target.build_configurations.map(&:name).join(', ')})."
-puts 'Next: pod install'
+puts 'Next: link FlutterGeneratedPluginSwiftPackage to the target (Frameworks phase).'
