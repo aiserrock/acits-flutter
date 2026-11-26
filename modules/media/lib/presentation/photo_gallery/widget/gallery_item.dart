@@ -44,17 +44,11 @@ class _GalleryItemWidget extends StatelessWidget {
       alignment: Alignment.topLeft,
       child: Padding(
         padding: const EdgeInsets.all(6.0),
-        child: Material(
-          color: Colors.black54,
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onEdit,
-            child: const Padding(
-              padding: EdgeInsets.all(9.0),
-              child: Icon(Icons.edit, color: Colors.white, size: 24.0),
-            ),
-          ),
+        child: IconButton(
+          tooltip: LocaleKeys.commonEdit.tr(),
+          onPressed: onEdit,
+          style: IconButton.styleFrom(backgroundColor: Colors.black54, foregroundColor: Colors.white),
+          icon: const Icon(Icons.edit, size: 24.0),
         ),
       ),
     );

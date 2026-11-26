@@ -18,6 +18,10 @@ part './widget/gallery_item.dart';
 
 const _maxCountImages = 6;
 
+/// Целевая ширина плитки галереи (логические px). Сетка добавляет колонки по
+/// мере роста окна.
+const galleryTileMaxExtent = 180.0;
+
 /// Экран выбора фотографий животного.
 class PhotoGalleryScreen extends StatelessWidget {
   const PhotoGalleryScreen({
@@ -77,6 +81,7 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
         buildWhen: (prev, next) => prev.isSelectorChanged != next.isSelectorChanged,
         builder: (_, state) => state.isSelectorChanged
             ? FloatingActionButton(
+                tooltip: LocaleKeys.commonDone.tr(),
                 onPressed: _onSubmit,
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 child: Icon(Icons.done_all, color: Theme.of(context).colorScheme.onPrimary),
@@ -108,7 +113,9 @@ class _PhotoGalleryViewState extends State<_PhotoGalleryView> {
     return GridView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.all(8.0),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      // Колонки считаются от ширины окна: на телефоне (~390 px) остаётся 3, на
+      // планшете и десктопе плитки сохраняют размер ~180 px и квадратную форму.
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: galleryTileMaxExtent),
       itemCount: list.length + controlsCount,
       itemBuilder: (context, index) {
         if (index == 0) {
