@@ -276,6 +276,14 @@ jobs:
           flutter config --enable-swift-package-manager
           flutter pub get
 
+      # The Xcode build phase `flutterfire bundle-service-file` copies the
+      # flavor's GoogleService-Info.plist into the .app; without the CLI on
+      # PATH the archive fails ("flutterfire: command not found").
+      - name: Install flutterfire CLI
+        run: |
+          dart pub global activate flutterfire_cli
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+
       - name: Cache SwiftPM
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
