@@ -2,6 +2,7 @@ import 'package:core/api.dart';
 import 'package:network/network.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:observability/observability.dart' show addHttpTracing;
 
 import 'package:app_services/src/domain/env.dart';
 
@@ -32,6 +33,7 @@ abstract class AcitsApiRegister {
       clientInfo: clientInfo,
     );
     dio.options.baseUrl = env.apiUrl;
+    addHttpTracing(dio);
     return dio;
   }
 
@@ -39,8 +41,11 @@ abstract class AcitsApiRegister {
   /// список всех приютов). baseUrl — из [Env].
   @prod
   @Named('acitsApiGuest')
-  Dio createAcitsApiGuestDio(Env env, ClientInfoProvider clientInfo) =>
-      createGuestDio(baseUrl: env.apiUrl, clientInfo: clientInfo);
+  Dio createAcitsApiGuestDio(Env env, ClientInfoProvider clientInfo) {
+    final dio = createGuestDio(baseUrl: env.apiUrl, clientInfo: clientInfo);
+    addHttpTracing(dio);
+    return dio;
+  }
 
   /// Сгенерированный retrofit-клиент поверх нового Dio.
   @prod

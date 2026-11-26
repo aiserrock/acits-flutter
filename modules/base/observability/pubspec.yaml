@@ -12,7 +12,9 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  dio: ^5.9.2
   firebase_crashlytics: ^6.1.0
+  sentry_dio: ^10.6.0
   sentry_flutter: ^10.6.0
 
 dev_dependencies:
