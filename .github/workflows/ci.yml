@@ -113,25 +113,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Format only hand-written code (line length 120), across the root app and
-      # every workspace module. Generated files (*.g.dart, *.config.dart,
-      # *.swagger.dart, *.gen.dart, locale_keys, firebase_options, and the
-      # swagger_parser output under generated/) are excluded: their exact
-      # formatting depends on generator/CLI versions and isn't hand-maintained.
-      # Mirrors `melos format:check`.
+      # Same check as `melos run format:check` (tool/ci/gate.sh is the single
+      # source of the gate).
       - name: Verify formatting
-        run: |
-          find lib test modules tool -name '*.dart' \
-            ! -name '*.g.dart' \
-            ! -name '*.config.dart' \
-            ! -name '*.swagger.dart' \
-            ! -name '*.gen.dart' \
-            ! -name 'locale_keys.g.dart' \
-            ! -name 'firebase_options.dart' \
-            ! -path '*/generated/*' \
-            ! -path '*/.dart_tool/*' \
-            ! -path '*/build/*' \
-            -print0 | xargs -0 dart format --output=none --set-exit-if-changed -l 120
+        run: tool/ci/gate.sh format-check
 
   ##### analyse #####
   analyse:
@@ -159,15 +144,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Strict gate: infos and warnings fail the build, matching
-      # `melos analyze:strict` / `melos check-all` used locally.
+      # Strict analysis + package layering, same as `melos run analyze:strict`.
       - name: Analyse
-        run: flutter analyze --fatal-infos --fatal-warnings
-
-      # Layering gate: no cycles and no upward dependencies between workspace
-      # packages. Mirrors `melos graph:check`.
-      - name: Check package graph
-        run: dart run tool/check_package_graph.dart
+        run: tool/ci/gate.sh analyze
 
   ##### test #####
   test:
@@ -195,20 +174,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Root app tests plus every package/module that ships a test/ folder.
-      # Packages without tests are skipped so the loop stays robust as modules
-      # come and go. `modules/base/*` needs its own glob — base is a container
-      # directory, its packages sit one level deeper.
+      # Same tests as `melos run test`, then the goldens (rendered on Linux).
       - name: Run tests
-        run: |
-          flutter test
-          for p in packages/* modules/* modules/base/*; do
-            if [ -d "$p/test" ]; then
-              echo "::group::flutter test ($p)"
-              (cd "$p" && flutter test)
-              echo "::endgroup::"
-            fi
-          done
+        run: tool/ci/gate.sh test
+
+      - name: Run golden tests
+        run: tool/ci/gate.sh goldens
 
   ##### build #####
   # PR builds the dev flavor as a signed release build (keystore from secrets);

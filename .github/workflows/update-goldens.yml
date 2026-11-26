@@ -37,8 +37,7 @@ jobs:
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Record goldens
-        working-directory: modules/ui_kit
-        run: flutter test --tags golden --update-goldens
+        run: tool/ci/gate.sh goldens --update-goldens
 
       - name: Open a pull request with the new images
         env:
