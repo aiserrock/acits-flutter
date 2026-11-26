@@ -12,32 +12,23 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:material_ui/material_ui.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-List<BottomNavigationBarItem> _buildBottomNavItems(BuildContext context) {
-  final inactiveIcon = context.appColors.inactiveIcon;
+/// Индекс первой недоступной вкладки: «Календарь» и «Медикаменты» пока заглушки.
+const _firstLockedTab = 2;
+
+List<AdaptiveDestination> _buildDestinations(BuildContext context) {
+  final inactive = context.appColors.inactiveIcon;
   final accent = Theme.of(context).colorScheme.primary;
-  return <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      icon: Assets.icon.today.svg(colorFilter: ColorFilter.mode(inactiveIcon, BlendMode.srcIn)),
-      activeIcon: Assets.icon.today.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
-      label: LocaleKeys.commonToday.tr(),
-    ),
-    BottomNavigationBarItem(
-      icon: Assets.icon.paw.svg(colorFilter: ColorFilter.mode(inactiveIcon, BlendMode.srcIn)),
-      activeIcon: Assets.icon.paw.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
-      label: LocaleKeys.commonAnimals.tr(),
-    ),
-    BottomNavigationBarItem(
-      icon: Assets.icon.calendar.svg(
-        colorFilter: ColorFilter.mode(inactiveIcon.withValues(alpha: .5), BlendMode.srcIn),
-      ),
-      activeIcon: Assets.icon.calendar.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
-      label: LocaleKeys.commonCalendar.tr(),
-    ),
-    BottomNavigationBarItem(
-      icon: Assets.icon.drugs.svg(colorFilter: ColorFilter.mode(inactiveIcon.withValues(alpha: .5), BlendMode.srcIn)),
-      activeIcon: Assets.icon.drugs.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
-      label: LocaleKeys.commonDrugs.tr(),
-    ),
+  AdaptiveDestination item(SvgGenImage icon, String label, {bool enabled = true}) => AdaptiveDestination(
+    icon: icon.svg(colorFilter: ColorFilter.mode(enabled ? inactive : inactive.withValues(alpha: .5), BlendMode.srcIn)),
+    selectedIcon: icon.svg(colorFilter: ColorFilter.mode(accent, BlendMode.srcIn)),
+    label: label,
+    enabled: enabled,
+  );
+  return [
+    item(Assets.icon.today, LocaleKeys.commonToday.tr()),
+    item(Assets.icon.paw, LocaleKeys.commonAnimals.tr()),
+    item(Assets.icon.calendar, LocaleKeys.commonCalendar.tr(), enabled: false),
+    item(Assets.icon.drugs, LocaleKeys.commonDrugs.tr(), enabled: false),
   ];
 }
 
@@ -98,52 +89,33 @@ class _RootScreenState extends State<RootScreen> {
     );
   }
 
+  void _onDestinationSelected(int index) {
+    if (index >= _firstLockedTab || index == _current) return;
+    setState(() {
+      _current = index;
+      _visited.add(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final bottomNav = BottomNavigationBar(
-      items: _buildBottomNavItems(context),
-      onTap: (index) => setState(() {
-        if (index > 1) {
-          ScaffoldMessenger.of(context)
-            ..clearSnackBars()
-            ..showSnackBar(
-              SnackBar(content: Text(LocaleKeys.commonDidNotImpl.tr()), duration: const Duration(seconds: 2)),
-            );
-        }
-        if (_current != index && index < 2) {
-          _current = index;
-          _visited.add(index);
-        }
-      }),
-      currentIndex: _current,
-      showSelectedLabels: true,
-      showUnselectedLabels: true,
-      type: BottomNavigationBarType.fixed,
-      fixedColor: Theme.of(context).colorScheme.primary,
-    );
-
-    // Web (iOS PWA): Flutter не пробрасывает env(safe-area-inset) в MediaQuery,
-    // поэтому нав-бар лезет под home-indicator. Берём реальный inset из JS-либы
-    // (WebInsets) и заставляем SafeArea дать минимум этого отступа. На нативе
-    // WebInsets.bottom = 0, и обёртку не ставим — Scaffold сам учитывает inset.
-    final bottomNavWithInset = kIsWeb
-        ? SafeArea(
-            minimum: EdgeInsets.only(bottom: WebInsets.bottom),
-            child: bottomNav,
-          )
-        : bottomNav;
-
     return RootDrawerProvider(
       rootScaffoldKey: _scaffoldKey,
-      child: Scaffold(
-        key: _scaffoldKey,
+      // Форму навигации выбирает ширина окна: нижняя панель на телефоне, рейл на
+      // планшете, развёрнутый рейл на широком окне.
+      child: AdaptiveScaffold(
+        scaffoldKey: _scaffoldKey,
         drawer: const PersonalDrawerWidget(),
-        bottomNavigationBar: bottomNavWithInset,
+        destinations: _buildDestinations(context),
+        selectedIndex: _current,
+        onDestinationSelected: _onDestinationSelected,
+        // Web (iOS PWA): Flutter не пробрасывает env(safe-area-inset) в MediaQuery,
+        // поэтому нижняя панель лезла бы под home-indicator. На нативе inset = 0.
+        bottomInset: kIsWeb ? WebInsets.bottom : 0,
         // IndexedStack сохраняет состояние уже открытых вкладок (скролл,
         // введённый поиск), но каждую вкладку строим лениво — до первого
         // перехода на неё в дереве стоит пустой SizedBox, и её cubit не
-        // поднимается. Calendar/Drugs пока недостижимы (см. onTap: index<2),
-        // поэтому остаются заглушками навсегда, не тратя ресурсы.
+        // поднимается. Calendar/Drugs пока недоступны, поэтому остаются заглушками.
         body: IndexedStack(
           index: _current,
           children: [

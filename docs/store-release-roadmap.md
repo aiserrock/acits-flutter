@@ -90,7 +90,7 @@ Plugin, генератор API на текущем мажоре.
   `AdaptiveScaffold`. Добавить: контейнер ширины контента, двухпанельный list-detail с
   supporting pane, адаптивный показ sheet / dialog / side sheet, адаптивную сетку; научить
   `AdaptiveScaffold` drawer'у и leading у рейла.
-- **Каркас приложения** — M. `RootScreen` переводится на `AdaptiveScaffold`: нижняя панель на
+- ✅ **Каркас приложения** — M. `RootScreen` переведён на `AdaptiveScaffold`: нижняя панель на
   узких, рейл на средних, развёрнутый рейл на широких. Web-рамка `PhoneFrame` (режет приложение
   до колонки 430 px и подменяет `MediaQuery`) удаляется.
 - **Роутер под двухпанельную раскладку** — L. `StatefulShellRoute` с устойчивыми URL

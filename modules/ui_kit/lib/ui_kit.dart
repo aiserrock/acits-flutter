@@ -9,6 +9,7 @@ export 'src/theme/theme.dart';
 export 'src/theme/icons.dart';
 export 'src/layout/breakpoints.dart';
 export 'src/layout/adaptive_scaffold.dart';
+export 'src/layout/content_width.dart';
 export 'src/components/primary_button.dart';
 export 'src/components/app_bar.dart';
 export 'src/components/text_field.dart';

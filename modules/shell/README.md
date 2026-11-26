@@ -9,7 +9,7 @@
 ## Что внутри
 
 - **`app_scaffold.dart`** — composition root: `EasyLocalization → RestartWidget →
-  ThemeCubit → MaterialApp.router` с роутером из DI + `PhoneFrame`. Это корневой
+  ThemeCubit → MaterialApp.router` с роутером из DI. Это корневой
   виджет, который `runApp` рендерит (см. корневой `lib/run_app.dart`).
 - **`navigation/`** — `app_router.dart` (сборка GoRouter-дерева из роутов всех
   фич), `auth_screen_bindings.dart`, `extra_codec.dart`, и 6 `*_router_service.dart`
@@ -23,7 +23,7 @@
   - `main`/`root_screen` — навигационный хост (bottom-nav / drawer), переключает фичи.
   - `common/` — общий sort-бар и пр.
 - **`widget/`** — виджеты уровня оболочки: `personal_drawer`,
-  `theme_switcher_tile`, `phone_frame`, `restart_widget`, `ThemeCubit` и т.п.
+  `theme_switcher_tile`, `restart_widget`, `ThemeCubit` и т.п.
 - **`src/shell_di.dart`** — injectable micro-package (`ShellPackageModule`),
   через который DI приложения (`modules/base/di`) регистрирует router-service impls
   (consumer'ский `@InjectableInit` не сканит injectable'ы зависимости напрямую).

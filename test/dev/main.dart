@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -13,6 +12,7 @@ import 'package:acits_flutter/firebase/firebase_config.dart';
 import 'package:acits_flutter/observability_setup.dart';
 import 'package:acits_flutter/run_app.dart';
 import 'package:app_services/app_services.dart' show Log;
+import 'package:shell/shell.dart' show OrientationPolicy;
 import 'di/di_container.dart';
 import 'service/shared_pref/debug_preference_storage.dart';
 import 'service/client/proxy_http_overrides.dart';
@@ -32,7 +32,7 @@ Future<void> _bootstrapDev() async {
   await observability.initFirebase(devFirebaseOptions);
 
   await EasyLocalization.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await OrientationPolicy.apply();
   await AppVersion.load();
   await observability.initSentry();
   _setupLogging();

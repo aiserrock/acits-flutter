@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:ui_kit/ui_kit.dart' show ContentWidth;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
@@ -50,27 +51,29 @@ class LoginScreen extends StatelessWidget {
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: KeyboardDismissOnTap(
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: BlocProvider(
-                create: (_) => LoginBloc(
-                  authService: authService,
-                  deepLinkService: deepLinkService,
-                  debugService: debugService,
-                  router: router,
-                ),
-                child: LoginForm(
-                  router: router,
-                  localeSwitcher: localeSwitcher,
-                  versionLabel: versionLabel,
-                  passwordVisibleIcon: passwordVisibleIcon,
-                  passwordHiddenIcon: passwordHiddenIcon,
+        child: ContentWidth(
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: BlocProvider(
+                  create: (_) => LoginBloc(
+                    authService: authService,
+                    deepLinkService: deepLinkService,
+                    debugService: debugService,
+                    router: router,
+                  ),
+                  child: LoginForm(
+                    router: router,
+                    localeSwitcher: localeSwitcher,
+                    versionLabel: versionLabel,
+                    passwordVisibleIcon: passwordVisibleIcon,
+                    passwordHiddenIcon: passwordHiddenIcon,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
