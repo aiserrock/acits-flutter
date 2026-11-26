@@ -197,29 +197,39 @@ class _AnimalsViewState extends State<AnimalsView> {
     return RefreshIndicator(
       onRefresh: () => context.read<AnimalsCubit>().loadAnimalList(needResetOffset: true),
       child: SlidableAutoCloseBehavior(
-        child: CustomScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          controller: _scrollController,
-          slivers: [
-            const SliverToBoxAdapter(child: SizedBox(height: _scrollTopPadding)),
-            SliverList(
-              delegate: SliverChildBuilderDelegate((_, index) {
-                final animal = data[index];
-                return Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                  child: AnimalCardWidget(
-                    animal,
-                    router: widget.router,
-                    permissions: widget.permissions,
-                    statusLabels: widget.statusLabels,
-                    avatarFallback: widget.avatarFallback,
-                    onDelete: () => _onDelete(context, animal),
-                  ),
-                );
-              }, childCount: data.length),
-            ),
-            SliverToBoxAdapter(child: _buildPageLoader(state)),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final columns = AdaptiveColumns.forWidth(constraints.maxWidth);
+            return CustomScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              controller: _scrollController,
+              slivers: [
+                const SliverToBoxAdapter(child: SizedBox(height: _scrollTopPadding)),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((_, row) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                      child: AdaptiveCardRow(
+                        columns: columns,
+                        children: [
+                          for (final animal in data.skip(row * columns).take(columns))
+                            AnimalCardWidget(
+                              animal,
+                              router: widget.router,
+                              permissions: widget.permissions,
+                              statusLabels: widget.statusLabels,
+                              avatarFallback: widget.avatarFallback,
+                              onDelete: () => _onDelete(context, animal),
+                            ),
+                        ],
+                      ),
+                    );
+                  }, childCount: AdaptiveColumns.rowCount(data.length, columns)),
+                ),
+                SliverToBoxAdapter(child: _buildPageLoader(state)),
+              ],
+            );
+          },
         ),
       ),
     );

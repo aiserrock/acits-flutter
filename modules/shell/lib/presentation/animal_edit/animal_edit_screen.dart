@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:ui_kit/ui_kit.dart' show ErrorHolderWidget, LoaderHolderWidget, SuccessHolderWidget;
+import 'package:ui_kit/ui_kit.dart' show ContentWidth, ErrorHolderWidget, LoaderHolderWidget, SuccessHolderWidget;
 
 import 'package:di/di.dart';
 import 'package:shell/presentation/animal_edit/data/animal_edit_data_holder.dart';
@@ -116,7 +116,7 @@ class _AnimalEditViewState extends State<_AnimalEditView> {
                   ),
                 )
               : null,
-          body: _buildBody(state),
+          body: ContentWidth(child: _buildBody(state)),
         );
       },
     );

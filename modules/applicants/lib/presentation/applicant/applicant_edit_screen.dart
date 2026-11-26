@@ -90,7 +90,7 @@ class _ApplicantEditViewState extends State<_ApplicantEditView> {
                   child: Icon(Icons.done_all, color: Theme.of(context).colorScheme.onPrimary),
                 )
               : null,
-          body: _buildBody(state),
+          body: ContentWidth(child: _buildBody(state)),
         );
       },
     );

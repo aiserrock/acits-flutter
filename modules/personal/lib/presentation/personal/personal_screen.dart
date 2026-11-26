@@ -77,12 +77,15 @@ class _PersonalViewState extends State<_PersonalView> {
         builder: (context, state) =>
             (state.data.isContent && state.fabVisible) ? _buildFab(context) : const SizedBox.shrink(),
       ),
-      body: BlocBuilder<PersonalCubit, PersonalState>(
-        builder: (context, state) => DataStateBuilder<UserProfile>(
-          state: state.data,
-          builder: (_, user) => _buildContent(user),
-          loader: (_) => const LoaderHolderWidget(),
-          errorBuilder: (_, e) => ErrorHolderWidget(error: e, onPressed: _init),
+      body: ContentWidth(
+        maxWidth: ContentWidth.reading,
+        child: BlocBuilder<PersonalCubit, PersonalState>(
+          builder: (context, state) => DataStateBuilder<UserProfile>(
+            state: state.data,
+            builder: (_, user) => _buildContent(user),
+            loader: (_) => const LoaderHolderWidget(),
+            errorBuilder: (_, e) => ErrorHolderWidget(error: e, onPressed: _init),
+          ),
         ),
       ),
     );

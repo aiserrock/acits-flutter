@@ -206,17 +206,26 @@ class _MainScreenContent extends StatelessWidget {
   }
 
   Widget _buildList() {
+    final items = data ?? const <PrescriptionExecutionToday>[];
     return RefreshIndicator(
       onRefresh: pullToRefresh,
-      child: ListView.separated(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
-        itemBuilder: (_, index) {
-          final item = (data ?? [])[index];
-          return PrescriptionCardWidget(item, onEditedPrescription: () => _onEditPrescriptionPressed(item));
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          final columns = AdaptiveColumns.forWidth(constraints.maxWidth);
+          return ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 40.0),
+            itemBuilder: (_, row) => AdaptiveCardRow(
+              columns: columns,
+              children: [
+                for (final item in items.skip(row * columns).take(columns))
+                  PrescriptionCardWidget(item, onEditedPrescription: () => _onEditPrescriptionPressed(item)),
+              ],
+            ),
+            itemCount: AdaptiveColumns.rowCount(items.length, columns),
+            separatorBuilder: (_, _) => const SizedBox(height: 16.0),
+          );
         },
-        itemCount: data?.length ?? 0,
-        separatorBuilder: (_, _) => const SizedBox(height: 16.0),
       ),
     );
   }
