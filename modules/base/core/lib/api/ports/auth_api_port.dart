@@ -38,4 +38,8 @@ abstract interface class AuthApiPort {
 
   /// `POST /api/v1/users/worker-register/` — registers a worker (guest).
   Future<UserWorkerDto> registerWorker(UserWorkerWriteDto body);
+
+  /// `POST /api/v1/users/reset-password/` — e-mails a password reset link to
+  /// [email] (guest). The server answers 400 when no user has this e-mail.
+  Future<void> requestPasswordReset(String email);
 }

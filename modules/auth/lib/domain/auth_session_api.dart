@@ -41,4 +41,7 @@ abstract interface class AuthSessionApi {
 
   /// Подтвердить электронную почту по ссылке [confirmLink].
   Future<Result<Failure, void>> confirmEmail(String confirmLink);
+
+  /// Ask the server to e-mail a password reset link to [email].
+  Future<Result<Failure, void>> requestPasswordReset(String email);
 }

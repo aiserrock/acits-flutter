@@ -225,6 +225,12 @@ class AuthService extends ChangeNotifier implements AuthSessionApi {
     });
   }
 
+  @override
+  Future<Result<Failure, void>> requestPasswordReset(String email) {
+    Log.info('Password reset requested');
+    return _guard<void>('Request password reset', () => _authApi.requestPasswordReset(email.trim()));
+  }
+
   /// Подтвердить электронную почту при регистрации
   @override
   Future<Result<Failure, void>> confirmEmail(String email) => _confirmRepository.confirmEmail(email);

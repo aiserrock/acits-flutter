@@ -97,6 +97,13 @@ class AuthApiAdapter implements AuthApiPort {
   }
 
   @override
+  Future<void> requestPasswordReset(String email) async {
+    // Raw POST over the guest Dio: the user is signed out, and the generated
+    // client adds a default `x-current-shelter` header the endpoint does not need.
+    await _guestDio.post<void>('/api/v1/users/reset-password/', data: <String, dynamic>{'email': email});
+  }
+
+  @override
   Future<List<ShelterShortDto>> allShelters({int? limit, int? offset, String? search}) async {
     final page = await _guestSheltersClient.v1SheltersList(limit: limit, offset: offset, search: search);
     final results = page.results ?? const <ShelterShortSerializers>[];
