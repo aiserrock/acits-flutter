@@ -21,6 +21,7 @@ abstract class AcitsApiRegister {
     TokenRefresher refresher,
     SessionInvalidator sessionInvalidator,
     LocaleProvider localeProvider,
+    ClientInfoProvider clientInfo,
     Env env,
   ) {
     final dio = createDio(
@@ -28,6 +29,7 @@ abstract class AcitsApiRegister {
       refresher: refresher,
       sessionInvalidator: sessionInvalidator,
       localeProvider: localeProvider,
+      clientInfo: clientInfo,
     );
     dio.options.baseUrl = env.apiUrl;
     return dio;
@@ -37,17 +39,8 @@ abstract class AcitsApiRegister {
   /// список всех приютов). baseUrl — из [Env].
   @prod
   @Named('acitsApiGuest')
-  Dio createAcitsApiGuestDio(Env env) {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: env.apiUrl,
-        connectTimeout: const Duration(milliseconds: 30000),
-        receiveTimeout: const Duration(milliseconds: 30000),
-        sendTimeout: const Duration(milliseconds: 30000),
-      ),
-    );
-    return dio;
-  }
+  Dio createAcitsApiGuestDio(Env env, ClientInfoProvider clientInfo) =>
+      createGuestDio(baseUrl: env.apiUrl, clientInfo: clientInfo);
 
   /// Сгенерированный retrofit-клиент поверх нового Dio.
   @prod

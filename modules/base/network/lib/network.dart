@@ -8,6 +8,7 @@
 library;
 
 export 'src/network/auth_interceptor.dart';
+export 'src/network/client_info_interceptor.dart';
 export 'src/network/dio_factory.dart';
 export 'src/network/header_interceptor.dart';
 export 'src/network/ports.dart';

@@ -19,3 +19,17 @@ abstract interface class SessionInvalidator {
 abstract interface class LocaleProvider {
   String get locale;
 }
+
+/// Who is calling the API: sent with every request so the backend can tell
+/// client versions apart (minimum supported version, staged deprecations).
+/// A value returned empty is not sent.
+abstract interface class ClientInfoProvider {
+  /// Marketing version, e.g. `1.2.0`; empty when it could not be read.
+  String get version;
+
+  /// Build number shared by all stores; empty when it could not be read.
+  String get buildNumber;
+
+  /// `android` or `ios`; empty on platforms that must not send the headers.
+  String get platform;
+}
