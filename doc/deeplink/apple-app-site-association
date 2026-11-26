@@ -5,13 +5,15 @@
       {
         "appID": "45G32KJDV7.ru.acits.dev",
         "paths": [
-          "/api/v1/users/verify-email/*"
+          "/api/v1/users/verify-email/*",
+          "/api/v1/users/reset-password/confirm/*"
         ]
       },
       {
         "appID": "45G32KJDV7.ru.acits",
         "paths": [
-          "/api/v1/users/verify-email/*"
+          "/api/v1/users/verify-email/*",
+          "/api/v1/users/reset-password/confirm/*"
         ]
       }
     ]

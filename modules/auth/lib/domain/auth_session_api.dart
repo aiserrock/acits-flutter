@@ -44,4 +44,11 @@ abstract interface class AuthSessionApi {
 
   /// Ask the server to e-mail a password reset link to [email].
   Future<Result<Failure, void>> requestPasswordReset(String email);
+
+  /// Set a new password with the [uidb64] and [token] from the reset link.
+  Future<Result<Failure, void>> completePasswordReset({
+    required String uidb64,
+    required String token,
+    required String newPassword,
+  });
 }

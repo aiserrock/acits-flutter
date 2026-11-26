@@ -51,6 +51,9 @@ abstract final class AppRoutes {
   static const registration = '/registration';
   static const emailConfirmation = '/email-confirmation';
 
+  /// New password from an e-mailed reset link (`?link=<the link>`).
+  static const resetPassword = '/reset-password';
+
   /// The signed-in shell; lands on the «Today» tab.
   static const root = today;
 
@@ -112,6 +115,10 @@ GoRouter createAppRouter() {
       GoRoute(path: AppRoutes.onboarding, builder: (context, state) => AuthScreenBindings.onboarding()),
       GoRoute(path: AppRoutes.login, builder: (context, state) => AuthScreenBindings.login()),
       GoRoute(path: AppRoutes.registration, builder: (context, state) => AuthScreenBindings.registration()),
+      GoRoute(
+        path: AppRoutes.resetPassword,
+        builder: (context, state) => AuthScreenBindings.resetPassword(state.uri.queryParameters['link'] ?? ''),
+      ),
       GoRoute(
         path: AppRoutes.emailConfirmation,
         builder: (context, state) => AuthScreenBindings.emailConfirmation(state.uri.queryParameters['link'] ?? ''),

@@ -56,7 +56,16 @@ class DeepLinkService implements Disposable, AuthDeepLinkHandler {
     Log.info('Deeplink received: $link');
     if (_isEmailVerifyLink(link)) {
       getIt<GoRouter>().push('${Routes.emailConfirmation}?link=${Uri.encodeComponent(link)}');
+    } else if (_isPasswordResetLink(link)) {
+      // The screen re-checks the host and extracts uidb64/token itself.
+      getIt<GoRouter>().push('${Routes.resetPassword}?link=${Uri.encodeComponent(link)}');
     }
+  }
+
+  bool _isPasswordResetLink(String link) {
+    final uri = Uri.tryParse(link);
+    if (uri == null || !uri.hasAuthority) return false;
+    return uri.path.contains('/api/v1/users/reset-password/confirm/');
   }
 
   bool _isEmailVerifyLink(String link) {

@@ -104,6 +104,18 @@ class AuthApiAdapter implements AuthApiPort {
   }
 
   @override
+  Future<void> completePasswordReset({
+    required String uidb64,
+    required String token,
+    required String newPassword,
+  }) async {
+    await _guestDio.post<void>(
+      '/api/v1/users/reset-password/complete/',
+      data: <String, dynamic>{'uidb64': uidb64, 'token': token, 'new_password': newPassword},
+    );
+  }
+
+  @override
   Future<List<ShelterShortDto>> allShelters({int? limit, int? offset, String? search}) async {
     final page = await _guestSheltersClient.v1SheltersList(limit: limit, offset: offset, search: search);
     final results = page.results ?? const <ShelterShortSerializers>[];
